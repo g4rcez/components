@@ -1,49 +1,49 @@
 {
-  "name": "dark",
-  "spacing": {
-    "base": "1rem",
-    "lg": "1.5rem",
-    "sm": "0.75rem"
-  },
-  "colors": {
-    "background": "#f1f5f9",
-    "foreground": "#334155",
-    "accent": "#0ea5e9",
-    "primary": {
-      "foreground": "#334155",
-      "DEFAULT": "#0ea5e9",
-      "subtle": "#7dd3fc",
-      "hover": "#0284c7"
+    "name": "dark",
+    "spacing": {
+        "base": "1rem",
+        "lg": "1.5rem",
+        "sm": "0.75rem"
     },
-    "secondary": {
-      "DEFAULT": "#475569",
-      "subtle": "#cbd5e1",
-      "hover": "#334155"
-    },
-    "info": {
-      "DEFAULT": "#3b82f6",
-      "subtle": "#93c5fd",
-      "hover": "#1d4ed8"
-    },
-    "danger": {
-      "DEFAULT": "#ef4444",
-      "subtle": "#fca5a5",
-      "hover": "#dc2626"
-    },
-    "success": {
-      "DEFAULT": "#10b981",
-      "subtle": "#6ee7b7",
-      "hover": "#047857"
-    },
-    "input": {
-      "border": "#d1d5db",
-      "placeholder": "#94a3b8",
-      "mask-error": "#fca5a5"
-    },
-    "card": {
-      "background": "#ffffff",
-      "border": "#cbd5e1",
-      "overlay": "#00000080"
+    "colors": {
+        "background": "#f1f5f9",
+        "foreground": "#334155",
+        "accent": "#0ea5e9",
+        "primary": {
+            "foreground": "#334155",
+            "DEFAULT": "#0ea5e9",
+            "subtle": "#7dd3fc",
+            "hover": "#0284c7"
+        },
+        "secondary": {
+            "DEFAULT": "#475569",
+            "subtle": "#cbd5e1",
+            "hover": "#334155"
+        },
+        "info": {
+            "DEFAULT": "#3b82f6",
+            "subtle": "#93c5fd",
+            "hover": "#1d4ed8"
+        },
+        "danger": {
+            "DEFAULT": "#ef4444",
+            "subtle": "#fca5a5",
+            "hover": "#dc2626"
+        },
+        "success": {
+            "DEFAULT": "#10b981",
+            "subtle": "#6ee7b7",
+            "hover": "#047857"
+        },
+        "input": {
+            "border": "#d1d5db",
+            "placeholder": "#94a3b8",
+            "mask-error": "#fca5a5"
+        },
+        "card": {
+            "background": "#ffffff",
+            "border": "#cbd5e1",
+            "overlay": "#00000080"
+        }
     }
-  }
 }
