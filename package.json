@@ -1,5 +1,5 @@
 {
-  "name": "bigweld",
+  "name": "unamed",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,16 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/react": "0.26.19",
+    "clsx": "2.1.1",
+    "fuzzy-search": "3.2.1",
+    "lucide-react": "0.400.0",
+    "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.4"
+    "tailwind-merge": "2.3.0",
+    "the-mask-input": "3.3.12",
+    "use-typed-reducer": "4.2.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/fuzzy-search": "2.1.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
