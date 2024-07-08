@@ -7,12 +7,13 @@
     },
     "colors": {
         "foreground": "#f8fafc",
-        "background": "#111827",
+        "background": "#191817",
         "accent": "#0ea5e9",
+        "disabled": "#52525b",
         "primary": {
-            "foreground": "#334155",
+            "foreground": "#f8fafc",
             "DEFAULT": "#0ea5e9",
-            "subtle": "#7dd3fc",
+            "subtle": "#bae6fd",
             "hover": "#0284c7"
         },
         "secondary": {
@@ -38,10 +39,16 @@
         "input": {
             "border": "#d1d5db",
             "placeholder": "#94a3b8",
-            "mask-error": "#fca5a5"
+            "mask-error": "#fca5a5",
+            "switch": "#171717"
         },
         "card": {
             "background": "#27272a",
+            "border": "#3f3f46",
+            "overlay": "#00000080"
+        },
+        "floating": {
+            "background": "#252525",
             "border": "#3f3f46",
             "overlay": "#00000080"
         }

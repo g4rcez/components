@@ -2,7 +2,7 @@
 import {
     autoUpdate,
     FloatingFocusManager,
-    FloatingPortal,
+    FloatingPortal, offset,
     size,
     useDismiss,
     useFloating,
@@ -12,7 +12,7 @@ import {
     useTransitionStyles,
 } from "@floating-ui/react";
 import Fuzzy from "fuzzy-search";
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { InputField } from "~/components/form/input-field";
 import { usePrevious } from "~/hooks/use-previous";
 import { css } from "~/lib/dom";
@@ -56,7 +56,7 @@ const fuzzyOptions = { caseSensitive: false, sort: false };
 
 const emptyRef: any[] = [];
 
-export const Autocomplete = ({ options, ...props }: SelectProps) => {
+export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options, ...props }: SelectProps, externalRef) => {
     const [open, setOpen] = useState(false);
     const [shadow, setShadow] = useState("");
     const [value, setValue] = useState(props.value ?? props.defaultValue ?? "");
@@ -71,17 +71,20 @@ export const Autocomplete = ({ options, ...props }: SelectProps) => {
         onOpenChange: setOpen,
         whileElementsMounted: autoUpdate,
         middleware: [
+            offset(4),
             size({
                 padding: 10,
                 apply(a) {
                     Object.assign(a.elements.floating.style, {
                         width: `${a.rects.reference.width}px`,
-                        maxHeight: `${Math.min(360, a.availableHeight)}px`,
+                        maxHeight: `${Math.min(480, a.availableHeight)}px`,
                     });
                 },
             }),
         ],
     });
+
+    useImperativeHandle(externalRef, () => refs.domReference?.current!, [refs]);
 
     const transitions = useTransitionStyles(context, transitionStyles);
     const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
@@ -190,7 +193,8 @@ export const Autocomplete = ({ options, ...props }: SelectProps) => {
                             ref: refs.setFloating,
                             style: { position: strategy, left: x ?? 0, top: y ?? 0, ...transitions.styles },
                         })}
-                        className="bg-card-background text-foreground list-none p-0 m-0 rounded-b-lg shadow-2xl overflow-auto origin-[top_center] overflow-y-auto"
+                        data-floating="true"
+                        className="bg-floating-background shadow-floating text-foreground list-none p-0 m-0 rounded-b-lg overflow-auto origin-[top_center] overflow-y-auto"
                     >
                         {list.map((item, i) => (
                             <Option
@@ -209,4 +213,4 @@ export const Autocomplete = ({ options, ...props }: SelectProps) => {
             </FloatingPortal>
         </fieldset>
     );
-};
+});
