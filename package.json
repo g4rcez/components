@@ -1,39 +1,95 @@
 {
-  "name": "unamed",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@g4rcez/components",
+  "version": "0.0.9",
+  "sideEffects": false,
+  "source": "./src/index.ts",
+  "types": "./dist/inmjs.d.ts",
+  "main": "./dist/index.umd.js",
+  "browser": "./dist/index.umd.js",
+  "module": "./dist/index.cjs",
+  "packageManager": "pnpm@8.15.3",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.ts",
+        "default": "./dist/index.d.ts"
+      },
+      "default": {
+        "type": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.umd.js",
+        "default": "./dist/index.mjs"
+      }
+    },
+    "./styles": {
+      "type": "./dist/preset/src/styles/design-tokens.d.ts",
+      "import": "./dist/preset/src/styles/design-tokens.js",
+      "require": "./dist/preset/src/styles/design-tokens.js",
+      "default": "./dist/preset/src/styles/design-tokens.js"
+    },
+    "./preset.tailwind": {
+      "type": "./dist/preset/preset.tailwind.d.ts",
+      "import": "./dist/preset/preset.tailwind.js",
+      "require": "./dist/preset/preset.tailwind.js",
+      "default": "./dist/preset/preset.tailwind.js"
+    },
+    "./dist/index.css": "./dist/index.css"
+  },
+  "files": [
+    "dist",
+    "dist/index.css"
+  ],
   "scripts": {
+    "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "format": "npx prettier --write .",
+    "lib:css": "tailwind -i ./src/index.css -o ./dist/index.css --minify",
+    "lib:tailwind": "tsc -p tsconfig.tailwind.json",
+    "lib:types": "tsc -p tsconfig.lib.json",
     "lint": "next lint",
-    "format": "npx prettier --write ."
+    "preset": "tsc -p tsconfig.tailwind.json"
+  },
+  "publishConfig": {
+    "directory": "dist"
   },
   "dependencies": {
+    "@dnd-kit/core": "6.1.0",
     "@floating-ui/react": "0.26.19",
+    "@vitejs/plugin-react": "4.3.1",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
+    "framer-motion": "11.2.13",
     "fuzzy-search": "3.2.1",
+    "linq-arrays": "3.2.5",
     "lucide-react": "0.400.0",
-    "next": "14.2.4",
+    "pretty-bytes": "6.1.1",
     "qs": "6.12.2",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "18",
+    "react-dom": "18",
+    "react-dropzone": "14.2.3",
+    "react-virtuoso": "4.7.11",
     "sidekicker": "0.1.8",
+    "storage-manager-js": "4.2.6-5",
     "tailwind-merge": "2.3.0",
     "the-mask-input": "3.3.12",
     "use-typed-reducer": "4.2.1",
+    "vite": "5.3.3",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@types/fuzzy-search": "2.1.5",
-    "@types/node": "^20",
+    "@types/node": "20.14.10",
     "@types/qs": "6.9.15",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "postcss": "^8",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "ncc": "0.3.6",
+    "next": "14.2.4",
+    "postcss": "8.4.39",
     "prettier": "3.3.2",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "tailwindcss": "3.4.4",
+    "tslib": "2.6.3",
+    "typescript": "5.5.3",
+    "vite-tsconfig-paths": "4.3.2"
   }
 }

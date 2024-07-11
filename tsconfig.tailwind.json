@@ -7,20 +7,18 @@
     "allowUnusedLabels": false,
     "alwaysStrict": true,
     "declaration": true,
-    "declarationDir": "./dist",
     "declarationMap": true,
-    "emitDeclarationOnly": true,
+    "outDir": "./dist/preset",
     "esModuleInterop": true,
+    "noEmit": false,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "module": "esnext",
     "moduleResolution": "node",
+    "module": "ES2015",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
@@ -30,22 +28,16 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "ES2015",
+    "target": "ES5",
     "paths": {
       "~/*": [
         "./src/*"
       ]
-    },
-    "noEmit": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    }
   },
   "include": [
-    "./src",
-    ".next/types/**/*.ts"
+    "./src/styles",
+    "./preset.tailwind.ts"
   ],
   "exclude": [
     "node_modules",

@@ -21,7 +21,7 @@ const options = {
     parameterLimit: Number.MAX_SAFE_INTEGER,
 } as const;
 
-export const formToJson = <T extends any>(form: HTMLFormElement): T => {
+export const formToJson = (form: HTMLFormElement): any => {
     const formData = new FormData(form);
     const urlSearchParams = new URLSearchParams(formData as any);
     return parse(urlSearchParams.toString(), options) as never;
@@ -125,7 +125,6 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
                 return { ...acc, [field.name]: errorMessage };
             }, {});
             const e = Is.empty(validationErrors) ? null : {};
-            console.log("ON INVALID", e);
             setErrors(e);
             exec?.({ form, errors: e || {} });
         },
@@ -140,11 +139,11 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
             Array.from(form.elements).forEach((field) => {
                 if (field.tagName === "SELECT") {
                     const input = field as HTMLSelectElement;
-                    json = setPath(json, input.name, input.value);
+                    json = setPath<any>(json as any, input.name, input.value);
                 }
                 if (field.tagName === "INPUT") {
                     const input = field as HTMLInputElement;
-                    json = setPath(json, input.name, getValueByType(input));
+                    json = setPath<any>(json as any, input.name, getValueByType(input));
                 }
             });
             exec({ form, json, event, reset: () => formReset(form) });

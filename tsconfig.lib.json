@@ -12,13 +12,9 @@
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -31,24 +27,23 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2015",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "paths": {
       "~/*": [
         "./src/*"
       ]
     },
-    "noEmit": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
   },
   "include": [
-    "./src",
-    ".next/types/**/*.ts"
+    "./src"
   ],
   "exclude": [
     "node_modules",
-    "docs"
+    "docs",
+    "app"
   ]
 }

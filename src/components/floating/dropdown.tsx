@@ -18,8 +18,9 @@ import React, { Fragment, PropsWithChildren, useMemo, useRef, useState } from "r
 type DropdownProps = {
     open?: boolean;
     arrow?: boolean;
-    trigger: React.ReactElement | React.ReactNode;
     onChange?: (nextValue: boolean) => void;
+    trigger: React.ReactElement | React.ReactNode;
+    title?: React.ReactNode | React.ReactElement | string;
 };
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
@@ -77,9 +78,12 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                         <FloatingArrow
                             ref={arrowRef}
                             context={context}
-                            strokeWidth={1}
-                            className="fill-floating-background stroke-1 stroke-floating-border"
+                            strokeWidth={0.1}
+                            className="fill-floating-background stroke-floating-border"
                         />
+                        <header className="mb-2">
+                            <h3 className="leading-snug font-medium text-2xl tracking-tight text-left">{props.title}</h3>
+                        </header>
                         {props.children}
                     </div>
                 </FloatingFocusManager>

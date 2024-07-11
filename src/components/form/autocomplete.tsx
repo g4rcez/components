@@ -2,7 +2,8 @@
 import {
     autoUpdate,
     FloatingFocusManager,
-    FloatingPortal, offset,
+    FloatingPortal,
+    offset,
     size,
     useDismiss,
     useFloating,
@@ -12,37 +13,35 @@ import {
     useTransitionStyles,
 } from "@floating-ui/react";
 import Fuzzy from "fuzzy-search";
+import { ChevronDown } from "lucide-react";
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { InputField } from "~/components/form/input-field";
+import { InputField, InputFieldProps } from "~/components/form/input-field";
+import { type OptionProps } from "~/components/form/select";
 import { usePrevious } from "~/hooks/use-previous";
 import { css } from "~/lib/dom";
-
-export type Option = {
-    value: string;
-    label?: React.ReactElement;
-};
 
 type ItemProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
     selected: boolean;
     active: boolean;
-    option: Option;
+    option: OptionProps;
 };
 
-export const Option = forwardRef<HTMLLIElement, ItemProps>(({ selected, active, option, ...rest }, ref) => (
-    <li
-        {...rest}
-        ref={ref}
-        role="option"
-        aria-selected={selected}
-        className={`p-2 cursor-pointer ${selected ? "bg-primary text-primary-foreground" : ""} ${active ? "bg-primary-subtle text-primary-foreground" : ""}`}
-    >
-        {option.label ?? option.value}
+export const Option = forwardRef<HTMLLIElement, ItemProps>(({ selected, active, onClick, option, ...rest }, ref) => (
+    <li {...rest} ref={ref} role="option" aria-selected={selected} className="w-full">
+        <button
+            type="button"
+            onClick={onClick as any}
+            aria-selected={selected}
+            className={`p-2 w-full text-left cursor-pointer ${selected ? "bg-primary text-primary-foreground" : ""} ${active ? "bg-primary-subtle text-primary-foreground" : ""}`}
+        >
+            {option.label ?? option.value}
+        </button>
     </li>
 ));
 
-type SelectProps = Omit<React.HTMLProps<HTMLInputElement>, "value"> & {
-    options: Option[];
+type SelectProps = Omit<InputFieldProps<"input">, "value"> & {
     value?: string;
+    options: OptionProps[];
 };
 
 const transitionStyles = {
@@ -56,7 +55,7 @@ const fuzzyOptions = { caseSensitive: false, sort: false };
 
 const emptyRef: any[] = [];
 
-export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options, ...props }: SelectProps, externalRef) => {
+export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options, required = true, ...props }: SelectProps, externalRef) => {
     const [open, setOpen] = useState(false);
     const [shadow, setShadow] = useState("");
     const [value, setValue] = useState(props.value ?? props.defaultValue ?? "");
@@ -110,7 +109,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
         }),
     ]);
 
-    const onSelect = (opt: Option) => {
+    const onSelect = (opt: OptionProps) => {
         setValue(opt.value);
         setOpen(false);
         setShadow("");
@@ -138,19 +137,23 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
         <fieldset className="relative w-auto">
             <InputField
                 {...(props as any)}
+                required={required}
                 right={
-                    value ? (
-                        <button type="button" onClick={onClose} className="link:text-danger transition-colors">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
-                                    fill="currentColor"
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                        </button>
-                    ) : null
+                    <span className="flex items-center gap-0.5">
+                        <ChevronDown size={20} />
+                        {value ? (
+                            <button type="button" onClick={onClose} className="link:text-danger transition-colors">
+                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
+                                        fill="currentColor"
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                        ) : null}
+                    </span>
                 }
             >
                 <input
@@ -177,11 +180,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
                             }
                         },
                     })}
+                    required={required}
                     value={open ? shadow : value}
                     aria-autocomplete="list"
                     autoComplete="off"
                     className={css(
                         "input text-foreground group h-10 w-full flex-1 rounded-md bg-transparent p-2 placeholder-input-mask outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        !!props.right || shadow ? "pe-12" : "",
+                        !!props.left ? "ps-8" : "",
                         props.className
                     )}
                 />
@@ -194,7 +200,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
                             style: { position: strategy, left: x ?? 0, top: y ?? 0, ...transitions.styles },
                         })}
                         data-floating="true"
-                        className="bg-floating-background shadow-floating text-foreground list-none p-0 m-0 rounded-b-lg overflow-auto origin-[top_center] overflow-y-auto"
+                        className="bg-floating-background shadow-floating text-foreground list-none p-0 m-0 rounded-b-lg overflow-auto origin-[top_center] overflow-y-auto z-floating"
                     >
                         {list.map((item, i) => (
                             <Option

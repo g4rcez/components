@@ -1,14 +1,8 @@
 "use client";
+import { InfoIcon } from "lucide-react";
 import { z } from "zod";
-import { Button } from "~/components/core/button";
-import { Card } from "~/components/display/card";
-import { Dropdown } from "~/components/floating/dropdown";
-import { Autocomplete } from "~/components/form/autocomplete";
-import { Form } from "~/components/form/form";
-import { Input } from "~/components/form/input";
-import { Select } from "~/components/form/select";
-import { Switch } from "~/components/form/switch";
-import { useForm } from "~/hooks/use-form";
+import { Autocomplete, Button, Card, Dropdown, FileUpload, Form, Input, Select, Switch, Tooltip, useForm } from "../src";
+import { ClientTable } from "./client-table";
 
 const selectProps = {
     placeholder: "Haskell",
@@ -26,10 +20,13 @@ const schema = z.object({
 export default function Home() {
     const form = useForm(schema);
     return (
-        <div className="text-foreground bg-background w-full h-screen">
-            <div className="p-32 mx-auto container text-center">
+        <div className="w-full h-full">
+            <div className="p-8 mx-auto container text-center flex flex-col gap-6">
                 <Card>
-                    <h1 className="font-medium text-7xl leading-snug tracking-tight">Testing</h1>
+                    <h1 className="font-medium gap-1 flex items-center justify-center text-7xl leading-snug tracking-tight">
+                        Testing
+                        <Tooltip title={<InfoIcon size={32} />}>I'm a tooltip</Tooltip>
+                    </h1>
                     <Dropdown trigger="Floating form">
                         <Autocomplete {...selectProps} name="test" />
                         <Autocomplete {...selectProps} name="test2" />
@@ -64,6 +61,10 @@ export default function Home() {
                             <Button type="submit">Save</Button>
                         </div>
                     </Form>
+                </Card>
+                <ClientTable />
+                <Card>
+                    <FileUpload id="id" />
                 </Card>
             </div>
         </div>

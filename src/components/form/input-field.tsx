@@ -60,7 +60,7 @@ export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
 >;
 
 export const InputField = <T extends "input" | "select">({
-    optionalText = "Opcional",
+    optionalText = "Optional",
     left,
     rightLabel,
     container,
@@ -93,10 +93,10 @@ export const InputField = <T extends "input" | "select">({
                         ) : null}
                     </InputFeedback>
                 ) : null}
-                <div className="group flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-focus-within:border-primary group-hover:border-primary group-error:border-danger">
-                    {left ? <span className="flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
+                <div className="relative group flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-focus-within:border-primary group-hover:border-primary group-error:border-danger">
+                    {left ? <span className="absolute left-0 flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
                     {children}
-                    {right ? <span className="flex flex-nowrap gap-2 whitespace-nowrap pr-1">{right}</span> : null}
+                    {right ? <span className="absolute right-0 flex flex-nowrap gap-2 whitespace-nowrap pr-1">{right}</span> : null}
                 </div>
             </label>
             <p className="mt-1 text-xs group-error:block group-error:text-danger">{error}</p>
