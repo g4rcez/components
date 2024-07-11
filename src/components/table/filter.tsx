@@ -1,11 +1,11 @@
 import { Symbols } from "linq-arrays";
 import { PlusIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment } from "react";
-import { Dropdown } from "~/components/floating/dropdown";
-import { Input } from "~/components/form/input";
-import { OptionProps, Select } from "~/components/form/select";
-import { uuid } from "~/lib/fns";
-import { Label } from "~/types";
+import { Dropdown } from "../floating/dropdown";
+import { Input } from "../form/input";
+import { OptionProps, Select } from "../form/select";
+import { uuid } from "../../lib/fns";
+import { Label } from "../../types";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
 
 const operators = {

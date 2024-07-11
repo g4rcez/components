@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import { Polymorph } from "~/components/core/polymorph";
-import { css } from "~/lib/dom";
+import { Polymorph } from "../core/polymorph";
+import { css } from "../../lib/dom";
 
 export type CardProps = React.ComponentProps<"div">;
 export const Card = (props: PropsWithChildren<CardProps>) => {

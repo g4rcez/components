@@ -2,9 +2,9 @@
 import React from "react";
 import { LocalStorage } from "storage-manager-js";
 import { useReducer } from "use-typed-reducer";
-import { OptionProps } from "~/components/form/select";
-import { isSsr } from "~/lib/fns";
-import { POJO, SetState } from "~/types";
+import { OptionProps } from "../form/select";
+import { isSsr } from "../../lib/fns";
+import { POJO, SetState } from "../../types";
 import { FilterConfig } from "./filter";
 import { GroupItem } from "./group";
 import { Sorter } from "./sort";

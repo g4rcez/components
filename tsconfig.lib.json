@@ -8,8 +8,8 @@
     "alwaysStrict": true,
     "declaration": true,
     "declarationDir": "./dist",
+    "outDir": "./dist",
     "declarationMap": true,
-    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
@@ -32,11 +32,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "paths": {
-      "~/*": [
-        "./src/*"
-      ]
-    },
   },
   "include": [
     "./src"

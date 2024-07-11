@@ -3,7 +3,7 @@ import prettyBytes from "pretty-bytes";
 import React, { Fragment, useEffect, useState } from "react";
 import { DropzoneProps, useDropzone } from "react-dropzone";
 import { Override } from "sidekicker";
-import { Button } from "~/components/core/button";
+import { Button } from "../core/button";
 
 type Props = Override<React.ComponentProps<"input">, DropzoneProps> & {
     onDeleteFile?: (file: File) => void;

@@ -1,9 +1,9 @@
 "use client";
 import { ChevronDown } from "lucide-react";
 import React, { forwardRef, useEffect, useRef } from "react";
-import { InputField, InputFieldProps } from "~/components/form/input-field";
-import { css, mergeRefs } from "~/lib/dom";
-import { Override } from "~/types";
+import { InputField, InputFieldProps } from "./input-field";
+import { css, mergeRefs } from "../../lib/dom";
+import { Override } from "../../types";
 
 export type OptionProps = Override<React.ComponentProps<"option">, { value: string }>;
 

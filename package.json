@@ -1,8 +1,12 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "sideEffects": false,
   "private": false,
+  "packageManager": "pnpm@8.15.3",
+  "publishConfig": {
+    "directory": "dist"
+  },
   "engines": {
     "node": ">=20.14.0"
   },
@@ -18,12 +22,64 @@
     "url": "https://github.com/g4rcez/components",
     "type": "git"
   },
+  "scripts": {
+    "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
+    "format": "npx prettier --write .",
+    "lib:css": "tailwind -i ./src/index.css -o ./dist/index.css --minify",
+    "lib:tailwind": "tsc -p tsconfig.tailwind.json",
+    "lib:types": "tsc -p tsconfig.lib.json",
+    "preset": "tsc -p tsconfig.tailwind.json",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@floating-ui/react": "0.26.19",
+    "class-variance-authority": "0.7.0",
+    "clsx": "2.1.1",
+    "framer-motion": "11.3.0",
+    "fuzzy-search": "3.2.1",
+    "linq-arrays": "3.2.5",
+    "lucide-react": "0.407.0",
+    "pretty-bytes": "6.1.1",
+    "qs": "6.12.3",
+    "react-dropzone": "14.2.3",
+    "react-virtuoso": "4.7.11",
+    "sidekicker": "0.1.8",
+    "storage-manager-js": "4.2.6-5",
+    "tailwind-merge": "2.4.0",
+    "the-mask-input": "3.3.12",
+    "use-typed-reducer": "4.2.1",
+    "vite": "5.3.3",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/fuzzy-search": "2.1.5",
+    "@types/node": "20.14.10",
+    "@types/qs": "6.9.15",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "postcss": "8.4.39",
+    "prettier": "3.3.2",
+    "tailwindcss": "3.4.4",
+    "tslib": "2.6.3",
+    "typescript": "5.5.3",
+    "vite-tsconfig-paths": "4.3.2",
+    "vitest": "2.0.2"
+  },
   "source": "./src/index.ts",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.umd.js",
   "browser": "./dist/index.umd.js",
   "module": "./dist/index.cjs",
-  "packageManager": "pnpm@8.15.3",
+  "files": [
+    "dist",
+    "dist/index.css"
+  ],
   "exports": {
     ".": {
       "types": {
@@ -38,6 +94,12 @@
         "default": "./dist/index.mjs"
       }
     },
+    "./themes": {
+      "type": "./dist/preset/src/styles/theme.d.ts",
+      "import": "./dist/preset/src/styles/theme.js",
+      "require": "./dist/preset/src/styles/theme.js",
+      "default": "./dist/preset/src/styles/theme.js"
+    },
     "./styles": {
       "type": "./dist/preset/src/styles/design-tokens.d.ts",
       "import": "./dist/preset/src/styles/design-tokens.js",
@@ -50,59 +112,48 @@
       "require": "./dist/preset/preset.tailwind.js",
       "default": "./dist/preset/preset.tailwind.js"
     },
-    "./dist/index.css": "./dist/index.css"
-  },
-  "files": [
-    "dist",
-    "dist/index.css"
-  ],
-  "scripts": {
-    "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
-    "format": "npx prettier --write .",
-    "lib:css": "tailwind -i ./src/index.css -o ./dist/index.css --minify",
-    "lib:tailwind": "tsc -p tsconfig.tailwind.json",
-    "lib:types": "tsc -p tsconfig.lib.json",
-    "preset": "tsc -p tsconfig.tailwind.json",
-    "test": "vitest run",
-    "test:watch": "vitest watch"
-  },
-  "publishConfig": {
-    "directory": "dist"
-  },
-  "dependencies": {
-    "@floating-ui/react": "0.26.19",
-    "@vitejs/plugin-react": "4.3.1",
-    "class-variance-authority": "0.7.0",
-    "clsx": "2.1.1",
-    "framer-motion": "11.2.13",
-    "fuzzy-search": "3.2.1",
-    "linq-arrays": "3.2.5",
-    "lucide-react": "0.400.0",
-    "pretty-bytes": "6.1.1",
-    "qs": "6.12.2",
-    "react": "18",
-    "react-dom": "18",
-    "react-dropzone": "14.2.3",
-    "react-virtuoso": "4.7.11",
-    "sidekicker": "0.1.8",
-    "storage-manager-js": "4.2.6-5",
-    "tailwind-merge": "2.3.0",
-    "the-mask-input": "3.3.12",
-    "use-typed-reducer": "4.2.1",
-    "vite": "5.3.3",
-    "zod": "3.23.8"
-  },
-  "devDependencies": {
-    "@types/fuzzy-search": "2.1.5",
-    "@types/node": "20.14.10",
-    "@types/qs": "6.9.15",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "postcss": "8.4.39",
-    "prettier": "3.3.2",
-    "tailwindcss": "3.4.4",
-    "typescript": "5.5.3",
-    "vite-tsconfig-paths": "4.3.2",
-    "vitest": "2.0.2"
+    "./dist/index.css": "./dist/index.css",
+    "./button": {
+      "type": "./dist/components/core/button.d.ts",
+      "import": "./dist/components/core/button.js",
+      "require": "./dist/components/core/button.js",
+      "default": "./dist/components/core/button.js"
+    },
+    "./input": {
+      "type": "./dist/components/form/input.d.ts",
+      "import": "./dist/components/form/input.js",
+      "require": "./dist/components/form/input.js",
+      "default": "./dist/components/form/input.js"
+    },
+    "./autocomplete": {
+      "type": "./dist/components/form/autocomplete.d.ts",
+      "import": "./dist/components/form/autocomplete.js",
+      "require": "./dist/components/form/autocomplete.js",
+      "default": "./dist/components/form/autocomplete.js"
+    },
+    "./select": {
+      "type": "./dist/components/form/select.d.ts",
+      "import": "./dist/components/form/select.js",
+      "require": "./dist/components/form/select.js",
+      "default": "./dist/components/form/select.js"
+    },
+    "./dropdown": {
+      "type": "./dist/components/floating/dropdown.d.ts",
+      "import": "./dist/components/floating/dropdown.js",
+      "require": "./dist/components/floating/dropdown.js",
+      "default": "./dist/components/floating/dropdown.js"
+    },
+    "./tooltip": {
+      "type": "./dist/components/floating/tooltip.d.ts",
+      "import": "./dist/components/floating/tooltip.js",
+      "require": "./dist/components/floating/tooltip.js",
+      "default": "./dist/components/floating/tooltip.js"
+    },
+    "./card": {
+      "type": "./dist/components/display/card.d.ts",
+      "import": "./dist/components/display/card.js",
+      "require": "./dist/components/display/card.js",
+      "default": "./dist/components/display/card.js"
+    }
   }
 }

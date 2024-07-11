@@ -14,8 +14,8 @@ import {
     useRole,
 } from "@floating-ui/react";
 import React, { Fragment, useRef, useState } from "react";
-import { Polymorph, PolymorphicProps } from "~/components/core/polymorph";
-import { Label, Override } from "~/types";
+import { Polymorph, PolymorphicProps } from "../../components/core/polymorph";
+import { Label, Override } from "../../types";
 
 type TooltipProps = Override<PolymorphicProps<React.ComponentProps<"button">, "div">, { title: Label }>;
 

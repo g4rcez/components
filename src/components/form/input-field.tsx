@@ -1,9 +1,9 @@
 "use client";
 import { CheckCircle, XCircle } from "lucide-react";
 import React, { Fragment, PropsWithChildren } from "react";
-import { PolymorphicProps } from "~/components/core/polymorph";
-import { css } from "~/lib/dom";
-import { Label } from "~/types";
+import { PolymorphicProps } from "../core/polymorph";
+import { css } from "../../lib/dom";
+import { Label } from "../../types";
 
 export type FeedbackProps = React.PropsWithChildren<
     Partial<{

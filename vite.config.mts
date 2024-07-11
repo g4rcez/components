@@ -5,9 +5,6 @@ import tsconfig from "vite-tsconfig-paths";
 
 export default defineConfig({
     plugins: [react(), tsconfig({ configNames: ["tsconfig.lib.json"] })],
-    resolve: {
-        alias: [{ find: "~", replacement: path.resolve(__dirname, "src") }],
-    },
     build: {
         sourcemap: true,
         outDir: "./dist",

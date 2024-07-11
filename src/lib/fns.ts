@@ -1,4 +1,4 @@
-import { AllPaths } from "sidekicker";
+import type { AllPaths } from "sidekicker";
 
 export const uuid = (): string =>
     "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {

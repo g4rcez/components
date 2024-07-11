@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Override } from "~/types";
+import { Override } from "../../types";
 
 type Polymorphism<T extends React.ElementType> = React.PropsWithChildren<{ as?: T }>;
 

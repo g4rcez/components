@@ -1,7 +1,7 @@
 import { AnimatePresence, Reorder, TargetAndTransition } from "framer-motion";
 import { PlusIcon, SearchIcon } from "lucide-react";
-import { Dropdown } from "~/components/floating/dropdown";
-import { useReactive } from "~/hooks/use-reactive";
+import { Dropdown } from "../floating/dropdown";
+import { useReactive } from "../../hooks/use-reactive";
 import { ColumnHeaderFilter, createFilterFromCol } from "./filter";
 import { SorterHead } from "./sort";
 import { Col, getLabel, TableOperationProps } from "./table-lib";

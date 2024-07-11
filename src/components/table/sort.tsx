@@ -1,10 +1,10 @@
 "use client";
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon, SortAscIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
-import { Dropdown } from "~/components/floating/dropdown";
-import { OptionProps, Select } from "~/components/form/select";
-import { uuid } from "~/lib/fns";
-import { Label } from "~/types";
+import { Dropdown } from "../floating/dropdown";
+import { OptionProps, Select } from "../form/select";
+import { uuid } from "../../lib/fns";
+import { Label } from "../../types";
 import { Col, TableConfiguration, TableOperationProps } from "./table-lib";
 
 type Keyof<T extends {}> = keyof T extends infer R extends string ? R : never;

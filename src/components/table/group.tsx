@@ -4,10 +4,10 @@ import Linq from "linq-arrays";
 import { GripVerticalIcon, GroupIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { keys } from "sidekicker";
-import { Button } from "~/components/core/button";
-import { Dropdown } from "~/components/floating/dropdown";
-import { Select } from "~/components/form/select";
-import { uuid } from "~/lib/fns";
+import { uuid } from "../../lib/fns";
+import { Button } from "../core/button";
+import { Dropdown } from "../floating/dropdown";
+import { Select } from "../form/select";
 import { Col, createOptionCols, TableConfiguration } from "./table-lib";
 
 export type GroupItem<T extends {}> = Col<T> & {

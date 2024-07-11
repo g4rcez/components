@@ -2,9 +2,9 @@ import { parse } from "qs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AllPaths, Is, setPath } from "sidekicker";
 import { z, ZodArray, ZodNumber } from "zod";
-import { formReset } from "~/components/form/form";
-import { InputProps } from "~/components/form/input";
-import { SelectProps } from "~/components/form/select";
+import { formReset } from "../components/form/form";
+import { InputProps } from "../components/form/input";
+import { SelectProps } from "../components/form/select";
 
 const sort = (a: string, b: string) => a.localeCompare(b);
 

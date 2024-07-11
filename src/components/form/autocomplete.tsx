@@ -15,10 +15,10 @@ import {
 import Fuzzy from "fuzzy-search";
 import { ChevronDown } from "lucide-react";
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { InputField, InputFieldProps } from "~/components/form/input-field";
-import { type OptionProps } from "~/components/form/select";
-import { usePrevious } from "~/hooks/use-previous";
-import { css } from "~/lib/dom";
+import { InputField, InputFieldProps } from "./input-field";
+import { type OptionProps } from "./select";
+import { usePrevious } from "../../hooks/use-previous";
+import { css } from "../../lib/dom";
 
 type ItemProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
     selected: boolean;

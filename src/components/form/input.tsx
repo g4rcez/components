@@ -1,9 +1,9 @@
 "use client";
 import React, { forwardRef, useEffect, useRef } from "react";
 import MaskInput, { TheMaskProps } from "the-mask-input";
-import { FeedbackProps, InputField, InputFieldProps } from "~/components/form/input-field";
-import { css, mergeRefs } from "~/lib/dom";
-import { Override } from "~/types";
+import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
+import { css, mergeRefs } from "../../lib/dom";
+import { Override } from "../../types";
 
 export type InputProps = Override<
     InputFieldProps<"input">,

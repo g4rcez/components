@@ -29,11 +29,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES5",
-    "paths": {
-      "~/*": [
-        "./src/*"
-      ]
-    }
   },
   "include": [
     "./src/styles",

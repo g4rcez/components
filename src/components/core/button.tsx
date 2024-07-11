@@ -1,8 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import React, { forwardRef } from "react";
-import { Polymorph, PolymorphicProps } from "~/components/core/polymorph";
-import { css } from "~/lib/dom";
-import { Label } from "~/types";
+import { Polymorph, PolymorphicProps } from "./polymorph";
+import { css } from "../../lib/dom";
+import { Label } from "../../types";
 
 const buttonVariants = cva(
     "inline-flex gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:text-opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
