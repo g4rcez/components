@@ -1,11 +1,11 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import React, { forwardRef } from "react";
-import { Polymorph, PolymorphicProps } from "./polymorph";
 import { css } from "../../lib/dom";
 import { Label } from "../../types";
+import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const buttonVariants = cva(
-    "inline-flex gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:text-opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
+    "inline-flex duration-700 data-[loading=true]:opacity-40 data-[loading=true]:animate-pulse gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-30 disabled:text-opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
     {
         variants: {
             size: {
@@ -23,8 +23,11 @@ const buttonVariants = cva(
             theme: {
                 raw: "",
                 main: "bg-primary hover:bg-primary-hover text-primary-foreground",
-                loading: "animate-pulse bg-disabled duration-700 opacity-70",
-                disabled: "bg-disabled duration-700 opacity-70",
+                warn: "bg-warn hover:bg-warn-hover text-warn-foreground",
+                danger: "bg-danger hover:bg-danger-hover text-danger-foreground",
+                secondary: "bg-secondary hover:bg-secondary-hover text-secondary-foreground",
+                success: "bg-success hover:bg-success-hover text-success-foreground",
+                info: "bg-info hover:bg-info-hover text-info-foreground",
             },
         },
         defaultVariants: { theme: "main", size: "default", rounded: "default" },
@@ -47,17 +50,11 @@ export const Button: <T extends React.ElementType = "button">(props: ButtonProps
             ref={ref}
             type={type}
             data-theme={theme}
+            data-loading={loading}
             disabled={disabled}
             as={props.as ?? "button"}
             onClick={disabled ? undefined : props.onClick}
-            className={css(
-                buttonVariants({
-                    size,
-                    rounded,
-                    theme: loading ? "loading" : disabled ? "disabled" : theme,
-                }),
-                className
-            )}
+            className={css(buttonVariants({ size, rounded, theme }), className)}
         >
             {props.children}
             {icon}
@@ -79,8 +76,8 @@ export const ButtonGroup = (props: Props) => (
                     type={button.type || "button"}
                     data-active={props.active === button.name ? "true" : "false"}
                     className={css(
-                        "border-main-bg flex flex-1 items-center gap-1.5 rounded-sm border-r-2 px-4 py-2 last:border-r-0",
-                        "hover:text-main cursor-pointer justify-center whitespace-nowrap align-middle font-medium",
+                        "flex flex-1 items-center gap-1.5 rounded-sm border-r-2 px-4 py-2 last:border-r-0",
+                        "cursor-pointer justify-center whitespace-nowrap align-middle font-medium",
                         "focus-visible:ring-ring shadow-sm focus-visible:outline-none focus-visible:ring-2 disabled:text-opacity-80",
                         "data-[active=true]:bg-main-bg text-body data-[active=true]:text-main transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-50"
                     )}

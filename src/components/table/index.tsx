@@ -56,7 +56,7 @@ const InnerTable = <T extends {}>({ filters, setCols, setFilters, sorters, cols,
         if (props.loading) return loadingArray as any as T[];
         const linq = new Linq(props.rows);
         if (filters.length > 0) {
-            filters.forEach((x) => (x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name, x.operation.symbol, x.value)));
+            filters.forEach((x) => (x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name as any, x.operation.symbol, x.value)));
         }
         if (sorters.length === 0) return linq.Select();
         return multiSort(linq.Select(), sorters);

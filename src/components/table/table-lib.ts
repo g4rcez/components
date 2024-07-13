@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { AllPaths } from "sidekicker";
 import { LocalStorage } from "storage-manager-js";
 import { useReducer } from "use-typed-reducer";
 import { OptionProps } from "../form/select";
@@ -35,15 +36,44 @@ type THead = React.ReactElement | React.ReactNode;
 
 export type ColMatrix = `${number},${number}`;
 
-export type CellPropsElement<T extends {}, K extends keyof T> = {
+// ref: https://github.com/gvergnaud/hotscript/blob/main/src/internals/objects/impl/objects.ts
+type ParsePath<
+    path,
+    output extends string[] = [],
+    currentChunk extends string = ""
+> = path extends number
+    ? [`${path}`]
+    : path extends `${infer first}${infer rest}`
+        ? first extends "." | "[" | "]"
+            ? ParsePath<
+                rest,
+                [...output, ...(currentChunk extends "" ? [] : [currentChunk])],
+                ""
+            >
+            : ParsePath<rest, output, `${currentChunk}${first}`>
+        : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
+
+type RecursiveGet<Obj, pathList> = Obj extends any
+    ? pathList extends [infer first, ...infer rest]
+        ? first extends keyof Obj
+            ? RecursiveGet<Obj[first], rest>
+            : [first, Obj] extends [`${number}` | "number", readonly any[]]
+                ? RecursiveGet<Extract<Obj, any[]>[number], rest>
+                : undefined
+        : Obj
+    : never;
+
+type GetFromPath<Obj, path> = RecursiveGet<Obj, ParsePath<path>>;
+
+export type CellPropsElement<T extends {}, K extends AllPaths<T>> = {
     row: T;
-    value: T[K];
+    value: GetFromPath<T, K>;
     rowIndex: number;
     matrix: ColMatrix;
     col: ColOptions<T, K> & { id: K; thead: THead };
 };
 
-type ColOptions<T extends {}, K extends keyof T> = Partial<{
+type ColOptions<T extends {}, K extends AllPaths<T>> = Partial<{
     cellProps: React.HTMLAttributes<HTMLTableCellElement>;
     thProps: React.HTMLAttributes<HTMLTableCellElement>;
     type: ColType;
@@ -53,13 +83,13 @@ type ColOptions<T extends {}, K extends keyof T> = Partial<{
 }>;
 
 export type ColConstructor<T extends {}> = {
-    remove: <K extends keyof T>(id: K) => void;
-    add: <K extends keyof T>(id: K, thead: THead, props?: ColOptions<T, K>) => void;
+    remove: <K extends AllPaths<T>>(id: K) => void;
+    add: <K extends AllPaths<T>>(id: K, thead: THead, props?: ColOptions<T, K>) => void;
 };
 
 const cols =
     <T extends POJO>() =>
-    <K extends keyof T>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
+    <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
 
 export type Col<T extends {}> = ReturnType<ReturnType<typeof cols<T>>>;
 

@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -25,7 +25,7 @@
   "scripts": {
     "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
     "format": "npx prettier --write .",
-    "lib:css": "tailwind -i ./src/index.css -o ./dist/index.css --minify",
+    "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
     "lib:tailwind": "tsc -p tsconfig.tailwind.json",
     "lib:types": "tsc -p tsconfig.lib.json",
     "preset": "tsc -p tsconfig.tailwind.json",
@@ -38,12 +38,14 @@
   },
   "dependencies": {
     "@floating-ui/react": "0.26.19",
+    "@radix-ui/react-slot": "1.1.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "framer-motion": "11.3.0",
     "fuzzy-search": "3.2.1",
     "linq-arrays": "3.2.5",
     "lucide-react": "0.407.0",
+    "next": "14.2.5",
     "pretty-bytes": "6.1.1",
     "qs": "6.12.3",
     "react-dropzone": "14.2.3",
@@ -94,6 +96,7 @@
         "default": "./dist/index.mjs"
       }
     },
+    "./dist/index.css": "./dist/index.css",
     "./themes": {
       "type": "./dist/preset/src/styles/theme.d.ts",
       "import": "./dist/preset/src/styles/theme.js",
@@ -112,7 +115,6 @@
       "require": "./dist/preset/preset.tailwind.js",
       "default": "./dist/preset/preset.tailwind.js"
     },
-    "./dist/index.css": "./dist/index.css",
     "./button": {
       "type": "./dist/components/core/button.d.ts",
       "import": "./dist/components/core/button.js",
@@ -131,6 +133,18 @@
       "require": "./dist/components/form/autocomplete.js",
       "default": "./dist/components/form/autocomplete.js"
     },
+    "./switch": {
+      "type": "./dist/components/form/switch.d.ts",
+      "import": "./dist/components/form/switch.js",
+      "require": "./dist/components/form/switch.js",
+      "default": "./dist/components/form/switch.js"
+    },
+    "./file-upload": {
+      "type": "./dist/components/form/file-upload.d.ts",
+      "import": "./dist/components/form/file-upload.js",
+      "require": "./dist/components/form/file-upload.js",
+      "default": "./dist/components/form/file-upload.js"
+    },
     "./select": {
       "type": "./dist/components/form/select.d.ts",
       "import": "./dist/components/form/select.js",
@@ -143,6 +157,12 @@
       "require": "./dist/components/floating/dropdown.js",
       "default": "./dist/components/floating/dropdown.js"
     },
+    "./modal": {
+      "type": "./dist/components/floating/modal.d.ts",
+      "import": "./dist/components/floating/modal.js",
+      "require": "./dist/components/floating/modal.js",
+      "default": "./dist/components/floating/modal.js"
+    },
     "./tooltip": {
       "type": "./dist/components/floating/tooltip.d.ts",
       "import": "./dist/components/floating/tooltip.js",
@@ -154,6 +174,12 @@
       "import": "./dist/components/display/card.js",
       "require": "./dist/components/display/card.js",
       "default": "./dist/components/display/card.js"
+    },
+    "./table": {
+      "type": "./dist/components/table/table.d.ts",
+      "import": "./dist/components/table/table.js",
+      "require": "./dist/components/table/table.js",
+      "default": "./dist/components/table/table.js"
     }
   }
 }

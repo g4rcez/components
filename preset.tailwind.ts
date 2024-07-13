@@ -3,20 +3,21 @@ import plugin from "tailwindcss/plugin";
 import { createDesignTokens, parsers } from "./src/styles/design-tokens";
 import { defaultDarkTheme } from "./src/styles/theme";
 
-const COLORS = createDesignTokens(defaultDarkTheme.colors, parsers.cssVariable);
-
-export const css = String.raw;
-
-export { createDesignTokens, parsers, defaultDarkTheme };
+const COLORS = createDesignTokens(defaultDarkTheme.colors, parsers.formatWithVar("hsla"));
 
 const config: Partial<Config> = {
     theme: {
         transitionTimingFunction: { DEFAULT: "cubic-bezier(1,.43,.36,.67)" },
         transitionDuration: { DEFAULT: "375ms" },
         extend: {
+            minWidth: { xs: "20rem" },
+            borderRadius: createDesignTokens(defaultDarkTheme.rounded, parsers.cssVariable),
             fill: COLORS,
             colors: COLORS,
-            borderColors: COLORS,
+            borderColors: {
+                ...COLORS,
+                DEFAULT: COLORS.card.border,
+            },
             placeholderColor: COLORS,
             zIndex: {
                 floating: "10",
@@ -30,21 +31,17 @@ const config: Partial<Config> = {
         plugin(function ({ addVariant }) {
             addVariant("link", ["&:hover", "&:active"]);
             addVariant("landing", ["&"]);
-            addVariant("group-assert", [css`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);
+            addVariant("group-assert", [`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);
             addVariant("group-error", [
-                css`:merge(.group):invalid:has(.input:not(:focus):invalid[data-initialized=true]) &`,
-                css`
-                    :merge(.group[data-error=true][data-interactive=true]): has(.input [ data-initialized = true]) &;
-                `,
-                css`
-                    :merge(.group[data-error=true][data-interactive=true]): has(.input) &;
-                `,
-                css`
-                    :merge(.group[data-error=true]: has(.input[data-initialized=true]) ) &;
-                `,
+                `:merge(.group):invalid:has(.input:not(:focus):invalid[data-initialized=true]) &`,
+                `:merge(.group[data-error=true][data-interactive=true]):has(.input [ data-initialized = true]) &`,
+                `:merge(.group[data-error=true][data-interactive=true]):has(.input) &`,
+                `:merge(.group[data-error=true]:has(.input[data-initialized=true]) ) &`,
             ]);
         }),
     ],
 };
 
 export default config;
+
+export { createDesignTokens, parsers, defaultDarkTheme };

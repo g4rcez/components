@@ -1,24 +1,17 @@
-type DesignTokens = {
-    [K in string]: string | DesignTokens;
-};
-
-type Token = { key: string; value: string };
-
-type DesignTokensParser = (value: string, key: string, combine: string) => string;
-
-type DesignTokensBuilder = (value: string, key: string, combine: string) => Token;
+import { DesignTokens, DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types";
 
 export const parsers = {
-    cssVariable: (_, __, k) => `var(--${k})`,
-    rgba: (value) => `rgba(${value})`,
-    rgb: (value) => `rgb(${value})`,
-    hsl: (value) => `hsl(${value})`,
-    hsla: (value) => `hsla(${value})`,
-    hex: (value) => value,
-    raw: (value) => value,
+    cssVariable: (_, __, k) => `var(--${k})` as const,
+    rgba: (v: string) => `rgba(${v})` as const,
+    rgb: (v: string) => `rgb(${v})` as const,
+    hsl: (v: string) => `hsl(${v})` as const,
+    hsla: (v: string) => `hsla(${v})` as const,
+    hex: (v: string) => v,
+    raw: (v: string) => v,
+    formatWithVar: (format: string) => (_: string, __: string, v: string) => `${format}(var(--${v}), <alpha-value>)` as const,
 } satisfies Record<string, DesignTokensParser>;
 
-export const reduceTokens = <T extends DesignTokens>(colors: T, parse: DesignTokensBuilder, prefix: string = "", append: string = ""): Token[] =>
+export const reduceTokens = <T extends GeneralTokens>(colors: T, parse: DesignTokensBuilder, prefix: string = "", append: string = ""): Token[] =>
     Object.entries(colors).reduce<Token[]>((acc, [key, value]) => {
         const combine = append === "" ? `${prefix}${key}` : `${append}-${key}`;
         if (typeof value === "string") {
@@ -28,7 +21,12 @@ export const reduceTokens = <T extends DesignTokens>(colors: T, parse: DesignTok
         return acc.concat(reduceTokens(value, parse, prefix, combine));
     }, []);
 
-export const createDesignTokens = <T extends DesignTokens>(colors: T, parse: DesignTokensParser, prefix: string = "", append: string = ""): T =>
+export const createDesignTokens = <T extends GeneralTokens, Fn extends DesignTokensParser>(
+    colors: T,
+    parse: Fn,
+    prefix: string = "",
+    append: string = ""
+): T =>
     Object.entries(colors).reduce<T>((acc, [key, value]) => {
         const combine = append === "" ? `${prefix}${key}` : `${append}-${key}`;
         if (typeof value === "string") {
@@ -46,12 +44,33 @@ const modifiers = {
     dark: (variables: string) => `html.dark {${variables}}`,
 };
 
-const createStyleContent = (tokens: Token[], modifier: (str: string) => string) => {
-    const content = tokens.map((token) => `${token.key}: ${token.value}`).join(";");
-    return modifier(content);
+const createStyleContent = (
+    tokens: Token[],
+    modifiers: {
+        result: (str: string) => string;
+        value?: (k: string, v: string) => string;
+    }
+) => {
+    const v = modifiers.value || ((_: string, s: string) => s);
+    const content = tokens.map((token) => `${token.key}: ${v(token.key, token.value)}`).join(";");
+    return modifiers.result(content);
 };
 
 export const createStyles = {
-    default: (tokens: Token[]) => createStyleContent(tokens, modifiers.default),
-    dark: (tokens: Token[]) => createStyleContent(tokens, modifiers.dark),
+    default: (tokens: Token[]) => createStyleContent(tokens, { result: modifiers.default }),
+    dark: (tokens: Token[]) => createStyleContent(tokens, { result: modifiers.dark }),
+};
+
+export const createTheme = (theme: DesignTokens, name?: string) => {
+    const fn: DesignTokensBuilder = (value, _, key) => ({
+        key: `--${key}`,
+        value: `${value}`,
+    });
+    const colors = reduceTokens(theme.colors, fn);
+    const spacing = reduceTokens(theme.spacing, fn);
+    const rounded = reduceTokens(theme.rounded, fn);
+    return createStyleContent(colors.concat(spacing, rounded), {
+        result: (variables: string) => `html${name ? `.${name}` : ""} {${variables}}`,
+        value: (_, v) => v.replace("hsla(", "").replace(")", ""),
+    });
 };

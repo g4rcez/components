@@ -1,6 +1,7 @@
 import { Symbols } from "linq-arrays";
 import { PlusIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment } from "react";
+import { AllPaths } from "sidekicker";
 import { Dropdown } from "../floating/dropdown";
 import { Input } from "../form/input";
 import { OptionProps, Select } from "../form/select";
@@ -34,7 +35,7 @@ type FilterValue = string | number | string[] | boolean;
 export type FilterConfig<T extends {} = {}> = {
     id: string;
     label: Label;
-    name: keyof T;
+    name: AllPaths<T>;
     type: ColType;
     operation: Operators;
     value: FilterValue;
@@ -83,7 +84,6 @@ export const Filter = <T extends {}>(props: Props<T>) => {
 
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         const id = e.currentTarget.dataset.id || "";
-        console.log({ id, f: props.filters });
         props.set((prev) => prev.filter((x) => x.id !== id));
     };
 

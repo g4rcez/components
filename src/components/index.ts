@@ -8,6 +8,7 @@ export * from "./form/switch";
 export * from "./form/input-field";
 export * from "./core/button";
 export * from "./core/polymorph";
+export * from "./core/tag";
 export * from "./display/card";
 export * from "./floating/dropdown";
 export * from "./floating/tooltip";

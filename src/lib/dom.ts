@@ -1,6 +1,7 @@
 import { ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import React, { LegacyRef, MutableRefObject, RefCallback } from "react";
+import { Is } from "sidekicker";
+import { twMerge } from "tailwind-merge";
 
 export const mergeRefs =
     <T extends any = any>(...refs: Array<MutableRefObject<T> | LegacyRef<T> | undefined | null>): RefCallback<T> =>
@@ -14,7 +15,7 @@ export const mergeRefs =
         });
     };
 
-export const isReactComponent = (a: any): a is React.FC => {
+export const isReactComponent = (a: any): a is React.ReactElement => {
     if (a.$$typeof === Symbol.for("react.forward_ref")) {
         return true;
     }
@@ -23,5 +24,7 @@ export const isReactComponent = (a: any): a is React.FC => {
     }
     return a.$$typeof === Symbol.for("react.element");
 };
+
+export const isReactFC = (a: any) => Is.function(a);
 
 export const css = (...styles: ClassValue[]) => twMerge(clsx(styles));
