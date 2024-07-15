@@ -52,7 +52,7 @@ export const defaultDarkTheme: DesignTokens = {
             foreground: "hsla(210, 40%, 98%)",
         },
         input: {
-            border: "hsla(240, 4%, 33%)",
+            border: "hsla(240, 4%, 25%)",
             placeholder: "hsla(210, 24%, 71%)",
             "mask-error": "hsla(0, 94%, 81%)",
             "switch-bg": "hsla(0, 0%, 9%)",
@@ -74,7 +74,6 @@ export const defaultDarkTheme: DesignTokens = {
         table: {
             background: "hsla(0, 0%, 15%)",
             border: "hsla(240, 4%, 33%)",
-            row: "hsla(240, 7%, 27%)",
         },
     },
 };
@@ -131,7 +130,7 @@ export const defaultLightTheme: DesignTokens = {
             foreground: "hsla(210, 34%, 96%)",
         },
         input: {
-            border: "hsla(240, 4%, 33%)",
+            border: "hsla(218, 22%, 80%)",
             placeholder: "hsla(210, 24%, 71%)",
             "mask-error": "hsla(0, 94%, 81%)",
             "switch-bg": "hsla(0, 0%, 9%)",
@@ -153,7 +152,6 @@ export const defaultLightTheme: DesignTokens = {
         table: {
             background: "hsla(0, 0%, 100%)",
             border: "hsla(210, 25%, 88%)",
-            row: "hsla(210, 24%, 71%)",
         },
     },
 };

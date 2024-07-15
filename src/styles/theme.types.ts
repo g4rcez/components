@@ -74,7 +74,6 @@ export type DesignTokens = {
         table: {
             background: string;
             border: string;
-            row: string;
         };
     };
 };

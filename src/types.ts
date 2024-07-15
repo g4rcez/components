@@ -8,4 +8,4 @@ export type Override<Source, New> = Omit<Source, keyof New> & New;
 
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
-export type POJO = Record<string, any>
+export type POJO = {}

@@ -6,3 +6,4 @@ export * from "./lib/dom";
 export * from "./lib/fns";
 export * from "./styles/theme";
 export * from "./styles/design-tokens";
+export { createColumns, createOptionCols, ColType, useTablePreferences } from "./components/table/table-lib";
