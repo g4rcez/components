@@ -2,11 +2,11 @@ import { Symbols } from "linq-arrays";
 import { PlusIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment } from "react";
 import { AllPaths } from "sidekicker";
+import { uuid } from "../../lib/fns";
+import { Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
 import { Input } from "../form/input";
 import { OptionProps, Select } from "../form/select";
-import { uuid } from "../../lib/fns";
-import { Label } from "../../types";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
 
 const operators = {
@@ -111,26 +111,26 @@ export const Filter = <T extends {}>(props: Props<T>) => {
                         return (
                             <li key={`filter-select-${filter.id}`} className="flex flex-nowrap gap-3">
                                 <Select
-                                    title="Filtro"
+                                    title="Filter"
                                     options={props.options}
-                                    placeholder="Seleciona um campo..."
+                                    placeholder="Name..."
                                     value={filter.name as string}
                                     data-id={filter.id}
                                     onChange={onSelectProperty}
                                 />
                                 <Select
-                                    title="Tipo do filtro"
+                                    title="Filter type"
                                     data-id={filter.id}
                                     onChange={onSelectOperation}
                                     value={filter.operation.value}
                                     options={operators}
-                                    placeholder="Operação..."
+                                    placeholder="Operator..."
                                 />
                                 <Input
                                     data-id={filter.id}
                                     onChange={onChangeValue}
-                                    placeholder="Buscar por..."
-                                    title="Valor do filtro"
+                                    placeholder="Search..."
+                                    title="Value"
                                     type={filter.type as any}
                                     value={filter.value as string}
                                 />
@@ -144,7 +144,7 @@ export const Filter = <T extends {}>(props: Props<T>) => {
                     })}
                     <li>
                         <button type="button" onClick={onAddFilter} className="text-primary flex items-center gap-1">
-                            <PlusIcon size={14} /> Adicionar novo filtro
+                            <PlusIcon size={14} /> New filter
                         </button>
                     </li>
                 </ul>
@@ -155,10 +155,11 @@ export const Filter = <T extends {}>(props: Props<T>) => {
 
 type ColumnHeaderFilterProps<T extends {}> = {
     filter: FilterConfig<T>;
+    onDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
     set: React.Dispatch<React.SetStateAction<FilterConfig<T>[]>>;
 };
 
-export const ColumnHeaderFilter = <T extends {}>({ filter, set }: ColumnHeaderFilterProps<T>) => {
+export const ColumnHeaderFilter = <T extends {}>({ filter, onDelete, set }: ColumnHeaderFilterProps<T>) => {
     const onSelectOperation = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const operator = e.target.value;
         const id = e.target.dataset.id || "";
@@ -173,14 +174,24 @@ export const ColumnHeaderFilter = <T extends {}>({ filter, set }: ColumnHeaderFi
 
     return (
         <div className="flex flex-nowrap items-center gap-4 py-2">
-            <Select onChange={onSelectOperation} value={filter.operation.value} options={operatorOptions[filter.type]!} placeholder="Operation..." />
+            <Select
+                onChange={onSelectOperation}
+                options={operatorOptions[filter.type]!}
+                placeholder="Operation..."
+                title="Filter type"
+                value={filter.operation.value}
+            />
             <Input
-                type={filter.type as any}
                 data-id={filter.id}
                 onChange={onChangeValue}
                 placeholder="Looking for..."
+                title="Value"
+                type={filter.type as any}
                 value={filter.value as string}
             />
+            <button onClick={onDelete} data-id={filter.id} type="button" className="mt-4">
+                <Trash2Icon className="text-danger" size={14} />
+            </button>
         </div>
     );
 };

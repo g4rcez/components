@@ -29,7 +29,7 @@ type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
     };
 
 const TableBody = React.forwardRef((props: TableBodyProps, ref: any) => (
-    <tbody {...props} className={`divide-y divide-table-row ${props.className ?? ""}`} ref={ref}>
+    <tbody {...props} className={`divide-y divide-table-border ${props.className ?? ""}`} ref={ref}>
         <AnimatePresence>{props.children}</AnimatePresence>
     </tbody>
 ));
@@ -140,7 +140,7 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
             };
         },
         {
-            interceptor: [
+            postMiddleware: [
                 (state) => {
                     props.set?.(state as any);
                     return state;

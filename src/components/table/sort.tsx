@@ -1,10 +1,10 @@
 "use client";
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon, SortAscIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
-import { Dropdown } from "../floating/dropdown";
-import { OptionProps, Select } from "../form/select";
 import { uuid } from "../../lib/fns";
 import { Label } from "../../types";
+import { Dropdown } from "../floating/dropdown";
+import { OptionProps, Select } from "../form/select";
 import { Col, TableConfiguration, TableOperationProps } from "./table-lib";
 
 type Keyof<T extends {}> = keyof T extends infer R extends string ? R : never;
@@ -24,6 +24,7 @@ const createSorterFn =
             const reverse = x.type === "desc" ? -1 : 1;
             const property = x.value;
             const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
+            console.log({ acc, p, a, b, property });
             return acc !== 0 ? acc : p;
         }, 0);
 
@@ -92,10 +93,17 @@ export const Sort = <T extends {}>(props: Props<T>) => {
                                 <Select
                                     onChange={onSetSorter(sorter.id)}
                                     options={props.options}
+                                    title="Field"
                                     placeholder="Selecione um campo..."
                                     value={sorter.value as string}
                                 />
-                                <Select onChange={onSortOrderType(sorter.id)} value={sorter.type} options={orderOptions} placeholder="Operação..." />
+                                <Select
+                                    title="Sort type"
+                                    onChange={onSortOrderType(sorter.id)}
+                                    value={sorter.type}
+                                    options={orderOptions}
+                                    placeholder="Operação..."
+                                />
                                 <button className="mt-4" data-id={sorter.id} onClick={onDelete}>
                                     <Trash2Icon className="text-danger" size={14} />
                                 </button>
@@ -103,8 +111,8 @@ export const Sort = <T extends {}>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button onClick={onAddSorter} className="text-primary flex items-center gap-1">
-                            <PlusIcon size={14} /> Adicionar ordenação
+                        <button type="button" onClick={onAddSorter} className="text-primary flex items-center gap-1">
+                            <PlusIcon size={14} /> Add sort
                         </button>
                     </li>
                 </ul>
@@ -132,7 +140,7 @@ export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
     }, [status, props.col]);
 
     return (
-        <button className="isolate flex items-center" onClick={onClick}>
+        <button className="isolate flex items-center" onClick={onClick} type="button">
             {status === Order.Asc ? <ChevronDownIcon size={14} /> : null}
             {status === Order.Desc ? <ChevronUpIcon size={14} /> : null}
             {status === Order.Undefined ? <SortAscIcon size={14} /> : null}

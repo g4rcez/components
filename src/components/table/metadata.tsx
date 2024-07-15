@@ -7,15 +7,15 @@ export const Metadata = <T extends {}>(props: TableOperationProps<T>) => (
     <header className="min-w-full mb-1">
         <div className="flex flex-wrap min-w-full items-center justify-between gap-x-4 gap-y-1">
             <div className="flex w-fit items-centeend gap-4 whitespace-nowrap py-2">
-                <p>
+                <span>
                     <Filter cols={props.cols} options={props.options} filters={props.filters} set={props.setFilters} />
-                </p>
-                <p>
+                </span>
+                <span>
                     <Sort options={props.options} cols={props.cols} sorters={props.sorters} set={props.setSorters} />
-                </p>
-                <p>
+                </span>
+                <span>
                     <Group rows={props.rows} groups={props.groups} setGroups={props.setGroups} options={props.options} cols={props.cols} />
-                </p>
+                </span>
             </div>
             <ul className="flex flex-wrap w-full flex-1 flex-grow flex-row items-center md:justify-end gap-4">
                 {props.filters.map((x) => (

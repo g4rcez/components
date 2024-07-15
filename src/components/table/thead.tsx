@@ -1,7 +1,7 @@
 import { AnimatePresence, Reorder, TargetAndTransition } from "framer-motion";
 import { PlusIcon, SearchIcon } from "lucide-react";
+import React from "react";
 import { Dropdown } from "../floating/dropdown";
-import { useReactive } from "../../hooks/use-reactive";
 import { ColumnHeaderFilter, createFilterFromCol } from "./filter";
 import { SorterHead } from "./sort";
 import { Col, getLabel, TableOperationProps } from "./table-lib";
@@ -12,7 +12,7 @@ type TableHeaderProps<T extends {}> = {
 
 const targetTransitionAnimate: TargetAndTransition = { opacity: 1 };
 
-const whileDrag: TargetAndTransition = { opacity: 0.75, backgroundColor: "#a1a1aa" };
+const whileDrag: TargetAndTransition = { opacity: 0.75, backgroundColor: "var(--table-border)" };
 
 const exit: TargetAndTransition = { opacity: 0, transition: { duration: 0.4, type: "spring" } };
 
@@ -22,6 +22,10 @@ type HeaderChildProps<T extends {}> = {
 
 const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
+    const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const id = e.currentTarget.dataset.id || "";
+        return props.setFilters((prev) => prev.filter((x) => x.id !== id));
+    };
     return (
         <Reorder.Item
             {...(props.header.thProps as {})}
@@ -37,26 +41,18 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
         >
             <span className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
-                    <Dropdown
-                        arrow
-                        trigger={<SearchIcon size={14} />}
-                        onChange={(opened) => {
-                            if (!opened) return;
-                            props.setFilters((prev) => prev.concat(createFilterFromCol(props.header, {})));
-                        }}
-                    >
-                        Filter by: {getLabel(props.header)}
+                    <Dropdown title={`Filter by ${getLabel(props.header)}`} arrow trigger={<SearchIcon size={14} />}>
                         {(ownFilters.length === 0) === null ? null : (
-                            <ul>
+                            <ul className="font-medium">
                                 {ownFilters.map((filter) => (
                                     <li key={`thead-filter-${filter.id}`} className="my-1">
-                                        <ColumnHeaderFilter filter={filter} set={props.setFilters} />
+                                        <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
                                     </li>
                                 ))}
                                 <li>
                                     <button
                                         onClick={() => props.setFilters((prev) => prev.concat(createFilterFromCol(props.header)))}
-                                        className="text-primary-muted flex items-center"
+                                        className="flex items-center"
                                     >
                                         <PlusIcon size={14} /> Add
                                     </button>
@@ -72,37 +68,30 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
     );
 };
 
-export const TableHeader = <T extends {}>(props: TableHeaderProps<T>) => {
-    const [headers, setHeaders] = useReactive<Col<T>[]>(props.headers);
-
-    const onPointerUp = () => props.setCols(headers);
-
-    return (
-        <Reorder.Group
-            as="tr"
-            axis="x"
-            drag
-            layout
-            layoutRoot
-            layoutScroll
-            initial={false}
-            values={headers}
-            onReorder={setHeaders}
-            onPointerUp={onPointerUp}
-            className="bg-table-background border-none text-lg"
-        >
-            <AnimatePresence>
-                {headers.map((header) => (
-                    <HeaderChild<T>
-                        key={`header-child-item-${header.id as string}`}
-                        setFilters={props.setFilters}
-                        filters={props.filters}
-                        setSorters={props.setSorters}
-                        sorters={props.sorters}
-                        header={header}
-                    />
-                ))}
-            </AnimatePresence>
-        </Reorder.Group>
-    );
-};
+export const TableHeader = <T extends {}>(props: TableHeaderProps<T>) => (
+    <Reorder.Group
+        as="tr"
+        axis="x"
+        drag
+        layout
+        layoutRoot
+        layoutScroll
+        initial={false}
+        values={props.headers}
+        onReorder={props.setCols}
+        className="bg-table-background border-none text-lg"
+    >
+        <AnimatePresence>
+            {props.headers.map((header) => (
+                <HeaderChild<T>
+                    key={`header-child-item-${header.id as string}`}
+                    setFilters={props.setFilters}
+                    filters={props.filters}
+                    setSorters={props.setSorters}
+                    sorters={props.sorters}
+                    header={header}
+                />
+            ))}
+        </AnimatePresence>
+    </Reorder.Group>
+);

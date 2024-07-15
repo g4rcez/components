@@ -38,7 +38,7 @@ const Item = ({ item, onPointerDown }: { item: GroupItem<any>; onPointerDown: an
             value={item}
             style={{ y }}
         >
-            <button className="cursor-grab">
+            <button type="button" className="cursor-grab">
                 <GripVerticalIcon size={14} />
             </button>
             <span>{item.groupName}</span>
@@ -67,7 +67,7 @@ export const Group = <T extends {}>(props: Props<T>) => {
         );
     };
 
-    const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => props.setGroups([]);
+    const onDelete = () => props.setGroups([]);
 
     return (
         <Fragment>
@@ -90,15 +90,15 @@ export const Group = <T extends {}>(props: Props<T>) => {
                 {props.groups.length > 0 ? (
                     <section className="my-4">
                         <header>
-                            <h2 className="text-xl font-medium">Ordenar grupos</h2>
+                            <h2 className="text-xl font-medium">Order groups</h2>
                         </header>
                         <LayoutGroup>
                             <Reorder.Group
                                 axis="y"
                                 className="relative space-y-2"
-                                dragListener={false}
-                                dragControls={controls}
                                 drag
+                                dragControls={controls}
+                                dragListener={false}
                                 layoutScroll
                                 onReorder={props.setGroups}
                                 values={props.groups}
