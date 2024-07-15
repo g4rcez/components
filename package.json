@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -59,6 +59,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "0.5.7",
     "@types/fuzzy-search": "2.1.5",
     "@types/node": "20.14.10",
     "@types/qs": "6.9.15",

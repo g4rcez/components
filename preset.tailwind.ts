@@ -2,6 +2,7 @@ import { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import { createDesignTokens, parsers } from "./src/styles/design-tokens";
 import { defaultDarkTheme } from "./src/styles/theme";
+import forms from "@tailwindcss/forms"
 
 const COLORS = createDesignTokens(defaultDarkTheme.colors, parsers.formatWithVar("hsla"));
 
@@ -28,6 +29,7 @@ const config: Partial<Config> = {
         },
     },
     plugins: [
+        forms({strategy:"class"}),
         plugin(function ({ addVariant }) {
             addVariant("link", ["&:hover", "&:active"]);
             addVariant("landing", ["&"]);
