@@ -54,7 +54,7 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
                 container={css("group inline-block w-full", container)}
             >
                 <MaskInput
-                    {...props}
+                    {...(props as any)}
                     type={type}
                     data-next={next}
                     ref={mergeRefs(ref, inputRef)}
