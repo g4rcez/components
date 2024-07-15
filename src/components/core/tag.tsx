@@ -5,7 +5,7 @@ import { Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const tagVariants = cva(
-    "inline-flex rounded-pill bg-opacity-90 gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium",
+    "inline-flex rounded-pill bg-opacity-90 gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle whitespace-nowrap font-medium",
     {
         variants: {
             size: {
@@ -44,7 +44,7 @@ export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => 
             {...props}
             ref={ref}
             data-theme={theme}
-            as={props.as ?? "button"}
+            as={props.as ?? "span"}
             className={css(
                 tagVariants({
                     size,
