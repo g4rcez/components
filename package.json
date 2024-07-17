@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
+    "dev": "next dev",
     "format": "npx prettier --write .",
     "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
     "lib:tailwind": "tsc -p tsconfig.tailwind.json",

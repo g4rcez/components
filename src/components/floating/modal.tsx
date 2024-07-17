@@ -98,7 +98,7 @@ const Draggable = (props: DraggableProps) => {
             onDrag={handleDrag}
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
-            className={`absolute top-1/2 ${props.type === "left" ? "right-2" : "left-2"} rounded-lg cursor-grab h-10 w-2 bg-floating-border`}
+            className={`absolute top-1/2 ${props.type === "left" ? "right-5" : "left-2"} rounded-lg cursor-grab h-10 w-2 bg-floating-border`}
         />
     );
 };
@@ -149,11 +149,15 @@ export const Modal = ({ type = "dialog", resizer = true, ...props }: PropsWithCh
                                     {!isDialog && resizer ? <Draggable value={value} parent={refs.floating} type={position as DrawerSides} /> : null}
                                     {props.title ? (
                                         <header className="w-full">
-                                            <h2 className="px-8 pb-4 border-b text-3xl font-medium leading-relaxed">{props.title}</h2>
+                                            <h2 className="px-8 pb-4 border-b border-floating-border text-3xl font-medium leading-relaxed">
+                                                {props.title}
+                                            </h2>
                                         </header>
                                     ) : null}
-                                    <div className="flex-1 px-8 overflow-scroll">{props.children}</div>
-                                    {props.footer ? <footer className="px-8 border-t pt-4 w-full">{props.footer}</footer> : null}
+                                    <div className="flex-1 px-8 overflow-y-auto">{props.children}</div>
+                                    {props.footer ? (
+                                        <footer className="px-8 border-t border-floating-border pt-4 w-full">{props.footer}</footer>
+                                    ) : null}
                                 </motion.div>
                             </FloatingFocusManager>
                         </FloatingOverlay>

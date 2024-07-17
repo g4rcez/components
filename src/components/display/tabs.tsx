@@ -30,10 +30,15 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
         };
         window.addEventListener("resize", listener);
         let first = header.querySelector<HTMLElement>(`li[data-active=true]`);
-        if (props.active === "") {
-            const hash = window.location.hash.replace(/^#/, "");
+        const hash = window.location.hash.replace(/^#/, "");
+        if (props.active === "" && hash !== "") {
             first = header.querySelector<HTMLElement>(`li[data-id=${hash}]`);
             setActive(hash);
+        }
+        if (first === null) {
+            first = header.querySelector<HTMLElement>(`li[data-id]`)!;
+            const id = first.getAttribute("data-id") || "";
+            setActive(id);
         }
         resize(first);
         return () => window.removeEventListener("resize", listener);
@@ -58,17 +63,17 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
             <Card
                 container="pt-0"
                 header={
-                    <header ref={ref} className="border-b border-card-border relative">
+                    <header ref={ref} className="border-b border-card-border relative mb-2">
                         <motion.div
                             layout
                             initial={false}
                             aria-hidden="true"
                             style={{ left, width }}
                             transition={{ type: "tween", left, width }}
-                            className="w-28 h-0.5 bg-primary absolute bottom-0 duration-300 transition-all"
+                            className="w-28 h-0.5 bg-primary absolute bottom-0 duration-300 transition-all hidden md:block"
                         />
                         <nav>
-                            <ul className="divide-x divide-card-border flex justify-between md:justify-start">
+                            <ul className="divide-x divide-card-border overflow-x-auto flex justify-between md:justify-start">
                                 {items.map((x: any) => {
                                     const inner = x.props as TabProps;
                                     return (
@@ -82,7 +87,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                                 data-id={inner.id}
                                                 onClick={onClick}
                                                 aria-current="page"
-                                                className="px-10 py-4 block font-medium w-full"
+                                                className="px-10 py-4 block font-medium w-full whitespace-nowrap"
                                                 href={props.useHash ? `#${inner.id}` : undefined}
                                             >
                                                 {inner.title}

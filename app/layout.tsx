@@ -1,5 +1,6 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import { AppWindowIcon, NetworkIcon, SmartphoneIcon, WifiIcon } from "lucide-react";
+import React, { useState } from "react";
 import {
     Autocomplete,
     Button,
@@ -11,11 +12,11 @@ import {
     Input,
     Modal,
     Select,
+    Stats,
     Tab,
     Table,
     Tabs,
     Tag,
-    TransferList,
     useTablePreferences,
 } from "../src";
 import "../src/index.css";
@@ -68,7 +69,7 @@ const cols = createColumns<Row>((col) => {
     col.add("languages", "Languages", { Element: (p) => p.value.join(", ") });
 });
 
-const data = Array.from({ length: 50 }).map(
+const data = Array.from({ length: 10 }).map(
     (_, i): Row => ({
         id: i + 1,
         name: `Name ${i}`,
@@ -76,6 +77,11 @@ const data = Array.from({ length: 50 }).map(
         languages: ["Kotlin", "Typescript"],
     })
 );
+
+const TableTab = () => {
+    const preferences = useTablePreferences("other-table");
+    return <Table {...preferences} operations={false} cols={cols} rows={data} />;
+};
 
 const TableView = () => {
     const preferences = useTablePreferences("table");
@@ -93,27 +99,6 @@ const options = [
     { label: "Java", value: "java" },
 ];
 
-const TransferListView = () => {
-    const [source, setSource] = useState(data);
-    const [target, setTarget] = useState(data);
-    return (
-        <Card title="Transfer list">
-            <TransferList
-                Item={(props) => (
-                    <Fragment>
-                        {props.data.id}. {props.data.name}
-                    </Fragment>
-                )}
-                reference="id"
-                source={source}
-                target={target}
-                setSource={setSource}
-                setTarget={setTarget}
-            />
-        </Card>
-    );
-};
-
 export default function Layout() {
     const styles = createTheme(defaultDarkTheme);
     return (
@@ -122,23 +107,48 @@ export default function Layout() {
                 <title>Components</title>
                 <style>{styles}</style>
             </head>
-            <body className="p-8 flex flex-col gap-4">
+            <body className="p-8 flex flex-col gap-9">
+                <div className="grid gap-4 md:grid-cols-4">
+                    <Stats Icon={WifiIcon} title="Title">
+                        500
+                    </Stats>
+                    <Stats Icon={SmartphoneIcon} title="Title">
+                        500
+                    </Stats>
+                    <Stats Icon={AppWindowIcon} title="Title">
+                        500
+                    </Stats>
+                    <Stats Icon={NetworkIcon} title="Title">
+                        500
+                    </Stats>
+                </div>
                 <Tabs active="" useHash>
-                    <Tab title="Item 1" id="item1">1. Item</Tab>
-                    <Tab title="Item 2" id="item2">2. Item</Tab>
-                    <Tab title="Item 3" id="item3">3. Item</Tab>
-                    <Tab title="Item 4" id="item4">4. Item</Tab>
-                    <Tab title="Item 5" id="item5">5. Item</Tab>
-                    <Tab title="Item 6" id="item6">6. Item</Tab>
+                    <Tab title="Item 1" id="item1">
+                        <TableTab />
+                    </Tab>
+                    <Tab title="Item 2" id="item2">
+                        2. Item
+                    </Tab>
+                    <Tab title="Item 3" id="item3">
+                        3. Item
+                    </Tab>
+                    <Tab title="Item 4" id="item4">
+                        4. Item
+                    </Tab>
+                    <Tab title="Item 5" id="item5">
+                        5. Item
+                    </Tab>
+                    <Tab title="Item 6" id="item6">
+                        6. Item
+                    </Tab>
                 </Tabs>
                 {/*<TransferListView />*/}
-                <Card>
+                <Card title="Inputs">
                     <Input placeholder="Text" title="Text" />
                     <Select options={options} placeholder="Haskell..." title="Language" />
                     <Autocomplete options={options} placeholder="Haskell..." title="Language" />
                 </Card>
                 <Card className={classNames} title="Button">
-                    <WithDialog side="left" type="drawer" />
                     <Button theme="raw">raw</Button>
                     <Button theme="main">main</Button>
                     <Button theme="secondary">secondary</Button>
@@ -202,6 +212,7 @@ export default function Layout() {
                 </Card>
                 <Card title="Dialog and Drawer" className={classNames}>
                     <WithDialog type="dialog" />
+                    <WithDialog side="left" type="drawer" />
                     <WithDialog side="right" type="drawer" />
                 </Card>
                 <TableView />

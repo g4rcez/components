@@ -12,6 +12,7 @@ export * from "./core/button";
 export * from "./core/polymorph";
 export * from "./core/tag";
 export * from "./display/card";
+export * from "./display/stats";
 export * from "./display/tabs";
 export * from "./floating/dropdown";
 export * from "./floating/tooltip";

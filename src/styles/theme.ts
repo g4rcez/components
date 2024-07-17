@@ -4,6 +4,7 @@ export const defaultDarkTheme: DesignTokens = {
     name: "dark",
     rounded: {
         pill: "2rem",
+        card: "0.75rem"
     },
     spacing: {
         base: "1rem",
@@ -87,6 +88,7 @@ export const defaultLightTheme: DesignTokens = {
     },
     rounded: {
         pill: "2rem",
+        card: "0.75rem"
     },
     colors: {
         foreground: "hsla(210, 14%, 27%)",

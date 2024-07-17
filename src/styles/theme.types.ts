@@ -4,6 +4,7 @@ export type DesignTokens = {
     name: string;
     rounded: {
         pill: string;
+        card: string;
     };
     spacing: {
         base: string;

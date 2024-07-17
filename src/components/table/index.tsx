@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Linq from "linq-arrays";
-import React, { Fragment, HTMLAttributes, useMemo } from "react";
+import React, { Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
+import { useCallbackRef } from "../../hooks/use-callback-ref";
 import { path } from "../../lib/fns";
 import { OptionProps } from "../form/select";
 import { FilterConfig } from "./filter";
@@ -26,6 +27,8 @@ type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
         showMetadata?: boolean;
         filters?: FilterConfig<T>[];
         setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
+        onScrollEnd?: () => void;
+        loadingMore?: boolean;
     };
 
 const TableBody = React.forwardRef((props: TableBodyProps, ref: any) => (
@@ -38,20 +41,78 @@ const VirtualTable = React.forwardRef((props: any, ref) => (
     <table {...props} ref={ref as any} className={`table min-w-full divide-y divide-table-border table-auto text-left ${props.className ?? ""}`} />
 ));
 
-const Thead = React.forwardRef((props: any, ref: any) => <thead {...props} className="bg-content-bg shadow-xs group:sticky top-0" ref={ref} />);
+const Thead = React.forwardRef((props: any, ref: any) => <thead {...props} className="bg-card-background shadow-xs group:sticky top-0" ref={ref} />);
 
 const TRow = React.forwardRef((props: any, ref: any) => <tr {...props} ref={ref} className={`table-row ${props.className ?? ""}`} />);
+
+const TFoot = React.forwardRef((props: any, ref: any) => {
+    if (props.context.loadingMore) {
+        return (
+            <tfoot {...props} ref={ref} className="bg-card-background">
+                <tr className="bg-card-background">
+                    <td colSpan={999} className="px-2 h-14 bg-card-background">
+                        <span className="block w-full h-2 bg-foreground rounded opacity-60 animate-pulse" />
+                    </td>
+                </tr>
+            </tfoot>
+        );
+    }
+    return null;
+});
 
 const components = {
     TableHead: Thead as any,
     Table: VirtualTable as any,
     TableBody: TableBody as any,
     TableRow: TRow as any,
+    TableFoot: TFoot as any,
 };
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-const InnerTable = <T extends {}>({ filters, setCols, setFilters, sorters, cols, setSorters, ...props }: InnerTableProps<T>) => {
+type ItemContentContext = {
+    loading?: boolean;
+    loadingMore?: boolean;
+    cols: Col<any>[];
+};
+
+const ItemContent = (index: number, row: any, context: ItemContentContext) => {
+    const cols = context.cols;
+    const loading = context.loading;
+    return (
+        <Fragment>
+            {cols.map((col, colIndex) => {
+                const matrix: ColMatrix = `${colIndex},${index}`;
+                const value: any = path(row, col.id as any);
+                const Component: React.FC<CellPropsElement<any, any>> = col.Element as any;
+                return (
+                    <td
+                        {...col.cellProps}
+                        data-matrix={matrix}
+                        key={`accessor-${index}-${colIndex}`}
+                        className="px-2 h-14 border-none first:table-cell hidden md:table-cell"
+                    >
+                        {loading ? (
+                            <div className="animate-pulse h-2 bg-table-border rounded" />
+                        ) : Component ? (
+                            <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
+                        ) : (
+                            <Fragment>{Is.nil(value) ? "" : value}</Fragment>
+                        )}
+                    </td>
+                );
+            })}
+        </Fragment>
+    );
+};
+
+const Frag = () => <Fragment />;
+
+const InnerTable = <T extends {}>({ filters, onScrollEnd, setCols, setFilters, sorters, cols, setSorters, ...props }: InnerTableProps<T>) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const [showLoadingFooter, setShowLoadingFooter] = useState(false);
+    const onScrollEndRef = useCallbackRef(onScrollEnd);
+    const loadingMoreRef = useCallbackRef(props.loadingMore);
     const rows = useMemo(() => {
         if (props.loading) return loadingArray as any as T[];
         const linq = new Linq(props.rows);
@@ -62,13 +123,35 @@ const InnerTable = <T extends {}>({ filters, setCols, setFilters, sorters, cols,
         return multiSort(linq.Select(), sorters);
     }, [props.rows, filters, sorters, props.loading]);
 
+    useEffect(() => {
+        if (ref.current === null) {
+            return () => {};
+        }
+        const div = ref.current;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((x) => console.log(x.isIntersecting, x.target));
+            const endOfPage = entries[entries.length - 1];
+            const condition = endOfPage.isIntersecting && loadingMoreRef.current;
+            if (condition) {
+                onScrollEndRef.current?.();
+                return void setShowLoadingFooter(true);
+            }
+            return setShowLoadingFooter(false);
+        });
+        observer.observe(div);
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div className="group border border-table-border rounded-lg px-1 min-w-full">
             <TableVirtuoso
                 data={rows}
-                totalCount={rows.length}
                 useWindowScroll
                 components={components}
+                totalCount={rows.length}
+                itemContent={ItemContent}
+                context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols }}
+                fixedFooterContent={showLoadingFooter ? Frag : null}
                 fixedHeaderContent={() => (
                     <TableHeader<T>
                         sorters={sorters}
@@ -79,36 +162,16 @@ const InnerTable = <T extends {}>({ filters, setCols, setFilters, sorters, cols,
                         setCols={setCols}
                     />
                 )}
-                itemContent={(index, row) =>
-                    cols.map((col, colIndex) => {
-                        const matrix: ColMatrix = `${colIndex},${index}`;
-                        const value: any = path(row, col.id as any);
-                        const Component: React.FC<CellPropsElement<T, any>> = col.Element as any;
-                        return (
-                            <td
-                                {...col.cellProps}
-                                data-matrix={matrix}
-                                key={`accessor-${index}-${colIndex}`}
-                                className="px-2 h-14 border-none first:table-cell hidden md:table-cell"
-                            >
-                                {props.loading ? (
-                                    <div className="animate-pulse h-2 bg-table-border rounded" />
-                                ) : Component ? (
-                                    <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
-                                ) : (
-                                    <Fragment>{Is.nil(value) ? "" : value}</Fragment>
-                                )}
-                            </td>
-                        );
-                    })
-                }
             />
+            <div aria-hidden="true" ref={ref} className="h-0.5 w-full" />
         </div>
     );
 };
 
-export type TableProps<T extends {}> = Pick<InnerTableProps<T>, "cols" | "rows"> & {
+export type TableProps<T extends {}> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore"> & {
     name: string;
+    operations?: boolean;
+    onScrollEnd?: () => void;
 } & Partial<TableOperationProps<T> & { reference: keyof T; loading: boolean }>;
 
 const dispatcherFun = <Prev extends any, T extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: T) =>
@@ -117,6 +180,7 @@ const dispatcherFun = <Prev extends any, T extends Prev | ((prev: Prev) => Prev)
 type DispatcherFun<T extends any> = T | ((prev: T) => T);
 
 export const Table = <T extends {}>(props: TableProps<T>) => {
+    const operations = props.operations ?? true;
     const optionCols = useMemo(() => createOptionCols(props.cols), [props.cols]);
     const [state, dispatch] = useReducer(
         {
@@ -151,21 +215,24 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
 
     return (
         <div className="relative min-w-full">
-            <Metadata
-                setCols={dispatch.cols}
-                rows={props.rows}
-                cols={state.cols}
-                filters={state.filters}
-                groups={state.groups}
-                options={optionCols}
-                setFilters={dispatch.filters}
-                setGroups={dispatch.groups}
-                setSorters={dispatch.sorters}
-                sorters={state.sorters}
-            />
+            {operations ? (
+                <Metadata
+                    setCols={dispatch.cols}
+                    rows={props.rows}
+                    cols={state.cols}
+                    filters={state.filters}
+                    groups={state.groups}
+                    options={optionCols}
+                    setFilters={dispatch.filters}
+                    setGroups={dispatch.groups}
+                    setSorters={dispatch.sorters}
+                    sorters={state.sorters}
+                />
+            ) : null}
             {state.groups.length === 0 ? (
                 <InnerTable
                     {...props}
+                    onScrollEnd={props.onScrollEnd}
                     cols={state.cols}
                     filters={state.filters}
                     groups={state.groups}
@@ -184,6 +251,7 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
                         <motion.div className="min-w-full" key={`group-${group.groupId}`}>
                             <InnerTable
                                 {...props}
+                                onScrollEnd={props.onScrollEnd}
                                 cols={state.cols}
                                 filters={state.filters}
                                 group={group}
