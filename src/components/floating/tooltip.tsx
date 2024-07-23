@@ -1,3 +1,4 @@
+"use client";
 import {
     arrow,
     autoUpdate,
@@ -17,12 +18,12 @@ import React, { Fragment, useRef, useState } from "react";
 import { Polymorph, PolymorphicProps } from "../../components/core/polymorph";
 import { Label, Override } from "../../types";
 
-type TooltipProps = Override<PolymorphicProps<React.ComponentProps<"button">, "div">, { title: Label }>;
+type TooltipProps = Override<PolymorphicProps<React.ComponentProps<"button">, "span">, { title: Label }>;
 
 export const Tooltip = ({ children, as, title, ...props }: TooltipProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const arrowRef = useRef(null);
-    const Component = as || "div";
+    const Component = as || "span";
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
         onOpenChange: setIsOpen,
@@ -38,7 +39,7 @@ export const Tooltip = ({ children, as, title, ...props }: TooltipProps) => {
             }),
         ],
     });
-    const hover = useHover(context, { move: false });
+    const hover = useHover(context, { move: true });
     const focus = useFocus(context);
     const dismiss = useDismiss(context);
     const role = useRole(context, { role: "tooltip" });
@@ -52,10 +53,10 @@ export const Tooltip = ({ children, as, title, ...props }: TooltipProps) => {
             <FloatingPortal>
                 {isOpen && (
                     <Polymorph
+                        {...getFloatingProps()}
                         ref={refs.setFloating}
                         style={floatingStyles}
-                        {...getFloatingProps()}
-                        className="bg-tooltip-background text-foreground border border-tooltip-border p-4 rounded-lg"
+                        className="bg-tooltip-background z-tooltip text-tooltip-foreground border border-tooltip-border p-3 rounded-lg"
                     >
                         <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="fill-tooltip-background stroke-tooltip-border" />
                         {children}

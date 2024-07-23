@@ -2,14 +2,11 @@ import { DesignTokens } from "./theme.types";
 
 export const defaultDarkTheme: DesignTokens = {
     name: "dark",
+    spacing: { base: "1rem", lg: "1.5rem", sm: "0.75rem" },
     rounded: {
         pill: "2rem",
-        card: "0.75rem"
-    },
-    spacing: {
-        base: "1rem",
-        lg: "1.5rem",
-        sm: "0.75rem",
+        card: "0.75rem",
+        full: "50%",
     },
     colors: {
         foreground: "hsla(210, 40%, 98%)",
@@ -35,9 +32,9 @@ export const defaultDarkTheme: DesignTokens = {
             foreground: "hsla(210, 40%, 98%)",
         },
         warn: {
-            DEFAULT: "hsla(25, 95%, 53%)",
+            DEFAULT: "hsla(27, 96%, 61%)",
             subtle: "hsla(45, 95%, 66%)",
-            hover: "hsla(35, 92%, 41%)",
+            hover: "hsla(21, 90%, 48%)",
             foreground: "hsla(210, 40%, 98%)",
         },
         danger: {
@@ -69,6 +66,7 @@ export const defaultDarkTheme: DesignTokens = {
             overlay: "hsla(0, 0%, 0%)",
         },
         tooltip: {
+            foreground: "hsla(210, 40%, 98%)",
             background: "hsla(0, 0%, 8%)",
             border: "hsla(0, 0%, 15%)",
         },
@@ -87,14 +85,15 @@ export const defaultLightTheme: DesignTokens = {
         sm: "0.75rem",
     },
     rounded: {
+        full: "50%",
         pill: "2rem",
-        card: "0.75rem"
+        card: "0.75rem",
     },
     colors: {
         foreground: "hsla(210, 14%, 27%)",
         background: "hsla(210, 34%, 96%)",
         accent: "hsla(199, 89%, 54%)",
-        disabled: "hsla(240, 4%, 33%)",
+        disabled: "hsla(240, 10%, 75%)",
         primary: {
             foreground: "hsla(210, 40%, 98%)",
             DEFAULT: "hsla(199, 89%, 54%)",
@@ -103,31 +102,31 @@ export const defaultLightTheme: DesignTokens = {
         },
         secondary: {
             DEFAULT: "hsla(210, 14%, 35%)",
-            subtle: "hsla(210, 27%, 88%)",
+            subtle: "hsla(210, 27%, 95%)",
             hover: "hsla(210, 21%, 27%)",
             foreground: "hsla(210, 40%, 98%)",
         },
         info: {
             DEFAULT: "hsla(219, 91%, 59%)",
-            subtle: "hsla(219, 93%, 77%)",
+            subtle: "hsla(219, 70%, 90%)",
             hover: "hsla(219, 83%, 41%)",
             foreground: "hsla(210, 34%, 96%)",
         },
         danger: {
             DEFAULT: "hsla(0, 82%, 63%)",
-            subtle: "hsla(0, 94%, 81%)",
+            subtle: "hsla(0, 96%, 95%)",
             hover: "hsla(0, 82%, 47%)",
             foreground: "hsla(210, 34%, 96%)",
         },
         warn: {
-            DEFAULT: "hsla(25, 95%, 53%)",
-            subtle: "hsla(45, 95%, 66%)",
-            hover: "hsla(35, 92%, 41%)",
+            DEFAULT: "hsla(27, 100%, 70%)",
+            subtle: "hsla(45, 95%, 80%)",
+            hover: "hsla(29, 85%, 50%)",
             foreground: "hsla(210, 34%, 96%)",
         },
         success: {
             DEFAULT: "hsla(160, 73%, 36%)",
-            subtle: "hsla(160, 75%, 75%)",
+            subtle: "hsla(160, 75%, 90%)",
             hover: "hsla(160, 91%, 27%)",
             foreground: "hsla(210, 34%, 96%)",
         },
@@ -148,6 +147,7 @@ export const defaultLightTheme: DesignTokens = {
             overlay: "hsla(0, 0%, 0%)",
         },
         tooltip: {
+            foreground: "hsla(210, 40%, 98%)",
             background: "hsla(0, 0%, 8%)",
             border: "hsla(0, 0%, 15%)",
         },

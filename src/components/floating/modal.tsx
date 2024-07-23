@@ -24,23 +24,21 @@ type Animations = {
     dialog: Record<AnimationLabels, TargetAndTransition>;
 };
 
-const drawerLeft = {
-    initial: { left: "-48rem", opacity: 0.4 },
-    enter: { left: 0, opacity: 1 },
-    exit: { left: "-48rem", opacity: 0.4 },
-};
+const createDrawerAnimation = (side: DrawerSides) => ({
+    initial: { [side]: "-60%", opacity: 0.8 },
+    enter: { [side]: 0, opacity: 1 },
+    exit: { [side]: "-60%", opacity: 0.8 },
+})
 
-const drawerRight = {
-    initial: { right: "-48rem", opacity: 0.4 },
-    enter: { right: 0, opacity: 1 },
-    exit: { right: "-48rem", opacity: 0.4 },
-};
+const drawerLeft = createDrawerAnimation("left");
+
+const drawerRight = createDrawerAnimation("right");
 
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     dialog: {
         initial: { opacity: 0, scale: 0.9 },
-        enter: { opacity: 1, scale: [1.05, 1] },
+        enter: { opacity: 1, scale: [1.125, 1] },
         exit: { opacity: 0, scale: 0.9 },
     },
 };

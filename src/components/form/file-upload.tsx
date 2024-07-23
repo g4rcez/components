@@ -1,3 +1,4 @@
+"use client";
 import { FileIcon, Trash2Icon, UploadIcon } from "lucide-react";
 import prettyBytes from "pretty-bytes";
 import React, { Fragment, useEffect, useState } from "react";

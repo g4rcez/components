@@ -28,3 +28,10 @@ export const isReactComponent = (a: any): a is React.ReactElement => {
 export const isReactFC = (a: any) => Is.function(a);
 
 export const css = (...styles: ClassValue[]) => twMerge(clsx(styles));
+
+export const dispatchInput = (input: HTMLInputElement, value: string) => {
+    console.log(input, value);
+    const native = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    native.call(input, value);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+};

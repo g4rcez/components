@@ -4,11 +4,13 @@ import React, { useState } from "react";
 import {
     Autocomplete,
     Button,
+    Calendar,
     Card,
     ColType,
     createColumns,
     createTheme,
     defaultDarkTheme,
+    defaultLightTheme,
     Input,
     Modal,
     Select,
@@ -17,6 +19,7 @@ import {
     Table,
     Tabs,
     Tag,
+    Tooltip,
     useTablePreferences,
 } from "../src";
 import "../src/index.css";
@@ -53,7 +56,7 @@ const WithDialog = (props: { type: "drawer" | "dialog"; side?: "left" | "right" 
     );
 };
 
-const classNames = "flex flex-row gap-4 flex-wrap";
+const classNames = "flex flex-row gap-4 flex-wrap items-center";
 
 type Row = {
     id: number;
@@ -100,14 +103,21 @@ const options = [
 ];
 
 export default function Layout() {
-    const styles = createTheme(defaultDarkTheme);
+    const stylesLight = createTheme(defaultLightTheme);
+    const stylesDark = createTheme(defaultDarkTheme, "dark");
     return (
         <html className="bg-background text-foreground">
             <head>
                 <title>Components</title>
-                <style>{styles}</style>
+                <style>{stylesLight}</style>
+                <style>{stylesDark}</style>
             </head>
-            <body className="p-8 flex flex-col gap-9">
+            <body className="p-8 flex flex-col gap-8">
+                <Card title="Calendar">
+                    <div className="max-w-xs">
+                        <Calendar />
+                    </div>
+                </Card>
                 <div className="grid gap-4 md:grid-cols-4">
                     <Stats Icon={WifiIcon} title="Title">
                         500
@@ -122,33 +132,14 @@ export default function Layout() {
                         500
                     </Stats>
                 </div>
-                <Tabs active="" useHash>
-                    <Tab title="Item 1" id="item1">
-                        <TableTab />
-                    </Tab>
-                    <Tab title="Item 2" id="item2">
-                        2. Item
-                    </Tab>
-                    <Tab title="Item 3" id="item3">
-                        3. Item
-                    </Tab>
-                    <Tab title="Item 4" id="item4">
-                        4. Item
-                    </Tab>
-                    <Tab title="Item 5" id="item5">
-                        5. Item
-                    </Tab>
-                    <Tab title="Item 6" id="item6">
-                        6. Item
-                    </Tab>
-                </Tabs>
-                {/*<TransferListView />*/}
-                <Card title="Inputs">
-                    <Input placeholder="Text" title="Text" />
-                    <Select options={options} placeholder="Haskell..." title="Language" />
-                    <Autocomplete options={options} placeholder="Haskell..." title="Language" />
-                </Card>
                 <Card className={classNames} title="Button">
+                    <Button
+                        onClick={() => {
+                            document.documentElement.classList.toggle("dark");
+                        }}
+                    >
+                        Change Theme
+                    </Button>
                     <Button theme="raw">raw</Button>
                     <Button theme="main">main</Button>
                     <Button theme="secondary">secondary</Button>
@@ -209,13 +200,62 @@ export default function Layout() {
                     <Tag theme="danger">danger</Tag>
                     <Tag theme="warn">warn</Tag>
                     <Tag theme="success">Success</Tag>
+
+                    <Tag size={"small"} theme="raw">
+                        raw
+                    </Tag>
+                    <Tag size={"small"} theme="main">
+                        main
+                    </Tag>
+                    <Tag size={"small"} theme="secondary">
+                        secondary
+                    </Tag>
+                    <Tag size={"small"} theme="info">
+                        info
+                    </Tag>
+                    <Tag size={"small"} theme="danger">
+                        danger
+                    </Tag>
+                    <Tag size={"small"} theme="warn">
+                        warn
+                    </Tag>
+                    <Tag size={"small"} theme="success">
+                        Success
+                    </Tag>
+                </Card>
+                <Card title="Inputs">
+                    <Input placeholder="Text" title="Text" />
+                    <Select options={options} placeholder="Haskell..." title="Language" />
+                    <Autocomplete onChange={(e) => console.log("EVENT", e)} options={options} placeholder="Haskell..." title="Language" />
+                </Card>
+                <Card title="Tooltip">
+                    <Tooltip title="Hover me">I'm a tooltip</Tooltip>
                 </Card>
                 <Card title="Dialog and Drawer" className={classNames}>
                     <WithDialog type="dialog" />
                     <WithDialog side="left" type="drawer" />
                     <WithDialog side="right" type="drawer" />
                 </Card>
-                <TableView />
+                <Tabs active="">
+                    <Tab title="Item 1" id="item1">
+                        <TableTab />
+                    </Tab>
+                    <Tab title="Item 2" id="item2">
+                        2. Item
+                    </Tab>
+                    <Tab title="Item 3" id="item3">
+                        3. Item
+                    </Tab>
+                    <Tab title="Item 4" id="item4">
+                        4. Item
+                    </Tab>
+                    <Tab title="Item 5" id="item5">
+                        5. Item
+                    </Tab>
+                    <Tab title="Item 6" id="item6">
+                        6. Item
+                    </Tab>
+                </Tabs>
             </body>
         </html>
     );

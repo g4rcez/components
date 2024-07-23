@@ -15,10 +15,10 @@ import {
 import Fuzzy from "fuzzy-search";
 import { ChevronDown } from "lucide-react";
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { usePrevious } from "../../hooks/use-previous";
+import { css, dispatchInput } from "../../lib/dom";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
-import { usePrevious } from "../../hooks/use-previous";
-import { css } from "../../lib/dom";
 
 type ItemProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
     selected: boolean;
@@ -46,7 +46,7 @@ type SelectProps = Omit<InputFieldProps<"input">, "value"> & {
 
 const transitionStyles = {
     duration: 300,
-    initial: { transform: "scaleY(0)", opacity: 0.2 },
+    initial: { transform: "scaleY(0)", opacity: 0.4 },
     open: { transform: "scaleY(1)", opacity: 1 },
     close: { transform: "scaleY(0)", opacity: 0 },
 } as const;
@@ -111,6 +111,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
 
     const onSelect = (opt: OptionProps) => {
         setValue(opt.value);
+        dispatchInput(refs.reference.current as HTMLInputElement, opt.value);
         setOpen(false);
         setShadow("");
     };
@@ -130,6 +131,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
     const onClose = () => {
         setShadow("");
         setValue("");
+        dispatchInput(refs.reference.current as HTMLInputElement, "");
         setOpen(false);
     };
 

@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -38,42 +38,44 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@floating-ui/react": "0.26.19",
+    "@floating-ui/react": "0.26.20",
     "@radix-ui/react-slot": "1.1.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
-    "framer-motion": "11.3.0",
+    "date-fns": "3.6.0",
+    "framer-motion": "11.3.8",
     "fuzzy-search": "3.2.1",
     "linq-arrays": "3.2.5",
-    "lucide-react": "0.407.0",
+    "lucide-react": "0.414.0",
     "next": "14.2.5",
     "pretty-bytes": "6.1.1",
     "qs": "6.12.3",
     "react-dropzone": "14.2.3",
-    "react-virtuoso": "4.7.11",
+    "react-use-measure": "2.1.1",
+    "react-virtuoso": "4.7.13",
     "sidekicker": "0.1.8",
     "storage-manager-js": "4.2.6-5",
     "tailwind-merge": "2.4.0",
     "the-mask-input": "3.3.12",
     "use-typed-reducer": "4.2.1",
-    "vite": "5.3.3",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@tailwindcss/forms": "0.5.7",
     "@types/fuzzy-search": "2.1.5",
-    "@types/node": "20.14.10",
+    "@types/node": "20.14.11",
     "@types/qs": "6.9.15",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@vitejs/plugin-react": "4.3.1",
     "postcss": "8.4.39",
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "tailwindcss": "3.4.4",
     "tslib": "2.6.3",
-    "typescript": "5.5.3",
+    "typescript": "5.5.4",
+    "vite": "5.3.4",
     "vite-tsconfig-paths": "4.3.2",
-    "vitest": "2.0.2"
+    "vitest": "2.0.4"
   },
   "source": "./src/index.ts",
   "types": "./dist/index.d.ts",
@@ -98,6 +100,7 @@
         "default": "./dist/index.mjs"
       }
     },
+    "./index.css": "./dist/index.css",
     "./dist/index.css": "./dist/index.css",
     "./themes": {
       "type": "./dist/preset/src/styles/theme.d.ts",
@@ -170,6 +173,12 @@
       "import": "./dist/components/floating/tooltip.js",
       "require": "./dist/components/floating/tooltip.js",
       "default": "./dist/components/floating/tooltip.js"
+    },
+    "./calendar": {
+      "type": "./dist/components/display/calendar.d.ts",
+      "import": "./dist/components/display/calendar.js",
+      "require": "./dist/components/display/calendar.js",
+      "default": "./dist/components/display/calendar.js"
     },
     "./card": {
       "type": "./dist/components/display/card.d.ts",

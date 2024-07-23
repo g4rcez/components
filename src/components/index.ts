@@ -14,6 +14,7 @@ export * from "./core/tag";
 export * from "./display/card";
 export * from "./display/stats";
 export * from "./display/tabs";
+export * from "./display/calendar";
 export * from "./floating/dropdown";
 export * from "./floating/tooltip";
 export * from "./floating/modal";

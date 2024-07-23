@@ -5,14 +5,14 @@ import { Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const tagVariants = cva(
-    "inline-flex rounded-pill bg-opacity-90 gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle whitespace-nowrap font-medium",
+    "inline-flex rounded-pill gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle whitespace-nowrap",
     {
         variants: {
             size: {
-                default: "h-8 px-4 py-2",
-                big: "h-12 px-6 py-4",
-                small: "h-10 p-2 text-sm",
                 icon: "p-1",
+                big: "h-12 px-6 py-4",
+                default: "h-8 px-4 py-2",
+                small: "h-6 p-2 px-3 text-sm",
             },
             theme: {
                 raw: "",
@@ -35,7 +35,7 @@ export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
     T
 >;
 
-export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => any = forwardRef(function Button(
+export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => any = forwardRef(function Tag(
     { className, icon, loading, theme, size, ...props }: TagProps,
     ref: React.ForwardedRef<HTMLButtonElement>
 ) {
@@ -45,13 +45,7 @@ export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => 
             ref={ref}
             data-theme={theme}
             as={props.as ?? "span"}
-            className={css(
-                tagVariants({
-                    size,
-                    theme: loading ? "loading" : (theme as any)?.disabled ? "disabled" : theme,
-                }),
-                className
-            )}
+            className={css(tagVariants({ size, theme }), className)}
         >
             {props.children}
             {icon}

@@ -1,3 +1,4 @@
+"use client";
 import React, { useId, useState } from "react";
 
 type SwitchProps = Omit<React.ComponentProps<"input">, "onChange"> & { onCheck?: (nextValue: boolean) => void };

@@ -3,6 +3,7 @@ export type GeneralTokens = { [K in string]: string | GeneralTokens };
 export type DesignTokens = {
     name: string;
     rounded: {
+        full: string;
         pill: string;
         card: string;
     };
@@ -69,6 +70,7 @@ export type DesignTokens = {
             overlay: string;
         };
         tooltip: {
+            foreground: string;
             background: string;
             border: string;
         };

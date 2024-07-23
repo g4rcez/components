@@ -1,3 +1,4 @@
+"use client";
 import { motion, useMotionValue } from "framer-motion";
 import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef } from "react";
 import { useReactive } from "../../hooks/use-reactive";
