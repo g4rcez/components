@@ -6,10 +6,9 @@ import {
     addYears,
     eachDayOfInterval,
     endOfWeek,
-    format,
     isSameMonth,
     isToday,
-    parse,
+    startOfDay,
     startOfMonth,
     startOfWeek,
     subDays,
@@ -19,15 +18,17 @@ import {
 } from "date-fns";
 import { AnimatePresence, motion, MotionConfig, Transition, Variants } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import React, { useRef, useState } from "react";
-import { Locales } from "the-mask-input";
+import React, { useEffect } from "react";
+import TheMaskInput, { Locales } from "the-mask-input";
+import { useReducer } from "use-typed-reducer";
+import { useDebounce } from "../../hooks/use-debounce";
 import { Resizable } from "../core/resizable";
 
 const transition: Transition = { type: "tween", bounce: 0.15, duration: 0.3 };
 
 const dir =
     (mod: number) =>
-        (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.5 });
+    (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.5 });
 
 const variants: Variants = {
     middle: { x: "0%", opacity: 1 },
@@ -35,19 +36,33 @@ const variants: Variants = {
     exit: dir(-1),
 };
 
-const removeImmediately: Variants = {
-    exit: { visibility: "hidden" },
-};
+const removeImmediately: Variants = { exit: { visibility: "hidden" } };
 
 type CalendarProps = {
+    date?: Date;
     locale?: Locales;
     markToday?: boolean;
+    autoFocusToday?: boolean;
+    onChange?: (d: Date) => void;
 };
 
 const createDays = (month: Date) => {
     const start = startOfWeek(startOfMonth(month));
     return eachDayOfInterval({ start, end: addDays(start, 41) });
 };
+
+const formatMonth = (d: Date, locale?: Locales) => d.toLocaleDateString(locale, { month: "long" });
+
+const getOptionsMonth = (date: Date, locale?: Locales) =>
+    Array.from({ length: 12 }).map((_, i) => {
+        const month = startOfMonth(new Date(date).setMonth(i));
+        const label = formatMonth(month, locale);
+        return (
+            <option key={label} value={label} data-index={i}>
+                {label}
+            </option>
+        );
+    });
 
 const onChangeUsingKeyboard = {
     ArrowLeft: (date: Date, duration: "days" | "month") => {
@@ -78,58 +93,90 @@ const focusDate = (next: Date, delay = 0) => {
     setTimeout(select, delay);
 };
 
-const isSameDay = (d1: Date, d2: Date) =>
-    d1.getUTCFullYear() === d2.getUTCFullYear() && d1.getUTCMonth() === d2.getUTCMonth() && d1.getUTCDate() === d2.getUTCDate();
+const formatYear = (now: Date) => now.getFullYear().toString().padStart(4, "0");
 
-export const Calendar = ({ locale = undefined, markToday = true }: CalendarProps) => {
-    const now = new Date();
-    const week = useRef(eachDayOfInterval({ start: startOfWeek(now), end: endOfWeek(now) }));
-    const [current, setCurrent] = useState<Date>(now);
-    const monthString = format(current || now, "yyyy-MM");
-    const [direction, setDirection] = useState<number | undefined>(undefined);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const month = parse(monthString, "yyyy-MM", current);
-    const currentAsString = current.toISOString();
+export const Calendar = ({ locale, markToday = true, autoFocusToday = true, date, onChange }: CalendarProps) => {
+    const now = date || new Date();
+    const [state, dispatch] = useReducer(
+        {
+            date: now,
+            isAnimating: false,
+            year: formatYear(now),
+            direction: undefined as number | undefined,
+            months: getOptionsMonth(now, locale),
+            week: eachDayOfInterval({ start: startOfWeek(now), end: endOfWeek(now) }),
+        },
+        (get) => ({
+            onChangeYear: (year: string) => ({ year }),
+            setToday: () => ({ date: startOfDay(new Date()) }),
+            onExitComplete: () => {
+                focusDate(get.state().date, 200);
+                return { isAnimating: false };
+            },
+            date: (callback: (d: Date) => Date) => {
+                const newDate = callback(get.state().date);
+                return { date: newDate, year: formatYear(newDate) };
+            },
+            nextMonth: () => {
+                const state = get.state();
+                if (state.isAnimating) return state;
+                const date = addMonths(state.date, 1);
+                return { date, isAnimating: true, direction: 1, year: formatYear(date) };
+            },
+            previousMonth: () => {
+                const state = get.state();
+                if (state.isAnimating) return state;
+                const date = subMonths(state.date, 1);
+                return { date, isAnimating: true, direction: -1, year: formatYear(date) };
+            },
+            onSelectDate: (e: React.MouseEvent<HTMLButtonElement>) => {
+                const d = e.currentTarget.dataset.date || "";
+                const date = new Date(d);
+                return { date, year: formatYear(date) };
+            },
+            onChangeMonth: (e: React.ChangeEvent<HTMLSelectElement>) => {
+                const value = e.target.value;
+                const array = Array.from(e.target.options);
+                const month = array.find((x) => x.value === value);
+                if (month) {
+                    const i = month.dataset.index || "";
+                    const d = new Date(get.state().date);
+                    d.setMonth(+i);
+                    return { date: d, year: formatYear(d) };
+                }
+                return get.state();
+            },
+            onKeyDown: (e: React.KeyboardEvent<HTMLUListElement>) => {
+                const key = e.key;
+                if (key in onChangeUsingKeyboard) {
+                    if (key === "ArrowUp" || key === "ArrowDown") e.preventDefault();
+                    const prev = get.state().date;
+                    const date: Date = onChangeUsingKeyboard[key](prev, e.shiftKey ? "month" : "days");
+                    focusDate(date);
+                    return { date, year: formatYear(date) };
+                }
+            },
+        })
+    );
 
-    const nextMonth = () => {
-        if (isAnimating) return;
-        setCurrent((prev) => addMonths(prev, 1));
-        setDirection(1);
-        setIsAnimating(true);
-    };
+    const days = createDays(state.date);
+    const currentAsString = state.date.toISOString();
+    const monthString = formatMonth(state.date, locale);
 
-    const previousMonth = () => {
-        if (isAnimating) return;
-        setCurrent((prev) => subMonths(prev, 1));
-        setDirection(-1);
-        setIsAnimating(true);
-    };
+    useEffect(() => onChange?.(state.date), [currentAsString]);
 
-    const days = createDays(month);
+    const defer = useDebounce((y: string) => {
+        dispatch.date((prev) => {
+            const d = new Date(prev);
+            d.setFullYear(+y);
+            return d;
+        });
+    }, 700);
 
-    const onKeyDown = (e: React.KeyboardEvent<HTMLUListElement>) => {
-        const key = e.key;
-        if (key in onChangeUsingKeyboard) {
-            if (current) {
-                setCurrent((prev) => {
-                    const next: Date = onChangeUsingKeyboard[key](prev, e.shiftKey ? "month" : "days");
-                    focusDate(next);
-                    return next;
-                });
-                if (key === "ArrowUp" || key === "ArrowDown") e.preventDefault();
-            }
-        }
-    };
-
-    const onSelectDate = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const date = e.currentTarget.dataset.date || "";
-        const d = new Date(date);
-        setCurrent(d);
-    };
-
-    const onExitComplete = () => {
-        setIsAnimating(false);
-        focusDate(current, 200);
+    const onChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value;
+        dispatch.onChangeYear(value);
+        defer(value);
     };
 
     return (
@@ -137,27 +184,45 @@ export const Calendar = ({ locale = undefined, markToday = true }: CalendarProps
             <div className="relative overflow-hidden">
                 <div className="flex flex-col justify-center rounded text-center">
                     <Resizable>
-                        <AnimatePresence mode="popLayout" initial={false} custom={direction} onExitComplete={onExitComplete}>
+                        <AnimatePresence mode="popLayout" initial={false} custom={state.direction} onExitComplete={dispatch.onExitComplete}>
                             <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
                                 <header className="relative flex justify-between">
                                     <motion.button
-                                        onClick={previousMonth}
+                                        onClick={dispatch.previousMonth}
                                         variants={removeImmediately}
                                         className="z-calendar rounded-full p-1.5 hover:bg-primary-subtle"
                                     >
                                         <ChevronLeftIcon className="h-4 w-4" />
                                     </motion.button>
-                                    <motion.p
+                                    <motion.span
                                         variants={variants}
-                                        custom={direction}
-                                        className="absolute inset-0 flex items-center justify-center font-semibold"
+                                        custom={state.direction}
+                                        className="absolute z-normal isolate inset-0 flex items-center justify-center font-semibold"
                                     >
-                                        {format(month, "MMMM yyyy")}
-                                    </motion.p>
+                                        <span className="w-fit flex items-center justify-center gap-0.5 py-1">
+                                            <select
+                                                style={{ width: `${monthString.length}ch` }}
+                                                value={monthString}
+                                                onChange={dispatch.onChangeMonth}
+                                                className="appearance-none capitalize bg-transparent proportional-nums hover:text-primary cursor-pointer w-fit"
+                                            >
+                                                {state.months}
+                                            </select>
+                                            <TheMaskInput
+                                                mask="int"
+                                                value={state.year}
+                                                maxLength={4}
+                                                placeholder="YYYY"
+                                                onChange={onChangeYear}
+                                                style={{ width: `${state.year.length}ch` }}
+                                                className="w-16 bg-transparent appearance-none hover:text-primary cursor-pointer"
+                                            />
+                                        </span>
+                                    </motion.span>
                                     <motion.button
                                         variants={removeImmediately}
                                         className="z-calendar rounded-full p-1.5 hover:bg-primary-subtle"
-                                        onClick={nextMonth}
+                                        onClick={dispatch.nextMonth}
                                     >
                                         <ChevronRightIcon className="h-4 w-4" />
                                     </motion.button>
@@ -169,17 +234,17 @@ export const Calendar = ({ locale = undefined, markToday = true }: CalendarProps
                                         }}
                                     />
                                 </header>
-                                <div className="mt-3 grid grid-cols-7 gap-y-4">
-                                    {week.current.map((dayOfWeek) => (
-                                        <span key={dayOfWeek.toString()} className="font-medium">
+                                <div className="mt-4 grid grid-cols-7 gap-y-4">
+                                    {state.week.map((dayOfWeek) => (
+                                        <span key={dayOfWeek.toString()} className="font-medium capitalize text-sm">
                                             {dayOfWeek.toLocaleDateString(locale, { weekday: "short" })}
                                         </span>
                                     ))}
                                 </div>
                                 <motion.ul
-                                    onKeyDown={onKeyDown}
+                                    onKeyDown={dispatch.onKeyDown}
                                     variants={variants}
-                                    custom={direction}
+                                    custom={state.direction}
                                     className="mt-4 pb-2 grid grid-cols-7 gap-y-4"
                                 >
                                     {days.map((day) => {
@@ -191,9 +256,9 @@ export const Calendar = ({ locale = undefined, markToday = true }: CalendarProps
                                                 <button
                                                     type="button"
                                                     data-date={key}
-                                                    onClick={onSelectDate}
-                                                    data-view={current.getMonth().toString()}
-                                                    className={`size-8 rounded-full font-semibold flex items-center justify-center proportional-nums ${today ? "text-primary" : ""} ${isSameMonth(day, month) ? "" : "text-disabled"} ${isSelected ? "bg-primary text-primary-foreground" : ""}`}
+                                                    onClick={dispatch.onSelectDate}
+                                                    data-view={state.date.getMonth().toString()}
+                                                    className={`size-8 rounded-full font-semibold flex items-center justify-center proportional-nums ${today ? "text-primary" : ""} ${isSameMonth(day, state.date) ? "" : "text-disabled"} ${isSelected ? "bg-primary text-primary-foreground" : ""}`}
                                                 >
                                                     {day.getDate()}
                                                 </button>
@@ -205,6 +270,11 @@ export const Calendar = ({ locale = undefined, markToday = true }: CalendarProps
                         </AnimatePresence>
                     </Resizable>
                 </div>
+                <footer className="text-center text-primary mt-2">
+                    <button type="button" onClick={dispatch.setToday}>
+                        Today
+                    </button>
+                </footer>
             </div>
         </MotionConfig>
     );

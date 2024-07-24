@@ -75,7 +75,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                                 className="fill-floating-background stroke-floating-border"
                             />
                             <header className="mb-2">
-                                <h3 className="leading-snug font-medium text-2xl tracking-tight text-left">{props.title}</h3>
+                                <h3 className="leading-snug font-medium text-2xl tracking-wide text-left">{props.title}</h3>
                             </header>
                             {props.children}
                         </div>

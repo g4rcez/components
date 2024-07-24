@@ -8,6 +8,7 @@ export * from "./form/switch";
 export * from "./form/input-field";
 export * from "./form/transfer-list";
 export * from "./form/checkbox";
+export * from "./form/date-picker";
 export * from "./core/button";
 export * from "./core/polymorph";
 export * from "./core/tag";

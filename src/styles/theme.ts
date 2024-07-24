@@ -90,7 +90,7 @@ export const defaultLightTheme: DesignTokens = {
         card: "0.75rem",
     },
     colors: {
-        foreground: "hsla(210, 14%, 27%)",
+        foreground: "hsla(217, 15%, 32%)",
         background: "hsla(210, 34%, 96%)",
         accent: "hsla(199, 89%, 54%)",
         disabled: "hsla(240, 10%, 75%)",
@@ -101,7 +101,7 @@ export const defaultLightTheme: DesignTokens = {
             hover: "hsla(199, 97%, 40%)",
         },
         secondary: {
-            DEFAULT: "hsla(210, 14%, 35%)",
+            DEFAULT: "hsla(210, 20%, 40%)",
             subtle: "hsla(210, 27%, 95%)",
             hover: "hsla(210, 21%, 27%)",
             foreground: "hsla(210, 40%, 98%)",

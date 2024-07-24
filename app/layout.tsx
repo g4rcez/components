@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import {
     Autocomplete,
     Button,
-    Calendar,
     Card,
     ColType,
     createColumns,
     createTheme,
+    DatePicker,
     defaultDarkTheme,
     defaultLightTheme,
     Input,
@@ -114,8 +114,8 @@ export default function Layout() {
             </head>
             <body className="p-8 flex flex-col gap-8">
                 <Card title="Calendar">
-                    <div className="max-w-xs">
-                        <Calendar />
+                    <div className="flex flex-row w-64 gap-2">
+                        <DatePicker name="date" title="Testing" locale="pt-BR" onChange={console.log} />
                     </div>
                 </Card>
                 <div className="grid gap-4 md:grid-cols-4">

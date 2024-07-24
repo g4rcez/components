@@ -18,6 +18,7 @@ const config: Partial<Config> = {
             placeholderColor: COLORS,
             borderColors: { ...COLORS, DEFAULT: COLORS.card.border },
             zIndex: {
+                normal: "1",
                 tooltip: "11",
                 floating: "10",
                 calendar: "2",
@@ -43,6 +44,6 @@ const config: Partial<Config> = {
     ],
 };
 
-export default config;
-
 export { createDesignTokens, parsers, defaultDarkTheme };
+
+export default config;

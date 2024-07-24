@@ -37,7 +37,7 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
             value={props.header}
             whileDrag={whileDrag}
             animate={targetTransitionAnimate}
-            className={`hidden px-2 py-4 first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
+            className={`hidden font-medium text-secondary px-2 py-4 first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
         >
             <span className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
