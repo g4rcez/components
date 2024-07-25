@@ -1,4 +1,5 @@
 "use client";
+import { isBefore } from "date-fns";
 import { AppWindowIcon, NetworkIcon, SmartphoneIcon, WifiIcon } from "lucide-react";
 import React, { useState } from "react";
 import {
@@ -28,6 +29,7 @@ const WithDialog = (props: { type: "drawer" | "dialog"; side?: "left" | "right" 
     const [open, setOpen] = useState(false);
     return (
         <Modal
+            asChild
             position={props.side}
             type={props.type}
             footer={
@@ -35,17 +37,16 @@ const WithDialog = (props: { type: "drawer" | "dialog"; side?: "left" | "right" 
                     <Button onClick={() => setOpen(false)}>Close</Button>
                 </div>
             }
-            title={`${props.type}  example`}
-            asChild
-            onChange={setOpen}
+            title={`${props.type} example`}
             open={open}
+            onChange={setOpen}
             trigger={
-                <Button>
+                <Button className="capitalize">
                     {props.type} {props.side}
                 </Button>
             }
         >
-            {Array.from({ length: 50 }).map((_, i) => (
+            {Array.from({ length: 20 }).map((_, i) => (
                 <p className="w-full break-keep" key={i}>
                     Pellentesque habitant morbi tristique senectus et netus.Nec dubitamus multa iter quae et nos invenerat.Inmensae subtilitatis,
                     obscuris et malesuada fames. Pellentesque habitant morbi tristique senectus et netus.Quo usque tandem abutere, Catilina, patientia
@@ -102,6 +103,25 @@ const options = [
     { label: "Java", value: "java" },
 ];
 
+const DatePickerField = () => {
+    const [state, setState] = useState<Date | undefined>(undefined);
+    return (
+        <Card title="Calendar + Datepicker">
+            <div className="flex w-64 flex-row gap-2 items-center">
+                <DatePicker
+                    date={state}
+                    name="date"
+                    locale="pt-BR"
+                    title="Testing"
+                    onChange={setState}
+                    disabledDate={(e) => isBefore(e, new Date())}
+                />
+            </div>
+            <span className="whitespace-nowrap">{state?.toISOString() || "Pick a date"}</span>
+        </Card>
+    );
+};
+
 export default function Layout() {
     const stylesLight = createTheme(defaultLightTheme);
     const stylesDark = createTheme(defaultDarkTheme, "dark");
@@ -113,11 +133,6 @@ export default function Layout() {
                 <style>{stylesDark}</style>
             </head>
             <body className="p-8 flex flex-col gap-8">
-                <Card title="Calendar">
-                    <div className="flex flex-row w-64 gap-2">
-                        <DatePicker name="date" title="Testing" locale="pt-BR" onChange={console.log} />
-                    </div>
-                </Card>
                 <div className="grid gap-4 md:grid-cols-4">
                     <Stats Icon={WifiIcon} title="Title">
                         500
@@ -132,6 +147,7 @@ export default function Layout() {
                         500
                     </Stats>
                 </div>
+                <DatePickerField />
                 <Card className={classNames} title="Button">
                     <Button
                         onClick={() => {

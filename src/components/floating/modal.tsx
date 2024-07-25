@@ -12,6 +12,7 @@ import {
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "framer-motion";
+import { XIcon } from "lucide-react";
 import React, { Fragment, PropsWithChildren, useId } from "react";
 import { Label } from "../../types";
 
@@ -27,8 +28,8 @@ type Animations = {
 const createDrawerAnimation = (side: DrawerSides) => ({
     initial: { [side]: "-60%", opacity: 0.8 },
     enter: { [side]: 0, opacity: 1 },
-    exit: { [side]: "-60%", opacity: 0.8 },
-})
+    exit: { [side]: ["-50%", "-90%"], opacity: 0 },
+});
 
 const drawerLeft = createDrawerAnimation("left");
 
@@ -37,17 +38,17 @@ const drawerRight = createDrawerAnimation("right");
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     dialog: {
-        initial: { opacity: 0, scale: 0.9 },
-        enter: { opacity: 1, scale: [1.125, 1] },
-        exit: { opacity: 0, scale: 0.9 },
+        initial: { opacity: 0, scale: 0.95 },
+        enter: { opacity: 1, scale: [1.05, 1] },
+        exit: { opacity: 0, scale: 0.97 },
     },
 };
 
-const variants = cva("isolate ring-0 outline-0 appearance-none container flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background", {
+const variants = cva("isolate ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background", {
     variants: {
         type: {
-            drawer: "max-h-screen h-screen min-h-0",
-            dialog: "max-h-[calc(100lvh-10%)] h-[inherit] relative rounded-lg py-8",
+            drawer: "max-h-screen max-w-[90%] w-auto h-screen min-h-0",
+            dialog: "max-h-[calc(100lvh-10%)] container h-[inherit] rounded-lg py-8",
         },
         position: {
             none: "",
@@ -64,6 +65,7 @@ export type DrawerProps = {
     footer?: Label;
     resizer?: boolean;
     asChild?: boolean;
+    closable?: boolean;
     type?: "dialog" | "drawer";
     position?: "left" | "right";
     trigger: Label | React.FC<any>;
@@ -129,7 +131,7 @@ export const Modal = ({ type = "dialog", resizer = true, ...props }: PropsWithCh
                     {props.open && (
                         <FloatingOverlay
                             lockScroll
-                            className={`relative !overflow-clip h-[100dvh] z-floating bg-floating-overlay/70 ${type === "drawer" ? "" : "grid items-baseline p-8"}`}
+                            className={`relative !overflow-clip h-[100dvh] z-floating bg-floating-overlay/70 ${type === "drawer" ? "" : "grid justify-center p-8"}`}
                         >
                             <FloatingFocusManager modal closeOnFocusOut context={context}>
                                 <motion.div
@@ -145,11 +147,24 @@ export const Modal = ({ type = "dialog", resizer = true, ...props }: PropsWithCh
                                     {...getFloatingProps()}
                                 >
                                     {!isDialog && resizer ? <Draggable value={value} parent={refs.floating} type={position as DrawerSides} /> : null}
-                                    {props.title ? (
-                                        <header className="w-full">
-                                            <h2 className="px-8 pb-4 border-b border-floating-border text-3xl font-medium leading-relaxed">
-                                                {props.title}
-                                            </h2>
+                                    {props.title || props.closable ? (
+                                        <header className="w-full relative">
+                                            {props.title ? (
+                                                <h2 className="px-8 pb-4 border-b border-floating-border text-3xl font-medium leading-relaxed">
+                                                    {props.title}
+                                                </h2>
+                                            ) : null}
+                                            {props.closable !== false ? (
+                                                <nav className="absolute -top-1 right-8">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => props.onChange?.(false)}
+                                                        className="p-1 transition-colors hover:text-danger focus:text-danger"
+                                                    >
+                                                        <XIcon />
+                                                    </button>
+                                                </nav>
+                                            ) : null}
                                         </header>
                                     ) : null}
                                     <div className="flex-1 px-8 overflow-y-auto">{props.children}</div>

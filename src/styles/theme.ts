@@ -20,7 +20,7 @@ export const defaultDarkTheme: DesignTokens = {
             hover: "hsla(199, 97%, 40%)",
         },
         secondary: {
-            DEFAULT: "hsla(210, 14%, 35%)",
+            DEFAULT: "hsla(210, 20%, 80%)",
             subtle: "hsla(210, 27%, 88%)",
             hover: "hsla(210, 21%, 27%)",
             foreground: "hsla(210, 40%, 98%)",

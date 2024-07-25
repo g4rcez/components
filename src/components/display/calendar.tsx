@@ -19,12 +19,13 @@ import {
 import { AnimatePresence, motion, MotionConfig, Transition, Variants } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import React, { useEffect } from "react";
+import { Is } from "sidekicker";
 import TheMaskInput, { Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
 import { Resizable } from "../core/resizable";
 
-const transition: Transition = { type: "tween", bounce: 0.15, duration: 0.3 };
+const transition: Transition = { type: "spring", bounce: 0.1, duration: 0.3 };
 
 const dir =
     (mod: number) =>
@@ -38,7 +39,8 @@ const variants: Variants = {
 
 const removeImmediately: Variants = { exit: { visibility: "hidden" } };
 
-type CalendarProps = {
+export type CalendarProps = {
+    disabledDate?: (date: Date) => boolean;
     date?: Date;
     locale?: Locales;
     markToday?: boolean;
@@ -95,7 +97,7 @@ const focusDate = (next: Date, delay = 0) => {
 
 const formatYear = (now: Date) => now.getFullYear().toString().padStart(4, "0");
 
-export const Calendar = ({ locale, markToday = true, autoFocusToday = true, date, onChange }: CalendarProps) => {
+export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToday = true, date, onChange }: CalendarProps) => {
     const now = date || new Date();
     const [state, dispatch] = useReducer(
         {
@@ -151,10 +153,13 @@ export const Calendar = ({ locale, markToday = true, autoFocusToday = true, date
                 if (key in onChangeUsingKeyboard) {
                     if (key === "ArrowUp" || key === "ArrowDown") e.preventDefault();
                     const prev = get.state().date;
-                    const date: Date = onChangeUsingKeyboard[key](prev, e.shiftKey ? "month" : "days");
-                    focusDate(date);
-                    return { date, year: formatYear(date) };
+                    const date = Is.keyof(onChangeUsingKeyboard, key) ? onChangeUsingKeyboard[key](prev, e.shiftKey ? "month" : "days") : null;
+                    if (date !== null) {
+                        focusDate(date);
+                        return { date, year: formatYear(date) };
+                    }
                 }
+                return get.state();
             },
         })
     );
@@ -184,7 +189,13 @@ export const Calendar = ({ locale, markToday = true, autoFocusToday = true, date
             <div className="relative overflow-hidden">
                 <div className="flex flex-col justify-center rounded text-center">
                     <Resizable>
-                        <AnimatePresence mode="popLayout" initial={false} custom={state.direction} onExitComplete={dispatch.onExitComplete}>
+                        <AnimatePresence
+                            presenceAffectsLayout
+                            mode="popLayout"
+                            initial={false}
+                            custom={state.direction}
+                            onExitComplete={dispatch.onExitComplete}
+                        >
                             <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
                                 <header className="relative flex justify-between">
                                     <motion.button
@@ -251,14 +262,17 @@ export const Calendar = ({ locale, markToday = true, autoFocusToday = true, date
                                         const key = day.toISOString();
                                         const isSelected = key === currentAsString;
                                         const today = isToday(day) && markToday;
+                                        const disabledByFn = disabledDate?.(day) || false;
+                                        const disableDate = !isSameMonth(day, state.date) || disabledByFn;
                                         return (
                                             <li key={key} className="w-full flex items-center justify-center">
                                                 <button
                                                     type="button"
                                                     data-date={key}
+                                                    disabled={disabledByFn}
                                                     onClick={dispatch.onSelectDate}
                                                     data-view={state.date.getMonth().toString()}
-                                                    className={`size-8 rounded-full font-semibold flex items-center justify-center proportional-nums ${today ? "text-primary" : ""} ${isSameMonth(day, state.date) ? "" : "text-disabled"} ${isSelected ? "bg-primary text-primary-foreground" : ""}`}
+                                                    className={`size-8 disabled:cursor-not-allowed rounded-full font-semibold flex items-center justify-center proportional-nums ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`}
                                                 >
                                                     {day.getDate()}
                                                 </button>
@@ -271,7 +285,7 @@ export const Calendar = ({ locale, markToday = true, autoFocusToday = true, date
                     </Resizable>
                 </div>
                 <footer className="text-center text-primary mt-2">
-                    <button type="button" onClick={dispatch.setToday}>
+                    <button className="hover:scale-105 transition-transform duration-300" type="button" onClick={dispatch.setToday}>
                         Today
                     </button>
                 </footer>
