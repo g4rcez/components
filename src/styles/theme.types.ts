@@ -2,6 +2,9 @@ export type GeneralTokens = { [K in string]: string | GeneralTokens };
 
 export type DesignTokens = {
     name: string;
+    shadow: {
+        floating: string;
+    };
     rounded: {
         full: string;
         pill: string;
@@ -31,6 +34,7 @@ export type DesignTokens = {
         };
         secondary: {
             DEFAULT: string;
+            background: string;
             subtle: string;
             hover: string;
             foreground: string;

@@ -6,7 +6,6 @@ export const useParentHeight = (ref: React.RefObject<HTMLElement>) => {
         const element = ref.current;
         if (!element) return;
         const parent = element.parentElement;
-        console.log(parent);
         if (!parent) return;
         const listener = () => {
             setH(parent.clientHeight);

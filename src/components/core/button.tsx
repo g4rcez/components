@@ -5,7 +5,7 @@ import { Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const buttonVariants = cva(
-    "inline-flex duration-700 data-[loading=true]:opacity-40 data-[loading=true]:animate-pulse gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-30 disabled:text-opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
+    "inline-flex duration-700 enabled:hover:bg-opacity-70 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
     {
         variants: {
             size: {
@@ -22,12 +22,12 @@ const buttonVariants = cva(
             },
             theme: {
                 raw: "",
-                main: "bg-primary hover:bg-primary-hover text-primary-foreground",
-                warn: "bg-warn hover:bg-warn-hover text-warn-foreground",
-                danger: "bg-danger hover:bg-danger-hover text-danger-foreground",
-                secondary: "bg-secondary hover:bg-secondary-hover text-secondary-foreground",
-                success: "bg-success hover:bg-success-hover text-success-foreground",
-                info: "bg-info hover:bg-info-hover text-info-foreground",
+                main: "bg-primary text-primary-foreground",
+                warn: "bg-warn text-warn-foreground",
+                danger: "bg-danger text-danger-foreground",
+                secondary: "bg-secondary-background text-secondary-foreground disabled:text-secondary-subtle",
+                success: "bg-success text-success-foreground",
+                info: "bg-info text-info-foreground",
             },
         },
         defaultVariants: { theme: "main", size: "default", rounded: "default" },

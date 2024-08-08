@@ -6,6 +6,8 @@ import { defaultDarkTheme } from "./src/styles/theme";
 
 const COLORS = createDesignTokens(defaultDarkTheme.colors, parsers.formatWithVar("hsla"));
 
+const css = String.raw;
+
 const config: Partial<Config> = {
     theme: {
         transitionTimingFunction: { DEFAULT: "cubic-bezier(1,.43,.36,.67)" },
@@ -24,7 +26,7 @@ const config: Partial<Config> = {
                 calendar: "2",
             },
             boxShadow: {
-                floating: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px",
+                floating: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 5px 12px",
             },
         },
     },
@@ -36,9 +38,9 @@ const config: Partial<Config> = {
             addVariant("group-assert", [`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);
             addVariant("group-error", [
                 `:merge(.group):invalid:has(.input:not(:focus):invalid[data-initialized=true]) &`,
-                `:merge(.group[data-error=true][data-interactive=true]):has(.input[data-initialized=true]) &`,
+                `:merge(.group[data-error=true]:has(.input[data-initialized=true])) &`,
                 `:merge(.group[data-error=true][data-interactive=true]):has(.input) &`,
-                `:merge(.group[data-error=true]:has(.input[data-initialized=true]) ) &`,
+                `:merge(.group[data-error=true][data-interactive=true]):has(.input[data-initialized=true]) &`,
             ]);
         }),
     ],

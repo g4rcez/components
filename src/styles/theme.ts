@@ -3,13 +3,16 @@ import { DesignTokens } from "./theme.types";
 export const defaultDarkTheme: DesignTokens = {
     name: "dark",
     spacing: { base: "1rem", lg: "1.5rem", sm: "0.75rem" },
+    shadow: {
+        floating: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 5px 12px",
+    },
     rounded: {
         pill: "2rem",
         card: "0.75rem",
-        full: "50%",
+        full: "9999px",
     },
     colors: {
-        foreground: "hsla(210, 40%, 98%)",
+        foreground: "hsla(210, 50%, 98%)",
         background: "hsla(0, 0%, 9%)",
         accent: "hsla(199, 89%, 54%)",
         disabled: "hsla(240, 4%, 33%)",
@@ -20,10 +23,11 @@ export const defaultDarkTheme: DesignTokens = {
             hover: "hsla(199, 97%, 40%)",
         },
         secondary: {
-            DEFAULT: "hsla(210, 20%, 80%)",
+            DEFAULT: "hsla(210, 32%, 70%)",
+            background: "hsla(210, 30%, 81%)",
             subtle: "hsla(210, 27%, 88%)",
-            hover: "hsla(210, 21%, 27%)",
-            foreground: "hsla(210, 40%, 98%)",
+            hover: "hsla(210, 10%, 58%)",
+            foreground: "hsla(210, 20%, 30%)",
         },
         info: {
             DEFAULT: "hsla(219, 91%, 59%)",
@@ -79,6 +83,9 @@ export const defaultDarkTheme: DesignTokens = {
 
 export const defaultLightTheme: DesignTokens = {
     name: "light",
+    shadow: {
+        floating: "rgba(50, 50, 50, 0.1) 0px 0px 0px 1px, rgba(50, 50, 50, 0.1) 0px 3px 6px, rgba(50, 50, 50, 0.1) 0px 2px 3px",
+    },
     spacing: {
         base: "1rem",
         lg: "1.5rem",
@@ -101,9 +108,10 @@ export const defaultLightTheme: DesignTokens = {
             hover: "hsla(199, 97%, 40%)",
         },
         secondary: {
-            DEFAULT: "hsla(210, 20%, 40%)",
-            subtle: "hsla(210, 27%, 95%)",
-            hover: "hsla(210, 21%, 27%)",
+            background: "hsla(210, 25%, 35%)",
+            DEFAULT: "hsla(210, 25%, 35%)",
+            subtle: "hsla(207, 29%, 39%)",
+            hover: "hsla(210, 21%, 67%)",
             foreground: "hsla(210, 40%, 98%)",
         },
         info: {

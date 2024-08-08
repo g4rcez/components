@@ -19,7 +19,7 @@ const tagVariants = cva(
                 main: "bg-primary-subtle text-primary-hover",
                 warn: "bg-warn-subtle text-warn-hover",
                 danger: "bg-danger-subtle text-danger-hover",
-                secondary: "bg-secondary-subtle text-secondary-hover",
+                secondary: "bg-secondary-background text-secondary-foreground",
                 success: "bg-success-subtle text-success-hover",
                 info: "bg-info-subtle text-info-hover",
                 loading: "animate-pulse bg-disabled duration-700 opacity-70",

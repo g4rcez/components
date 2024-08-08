@@ -37,29 +37,21 @@ type THead = React.ReactElement | React.ReactNode;
 export type ColMatrix = `${number},${number}`;
 
 // ref: https://github.com/gvergnaud/hotscript/blob/main/src/internals/objects/impl/objects.ts
-type ParsePath<
-    path,
-    output extends string[] = [],
-    currentChunk extends string = ""
-> = path extends number
+type ParsePath<path, output extends string[] = [], currentChunk extends string = ""> = path extends number
     ? [`${path}`]
     : path extends `${infer first}${infer rest}`
-        ? first extends "." | "[" | "]"
-            ? ParsePath<
-                rest,
-                [...output, ...(currentChunk extends "" ? [] : [currentChunk])],
-                ""
-            >
-            : ParsePath<rest, output, `${currentChunk}${first}`>
-        : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
+      ? first extends "." | "[" | "]"
+          ? ParsePath<rest, [...output, ...(currentChunk extends "" ? [] : [currentChunk])], "">
+          : ParsePath<rest, output, `${currentChunk}${first}`>
+      : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
 
 type RecursiveGet<Obj, pathList> = Obj extends any
     ? pathList extends [infer first, ...infer rest]
         ? first extends keyof Obj
             ? RecursiveGet<Obj[first], rest>
             : [first, Obj] extends [`${number}` | "number", readonly any[]]
-                ? RecursiveGet<Extract<Obj, any[]>[number], rest>
-                : undefined
+              ? RecursiveGet<Extract<Obj, any[]>[number], rest>
+              : undefined
         : Obj
     : never;
 
@@ -93,12 +85,25 @@ const cols =
 
 export type Col<T extends POJO> = ReturnType<ReturnType<typeof cols<T>>>;
 
+export type TablePagination = {
+    sizes?: number[];
+    onChangeSize?: (size: number) => void
+    size: number;
+    pages: number;
+    current: number;
+    hasNext: boolean;
+    totalItems: number;
+    hasPrevious: boolean;
+    asLink?: React.FC<React.PropsWithChildren<{ href: number | "previous" | "next"; className: string }>>;
+};
+
 type TableGetters<T extends POJO> = {
     rows: T[];
     cols: Col<T>[];
-    groups: GroupItem<T>[];
     sorters: Sorter<T>[];
+    groups: GroupItem<T>[];
     filters: FilterConfig<T>[];
+    pagination: TablePagination | null;
 };
 
 type TableSetters<T extends POJO> = {

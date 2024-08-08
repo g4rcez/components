@@ -1,5 +1,5 @@
 import { AnimatePresence, Reorder, TargetAndTransition } from "framer-motion";
-import { PlusIcon, SearchIcon } from "lucide-react";
+import { PlusIcon, SearchIcon, ZoomInIcon } from "lucide-react";
 import React from "react";
 import { Dropdown } from "../floating/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol } from "./filter";
@@ -22,10 +22,13 @@ type HeaderChildProps<T extends {}> = {
 
 const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
+    const hasFilters = ownFilters.length > 0;
+    const FilterIcon = hasFilters ? ZoomInIcon : SearchIcon;
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         const id = e.currentTarget.dataset.id || "";
         return props.setFilters((prev) => prev.filter((x) => x.id !== id));
     };
+
     return (
         <Reorder.Item
             {...(props.header.thProps as {})}
@@ -37,11 +40,11 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
             value={props.header}
             whileDrag={whileDrag}
             animate={targetTransitionAnimate}
-            className={`hidden font-medium text-secondary px-2 py-4 first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
+            className={`hidden font-medium px-2 py-4 first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
         >
             <span className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
-                    <Dropdown title={`Filter by ${getLabel(props.header)}`} arrow trigger={<SearchIcon size={14} />}>
+                    <Dropdown title={`Filter by ${getLabel(props.header)}`} arrow trigger={<FilterIcon size={14} />}>
                         {(ownFilters.length === 0) === null ? null : (
                             <ul className="font-medium">
                                 {ownFilters.map((filter) => (

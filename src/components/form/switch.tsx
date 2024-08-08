@@ -30,7 +30,7 @@ export const Switch = ({ children, ...props }: SwitchProps) => {
                 <span
                     aria-hidden="true"
                     data-checked={checked}
-                    className="data-[checked=false]:bg-disabled data-[checked=true]:bg-input-switch pointer-events-none inline-block size-5 aspect-square data-[checked=false]translate-x-0 data-[checked=true]:translate-x-5 transform rounded-full shadow ring-0 transition ease-in-out"
+                    className="data-[checked=false]:bg-disabled data-[checked=true]:bg-input-switch inline-block size-5 aspect-square data-[checked=false]translate-x-0 data-[checked=true]:translate-x-5 transform rounded-full shadow ring-0 transition ease-in-out"
                 />
             </button>
             <span className="ml-3 text-sm" id={`${id}-label`}>

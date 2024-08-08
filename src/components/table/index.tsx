@@ -10,12 +10,15 @@ import { OptionProps } from "../form/select";
 import { FilterConfig } from "./filter";
 import { GroupItem } from "./group";
 import { Metadata } from "./metadata";
+import { Pagination } from "./pagination";
 import { multiSort, Sorter } from "./sort";
 import { CellPropsElement, Col, ColMatrix, createOptionCols, TableOperationProps } from "./table-lib";
 import { TableHeader } from "./thead";
 
 type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
+        border?: boolean;
+        useControl?: boolean;
         loading?: boolean;
         group?: GroupItem<T>;
         groups?: GroupItem<T>[];
@@ -108,13 +111,27 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
 
 const Frag = () => <Fragment />;
 
-const InnerTable = <T extends {}>({ filters, onScrollEnd, setCols, setFilters, sorters, cols, setSorters, ...props }: InnerTableProps<T>) => {
+const InnerTable = <T extends {}>({
+    filters,
+    pagination = null,
+    onScrollEnd,
+    useControl = false,
+    setCols,
+    setFilters,
+    sorters,
+    cols,
+    border = true,
+    setSorters,
+    ...props
+}: InnerTableProps<T>) => {
     const ref = useRef<HTMLDivElement>(null);
     const [showLoadingFooter, setShowLoadingFooter] = useState(false);
     const onScrollEndRef = useCallbackRef(onScrollEnd);
     const loadingMoreRef = useCallbackRef(props.loadingMore);
+
     const rows = useMemo(() => {
         if (props.loading) return loadingArray as any as T[];
+        if (useControl) return props.rows;
         const linq = new Linq(props.rows);
         if (filters.length > 0) {
             filters.forEach((x) => (x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name as any, x.operation.symbol, x.value)));
@@ -129,7 +146,6 @@ const InnerTable = <T extends {}>({ filters, onScrollEnd, setCols, setFilters, s
         }
         const div = ref.current;
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach((x) => console.log(x.isIntersecting, x.target));
             const endOfPage = entries[entries.length - 1];
             const condition = endOfPage.isIntersecting && loadingMoreRef.current;
             if (condition) {
@@ -143,32 +159,36 @@ const InnerTable = <T extends {}>({ filters, onScrollEnd, setCols, setFilters, s
     }, []);
 
     return (
-        <div className="group border border-table-border rounded-lg px-1 min-w-full">
-            <TableVirtuoso
-                data={rows}
-                useWindowScroll
-                components={components}
-                totalCount={rows.length}
-                itemContent={ItemContent}
-                context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols }}
-                fixedFooterContent={showLoadingFooter ? Frag : null}
-                fixedHeaderContent={() => (
-                    <TableHeader<T>
-                        sorters={sorters}
-                        setSorters={setSorters}
-                        filters={filters}
-                        setFilters={setFilters}
-                        headers={cols}
-                        setCols={setCols}
-                    />
-                )}
-            />
-            <div aria-hidden="true" ref={ref} className="h-0.5 w-full" />
+        <div className="min-w-full">
+            <div className={`group  rounded-lg px-1 ${border ? "border border-table-border" : ""}`}>
+                <TableVirtuoso
+                    data={rows}
+                    useWindowScroll
+                    components={components}
+                    totalCount={rows.length}
+                    itemContent={ItemContent}
+                    context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols }}
+                    fixedFooterContent={showLoadingFooter ? Frag : null}
+                    fixedHeaderContent={() => (
+                        <TableHeader<T>
+                            sorters={sorters}
+                            setSorters={setSorters}
+                            filters={filters}
+                            setFilters={setFilters}
+                            headers={cols}
+                            setCols={setCols}
+                        />
+                    )}
+                />
+                <div aria-hidden="true" ref={ref} className="h-0.5 w-full" />
+            </div>
+            {pagination !== null ? <Pagination {...pagination} /> : null}
         </div>
     );
 };
 
-export type TableProps<T extends {}> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore"> & {
+export type TableProps<T extends {}> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border"> & {
+    useControl?: boolean;
     name: string;
     operations?: boolean;
     onScrollEnd?: () => void;
@@ -227,6 +247,7 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
                     setGroups={dispatch.groups}
                     setSorters={dispatch.sorters}
                     sorters={state.sorters}
+                    pagination={props.pagination ?? null}
                 />
             ) : null}
             {state.groups.length === 0 ? (
@@ -244,6 +265,7 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
                     setGroups={dispatch.groups}
                     setSorters={dispatch.sorters}
                     sorters={state.sorters}
+                    pagination={props.pagination ?? null}
                 />
             ) : (
                 <div className="flex flex-wrap gap-4">
@@ -251,6 +273,7 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
                         <motion.div className="min-w-full" key={`group-${group.groupId}`}>
                             <InnerTable
                                 {...props}
+                                pagination={null}
                                 onScrollEnd={props.onScrollEnd}
                                 cols={state.cols}
                                 filters={state.filters}

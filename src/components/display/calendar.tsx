@@ -201,7 +201,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                     <motion.button
                                         onClick={dispatch.previousMonth}
                                         variants={removeImmediately}
-                                        className="z-calendar rounded-full p-1.5 hover:bg-primary-subtle"
+                                        className="z-calendar rounded-full p-1.5 hover:bg-primary"
                                     >
                                         <ChevronLeftIcon className="h-4 w-4" />
                                     </motion.button>
@@ -232,7 +232,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                     </motion.span>
                                     <motion.button
                                         variants={removeImmediately}
-                                        className="z-calendar rounded-full p-1.5 hover:bg-primary-subtle"
+                                        className="z-calendar rounded-full p-1.5 hover:bg-primary"
                                         onClick={dispatch.nextMonth}
                                     >
                                         <ChevronRightIcon className="h-4 w-4" />

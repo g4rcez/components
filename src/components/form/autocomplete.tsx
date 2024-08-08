@@ -204,16 +204,18 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(({ options
                         data-floating="true"
                         className="bg-floating-background shadow-floating text-foreground list-none p-0 m-0 rounded-b-lg overflow-auto origin-[top_center] overflow-y-auto z-floating"
                     >
-                        {list.map((item, i) => (
+                        {list.map((option, i) => (
                             <Option
                                 {...getItemProps({
-                                    onClick: () => onSelect(item),
+                                    onClick: () => onSelect(option),
                                     ref: (node) => void (listRef.current[i] = node) as any,
+                                    selected: index === i,
+                                    active: value === option.value
                                 })}
-                                key={`${item.value}-option`}
-                                option={item}
+                                key={`${option.value}-option`}
+                                option={option}
                                 selected={index === i}
-                                active={value === item.value}
+                                active={value === option.value}
                             />
                         ))}
                     </ul>

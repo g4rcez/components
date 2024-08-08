@@ -89,7 +89,7 @@ export const DatePicker = ({ date, locale, disabledDate, autoFocusToday, onChang
             right={
                 <Fragment>
                     <input defaultValue={innerDate?.toISOString()} hidden type="date" name={props.name} />
-                    <Dropdown trigger={<CalendarIcon />} onChange={setOpen} open={open}>
+                    <Dropdown restoreFocus trigger={<CalendarIcon />} onChange={setOpen} open={open}>
                         <Calendar
                             {...props}
                             locale={locale}

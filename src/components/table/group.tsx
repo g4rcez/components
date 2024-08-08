@@ -1,7 +1,7 @@
 "use client";
 import { LayoutGroup, Reorder, useDragControls, useMotionValue } from "framer-motion";
 import Linq from "linq-arrays";
-import { GripVerticalIcon, GroupIcon, Trash2Icon } from "lucide-react";
+import { GripVerticalIcon, GroupIcon, Trash2Icon, UngroupIcon } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { keys } from "sidekicker";
 import { uuid } from "../../lib/fns";
@@ -76,7 +76,7 @@ export const Group = <T extends {}>(props: Props<T>) => {
                 title="Groups"
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
-                        <GroupIcon size={14} />
+                        <UngroupIcon size={14} />
                         Groups{props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
                     </span>
                 }

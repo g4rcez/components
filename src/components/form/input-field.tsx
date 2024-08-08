@@ -49,6 +49,7 @@ export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
         hideLeft: boolean;
         container: string;
         left: Label;
+        feedback: Label;
         optionalText: string;
         right: Label;
         rightLabel: Label;
@@ -64,6 +65,7 @@ export const InputField = <T extends "input" | "select">({
     left,
     rightLabel,
     container,
+    feedback,
     right,
     children,
     error,
@@ -99,7 +101,12 @@ export const InputField = <T extends "input" | "select">({
                     {right ? <span className="absolute right-0 flex flex-nowrap gap-2 whitespace-nowrap pr-1">{right}</span> : null}
                 </div>
             </label>
-            <p className="mt-1 text-xs group-error:block group-error:text-danger">{error}</p>
+            <p className="group-error:block group-error:text-danger mt-1 hidden text-xs group-has-[input:not(:focus):invalid[data-initialized=true]]:block">
+                {error}
+            </p>
+            <p className="mt-1 hidden text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block">
+                {feedback}
+            </p>
         </fieldset>
     );
 };

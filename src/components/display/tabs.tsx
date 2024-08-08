@@ -5,7 +5,12 @@ import { useReactive } from "../../hooks/use-reactive";
 import { Label } from "../../types";
 import { Card } from "./card";
 
-export type TabsProps = { active: string; onChange?: (id: string) => void; useHash?: boolean };
+export type TabsProps = {
+    active: string;
+    onChange?: (id: string) => void;
+    useHash?: boolean;
+    className?: string;
+};
 
 const Context = createContext<string>("");
 
@@ -62,6 +67,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     return (
         <Context.Provider value={active}>
             <Card
+                className={props.className}
                 container="pt-0"
                 header={
                     <header ref={ref} className="border-b border-card-border relative mb-2">

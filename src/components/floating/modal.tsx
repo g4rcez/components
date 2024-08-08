@@ -25,10 +25,12 @@ type Animations = {
     dialog: Record<AnimationLabels, TargetAndTransition>;
 };
 
+const animationDuration = '600ms'
+
 const createDrawerAnimation = (side: DrawerSides) => ({
-    initial: { [side]: "-60%", opacity: 0.8 },
-    enter: { [side]: 0, opacity: 1 },
-    exit: { [side]: ["-50%", "-90%"], opacity: 0 },
+    initial: { [side]: "-60%", opacity: 0.8, animationDuration },
+    enter: { [side]: 0, opacity: 1, animationDuration },
+    exit: { [side]: ["-50%", "-90%"], opacity: 0, animationDuration },
 });
 
 const drawerLeft = createDrawerAnimation("left");
@@ -38,9 +40,9 @@ const drawerRight = createDrawerAnimation("right");
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     dialog: {
-        initial: { opacity: 0, scale: 0.95 },
-        enter: { opacity: 1, scale: [1.05, 1] },
-        exit: { opacity: 0, scale: 0.97 },
+        initial: { opacity: 0, scale: 0.95, animationDuration },
+        enter: { opacity: 1, scale: [1.05, 1], animationDuration },
+        exit: { opacity: 0, scale: 0.97, animationDuration },
     },
 };
 
@@ -68,7 +70,7 @@ export type DrawerProps = {
     closable?: boolean;
     type?: "dialog" | "drawer";
     position?: "left" | "right";
-    trigger: Label | React.FC<any>;
+    trigger?: Label | React.FC<any>;
     onChange: (nextState: boolean) => void;
 };
 
@@ -119,13 +121,15 @@ export const Modal = ({ type = "dialog", resizer = true, ...props }: PropsWithCh
 
     return (
         <Fragment>
-            {props.asChild ? (
-                <Slot ref={refs.setReference} {...getReferenceProps()} children={Trigger} />
-            ) : (
-                <button ref={refs.setReference} {...getReferenceProps()} type="button">
-                    {Trigger}
-                </button>
-            )}
+            {props.trigger ? <Fragment>
+                {props.asChild ? (
+                    <Slot ref={refs.setReference} {...getReferenceProps()} children={Trigger} />
+                ) : (
+                    <button ref={refs.setReference} {...getReferenceProps()} type="button">
+                        {Trigger}
+                    </button>
+                )}
+            </Fragment> : null}
             <FloatingPortal>
                 <AnimatePresence presenceAffectsLayout>
                     {props.open && (

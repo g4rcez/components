@@ -1,5 +1,5 @@
 import { Symbols } from "linq-arrays";
-import { PlusIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { ListFilterIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment } from "react";
 import { AllPaths } from "sidekicker";
 import { uuid } from "../../lib/fns";
@@ -100,7 +100,7 @@ export const Filter = <T extends {}>(props: Props<T>) => {
                 title="Filters"
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
-                        <SearchIcon size={14} />
+                        <ListFilterIcon size={14} />
                         Filtros {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
@@ -175,6 +175,7 @@ export const ColumnHeaderFilter = <T extends {}>({ filter, onDelete, set }: Colu
     return (
         <div className="flex flex-nowrap items-center gap-4 py-2">
             <Select
+                data-id={filter.id}
                 onChange={onSelectOperation}
                 options={operatorOptions[filter.type]!}
                 placeholder="Operation..."

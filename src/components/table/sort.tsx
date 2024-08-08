@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDownIcon, ChevronUpIcon, PlusIcon, SortAscIcon, Trash2Icon } from "lucide-react";
+import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 import { uuid } from "../../lib/fns";
 import { Label } from "../../types";
@@ -24,7 +24,6 @@ const createSorterFn =
             const reverse = x.type === "desc" ? -1 : 1;
             const property = x.value;
             const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
-            console.log({ acc, p, a, b, property });
             return acc !== 0 ? acc : p;
         }, 0);
 
@@ -80,8 +79,8 @@ export const Sort = <T extends {}>(props: Props<T>) => {
                 arrow={false}
                 title="Order By"
                 trigger={
-                    <span className="flex items-center gap-1 proportional-nums text-foreground-description">
-                        <SortAscIcon size={14} />
+                    <span className="flex items-center gap-1 proportional-nums">
+                        <ArrowUpDownIcon size={14} />
                         Order by {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
                     </span>
                 }
@@ -124,8 +123,10 @@ export const Sort = <T extends {}>(props: Props<T>) => {
 type SorterHeadProps<T extends {}> = Pick<TableOperationProps<T>, "sorters" | "setSorters"> & { col: Col<T> };
 
 export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
-    const sorter = props.sorters.find((sort) => sort.id === props.col.id);
-    const [status, setStatus] = useState(sorter ? sorter.type : Order.Undefined);
+    const [status, setStatus] = useState(() => {
+        const sorter = props.sorters.find((sort) => sort.value === props.col.id);
+        return sorter ? sorter.type : Order.Undefined;
+    });
 
     const onClick = () => setStatus((prev) => (prev === Order.Undefined ? Order.Asc : prev === Order.Asc ? Order.Desc : Order.Undefined));
 
@@ -141,9 +142,9 @@ export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
 
     return (
         <button className="isolate flex items-center" onClick={onClick} type="button">
-            {status === Order.Asc ? <ChevronDownIcon size={14} /> : null}
-            {status === Order.Desc ? <ChevronUpIcon size={14} /> : null}
-            {status === Order.Undefined ? <SortAscIcon size={14} /> : null}
+            {status === Order.Asc ? <ArrowUp01Icon size={14} /> : null}
+            {status === Order.Desc ? <ArrowDown01Icon size={14} /> : null}
+            {status === Order.Undefined ? <ArrowUpDownIcon size={14} /> : null}
         </button>
     );
 };
