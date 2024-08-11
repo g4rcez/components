@@ -4,6 +4,7 @@ import React, { createContext, Fragment, PropsWithChildren, useContext, useEffec
 import { useReactive } from "../../hooks/use-reactive";
 import { Label } from "../../types";
 import { Card } from "./card";
+import { Autocomplete } from "../form/autocomplete";
 
 export type TabsProps = {
     active: string;
@@ -77,10 +78,23 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                             aria-hidden="true"
                             style={{ left, width }}
                             transition={{ type: "tween", left, width }}
-                            className="w-28 h-0.5 bg-primary absolute bottom-0 duration-300 transition-all hidden md:block"
+                            className="w-28 h-0.5 bg-primary absolute bottom-0 duration-300 transition-all hidden lg:block"
                         />
                         <nav>
-                            <ul className="divide-x divide-card-border overflow-x-auto flex justify-between md:justify-start">
+                            <Autocomplete
+                                onChange={(e) => setActive(e.target.value)}
+                                value={active}
+                                container="container inline-flex px-6 w-full mx-auto"
+                                selectContainer="mt-4 lg:mt-0 min-w-full inline-flex min-w-full lg:hidden"
+                                hideLeft
+                                labelClassName="border-transparent rounded-none"
+                                rightLabel={null}
+                                options={items.map((x: any) => {
+                                    const inner = x.props as TabProps;
+                                    return { value: inner.id, label: inner.label ?? inner.title };
+                                })}
+                            />
+                            <ul className="hidden lg:flex divide-x divide-card-border overflow-x-auto justify-between md:justify-start">
                                 {items.map((x: any) => {
                                     const inner = x.props as TabProps;
                                     return (
@@ -97,7 +111,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                                 className="px-10 py-4 block font-medium w-full whitespace-nowrap"
                                                 href={props.useHash ? `#${inner.id}` : undefined}
                                             >
-                                                {inner.title}
+                                                {inner.title as any}
                                             </Render>
                                         </li>
                                     );
@@ -115,7 +129,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
 
 const useTabs = () => useContext(Context);
 
-export type TabProps = { id: string; title: Label };
+export type TabProps = { id: string; title: string; label?: undefined } | { id: string; title: Omit<Label, string>; label: string };
 
 export const Tab = (props: PropsWithChildren<TabProps>) => {
     const active = useTabs();
