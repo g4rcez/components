@@ -20,4 +20,4 @@ export const path = <T extends {}, K extends AllPaths<T>>(obj: T, path: K) => {
     return result === undefined || result === obj ? undefined : result;
 };
 
-export const isSsr = () => typeof window === 'undefined';
+export const isSsr = () => typeof window === "undefined";

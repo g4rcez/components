@@ -15,6 +15,7 @@ import {
     DatePicker,
     defaultDarkTheme,
     defaultLightTheme,
+    formToJson,
     Input,
     Modal,
     Radiobox,
@@ -30,6 +31,50 @@ import {
     useTablePreferences,
 } from "../src";
 import "../src/index.css";
+
+const FormExample = () => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const json = formToJson(e.currentTarget);
+        console.log(json);
+    };
+    return (
+        <Card title="Inputs">
+            <form onSubmit={onSubmit} className="flex gap-6 flex-wrap">
+                <Input name="input" required placeholder="Text" title="Text" />
+                <Select name="select" required options={options} placeholder="Haskell..." title="Language" />
+                <Autocomplete
+                    name="autocomplete"
+                    onChange={(e) => console.log("EVENT", e)}
+                    options={options}
+                    placeholder="Haskell..."
+                    title="Language"
+                />
+                <div className="flex items-center flex-nowrap gap-4 min-w-full">
+                    <Checkbox name="checkbox">Uncontrolled checkbox</Checkbox>
+                    <Checkbox name="disabled-checkbox" disabled>
+                        Disabled checkbox
+                    </Checkbox>
+                    <Checkbox name="disabled-checked-checkbox" defaultChecked disabled>
+                        Disabled checkbox
+                    </Checkbox>
+                </div>
+                <div>
+                    <Switch name="switch">Toggle</Switch>
+                </div>
+                <Radiobox name="number" value={1}>
+                    One
+                </Radiobox>
+                <Radiobox name="number" value={2}>
+                    Two
+                </Radiobox>
+                <div className="min-w-full">
+                    <Button type="submit">Submit</Button>
+                </div>
+            </form>
+        </Card>
+    );
+};
 
 const WithDialog = (props: { type: "drawer" | "dialog"; side?: "left" | "right" }) => {
     const [open, setOpen] = useState(false);
@@ -162,7 +207,6 @@ export default function Layout() {
             </head>
             <body>
                 <main className="p-8 flex flex-col gap-8">
-                    <TableView />
                     <div className="grid gap-4 md:grid-cols-4">
                         <Stats Icon={WifiIcon} title="Title">
                             500
@@ -269,27 +313,7 @@ export default function Layout() {
                             Success
                         </Tag>
                     </Card>
-                    <Card title="Inputs">
-                        <Input error="Has error" placeholder="Text" title="Text" />
-                        <Select options={options} placeholder="Haskell..." title="Language" />
-                        <Autocomplete onChange={(e) => console.log("EVENT", e)} options={options} placeholder="Haskell..." title="Language" />
-                        <Checkbox>Uncontrolled checkbox</Checkbox>
-                        <Checkbox disabled>Disabled checkbox</Checkbox>
-                        <Checkbox defaultChecked disabled>
-                            Disabled checkbox
-                        </Checkbox>
-                        <div>
-                            <Switch>Toggle</Switch>
-                        </div>
-                        <form onSubmit={(e) => e.preventDefault()}>
-                            <Radiobox name="number" value={1}>
-                                One
-                            </Radiobox>
-                            <Radiobox name="number" value={2}>
-                                Two
-                            </Radiobox>
-                        </form>
-                    </Card>
+                    <FormExample />
                     <Card title="Tooltip">
                         <Tooltip title="Hover me">I'm a tooltip</Tooltip>
                     </Card>
@@ -299,7 +323,7 @@ export default function Layout() {
                         <WithDialog side="right" type="drawer" />
                     </Card>
                     <Tabs active="">
-                        <Tab title="Item 1" id="item1">
+                        <Tab title={<span>Testing JSX</span>} label="Mobile label" id="item1">
                             <TableTab />
                         </Tab>
                         <Tab title="Item 2" id="item2">
@@ -318,6 +342,7 @@ export default function Layout() {
                             6. Item
                         </Tab>
                     </Tabs>
+                    <TableView />
                 </main>
             </body>
         </html>

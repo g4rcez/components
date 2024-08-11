@@ -25,7 +25,7 @@ type Animations = {
     dialog: Record<AnimationLabels, TargetAndTransition>;
 };
 
-const animationDuration = '600ms'
+const animationDuration = "600ms";
 
 const createDrawerAnimation = (side: DrawerSides) => ({
     initial: { [side]: "-60%", opacity: 0.8, animationDuration },
@@ -121,15 +121,17 @@ export const Modal = ({ type = "dialog", resizer = true, ...props }: PropsWithCh
 
     return (
         <Fragment>
-            {props.trigger ? <Fragment>
-                {props.asChild ? (
-                    <Slot ref={refs.setReference} {...getReferenceProps()} children={Trigger} />
-                ) : (
-                    <button ref={refs.setReference} {...getReferenceProps()} type="button">
-                        {Trigger}
-                    </button>
-                )}
-            </Fragment> : null}
+            {props.trigger ? (
+                <Fragment>
+                    {props.asChild ? (
+                        <Slot ref={refs.setReference} {...getReferenceProps()} children={Trigger} />
+                    ) : (
+                        <button ref={refs.setReference} {...getReferenceProps()} type="button">
+                            {Trigger}
+                        </button>
+                    )}
+                </Fragment>
+            ) : null}
             <FloatingPortal>
                 <AnimatePresence presenceAffectsLayout>
                     {props.open && (

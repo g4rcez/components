@@ -27,10 +27,10 @@ The difference between then is:
 
 # Tasks
 
-- [x] TailwindCSS Plugin
-- [x] Hook to work with forms
-- [ ] Alerts
-- [x] Notion Table
-- [x] Dropdown
-- [ ] Dark mode toggler
-- [ ] Write docs
+-   [x] TailwindCSS Plugin
+-   [x] Hook to work with forms
+-   [ ] Alerts
+-   [x] Notion Table
+-   [x] Dropdown
+-   [ ] Dark mode toggler
+-   [ ] Write docs

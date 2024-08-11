@@ -14,7 +14,10 @@ export type InputProps = Override<
 >;
 
 export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
-    ({ type = "text", container, feedback = null, next, rightLabel, optionalText, hideLeft = false, right, left, ...props }: InputProps, ref): any => {
+    (
+        { type = "text", container, feedback = null, next, rightLabel, optionalText, hideLeft = false, right, left, ...props }: InputProps,
+        ref
+    ): any => {
         const id = props.id ?? props.name;
         const inputRef = useRef<HTMLInputElement>(null);
 

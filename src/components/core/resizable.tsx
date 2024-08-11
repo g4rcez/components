@@ -6,7 +6,7 @@ import useMeasure from "react-use-measure";
 export const Resizable = ({ children }: React.PropsWithChildren) => {
     const [ref, bounds] = useMeasure();
     return (
-        <motion.div animate={{ height: bounds.height > 0 ? bounds.height : 'auto' }}>
+        <motion.div animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}>
             <div ref={ref}>{children}</div>
         </motion.div>
     );

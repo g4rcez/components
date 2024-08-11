@@ -70,7 +70,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
             ...props,
             name,
             id: name,
-            type: Is.instance(validator, ZodNumber) ? "number" : props?.type ?? "text",
+            type: Is.instance(validator, ZodNumber) ? "number" : (props?.type ?? "text"),
             error: errors?.[name],
             ref: (e: HTMLInputElement) => {
                 if (e === null) return;

@@ -7,4 +7,3 @@ export const useReactive = <T extends unknown>(t: T, initial?: T) => {
     }, [t]);
     return [state, setState] as const;
 };
-

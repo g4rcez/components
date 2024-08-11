@@ -31,7 +31,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ container, r
             {...(props as any)}
             required={required}
             container={css("group inline-block w-full", container)}
-            right={<ChevronDown size={20} />}
+            right={
+                <button type="button" className="hover:text-primary transition-colors">
+                    <ChevronDown size={20} />
+                </button>
+            }
         >
             <select
                 {...props}

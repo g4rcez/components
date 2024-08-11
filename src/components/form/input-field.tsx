@@ -45,8 +45,10 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, child
 
 export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
     Partial<{
-        error?: string;
+        labelClassName: string;
+        error: string;
         hideLeft: boolean;
+        interactive: boolean;
         container: string;
         left: Label;
         feedback: Label;
@@ -66,11 +68,13 @@ export const InputField = <T extends "input" | "select">({
     rightLabel,
     container,
     feedback,
+    interactive,
     right,
     children,
     error,
     form,
     id,
+    labelClassName = "",
     name,
     title,
     placeholder,
@@ -79,7 +83,7 @@ export const InputField = <T extends "input" | "select">({
 }: PropsWithChildren<InputFieldProps<T>>) => {
     const ID = id ?? name;
     return (
-        <fieldset data-error={!!error} form={form} className={css("group inline-block w-full", container)}>
+        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex gap-1 w-full", container)}>
             <label
                 form={form}
                 htmlFor={ID}
@@ -95,18 +99,18 @@ export const InputField = <T extends "input" | "select">({
                         ) : null}
                     </InputFeedback>
                 ) : null}
-                <div className="relative group flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-focus-within:border-primary group-hover:border-primary group-error:border-danger">
+                <div
+                    className={`relative group flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-focus-within:border-primary group-hover:border-primary group-error:border-danger ${labelClassName}`}
+                >
                     {left ? <span className="absolute left-0 flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
                     {children}
                     {right ? <span className="absolute right-0 flex flex-nowrap gap-2 whitespace-nowrap pr-1">{right}</span> : null}
                 </div>
             </label>
-            <p className="group-error:block group-error:text-danger mt-1 hidden text-xs group-has-[input:not(:focus):invalid[data-initialized=true]]:block">
+            <p className="group-error:block empty:hidden group-error:text-danger hidden text-xs group-has-[input:not(:focus):invalid[data-initialized=true]]:block">
                 {error}
             </p>
-            <p className="mt-1 hidden text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block">
-                {feedback}
-            </p>
+            <p className="hidden text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block">{feedback}</p>
         </fieldset>
     );
 };

@@ -1,41 +1,31 @@
 {
-  "compilerOptions": {
-    "allowJs": false,
-    "allowSyntheticDefaultImports": true,
-    "allowUmdGlobalAccess": false,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "alwaysStrict": true,
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "./dist/preset",
-    "esModuleInterop": true,
-    "noEmit": false,
-    "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "moduleResolution": "node",
-    "module": "ES2015",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "target": "ES5",
-  },
-  "include": [
-    "./src/styles",
-    "./preset.tailwind.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "docs"
-  ]
+    "compilerOptions": {
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "allowUmdGlobalAccess": false,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "alwaysStrict": true,
+        "declaration": true,
+        "declarationMap": true,
+        "outDir": "./dist/preset",
+        "esModuleInterop": true,
+        "noEmit": false,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "moduleResolution": "node",
+        "module": "ES2015",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "target": "ES5"
+    },
+    "include": ["./src/styles", "./preset.tailwind.ts"],
+    "exclude": ["node_modules", "docs"]
 }

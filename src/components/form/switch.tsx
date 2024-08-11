@@ -25,12 +25,12 @@ export const Switch = ({ children, ...props }: SwitchProps) => {
                 aria-checked={checked}
                 data-checked={checked}
                 aria-labelledby={`${id}-label`}
-                className="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent data-[checked=false]:bg-input-switch-bg data-[checked=true]:bg-primary transition-colors ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="relative duration-300 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent data-[checked=false]:bg-input-switch-bg data-[checked=true]:bg-primary transition-colors ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
                 <span
                     aria-hidden="true"
                     data-checked={checked}
-                    className="data-[checked=false]:bg-disabled data-[checked=true]:bg-input-switch inline-block size-5 aspect-square data-[checked=false]translate-x-0 data-[checked=true]:translate-x-5 transform rounded-full shadow ring-0 transition ease-in-out"
+                    className="data-[checked=false]:bg-disabled duration-300 data-[checked=true]:bg-input-switch inline-block size-5 aspect-square data-[checked=false]:translate-x-0 data-[checked=true]:translate-x-5 transform rounded-full shadow ring-0 transition duration-300 ease-in-out"
                 />
             </button>
             <span className="ml-3 text-sm" id={`${id}-label`}>
