@@ -87,7 +87,7 @@ export type Col<T extends POJO> = ReturnType<ReturnType<typeof cols<T>>>;
 
 export type TablePagination = {
     sizes?: number[];
-    onChangeSize?: (size: number) => void
+    onChangeSize?: (size: number) => void;
     size: number;
     pages: number;
     current: number;
