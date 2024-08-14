@@ -2,9 +2,10 @@ import { AnimatePresence, Reorder, TargetAndTransition } from "framer-motion";
 import { PlusIcon, SearchIcon, ZoomInIcon } from "lucide-react";
 import React from "react";
 import { Dropdown } from "../floating/dropdown";
-import { ColumnHeaderFilter, createFilterFromCol } from "./filter";
+import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
 import { Col, getLabel, TableOperationProps } from "./table-lib";
+import { useTranslations } from "../../hooks/use-translate-context";
 
 type TableHeaderProps<T extends {}> = {
     headers: Col<T>[];
@@ -21,9 +22,11 @@ type HeaderChildProps<T extends {}> = {
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "sorters" | "setSorters">;
 
 const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
+    const translation = useTranslations();
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
     const hasFilters = ownFilters.length > 0;
     const FilterIcon = hasFilters ? ZoomInIcon : SearchIcon;
+    const { operationOptions, operations } = useOperators()
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         const id = e.currentTarget.dataset.id || "";
         return props.setFilters((prev) => prev.filter((x) => x.id !== id));
@@ -44,7 +47,13 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
         >
             <span className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
-                    <Dropdown title={`Filter by ${getLabel(props.header)}`} arrow trigger={<FilterIcon size={14} />}>
+                    <Dropdown title={
+                        <span>
+                            {translation.tableFilterDropdownTitleUnique} <span className="text-primary">
+                                {getLabel(props.header)}
+                            </span>
+                        </span>
+                    } arrow trigger={<FilterIcon size={14} />}>
                         {(ownFilters.length === 0) === null ? null : (
                             <ul className="font-medium">
                                 {ownFilters.map((filter) => (
@@ -54,10 +63,9 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
                                 ))}
                                 <li>
                                     <button
-                                        onClick={() => props.setFilters((prev) => prev.concat(createFilterFromCol(props.header)))}
-                                        className="flex items-center"
-                                    >
-                                        <PlusIcon size={14} /> Add
+                                        onClick={() => props.setFilters((prev) => prev.concat(createFilterFromCol(props.header, operationOptions, operations)))}
+                                        type="button" className="text-primary flex items-center gap-1">
+                                        <PlusIcon size={14} /> {translation.tableFilterNewFilter}
                                     </button>
                                 </li>
                             </ul>

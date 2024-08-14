@@ -5,11 +5,11 @@ import { InputField, InputFieldProps } from "./input-field";
 import { css, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 
-export type OptionProps = Override<React.ComponentProps<"option">, { value: string }>;
+export type OptionProps = Override<React.ComponentProps<"option">, { value: string; "data-dynamic"?: string }>;
 
 export type SelectProps = Override<InputFieldProps<"select">, { options: OptionProps[] }>;
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ container, required = true, options, ...props }: SelectProps, ref) => {
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ required = true, options, feedback = null, labelClassName, interactive, rightLabel, optionalText, container, hideLeft = false, right, left, error, ...props }: SelectProps, ref) => {
     const inputRef = useRef<HTMLSelectElement>(null);
     const id = props.id ?? props.name;
 
@@ -28,9 +28,21 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ container, r
 
     return (
         <InputField<"select">
-            {...(props as any)}
-            required={required}
             container={css("group inline-block w-full", container)}
+            error={error}
+            feedback={feedback}
+            hideLeft={hideLeft}
+            left={left}
+            optionalText={optionalText}
+            rightLabel={rightLabel}
+            interactive={interactive}
+            form={props.form}
+            id={props.name || props.id}
+            name={props.name}
+            labelClassName={labelClassName}
+            title={props.title}
+            placeholder={props.placeholder}
+            required={required}
             right={
                 <button type="button" className="hover:text-primary transition-colors">
                     <ChevronDown size={20} />

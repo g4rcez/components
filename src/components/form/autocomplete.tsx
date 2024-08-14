@@ -19,6 +19,7 @@ import { usePrevious } from "../../hooks/use-previous";
 import { css, dispatchInput } from "../../lib/dom";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
+import { safeRegex } from "../../lib/fns";
 
 type ItemProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
     selected: boolean;
@@ -39,10 +40,11 @@ export const Option = forwardRef<HTMLLIElement, ItemProps>(({ selected, active, 
     </li>
 ));
 
-type SelectProps = Omit<InputFieldProps<"input">, "value"> & {
+export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
     value?: string;
     options: OptionProps[];
     selectContainer?: string;
+    dynamicOption?: boolean;
 };
 
 const transitionStyles = {
@@ -54,10 +56,10 @@ const transitionStyles = {
 
 const fuzzyOptions = { caseSensitive: false, sort: false };
 
-const emptyRef: any[] = [];
+const emptyRef: any[] = []
 
-export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(
-    ({ options, selectContainer, labelClassName, required = false, ...props }: SelectProps, externalRef) => {
+export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
+    ({ options, dynamicOption = false, selectContainer, feedback = null, labelClassName, interactive, rightLabel, optionalText, container, hideLeft = false, right, left, error, required = false, ...props }: AutocompleteProps, externalRef) => {
         const ref = useRef<HTMLInputElement>(null);
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
@@ -66,7 +68,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
         const previousIndex = usePrevious(index);
-        const list = new Fuzzy(options, ["value"], fuzzyOptions).search(shadow);
+        const innerOptions: OptionProps[] = dynamicOption && shadow !== "" ? [
+            { value: shadow, label: shadow, "data-dynamic": "true" },
+            ...options
+        ] : options
+        const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
+
+        const pattern = dynamicOption ? undefined : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
         useEffect(() => {
             if (props.value) {
@@ -155,8 +163,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(
             <fieldset className={`relative w-full inline-block ${selectContainer}`}>
                 <InputField
                     {...(props as any)}
-                    required={required}
+                    container={css("group inline-block w-full", container)}
+                    error={error}
+                    feedback={feedback}
+                    form={props.form}
+                    hideLeft={hideLeft}
+                    id={props.name || props.id}
+                    interactive={interactive}
                     labelClassName={labelClassName}
+                    left={left}
+                    name={props.name}
+                    optionalText={optionalText}
+                    placeholder={props.placeholder}
+                    required={required}
+                    rightLabel={rightLabel}
+                    title={props.title}
                     right={
                         <span className="flex items-center gap-0.5">
                             <button type="button" className="link:text-primary transition-colors">
@@ -183,6 +204,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, SelectProps>(
                             ...props,
                             onChange,
                             onFocus,
+                            pattern,
                             ref: refs.setReference,
                             name: undefined,
                             onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),

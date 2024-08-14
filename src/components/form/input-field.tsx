@@ -4,6 +4,7 @@ import React, { Fragment, PropsWithChildren } from "react";
 import { PolymorphicProps } from "../core/polymorph";
 import { css } from "../../lib/dom";
 import { Label } from "../../types";
+import { useTranslations } from "../../hooks/use-translate-context";
 
 export type FeedbackProps = React.PropsWithChildren<
     Partial<{
@@ -63,7 +64,7 @@ export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
 >;
 
 export const InputField = <T extends "input" | "select">({
-    optionalText = "Optional",
+    optionalText: _optionalText,
     left,
     rightLabel,
     container,
@@ -82,6 +83,8 @@ export const InputField = <T extends "input" | "select">({
     required,
 }: PropsWithChildren<InputFieldProps<T>>) => {
     const ID = id ?? name;
+    const translation = useTranslations();
+    const optionalText = _optionalText ?? translation.inputOptionalLabel;
     return (
         <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex gap-1 w-full", container)}>
             <label

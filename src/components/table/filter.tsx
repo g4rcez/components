@@ -1,6 +1,6 @@
 import { Symbols } from "linq-arrays";
 import { ListFilterIcon, PlusIcon, Trash2Icon } from "lucide-react";
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import { AllPaths } from "sidekicker";
 import { uuid } from "../../lib/fns";
 import { Label } from "../../types";
@@ -8,27 +8,15 @@ import { Dropdown } from "../floating/dropdown";
 import { Input } from "../form/input";
 import { OptionProps, Select } from "../form/select";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
+import { useTranslations } from "../../hooks/use-translate-context";
 
-const operators = {
-    contains: { value: "contains", label: "Contains", symbol: "includes" },
-    is: { value: "is", label: "Is", symbol: "is" },
-    isNot: { value: "isNot", label: "Is not", symbol: "!==" },
-    notContains: { value: "notContains", label: "Does not contains", symbol: "notIncludes" },
-    lessThan: { value: "lessThan", label: "Less Than", symbol: "<=" },
-    greaterThan: { value: "greaterThan", label: "Greater than", symbol: ">=" },
-    startsWith: { value: "startsWith", label: "Starts with", symbol: "startsWith" },
-    endsWith: { value: "endsWith", label: "Ends with", symbol: "endsWith" },
-} satisfies Record<string, OptionProps & { symbol: Symbols }>;
+type Operators = { value: string; label: string; symbol: string }
 
-type Operator = keyof typeof operators;
+type OperatorTypes = "contains" | "is" | "isNot" | "notContains" | "lessThan" | "greaterThan" | "startsWith" | "endsWith"
 
-type Operators = (typeof operators)[Operator];
+type Operations = Record<OperatorTypes, Operators>
 
-const operatorOptions: Partial<Record<ColType, OptionProps[]>> = {
-    [ColType.Text]: [operators.is, operators.isNot, operators.contains, operators.notContains, operators.startsWith, operators.endsWith],
-    [ColType.Boolean]: [operators.is, operators.isNot],
-    [ColType.Number]: [operators.is, operators.isNot, operators.greaterThan, operators.lessThan],
-};
+type OperationOptions = Partial<Record<ColType, OptionProps[]>>
 
 type FilterValue = string | number | string[] | boolean;
 
@@ -50,18 +38,47 @@ type Props<T extends {}> = TableConfiguration<
     }
 >;
 
-export const createFilterFromCol = <T extends {}>(f: Col<T>, rest: Partial<FilterConfig<T>> = {}): FilterConfig<T> => {
+export const createFilterFromCol = <T extends {}>(f: Col<T>, options: OperationOptions, operations: Operations, rest: Partial<FilterConfig<T>> = {}): FilterConfig<T> => {
     const name = f.id;
     const type = f.type ?? ColType.Text;
-    const operatorId = operatorOptions[type]?.[0]!.value as Operator;
-    const operation = operators[operatorId];
+    const operatorId = options[type]?.[0]!.value as OperatorTypes;
+    const operation = operations[operatorId];
     return { id: uuid(), operation, label: getLabel(f), name, type, value: "", ...rest };
 };
 
+export const useOperators = () => {
+    const translation = useTranslations()
+    const operations = useMemo((): Operations => {
+        return {
+            contains: { value: "contains", label: translation.tableFilterTypeContains, symbol: "includes" },
+            is: { value: "is", label: translation.tableFilterTypeIs, symbol: "is" },
+            isNot: { value: "isNot", label: translation.tableFilterTypeIsNot, symbol: "!==" },
+            notContains: { value: "notContains", label: translation.tableFilterTypeNotContains, symbol: "notIncludes" },
+            lessThan: { value: "lessThan", label: translation.tableFilterTypeLessThan, symbol: "<=" },
+            greaterThan: { value: "greaterThan", label: translation.tableFilterTypeGreaterThan, symbol: ">=" },
+            startsWith: { value: "startsWith", label: translation.tableFilterTypeStartsWith, symbol: "startsWith" },
+            endsWith: { value: "endsWith", label: translation.tableFilterTypeEndsWith, symbol: "endsWith" },
+        } satisfies Record<string, OptionProps & { symbol: Symbols }>;
+    }, [translation])
+
+    const operationOptions = useMemo((): OperationOptions => {
+        return {
+            [ColType.Text]: [operations.is, operations.isNot, operations.contains, operations.notContains, operations.startsWith, operations.endsWith],
+            [ColType.Boolean]: [operations.is, operations.isNot],
+            [ColType.Number]: [operations.is, operations.isNot, operations.greaterThan, operations.lessThan],
+        };
+    }, [translation])
+    return { operationOptions, operations }
+
+}
+
 export const Filter = <T extends {}>(props: Props<T>) => {
+    const translation = useTranslations()
+    const { operationOptions, operations } = useOperators()
+
     const onAddFilter = () => {
         const col = props.cols.at(0)!;
-        props.set((prev) => [...prev, createFilterFromCol(col)]);
+        props.set((prev) => [...prev, createFilterFromCol(col, operationOptions, operations)]);
     };
 
     const onSelectProperty = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,7 +88,7 @@ export const Filter = <T extends {}>(props: Props<T>) => {
             prev.map((x) => {
                 if (changedId !== x.id) return x;
                 const col = props.cols.find((x) => newId === x.id)!;
-                return createFilterFromCol(col, { value: "" });
+                return createFilterFromCol(col, operationOptions, operations, { value: "" });
             })
         );
     };
@@ -79,7 +96,7 @@ export const Filter = <T extends {}>(props: Props<T>) => {
     const onSelectOperation = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const id = e.target.dataset.id || "";
         const operator = e.target.value;
-        props.set((prev) => prev.map((x) => (x.id === id ? { ...x, operation: operators[operator as Operator] } : x)));
+        props.set((prev) => prev.map((x) => (x.id === id ? { ...x, operation: operations[operator as OperatorTypes] } : x)));
     };
 
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -96,43 +113,44 @@ export const Filter = <T extends {}>(props: Props<T>) => {
     return (
         <Fragment>
             <Dropdown
-                arrow={false}
-                title="Filters"
+                arrow
+                title={translation.tableFilterDropdownTitle}
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
                         <ListFilterIcon size={14} />
-                        Filtros {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
+                        {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
             >
                 <ul className="mt-4 space-y-2">
                     {props.filters.map((filter) => {
-                        const operators = operatorOptions[filter.type]!;
+                        const operators = operationOptions[filter.type]!;
                         return (
                             <li key={`filter-select-${filter.id}`} className="flex flex-nowrap gap-3">
                                 <Select
-                                    title="Filter"
                                     options={props.options}
-                                    placeholder="Name..."
+                                    title={translation.tableFilterColumnTitle}
+                                    placeholder={translation.tableFilterColumnPlaceholder}
                                     value={filter.name as string}
                                     data-id={filter.id}
                                     onChange={onSelectProperty}
                                 />
                                 <Select
-                                    title="Filter type"
                                     data-id={filter.id}
                                     onChange={onSelectOperation}
                                     value={filter.operation.value}
                                     options={operators}
-                                    placeholder="Operator..."
+                                    title={translation.tableFilterOperatorTitle}
+                                    placeholder={translation.tableFilterOperatorPlaceholder}
                                 />
                                 <Input
                                     data-id={filter.id}
                                     onChange={onChangeValue}
-                                    placeholder="Search..."
-                                    title="Value"
+                                    title={translation.tableFilterValueTitle}
+                                    placeholder={translation.tableFilterValuePlaceholder}
                                     type={filter.type as any}
                                     value={filter.value as string}
+                                    optionalText=""
                                 />
                                 <div className="flex items-center justify-center mt-5">
                                     <button data-id={filter.id} type="button" onClick={onDelete}>
@@ -144,7 +162,7 @@ export const Filter = <T extends {}>(props: Props<T>) => {
                     })}
                     <li>
                         <button type="button" onClick={onAddFilter} className="text-primary flex items-center gap-1">
-                            <PlusIcon size={14} /> New filter
+                            <PlusIcon size={14} /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
                 </ul>
@@ -160,10 +178,12 @@ type ColumnHeaderFilterProps<T extends {}> = {
 };
 
 export const ColumnHeaderFilter = <T extends {}>({ filter, onDelete, set }: ColumnHeaderFilterProps<T>) => {
+    const translation = useTranslations();
+    const { operationOptions, operations } = useOperators()
     const onSelectOperation = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const operator = e.target.value;
         const id = e.target.dataset.id || "";
-        set((prev) => prev.map((x) => (x.id === id ? { ...x, operation: operators[operator as Operator] } : x)));
+        set((prev) => prev.map((x) => (x.id === id ? { ...x, operation: operations[operator as OperatorTypes] } : x)));
     };
 
     const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,18 +197,18 @@ export const ColumnHeaderFilter = <T extends {}>({ filter, onDelete, set }: Colu
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}
-                options={operatorOptions[filter.type]!}
-                placeholder="Operation..."
-                title="Filter type"
+                options={operationOptions[filter.type]!}
+                title={translation.tableFilterColumnTitle}
+                placeholder={translation.tableFilterColumnPlaceholder}
                 value={filter.operation.value}
             />
             <Input
                 data-id={filter.id}
                 onChange={onChangeValue}
-                placeholder="Looking for..."
-                title="Value"
                 type={filter.type as any}
                 value={filter.value as string}
+                title={translation.tableFilterValueTitle}
+                placeholder={translation.tableFilterValueTitle}
             />
             <button onClick={onDelete} data-id={filter.id} type="button" className="mt-4">
                 <Trash2Icon className="text-danger" size={14} />

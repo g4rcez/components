@@ -8,14 +8,14 @@ import { Override } from "../../types";
 export type InputProps = Override<
     InputFieldProps<"input">,
     TheMaskProps &
-        FeedbackProps & {
-            next?: string;
-        }
+    FeedbackProps & {
+        next?: string;
+    }
 >;
 
 export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     (
-        { type = "text", container, feedback = null, next, rightLabel, optionalText, hideLeft = false, right, left, ...props }: InputProps,
+        { type = "text", feedback = null, labelClassName, next, interactive, rightLabel, optionalText, container, hideLeft = false, right, left, error, ...props }: InputProps,
         ref
     ): any => {
         const id = props.id ?? props.name;
@@ -48,14 +48,22 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
 
         return (
             <InputField<"input">
-                {...(props as any)}
-                feedback={feedback}
-                right={right}
-                left={left}
-                hideLeft={hideLeft}
-                rightLabel={rightLabel}
-                optionalText={optionalText}
                 container={css("group inline-block w-full", container)}
+                error={error}
+                feedback={feedback}
+                hideLeft={hideLeft}
+                left={left}
+                optionalText={optionalText}
+                right={right}
+                rightLabel={rightLabel}
+                interactive={interactive}
+                form={props.form}
+                id={props.name || props.id}
+                name={props.name}
+                labelClassName={labelClassName}
+                title={props.title}
+                placeholder={props.placeholder}
+                required={props.required}
             >
                 <MaskInput
                     {...(props as any)}

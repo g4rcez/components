@@ -6,6 +6,7 @@ import { Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
 import { OptionProps, Select } from "../form/select";
 import { Col, TableConfiguration, TableOperationProps } from "./table-lib";
+import { useTranslations } from "../../hooks/use-translate-context";
 
 type Keyof<T extends {}> = keyof T extends infer R extends string ? R : never;
 
@@ -19,22 +20,16 @@ export type Sorter<T extends {}> = { value: Keyof<T>; type: Order; label: Label;
 
 const createSorterFn =
     <T extends {}>(fields: Sorter<T>[]) =>
-    (a: any, b: any) =>
-        fields.reduce<number>((acc, x) => {
-            const reverse = x.type === "desc" ? -1 : 1;
-            const property = x.value;
-            const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
-            return acc !== 0 ? acc : p;
-        }, 0);
+        (a: any, b: any) =>
+            fields.reduce<number>((acc, x) => {
+                const reverse = x.type === "desc" ? -1 : 1;
+                const property = x.value;
+                const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
+                return acc !== 0 ? acc : p;
+            }, 0);
 
 export const multiSort = <T extends {}>(array: T[], fields: Sorter<T>[]) => array.sort(createSorterFn(fields));
 
-const orders = {
-    asc: { label: "Ascending", value: Order.Asc },
-    desc: { label: "Descending", value: Order.Desc },
-} satisfies Omit<Record<Order, OptionProps>, Order.Undefined>;
-
-const orderOptions: OptionProps[] = [orders.asc, orders.desc];
 
 type Props<T extends {}> = TableConfiguration<
     T,
@@ -45,17 +40,26 @@ type Props<T extends {}> = TableConfiguration<
     }
 >;
 
-const createSorter = <T extends {}>(col: Col<T>, order: Order = Order.Asc): Sorter<T> => ({
+const createSorter = <T extends {}>(col: Col<T>, label: string, order: Order = Order.Asc): Sorter<T> => ({
     id: uuid(),
     type: order,
     value: col.id as any,
-    label: orders[Order.Asc].label,
+    label,
 });
 
 export const Sort = <T extends {}>(props: Props<T>) => {
+    const translation = useTranslations()
+
+    const orders = {
+        asc: { label: translation.tableSortAsc, value: Order.Asc },
+        desc: { label: translation.tableSortDesc, value: Order.Desc },
+    } satisfies Omit<Record<Order, OptionProps>, Order.Undefined>;
+
+    const orderOptions: OptionProps[] = [orders.asc, orders.desc];
+
     const onAddSorter = () => {
         const col = props.cols[0];
-        if (col) props.set((prev) => [...prev, createSorter(col)]);
+        if (col) props.set((prev) => [...prev, createSorter(col, orders.asc.label)]);
     };
 
     const onSetSorter = (id: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -76,12 +80,11 @@ export const Sort = <T extends {}>(props: Props<T>) => {
     return (
         <Fragment>
             <Dropdown
-                arrow={false}
-                title="Order By"
+                title={translation.tableSortDropdownTitle}
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
                         <ArrowUpDownIcon size={14} />
-                        Order by {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
+                        {translation.tableSortOrderByLabel} {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
                     </span>
                 }
             >
@@ -90,18 +93,18 @@ export const Sort = <T extends {}>(props: Props<T>) => {
                         return (
                             <li key={`sorter-select-${sorter.id}`} className="flex flex-nowrap gap-3">
                                 <Select
-                                    onChange={onSetSorter(sorter.id)}
                                     options={props.options}
-                                    title="Field"
-                                    placeholder="Selecione um campo..."
                                     value={sorter.value as string}
+                                    onChange={onSetSorter(sorter.id)}
+                                    title={translation.tableSortOrderInputTitle}
+                                    placeholder={translation.tableSortOrderInputPlaceholder}
                                 />
                                 <Select
-                                    title="Sort type"
                                     onChange={onSortOrderType(sorter.id)}
                                     value={sorter.type}
                                     options={orderOptions}
-                                    placeholder="Operação..."
+                                    title={translation.tableSortTypeInputTitle}
+                                    placeholder={translation.tableSortTypeInputPlaceholder}
                                 />
                                 <button className="mt-4" data-id={sorter.id} onClick={onDelete}>
                                     <Trash2Icon className="text-danger" size={14} />
@@ -111,7 +114,7 @@ export const Sort = <T extends {}>(props: Props<T>) => {
                     })}
                     <li>
                         <button type="button" onClick={onAddSorter} className="text-primary flex items-center gap-1">
-                            <PlusIcon size={14} /> Add sort
+                            <PlusIcon size={14} /> {translation.tableSortAddButton}
                         </button>
                     </li>
                 </ul>
