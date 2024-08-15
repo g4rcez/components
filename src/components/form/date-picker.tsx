@@ -1,12 +1,13 @@
 import { format, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
 import { Mask } from "the-mask-input/dist/src/types";
 import { Override } from "../../types";
 import { Calendar, CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
 import { Input, InputProps } from "./input";
+import { useTranslations } from "../../hooks/use-translate-context";
 
 type DatePickerProps = Override<InputProps, CalendarProps & {}>;
 
@@ -34,6 +35,8 @@ const partValues = {
 };
 
 export const DatePicker = ({ date, locale, disabledDate, autoFocusToday, onChange, markToday, ...props }: DatePickerProps) => {
+    const labelId = useId();
+    const translation = useTranslations();
     const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale), [locale]);
     const [innerDate, setInnerDate] = useState(date || undefined);
     const [open, setOpen] = useState(false);
@@ -48,8 +51,8 @@ export const DatePicker = ({ date, locale, disabledDate, autoFocusToday, onChang
             ? ""
             : datetimeFormat
 
-                  .formatToParts(innerDate)
-                  .reduce((acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""), "")
+                .formatToParts(innerDate)
+                .reduce((acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""), "")
     );
 
     const onChangeDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +92,12 @@ export const DatePicker = ({ date, locale, disabledDate, autoFocusToday, onChang
             right={
                 <Fragment>
                     <input defaultValue={innerDate?.toISOString()} hidden type="date" name={props.name} />
-                    <Dropdown restoreFocus trigger={<CalendarIcon />} onChange={setOpen} open={open}>
+                    <span id={labelId} className="sr-only">{translation.datePickerCalendarButtonLabel}</span>
+                    <Dropdown restoreFocus trigger={<CalendarIcon />} onChange={setOpen} open={open}
+                        buttonProps={{
+                            "aria-describedby": labelId
+                        }}
+                    >
                         <Calendar
                             {...props}
                             locale={locale}

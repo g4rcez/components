@@ -6,8 +6,10 @@ import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter"
 import { SorterHead } from "./sort";
 import { Col, getLabel, TableOperationProps } from "./table-lib";
 import { useTranslations } from "../../hooks/use-translate-context";
+import { Order } from "linq-arrays";
 
 type TableHeaderProps<T extends {}> = {
+    loading: boolean;
     headers: Col<T>[];
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "setSorters" | "sorters">;
 
@@ -19,6 +21,7 @@ const exit: TargetAndTransition = { opacity: 0, transition: { duration: 0.4, typ
 
 type HeaderChildProps<T extends {}> = {
     header: Col<T>;
+    loading: boolean
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "sorters" | "setSorters">;
 
 const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
@@ -32,6 +35,10 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
         return props.setFilters((prev) => prev.filter((x) => x.id !== id));
     };
 
+    const ownSorter = props.sorters.find(x => props.header.id === x.value)
+
+    const ariaSort = !ownSorter?.type ? "none" : ownSorter.type === Order.Asc ? "ascending" : "descending"
+
     return (
         <Reorder.Item
             {...(props.header.thProps as {})}
@@ -40,20 +47,27 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
             initial={false}
             dragSnapToOrigin
             dragDirectionLock
+            role="columnheader"
             value={props.header}
             whileDrag={whileDrag}
+            aria-sort={ariaSort}
+            aria-busy={props.loading}
             animate={targetTransitionAnimate}
             className={`hidden font-medium px-2 py-4 first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
         >
             <span className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
-                    <Dropdown title={
-                        <span>
-                            {translation.tableFilterDropdownTitleUnique} <span className="text-primary">
-                                {getLabel(props.header)}
+                    <Dropdown
+                        arrow
+                        trigger={<FilterIcon size={14} />}
+                        title={
+                            <span>
+                                {translation.tableFilterDropdownTitleUnique} <span className="text-primary">
+                                    {getLabel(props.header)}
+                                </span>
                             </span>
-                        </span>
-                    } arrow trigger={<FilterIcon size={14} />}>
+                        }
+                    >
                         {(ownFilters.length === 0) === null ? null : (
                             <ul className="font-medium">
                                 {ownFilters.map((filter) => (
@@ -82,6 +96,7 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
 export const TableHeader = <T extends {}>(props: TableHeaderProps<T>) => (
     <Reorder.Group
         as="tr"
+        role="row"
         axis="x"
         drag
         layout
@@ -96,6 +111,7 @@ export const TableHeader = <T extends {}>(props: TableHeaderProps<T>) => (
             {props.headers.map((header) => (
                 <HeaderChild<T>
                     key={`header-child-item-${header.id as string}`}
+                    loading={props.loading}
                     setFilters={props.setFilters}
                     filters={props.filters}
                     setSorters={props.setSorters}

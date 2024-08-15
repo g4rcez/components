@@ -4,12 +4,17 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import { InputField, InputFieldProps } from "./input-field";
 import { css, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
+import { useTranslations } from "../../hooks/use-translate-context";
 
 export type OptionProps = Override<React.ComponentProps<"option">, { value: string; "data-dynamic"?: string }>;
 
-export type SelectProps = Override<InputFieldProps<"select">, { options: OptionProps[] }>;
+export type SelectProps = Override<InputFieldProps<"select">, { 
+    options: OptionProps[];
+    selectContainer?: string
+}>;
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ required = true, options, feedback = null, labelClassName, interactive, rightLabel, optionalText, container, hideLeft = false, right, left, error, ...props }: SelectProps, ref) => {
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ required = true, options, selectContainer = "", feedback = null, labelClassName, interactive, rightLabel, optionalText, container, hideLeft = false, right, left, error, ...props }: SelectProps, ref) => {
+    const translation = useTranslations();
     const inputRef = useRef<HTMLSelectElement>(null);
     const id = props.id ?? props.name;
 
@@ -46,6 +51,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ required = t
             right={
                 <button type="button" className="hover:text-primary transition-colors">
                     <ChevronDown size={20} />
+                    <span className="sr-only">{translation.inputCaretDown}</span>
                 </button>
             }
         >
@@ -57,7 +63,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ required = t
                 required={required}
                 data-selected={!!props.value || false}
                 className={css(
-                    "input bg-transparent text-foreground select group h-10 w-full flex-1 rounded-md p-2 placeholder-input-placeholder outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                    "input bg-transparent text-foreground select group h-11 w-full flex-1 rounded-md p-2 placeholder-input-placeholder outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                     "data-[selected=false]:text-input-placeholder",
                     props.className
                 )}

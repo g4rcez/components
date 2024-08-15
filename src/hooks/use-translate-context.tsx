@@ -1,6 +1,8 @@
-import { createContext, useContext, PropsWithChildren, useMemo } from "react"
+import { createContext, useContext, PropsWithChildren, useMemo, Fragment } from "react"
 
 const defaultTranslations = {
+  inputCaretDown: "Click to see all options",
+  datePickerCalendarButtonLabel: "Click to open a date picker",
   inputOptionalLabel: "Optional",
   tableSortAsc: "Ascending",
   tableSortOrderByLabel: "Order by",
@@ -35,7 +37,19 @@ const defaultTranslations = {
 
   tableFilterLabel: "Filters",
   tableFilterDropdownTitle: "Filters",
-  tableFilterDropdownTitleUnique: "Filter by"
+  tableFilterDropdownTitleUnique: "Filter by",
+
+
+  tablePaginationPrevious: "Previous",
+  tablePaginationNext: "Next",
+  tablePaginationSelectLabel: "Select the size of page",
+  tablePaginationFooter: (pagination: {
+    pages: number; totalItems: number; sizes?: number[]; current: number;
+    select: React.ReactNode
+  }) => <Fragment>
+      {pagination.current} to {pagination.pages} of {pagination.totalItems} items.
+      {Array.isArray(pagination.sizes) ? (pagination.select) : null} per page.
+    </Fragment>
 }
 
 type Translations = typeof defaultTranslations;

@@ -223,7 +223,6 @@ export default function Layout() {
                         tableSortAsc: "asc",
                         tableSortDesc: "desc"
                     }}>
-                        <TableView />
                         <div className="grid gap-4 md:grid-cols-4">
                             <Stats Icon={WifiIcon} title="Title">
                                 500
@@ -359,6 +358,7 @@ export default function Layout() {
                                 6. Item
                             </Tab>
                         </Tabs>
+                        <TableView />
                     </ComponentsProvider>
                 </main>
             </body>

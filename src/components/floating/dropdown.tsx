@@ -24,6 +24,7 @@ type DropdownProps = {
     onChange?: (nextValue: boolean) => void;
     trigger: React.ReactElement | React.ReactNode;
     title?: React.ReactNode | React.ReactElement | string;
+    buttonProps?: React.ComponentProps<"button">;
 };
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
@@ -65,7 +66,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
 
     return (
         <Fragment>
-            <button ref={refs.setReference} {...getReferenceProps()} type="button">
+            <button ref={refs.setReference} {...getReferenceProps(props.buttonProps)} type="button">
                 {props.trigger}
             </button>
             {open && (

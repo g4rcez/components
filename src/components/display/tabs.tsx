@@ -5,6 +5,7 @@ import { useReactive } from "../../hooks/use-reactive";
 import { Label } from "../../types";
 import { Card } from "./card";
 import { Autocomplete } from "../form/autocomplete";
+import { Select } from "../form/select";
 
 export type TabsProps = {
     active: string;
@@ -81,12 +82,11 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                             className="w-28 h-0.5 bg-primary absolute bottom-0 duration-300 transition-all hidden lg:block"
                         />
                         <nav>
-                            <Autocomplete
+                            <Select
                                 onChange={(e) => setActive(e.target.value)}
                                 value={active}
-                                container="container inline-flex px-6 w-full mx-auto"
-                                selectContainer="mt-4 lg:mt-0 min-w-full inline-flex min-w-full lg:hidden"
                                 hideLeft
+                                container="container rounded mt-4 lg:mt-0 min-w-full lg:hidden inline-flex px-6 w-full mx-auto"
                                 labelClassName="border-transparent rounded-none"
                                 rightLabel={null}
                                 options={items.map((x: any) => {

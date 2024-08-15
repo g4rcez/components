@@ -1,5 +1,6 @@
-import { Fragment, useMemo } from "react";
+import { Fragment, useId, useMemo } from "react";
 import { TablePagination } from "./table-lib";
+import { useTranslations } from "../../hooks/use-translate-context";
 
 function createPaginationItems(current: number, max: number) {
     if (!current || !max) return [];
@@ -23,6 +24,8 @@ function createPaginationItems(current: number, max: number) {
 }
 
 export const Pagination = (pagination: TablePagination) => {
+    const id = useId();
+    const translation = useTranslations()
     const Render = pagination.asLink || "button";
     const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination.current, pagination.pages]);
     const hasNext = pagination.current < pagination.pages;
@@ -30,32 +33,36 @@ export const Pagination = (pagination: TablePagination) => {
     return (
         <footer className="flex px-1 py-2 items-center justify-center gap-4 lg:justify-between flex-wrap lg:flex-nowrap">
             <p>
-                {pagination.current} to {pagination.pages} of {pagination.totalItems} items.
-                {pagination.onChangeSize && Array.isArray(pagination.sizes) ? (
-                    <Fragment>
-                        <select
-                            value={pagination.size}
-                            className="cursor-pointer bg-transparent"
-                            onChange={(e) => {
-                                pagination.onChangeSize?.(Number(e.target.value));
-                            }}
-                        >
-                            {pagination.sizes.map((value) => (
-                                <option key={`pagination-opt-${value}`} value={value}>
-                                    {value}
-                                </option>
-                            ))}
-                        </select>{" "}
-                        per page
-                    </Fragment>
-                ) : null}
+                <translation.tablePaginationFooter
+                    {...pagination}
+                    sizes={pagination.sizes}
+                    select={pagination.onChangeSize && Array.isArray(pagination.sizes) ? (
+                        <Fragment>
+                            <label htmlFor={id}>{translation.tablePaginationSelectLabel}</label>
+                            <select
+                                id={id}
+                                value={pagination.size}
+                                className="cursor-pointer bg-transparent"
+                                onChange={(e) => {
+                                    pagination.onChangeSize?.(Number(e.target.value));
+                                }}
+                            >
+                                {pagination.sizes.map((value) => (
+                                    <option key={`pagination-opt-${value}`} value={value}>
+                                        {value}
+                                    </option>
+                                ))}
+                            </select>{" "}
+                        </Fragment>
+                    ) : null}
+                />
             </p>
             <nav>
                 <ul className="flex items-center gap-2">
                     {pagination.current > 1 ? (
                         <li>
                             <Render href="previous" className="">
-                                Previous
+                                {translation.tablePaginationPrevious}
                             </Render>
                         </li>
                     ) : null}
@@ -81,7 +88,7 @@ export const Pagination = (pagination: TablePagination) => {
                     {hasNext ? (
                         <li>
                             <Render href="next" className="">
-                                Next
+                                {translation.tablePaginationNext}
                             </Render>
                         </li>
                     ) : null}

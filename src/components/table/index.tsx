@@ -35,24 +35,24 @@ type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
     };
 
 const TableBody = React.forwardRef((props: TableBodyProps, ref: any) => (
-    <tbody {...props} className={`divide-y divide-table-border ${props.className ?? ""}`} ref={ref}>
+    <tbody {...props} role="rowgroup" className={`divide-y divide-table-border ${props.className ?? ""}`} ref={ref}>
         <AnimatePresence>{props.children}</AnimatePresence>
     </tbody>
 ));
 
 const VirtualTable = React.forwardRef((props: any, ref) => (
-    <table {...props} ref={ref as any} className={`table min-w-full divide-y divide-table-border table-auto text-left ${props.className ?? ""}`} />
+    <table {...props} ref={ref as any} role="table" className={`table min-w-full divide-y divide-table-border table-auto text-left ${props.className ?? ""}`} />
 ));
 
-const Thead = React.forwardRef((props: any, ref: any) => <thead {...props} className="bg-card-background shadow-xs group:sticky top-0" ref={ref} />);
+const Thead = React.forwardRef((props: any, ref: any) => <thead {...props} role="rowgroup" className="bg-card-background shadow-xs group:sticky top-0" ref={ref} />);
 
-const TRow = React.forwardRef((props: any, ref: any) => <tr {...props} ref={ref} className={`table-row ${props.className ?? ""}`} />);
+const TRow = React.forwardRef((props: any, ref: any) => <tr {...props} role="row" ref={ref} className={`table-row ${props.className ?? ""}`} />);
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
     if (props.context.loadingMore) {
         return (
             <tfoot {...props} ref={ref} className="bg-card-background">
-                <tr className="bg-card-background">
+                <tr role="row" className="bg-card-background">
                     <td colSpan={999} className="px-2 h-14 bg-card-background">
                         <span className="block w-full h-2 bg-foreground rounded opacity-60 animate-pulse" />
                     </td>
@@ -92,6 +92,7 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
                     <td
                         {...col.cellProps}
                         data-matrix={matrix}
+                        role="cell"
                         key={`accessor-${index}-${colIndex}`}
                         className="px-2 h-14 border-none first:table-cell hidden md:table-cell"
                     >
@@ -171,12 +172,12 @@ const InnerTable = <T extends {}>({
                     fixedFooterContent={showLoadingFooter ? Frag : null}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
-                            sorters={sorters}
-                            setSorters={setSorters}
-                            filters={filters}
-                            setFilters={setFilters}
                             headers={cols}
+                            sorters={sorters}
+                            filters={filters}
                             setCols={setCols}
+                            setSorters={setSorters}
+                            setFilters={setFilters}
                         />
                     )}
                 />
