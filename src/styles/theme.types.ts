@@ -18,7 +18,6 @@ export type DesignTokens = {
     colors: {
         foreground: string;
         background: string;
-        accent: string;
         disabled: string;
         primary: {
             foreground: string;

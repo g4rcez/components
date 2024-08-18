@@ -3,7 +3,7 @@ import { isBefore } from "date-fns";
 import { AppWindowIcon, NetworkIcon, SmartphoneIcon, WifiIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Autocomplete,
     Button,
@@ -42,7 +42,7 @@ const FormExample = () => {
     return (
         <Card title="Inputs">
             <form onSubmit={onSubmit} className="flex gap-6 flex-wrap">
-                <Input name="input" required placeholder="Text" title="Text" />
+                <Input info="I'm a info" name="input" required placeholder="Text" title="Text" />
                 <Select name="select" required options={options} placeholder="Haskell..." title="Language" />
                 <Autocomplete
                     required
@@ -154,6 +154,14 @@ const TableView = () => {
     const router = useSearchParams();
     const queryStringPage = (router.get("page") as string) || "";
     const current = Number(queryStringPage) || 1;
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let l = setInterval(() => {
+            setLoading(prev => !prev);
+        }, 5000);
+        return () => clearInterval(l);
+    }, []);
 
     const pagination: TablePagination = {
         hasNext: true,
@@ -175,7 +183,7 @@ const TableView = () => {
     };
     return (
         <Card className={classNames} title="Table - Backend pagination">
-            <Table {...preferences} pagination={pagination} useControl cols={cols} rows={data} />
+            <Table {...preferences} loading={loading} pagination={pagination} useControl cols={cols} rows={data} />
         </Card>
     );
 };
@@ -199,9 +207,9 @@ const DatePickerField = () => {
                     title="Testing"
                     onChange={setState}
                     disabledDate={(e) => isBefore(e, new Date())}
+                    feedback={<span className="whitespace-nowrap">{state?.toISOString() || "Pick a date"}</span>}
                 />
             </div>
-            <span className="whitespace-nowrap">{state?.toISOString() || "Pick a date"}</span>
         </Card>
     );
 };
@@ -218,11 +226,13 @@ export default function Layout() {
             </head>
             <body>
                 <main className="p-8 flex flex-col gap-8">
-                    <ComponentsProvider map={{
-                        inputOptionalLabel: "Optional field",
-                        tableSortAsc: "asc",
-                        tableSortDesc: "desc"
-                    }}>
+                    <ComponentsProvider
+                        map={{
+                            inputOptionalLabel: "Optional field",
+                            tableSortAsc: "asc",
+                            tableSortDesc: "desc",
+                        }}
+                    >
                         <div className="grid gap-4 md:grid-cols-4">
                             <Stats Icon={WifiIcon} title="Title">
                                 500
@@ -237,7 +247,11 @@ export default function Layout() {
                                 500
                             </Stats>
                         </div>
-                        <DatePickerField />
+                        <Card title="Dialog and Drawer" className={classNames}>
+                            <WithDialog type="dialog" />
+                            <WithDialog side="left" type="drawer" />
+                            <WithDialog side="right" type="drawer" />
+                        </Card>
                         <Card className={classNames} title="Button">
                             <Button
                                 onClick={() => {
@@ -330,13 +344,9 @@ export default function Layout() {
                             </Tag>
                         </Card>
                         <FormExample />
+                        <DatePickerField />
                         <Card title="Tooltip">
                             <Tooltip title="Hover me">I'm a tooltip</Tooltip>
-                        </Card>
-                        <Card title="Dialog and Drawer" className={classNames}>
-                            <WithDialog type="dialog" />
-                            <WithDialog side="left" type="drawer" />
-                            <WithDialog side="right" type="drawer" />
                         </Card>
                         <Tabs active="">
                             <Tab title={<span>Testing JSX</span>} label="Mobile label" id="item1">

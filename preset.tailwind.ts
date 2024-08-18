@@ -13,7 +13,7 @@ const config: Partial<Config> = {
         transitionTimingFunction: { DEFAULT: "cubic-bezier(1,.43,.36,.67)" },
         transitionDuration: { DEFAULT: "375ms" },
         extend: {
-            minWidth: { xs: "20rem" },
+            minWidth: { xs: "20rem", screen: "100vh" },
             borderRadius: createDesignTokens(defaultDarkTheme.rounded, parsers.cssVariable),
             fill: COLORS,
             colors: COLORS,

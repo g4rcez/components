@@ -14,11 +14,10 @@ export const defaultDarkTheme: DesignTokens = {
     colors: {
         foreground: "hsla(210, 50%, 98%)",
         background: "hsla(0, 0%, 9%)",
-        accent: "hsla(199, 89%, 54%)",
         disabled: "hsla(240, 4%, 33%)",
         primary: {
             foreground: "hsla(210, 40%, 98%)",
-            DEFAULT: "hsla(199, 89%, 54%)",
+            DEFAULT: "hsla(200,98%,39%)",
             subtle: "hsla(199, 95%, 87%)",
             hover: "hsla(199, 97%, 40%)",
         },
@@ -42,7 +41,7 @@ export const defaultDarkTheme: DesignTokens = {
             foreground: "hsla(210, 40%, 98%)",
         },
         danger: {
-            DEFAULT: "hsla(358, 75%, 59%)",
+            DEFAULT: "hsla(358, 65%, 57%)",
             subtle: "hsla(0, 94%, 81%)",
             hover: "hsla(0, 82%, 47%)",
             foreground: "hsla(210, 40%, 98%)",
@@ -99,7 +98,6 @@ export const defaultLightTheme: DesignTokens = {
     colors: {
         foreground: "hsla(217, 15%, 32%)",
         background: "hsla(210, 34%, 96%)",
-        accent: "hsla(199, 89%, 54%)",
         disabled: "hsla(240, 10%, 75%)",
         primary: {
             foreground: "hsla(210, 40%, 98%)",
