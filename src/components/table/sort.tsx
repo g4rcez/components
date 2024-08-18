@@ -1,11 +1,11 @@
 "use client";
 import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon, PlusIcon, Trash2Icon } from "lucide-react";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useTransition } from "react";
 import { uuid } from "../../lib/fns";
 import { Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
 import { OptionProps, Select } from "../form/select";
-import { Col, TableConfiguration, TableOperationProps } from "./table-lib";
+import { Col, getLabel, TableConfiguration, TableOperationProps } from "./table-lib";
 import { useTranslations } from "../../hooks/use-translate-context";
 
 type Keyof<T extends {}> = keyof T extends infer R extends string ? R : never;
@@ -126,6 +126,7 @@ export const Sort = <T extends {}>(props: Props<T>) => {
 type SorterHeadProps<T extends {}> = Pick<TableOperationProps<T>, "sorters" | "setSorters"> & { col: Col<T> };
 
 export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
+    const translations = useTranslations();
     const [status, setStatus] = useState(() => {
         const sorter = props.sorters.find((sort) => sort.value === props.col.id);
         return sorter ? sorter.type : Order.Undefined;
@@ -143,8 +144,13 @@ export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
         });
     }, [status, props.col]);
 
+    const labelId = `${props.col.id}-sorter-id`;
+
+    const label = getLabel(props.col);
+
     return (
-        <button className="isolate flex items-center" onClick={onClick} type="button">
+        <button aria-labelledby={labelId} className="isolate flex items-center" onClick={onClick} type="button">
+            <span id={labelId} className="sr-only">{translations.tableSortDropdownTitle} {label}</span>
             {status === Order.Asc ? <ArrowUp01Icon size={14} /> : null}
             {status === Order.Desc ? <ArrowDown01Icon size={14} /> : null}
             {status === Order.Undefined ? <ArrowUpDownIcon size={14} /> : null}

@@ -39,6 +39,8 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
 
     const ariaSort = !ownSorter?.type ? "none" : ownSorter.type === Order.Asc ? "ascending" : "descending"
 
+    const label = getLabel(props.header);
+
     return (
         <Reorder.Item
             {...(props.header.thProps as {})}
@@ -59,11 +61,16 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
                 <span className="flex items-center gap-1">
                     <Dropdown
                         arrow
-                        trigger={<FilterIcon size={14} />}
+                        trigger={
+                            <span>
+                                <span id={`${props.header.id}-filter-dropdown-button`} className="sr-only">{translation.tableFilterDropdownTitleUnique} {label}</span>
+                                <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} size={14} />
+                            </span>
+                        }
                         title={
                             <span>
                                 {translation.tableFilterDropdownTitleUnique} <span className="text-primary">
-                                    {getLabel(props.header)}
+                                    {label}
                                 </span>
                             </span>
                         }

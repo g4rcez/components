@@ -1,21 +1,36 @@
 "use client";
 import React, { forwardRef, useEffect, useRef } from "react";
 import MaskInput, { TheMaskProps } from "the-mask-input";
-import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
 import { css, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
+import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
 
 export type InputProps = Override<
     InputFieldProps<"input">,
     TheMaskProps &
-    FeedbackProps & {
-        next?: string;
-    }
+        FeedbackProps & {
+            next?: string;
+        }
 >;
 
 export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     (
-        { type = "text", feedback = null, labelClassName, next, interactive, rightLabel, optionalText, container, hideLeft = false, right, left, error, ...props }: InputProps,
+        {
+            type = "text",
+            feedback = null,
+            info,
+            labelClassName,
+            next,
+            interactive,
+            rightLabel,
+            optionalText,
+            container,
+            hideLeft = false,
+            right,
+            left,
+            error,
+            ...props
+        }: InputProps,
         ref
     ): any => {
         const id = props.id ?? props.name;
@@ -48,6 +63,7 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
 
         return (
             <InputField<"input">
+                info={info}
                 container={css("group inline-block w-full", container)}
                 error={error}
                 feedback={feedback}

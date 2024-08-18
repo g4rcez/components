@@ -54,15 +54,16 @@ const defaultTranslations = {
 
 type Translations = typeof defaultTranslations;
 
-const Context = createContext(defaultTranslations)
+const Context = createContext({ translations: defaultTranslations })
 
 export const ComponentsProvider = (props: PropsWithChildren<{ map: Partial<Translations> }>) => {
-  const memoMap = useMemo(() => ({ ...defaultTranslations, ...props.map }), [props.map])
+  const memoMap = useMemo(() => ({ translations: { ...defaultTranslations, ...props.map } }), [props.map])
   return <Context.Provider value={memoMap}>{props.children}</Context.Provider>
 }
 
 export const useTranslations = () => {
   const ctx = useContext(Context)
   if (!ctx) return defaultTranslations;
-  return ctx
+  return ctx.translations
 }
+

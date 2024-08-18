@@ -92,11 +92,17 @@ export const DatePicker = ({ date, locale, disabledDate, autoFocusToday, onChang
             right={
                 <Fragment>
                     <input defaultValue={innerDate?.toISOString()} hidden type="date" name={props.name} />
-                    <span id={labelId} className="sr-only">{translation.datePickerCalendarButtonLabel}</span>
-                    <Dropdown restoreFocus trigger={<CalendarIcon />} onChange={setOpen} open={open}
-                        buttonProps={{
-                            "aria-describedby": labelId
-                        }}
+                    <Dropdown
+                        open={open}
+                        restoreFocus
+                        onChange={setOpen}
+                        trigger={
+                            <span aria-labelledby={labelId}>
+                                <span id={labelId} className="sr-only">{translation.datePickerCalendarButtonLabel}</span>
+                                <CalendarIcon />
+                            </span>
+                        }
+                        buttonProps={{ "aria-describedby": labelId }}
                     >
                         <Calendar
                             {...props}

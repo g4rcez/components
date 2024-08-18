@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Linq from "linq-arrays";
-import React, { Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
+import React, { CSSProperties, Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
-import { Is } from "sidekicker";
+import { clamp, Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
 import { useCallbackRef } from "../../hooks/use-callback-ref";
 import { path } from "../../lib/fns";
@@ -14,6 +14,8 @@ import { Pagination } from "./pagination";
 import { multiSort, Sorter } from "./sort";
 import { CellPropsElement, Col, ColMatrix, createOptionCols, TableOperationProps } from "./table-lib";
 import { TableHeader } from "./thead";
+
+const calculateSkeletonWidth = () => clamp(40, Math.random() * 90, 90);
 
 type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
@@ -41,10 +43,17 @@ const TableBody = React.forwardRef((props: TableBodyProps, ref: any) => (
 ));
 
 const VirtualTable = React.forwardRef((props: any, ref) => (
-    <table {...props} ref={ref as any} role="table" className={`table min-w-full divide-y divide-table-border table-auto text-left ${props.className ?? ""}`} />
+    <table
+        {...props}
+        ref={ref as any}
+        role="table"
+        className={`table min-w-full divide-y divide-table-border table-auto text-left ${props.className ?? ""}`}
+    />
 ));
 
-const Thead = React.forwardRef((props: any, ref: any) => <thead {...props} role="rowgroup" className="bg-card-background shadow-xs group:sticky top-0" ref={ref} />);
+const Thead = React.forwardRef((props: any, ref: any) => (
+    <thead {...props} role="rowgroup" className="bg-card-background shadow-xs group:sticky top-0" ref={ref} />
+));
 
 const TRow = React.forwardRef((props: any, ref: any) => <tr {...props} role="row" ref={ref} className={`table-row ${props.className ?? ""}`} />);
 
@@ -97,7 +106,10 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
                         className="px-2 h-14 border-none first:table-cell hidden md:table-cell"
                     >
                         {loading ? (
-                            <div className="animate-pulse h-2 bg-table-border rounded" />
+                            <div
+                                className="animate-pulse h-2 bg-table-border rounded"
+                                style={{ width: `${calculateSkeletonWidth()}%` } as CSSProperties}
+                            />
                         ) : Component ? (
                             <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
                         ) : (
@@ -135,7 +147,9 @@ const InnerTable = <T extends {}>({
         if (useControl) return props.rows;
         const linq = new Linq(props.rows);
         if (filters.length > 0) {
-            filters.forEach((x) => (x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name as any, x.operation.symbol, x.value)));
+            filters.forEach((x) =>
+                x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name as any, x.operation.symbol as any, x.value)
+            );
         }
         if (sorters.length === 0) return linq.Select();
         return multiSort(linq.Select(), sorters);
@@ -178,6 +192,7 @@ const InnerTable = <T extends {}>({
                             setCols={setCols}
                             setSorters={setSorters}
                             setFilters={setFilters}
+                            loading={!!props.loading}
                         />
                     )}
                 />

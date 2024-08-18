@@ -1,41 +1,66 @@
 "use client";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
 import React, { Fragment, PropsWithChildren } from "react";
-import { PolymorphicProps } from "../core/polymorph";
+import { useTranslations } from "../../hooks/use-translate-context";
 import { css } from "../../lib/dom";
 import { Label } from "../../types";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { PolymorphicProps } from "../core/polymorph";
+import { Tooltip } from "../floating/tooltip";
 
 export type FeedbackProps = React.PropsWithChildren<
     Partial<{
-        title: string | React.ReactElement | React.ReactNode;
+        info: Label;
+        title: Label;
         hideLeft?: boolean;
         className?: string;
         placeholder: string;
         reportStatus: boolean;
     }>
 >;
-export const InputFeedback = ({ reportStatus, hideLeft = false, className, children, title }: FeedbackProps) => (
+
+export const InputFeedback = ({ reportStatus, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <div className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
             <span className="flex items-center gap-1 group-hover:text-primary group-focus-within:text-primary transition-colors group-error:text-danger">
                 {title}
-                {reportStatus ? (
-                    <span className="flex aspect-square h-4 w-4 items-center justify-center">
-                        <CheckCircle
-                            className="hidden aspect-square h-3 w-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100"
-                            aria-hidden="true"
-                            size={16}
-                            strokeWidth={1}
-                            absoluteStrokeWidth
-                        />
-                        <XCircle
-                            className="hidden aspect-square h-3 w-3 opacity-0 transition-opacity group-error:block group-error:opacity-100"
-                            aria-hidden="true"
-                            size={16}
-                            strokeWidth={1}
-                            absoluteStrokeWidth
-                        />
+                {reportStatus || info ? (
+                    <span className="flex gap-1 items-center justify-center">
+                        {info ? (
+                            <Tooltip
+                                title={
+                                    <span>
+                                        <span className="sr-only">{info}</span>
+                                        <InfoIcon
+                                            className="aspect-square size-3"
+                                            aria-hidden="true"
+                                            size={16}
+                                            strokeWidth={1}
+                                            absoluteStrokeWidth
+                                        />
+                                    </span>
+                                }
+                            >
+                                {info}
+                            </Tooltip>
+                        ) : null}
+                        {reportStatus ? (
+                            <Fragment>
+                                <CheckCircle
+                                    className="hidden aspect-square size-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100"
+                                    aria-hidden="true"
+                                    size={16}
+                                    strokeWidth={1}
+                                    absoluteStrokeWidth
+                                />
+                                <XCircle
+                                    className="hidden aspect-square size-3 opacity-0 transition-opacity group-error:block group-error:opacity-100"
+                                    aria-hidden="true"
+                                    size={16}
+                                    strokeWidth={1}
+                                    absoluteStrokeWidth
+                                />
+                            </Fragment>
+                        ) : null}
                     </span>
                 ) : null}
             </span>
@@ -46,6 +71,7 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, child
 
 export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
     Partial<{
+        info: Label;
         labelClassName: string;
         error: string;
         hideLeft: boolean;
@@ -71,6 +97,7 @@ export const InputField = <T extends "input" | "select">({
     feedback,
     interactive,
     right,
+    info,
     children,
     error,
     form,
@@ -86,14 +113,14 @@ export const InputField = <T extends "input" | "select">({
     const translation = useTranslations();
     const optionalText = _optionalText ?? translation.inputOptionalLabel;
     return (
-        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex gap-1 w-full", container)}>
+        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex gap-1.5 w-full", container)}>
             <label
                 form={form}
                 htmlFor={ID}
                 className="inline-flex w-full cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-error:text-danger group-hover:border-primary"
             >
                 {!hideLeft && !rightLabel ? (
-                    <InputFeedback hideLeft={hideLeft} reportStatus title={title} placeholder={placeholder}>
+                    <InputFeedback info={info} hideLeft={hideLeft} reportStatus title={title} placeholder={placeholder}>
                         {optionalText || rightLabel ? (
                             <Fragment>
                                 {!required ? <span className="text-opacity-70">{optionalText}</span> : null}
@@ -113,7 +140,7 @@ export const InputField = <T extends "input" | "select">({
             <p className="group-error:block empty:hidden group-error:text-danger hidden text-xs group-has-[input:not(:focus):invalid[data-initialized=true]]:block">
                 {error}
             </p>
-            <p className="hidden text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block">{feedback}</p>
+            <p className="text-xs group-assert:block group-error:hidden empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block">{feedback}</p>
         </fieldset>
     );
 };
