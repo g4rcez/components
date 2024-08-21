@@ -1,6 +1,6 @@
 "use client";
 import { isBefore } from "date-fns";
-import { AppWindowIcon, NetworkIcon, SmartphoneIcon, WifiIcon } from "lucide-react";
+import { AppWindowIcon, NetworkIcon, SmartphoneIcon, TextIcon, WifiIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,6 +17,8 @@ import {
     defaultLightTheme,
     formToJson,
     Input,
+    Menu,
+    MenuItem,
     Modal,
     Radiobox,
     Select,
@@ -158,7 +160,7 @@ const TableView = () => {
 
     useEffect(() => {
         let l = setInterval(() => {
-            setLoading(prev => !prev);
+            setLoading((prev) => !prev);
         }, 5000);
         return () => clearInterval(l);
     }, []);
@@ -226,6 +228,28 @@ export default function Layout() {
             </head>
             <body>
                 <main className="p-8 flex flex-col gap-8">
+                    <Card title="Menu">
+                        <Menu label="Edit">
+                            <MenuItem label="Undo" onClick={() => console.log("Undo")} />
+                            <MenuItem label="Redo" disabled />
+                            <MenuItem label="Cut" />
+                            <Menu label="Copy as">
+                                <MenuItem Right={TextIcon} label="Text" className="text-danger" />
+                                <MenuItem label="Video" />
+                                <Menu label="Image">
+                                    <MenuItem label=".png" />
+                                    <MenuItem label=".jpg" />
+                                    <MenuItem label=".svg" />
+                                    <MenuItem label=".gif" />
+                                </Menu>
+                                <MenuItem label="Audio" />
+                            </Menu>
+                            <Menu label="Share">
+                                <MenuItem label="Mail" />
+                                <MenuItem label="Instagram" />
+                            </Menu>
+                        </Menu>
+                    </Card>
                     <ComponentsProvider
                         map={{
                             inputOptionalLabel: "Optional field",

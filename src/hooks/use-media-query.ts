@@ -17,16 +17,12 @@ export const useMediaQuery = (query: string, defaultValue: boolean = true) => {
         onChange();
         if (matchMedia.addListener) {
             matchMedia.addListener(onChange);
-        } else {
-            matchMedia.addEventListener("change", onChange);
+            return () => {
+                return matchMedia.removeListener ? matchMedia.removeListener(onChange) : undefined;
+            };
         }
-        return () => {
-            if (matchMedia.removeListener) {
-                matchMedia.removeListener(onChange);
-            } else {
-                matchMedia.removeEventListener("change", onChange);
-            }
-        };
+        matchMedia.addEventListener("change", onChange);
+        return () => matchMedia.removeEventListener("change", onChange);
     }, [query]);
 
     return matches;

@@ -59,7 +59,7 @@ const variants = cva("isolate ring-0 outline-0 appearance-none flex flex-col gap
         type: {
             drawer: "max-h-screen max-w-[90%] w-auto h-screen min-h-0",
             dialog: "max-h-[calc(100lvh-10%)] container h-[inherit] rounded-lg py-8",
-            sheet: "w-full absolute bottom-0 max-h-[calc(100lvh-10%)] pt-8 pb-4 rounded-t-lg"
+            sheet: "w-full absolute bottom-0 max-h-[calc(100lvh-10%)] pt-6 pb-4 rounded-t-lg"
         },
         position: {
             none: "",
@@ -127,7 +127,7 @@ const Draggable = (props: DraggableProps) => {
             whileDrag={{ cursor: "grabbing" }}
             className={css(
                 "absolute rounded-lg cursor-grab bg-floating-border",
-                props.sheet ? "left-1/2 top-2 w-12 h-3" : (props.type === "left" ? "top-1/2 right-5 h-10 w-2" : "top-1/2 left-2 h-10 w-2")
+                props.sheet ? "left-1/2 top-2 w-16 h-2" : (props.type === "left" ? "top-1/2 right-5 h-10 w-2" : "top-1/2 left-2 h-10 w-2")
             )}
         />
     );

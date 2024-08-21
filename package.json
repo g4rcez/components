@@ -191,6 +191,12 @@
             "import": "./dist/components/table/table.js",
             "require": "./dist/components/table/table.js",
             "default": "./dist/components/table/table.js"
+        },
+        "./menu": {
+            "type": "./dist/components/floating/menu.d.ts",
+            "import": "./dist/components/floating/menu.js",
+            "require": "./dist/components/floating/menu.js",
+            "default": "./dist/components/floating/menu.js"
         }
     }
 }
