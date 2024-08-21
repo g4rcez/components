@@ -26,9 +26,16 @@ import {
 import { ChevronRightIcon, LucideProps } from "lucide-react";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { css } from "../../lib/dom";
+import { Label } from "../../types";
 
-const menuItemClassName = (highlight: string = "data-[open]:bg-primary focus:bg-primary") =>
-    `w-full outline-none px-2 py-1 rounded items-center flex justify-between text-left min-w-32 ${highlight} aria-expanded:opacity-80`;
+const menuItemClassName = (highlight: string = "") =>
+    css(
+        "w-full min-w-32 outline-none px-2 py-1 items-center flex justify-between text-left",
+        "data-[active=true]:bg-primary data-[open]:bg-primary focus:bg-primary aria-expanded:opacity-80",
+        "first-of-type:rounded-t-lg last-of-type:rounded-b-lg",
+        "disabled:opacity-40 disabled:cursor-not-allowed",
+        highlight
+    );
 
 const MenuContext = createContext<{
     getItemProps: (userProps?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
@@ -40,19 +47,19 @@ const MenuContext = createContext<{
     isOpen: false,
     activeIndex: null,
     getItemProps: () => ({}),
-    setActiveIndex: () => {},
-    setHasFocusInside: () => {},
+    setActiveIndex: () => { },
+    setHasFocusInside: () => { },
 });
 
 type MenuProps = Partial<{
     isParent: boolean;
-    label: string;
+    label: Label;
     nested: boolean;
     children: React.ReactNode;
 }>;
 
 const MenuComponent = React.forwardRef<HTMLButtonElement, MenuProps & React.HTMLProps<HTMLButtonElement>>(
-    ({ children, label, isParent, ...props }, forwardedRef) => {
+    ({ children, isParent, label, ...props }, forwardedRef) => {
         const parentId = useFloatingParentNodeId();
         const isNested = parentId !== null;
 
@@ -79,7 +86,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, MenuProps & React.HTML
         const dismiss = useDismiss(context, { bubbles: true });
         const hover = useHover(context, {
             enabled: true,
-            delay: { open: 75 },
+            delay: { open: 100 },
             handleClose: safePolygon({ blockPointerEvents: true }),
         });
 
@@ -127,6 +134,8 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, MenuProps & React.HTML
             if (isOpen && tree) tree.events.emit("menuopen", { parentId, nodeId });
         }, [tree, isOpen, nodeId, parentId]);
 
+        const className = isParent ? props.className : menuItemClassName(props.className);
+
         return (
             <FloatingNode id={nodeId}>
                 <button
@@ -136,7 +145,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, MenuProps & React.HTML
                     data-nested={isNested ? "" : undefined}
                     role={isNested ? "menuitem" : undefined}
                     data-focus-inside={hasFocusInside ? "" : undefined}
-                    className={isParent ? css(props.className) : isNested ? menuItemClassName(props.className) : menuItemClassName(props.className)}
+                    className={className}
                     {...getReferenceProps(
                         parent.getItemProps({
                             ...props,
@@ -164,7 +173,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, MenuProps & React.HTML
                                     <div
                                         ref={refs.setFloating}
                                         style={floatingStyles}
-                                        className="bg-floating-background outline-none items-start border text-left shadow-xl border-floating-border flex flex-col rounded-lg"
+                                        className="bg-floating-background z-tooltip isolate outline-none items-start border text-left shadow-xl border-floating-border flex flex-col rounded-lg"
                                         {...getFloatingProps()}
                                     >
                                         {children}
@@ -192,6 +201,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, MenuItemProps & Reac
             <button
                 {...props}
                 ref={useMergeRefs([item.ref, forwardedRef])}
+                data-active={isActive}
                 type="button"
                 role="menuitem"
                 disabled={disabled}

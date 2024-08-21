@@ -51,11 +51,13 @@ const VirtualTable = React.forwardRef((props: any, ref) => (
     />
 ));
 
-const Thead = React.forwardRef((props: any, ref: any) => (
+const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => (
     <thead {...props} role="rowgroup" className="bg-card-background shadow-xs group:sticky top-0" ref={ref} />
 ));
 
-const TRow = React.forwardRef((props: any, ref: any) => <tr {...props} role="row" ref={ref} className={`table-row ${props.className ?? ""}`} />);
+const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => (
+    <tr {...props} role="row" ref={ref} className={`table-row ${props.className ?? ""}`} />
+));
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
     if (props.context.loadingMore) {
@@ -157,7 +159,7 @@ const InnerTable = <T extends {}>({
 
     useEffect(() => {
         if (ref.current === null) {
-            return () => {};
+            return () => { };
         }
         const div = ref.current;
         const observer = new IntersectionObserver((entries) => {
@@ -228,10 +230,10 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
         (get) => {
             const create =
                 <T extends any>(key: string) =>
-                (arg: T) => {
-                    const state = get.state();
-                    return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
-                };
+                    (arg: T) => {
+                        const state = get.state();
+                        return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
+                    };
             return {
                 cols: create<DispatcherFun<Col<T>[]>>("cols"),
                 filters: create<DispatcherFun<FilterConfig<T>[]>>("filters"),

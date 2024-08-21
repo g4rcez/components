@@ -29,7 +29,7 @@ type ItemProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
 };
 
 export const Option = forwardRef<HTMLLIElement, ItemProps>(({ selected, active, onClick, option, ...rest }, ref) => (
-    <li {...rest} ref={ref} role="option" aria-selected={selected} className="w-full">
+    <li {...rest} ref={ref} role="option" aria-selected={selected} className="w-full last:border-transparent border-b border-tooltip-border">
         <button
             type="button"
             onClick={onClick as any}
@@ -246,7 +246,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     style: { position: strategy, left: x ?? 0, top: y ?? 0, ...transitions.styles },
                                 })}
                                 data-floating="true"
-                                className="bg-floating-background shadow-floating text-foreground list-none p-0 m-0 rounded-b-lg overflow-auto origin-[top_center] overflow-y-auto z-floating"
+                                className="bg-floating-background shadow-floating text-foreground list-none p-0 m-0 rounded-t-lg rounded-b-lg overflow-auto origin-[top_center] overflow-y-auto z-floating"
                             >
                                 {list.map((option, i) => (
                                     <Option

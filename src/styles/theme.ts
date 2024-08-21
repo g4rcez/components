@@ -71,7 +71,7 @@ export const defaultDarkTheme: DesignTokens = {
         tooltip: {
             foreground: "hsla(210, 40%, 98%)",
             background: "hsla(0, 0%, 8%)",
-            border: "hsla(0, 0%, 15%)",
+            border: "hsla(0, 0%, 19%)",
         },
         table: {
             background: "hsla(0, 0%, 15%)",
