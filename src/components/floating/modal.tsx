@@ -14,9 +14,9 @@ import { cva } from "class-variance-authority";
 import { AnimatePresence, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "framer-motion";
 import { XIcon } from "lucide-react";
 import React, { Fragment, PropsWithChildren, useId } from "react";
-import { Label } from "../../types";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { css } from "../../lib/dom";
+import { Label } from "../../types";
 
 type DrawerSides = "left" | "right";
 
@@ -43,9 +43,9 @@ const drawerRight = createDrawerAnimation("right");
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     sheet: {
-        initial: { opacity: 0, scaleY: 0.95, animationDuration, originY: "bottom" },
+        initial: { opacity: 0.5, scaleY: 0.5, animationDuration, originY: "bottom" },
         enter: { opacity: 1, scaleY: 1, animationDuration, originY: "bottom" },
-        exit: { opacity: 0, scaleY: 0.8, animationDuration, originY: "bottom" },
+        exit: { opacity: 0.1, scaleY: 0.5, animationDuration, originY: "bottom" },
     },
     dialog: {
         initial: { opacity: 0, scale: 0.95, animationDuration },
@@ -59,7 +59,7 @@ const variants = cva("isolate ring-0 outline-0 appearance-none flex flex-col gap
         type: {
             drawer: "max-h-screen max-w-[90%] w-auto h-screen min-h-0",
             dialog: "max-h-[calc(100lvh-10%)] container h-[inherit] rounded-lg py-8",
-            sheet: "w-full absolute bottom-0 max-h-[calc(100lvh-10%)] pt-6 pb-4 rounded-t-lg"
+            sheet: "w-full absolute bottom-0 max-h-[90vh] max-h-[90svh] pt-6 pb-4 rounded-t-lg",
         },
         position: {
             none: "",
@@ -93,25 +93,25 @@ type DraggableProps = {
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
 
+const calculateClose = (n: number) => n * 0.62;
+
 const Draggable = (props: DraggableProps) => {
-    const handleDrag = (_: any, info: PanInfo) => {
+    const onDrag = (_: any, info: PanInfo) => {
         if (props.parent.current) {
             if (!props.sheet) {
                 const div = props.parent.current as HTMLElement;
                 const v = props.value.get() || div.getBoundingClientRect().width;
                 const delta = props.type === "right" ? -info.delta.x : info.delta.x;
-                props.value.set(Math.abs(v + delta));
+                return props.value.set(Math.abs(v + delta));
             }
             const div = props.parent.current as HTMLElement;
             const rect = div.getBoundingClientRect();
             const v = props.value.get() || rect.height;
-            const result = Math.abs(v - info.delta.y)
-            const twentyPercentScreen = window.outerHeight * 0.68
-            if (result < twentyPercentScreen) {
-                props.onChange(false)
-                return setTimeout(() =>
-                    props.value.set(window.outerHeight * 0.9), 350
-                )
+            const result = Math.abs(v - info.delta.y);
+            const screenHeightToClose = calculateClose(window.outerHeight);
+            if (result < screenHeightToClose) {
+                props.onChange(false);
+                return setTimeout(() => props.value.set(window.outerHeight), 350);
             }
             return props.value.set(result);
         }
@@ -119,31 +119,43 @@ const Draggable = (props: DraggableProps) => {
 
     return (
         <motion.div
-            drag="x"
-            dragElastic={0}
-            dragMomentum={false}
-            onDrag={handleDrag}
+            draggable
+            dragMomentum
+            onDrag={onDrag}
+            animate={false}
+            initial={false}
+            dragElastic={0.15}
+            dragDirectionLock
+            dragSnapToOrigin
+            drag={props.sheet ? "y" : "x"}
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
             className={css(
-                "absolute rounded-lg cursor-grab bg-floating-border",
-                props.sheet ? "left-1/2 top-2 w-16 h-2" : (props.type === "left" ? "top-1/2 right-5 h-10 w-2" : "top-1/2 left-2 h-10 w-2")
+                "absolute rounded-lg cursor-grab",
+                props.sheet ? "" : "bg-floating-border",
+                props.sheet
+                    ? "w-full py-2 top-1 h-3 flex justify-center"
+                    : props.type === "left"
+                      ? "top-1/2 right-5 h-10 w-2"
+                      : "top-1/2 left-2 h-10 w-2"
             )}
-        />
+        >
+            {props.sheet ? <div className="bg-floating-border rounded-lg w-1/4 h-2" /> : null}
+        </motion.div>
     );
 };
 
-const positions = { "drawer": "right", "sheet": "none", "dialog": "none" } as const;
+const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
 export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: PropsWithChildren<DrawerProps>) => {
     const headingId = useId();
     const descriptionId = useId();
-    const isDesktop = useMediaQuery("(min-width: 48rem)")
+    const isDesktop = useMediaQuery("(min-width: 48rem)");
     const useResizer = _type === "drawer" || !isDesktop;
     const position = isDesktop ? positions[_type] : positions.sheet;
     const func = isDesktop ? animations[_type] : animations.sheet;
     const animation = typeof func === "function" ? func(position as DrawerSides) : func;
-    const type = isDesktop ? _type : "sheet"
+    const type = isDesktop ? _type : "sheet";
 
     const { refs, context } = useFloating({ open: props.open, onOpenChange: props.onChange });
     const click = useClick(context);
@@ -152,7 +164,7 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
     const { getReferenceProps, getFloatingProps } = useInteractions([click, role, dismiss]);
     const Trigger = props.trigger as any;
 
-    const value = useMotionValue<undefined | number>(undefined);
+    const value = useMotionValue<number | undefined>(undefined);
 
     return (
         <Fragment>
@@ -187,7 +199,15 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
                                     style={isDesktop ? { width: value } : { height: value }}
                                     {...getFloatingProps()}
                                 >
-                                    {useResizer && resizer ? <Draggable onChange={props.onChange} sheet={!isDesktop} value={value} parent={refs.floating} type={position as DrawerSides} /> : null}
+                                    {useResizer && resizer ? (
+                                        <Draggable
+                                            onChange={props.onChange}
+                                            sheet={!isDesktop}
+                                            value={value}
+                                            parent={refs.floating}
+                                            type={position as DrawerSides}
+                                        />
+                                    ) : null}
                                     {props.title || props.closable ? (
                                         <header className="w-full relative">
                                             {props.title ? (

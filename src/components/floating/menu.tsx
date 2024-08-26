@@ -30,7 +30,7 @@ import { Label } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
-        "w-full min-w-32 outline-none px-2 py-1 items-center flex justify-between text-left",
+        "w-full min-w-36 outline-none px-2 py-1 items-center flex justify-between text-left",
         "data-[active=true]:bg-primary data-[open]:bg-primary focus:bg-primary aria-expanded:opacity-80",
         "first-of-type:rounded-t-lg last-of-type:rounded-b-lg",
         "disabled:opacity-40 disabled:cursor-not-allowed",

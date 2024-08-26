@@ -41,11 +41,12 @@ const FormExample = () => {
         const json = formToJson(e.currentTarget);
         console.log(json);
     };
+
     return (
         <Card title="Inputs">
             <form onSubmit={onSubmit} className="flex gap-6 flex-wrap">
                 <Input info="I'm a info" name="input" required placeholder="Text" title="Text" />
-                <Select name="select" required options={options} placeholder="Haskell..." title="Language" />
+                <Select name="select" defaultValue="" required options={options} placeholder="Haskell..." title="Language" />
                 <Autocomplete
                     required
                     name="autocomplete"
@@ -63,7 +64,7 @@ const FormExample = () => {
                     placeholder="Haskell..."
                     title="Select or create language"
                 />
-                <div className="flex items-center flex-nowrap gap-4 min-w-full">
+                <div className="flex items-center flex-wrap gap-4 min-w-full">
                     <Checkbox name="checkbox">Uncontrolled checkbox</Checkbox>
                     <Checkbox name="disabled-checkbox" disabled>
                         Disabled checkbox
@@ -275,6 +276,7 @@ export default function Layout() {
                                 500
                             </Stats>
                         </div>
+                        <FormExample />
                         <Card title="Dialog and Drawer" className={classNames}>
                             <WithDialog type="dialog" />
                             <WithDialog side="left" type="drawer" />
@@ -372,7 +374,6 @@ export default function Layout() {
                                 Success
                             </Tag>
                         </Card>
-                        <FormExample />
                         <DatePickerField />
                         <Card title="Tooltip">
                             <Tooltip title="Hover me">I'm a tooltip</Tooltip>
