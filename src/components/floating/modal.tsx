@@ -59,7 +59,7 @@ const variants = cva("isolate ring-0 outline-0 appearance-none flex flex-col gap
         type: {
             drawer: "max-h-screen max-w-[90%] w-auto h-screen min-h-0",
             dialog: "max-h-[calc(100lvh-10%)] container h-[inherit] rounded-lg py-8",
-            sheet: "w-full absolute bottom-0 max-h-[90vh] max-h-[90svh] pt-6 pb-4 rounded-t-lg",
+            sheet: "w-full absolute bottom-0 max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
         },
         position: {
             none: "",
@@ -85,13 +85,13 @@ export type DrawerProps = {
 
 type DraggableProps = {
     sheet: boolean;
-    type: DrawerSides;
+    position: DrawerSides;
     parent: React.RefObject<HTMLElement>;
     onChange: (nextState: boolean) => void;
     value: MotionValue<number | undefined>;
 };
 
-const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
+const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 
 const calculateClose = (n: number) => n * 0.62;
 
@@ -101,7 +101,7 @@ const Draggable = (props: DraggableProps) => {
             if (!props.sheet) {
                 const div = props.parent.current as HTMLElement;
                 const v = props.value.get() || div.getBoundingClientRect().width;
-                const delta = props.type === "right" ? -info.delta.x : info.delta.x;
+                const delta = props.position === "right" ? -info.delta.x : info.delta.x;
                 return props.value.set(Math.abs(v + delta));
             }
             const div = props.parent.current as HTMLElement;
@@ -121,21 +121,23 @@ const Draggable = (props: DraggableProps) => {
         <motion.div
             draggable
             dragMomentum
+            dragListener
+            dragPropagation
             onDrag={onDrag}
             animate={false}
             initial={false}
-            dragElastic={0.15}
+            dragElastic={0}
             dragDirectionLock
             dragSnapToOrigin
             drag={props.sheet ? "y" : "x"}
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
             className={css(
-                "absolute rounded-lg cursor-grab",
-                props.sheet ? "" : "bg-floating-border",
+                "absolute rounded-lg",
+                props.sheet ? "cursor-row-resize" : "bg-floating-border cursor-col-resize",
                 props.sheet
                     ? "w-full py-2 top-1 h-3 flex justify-center"
-                    : props.type === "left"
+                    : props.position === "left"
                       ? "top-1/2 right-5 h-10 w-2"
                       : "top-1/2 left-2 h-10 w-2"
             )}
@@ -152,7 +154,7 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
     const descriptionId = useId();
     const isDesktop = useMediaQuery("(min-width: 48rem)");
     const useResizer = _type === "drawer" || !isDesktop;
-    const position = isDesktop ? positions[_type] : positions.sheet;
+    const position = isDesktop ? (_type === "drawer" ? props.position : positions[_type]) : positions.sheet;
     const func = isDesktop ? animations[_type] : animations.sheet;
     const animation = typeof func === "function" ? func(position as DrawerSides) : func;
     const type = isDesktop ? _type : "sheet";
@@ -205,7 +207,7 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
                                             sheet={!isDesktop}
                                             value={value}
                                             parent={refs.floating}
-                                            type={position as DrawerSides}
+                                            position={position as DrawerSides}
                                         />
                                     ) : null}
                                     {props.title || props.closable ? (
@@ -216,11 +218,11 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
                                                 </h2>
                                             ) : null}
                                             {props.closable !== false ? (
-                                                <nav className="absolute -top-1 right-8">
+                                                <nav className="absolute -top-2.5 lg:-top-1 right-4 lg:right-8">
                                                     <button
                                                         type="button"
                                                         onClick={() => props.onChange(false)}
-                                                        className="p-1 transition-colors hover:text-danger focus:text-danger"
+                                                        className="p-1 transition-colors opacity-70 hover:opacity-100 hover:text-danger focus:text-danger"
                                                     >
                                                         <XIcon />
                                                     </button>
@@ -228,7 +230,7 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
                                             ) : null}
                                         </header>
                                     ) : null}
-                                    <div className="flex-1 px-8 overflow-y-auto">{props.children}</div>
+                                    <section className="flex-1 px-8 overflow-y-auto">{props.children}</section>
                                     {props.footer ? (
                                         <footer className="px-8 border-t border-floating-border pt-4 w-full">{props.footer}</footer>
                                     ) : null}

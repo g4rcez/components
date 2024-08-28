@@ -90,18 +90,13 @@ const FormExample = () => {
     );
 };
 
-const WithDialog = (props: { type: "drawer" | "dialog"; side?: "left" | "right" }) => {
+const DrawerOrDialog = (props: { type: "drawer" | "dialog"; side?: "left" | "right" }) => {
     const [open, setOpen] = useState(false);
     return (
         <Modal
             asChild
             position={props.side}
             type={props.type}
-            footer={
-                <div className="flex justify-end">
-                    <Button onClick={() => setOpen(false)}>Close</Button>
-                </div>
-            }
             title={`${props.type} example`}
             open={open}
             onChange={setOpen}
@@ -184,11 +179,10 @@ const TableView = () => {
     const queryStringPage = (router.get("page") as string) || "";
     const current = Number(queryStringPage) || 1;
     const [loading, setLoading] = useState(false);
-
     useEffect(() => {
         let l = setInterval(() => {
             setLoading((prev) => !prev);
-        }, 500000);
+        }, 5000);
         return () => clearInterval(l);
     }, []);
 
@@ -278,9 +272,9 @@ export default function Layout() {
                         </div>
                         <FormExample />
                         <Card title="Dialog and Drawer" className={classNames}>
-                            <WithDialog type="dialog" />
-                            <WithDialog side="left" type="drawer" />
-                            <WithDialog side="right" type="drawer" />
+                            <DrawerOrDialog type="dialog" />
+                            <DrawerOrDialog side="left" type="drawer" />
+                            <DrawerOrDialog side="right" type="drawer" />
                         </Card>
                         <Card className={classNames} title="Button">
                             <Button
