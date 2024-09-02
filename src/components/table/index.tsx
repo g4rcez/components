@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Linq from "linq-arrays";
 import React, { CSSProperties, Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
-import { clamp, Is } from "sidekicker";
+import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
 import { useCallbackRef } from "../../hooks/use-callback-ref";
 import { path } from "../../lib/fns";
@@ -15,7 +15,7 @@ import { multiSort, Sorter } from "./sort";
 import { CellPropsElement, Col, ColMatrix, createOptionCols, TableOperationProps } from "./table-lib";
 import { TableHeader } from "./thead";
 
-const calculateSkeletonWidth = () => clamp(40, Math.random() * 90, 90);
+const calculateSkeletonWidth = (index: number) => Math.min(Math.max(index + index * (index % 2 === 0 ? 2 : 4) + 10, 50), 90);
 
 type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
@@ -110,7 +110,7 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
                         {loading ? (
                             <div
                                 className="animate-pulse h-2 bg-table-border rounded"
-                                style={{ width: `${calculateSkeletonWidth()}%` } as CSSProperties}
+                                style={{ width: `${calculateSkeletonWidth(index)}%` } as CSSProperties}
                             />
                         ) : Component ? (
                             <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
@@ -135,7 +135,7 @@ const InnerTable = <T extends {}>({
     setFilters,
     sorters,
     cols,
-    border = true,
+    border = false,
     setSorters,
     ...props
 }: InnerTableProps<T>) => {
@@ -159,7 +159,7 @@ const InnerTable = <T extends {}>({
 
     useEffect(() => {
         if (ref.current === null) {
-            return () => { };
+            return () => {};
         }
         const div = ref.current;
         const observer = new IntersectionObserver((entries) => {
@@ -177,7 +177,7 @@ const InnerTable = <T extends {}>({
 
     return (
         <div className="min-w-full">
-            <div className={`group  rounded-lg px-1 ${border ? "border border-table-border" : ""}`}>
+            <div className={`group rounded-lg px-1 ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
                     data={rows}
                     useWindowScroll
@@ -230,10 +230,10 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
         (get) => {
             const create =
                 <T extends any>(key: string) =>
-                    (arg: T) => {
-                        const state = get.state();
-                        return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
-                    };
+                (arg: T) => {
+                    const state = get.state();
+                    return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
+                };
             return {
                 cols: create<DispatcherFun<Col<T>[]>>("cols"),
                 filters: create<DispatcherFun<FilterConfig<T>[]>>("filters"),

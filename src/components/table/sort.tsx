@@ -1,12 +1,12 @@
 "use client";
 import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon, PlusIcon, Trash2Icon } from "lucide-react";
-import React, { Fragment, useEffect, useState, useTransition } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { useTranslations } from "../../hooks/use-translate-context";
 import { uuid } from "../../lib/fns";
 import { Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
 import { OptionProps, Select } from "../form/select";
 import { Col, getLabel, TableConfiguration, TableOperationProps } from "./table-lib";
-import { useTranslations } from "../../hooks/use-translate-context";
 
 type Keyof<T extends {}> = keyof T extends infer R extends string ? R : never;
 
@@ -20,16 +20,15 @@ export type Sorter<T extends {}> = { value: Keyof<T>; type: Order; label: Label;
 
 const createSorterFn =
     <T extends {}>(fields: Sorter<T>[]) =>
-        (a: any, b: any) =>
-            fields.reduce<number>((acc, x) => {
-                const reverse = x.type === "desc" ? -1 : 1;
-                const property = x.value;
-                const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
-                return acc !== 0 ? acc : p;
-            }, 0);
+    (a: any, b: any) =>
+        fields.reduce<number>((acc, x) => {
+            const reverse = x.type === "desc" ? -1 : 1;
+            const property = x.value;
+            const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
+            return acc !== 0 ? acc : p;
+        }, 0);
 
-export const multiSort = <T extends {}>(array: T[], fields: Sorter<T>[]) => array.sort(createSorterFn(fields));
-
+export const multiSort = <T extends {}>(array: T[], fields: Sorter<T>[]) => array.toSorted(createSorterFn(fields));
 
 type Props<T extends {}> = TableConfiguration<
     T,
@@ -40,7 +39,7 @@ type Props<T extends {}> = TableConfiguration<
     }
 >;
 
-const createSorter = <T extends {}>(col: Col<T>, label: string, order: Order = Order.Asc): Sorter<T> => ({
+const createSorter = <T extends {}>(col: Col<T>, label: string, order: Order): Sorter<T> => ({
     id: uuid(),
     type: order,
     value: col.id as any,
@@ -48,7 +47,7 @@ const createSorter = <T extends {}>(col: Col<T>, label: string, order: Order = O
 });
 
 export const Sort = <T extends {}>(props: Props<T>) => {
-    const translation = useTranslations()
+    const translation = useTranslations();
 
     const orders = {
         asc: { label: translation.tableSortAsc, value: Order.Asc },
@@ -59,7 +58,7 @@ export const Sort = <T extends {}>(props: Props<T>) => {
 
     const onAddSorter = () => {
         const col = props.cols[0];
-        if (col) props.set((prev) => [...prev, createSorter(col, orders.asc.label)]);
+        if (col) props.set((prev) => [...prev, createSorter(col, orders.asc.label, orders.asc.value)]);
     };
 
     const onSetSorter = (id: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -136,10 +135,11 @@ export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
 
     useEffect(() => {
         props.setSorters((prev) => {
-            if (status === Order.Undefined) return prev.filter((x) => (x.value as string) !== props.col.id);
+            if (status === Order.Undefined) return prev.filter((x) => x.value !== props.col.id);
             const findIndex = prev.findIndex((p) => (p.value as string) === props.col.id);
-            if (findIndex === -1) return [...prev, createSorter(props.col, status)];
-            prev[findIndex] = createSorter(props.col, status);
+            const sorter = createSorter(props.col, status, status);
+            if (findIndex === -1) return [...prev, sorter];
+            prev[findIndex] = sorter;
             return [...prev];
         });
     }, [status, props.col]);
@@ -150,7 +150,9 @@ export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
 
     return (
         <button aria-labelledby={labelId} className="isolate flex items-center" onClick={onClick} type="button">
-            <span id={labelId} className="sr-only">{translations.tableSortDropdownTitle} {label}</span>
+            <span id={labelId} className="sr-only">
+                {translations.tableSortDropdownTitle} {label}
+            </span>
             {status === Order.Asc ? <ArrowUp01Icon size={14} /> : null}
             {status === Order.Desc ? <ArrowDown01Icon size={14} /> : null}
             {status === Order.Undefined ? <ArrowUpDownIcon size={14} /> : null}

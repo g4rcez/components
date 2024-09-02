@@ -170,7 +170,7 @@ const data = Array.from({ length: 10 }).map(
 
 const TableTab = () => {
     const preferences = useTablePreferences<Row>("other-table");
-    return <Table {...preferences} operations={false} cols={cols} rows={data} />;
+    return <Table {...preferences} cols={cols} rows={data} />;
 };
 
 const TableView = () => {

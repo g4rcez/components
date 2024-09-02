@@ -21,6 +21,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {
             required = true,
             options,
+            info,
             selectContainer = "",
             feedback = null,
             labelClassName,
@@ -60,6 +61,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 feedback={feedback}
                 hideLeft={hideLeft}
                 left={left}
+                info={info}
                 optionalText={optionalText}
                 rightLabel={rightLabel}
                 interactive={interactive}

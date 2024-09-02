@@ -91,9 +91,9 @@ export const defaultLightTheme: DesignTokens = {
         sm: "0.75rem",
     },
     rounded: {
-        full: "50%",
         pill: "2rem",
         card: "0.75rem",
+        full: "9999px",
     },
     colors: {
         foreground: "hsla(217, 15%, 32%)",
@@ -140,7 +140,7 @@ export const defaultLightTheme: DesignTokens = {
             border: "hsla(218, 22%, 80%)",
             placeholder: "hsla(210, 24%, 71%)",
             "mask-error": "hsla(0, 94%, 81%)",
-            "switch-bg": "hsla(0, 0%, 9%)",
+            "switch-bg": "hsla(0, 0%, 45%)",
             switch: "hsla(0, 0%, 100%)",
         },
         card: {
