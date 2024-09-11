@@ -15,7 +15,7 @@
     "prettier-plugin-tailwindcss": "0.6.6"
   },
   "scripts": {
-    "build": "pnpm run -r build",
+    "build": "pnpm run -r build; ls packages packages/docs packages/docs/.next",
     "dev": "pnpm run --filter ./packages/docs dev",
     "start": "pnpm run --filter ./packages/docs start"
   }
