@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "pnpm run -r build",
+    "dev": "pnpm run --filter ./packages/docs dev",
     "start": "pnpm run --filter ./packages/docs start"
   }
 }
