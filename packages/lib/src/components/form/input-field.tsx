@@ -21,22 +21,16 @@ export type FeedbackProps = React.PropsWithChildren<
 export const InputFeedback = ({ reportStatus, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <div className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
-            <span className="flex items-center gap-1 group-hover:text-primary group-focus-within:text-primary transition-colors group-error:text-danger">
+            <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-error:text-danger">
                 {title}
                 {reportStatus || info ? (
-                    <span className="flex gap-1 items-center justify-center">
+                    <span className="flex items-center justify-center gap-1">
                         {info ? (
                             <Tooltip
                                 title={
-                                    <span>
+                                    <span className="cursor-help">
                                         <span className="sr-only">{info}</span>
-                                        <InfoIcon
-                                            className="aspect-square size-3"
-                                            aria-hidden="true"
-                                            size={16}
-                                            strokeWidth={1}
-                                            absoluteStrokeWidth
-                                        />
+                                        <InfoIcon className="aspect-square size-3" aria-hidden="true" size={16} strokeWidth={1} absoluteStrokeWidth />
                                     </span>
                                 }
                             >
@@ -113,11 +107,11 @@ export const InputField = <T extends "input" | "select">({
     const translation = useTranslations();
     const optionalText = _optionalText ?? translation.inputOptionalLabel;
     return (
-        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex gap-1.5 w-full", container)}>
+        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex w-full gap-1.5", container)}>
             <label
                 form={form}
                 htmlFor={ID}
-                className="inline-flex w-full cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-error:text-danger group-hover:border-primary"
+                className="inline-flex w-full cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-hover:border-primary group-error:text-danger"
             >
                 {!hideLeft && !rightLabel ? (
                     <InputFeedback info={info} hideLeft={hideLeft} reportStatus title={title} placeholder={placeholder}>
@@ -130,19 +124,19 @@ export const InputField = <T extends "input" | "select">({
                     </InputFeedback>
                 ) : null}
                 <div
-                    className={`relative group flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-focus-within:border-primary group-hover:border-primary group-error:border-danger ${labelClassName}
-                    focus:ring-2 focus:ring-inset focus:ring-primary
-                    `}
+                    className={`group relative flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-focus-within:border-primary group-hover:border-primary group-error:border-danger ${labelClassName} focus:ring-2 focus:ring-inset focus:ring-primary`}
                 >
                     {left ? <span className="absolute left-0 flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
                     {children}
                     {right ? <span className="absolute right-0 flex flex-nowrap gap-2 whitespace-nowrap pr-1">{right}</span> : null}
                 </div>
             </label>
-            <p className="group-error:block empty:hidden group-error:text-danger hidden text-xs group-has-[input:not(:focus):invalid[data-initialized=true]]:block">
+            <p className="hidden text-xs empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:block group-error:block group-error:text-danger">
                 {error}
             </p>
-            <p className="text-xs group-assert:block group-error:hidden empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block">{feedback}</p>
+            <p className="text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">
+                {feedback}
+            </p>
         </fieldset>
     );
 };

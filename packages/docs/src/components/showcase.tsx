@@ -1,5 +1,6 @@
 "use client";
 import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Alert, Button, Modal } from "../../../lib/src";
 import {
@@ -41,18 +42,28 @@ export const Showcase = () => {
           labore et dolore magna aliqua.
         </AnimatedListItem>
         <AnimatedListItem
-          title="Animated list"
-          description="Click here and open a modal"
+          title="Form"
+          description="All elements that you need"
           leading={({ open }) => (
             <Button onClick={open} theme="raw">
               <ChevronRightIcon aria-hidden />
             </Button>
           )}
         >
-          Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
-          tempor incidunt ut labore et dolore magna aliqua. Lorem ipsum dolor
-          sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut
-          labore et dolore magna aliqua.
+          <ul className="space-y-4">
+            <li>Input with mask</li>
+            <li>Select</li>
+            <li>Autocomplete</li>
+            <li>DatePicker</li>
+            <li>
+              <Link
+                href="/docs/form"
+                className="hover:underline hover:text-primary transition-all ease-normal"
+              >
+                useForm
+              </Link>
+            </li>
+          </ul>
         </AnimatedListItem>
         <AnimatedListItem
           title="Animated list"

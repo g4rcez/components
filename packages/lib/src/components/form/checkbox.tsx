@@ -16,7 +16,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         <label
             data-disabled={props.disabled}
             aria-disabled={props.disabled}
-            className={css("group flex flex-wrap items-center font-normal data-[disabled=true]:cursor-not-allowed", container)}
+            className={css("group flex flex-wrap items-center font-normal data-[disabled=true]:cursor-not-allowed w-fit", container)}
         >
             <input
                 {...props}
@@ -28,7 +28,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 )}
             />
             {children}
-            <span className="flex-1 whitespace-nowrap text-xs text-danger empty:mt-0 empty:hidden">{error}</span>
+            <span className="min-w-full flex-1 whitespace-nowrap text-xs text-danger empty:mt-0 empty:hidden">{error}</span>
         </label>
     )
 );

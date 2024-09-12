@@ -70,7 +70,7 @@ const variants = cva("isolate ring-0 outline-0 appearance-none flex flex-col gap
     defaultVariants: { position: "right", type: "dialog" },
 });
 
-export type DrawerProps = {
+export type ModalProps = {
     title?: Label;
     open: boolean;
     footer?: Label;
@@ -149,7 +149,7 @@ const Draggable = (props: DraggableProps) => {
 
 const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
-export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: PropsWithChildren<DrawerProps>) => {
+export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: PropsWithChildren<ModalProps>) => {
     const headingId = useId();
     const descriptionId = useId();
     const isDesktop = useMediaQuery("(min-width: 48rem)");

@@ -14,10 +14,10 @@ import {
 } from "@floating-ui/react";
 import Fuzzy from "fuzzy-search";
 import { ChevronDown } from "lucide-react";
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { usePrevious } from "../../hooks/use-previous";
 import { useTranslations } from "../../hooks/use-translate-context";
-import { css, dispatchInput } from "../../lib/dom";
+import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
@@ -32,6 +32,7 @@ export const Option = forwardRef<HTMLLIElement, ItemProps>(({ selected, active, 
     <li {...rest} ref={ref} role="option" aria-selected={selected} className="w-full border-b border-tooltip-border last:border-transparent">
         <button
             type="button"
+            data-value={option.value}
             onClick={onClick as any}
             aria-selected={selected}
             className={`w-full cursor-pointer p-2 text-left ${selected ? "bg-primary text-primary-foreground" : ""} ${active ? "bg-primary-subtle text-primary-foreground" : ""}`}
@@ -90,15 +91,19 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const innerOptions: OptionProps[] =
             dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
-        useImperativeHandle(externalRef, () => ref.current!);
 
         const pattern = dynamicOption
             ? undefined
             : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
         useEffect(() => {
+            const input = refs.reference.current as HTMLInputElement;
+            if (!input) return;
+            return initializeInputDataset(input);
+        }, []);
+
+        useEffect(() => {
             if (props.value) {
-                setValue(props.value);
                 const item = options.find((x) => x.value === props.value);
                 setValue(item?.label ?? props.value);
             }
@@ -122,9 +127,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 }),
             ],
         });
-
-        useImperativeHandle(externalRef, () => refs.domReference?.current!, [refs]);
-
         const transitions = useTransitionStyles(context, transitionStyles);
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
             useRole(context, { role: "listbox" }),
@@ -151,6 +153,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const onSelect = (opt: OptionProps) => {
             setValue(opt.value);
+            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", opt.value);
             setLabel(opt.label ?? "");
             const fakeEvent = dispatchInput(ref.current, opt.value);
             if (fakeEvent) props.onChange?.(fakeEvent as any);
@@ -174,6 +177,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const onClose = () => {
             setShadow("");
             setValue("");
+            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
             setLabel("");
             dispatchInput(refs.reference.current as HTMLInputElement, "");
             setOpen(false);
@@ -196,7 +200,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 name={props.name}
                 optionalText={optionalText}
                 placeholder={props.placeholder}
-                required={required}
+                required
                 rightLabel={rightLabel}
                 title={props.title}
                 right={
@@ -220,7 +224,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     </span>
                 }
             >
-                <input ref={ref} required={required} type="hidden" name={id} id={id} defaultValue={props.value || undefined} />
                 <input
                     {...getReferenceProps({
                         ...props,
@@ -248,8 +251,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             }
                         },
                     })}
+                    data-value={value}
+                    data-error={!!error}
                     data-name={id}
-                    data-ignore="ignore"
+                    data-target={id}
                     required={required}
                     value={open ? shadow : label || value}
                     aria-autocomplete="list"
@@ -260,6 +265,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         !!left ? "ps-8" : "",
                         props.className
                     )}
+                />
+                <input
+                    id={id}
+                    name={id}
+                    type="hidden"
+                    data-origin={id}
+                    ref={externalRef}
+                    required={required}
+                    defaultValue={props.value || value || undefined}
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (

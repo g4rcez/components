@@ -1,7 +1,7 @@
 "use client";
 import React, { forwardRef, useEffect, useRef } from "react";
 import MaskInput, { TheMaskProps } from "the-mask-input";
-import { css, mergeRefs } from "../../lib/dom";
+import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
 
@@ -39,7 +39,7 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
         useEffect(() => {
             if (inputRef.current === null) return;
             const input = inputRef.current;
-            const focus = () => input.setAttribute("data-initialized", "true");
+            const focus = initializeInputDataset(inputRef.current);
             const goNextInputImpl = (e: Event) => {
                 const event = e as KeyboardEvent;
                 if (event.key === "Enter" && input.enterKeyHint === "next") {
@@ -54,10 +54,9 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
                 }
             };
             input.addEventListener("keydown", goNextInputImpl);
-            input.addEventListener("focus", focus);
             return () => {
+                focus();
                 input.removeEventListener("keydown", goNextInputImpl);
-                input.removeEventListener("focus", focus);
             };
         }, []);
 
@@ -89,7 +88,7 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
                     id={id}
                     name={id}
                     className={css(
-                        "input text-foreground group h-11 w-full flex-1 rounded-md bg-transparent p-2 placeholder-input-mask outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        "input placeholder-input-mask group h-11 w-full flex-1 rounded-md bg-transparent p-2 text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         !!right ? "pe-4" : "",
                         !!left ? "ps-4" : "",
                         props.className

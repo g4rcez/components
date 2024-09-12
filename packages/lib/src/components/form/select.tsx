@@ -2,7 +2,7 @@
 import { ChevronDown } from "lucide-react";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translate-context";
-import { css, mergeRefs } from "../../lib/dom";
+import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 
@@ -45,12 +45,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         useEffect(() => {
             if (inputRef.current === null) return;
             const input = inputRef.current;
-            const focus = () => input.setAttribute("data-initialized", "true");
+            const focus = initializeInputDataset(inputRef.current);
             const change = () => input.setAttribute("data-selected", "true");
-            input.addEventListener("focus", focus);
             input.addEventListener("change", change);
             return () => {
-                input.removeEventListener("focus", focus);
+              focus()
                 input.removeEventListener("change", change);
             };
         }, []);
@@ -86,11 +85,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             >
                 <select
                     {...props}
-                    ref={mergeRefs(ref, inputRef)}
                     id={id}
                     name={id}
                     value={props.value}
                     required={required}
+                    ref={mergeRefs(ref, inputRef)}
                     data-selected={!!props.value || false}
                     defaultValue={props.value ? undefined : ""}
                     className={css(

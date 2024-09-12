@@ -29,8 +29,8 @@ The difference between then is:
 
 -   [x] TailwindCSS Plugin
 -   [x] Hook to work with forms
--   [ ] Alerts
+-   [x] Alerts
 -   [x] Notion Table
 -   [x] Dropdown
--   [ ] Dark mode toggler
--   [ ] Write docs
+-   [x] Dark mode toggler
+-   [x] Write docs

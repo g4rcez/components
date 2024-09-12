@@ -2,6 +2,7 @@ import { parse } from "qs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AllPaths, Is, setPath } from "sidekicker";
 import { z, ZodArray, ZodNumber } from "zod";
+import { DatePickerProps } from "../components";
 import { AutocompleteProps } from "../components/form/autocomplete";
 import { CheckboxProps } from "../components/form/checkbox";
 import { formReset } from "../components/form/form";
@@ -39,7 +40,10 @@ export const getSchemaShape = <T extends z.ZodObject<any>>(name: string, schema:
         return shape instanceof ZodArray ? shape.element : shape;
     }, schema);
 
-const getValueByType = (e: HTMLInputElement) => {
+type HTMLEntryElements = HTMLInputElement | HTMLSelectElement;
+
+const getValueByType = (e: HTMLEntryElements) => {
+    if (e.dataset.value) return e.dataset.value;
     if (e.type === "checkbox") return e.checked;
     if (e.type === "number") return e.valueAsNumber;
     return e.value;
@@ -55,13 +59,28 @@ export type UseFormSubmitParams<T> = {
     form: HTMLFormElement;
     reset: () => void;
     event: React.FormEvent<HTMLFormElement>;
-}
+};
 
 type UseFormSubmit<T> = (args: UseFormSubmitParams<T>) => any;
 
 export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
     const [errors, setErrors] = useState<Record<string, string | undefined> | null>(null);
-    const ref = useRef<Record<string, { element: HTMLElement; schema: z.ZodType }>>({});
+    const ref = useRef<Record<string, { element: HTMLInputElement | HTMLSelectElement; schema: z.ZodType }>>({});
+
+    const datepicker = <Props extends DatePickerProps>(name: AllPaths<z.infer<T>>, props?: Props): Props => {
+        const validator = getSchemaShape(name, schema);
+        return {
+            ...props,
+            name,
+            id: name,
+            required: !validator.isOptional(),
+            error: errors?.[name],
+            ref: (e: HTMLSelectElement) => {
+                if (e === null) return;
+                ref.current[name] = { element: e, schema: validator };
+            },
+        } as any;
+    };
 
     const select = <Props extends SelectProps | AutocompleteProps>(name: AllPaths<z.infer<T>>, props?: Props): Props => {
         const validator = getSchemaShape(name, schema);
@@ -111,38 +130,39 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
 
     useEffect(() => {
         const events = Object.values(ref.current).map((input) => {
-            if (input.element.dataset.ignore === "ignore")
-                return {
-                    input: null,
-                    hasInitialError: false,
-                    unsubscribe: () => {},
-                };
-            const validation = input.schema.safeParse(getValueByType(input.element as any));
+            const element = input.element.dataset.origin
+                ? (document.querySelector(`[data-target=${input.element.name}]`) as HTMLEntryElements)
+                : (input.element as HTMLEntryElements);
+            const validation = input.schema.safeParse(getValueByType(element));
             const onBlurField = (e: any) => {
-                const html = input.element as HTMLInputElement;
-                const name = html.name;
+                const name = element.dataset.target || element.name;
                 if (!name) return;
-                const value = getValueByType(e.target);
+                console.log(e);
+                const value = getValueByType(e.target) || (e.relatedTarget ? getValueByType(e.relatedTarget) : "");
                 const validation = input.schema.safeParse(value);
+                console.log({ name, value, validation });
                 if (validation.success) {
-                    html.setCustomValidity("");
+                    element.setCustomValidity("");
                     return setErrors((prev) => {
                         const { [name]: removed, ...rest } = prev || {};
                         return rest === null || Is.empty(rest) ? null : rest;
                     });
                 }
-                if (html.required) {
+                if (element.required) {
                     const errorMessage = validation.error.issues[0].message;
-                    html.setCustomValidity(errorMessage);
+                    element.setCustomValidity(errorMessage);
                     setErrors((prev) => ({ ...prev, [name]: errorMessage }));
                 }
             };
-            const event = input.element.tagName === "INPUT" ? "blur" : "change";
-            input.element.addEventListener(event, onBlurField);
+            element.addEventListener("blur", onBlurField);
+            if (element.tagName === "SELECT") element.addEventListener("change", onBlurField);
             return {
                 input,
-                hasInitialError: (input.element as HTMLInputElement).required ? !validation.success : false,
-                unsubscribe: () => input.element.removeEventListener(event, onBlurField),
+                hasInitialError: (element as HTMLInputElement).required ? !validation.success : false,
+                unsubscribe: () => {
+                    element.removeEventListener("blur", onBlurField);
+                    if (element.tagName === "SELECT") element.addEventListener("change", onBlurField);
+                },
             };
         });
         const hasErrors = events.some((x) => x.hasInitialError);
@@ -202,5 +222,5 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
         []
     );
 
-    return { input, checkbox, select, onSubmit, errors, onInvalid, disabled: errors !== null };
+    return { input, datepicker, checkbox, select, onSubmit, errors, onInvalid, disabled: errors !== null };
 };

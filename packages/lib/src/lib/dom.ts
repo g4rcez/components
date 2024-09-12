@@ -41,3 +41,9 @@ export const dispatchInput = (node: HTMLInputElement | undefined | null, value: 
         return event;
     }
 };
+
+export const initializeInputDataset = (input: HTMLInputElement | HTMLSelectElement) => {
+    const focus = () => input.setAttribute("data-initialized", "true");
+    input.addEventListener("focus", focus);
+    return () => input.removeEventListener("focus", focus);
+}

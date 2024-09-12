@@ -23,6 +23,7 @@ import { Is } from "sidekicker";
 import TheMaskInput, { Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
+import { css } from "../../lib/dom";
 import { Resizable } from "../core/resizable";
 
 const transition: Transition = { type: "spring", bounce: 0.1, duration: 0.3 };
@@ -45,7 +46,7 @@ export type CalendarProps = {
     locale?: Locales;
     markToday?: boolean;
     autoFocusToday?: boolean;
-    onChange?: (d: Date) => void;
+    onChange?: (d: Date | undefined) => void;
 };
 
 const createDays = (month: Date) => {
@@ -176,7 +177,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
             d.setFullYear(+y);
             return d;
         });
-    }, 700);
+    }, 1200);
 
     const onChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
@@ -190,9 +191,9 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                 <div className="flex flex-col justify-center rounded text-center">
                     <Resizable>
                         <AnimatePresence
-                            presenceAffectsLayout
-                            mode="popLayout"
                             initial={false}
+                            mode="popLayout"
+                            presenceAffectsLayout
                             custom={state.direction}
                             onExitComplete={dispatch.onExitComplete}
                         >
@@ -208,14 +209,14 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                     <motion.span
                                         variants={variants}
                                         custom={state.direction}
-                                        className="absolute z-normal isolate inset-0 flex items-center justify-center font-semibold"
+                                        className="absolute inset-0 isolate z-normal flex items-center justify-center font-semibold"
                                     >
-                                        <span className="w-fit flex items-center justify-center gap-0.5 py-1">
+                                        <span className="flex w-fit items-center justify-center gap-0.5 py-1">
                                             <select
                                                 style={{ width: `${monthString.length}ch` }}
                                                 value={monthString}
                                                 onChange={dispatch.onChangeMonth}
-                                                className="appearance-none capitalize bg-transparent proportional-nums hover:text-primary cursor-pointer w-fit"
+                                                className="w-fit cursor-pointer appearance-none bg-transparent capitalize proportional-nums hover:text-primary"
                                             >
                                                 {state.months}
                                             </select>
@@ -226,7 +227,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                                 placeholder="YYYY"
                                                 onChange={onChangeYear}
                                                 style={{ width: `${state.year.length}ch` }}
-                                                className="w-16 bg-transparent appearance-none hover:text-primary cursor-pointer"
+                                                className="w-16 cursor-pointer appearance-none bg-transparent hover:text-primary"
                                             />
                                         </span>
                                     </motion.span>
@@ -247,7 +248,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                 </header>
                                 <div className="mt-4 grid grid-cols-7 gap-y-4">
                                     {state.week.map((dayOfWeek) => (
-                                        <span key={dayOfWeek.toString()} className="font-medium capitalize text-sm">
+                                        <span key={dayOfWeek.toString()} className="text-sm font-medium capitalize">
                                             {dayOfWeek.toLocaleDateString(locale, { weekday: "short" })}
                                         </span>
                                     ))}
@@ -256,7 +257,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                     onKeyDown={dispatch.onKeyDown}
                                     variants={variants}
                                     custom={state.direction}
-                                    className="mt-4 pb-2 grid grid-cols-7 gap-y-4"
+                                    className="mt-4 grid grid-cols-7 gap-y-4 pb-2"
                                 >
                                     {days.map((day) => {
                                         const key = day.toISOString();
@@ -265,14 +266,16 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                         const disabledByFn = disabledDate?.(day) || false;
                                         const disableDate = !isSameMonth(day, state.date) || disabledByFn;
                                         return (
-                                            <li key={key} className="w-full flex items-center justify-center">
+                                            <li key={key} className="flex w-full items-center justify-center">
                                                 <button
                                                     type="button"
                                                     data-date={key}
                                                     disabled={disabledByFn}
                                                     onClick={dispatch.onSelectDate}
                                                     data-view={state.date.getMonth().toString()}
-                                                    className={`size-8 disabled:cursor-not-allowed rounded-full font-semibold flex items-center justify-center proportional-nums ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`}
+                                                    className={css(
+                                                        `flex size-8 items-center justify-center rounded-full font-semibold proportional-nums disabled:cursor-not-allowed ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`
+                                                    )}
                                                 >
                                                     {day.getDate()}
                                                 </button>
@@ -284,8 +287,8 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                         </AnimatePresence>
                     </Resizable>
                 </div>
-                <footer className="text-center text-primary mt-2">
-                    <button className="hover:scale-105 transition-transform duration-300" type="button" onClick={dispatch.setToday}>
+                <footer className="mt-2 text-center text-primary">
+                    <button className="duration-300 transition-transform hover:scale-105" type="button" onClick={dispatch.setToday}>
                         Today
                     </button>
                 </footer>
