@@ -93,7 +93,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     data-selected={!!props.value || false}
                     defaultValue={props.value ? undefined : ""}
                     className={css(
-                        "input select group h-11 w-full flex-1 rounded-md bg-transparent p-2 text-foreground placeholder-input-placeholder outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        "input appearance-none select group h-10 py-1 px-2 w-full flex-1 rounded-md bg-transparent text-foreground placeholder-input-placeholder outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         "data-[selected=false]:text-input-placeholder",
                         props.className
                     )}

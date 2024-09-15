@@ -1,10 +1,11 @@
 "use client";
 import { motion, useMotionValue } from "framer-motion";
-import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef } from "react";
+import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
 import { useReactive } from "../../hooks/use-reactive";
-import { Label } from "../../types";
+import { Label, SetState } from "../../types";
+import { Button } from "../core/button";
+import { Modal } from "../floating/modal";
 import { Card } from "./card";
-import { Select } from "../form/select";
 
 export type TabsProps = {
     active: string;
@@ -14,6 +15,37 @@ export type TabsProps = {
 };
 
 const Context = createContext<string>("");
+
+const SelectTab = (props: { items: any[]; active: string; setActive: SetState<string> }) => {
+    const [view, setView] = useState(false);
+    const title = props.items.find((x) => {
+        const inner = x.props as TabProps;
+        return inner.id === props.active;
+    });
+    return (
+        <div className="my-4 px-8 flex min-w-full text-center lg:hidden">
+            <Button className="min-w-full" onClick={() => setView(true)}>{title?.props?.title}</Button>
+            <Modal closable forceType onChange={setView} open={view} type="dialog">
+                <ul className="mt-4 space-y-4">
+                    {props.items.map((x: any) => {
+                        const inner = x.props as TabProps;
+                        const onClick = () => {
+                            props.setActive(inner.id);
+                            setView(false);
+                        };
+                        return (
+                            <li key={inner.id} className="min-w-full">
+                                <Button className="w-full" onClick={onClick} theme={inner.id === props.active ? "primary" : "secondary"}>
+                                    {inner.title as any}
+                                </Button>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </Modal>
+        </div>
+    );
+};
 
 export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     const [active, setActive] = useReactive(props.active);
@@ -68,32 +100,21 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     return (
         <Context.Provider value={active}>
             <Card
-                className={props.className}
                 container="pt-0"
+                className={props.className}
                 header={
-                    <header ref={ref} className="border-b border-card-border relative mb-2">
+                    <header ref={ref} className="relative mb-2 border-b border-card-border">
                         <motion.div
                             layout
                             initial={false}
                             aria-hidden="true"
                             style={{ left, width }}
                             transition={{ type: "tween", left, width }}
-                            className="w-28 h-0.5 bg-primary absolute bottom-0 duration-300 transition-all hidden lg:block"
+                            className="duration-300 absolute bottom-0 hidden h-0.5 w-28 bg-primary transition-all lg:block"
                         />
                         <nav>
-                            <Select
-                                onChange={(e) => setActive(e.target.value)}
-                                value={active}
-                                hideLeft
-                                container="container rounded mt-4 lg:mt-0 min-w-full lg:hidden inline-flex px-6 w-full mx-auto"
-                                labelClassName="border-transparent rounded-none"
-                                rightLabel={null}
-                                options={items.map((x: any) => {
-                                    const inner = x.props as TabProps;
-                                    return { value: inner.id, label: inner.label ?? inner.title };
-                                })}
-                            />
-                            <ul className="hidden lg:flex divide-x divide-card-border overflow-x-auto justify-between md:justify-start">
+                            <SelectTab setActive={setActive} items={items} active={active} />
+                            <ul className="hidden justify-between divide-x divide-card-border overflow-x-auto md:justify-start lg:flex">
                                 {items.map((x: any) => {
                                     const inner = x.props as TabProps;
                                     return (
@@ -101,13 +122,13 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             data-id={inner.id}
                                             key={`tab-header-${inner.id}`}
                                             data-active={active === inner.id}
-                                            className="data-[active=true]:text-primary w-full md:w-auto"
+                                            className="w-full data-[active=true]:text-primary md:w-auto"
                                         >
                                             <Render
                                                 data-id={inner.id}
                                                 onClick={onClick}
                                                 aria-current="page"
-                                                className="px-10 py-4 block font-medium w-full whitespace-nowrap"
+                                                className="block w-full whitespace-nowrap px-10 py-4 font-medium"
                                                 href={props.useHash ? `#${inner.id}` : undefined}
                                             >
                                                 {inner.title as any}
@@ -128,7 +149,13 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
 
 const useTabs = () => useContext(Context);
 
-export type TabProps = { id: string; title: string; label?: undefined } | { id: string; title: Omit<Label, string>; label: string };
+export type TabProps =
+    | { id: string; title: string; label?: undefined }
+    | {
+          id: string;
+          title: Omit<Label, string>;
+          label: string;
+      };
 
 export const Tab = (props: PropsWithChildren<TabProps>) => {
     const active = useTabs();

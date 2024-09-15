@@ -16,11 +16,7 @@ const sections = [
     title: "Floating",
     items: [
       {
-        title: "<Dialog />",
-        href: "/docs/modal",
-      },
-      {
-        title: "<Drawer />",
+        title: "Drawer/Dialog",
         href: "/docs/modal",
       },
     ],
@@ -29,7 +25,7 @@ const sections = [
     title: "Form",
     items: [
       {
-        title: "<Input />",
+        title: "Input",
         href: "/docs/input",
       },
       {
@@ -45,7 +41,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
   return (
     <Fragment>
       <nav className="[grid-area:header] z-10 mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
-        <div className="container items-center mx-auto flex justify-between">
+        <div className="container px-4 items-center mx-auto flex justify-between">
           <Brand />
           <ToggleMode />
         </div>
@@ -88,7 +84,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                 {props.description}
               </p>
             </header>
-            <div ref={ref} className="min-w-full mt-10">
+            <div ref={ref} className="min-w-full mt-10 pb-8">
               {props.children}
             </div>
           </main>

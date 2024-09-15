@@ -1,8 +1,9 @@
 "use client";
-import React, { forwardRef, useId, useState } from "react";
-import { css } from "../../lib/dom";
+import React, { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
+import { useCallbackRef } from "../../hooks/use-callback-ref";
+import { css, dispatchInput } from "../../lib/dom";
 
-export type SwitchProps = Omit<React.ComponentProps<"input">, "onChange"> & {
+export type SwitchProps = React.ComponentProps<"input"> & {
     onCheck?: (nextValue: boolean) => void;
     error?: string;
     container?: string;
@@ -10,19 +11,39 @@ export type SwitchProps = Omit<React.ComponentProps<"input">, "onChange"> & {
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, container, error, ...props }: SwitchProps, ref) => {
     const id = useId();
-    const [innerChecked, setInnerChecked] = useState(false);
-    const checked = props.checked ?? innerChecked;
+    const [innerChecked, setInnerChecked] = useState(props.checked ?? false);
+    const checked = innerChecked;
+    const innerRef = useRef<HTMLInputElement>(null);
+    const stableOnChange = useCallbackRef(props.onChange);
+    useImperativeHandle(ref, () => innerRef.current!);
+
+    useEffect(() => {
+        if (innerRef.current !== null) {
+            if (stableOnChange.current) {
+                const onChange = (e: any) => {
+                    e.target.checked = !e.target.checked;
+                    stableOnChange.current && stableOnChange.current(e);
+                };
+                innerRef.current.addEventListener("change", onChange);
+                return () => innerRef.current?.removeEventListener("change", onChange);
+            }
+        }
+    }, []);
 
     const onCheck = (e: React.MouseEvent<HTMLButtonElement>) => {
         const button = e.target as HTMLButtonElement;
         const checked = !(button.dataset.checked === "true");
         setInnerChecked(checked);
         props?.onCheck?.(checked);
+        if (innerRef.current !== null) {
+            dispatchInput(innerRef.current, checked.toString());
+            innerRef.current.dispatchEvent(new Event("change", { bubbles: true }));
+        }
     };
 
     return (
         <fieldset className={css("flex flex-wrap items-center", container)}>
-            <input {...props} ref={ref} hidden type="checkbox" checked={checked} onChange={(e) => setInnerChecked(e.target.checked)} />
+            <input {...props} ref={innerRef} hidden type="checkbox" checked={checked} onChange={(e) => setInnerChecked(e.target.checked)} />
             <button
                 type="button"
                 role="switch"

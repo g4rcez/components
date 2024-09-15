@@ -30,22 +30,24 @@ type Animations = {
 
 const animationDuration = "600ms";
 
-const createDrawerAnimation = (side: DrawerSides) => ({
-    initial: { [side]: "-60%", opacity: 0.8, animationDuration },
-    enter: { [side]: 0, opacity: 1, animationDuration },
-    exit: { [side]: ["-50%", "-90%"], opacity: 0, animationDuration },
-});
+const drawerLeft = {
+    initial: { translateX: ["-30%", "0%"], opacity: 0.8, animationDuration },
+    enter: { translateX: ["-30%", "0%"], opacity: 1, animationDuration },
+    exit: { translateX: ["0%", "-30%"], opacity: 0, animationDuration },
+};
 
-const drawerLeft = createDrawerAnimation("left");
-
-const drawerRight = createDrawerAnimation("right");
+const drawerRight = {
+    initial: { translateX: ["30%", "0%"], opacity: 0.8 },
+    enter: { translateX: "0%", opacity: 1, animationDuration },
+    exit: { translateX: ["0%", "30%"], opacity: 0, animationDuration },
+} satisfies Record<string, TargetAndTransition>;
 
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     sheet: {
-        initial: { opacity: 0.5, scaleY: 0.5, animationDuration, originY: "bottom" },
-        enter: { opacity: 1, scaleY: 1, animationDuration, originY: "bottom" },
-        exit: { opacity: 0.1, scaleY: 0.5, animationDuration, originY: "bottom" },
+        initial: { opacity: 0.5, translateY: "25%", animationDuration, originY: "bottom" },
+        enter: { opacity: 1, translateY: "0%", animationDuration, originY: "bottom" },
+        exit: { opacity: 0.1, translateY: "50%", animationDuration, originY: "bottom" },
     },
     dialog: {
         initial: { opacity: 0, scale: 0.95, animationDuration },
@@ -54,12 +56,12 @@ const animations: Animations = {
     },
 };
 
-const variants = cva("isolate ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background", {
+const variants = cva("isolate z-floating border border-card-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background", {
     variants: {
         type: {
-            drawer: "max-h-screen max-w-[90%] w-auto h-screen min-h-0",
-            dialog: "max-h-[calc(100lvh-10%)] container h-min rounded-lg py-8",
-            sheet: "w-full absolute bottom-0 max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
+            drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
+            dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-8",
+            sheet: "w-screen absolute bottom-0 h-[85vh] max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
         },
         position: {
             none: "",
@@ -77,9 +79,11 @@ export type ModalProps = {
     resizer?: boolean;
     asChild?: boolean;
     closable?: boolean;
-    type?: "dialog" | "drawer";
+    overlayClickClose?: boolean;
     position?: "left" | "right";
     trigger?: Label | React.FC<any>;
+    forceType?: boolean;
+    type?: "dialog" | "drawer" | "sheet";
     onChange: (nextState: boolean) => void;
 };
 
@@ -134,39 +138,48 @@ const Draggable = (props: DraggableProps) => {
             whileDrag={{ cursor: "grabbing" }}
             className={css(
                 "absolute rounded-lg",
-                props.sheet ? "cursor-row-resize" : "bg-floating-border cursor-col-resize",
+                props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
                 props.sheet
-                    ? "w-full py-2 top-1 h-3 flex justify-center"
+                    ? "top-1 flex h-3 w-full justify-center py-2"
                     : props.position === "left"
-                      ? "top-1/2 right-5 h-10 w-2"
-                      : "top-1/2 left-2 h-10 w-2"
+                      ? "right-5 top-1/2 h-10 w-2"
+                      : "left-2 top-1/2 h-10 w-2"
             )}
         >
-            {props.sheet ? <div className="bg-floating-border rounded-lg w-1/4 h-2" /> : null}
+            {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
         </motion.div>
     );
 };
 
 const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
-export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: PropsWithChildren<ModalProps>) => {
+export const Modal = ({
+    type: _type = "dialog",
+    resizer = true,
+    overlayClickClose = false,
+    forceType = false,
+    closable = true,
+    ...props
+}: PropsWithChildren<ModalProps>) => {
     const headingId = useId();
     const descriptionId = useId();
     const isDesktop = useMediaQuery("(min-width: 48rem)");
-    const useResizer = _type === "drawer" || !isDesktop;
-    const position = isDesktop ? (_type === "drawer" ? props.position : positions[_type]) : positions.sheet;
-    const func = isDesktop ? animations[_type] : animations.sheet;
+    const useResizer = _type !== "dialog";
+    const position = isDesktop ? (_type === "drawer" ? props.position : positions[_type]) : forceType ? positions[_type] : positions.sheet;
+    const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
     const animation = typeof func === "function" ? func(position as DrawerSides) : func;
-    const type = isDesktop ? _type : "sheet";
+    const type = isDesktop ? _type : forceType ? _type : "sheet";
 
     const { refs, context } = useFloating({ open: props.open, onOpenChange: props.onChange });
     const click = useClick(context);
     const role = useRole(context);
-    const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: false });
+    const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: overlayClickClose });
     const { getReferenceProps, getFloatingProps } = useInteractions([click, role, dismiss]);
     const Trigger = props.trigger as any;
 
     const value = useMotionValue<number | undefined>(undefined);
+
+    const onClose = () => props.onChange(false);
 
     return (
         <Fragment>
@@ -183,12 +196,12 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
             ) : null}
             <FloatingPortal>
                 <AnimatePresence presenceAffectsLayout>
-                    {props.open && (
+                    {props.open ? (
                         <FloatingOverlay
                             lockScroll
-                            className={`relative !overflow-clip h-[100dvh] z-floating bg-floating-overlay/70 ${type === "drawer" ? "" : "grid justify-center p-8"}`}
+                            className={`z-overlay inset-0 isolate h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "grid items-end justify-center lg:items-center"}`}
                         >
-                            <FloatingFocusManager modal closeOnFocusOut context={context}>
+                            <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                                 <motion.div
                                     animate="enter"
                                     aria-describedby={descriptionId}
@@ -197,47 +210,47 @@ export const Modal = ({ type: _type = "dialog", resizer = true, ...props }: Prop
                                     exit="exit"
                                     initial="initial"
                                     ref={refs.setFloating}
+                                    style={type === "drawer" ? { width: value } : { height: value }}
                                     variants={animation}
-                                    style={isDesktop ? { width: value } : { height: value }}
                                     {...getFloatingProps()}
                                 >
-                                    {useResizer && resizer ? (
-                                        <Draggable
-                                            onChange={props.onChange}
-                                            sheet={!isDesktop}
-                                            value={value}
-                                            parent={refs.floating}
-                                            position={position as DrawerSides}
-                                        />
-                                    ) : null}
-                                    {props.title || props.closable ? (
-                                        <header className="w-full relative">
+                                    {props.title ? (
+                                        <header className="relative w-full">
                                             {props.title ? (
-                                                <h2 className="px-8 pb-4 border-b border-floating-border text-3xl font-medium leading-relaxed">
+                                                <h2 className="border-b border-floating-border px-8 pb-4 text-3xl font-medium leading-relaxed">
                                                     {props.title}
                                                 </h2>
                                             ) : null}
-                                            {props.closable !== false ? (
-                                                <nav className="absolute -top-2.5 lg:-top-1 right-4 lg:right-8">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => props.onChange(false)}
-                                                        className="p-1 transition-colors opacity-70 hover:opacity-100 hover:text-danger focus:text-danger"
-                                                    >
-                                                        <XIcon />
-                                                    </button>
-                                                </nav>
-                                            ) : null}
                                         </header>
                                     ) : null}
-                                    <section className="flex-1 px-8 overflow-y-auto">{props.children}</section>
+                                    <section className="py-1 flex-1 overflow-y-auto px-8">{props.children}</section>
                                     {props.footer ? (
-                                        <footer className="px-8 border-t border-floating-border pt-4 w-full">{props.footer}</footer>
+                                        <footer className="w-full border-t border-floating-border px-8 pt-4">{props.footer}</footer>
+                                    ) : null}
+                                    {closable ? (
+                                        <nav className="absolute right-4 top-1">
+                                            <button
+                                                type="button"
+                                                onClick={onClose}
+                                                className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                            >
+                                                <XIcon />
+                                            </button>
+                                        </nav>
+                                    ) : null}
+                                    {useResizer && resizer ? (
+                                        <Draggable
+                                            onChange={props.onChange}
+                                            parent={refs.floating}
+                                            position={position as DrawerSides}
+                                            sheet={type === "sheet"}
+                                            value={value}
+                                        />
                                     ) : null}
                                 </motion.div>
                             </FloatingFocusManager>
                         </FloatingOverlay>
-                    )}
+                    ) : null}
                 </AnimatePresence>
             </FloatingPortal>
         </Fragment>

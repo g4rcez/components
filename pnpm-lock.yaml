@@ -18,8 +18,8 @@ importers:
   packages/docs:
     dependencies:
       '@g4rcez/components':
-        specifier: workspace:*
-        version: link:../lib/dist
+        specifier: ^0.0.32
+        version: 0.0.32(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       date-fns:
         specifier: 3.6.0
         version: 3.6.0
@@ -432,6 +432,13 @@ packages:
 
   '@floating-ui/utils@0.2.7':
     resolution: {integrity: sha512-X8R8Oj771YRl/w+c1HqAC1szL8zWQRwFvgDwT129k9ACdBoud/+/rX9V0qiMl6LWUdP9voC2nDVZYPMQQsb6eA==}
+
+  '@g4rcez/components@0.0.32':
+    resolution: {integrity: sha512-ctFoY/Zt7a2Hb7bCYwLEiRNIsmo82CQ3DeGCbm2m26yIUIpMfx6TLTP7vSHMz678Ccl3VVVsIi+3gnt9V00Zaw==}
+    engines: {node: '>=20.14.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1914,6 +1921,34 @@ snapshots:
       tabbable: 6.2.0
 
   '@floating-ui/utils@0.2.7': {}
+
+  '@g4rcez/components@0.0.32(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@floating-ui/react': 0.26.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot': 1.1.0(@types/react@18.3.3)(react@18.3.1)
+      class-variance-authority: 0.7.0
+      clsx: 2.1.1
+      date-fns: 3.6.0
+      framer-motion: 11.3.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      fuzzy-search: 3.2.1
+      linq-arrays: 3.2.5
+      lucide-react: 0.414.0(react@18.3.1)
+      pretty-bytes: 6.1.1
+      qs: 6.12.3
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-dropzone: 14.2.3(react@18.3.1)
+      react-use-measure: 2.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-virtuoso: 4.7.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      sidekicker: 0.1.8
+      storage-manager-js: 4.2.6-5
+      tailwind-merge: 2.4.0
+      the-mask-input: 3.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      use-typed-reducer: 4.2.1(react@18.3.1)
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+      - '@types/react'
 
   '@isaacs/cliui@8.0.2':
     dependencies:

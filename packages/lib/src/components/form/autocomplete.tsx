@@ -260,7 +260,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     aria-autocomplete="list"
                     autoComplete="off"
                     className={css(
-                        "input placeholder-input-mask group h-11 w-full flex-1 rounded-md bg-transparent p-2 text-base text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        "input placeholder-input-mask group h-10 py-1 px-2 w-full flex-1 rounded-md bg-transparent text-base text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         !!right || shadow ? "pe-12" : "",
                         !!left ? "ps-8" : "",
                         props.className

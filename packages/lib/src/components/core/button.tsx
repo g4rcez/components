@@ -22,6 +22,7 @@ const buttonVariants = cva(
             },
             theme: {
                 raw: "",
+                primary: "bg-primary text-primary-foreground",
                 main: "bg-primary text-primary-foreground",
                 warn: "bg-warn text-warn-foreground",
                 danger: "bg-danger text-danger-foreground",
@@ -57,8 +58,8 @@ export const Button: <T extends React.ElementType = "button">(props: ButtonProps
             onClick={disabled ? undefined : props.onClick}
             className={css(buttonVariants({ size, rounded, theme }), className)}
         >
-            {props.children}
             {icon}
+            {props.children}
         </Polymorph>
     );
 }) as never;

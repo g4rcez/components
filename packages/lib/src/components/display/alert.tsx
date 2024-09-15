@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { HTMLMotionProps, motion } from "framer-motion";
-import { CheckCircleIcon, CircleAlertIcon, XIcon } from "lucide-react";
+import { CheckCircleIcon, CircleAlertIcon, InfoIcon, XIcon } from "lucide-react";
 import React, { forwardRef, PropsWithChildren } from "react";
 import { css } from "../../lib/dom";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
@@ -24,7 +24,7 @@ export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
         layout
         layoutRoot
         layoutScroll
-        initial={!props.open}
+        initial={false}
         animate={props.open.toString()}
         aria-hidden={!props.open}
         className={props.className}
@@ -42,6 +42,7 @@ const alertVariants = cva("px-4 py-4 border relative rounded-lg text-sm", {
             neutral: "border-border bg-background",
             danger: "text-danger-contrast bg-danger/10 border-danger/50",
             success: "text-success-foreground bg-success/10 border-success/50",
+            info: "text-info bg-info/10 border-info/50",
         },
     },
     defaultVariants: { theme: "neutral" },
@@ -78,6 +79,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                 >
                     <h4 className="mb-2 flex items-center gap-2">
                         {theme === "success" ? <CheckCircleIcon size={20} /> : null}
+                        {theme === "info" ? <InfoIcon size={20} /> : null}
                         {theme === "danger" ? <CircleAlertIcon size={20} /> : null}
                         <span className="tracking-3 text-balance text-lg font-semibold">{props.title}</span>
                     </h4>

@@ -9,7 +9,7 @@ export const RootLayout = (props: PropsWithChildren) => {
   const stylesLight = createTheme(defaultLightTheme);
   const stylesDark = createTheme(defaultDarkTheme, "dark");
   return (
-    <html className="bg-background text-foreground">
+    <html className="bg-background text-foreground dark">
       <head>
         <title>Components</title>
         <style>{stylesLight}</style>
