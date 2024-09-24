@@ -60,7 +60,7 @@ const variants = cva("isolate z-floating border border-card-border ring-0 outlin
     variants: {
         type: {
             drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
-            dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-8",
+            dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
             sheet: "w-screen absolute bottom-0 h-[85vh] max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
         },
         position: {
@@ -217,7 +217,7 @@ export const Modal = ({
                                     {props.title ? (
                                         <header className="relative w-full">
                                             {props.title ? (
-                                                <h2 className="border-b border-floating-border px-8 pb-4 text-3xl font-medium leading-relaxed">
+                                                <h2 className="border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed">
                                                     {props.title}
                                                 </h2>
                                             ) : null}
