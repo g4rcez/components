@@ -1,24 +1,12 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Button } from "../../../../../lib/src";
 import { useNotification } from "../../../../../lib/src/components/display/notifications";
 
 export default function GetStartedPage() {
   const notification = useNotification();
   const count = useRef(0);
-
-  useEffect(() => {
-    const fns = [
-      notification(
-        <p>
-          Hack the <b>PLANET</b>
-        </p>,
-        { title: "Title", theme: "warn" },
-      ),
-    ];
-    return () => void fns.map((x) => x.close());
-  }, []);
 
   return (
     <DocsLayout
@@ -39,6 +27,7 @@ export default function GetStartedPage() {
           count.current = c;
           notification(`I'm a ${c} index`, {
             duration: 20000,
+            title: "Title",
           });
         }}
       >

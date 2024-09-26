@@ -17,7 +17,7 @@ export const RootLayout = (props: PropsWithChildren) => {
         <style>{stylesDark}</style>
       </head>
       <body>
-        <Notifications max={6} duration={1000000}>{props.children}</Notifications>
+        <Notifications max={6} duration={10000000}>{props.children}</Notifications>
       </body>
     </html>
   );
