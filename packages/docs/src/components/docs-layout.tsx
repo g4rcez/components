@@ -1,9 +1,9 @@
 "use client";
 import { Brand } from "@/components/brand";
 import { ToggleMode } from "@/components/toggle-mode";
-import { type Label } from "@g4rcez/components";
 import Link from "next/link";
 import { Fragment, PropsWithChildren, useRef } from "react";
+import { type Label } from "../../../lib/src";
 
 type Props = {
   title: Label;
@@ -40,7 +40,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
   const ref = useRef<HTMLDivElement | null>(null);
   return (
     <Fragment>
-      <nav className="[grid-area:header] z-10 mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
+      <nav className="[grid-area:header] isolate mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
         <div className="container px-4 items-center mx-auto flex justify-between">
           <Brand />
           <ToggleMode />

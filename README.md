@@ -25,12 +25,8 @@ The difference between then is:
 -   Select is a native component with styles
 -   Autocomplete uses [floating-ui](https://floating-ui.com/) to provide options list
 
-# Tasks
+# Roadmap
 
--   [x] TailwindCSS Plugin
--   [x] Hook to work with forms
--   [x] Alerts
--   [x] Notion Table
--   [x] Dropdown
--   [x] Dark mode toggler
--   [x] Write docs
+1. Documentation
+2. IntersectionArea: component just render when appear at screen
+3. Refactor component architecture to seems like shadcn: allows you to copy and paste implementations

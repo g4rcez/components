@@ -33,24 +33,28 @@ export const defaultDarkTheme: DesignTokens = {
             subtle: "hsla(219, 93%, 77%)",
             hover: "hsla(219, 83%, 41%)",
             foreground: "hsla(210, 40%, 98%)",
+            notification: "hsla(219, 91%, 59%)",
         },
         warn: {
             DEFAULT: "hsla(27, 96%, 61%)",
             subtle: "hsla(45, 95%, 66%)",
             hover: "hsla(21, 90%, 48%)",
             foreground: "hsla(210, 40%, 98%)",
+            notification: "hsla(32, 65%, 75%)",
         },
         danger: {
             DEFAULT: "hsla(358, 65%, 57%)",
             subtle: "hsla(0, 94%, 81%)",
             hover: "hsla(0, 82%, 47%)",
             foreground: "hsla(210, 40%, 98%)",
+            notification: "hsla(358, 40%, 23%)",
         },
         success: {
             DEFAULT: "hsla(160, 73%, 36%)",
             subtle: "hsla(160, 75%, 75%)",
             hover: "hsla(160, 91%, 27%)",
             foreground: "hsla(160, 91%, 50%)",
+            notification: "hsla(161,62%,17%)"
         },
         input: {
             border: "hsla(240, 4%, 25%)",
@@ -117,24 +121,28 @@ export const defaultLightTheme: DesignTokens = {
             subtle: "hsla(219, 70%, 90%)",
             hover: "hsla(219, 83%, 41%)",
             foreground: "hsla(210, 34%, 96%)",
+            notification: "hsla(219, 91%, 59%)",
         },
         danger: {
             DEFAULT: "hsla(0, 82%, 63%)",
             subtle: "hsla(0, 96%, 95%)",
             hover: "hsla(0, 82%, 47%)",
             foreground: "hsla(210, 34%, 96%)",
+            notification: "hsla(0, 100%, 87%)",
         },
         warn: {
             DEFAULT: "hsla(27, 100%, 70%)",
             subtle: "hsla(45, 95%, 80%)",
             hover: "hsla(29, 85%, 50%)",
             foreground: "hsla(210, 34%, 96%)",
+            notification: "hsla(27, 85%, 92%)",
         },
         success: {
             DEFAULT: "hsla(160, 73%, 36%)",
             subtle: "hsla(160, 75%, 90%)",
             hover: "hsla(160, 91%, 27%)",
             foreground: "hsla(160, 91%, 17%)",
+            notification: "hsla(160, 75%, 80%)",
         },
         input: {
             border: "hsla(218, 22%, 80%)",

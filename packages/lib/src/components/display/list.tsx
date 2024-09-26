@@ -1,7 +1,17 @@
-import { AnimatePresence, motion } from "framer-motion";
+import {
+    FloatingContext,
+    FloatingFocusManager,
+    FloatingOverlay,
+    FloatingPortal,
+    useClick,
+    useDismiss,
+    useFloating,
+    useInteractions,
+    useRole,
+} from "@floating-ui/react";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import { XIcon } from "lucide-react";
-import React, { Fragment, PropsWithChildren, useCallback, useEffect, useId, useRef, useState } from "react";
-import { useOnClickOutside } from "../../hooks/use-click-outside";
+import React, { Fragment, PropsWithChildren, useCallback, useId, useState } from "react";
 import { Label } from "../../types";
 
 type AnimatedItemProps = {
@@ -16,65 +26,77 @@ type IdAnimatedItem = AnimatedItemProps & { id: string };
 
 type AnimatedListProps = {};
 
-const FloatItem = ({ item, setter }: { item: IdAnimatedItem | null; setter: () => void }) => {
-    const ref = useRef(null);
-    useOnClickOutside(ref, setter);
+type FloatItemProps = {
+    setter: () => void;
+    context: FloatingContext;
+    item: IdAnimatedItem | null;
+    get: ReturnType<typeof useInteractions>["getFloatingProps"];
+    refs: { setFloating: any };
+};
 
-    useEffect(() => {
-        function onKeyDown(event: any) {
-            if (event.key === "Escape") setter();
-        }
-
-        window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-    }, []);
-
+const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => {
     return (
-        <Fragment>
-            <AnimatePresence>
-                {item ? (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="pointer-events-none absolute inset-0 z-floating h-screen w-screen bg-floating-overlay/70"
-                    />
-                ) : null}
-            </AnimatePresence>
-            <AnimatePresence>
-                {item ? (
-                    <div className="absolute inset-0 z-tooltip flex items-center justify-center">
-                        <motion.div
-                            layout
-                            ref={ref}
-                            layoutId={`item-${item.id}`}
-                            className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow"
-                        >
-                            <nav className="absolute right-4 top-1 lg:right-2">
-                                <button
-                                    type="button"
-                                    onClick={setter}
-                                    className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
-                                >
-                                    <XIcon />
-                                </button>
-                            </nav>
-                            <header className="flex w-full flex-wrap items-center justify-between gap-2">
-                                <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
-                                <p className="text-sm leading-snug text-secondary">{item.description}</p>
-                            </header>
-                            {item.children}
-                        </motion.div>
-                    </div>
-                ) : null}
-            </AnimatePresence>
-        </Fragment>
+        <FloatingPortal>
+            <MotionConfig reducedMotion="user" transition={{ type: "tween", stiffness: 25, duration: 0.2 }}>
+                <AnimatePresence presenceAffectsLayout>
+                    <AnimatePresence>
+                        {item ? (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="pointer-events-none fixed inset-0 top-0 z-floating h-screen w-screen bg-floating-overlay/70"
+                            />
+                        ) : null}
+                    </AnimatePresence>
+                    <AnimatePresence>
+                        {item ? (
+                            <FloatingOverlay lockScroll className="absolute inset-0 z-tooltip flex items-center justify-center">
+                                <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
+                                    <motion.div
+                                        layout
+                                        layoutId={`item-${item.id}`}
+                                        className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow"
+                                        ref={refs.setFloating}
+                                        {...get()}
+                                    >
+                                        <nav className="absolute right-4 top-1 lg:right-2">
+                                            <button
+                                                type="button"
+                                                onClick={setter}
+                                                className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                            >
+                                                <XIcon />
+                                            </button>
+                                        </nav>
+                                        <header className="flex w-full flex-wrap items-center justify-between gap-2">
+                                            <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
+                                            <p className="text-sm leading-snug text-secondary">{item.description}</p>
+                                        </header>
+                                        {item.children}
+                                    </motion.div>
+                                </FloatingFocusManager>
+                            </FloatingOverlay>
+                        ) : null}
+                    </AnimatePresence>
+                </AnimatePresence>
+            </MotionConfig>
+        </FloatingPortal>
     );
 };
 
 export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
     const [selected, setSelected] = useState<IdAnimatedItem | null>(null);
     const id = useId();
+    const { context, refs } = useFloating({
+        open: selected !== null,
+        transform: true,
+        onOpenChange: (open) => (open ? undefined : setSelected(null)),
+    });
+    const click = useClick(context);
+    const role = useRole(context);
+    const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: true });
+    const { getFloatingProps } = useInteractions([click, role, dismiss]);
 
     const clear = useCallback(() => {
         setSelected(null);
@@ -84,19 +106,18 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
 
     return (
         <Fragment>
-            <FloatItem item={selected} setter={clear} />
+            <FloatItem refs={refs} context={context} get={getFloatingProps} item={selected} setter={clear} />
             <ul role="list">
                 {items.map((x, index) => {
                     const item: AnimatedItemProps = (x as any).props;
-                    const isLast = index === items.length - 1;
                     const innerId = `${id}-${index}`;
                     const setter = () => setSelected({ ...item, id: innerId });
                     const Leading = item.leading;
                     return (
                         <motion.li
                             layout
-                            layoutId={`item-${innerId}`}
                             key={innerId}
+                            layoutId={`item-${innerId}`}
                             className={`border-b border-card-border py-2 last:border-transparent`}
                         >
                             <motion.div layoutId={`toast-${innerId}`} className="relative">

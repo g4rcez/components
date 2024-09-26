@@ -1,11 +1,11 @@
 import {
-    autoUpdate,
-    flip,
     FloatingFocusManager,
     FloatingList,
     FloatingNode,
     FloatingPortal,
     FloatingTree,
+    autoUpdate,
+    flip,
     offset,
     safePolygon,
     shift,

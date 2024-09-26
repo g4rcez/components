@@ -1,9 +1,10 @@
-import { createTheme } from "@g4rcez/components/styles/design-tokens";
+import { PropsWithChildren } from "react";
+import { Notifications } from "../../../lib/src/components/display/notifications";
+import { createTheme } from "../../../lib/src/styles/design-tokens";
 import {
   defaultDarkTheme,
   defaultLightTheme,
-} from "@g4rcez/components/styles/theme";
-import { PropsWithChildren } from "react";
+} from "../../../lib/src/styles/theme";
 
 export const RootLayout = (props: PropsWithChildren) => {
   const stylesLight = createTheme(defaultLightTheme);
@@ -15,7 +16,9 @@ export const RootLayout = (props: PropsWithChildren) => {
         <style>{stylesLight}</style>
         <style>{stylesDark}</style>
       </head>
-      <body>{props.children}</body>
+      <body>
+        <Notifications max={6} duration={1000000}>{props.children}</Notifications>
+      </body>
     </html>
   );
 };

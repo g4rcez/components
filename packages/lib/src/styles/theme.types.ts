@@ -30,6 +30,7 @@ export type DesignTokens = {
             subtle: string;
             hover: string;
             foreground: string;
+            notification: string;
         };
         secondary: {
             DEFAULT: string;
@@ -43,18 +44,21 @@ export type DesignTokens = {
             subtle: string;
             hover: string;
             foreground: string;
+            notification: string;
         };
         danger: {
             DEFAULT: string;
             subtle: string;
             hover: string;
             foreground: string;
+            notification: string;
         };
         success: {
             DEFAULT: string;
             subtle: string;
             hover: string;
             foreground: string;
+            notification: string;
         };
         input: {
             border: string;
