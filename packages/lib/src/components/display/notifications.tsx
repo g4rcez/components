@@ -3,7 +3,7 @@ import * as RadixToast from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
 import { AnimatePresence, motion, TargetAndTransition } from "framer-motion";
 import { XIcon } from "lucide-react";
-import { createContext, type ElementRef, forwardRef, type PropsWithChildren, useCallback, useContext, useRef, useState } from "react";
+import { createContext, type ElementRef, forwardRef, type PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useHover } from "../../hooks/use-hover";
 import { Label } from "../../types";
 
@@ -30,10 +30,7 @@ type NotificationOptions = Partial<{
     theme: VariantProps<typeof variants>["theme"];
 }>;
 
-type NotificationSubscriber = {
-    close: () => void;
-    clear: () => void;
-};
+type NotificationSubscriber = { close: () => void; clear: () => void };
 
 type ContextFunction = (text: Label, args?: NotificationOptions) => NotificationSubscriber;
 
@@ -53,15 +50,15 @@ type NotificationItemProps = {
 } & NotificationOptions;
 
 const animatedIndex: Record<string, TargetAndTransition> = {
-    0: { y: [10, 15], scale: [1, 0.98] },
-    1: { y: [15, 20], scale: [1, 0.97] },
-    2: { y: [20, 25], scale: [1, 0.96] },
-    default: { y: [25, 30], scale: [1, 0.95] },
+    0: { opacity: 1, y: [10, 15], scale: [1, 0.98] },
+    1: { opacity: 1, y: [15, 20], scale: [1, 0.97] },
+    2: { opacity: 1, y: [20, 25], scale: [1, 0.96] },
+    default: { opacity: 1, y: [25, 30], scale: [1, 0.95] },
 };
 
 const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, NotificationItemProps>(function Toast(props, forwardedRef) {
     const closable = props.closable ?? true;
-    const duration = props.duration ?? 100000;
+    const duration = props.duration;
     const variant = props.hover ? "hover" : props.isLast ? "isLast" : "other";
     const className = variants({ theme: props.theme || "default" });
     return (
@@ -74,12 +71,12 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                 initial={{ y: -100, zIndex: -1 }}
                 className="text-select pointer-events-auto absolute right-0 top-0 w-80"
                 variants={{
-                    isLast: { y: 10, scale: 1, animationDuration: "300ms" },
-                    hover: { y: 0, position: "static", scale: 1 },
+                    isLast: { y: 10, scale: 1, animationDuration: "300ms", opacity: 1 },
+                    hover: { y: 0, position: "static", scale: 1, opacity: 1 },
                     other: animatedIndex[props.reversedIndex] || animatedIndex.default,
                 }}
                 transition={{ type: "spring", mass: 1.2, damping: 30, stiffness: 200 }}
-                exit={{ opacity: 0, zIndex: -1, transition: { opacity: { bounce: 0.25, duration: 0.2 } } }}
+                exit={{ opacity: [0.9, 0], transition: { opacity: { bounce: 0.25, duration: 0.3 } } }}
             >
                 <div className={className}>
                     <div className="flex flex-col p-4">
@@ -115,6 +112,10 @@ export function Notifications({ children, max = 5, duration = 5000 }: PropsWithC
     const [messages, setMessages] = useState<NotificationItem[]>([]);
 
     const clear = useCallback(() => setMessages([]), []);
+
+    useEffect(() => {
+        return () => clear();
+    }, [clear]);
 
     const notify = useCallback(
         (text: Label, args?: NotificationOptions) => {

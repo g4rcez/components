@@ -25,10 +25,7 @@ export default function GetStartedPage() {
           const prev = count.current;
           const c = prev + 1;
           count.current = c;
-          notification(`I'm a ${c} index`, {
-            duration: 20000,
-            title: "Title",
-          });
+          notification(`I'm a ${c} index`, { title: "Title" });
         }}
       >
         Notify
