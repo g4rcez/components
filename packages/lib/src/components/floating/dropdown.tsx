@@ -70,16 +70,10 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 {props.trigger}
             </button>
             {open && (
-                <FloatingPortal id={`${headingId}-portal`}>
-                    <FloatingFocusManager
-                        restoreFocus={props.restoreFocus ?? true}
-                        returnFocus={props.restoreFocus ?? true}
-                        visuallyHiddenDismiss
-                        context={context}
-                        modal={false}
-                    >
+                <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
+                    <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="bg-floating-background relative min-w-96 isolate z-floating border shadow-2xl p-6 border-floating-border rounded-lg"
+                            className="relative isolate z-floating min-w-96 rounded-lg border border-floating-border bg-floating-background p-6 shadow-2xl"
                             ref={refs.setFloating}
                             style={floatingStyles}
                             aria-labelledby={headingId}
@@ -92,7 +86,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                                 className="fill-floating-background stroke-floating-border"
                             />
                             <header className="mb-2">
-                                <h3 className="leading-snug font-medium text-2xl tracking-wide text-left">{props.title}</h3>
+                                <h3 className="text-left text-2xl font-medium leading-snug tracking-wide">{props.title}</h3>
                             </header>
                             {props.children}
                         </div>

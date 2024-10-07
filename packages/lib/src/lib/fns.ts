@@ -24,3 +24,13 @@ export const isSsr = () => typeof window === "undefined";
 
 export const safeRegex = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+
+export const splitInto = <T extends any>(array: T[], size: number) => {
+  const newArray: T[][] = [];
+  for (let i = 0; i < size; i++) {
+    const init = i * size;
+    const result = array.slice(init, init + size);
+    if (result.length > 0) newArray.push(result);
+  }
+  return newArray;
+};

@@ -3,22 +3,21 @@ import { Brand } from "@/components/brand";
 import { ToggleMode } from "@/components/toggle-mode";
 import Link from "next/link";
 import { Fragment, PropsWithChildren, useRef } from "react";
-import { type Label } from "../../../lib/src";
+import { css, type Label } from "../../../lib/src";
 
 type Props = {
   title: Label;
   section: string;
   description: Label;
+  className?: string;
 };
 
 const sections = [
   {
     title: "Floating",
     items: [
-      {
-        title: "Drawer/Dialog",
-        href: "/docs/modal",
-      },
+      { title: "Drawer/Dialog", href: "/docs/modal" },
+      { title: "Menu", href: "/docs/menu" },
     ],
   },
   {
@@ -84,7 +83,10 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                 {props.description}
               </p>
             </header>
-            <div ref={ref} className="min-w-full mt-10 pb-8">
+            <div
+              ref={ref}
+              className={css("min-w-full mt-10 pb-8", props.className)}
+            >
               {props.children}
             </div>
           </main>

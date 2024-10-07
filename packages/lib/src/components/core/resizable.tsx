@@ -1,6 +1,7 @@
 "use client";
 import { motion, useMotionValue } from "framer-motion";
 import React, { useEffect, useMemo, useState } from "react";
+import { isSsr } from "../../lib/fns";
 
 const defaultState = {
     x: 0,
@@ -21,30 +22,31 @@ const useElementRect = <E extends Element = Element>() => {
 
     const observer = useMemo(
         () =>
-            new window.ResizeObserver((entries) => {
-                if (entries[0]) {
-                    const rect = entries[0].contentRect;
-                    motion.set({
-                        x: rect.x,
-                        y: rect.y,
-                        width: rect.width,
-                        height: rect.height,
-                        top: rect.top,
-                        left: rect.left,
-                        bottom: rect.bottom,
-                        right: rect.right,
-                    });
-                }
-            }),
+            isSsr()
+                ? null
+                : new window.ResizeObserver((entries) => {
+                      if (entries[0]) {
+                          const rect = entries[0].contentRect;
+                          motion.set({
+                              x: rect.x,
+                              y: rect.y,
+                              width: rect.width,
+                              height: rect.height,
+                              top: rect.top,
+                              left: rect.left,
+                              bottom: rect.bottom,
+                              right: rect.right,
+                          });
+                      }
+                  }),
         []
     );
 
     useEffect(() => {
         if (!element) return;
+        if (observer === null) return;
         observer.observe(element);
-        return () => {
-            observer.disconnect();
-        };
+        return () => observer.disconnect();
     }, [element]);
 
     return [ref, motion] as const;

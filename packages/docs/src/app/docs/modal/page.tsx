@@ -76,7 +76,7 @@ export default function ModalExamplePage() {
             Drawer element is resized by default. You can omit this behaviour
             using the property resizer=false
           </p>
-          <div className="flex gap-6 mt-4">
+          <div className="flex flex-col lg:flex-row gap-6 mt-4">
             <Element
               {...state}
               asChild

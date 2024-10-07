@@ -1,4 +1,4 @@
-import { createContext, useContext, PropsWithChildren, useMemo, Fragment } from "react"
+import React, { createContext, useContext, PropsWithChildren, useMemo, Fragment } from "react"
 
 const defaultTranslations = {
   inputCaretDown: "Click to see all options",
@@ -49,7 +49,10 @@ const defaultTranslations = {
   }) => <Fragment>
       {pagination.current} to {pagination.pages} of {pagination.totalItems} items.
       {Array.isArray(pagination.sizes) ? (pagination.select) : null} per page.
-    </Fragment>
+    </Fragment>,
+
+  calendarFromDate: "From date",
+  calendarToDate: "To date",
 }
 
 type Translations = typeof defaultTranslations;

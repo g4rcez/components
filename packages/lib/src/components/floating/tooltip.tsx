@@ -6,6 +6,7 @@ import {
     FloatingArrow,
     FloatingPortal,
     offset,
+    type Placement,
     shift,
     useDismiss,
     useFloating,
@@ -16,33 +17,34 @@ import {
 } from "@floating-ui/react";
 import React, { Fragment, useRef, useState } from "react";
 import { Polymorph, PolymorphicProps } from "../../components/core/polymorph";
-import { Label, Override } from "../../types";
+import { FLOATING_DELAY } from "../../constants";
+import { ComponentLike, Label, Override } from "../../types";
 
-type TooltipProps = Override<PolymorphicProps<React.ComponentProps<"button">, "span">, { title: Label }>;
+export type TooltipProps<T extends ComponentLike = "span"> = Override<
+    PolymorphicProps<React.ComponentProps<T>, T>,
+    {
+        title: Label;
+        enabled?: boolean;
+        placement?: Placement;
+    }
+>;
 
-export const Tooltip = ({ children, as, title, ...props }: TooltipProps) => {
-    const [isOpen, setIsOpen] = useState(false);
+export const Tooltip = <T extends ComponentLike = "span">({ children, placement, enabled, as, title, ...props }: TooltipProps<T>) => {
+    const [open, setOpen] = useState(false);
     const arrowRef = useRef(null);
-    const Component = as || "span";
+    const Component: any = as || "span";
     const { refs, floatingStyles, context } = useFloating({
-        open: isOpen,
-        onOpenChange: setIsOpen,
-        whileElementsMounted: autoUpdate,
+        open,
+        placement,
         transform: true,
-        middleware: [
-            offset(5),
-            flip({ fallbackAxisSideDirection: "start" }),
-            shift(),
-            arrow({
-                element: arrowRef,
-                padding: 5,
-            }),
-        ],
+        onOpenChange: setOpen,
+        whileElementsMounted: autoUpdate,
+        middleware: [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift(), arrow({ element: arrowRef, padding: 5 })],
     });
-    const hover = useHover(context, { move: true });
-    const focus = useFocus(context);
-    const dismiss = useDismiss(context);
-    const role = useRole(context, { role: "tooltip" });
+    const hover = useHover(context, { move: true, enabled, delay: { open: FLOATING_DELAY } });
+    const focus = useFocus(context, { enabled });
+    const dismiss = useDismiss(context, { enabled });
+    const role = useRole(context, { role: "tooltip", enabled });
     const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
 
     return (
@@ -51,12 +53,12 @@ export const Tooltip = ({ children, as, title, ...props }: TooltipProps) => {
                 {title}
             </Component>
             <FloatingPortal>
-                {isOpen && (
+                {open && (
                     <Polymorph
                         {...getFloatingProps()}
                         ref={refs.setFloating}
                         style={floatingStyles}
-                        className="bg-tooltip-background z-tooltip text-tooltip-foreground border border-tooltip-border p-3 rounded-lg"
+                        className="z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground"
                     >
                         <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="fill-tooltip-background stroke-tooltip-border" />
                         {children}

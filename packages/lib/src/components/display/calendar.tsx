@@ -6,6 +6,8 @@ import {
     addYears,
     eachDayOfInterval,
     endOfWeek,
+    isAfter,
+    isBefore,
     isSameMonth,
     isToday,
     startOfDay,
@@ -18,12 +20,15 @@ import {
 } from "date-fns";
 import { AnimatePresence, motion, MotionConfig, Transition, Variants } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import { Is } from "sidekicker";
 import TheMaskInput, { Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
+import { useTranslations } from "../../hooks/use-translate-context";
 import { css } from "../../lib/dom";
+import { splitInto } from "../../lib/fns";
+import { SetState } from "../../types";
 import { Resizable } from "../core/resizable";
 
 const transition: Transition = { type: "spring", bounce: 0.1, duration: 0.3 };
@@ -40,14 +45,36 @@ const variants: Variants = {
 
 const removeImmediately: Variants = { exit: { visibility: "hidden" } };
 
-export type CalendarProps = {
-    disabledDate?: (date: Date) => boolean;
-    date?: Date;
-    locale?: Locales;
-    markToday?: boolean;
-    autoFocusToday?: boolean;
-    onChange?: (d: Date | undefined) => void;
-};
+type Range = { from?: Date; to?: Date };
+
+export type CalendarProps = Partial<
+    {
+        locale: Locales;
+        markToday: boolean;
+        rangeMode: boolean;
+        changeOnlyOnClick: boolean;
+        onChangeMonth: (d: Date) => void;
+        onChangeYear: (d: Date) => void;
+        RenderOnDay: React.FC<{ date: Date }>;
+        disabledDate: (date: Date) => boolean;
+        styles: Partial<{
+            day: string;
+            week: string;
+            weekDay: string;
+            dayFrame: string;
+            calendar: string;
+        }>;
+    } & (
+        | {
+              date: Date;
+              onChange: SetState<Date | undefined>;
+          }
+        | {
+              range: Range;
+              onChange: SetState<Range | undefined>;
+          }
+    )
+>;
 
 const createDays = (month: Date) => {
     const start = startOfWeek(startOfMonth(month));
@@ -86,11 +113,13 @@ const onChangeUsingKeyboard = {
     },
 } satisfies Record<string, (date: Date, duration: "days" | "month") => Date>;
 
-const focusDate = (next: Date, delay = 0) => {
+const focusDate = (root: RefObject<HTMLElement>, next: Date, delay = 0) => {
     const d = next.toISOString();
     const select = () => {
-        const element = document.querySelector<HTMLButtonElement>(`button[data-date="${d}"]`);
-        if (element) return element.focus({ preventScroll: false });
+        if (root.current) {
+            const element = root.current.querySelector<HTMLButtonElement>(`button[data-date="${d}"]`);
+            if (element) return element.focus({ preventScroll: false });
+        }
     };
     if (delay === 0) select();
     setTimeout(select, delay);
@@ -98,22 +127,46 @@ const focusDate = (next: Date, delay = 0) => {
 
 const formatYear = (now: Date) => now.getFullYear().toString().padStart(4, "0");
 
-export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToday = true, date, onChange }: CalendarProps) => {
+const inRange = (start: Date | undefined, middle: Date, end: Date | undefined) => {
+    if (start === undefined || end === undefined) return false;
+    return isAfter(middle, start) && isBefore(middle, end);
+};
+
+type SelectMode = "from" | "to";
+
+export const Calendar = ({
+    RenderOnDay,
+    changeOnlyOnClick = false,
+    disabledDate,
+    locale,
+    markToday = true,
+    onChangeMonth,
+    onChangeYear,
+    rangeMode = false,
+    onChange,
+    styles,
+    ...props
+}: CalendarProps) => {
+    const translate = useTranslations();
+    const { date, range } = props as { date: Date | undefined; range: Range };
     const now = date || new Date();
+    const table = useRef<HTMLElement>(null);
     const [state, dispatch] = useReducer(
         {
             date: now,
             isAnimating: false,
             year: formatYear(now),
-            direction: undefined as number | undefined,
             months: getOptionsMonth(now, locale),
+            direction: undefined as number | undefined,
+            range: { from: range?.from, to: range?.to },
+            selectMode: (rangeMode ? "from" : undefined) as SelectMode | undefined,
             week: eachDayOfInterval({ start: startOfWeek(now), end: endOfWeek(now) }),
         },
         (get) => ({
             onChangeYear: (year: string) => ({ year }),
             setToday: () => ({ date: startOfDay(new Date()) }),
             onExitComplete: () => {
-                focusDate(get.state().date, 200);
+                focusDate(get.props().table, get.state().date, 200);
                 return { isAnimating: false };
             },
             date: (callback: (d: Date) => Date) => {
@@ -133,43 +186,85 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                 return { date, isAnimating: true, direction: -1, year: formatYear(date) };
             },
             onSelectDate: (e: React.MouseEvent<HTMLButtonElement>) => {
+                const state = get.state();
+                const isRangeMode = e.currentTarget.dataset.range === "true";
                 const d = e.currentTarget.dataset.date || "";
                 const date = new Date(d);
-                return { date, year: formatYear(date) };
+                return {
+                    date,
+                    year: formatYear(date),
+                    selectMode: state.selectMode === undefined ? undefined : state.selectMode === "from" ? "to" : "from",
+                    range: !isRangeMode
+                        ? state.range
+                        : {
+                              from: state.selectMode === "from" ? date : state.range.from,
+                              to: state.selectMode === "to" ? date : state.range.to,
+                          },
+                };
             },
             onChangeMonth: (e: React.ChangeEvent<HTMLSelectElement>) => {
                 const value = e.target.value;
                 const array = Array.from(e.target.options);
                 const month = array.find((x) => x.value === value);
+                const state = get.state();
                 if (month) {
                     const i = month.dataset.index || "";
                     const d = new Date(get.state().date);
                     d.setMonth(+i);
-                    return { date: d, year: formatYear(d) };
+                    return { ...state, date: d, year: formatYear(d) };
                 }
-                return get.state();
+                return state;
             },
-            onKeyDown: (e: React.KeyboardEvent<HTMLUListElement>) => {
+            onKeyDown: (e: React.KeyboardEvent<HTMLTableSectionElement>) => {
                 const key = e.key;
+                const state = get.state();
                 if (key in onChangeUsingKeyboard) {
                     if (key === "ArrowUp" || key === "ArrowDown") e.preventDefault();
                     const prev = get.state().date;
                     const date = Is.keyof(onChangeUsingKeyboard, key) ? onChangeUsingKeyboard[key](prev, e.shiftKey ? "month" : "days") : null;
                     if (date !== null) {
-                        focusDate(date);
-                        return { date, year: formatYear(date) };
+                        focusDate(get.props().table, date);
+                        return { ...state, date, year: formatYear(date) };
                     }
                 }
                 return get.state();
             },
-        })
+        }),
+        {
+            props: { onChangeMonth, onChangeYear, table },
+            postMiddleware: [
+                (state, _, args) => {
+                    const isValidMethod = args.method === "onChangeMonth" || args.method === "previousMonth" || args.method === "nextMonth";
+                    if (isValidMethod) args.props.onChangeMonth?.(state.date);
+                    return state;
+                },
+                (state, _, args) => {
+                    const isValidMethod = args.method === "onChangeYear";
+                    if (isValidMethod) args.props.onChangeYear?.(state.date);
+                    return state;
+                },
+                (state, _, args) => {
+                    const isValidMethod = args.method === "onSelectDate" || args.method === "setToday" || args.method === "onKeyDown";
+                    if (rangeMode && isValidMethod && changeOnlyOnClick) {
+                        onChange?.(state.range as any);
+                        return state;
+                    }
+                    if (isValidMethod && changeOnlyOnClick) onChange?.(state.date);
+                    return state;
+                },
+            ],
+        }
     );
 
-    const days = createDays(state.date);
+    const zip = splitInto(createDays(state.date), 7);
+
     const currentAsString = state.date.toISOString();
+
     const monthString = formatMonth(state.date, locale);
 
-    useEffect(() => onChange?.(state.date), [currentAsString]);
+    useEffect(() => {
+        if (!changeOnlyOnClick) onChange?.(state.date);
+    }, [currentAsString]);
 
     const defer = useDebounce((y: string) => {
         dispatch.date((prev) => {
@@ -179,15 +274,16 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
         });
     }, 1200);
 
-    const onChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const internalOnChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         dispatch.onChangeYear(value);
+        onChangeYear?.(new Date(value));
         defer(value);
     };
 
     return (
         <MotionConfig transition={transition}>
-            <div className="relative overflow-hidden">
+            <div className={css("relative overflow-hidden", styles?.calendar)}>
                 <div className="flex flex-col justify-center rounded text-center">
                     <Resizable>
                         <AnimatePresence
@@ -225,7 +321,7 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                                 value={state.year}
                                                 maxLength={4}
                                                 placeholder="YYYY"
-                                                onChange={onChangeYear}
+                                                onChange={internalOnChangeYear}
                                                 style={{ width: `${state.year.length}ch` }}
                                                 className="w-16 cursor-pointer appearance-none bg-transparent hover:text-primary"
                                             />
@@ -246,43 +342,91 @@ export const Calendar = ({ locale, disabledDate, markToday = true, autoFocusToda
                                         }}
                                     />
                                 </header>
-                                <div className="mt-4 grid grid-cols-7 gap-y-4">
-                                    {state.week.map((dayOfWeek) => (
-                                        <span key={dayOfWeek.toString()} className="text-sm font-medium capitalize">
-                                            {dayOfWeek.toLocaleDateString(locale, { weekday: "short" })}
-                                        </span>
-                                    ))}
-                                </div>
-                                <motion.ul
-                                    onKeyDown={dispatch.onKeyDown}
-                                    variants={variants}
-                                    custom={state.direction}
-                                    className="mt-4 grid grid-cols-7 gap-y-4 pb-2"
-                                >
-                                    {days.map((day) => {
-                                        const key = day.toISOString();
-                                        const isSelected = key === currentAsString;
-                                        const today = isToday(day) && markToday;
-                                        const disabledByFn = disabledDate?.(day) || false;
-                                        const disableDate = !isSameMonth(day, state.date) || disabledByFn;
-                                        return (
-                                            <li key={key} className="flex w-full items-center justify-center">
-                                                <button
-                                                    type="button"
-                                                    data-date={key}
-                                                    disabled={disabledByFn}
-                                                    onClick={dispatch.onSelectDate}
-                                                    data-view={state.date.getMonth().toString()}
-                                                    className={css(
-                                                        `flex size-8 items-center justify-center rounded-full font-semibold proportional-nums disabled:cursor-not-allowed ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`
-                                                    )}
+                                <table className="mt-2 table min-w-full table-auto border-0">
+                                    <thead>
+                                        <tr>
+                                            {state.week.map((dayOfWeek) => (
+                                                <th
+                                                    key={dayOfWeek.toString()}
+                                                    className={css("py-2 text-sm font-medium capitalize", styles?.weekDay)}
                                                 >
-                                                    {day.getDate()}
-                                                </button>
-                                            </li>
-                                        );
-                                    })}
-                                </motion.ul>
+                                                    {dayOfWeek.toLocaleDateString(locale, { weekday: "short" })}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <motion.tbody
+                                        variants={variants}
+                                        custom={state.direction}
+                                        onKeyDown={dispatch.onKeyDown}
+                                        className={css(styles?.week)}
+                                    >
+                                        {zip.map((week, index) => {
+                                            return (
+                                                <tr key={`week-${week.length}-${index}`} className={styles?.week}>
+                                                    {week.map((day) => {
+                                                        const key = day.toISOString();
+                                                        const isSelected = rangeMode
+                                                            ? key === range?.to?.toISOString() || key === range?.from?.toISOString()
+                                                            : key === date?.toISOString();
+                                                        const today = isToday(day) && markToday;
+                                                        const disabledByFn = disabledDate?.(day) || false;
+                                                        const disableDate = !isSameMonth(day, state.date) || disabledByFn;
+                                                        const isInRange = rangeMode ? inRange(range?.from, day, range?.to) : false;
+                                                        return (
+                                                            <td key={key} align="center" className={css("relative", styles?.dayFrame)}>
+                                                                <button
+                                                                    type="button"
+                                                                    data-date={key}
+                                                                    disabled={disabledByFn}
+                                                                    data-range={rangeMode}
+                                                                    onClick={dispatch.onSelectDate}
+                                                                    data-view={state.date.getMonth().toString()}
+                                                                    className={css(
+                                                                        `flex size-10 items-center justify-center rounded-full font-semibold proportional-nums disabled:cursor-not-allowed ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
+                                                                        styles?.day,
+                                                                        isInRange ? "size-10 border border-dashed border-card-border" : ""
+                                                                    )}
+                                                                >
+                                                                    {day.getDate()}
+                                                                    {isSelected && state.range.from?.toISOString() === key ? (
+                                                                        <span className="absolute h-full w-full">
+                                                                            <span className="flex h-full items-center justify-end">
+                                                                                <span className="sr-only">{translate.calendarFromDate}</span>
+                                                                                <ChevronRightIcon
+                                                                                    aria-hidden="true"
+                                                                                    className="text-primary-subtle"
+                                                                                    absoluteStrokeWidth
+                                                                                    size={28}
+                                                                                    strokeWidth={3}
+                                                                                />
+                                                                            </span>
+                                                                        </span>
+                                                                    ) : null}
+                                                                    {isSelected && state.range.to?.toISOString() === key ? (
+                                                                        <span className="absolute h-full w-full">
+                                                                            <span className="flex h-full items-center justify-start">
+                                                                                <span className="sr-only">{translate.calendarToDate}</span>
+                                                                                <ChevronLeftIcon
+                                                                                    aria-hidden="true"
+                                                                                    className="text-primary-subtle"
+                                                                                    absoluteStrokeWidth
+                                                                                    size={28}
+                                                                                    strokeWidth={3}
+                                                                                />
+                                                                            </span>
+                                                                        </span>
+                                                                    ) : null}
+                                                                </button>
+                                                                {RenderOnDay ? <RenderOnDay date={day} /> : null}
+                                                            </td>
+                                                        );
+                                                    })}
+                                                </tr>
+                                            );
+                                        })}
+                                    </motion.tbody>
+                                </table>
                             </motion.div>
                         </AnimatePresence>
                     </Resizable>

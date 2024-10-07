@@ -110,7 +110,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                         />
                         <Dropdown
                             open={open}
-                            restoreFocus
                             onChange={setOpen}
                             trigger={
                                 <span aria-labelledby={labelId}>
