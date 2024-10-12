@@ -58,7 +58,7 @@ export const Tooltip = <T extends ComponentLike = "span">({ children, placement,
                         {...getFloatingProps()}
                         ref={refs.setFloating}
                         style={floatingStyles}
-                        className="z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground"
+                        className="z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-lg"
                     >
                         <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="fill-tooltip-background stroke-tooltip-border" />
                         {children}

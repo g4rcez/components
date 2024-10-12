@@ -1,9 +1,10 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import React from "react";
+import React, { useState } from "react";
 import { Card, Input } from "../../../../../lib/src";
 
 export default function FormPage() {
+  const [currency, setCurrency] = useState("BRL");
   return (
     <DocsLayout
       title="Input"
@@ -56,6 +57,24 @@ export default function FormPage() {
           required
         />
         <Input mask="percent" title="Percent %" placeholder="%%%" required />
+        <Input
+          mask="money"
+          locale={currency === "BRL" ? "pt-BR" : "en-US"}
+          currency={currency as any}
+          title="Interactive Money"
+          placeholder={currency}
+          required
+          right={
+            <select
+              value={currency}
+              className="bg-transparent border-0"
+              onChange={(e) => setCurrency(e.target.value)}
+            >
+              <option value="USD">USD</option>
+              <option value="BRL">BRL</option>
+            </select>
+          }
+        />
       </Card>
     </DocsLayout>
   );

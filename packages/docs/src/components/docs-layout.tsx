@@ -14,23 +14,24 @@ type Props = {
 
 const sections = [
   {
+    title: "Display",
+    items: [
+      { title: "Timeline", href: "/docs/timeline" },
+    ],
+  },{
     title: "Floating",
     items: [
       { title: "Drawer/Dialog", href: "/docs/modal" },
       { title: "Menu", href: "/docs/menu" },
+      { title: "Expand", href: "/docs/expand" },
     ],
   },
   {
     title: "Form",
     items: [
-      {
-        title: "Input",
-        href: "/docs/input",
-      },
-      {
-        title: "useForm",
-        href: "/docs/form",
-      },
+      { title: "Input", href: "/docs/input", },
+      { title: "useForm", href: "/docs/form", },
+      { title: "Calendar", href: "/docs/calendar", },
     ],
   },
 ];
@@ -39,7 +40,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
   const ref = useRef<HTMLDivElement | null>(null);
   return (
     <Fragment>
-      <nav className="[grid-area:header] isolate mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
+      <nav className="[grid-area:header] isolate z-navbar mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
         <div className="container px-4 items-center mx-auto flex justify-between">
           <Brand />
           <ToggleMode />

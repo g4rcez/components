@@ -46,7 +46,7 @@ const getValueByType = (e: HTMLEntryElements) => {
     if (e.dataset.value) return e.dataset.value;
     if (e.type === "checkbox") return e.checked;
     if (e.type === "number") return e.valueAsNumber;
-    return e.value;
+    return e.value || e.getAttribute("value");
 };
 
 type CustomOnInvalid = (args: { form: HTMLFormElement; errors: Record<string, string> }) => any;
@@ -137,10 +137,8 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
             const onBlurField = (e: any) => {
                 const name = element.dataset.target || element.name;
                 if (!name) return;
-                console.log(e);
                 const value = getValueByType(e.target) || (e.relatedTarget ? getValueByType(e.relatedTarget) : "");
                 const validation = input.schema.safeParse(value);
-                console.log({ name, value, validation });
                 if (validation.success) {
                     element.setCustomValidity("");
                     return setErrors((prev) => {

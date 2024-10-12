@@ -4,9 +4,9 @@ import { useCallbackRef } from "../../hooks/use-callback-ref";
 import { css, dispatchInput } from "../../lib/dom";
 
 export type SwitchProps = React.ComponentProps<"input"> & {
-    onCheck?: (nextValue: boolean) => void;
     error?: string;
     container?: string;
+    onCheck?: (nextValue: boolean) => void;
 };
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, container, error, ...props }: SwitchProps, ref) => {
@@ -43,7 +43,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
 
     return (
         <fieldset className={css("flex flex-wrap items-center", container)}>
-            <input {...props} ref={innerRef} hidden type="checkbox" checked={checked} onChange={(e) => setInnerChecked(e.target.checked)} />
+            <input {...props} id={props.id || id} ref={innerRef} hidden type="checkbox" checked={checked} onChange={(e) => setInnerChecked(e.target.checked)} />
             <button
                 type="button"
                 role="switch"
@@ -59,9 +59,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
                     className="duration-300 duration-300 ease-in-out inline-block aspect-square size-5 transform rounded-full shadow ring-0 transition data-[checked=false]:translate-x-0 data-[checked=true]:translate-x-5 data-[checked=false]:bg-disabled data-[checked=true]:bg-input-switch"
                 />
             </button>
-            <span className="ml-3 text-sm" id={`${id}-label`}>
+            <label htmlFor={props.id || id} className="inline-block ml-3 text-sm" id={`${id}-label`}>
                 <span className="font-medium text-foreground">{children}</span>
-            </span>
+            </label>
             <span className="mt-1 flex-1 whitespace-nowrap text-xs text-danger empty:mt-0 empty:hidden">{error}</span>
         </fieldset>
     );

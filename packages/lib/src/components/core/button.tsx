@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import { motion } from "framer-motion";
 import React, { forwardRef } from "react";
 import { css } from "../../lib/dom";
 import { type Label } from "../../types";

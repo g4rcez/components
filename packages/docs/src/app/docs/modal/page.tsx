@@ -1,6 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import React, { PropsWithChildren, useState } from "react";
+import { motion } from "framer-motion";
+import React, { PropsWithChildren, useId, useState } from "react";
 import {
   Button,
   Card,
@@ -25,8 +26,8 @@ export default function ModalExamplePage() {
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.checked;
+    const name = e.currentTarget.name;
+    const value = e.currentTarget.checked;
     return setState((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -58,7 +59,8 @@ export default function ModalExamplePage() {
             asChild
             type="dialog"
             title="Dialog"
-            trigger={<Button>Dialog</Button>}
+            layoutId="dialog"
+            trigger={<Button as={motion.button}>Dialog</Button>}
           >
             I'm a Dialog component
           </Element>

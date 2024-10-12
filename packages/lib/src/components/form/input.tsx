@@ -5,13 +5,7 @@ import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
 
-export type InputProps = Override<
-    InputFieldProps<"input">,
-    TheMaskProps &
-        FeedbackProps & {
-            next?: string;
-        }
->;
+export type InputProps = Override<InputFieldProps<"input">, TheMaskProps & FeedbackProps & { next?: string }>;
 
 export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     (
@@ -88,7 +82,7 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
                     id={id}
                     name={id}
                     className={css(
-                        "input placeholder-input-mask group h-10 py-1 px-2 w-full flex-1 rounded-md bg-transparent text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        "input placeholder-input-mask group h-10 w-full flex-1 rounded-md bg-transparent px-2 py-1 text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         !!right ? "pe-4" : "",
                         !!left ? "ps-4" : "",
                         props.className

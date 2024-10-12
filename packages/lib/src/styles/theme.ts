@@ -161,8 +161,8 @@ export const defaultLightTheme: DesignTokens = {
             overlay: "hsla(0, 0%, 0%)",
         },
         tooltip: {
-            foreground: "hsla(210, 40%, 98%)",
-            background: "hsla(0, 0%, 8%)",
+            foreground: "hsla(217, 15%, 20%)",
+            background: "hsla(210, 25%, 98%)",
             border: "hsla(0, 0%, 85%)",
         },
         table: {

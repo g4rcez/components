@@ -56,23 +56,27 @@ const animations: Animations = {
     },
 };
 
-const variants = cva("isolate z-floating border border-card-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background", {
-    variants: {
-        type: {
-            drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
-            dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
-            sheet: "w-screen absolute bottom-0 h-[85vh] max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
+const variants = cva(
+    "isolate z-floating border border-card-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background",
+    {
+        variants: {
+            type: {
+                drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
+                dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
+                sheet: "w-screen absolute bottom-0 h-[85vh] max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
+            },
+            position: {
+                none: "",
+                right: "py-4 absolute right-0 top-0 rounded-l-lg",
+                left: "py-4 absolute left-0 top-0 rounded-r-lg",
+            },
         },
-        position: {
-            none: "",
-            right: "py-4 absolute right-0 top-0 rounded-l-lg",
-            left: "py-4 absolute left-0 top-0 rounded-r-lg",
-        },
-    },
-    defaultVariants: { position: "right", type: "dialog" },
-});
+        defaultVariants: { position: "right", type: "dialog" },
+    }
+);
 
 export type ModalProps = {
+    layoutId?: string;
     title?: Label;
     open: boolean;
     footer?: Label;
@@ -186,11 +190,17 @@ export const Modal = ({
             {props.trigger ? (
                 <Fragment>
                     {props.asChild ? (
-                        <Slot ref={refs.setReference} {...getReferenceProps()} children={Trigger} />
+                        <Slot
+                            ref={refs.setReference}
+                            {...getReferenceProps({
+                                layoutId: props.layoutId,
+                            } as any)}
+                            children={Trigger}
+                        />
                     ) : (
-                        <button ref={refs.setReference} {...getReferenceProps()} type="button">
+                        <motion.button ref={refs.setReference} {...getReferenceProps()} layoutId={props.layoutId} type="button">
                             {Trigger}
-                        </button>
+                        </motion.button>
                     )}
                 </Fragment>
             ) : null}
@@ -199,7 +209,7 @@ export const Modal = ({
                     {props.open ? (
                         <FloatingOverlay
                             lockScroll
-                            className={`z-overlay inset-0 isolate h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "grid items-end justify-center lg:items-center"}`}
+                            className={`inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "grid items-end justify-center lg:items-center"}`}
                         >
                             <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                                 <motion.div
@@ -208,6 +218,7 @@ export const Modal = ({
                                     aria-labelledby={headingId}
                                     className={variants({ position, type })}
                                     exit="exit"
+                                    layoutId={props.layoutId}
                                     initial="initial"
                                     ref={refs.setFloating}
                                     style={type === "drawer" ? { width: value } : { height: value }}
@@ -223,12 +234,12 @@ export const Modal = ({
                                             ) : null}
                                         </header>
                                     ) : null}
-                                    <section className="py-1 flex-1 overflow-y-auto px-8">{props.children}</section>
+                                    <section className="flex-1 overflow-y-auto px-8 py-1">{props.children}</section>
                                     {props.footer ? (
                                         <footer className="w-full border-t border-floating-border px-8 pt-4">{props.footer}</footer>
                                     ) : null}
                                     {closable ? (
-                                        <nav className="absolute right-4 top-1">
+                                        <nav className="absolute right-4 top-1 z-floating">
                                             <button
                                                 type="button"
                                                 onClick={onClose}

@@ -34,56 +34,54 @@ type FloatItemProps = {
     refs: { setFloating: any };
 };
 
-const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => {
-    return (
-        <FloatingPortal>
-            <MotionConfig reducedMotion="user" transition={{ type: "tween", stiffness: 25, duration: 0.2 }}>
-                <AnimatePresence presenceAffectsLayout>
-                    <AnimatePresence>
-                        {item ? (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="pointer-events-none fixed inset-0 top-0 z-floating h-screen w-screen bg-floating-overlay/70"
-                            />
-                        ) : null}
-                    </AnimatePresence>
-                    <AnimatePresence>
-                        {item ? (
-                            <FloatingOverlay lockScroll className="absolute inset-0 z-tooltip flex items-center justify-center">
-                                <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
-                                    <motion.div
-                                        layout
-                                        layoutId={`item-${item.id}`}
-                                        className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow"
-                                        ref={refs.setFloating}
-                                        {...get()}
-                                    >
-                                        <nav className="absolute right-4 top-1 lg:right-2">
-                                            <button
-                                                type="button"
-                                                onClick={setter}
-                                                className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
-                                            >
-                                                <XIcon />
-                                            </button>
-                                        </nav>
-                                        <header className="flex w-full flex-wrap items-center justify-between gap-2">
-                                            <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
-                                            <p className="text-sm leading-snug text-secondary">{item.description}</p>
-                                        </header>
-                                        {item.children}
-                                    </motion.div>
-                                </FloatingFocusManager>
-                            </FloatingOverlay>
-                        ) : null}
-                    </AnimatePresence>
+const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
+    <FloatingPortal>
+        <MotionConfig reducedMotion="user" transition={{ type: "tween", stiffness: 25, duration: 0.2 }}>
+            <AnimatePresence presenceAffectsLayout>
+                <AnimatePresence>
+                    {item ? (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="pointer-events-none fixed inset-0 top-0 z-floating h-screen w-screen bg-floating-overlay/70"
+                        />
+                    ) : null}
                 </AnimatePresence>
-            </MotionConfig>
-        </FloatingPortal>
-    );
-};
+                <AnimatePresence>
+                    {item ? (
+                        <FloatingOverlay lockScroll className="absolute inset-0 z-tooltip flex items-center justify-center">
+                            <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
+                                <motion.div
+                                    layout
+                                    layoutId={`item-${item.id}`}
+                                    className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow"
+                                    ref={refs.setFloating}
+                                    {...get()}
+                                >
+                                    <nav className="absolute right-4 top-1 lg:right-2">
+                                        <button
+                                            type="button"
+                                            onClick={setter}
+                                            className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                        >
+                                            <XIcon />
+                                        </button>
+                                    </nav>
+                                    <header className="flex w-full flex-wrap items-center justify-between gap-2">
+                                        <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
+                                        <p className="text-sm leading-snug text-secondary">{item.description}</p>
+                                    </header>
+                                    {item.children}
+                                </motion.div>
+                            </FloatingFocusManager>
+                        </FloatingOverlay>
+                    ) : null}
+                </AnimatePresence>
+            </AnimatePresence>
+        </MotionConfig>
+    </FloatingPortal>
+);
 
 export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
     const [selected, setSelected] = useState<IdAnimatedItem | null>(null);

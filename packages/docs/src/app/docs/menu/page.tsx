@@ -11,8 +11,13 @@ export default function MenuExample() {
       description="Create a menu, like right-click, but using an custom layout"
     >
       <div className="flex flex-col gap-8">
-        <Card title="Simple menu">
+        <Card title="Simple menu" className="flex gap-8">
           <Menu label="I'm a menu">
+            <MenuItem label="Item 1" />
+            <MenuItem label="Item 2" />
+            <MenuItem label="Item 3" />
+          </Menu>
+          <Menu label="I'm a menu without hover" hover={false}>
             <MenuItem label="Item 1" />
             <MenuItem label="Item 2" />
             <MenuItem label="Item 3" />

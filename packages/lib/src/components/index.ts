@@ -23,4 +23,5 @@ export * from "./form/switch";
 export * from "./form/transfer-list";
 export * from "./table/index";
 export * from "./floating/menu";
+export * from "./floating/expand";
 export { createColumns, createOptionCols, type ColType, useTablePreferences, type TablePagination } from "./table/table-lib";

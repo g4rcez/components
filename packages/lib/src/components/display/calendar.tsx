@@ -28,14 +28,12 @@ import { useDebounce } from "../../hooks/use-debounce";
 import { useTranslations } from "../../hooks/use-translate-context";
 import { css } from "../../lib/dom";
 import { splitInto } from "../../lib/fns";
-import { SetState } from "../../types";
-import { Resizable } from "../core/resizable";
 
-const transition: Transition = { type: "spring", bounce: 0.1, duration: 0.3 };
+const transition: Transition = { type: "spring", bounce: 0.3, duration: 0.6 };
 
 const dir =
     (mod: number) =>
-    (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.5 });
+    (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
 
 const variants: Variants = {
     middle: { x: "0%", opacity: 1 },
@@ -47,7 +45,11 @@ const removeImmediately: Variants = { exit: { visibility: "hidden" } };
 
 type Range = { from?: Date; to?: Date };
 
-export type CalendarProps = Partial<
+type OnChangeDate = (d: Date | undefined) => void;
+
+type OnChangeRange = (d: Range | undefined) => void;
+
+export type CalendarProps<T extends "date" | "range" | undefined = undefined> = Partial<
     {
         locale: Locales;
         markToday: boolean;
@@ -64,16 +66,8 @@ export type CalendarProps = Partial<
             dayFrame: string;
             calendar: string;
         }>;
-    } & (
-        | {
-              date: Date;
-              onChange: SetState<Date | undefined>;
-          }
-        | {
-              range: Range;
-              onChange: SetState<Range | undefined>;
-          }
-    )
+    } & (T extends "date" ? { date: Date; onChange: OnChangeDate } : T extends "range" ? { range: Range; onChange: OnChangeRange } : {}) &
+        ({ date: Date; onChange: OnChangeDate } | { range: Range; onChange: OnChangeRange })
 >;
 
 const createDays = (month: Date) => {
@@ -95,27 +89,19 @@ const getOptionsMonth = (date: Date, locale?: Locales) =>
     });
 
 const onChangeUsingKeyboard = {
-    ArrowLeft: (date: Date, duration: "days" | "month") => {
-        if (duration === "days") return subDays(date, 1);
-        return subMonths(date, 1);
-    },
-    ArrowRight: (date: Date, duration: "days" | "month") => {
-        if (duration === "days") return addDays(date, 1);
-        return addMonths(date, 1);
-    },
-    ArrowUp: (date: Date, duration: "days" | "month") => {
-        if (duration === "days") return subWeeks(date, 1);
-        return subYears(date, 1);
-    },
-    ArrowDown: (date: Date, duration: "days" | "month") => {
-        if (duration === "days") return addWeeks(date, 1);
-        return addYears(date, 1);
-    },
+    ArrowLeft: (date: Date, duration: "days" | "month") => (duration === "days" ? subDays(date, 1) : subMonths(date, 1)),
+    ArrowRight: (date: Date, duration: "days" | "month") => (duration === "days" ? addDays(date, 1) : addMonths(date, 1)),
+    ArrowUp: (date: Date, duration: "days" | "month") => (duration === "days" ? subWeeks(date, 1) : subYears(date, 1)),
+    ArrowDown: (date: Date, duration: "days" | "month") => (duration === "days" ? addWeeks(date, 1) : addYears(date, 1)),
 } satisfies Record<string, (date: Date, duration: "days" | "month") => Date>;
 
-const focusDate = (root: RefObject<HTMLElement>, next: Date, delay = 0) => {
+const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement>, next: Date, delay = 0) => {
     const d = next.toISOString();
     const select = () => {
+        if (!!origin?.dataset.focustrap) {
+            const el = root.current?.querySelector(`button[data-focustrap="${origin?.dataset.focustrap}"]`) as HTMLButtonElement;
+            return setTimeout(() => el?.focus({ preventScroll: false }), delay);
+        }
         if (root.current) {
             const element = root.current.querySelector<HTMLButtonElement>(`button[data-date="${d}"]`);
             if (element) return element.focus({ preventScroll: false });
@@ -148,9 +134,10 @@ export const Calendar = ({
     ...props
 }: CalendarProps) => {
     const translate = useTranslations();
+    const root = useRef<HTMLTableElement>(null);
     const { date, range } = props as { date: Date | undefined; range: Range };
     const now = date || new Date();
-    const table = useRef<HTMLElement>(null);
+    const monthClicked = useRef<HTMLButtonElement | null>(null);
     const [state, dispatch] = useReducer(
         {
             date: now,
@@ -166,20 +153,23 @@ export const Calendar = ({
             onChangeYear: (year: string) => ({ year }),
             setToday: () => ({ date: startOfDay(new Date()) }),
             onExitComplete: () => {
-                focusDate(get.props().table, get.state().date, 200);
+                focusDate(monthClicked.current || null, root, get.state().date, 200);
+                monthClicked.current = null;
                 return { isAnimating: false };
             },
             date: (callback: (d: Date) => Date) => {
                 const newDate = callback(get.state().date);
                 return { date: newDate, year: formatYear(newDate) };
             },
-            nextMonth: () => {
+            nextMonth: (e: React.MouseEvent<HTMLButtonElement>) => {
+                monthClicked.current = e.currentTarget;
                 const state = get.state();
                 if (state.isAnimating) return state;
                 const date = addMonths(state.date, 1);
                 return { date, isAnimating: true, direction: 1, year: formatYear(date) };
             },
-            previousMonth: () => {
+            previousMonth: (e: React.MouseEvent<HTMLButtonElement>) => {
+                monthClicked.current = e.currentTarget;
                 const state = get.state();
                 if (state.isAnimating) return state;
                 const date = subMonths(state.date, 1);
@@ -223,7 +213,7 @@ export const Calendar = ({
                     const prev = get.state().date;
                     const date = Is.keyof(onChangeUsingKeyboard, key) ? onChangeUsingKeyboard[key](prev, e.shiftKey ? "month" : "days") : null;
                     if (date !== null) {
-                        focusDate(get.props().table, date);
+                        focusDate(e.target as HTMLElement, root, date);
                         return { ...state, date, year: formatYear(date) };
                     }
                 }
@@ -231,7 +221,7 @@ export const Calendar = ({
             },
         }),
         {
-            props: { onChangeMonth, onChangeYear, table },
+            props: { onChangeMonth, onChangeYear },
             postMiddleware: [
                 (state, _, args) => {
                     const isValidMethod = args.method === "onChangeMonth" || args.method === "previousMonth" || args.method === "nextMonth";
@@ -283,153 +273,128 @@ export const Calendar = ({
 
     return (
         <MotionConfig transition={transition}>
-            <div className={css("relative overflow-hidden", styles?.calendar)}>
+            <div ref={root} className={css("relative overflow-hidden", styles?.calendar)}>
                 <div className="flex flex-col justify-center rounded text-center">
-                    <Resizable>
-                        <AnimatePresence
-                            initial={false}
-                            mode="popLayout"
-                            presenceAffectsLayout
-                            custom={state.direction}
-                            onExitComplete={dispatch.onExitComplete}
-                        >
-                            <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
-                                <header className="relative flex justify-between">
-                                    <motion.button
-                                        onClick={dispatch.previousMonth}
-                                        variants={removeImmediately}
-                                        className="z-calendar rounded-full p-1.5 hover:bg-primary"
-                                    >
-                                        <ChevronLeftIcon className="h-4 w-4" />
-                                    </motion.button>
-                                    <motion.span
-                                        variants={variants}
-                                        custom={state.direction}
-                                        className="absolute inset-0 isolate z-normal flex items-center justify-center font-semibold"
-                                    >
-                                        <span className="flex w-fit items-center justify-center gap-0.5 py-1">
-                                            <select
-                                                style={{ width: `${monthString.length}ch` }}
-                                                value={monthString}
-                                                onChange={dispatch.onChangeMonth}
-                                                className="w-fit cursor-pointer appearance-none bg-transparent capitalize proportional-nums hover:text-primary"
-                                            >
-                                                {state.months}
-                                            </select>
-                                            <TheMaskInput
-                                                mask="int"
-                                                value={state.year}
-                                                maxLength={4}
-                                                placeholder="YYYY"
-                                                onChange={internalOnChangeYear}
-                                                style={{ width: `${state.year.length}ch` }}
-                                                className="w-16 cursor-pointer appearance-none bg-transparent hover:text-primary"
-                                            />
-                                        </span>
-                                    </motion.span>
-                                    <motion.button
-                                        variants={removeImmediately}
-                                        className="z-calendar rounded-full p-1.5 hover:bg-primary"
-                                        onClick={dispatch.nextMonth}
-                                    >
-                                        <ChevronRightIcon className="h-4 w-4" />
-                                    </motion.button>
-                                    <div
-                                        className="absolute inset-0"
-                                        style={{
-                                            backgroundImage:
-                                                "linear-gradient(to right, hsla(var(--card-background)) 15%, transparent 30%, transparent 70%, hsla(var(--card-background)) 85%)",
-                                        }}
-                                    />
-                                </header>
-                                <table className="mt-2 table min-w-full table-auto border-0">
-                                    <thead>
-                                        <tr>
-                                            {state.week.map((dayOfWeek) => (
-                                                <th
-                                                    key={dayOfWeek.toString()}
-                                                    className={css("py-2 text-sm font-medium capitalize", styles?.weekDay)}
-                                                >
-                                                    {dayOfWeek.toLocaleDateString(locale, { weekday: "short" })}
-                                                </th>
-                                            ))}
+                    <AnimatePresence initial={false} mode="popLayout" custom={state.direction} onExitComplete={dispatch.onExitComplete}>
+                        <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
+                            <header className="relative flex justify-between">
+                                <motion.button
+                                    layout
+                                    data-focustrap="prev"
+                                    variants={removeImmediately}
+                                    onClick={dispatch.previousMonth}
+                                    className="z-calendar rounded-full p-1.5 hover:bg-primary"
+                                >
+                                    <ChevronLeftIcon className="h-4 w-4" />
+                                </motion.button>
+                                <motion.span
+                                    layout
+                                    variants={variants}
+                                    custom={state.direction}
+                                    className="absolute inset-0 isolate z-normal flex items-center justify-center font-semibold"
+                                >
+                                    <span className="flex w-fit items-center justify-center gap-0.5 py-1">
+                                        <select
+                                            style={{ width: `${monthString.length}ch` }}
+                                            value={monthString}
+                                            onChange={dispatch.onChangeMonth}
+                                            className="w-fit cursor-pointer appearance-none bg-transparent capitalize proportional-nums hover:text-primary"
+                                        >
+                                            {state.months}
+                                        </select>
+                                        <TheMaskInput
+                                            mask="int"
+                                            value={state.year}
+                                            maxLength={4}
+                                            placeholder="YYYY"
+                                            onChange={internalOnChangeYear}
+                                            style={{ width: `${state.year.length}ch` }}
+                                            className="w-16 cursor-pointer appearance-none bg-transparent hover:text-primary"
+                                        />
+                                    </span>
+                                </motion.span>
+                                <motion.button
+                                    layout
+                                    data-focustrap="next"
+                                    variants={removeImmediately}
+                                    className="z-calendar rounded-full p-1.5 hover:bg-primary"
+                                    onClick={dispatch.nextMonth}
+                                >
+                                    <ChevronRightIcon className="h-4 w-4" />
+                                </motion.button>
+                                <div
+                                    className="absolute inset-0"
+                                    style={{
+                                        backgroundImage:
+                                            "linear-gradient(to right, hsla(var(--card-background)) 15%, transparent 30%, transparent 70%, hsla(var(--card-background)) 85%)",
+                                    }}
+                                />
+                            </header>
+                            <motion.table className="mt-2 table min-w-full table-auto border-0">
+                                <thead>
+                                    <tr>
+                                        {state.week.map((dayOfWeek) => (
+                                            <th key={dayOfWeek.toString()} className={css("py-2 text-sm font-medium capitalize", styles?.weekDay)}>
+                                                {dayOfWeek.toLocaleDateString(locale, { weekday: "short" })}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <motion.tbody
+                                    layout
+                                    variants={variants}
+                                    custom={state.direction}
+                                    onKeyDown={dispatch.onKeyDown}
+                                    className={css(styles?.week)}
+                                >
+                                    {zip.map((week, index) => (
+                                        <tr key={`week-${week.length}-${index}`} className={styles?.week}>
+                                            {week.map((day) => {
+                                                const key = day.toISOString();
+                                                const isSelected = rangeMode
+                                                    ? key === range?.to?.toISOString() || key === range?.from?.toISOString()
+                                                    : key === date?.toISOString();
+                                                const today = isToday(day) && markToday;
+                                                const disabledByFn = disabledDate?.(day) || false;
+                                                const disableDate = !isSameMonth(day, state.date) || disabledByFn;
+                                                const isInRange = rangeMode ? inRange(range?.from, day, range?.to) : false;
+                                                return (
+                                                    <td key={key} align="center" className={css("relative", styles?.dayFrame)}>
+                                                        <button
+                                                            type="button"
+                                                            data-date={key}
+                                                            disabled={disabledByFn}
+                                                            data-range={rangeMode}
+                                                            onClick={dispatch.onSelectDate}
+                                                            data-view={state.date.getMonth().toString()}
+                                                            className={css(
+                                                                `flex size-10 items-center justify-center rounded-full font-semibold proportional-nums disabled:cursor-not-allowed ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
+                                                                styles?.day,
+                                                                isInRange ? "size-10 border border-dashed border-card-border" : ""
+                                                            )}
+                                                        >
+                                                            {day.getDate()}
+                                                            {isSelected && state.range.from?.toISOString() === key ? (
+                                                                <span className="absolute -top-2 left-0 h-full w-full">
+                                                                    <span className="text-xs">{translate.calendarFromDate}</span>
+                                                                </span>
+                                                            ) : null}
+                                                            {isSelected && state.range.to?.toISOString() === key ? (
+                                                                <span className="absolute -top-2 left-0 h-full w-full">
+                                                                    <span className="text-xs">{translate.calendarToDate}</span>
+                                                                </span>
+                                                            ) : null}
+                                                        </button>
+                                                        {RenderOnDay ? <RenderOnDay date={day} /> : null}
+                                                    </td>
+                                                );
+                                            })}
                                         </tr>
-                                    </thead>
-                                    <motion.tbody
-                                        variants={variants}
-                                        custom={state.direction}
-                                        onKeyDown={dispatch.onKeyDown}
-                                        className={css(styles?.week)}
-                                    >
-                                        {zip.map((week, index) => {
-                                            return (
-                                                <tr key={`week-${week.length}-${index}`} className={styles?.week}>
-                                                    {week.map((day) => {
-                                                        const key = day.toISOString();
-                                                        const isSelected = rangeMode
-                                                            ? key === range?.to?.toISOString() || key === range?.from?.toISOString()
-                                                            : key === date?.toISOString();
-                                                        const today = isToday(day) && markToday;
-                                                        const disabledByFn = disabledDate?.(day) || false;
-                                                        const disableDate = !isSameMonth(day, state.date) || disabledByFn;
-                                                        const isInRange = rangeMode ? inRange(range?.from, day, range?.to) : false;
-                                                        return (
-                                                            <td key={key} align="center" className={css("relative", styles?.dayFrame)}>
-                                                                <button
-                                                                    type="button"
-                                                                    data-date={key}
-                                                                    disabled={disabledByFn}
-                                                                    data-range={rangeMode}
-                                                                    onClick={dispatch.onSelectDate}
-                                                                    data-view={state.date.getMonth().toString()}
-                                                                    className={css(
-                                                                        `flex size-10 items-center justify-center rounded-full font-semibold proportional-nums disabled:cursor-not-allowed ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
-                                                                        styles?.day,
-                                                                        isInRange ? "size-10 border border-dashed border-card-border" : ""
-                                                                    )}
-                                                                >
-                                                                    {day.getDate()}
-                                                                    {isSelected && state.range.from?.toISOString() === key ? (
-                                                                        <span className="absolute h-full w-full">
-                                                                            <span className="flex h-full items-center justify-end">
-                                                                                <span className="sr-only">{translate.calendarFromDate}</span>
-                                                                                <ChevronRightIcon
-                                                                                    aria-hidden="true"
-                                                                                    className="text-primary-subtle"
-                                                                                    absoluteStrokeWidth
-                                                                                    size={28}
-                                                                                    strokeWidth={3}
-                                                                                />
-                                                                            </span>
-                                                                        </span>
-                                                                    ) : null}
-                                                                    {isSelected && state.range.to?.toISOString() === key ? (
-                                                                        <span className="absolute h-full w-full">
-                                                                            <span className="flex h-full items-center justify-start">
-                                                                                <span className="sr-only">{translate.calendarToDate}</span>
-                                                                                <ChevronLeftIcon
-                                                                                    aria-hidden="true"
-                                                                                    className="text-primary-subtle"
-                                                                                    absoluteStrokeWidth
-                                                                                    size={28}
-                                                                                    strokeWidth={3}
-                                                                                />
-                                                                            </span>
-                                                                        </span>
-                                                                    ) : null}
-                                                                </button>
-                                                                {RenderOnDay ? <RenderOnDay date={day} /> : null}
-                                                            </td>
-                                                        );
-                                                    })}
-                                                </tr>
-                                            );
-                                        })}
-                                    </motion.tbody>
-                                </table>
-                            </motion.div>
-                        </AnimatePresence>
-                    </Resizable>
+                                    ))}
+                                </motion.tbody>
+                            </motion.table>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
                 <footer className="mt-2 text-center text-primary">
                     <button className="duration-300 transition-transform hover:scale-105" type="button" onClick={dispatch.setToday}>

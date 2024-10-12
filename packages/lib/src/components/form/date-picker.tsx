@@ -1,15 +1,14 @@
-import { format, parse, startOfDay } from "date-fns";
+import { format, isValid, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import React, { forwardRef, Fragment, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
-import { Mask } from "the-mask-input/dist/src/types";
 import { useTranslations } from "../../hooks/use-translate-context";
 import { Override } from "../../types";
 import { Calendar, CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
 import { Input, InputProps } from "./input";
 
-export type DatePickerProps = Override<InputProps, CalendarProps & {}>;
+export type DatePickerProps = Override<InputProps, CalendarProps<"date">>;
 
 const fixedDate = new Date(1970, 11, 31);
 
@@ -34,25 +33,36 @@ const partValues = {
     month: (date: Date) => (date.getMonth() + 1).toString().padStart(2, "0"),
 };
 
+const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
+    try {
+        return datetimeFormat.formatToParts(date);
+    } catch (e) {
+        return [];
+    }
+};
+
+type Mask = string | RegExp;
+
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-    ({ date, locale, disabledDate, autoFocusToday, onChange, markToday, ...props }: DatePickerProps, externalRef) => {
+    ({ date, locale, disabledDate, onChange, markToday, ...props }: DatePickerProps, externalRef) => {
         const labelId = useId();
         const translation = useTranslations();
         const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale), [locale]);
         const [innerDate, setInnerDate] = useState(date || undefined);
         const [open, setOpen] = useState(false);
-        const mask: Mask[] = datetimeFormat.formatToParts(fixedDate).flatMap((x) => (Is.keyof(parts, x.type) ? (parts[x.type](x.value) as any) : []));
-        const placeholder = datetimeFormat
-
-            .formatToParts(fixedDate)
-            .reduce((acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""), "");
+        const mask: Mask[] = formatParts(datetimeFormat, fixedDate).flatMap((x) => (Is.keyof(parts, x.type) ? (parts[x.type](x.value) as any) : []));
+        const placeholder = formatParts(datetimeFormat, fixedDate).reduce(
+            (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
+            ""
+        );
 
         const [value, setValue] = useState(
             !innerDate
                 ? ""
-                : datetimeFormat
-                      .formatToParts(innerDate)
-                      .reduce((acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""), "")
+                : formatParts(datetimeFormat, innerDate).reduce(
+                      (acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""),
+                      ""
+                  )
         );
 
         const onChangeDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +90,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             return setValue("");
         };
 
-        const htmlValue = innerDate?.toISOString();
+        const validDate = isValid(innerDate);
+
+        const htmlValue = validDate ? innerDate!.toISOString() : undefined;
 
         return (
             <Input
@@ -124,11 +136,11 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                             <Calendar
                                 {...props}
                                 locale={locale}
-                                date={innerDate}
-                                onChange={onChangeDate}
+                                changeOnlyOnClick
                                 markToday={markToday}
+                                onChange={onChangeDate}
                                 disabledDate={disabledDate}
-                                autoFocusToday={autoFocusToday}
+                                date={validDate ? innerDate : undefined}
                             />
                         </Dropdown>
                     </Fragment>

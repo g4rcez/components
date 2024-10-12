@@ -51,8 +51,8 @@ const defaultTranslations = {
       {Array.isArray(pagination.sizes) ? (pagination.select) : null} per page.
     </Fragment>,
 
-  calendarFromDate: "From date",
-  calendarToDate: "To date",
+  calendarFromDate: "From",
+  calendarToDate: "To",
 }
 
 type Translations = typeof defaultTranslations;
