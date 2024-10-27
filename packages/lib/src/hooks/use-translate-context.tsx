@@ -4,6 +4,9 @@ const defaultTranslations = {
   inputCaretDown: "Click to see all options",
   datePickerCalendarButtonLabel: "Click to open a date picker",
   inputOptionalLabel: "Optional",
+
+  tableGroupLabel: "Group",
+  tableGroupLabelWithCount: "Group",
   tableSortAsc: "Ascending",
   tableSortOrderByLabel: "Order by",
   tableSortOrderInputPlaceholder: "Order by",

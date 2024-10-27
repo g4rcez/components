@@ -1,9 +1,10 @@
 "use client";
 import { LayoutGroup, Reorder, useDragControls, useMotionValue } from "framer-motion";
 import Linq from "linq-arrays";
-import { GripVerticalIcon, GroupIcon, Trash2Icon, UngroupIcon } from "lucide-react";
+import { GripVerticalIcon, Trash2Icon, UngroupIcon } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { keys } from "sidekicker";
+import { useTranslations } from "../../hooks/use-translate-context";
 import { uuid } from "../../lib/fns";
 import { Button } from "../core/button";
 import { Dropdown } from "../floating/dropdown";
@@ -47,6 +48,7 @@ const Item = ({ item, onPointerDown }: { item: GroupItem<any>; onPointerDown: an
 };
 
 export const Group = <T extends {}>(props: Props<T>) => {
+    const translations = useTranslations();
     const options = createOptionCols(props.cols);
     const controls = useDragControls();
     const [group, setGroup] = useState((props.groups[0]?.thead as string) || "");
@@ -73,11 +75,11 @@ export const Group = <T extends {}>(props: Props<T>) => {
         <Fragment>
             <Dropdown
                 arrow={false}
-                title="Groups"
+                title={translations.tableGroupLabel}
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
                         <UngroupIcon size={14} />
-                        Groups{props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
+                        {translations.tableGroupLabelWithCount}{props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
                     </span>
                 }
             >

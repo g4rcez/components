@@ -1,7 +1,8 @@
 "use client";
 import { motion, useMotionValue } from "framer-motion";
-import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useReactive } from "../../hooks/use-reactive";
+import { useStableRef } from "../../hooks/use-stable-ref";
 import { Label, SetState } from "../../types";
 import { Button } from "../core/button";
 import { Modal } from "../floating/modal";
@@ -9,9 +10,9 @@ import { Card } from "./card";
 
 export type TabsProps = {
     active: string;
-    onChange?: (id: string) => void;
     useHash?: boolean;
     className?: string;
+    onChange?: (id: string) => void;
 };
 
 const Context = createContext<string>("");
@@ -23,9 +24,11 @@ const SelectTab = (props: { items: any[]; active: string; setActive: SetState<st
         return inner.id === props.active;
     });
     return (
-        <div className="my-4 px-8 flex min-w-full text-center lg:hidden">
-            <Button className="min-w-full" onClick={() => setView(true)}>{title?.props?.title}</Button>
-            <Modal closable forceType onChange={setView} open={view} type="dialog">
+        <div className="my-4 flex min-w-full px-8 text-center lg:hidden">
+            <Button className="min-w-full" onClick={() => setView(true)}>
+                {title?.props?.title}
+            </Button>
+            <Modal closable onChange={setView} open={view} type="dialog">
                 <ul className="mt-4 space-y-4">
                     {props.items.map((x: any) => {
                         const inner = x.props as TabProps;
@@ -54,7 +57,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const Render = props.useHash ? "a" : "button";
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const header = ref.current;
         if (header === null) return;
         const resize = (element?: HTMLElement | null) => {
@@ -83,9 +86,10 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
         return () => window.removeEventListener("resize", listener);
     }, []);
 
+    const onChangeRef = useStableRef(props.onChange);
     useEffect(() => {
-        if (props.onChange) props.onChange(active);
-    }, [props.onChange, active]);
+        if (onChangeRef.current) onChangeRef.current(active);
+    }, [onChangeRef, active]);
 
     const items = React.Children.toArray(props.children as React.ReactElement<TabProps>);
 
@@ -110,7 +114,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                             aria-hidden="true"
                             style={{ left, width }}
                             transition={{ type: "tween", left, width }}
-                            className="duration-300 absolute bottom-0 hidden h-0.5 w-28 bg-primary transition-all lg:block"
+                            className="absolute bottom-0 hidden h-0.5 w-28 bg-primary transition-all duration-300 lg:block"
                         />
                         <nav>
                             <SelectTab setActive={setActive} items={items} active={active} />

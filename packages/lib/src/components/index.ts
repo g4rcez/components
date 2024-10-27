@@ -11,6 +11,7 @@ export * from "./floating/modal";
 export * from "./floating/tooltip";
 export * from "./form/autocomplete";
 export * from "./form/checkbox";
+export * from "./form/task-list";
 export * from "./form/date-picker";
 export * from "./form/file-upload";
 export * from "./form/form";

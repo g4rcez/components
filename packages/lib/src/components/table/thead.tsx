@@ -45,6 +45,7 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
         <Reorder.Item
             {...(props.header.thProps as {})}
             as="th"
+            layout
             exit={exit}
             initial={false}
             dragSnapToOrigin

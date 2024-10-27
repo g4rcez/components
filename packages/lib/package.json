@@ -1,203 +1,227 @@
 {
-    "name": "@g4rcez/components",
-    "version": "0.0.34",
-    "sideEffects": false,
-    "private": false,
-    "packageManager": "pnpm@8.15.3",
-    "publishConfig": {
-        "directory": "dist"
+  "name": "@g4rcez/components",
+  "version": "0.0.35",
+  "sideEffects": false,
+  "private": false,
+  "packageManager": "pnpm@8.15.3",
+  "publishConfig": {
+    "directory": "dist"
+  },
+  "engines": {
+    "node": ">=20.14.0"
+  },
+  "author": {
+    "email": "allan.f.garcez@gmail.com",
+    "name": "Allan Garcez",
+    "url": "https://garcez.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/g4rcez/components/issues"
+  },
+  "repository": {
+    "url": "https://github.com/g4rcez/components",
+    "type": "git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "watch": "vite build --watch --minify false",
+    "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
+    "format": "npx prettier --write .",
+    "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
+    "lib:tailwind": "tsc -p tsconfig.tailwind.json",
+    "lib:types": "tsc -p tsconfig.lib.json",
+    "preset": "tsc -p tsconfig.tailwind.json",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@floating-ui/react": "0.26.20",
+    "@radix-ui/react-slot": "1.1.0",
+    "@radix-ui/react-toast": "1.2.1",
+    "class-variance-authority": "0.7.0",
+    "clsx": "2.1.1",
+    "date-fns": "3.6.0",
+    "framer-motion": "11.3.8",
+    "fuzzy-search": "3.2.1",
+    "linq-arrays": "3.2.5",
+    "lucide-react": "0.414.0",
+    "pretty-bytes": "6.1.1",
+    "qs": "6.12.3",
+    "react-dropzone": "14.2.3",
+    "react-use-measure": "2.1.1",
+    "react-virtuoso": "4.7.13",
+    "sidekicker": "0.1.8",
+    "storage-manager-js": "4.2.6-5",
+    "tailwind-merge": "2.4.0",
+    "the-mask-input": "3.3.12",
+    "use-typed-reducer": "4.2.1",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "0.5.7",
+    "@types/fuzzy-search": "2.1.5",
+    "@types/node": "20.14.11",
+    "@types/qs": "6.9.15",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "postcss": "8.4.39",
+    "prettier": "3.3.3",
+    "tailwindcss": "3.4.4",
+    "tslib": "2.6.3",
+    "typescript": "5.5.4",
+    "vite": "5.3.4",
+    "vite-tsconfig-paths": "4.3.2",
+    "vitest": "2.0.4"
+  },
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.umd.js",
+  "browser": "./dist/index.umd.js",
+  "module": "./dist/index.cjs",
+  "files": [
+    "dist",
+    "dist/index.css"
+  ],
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.ts",
+        "default": "./dist/index.d.ts"
+      },
+      "default": {
+        "type": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.umd.js",
+        "default": "./dist/index.mjs"
+      }
     },
-    "engines": {
-        "node": ">=20.14.0"
+    "./index.css": "./dist/index.css",
+    "./dist/index.css": "./dist/index.css",
+    "./themes": {
+      "type": "./dist/preset/src/styles/theme.d.ts",
+      "import": "./dist/preset/src/styles/theme.js",
+      "require": "./dist/preset/src/styles/theme.js",
+      "default": "./dist/preset/src/styles/theme.js"
     },
-    "author": {
-        "email": "allan.f.garcez@gmail.com",
-        "name": "Allan Garcez",
-        "url": "https://garcez.dev"
+    "./styles": {
+      "type": "./dist/preset/src/styles/design-tokens.d.ts",
+      "import": "./dist/preset/src/styles/design-tokens.js",
+      "require": "./dist/preset/src/styles/design-tokens.js",
+      "default": "./dist/preset/src/styles/design-tokens.js"
     },
-    "bugs": {
-        "url": "https://github.com/g4rcez/components/issues"
+    "./preset.tailwind": {
+      "type": "./dist/preset/preset.tailwind.d.ts",
+      "import": "./dist/preset/preset.tailwind.js",
+      "require": "./dist/preset/preset.tailwind.js",
+      "default": "./dist/preset/preset.tailwind.js"
     },
-    "repository": {
-        "url": "https://github.com/g4rcez/components",
-        "type": "git"
+    "./button": {
+      "type": "./dist/components/core/button.d.ts",
+      "import": "./dist/components/core/button.js",
+      "require": "./dist/components/core/button.js",
+      "default": "./dist/components/core/button.js"
     },
-    "license": "MIT",
-    "scripts": {
-        "watch": "vite build --watch --minify false",
-        "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
-        "format": "npx prettier --write .",
-        "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
-        "lib:tailwind": "tsc -p tsconfig.tailwind.json",
-        "lib:types": "tsc -p tsconfig.lib.json",
-        "preset": "tsc -p tsconfig.tailwind.json",
-        "test": "vitest run",
-        "test:watch": "vitest watch"
+    "./task-list": {
+      "type": "./dist/components/form/task-list.d.ts",
+      "import": "./dist/components/form/task-list.js",
+      "require": "./dist/components/form/task-list.js",
+      "default": "./dist/components/form/task-list.js"
     },
-    "peerDependencies": {
-        "react": ">=18",
-        "react-dom": ">=18"
+    "./checkbox": {
+      "type": "./dist/components/form/checkbox.d.ts",
+      "import": "./dist/components/form/checkbox.js",
+      "require": "./dist/components/form/checkbox.js",
+      "default": "./dist/components/form/checkbox.js"
     },
-    "dependencies": {
-        "@floating-ui/react": "0.26.20",
-        "@radix-ui/react-slot": "1.1.0",
-        "@radix-ui/react-toast": "1.2.1",
-        "class-variance-authority": "0.7.0",
-        "clsx": "2.1.1",
-        "date-fns": "3.6.0",
-        "framer-motion": "11.3.8",
-        "fuzzy-search": "3.2.1",
-        "linq-arrays": "3.2.5",
-        "lucide-react": "0.414.0",
-        "pretty-bytes": "6.1.1",
-        "qs": "6.12.3",
-        "react-dropzone": "14.2.3",
-        "react-use-measure": "2.1.1",
-        "react-virtuoso": "4.7.13",
-        "sidekicker": "0.1.8",
-        "storage-manager-js": "4.2.6-5",
-        "tailwind-merge": "2.4.0",
-        "the-mask-input": "3.3.12",
-        "use-typed-reducer": "4.2.1",
-        "zod": "3.23.8"
+    "./input": {
+      "type": "./dist/components/form/input.d.ts",
+      "import": "./dist/components/form/input.js",
+      "require": "./dist/components/form/input.js",
+      "default": "./dist/components/form/input.js"
     },
-    "devDependencies": {
-        "@tailwindcss/forms": "0.5.7",
-        "@types/fuzzy-search": "2.1.5",
-        "@types/node": "20.14.11",
-        "@types/qs": "6.9.15",
-        "@types/react": "18.3.3",
-        "@types/react-dom": "18.3.0",
-        "@vitejs/plugin-react": "4.3.1",
-        "postcss": "8.4.39",
-        "prettier": "3.3.3",
-        "tailwindcss": "3.4.4",
-        "tslib": "2.6.3",
-        "typescript": "5.5.4",
-        "vite": "5.3.4",
-        "vite-tsconfig-paths": "4.3.2",
-        "vitest": "2.0.4"
+    "./autocomplete": {
+      "type": "./dist/components/form/autocomplete.d.ts",
+      "import": "./dist/components/form/autocomplete.js",
+      "require": "./dist/components/form/autocomplete.js",
+      "default": "./dist/components/form/autocomplete.js"
     },
-    "source": "./src/index.ts",
-    "types": "./dist/index.d.ts",
-    "main": "./dist/index.umd.js",
-    "browser": "./dist/index.umd.js",
-    "module": "./dist/index.cjs",
-    "files": [
-        "dist",
-        "dist/index.css"
-    ],
-    "exports": {
-        ".": {
-            "types": {
-                "import": "./dist/index.d.ts",
-                "require": "./dist/index.d.ts",
-                "default": "./dist/index.d.ts"
-            },
-            "default": {
-                "type": "./dist/index.d.ts",
-                "import": "./dist/index.mjs",
-                "require": "./dist/index.umd.js",
-                "default": "./dist/index.mjs"
-            }
-        },
-        "./index.css": "./dist/index.css",
-        "./dist/index.css": "./dist/index.css",
-        "./themes": {
-            "type": "./dist/preset/src/styles/theme.d.ts",
-            "import": "./dist/preset/src/styles/theme.js",
-            "require": "./dist/preset/src/styles/theme.js",
-            "default": "./dist/preset/src/styles/theme.js"
-        },
-        "./styles": {
-            "type": "./dist/preset/src/styles/design-tokens.d.ts",
-            "import": "./dist/preset/src/styles/design-tokens.js",
-            "require": "./dist/preset/src/styles/design-tokens.js",
-            "default": "./dist/preset/src/styles/design-tokens.js"
-        },
-        "./preset.tailwind": {
-            "type": "./dist/preset/preset.tailwind.d.ts",
-            "import": "./dist/preset/preset.tailwind.js",
-            "require": "./dist/preset/preset.tailwind.js",
-            "default": "./dist/preset/preset.tailwind.js"
-        },
-        "./button": {
-            "type": "./dist/components/core/button.d.ts",
-            "import": "./dist/components/core/button.js",
-            "require": "./dist/components/core/button.js",
-            "default": "./dist/components/core/button.js"
-        },
-        "./input": {
-            "type": "./dist/components/form/input.d.ts",
-            "import": "./dist/components/form/input.js",
-            "require": "./dist/components/form/input.js",
-            "default": "./dist/components/form/input.js"
-        },
-        "./autocomplete": {
-            "type": "./dist/components/form/autocomplete.d.ts",
-            "import": "./dist/components/form/autocomplete.js",
-            "require": "./dist/components/form/autocomplete.js",
-            "default": "./dist/components/form/autocomplete.js"
-        },
-        "./switch": {
-            "type": "./dist/components/form/switch.d.ts",
-            "import": "./dist/components/form/switch.js",
-            "require": "./dist/components/form/switch.js",
-            "default": "./dist/components/form/switch.js"
-        },
-        "./file-upload": {
-            "type": "./dist/components/form/file-upload.d.ts",
-            "import": "./dist/components/form/file-upload.js",
-            "require": "./dist/components/form/file-upload.js",
-            "default": "./dist/components/form/file-upload.js"
-        },
-        "./select": {
-            "type": "./dist/components/form/select.d.ts",
-            "import": "./dist/components/form/select.js",
-            "require": "./dist/components/form/select.js",
-            "default": "./dist/components/form/select.js"
-        },
-        "./dropdown": {
-            "type": "./dist/components/floating/dropdown.d.ts",
-            "import": "./dist/components/floating/dropdown.js",
-            "require": "./dist/components/floating/dropdown.js",
-            "default": "./dist/components/floating/dropdown.js"
-        },
-        "./modal": {
-            "type": "./dist/components/floating/modal.d.ts",
-            "import": "./dist/components/floating/modal.js",
-            "require": "./dist/components/floating/modal.js",
-            "default": "./dist/components/floating/modal.js"
-        },
-        "./tooltip": {
-            "type": "./dist/components/floating/tooltip.d.ts",
-            "import": "./dist/components/floating/tooltip.js",
-            "require": "./dist/components/floating/tooltip.js",
-            "default": "./dist/components/floating/tooltip.js"
-        },
-        "./calendar": {
-            "type": "./dist/components/display/calendar.d.ts",
-            "import": "./dist/components/display/calendar.js",
-            "require": "./dist/components/display/calendar.js",
-            "default": "./dist/components/display/calendar.js"
-        },
-        "./card": {
-            "type": "./dist/components/display/card.d.ts",
-            "import": "./dist/components/display/card.js",
-            "require": "./dist/components/display/card.js",
-            "default": "./dist/components/display/card.js"
-        },
-        "./table": {
-            "type": "./dist/components/table/table.d.ts",
-            "import": "./dist/components/table/table.js",
-            "require": "./dist/components/table/table.js",
-            "default": "./dist/components/table/table.js"
-        },
-        "./menu": {
-            "type": "./dist/components/floating/menu.d.ts",
-            "import": "./dist/components/floating/menu.js",
-            "require": "./dist/components/floating/menu.js",
-            "default": "./dist/components/floating/menu.js"
-        }
+    "./switch": {
+      "type": "./dist/components/form/switch.d.ts",
+      "import": "./dist/components/form/switch.js",
+      "require": "./dist/components/form/switch.js",
+      "default": "./dist/components/form/switch.js"
+    },
+    "./file-upload": {
+      "type": "./dist/components/form/file-upload.d.ts",
+      "import": "./dist/components/form/file-upload.js",
+      "require": "./dist/components/form/file-upload.js",
+      "default": "./dist/components/form/file-upload.js"
+    },
+    "./select": {
+      "type": "./dist/components/form/select.d.ts",
+      "import": "./dist/components/form/select.js",
+      "require": "./dist/components/form/select.js",
+      "default": "./dist/components/form/select.js"
+    },
+    "./dropdown": {
+      "type": "./dist/components/floating/dropdown.d.ts",
+      "import": "./dist/components/floating/dropdown.js",
+      "require": "./dist/components/floating/dropdown.js",
+      "default": "./dist/components/floating/dropdown.js"
+    },
+    "./modal": {
+      "type": "./dist/components/floating/modal.d.ts",
+      "import": "./dist/components/floating/modal.js",
+      "require": "./dist/components/floating/modal.js",
+      "default": "./dist/components/floating/modal.js"
+    },
+    "./tooltip": {
+      "type": "./dist/components/floating/tooltip.d.ts",
+      "import": "./dist/components/floating/tooltip.js",
+      "require": "./dist/components/floating/tooltip.js",
+      "default": "./dist/components/floating/tooltip.js"
+    },
+    "./calendar": {
+      "type": "./dist/components/display/calendar.d.ts",
+      "import": "./dist/components/display/calendar.js",
+      "require": "./dist/components/display/calendar.js",
+      "default": "./dist/components/display/calendar.js"
+    },
+    "./card": {
+      "type": "./dist/components/display/card.d.ts",
+      "import": "./dist/components/display/card.js",
+      "require": "./dist/components/display/card.js",
+      "default": "./dist/components/display/card.js"
+    },
+    "./table": {
+      "type": "./dist/components/table/table.d.ts",
+      "import": "./dist/components/table/table.js",
+      "require": "./dist/components/table/table.js",
+      "default": "./dist/components/table/table.js"
+    },
+    "./menu": {
+      "type": "./dist/components/floating/menu.d.ts",
+      "import": "./dist/components/floating/menu.js",
+      "require": "./dist/components/floating/menu.js",
+      "default": "./dist/components/floating/menu.js"
+    },
+    "./tabs": {
+      "type": "./dist/components/display/tabs.d.ts",
+      "import": "./dist/components/display/tabs.js",
+      "require": "./dist/components/display/tabs.js",
+      "default": "./dist/components/display/tabs.js"
+    },
+    "./stats": {
+      "type": "./dist/components/display/stats.d.ts",
+      "import": "./dist/components/display/stats.js",
+      "require": "./dist/components/display/stats.js",
+      "default": "./dist/components/display/stats.js"
     }
+  }
 }

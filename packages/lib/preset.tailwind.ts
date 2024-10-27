@@ -6,14 +6,16 @@ import { defaultDarkTheme } from "./src/styles/theme";
 
 const COLORS = createDesignTokens(defaultDarkTheme.colors, parsers.formatWithVar("hsla"));
 
+export const css = String.raw;
+
 const config: Partial<Config> = {
     theme: {
-        transitionTimingFunction: {
-            DEFAULT: "cubic-bezier(0,0,.58,1)",
-            normal: "cubic-bezier(.25,.1,.25,1)",
-        },
-        transitionDuration: { DEFAULT: "375ms" },
         extend: {
+            transitionTimingFunction: {
+                DEFAULT: "cubic-bezier(0,0,.58,1)",
+                normal: "cubic-bezier(.25,.1,.25,1)",
+            },
+            transitionDuration: { DEFAULT: "375ms" },
             minWidth: { xs: "20rem", screen: "100vh" },
             borderRadius: createDesignTokens(defaultDarkTheme.rounded, parsers.cssVariable),
             fill: COLORS,
@@ -44,6 +46,9 @@ const config: Partial<Config> = {
                 `:merge(.group[data-error=true]:has(.input[data-initialized=true])) &`,
                 `:merge(.group[data-error=true][data-interactive=true]):has(.input) &`,
                 `:merge(.group[data-error=true][data-interactive=true]):has(.input[data-initialized=true]) &`,
+            ]);
+            addVariant("group-checkbox-checked", [
+                `:merge(&:has(.form-checkbox[type=checkbox]:checked))`,
             ]);
         }),
     ],
