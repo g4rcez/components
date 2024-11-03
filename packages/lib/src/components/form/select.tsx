@@ -13,8 +13,7 @@ export type SelectProps = Override<
     {
         options: OptionProps[];
         selectContainer?: string;
-    }
->;
+    }>;
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     (

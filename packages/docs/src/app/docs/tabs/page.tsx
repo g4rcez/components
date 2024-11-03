@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useState } from "react";
-import { Alert, Button, Tab, Tabs } from "../../../../../lib/src";
+import { Alert, Tab, Tabs } from "../../../../../lib/src";
 
 export default function FormPage() {
   const [state, setState] = useState("second");

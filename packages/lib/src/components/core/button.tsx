@@ -1,12 +1,11 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion";
 import React, { forwardRef } from "react";
 import { css } from "../../lib/dom";
 import { type Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const buttonVariants = cva(
-    "inline-flex duration-700 enabled:hover:bg-opacity-80 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 text-main-foreground border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring ease-normal",
+    "inline-flex duration-700 enabled:hover:bg-opacity-80 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring ease-normal",
     {
         variants: {
             size: {
@@ -17,19 +16,22 @@ const buttonVariants = cva(
             },
             rounded: {
                 rough: "rounded-sm",
-                default: "rounded-md",
+                default: "rounded-button",
                 squared: "rounded-none",
                 circle: "rounded-full aspect-square",
             },
             theme: {
                 raw: "",
-                primary: "bg-primary text-primary-foreground",
+                danger: "bg-button-danger-bg text-button-danger-text",
+                disabled: "bg-disabled duration-700 opacity-70",
+                info: "bg-button-info-bg text-button-info-text",
+                loading: "animate-pulse bg-disabled duration-700 opacity-70",
                 main: "bg-primary text-primary-foreground",
-                warn: "bg-warn text-warn-foreground",
-                danger: "bg-danger text-danger-foreground",
-                secondary: "bg-secondary-background text-secondary-foreground disabled:text-secondary-subtle",
-                success: "bg-success text-success-foreground",
-                info: "bg-info text-info-foreground",
+                neutral: "bg-transparent border border-card-border",
+                primary: "bg-button-primary-bg text-button-primary-text",
+                secondary: "bg-button-secondary-bg text-button-secondary-text",
+                success: "bg-button-success-bg text-button-success-text",
+                warn: "bg-button-warn-bg text-button-warn-text",
             },
         },
         defaultVariants: { theme: "main", size: "default", rounded: "default" },
@@ -70,22 +72,3 @@ type Props = {
     buttons: ButtonProps[];
 };
 
-export const ButtonGroup = (props: Props) => (
-    <ul className="border-main-bg text-main-foreground flex w-full flex-row rounded-md border-2">
-        {props.buttons.map((button) => (
-            <li key={`button-group-${button.name}`} className="flex flex-1">
-                <button
-                    {...button}
-                    type={button.type || "button"}
-                    data-active={props.active === button.name ? "true" : "false"}
-                    className={css(
-                        "flex flex-1 items-center gap-1.5 rounded-sm border-r-2 px-4 py-2 last:border-r-0",
-                        "cursor-pointer justify-center whitespace-nowrap align-middle font-medium",
-                        "focus-visible:ring-ring shadow-sm focus-visible:outline-none focus-visible:ring-2 disabled:text-opacity-80",
-                        "data-[active=true]:bg-main-bg text-body data-[active=true]:text-main transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-50"
-                    )}
-                />
-            </li>
-        ))}
-    </ul>
-);

@@ -82,9 +82,9 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
                     id={id}
                     name={id}
                     className={css(
-                        "input placeholder-input-mask group h-10 w-full flex-1 rounded-md bg-transparent px-2 py-1 text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
-                        !!right ? "pe-4" : "",
-                        !!left ? "ps-4" : "",
+                        "input  placeholder-input-mask h-input-height px-input-x py-input-y group w-full flex-1 rounded-md bg-transparent text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        !!right ? "pe-input-inline" : "",
+                        !!left ? "ps-input-inline" : "",
                         props.className
                     )}
                 />

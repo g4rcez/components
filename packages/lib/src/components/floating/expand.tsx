@@ -1,5 +1,5 @@
 "use client";
-import { FloatingFocusManager, FloatingPortal, offset, useClick, useDismiss, useFloating, useInteractions, useRole } from "@floating-ui/react";
+import { FloatingFocusManager, FloatingPortal, useClick, useDismiss, useFloating, useInteractions, useRole } from "@floating-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PropsWithChildren, useId, useRef, useState } from "react";
 import { Label, Override } from "../../types";
@@ -17,8 +17,8 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
     const { context, refs } = useFloating({
         transform: true,
         open: open !== null,
-        onOpenChange: setOpen,
         nodeId: id,
+        onOpenChange: setOpen,
         strategy: "absolute",
     });
     const click = useClick(context);

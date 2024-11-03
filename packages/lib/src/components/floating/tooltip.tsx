@@ -8,6 +8,7 @@ import {
     offset,
     type Placement,
     shift,
+    useClientPoint,
     useDismiss,
     useFloating,
     useFocus,
@@ -26,10 +27,11 @@ export type TooltipProps<T extends ComponentLike = "span"> = Override<
         title: Label;
         enabled?: boolean;
         placement?: Placement;
+        followCursor?: boolean;
     }
 >;
 
-export const Tooltip = <T extends ComponentLike = "span">({ children, placement, enabled, as, title, ...props }: TooltipProps<T>) => {
+export const Tooltip = <T extends ComponentLike = "span">({ children, followCursor = false, placement, enabled, as, title, ...props }: TooltipProps<T>) => {
     const [open, setOpen] = useState(false);
     const arrowRef = useRef(null);
     const Component: any = as || "span";
@@ -45,7 +47,8 @@ export const Tooltip = <T extends ComponentLike = "span">({ children, placement,
     const focus = useFocus(context, { enabled });
     const dismiss = useDismiss(context, { enabled });
     const role = useRole(context, { role: "tooltip", enabled });
-    const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
+    const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
+    const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role, clientPoint]);
 
     return (
         <Fragment>

@@ -107,7 +107,7 @@ export const InputField = <T extends "input" | "select">({
     const translation = useTranslations();
     const optionalText = _optionalText ?? translation.inputOptionalLabel;
     return (
-        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex w-full gap-1.5", container)}>
+        <fieldset form={form} data-error={!!error} data-interactive={!!interactive} className={css("group inline-flex w-full gap-input-gap", container)}>
             <label
                 form={form}
                 htmlFor={ID}

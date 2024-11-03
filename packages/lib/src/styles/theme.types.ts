@@ -1,21 +1,15 @@
 export type GeneralTokens = { [K in string]: string | GeneralTokens };
 
+type ThemeState = "primary" | "warn" | "secondary" | "info" | "danger" | "success" | "neutral";
+
 export type DesignTokens = {
     name: string;
-    shadow: {
-        floating: string;
-    };
-    rounded: {
-        full: string;
-        pill: string;
-        card: string;
-    };
-    spacing: {
-        base: string;
-        lg: string;
-        sm: string;
-    };
+    shadow: Record<"floating", string>;
+    rounded: Record<"button" | "full" | "pill" | "card", string>;
+    spacing: Record<"base" | "lg" | "sm", string>;
     colors: {
+        tag: Record<ThemeState, { text: string; bg: string }>;
+        button: Record<ThemeState, { text: string; bg: string }>;
         foreground: string;
         background: string;
         disabled: string;

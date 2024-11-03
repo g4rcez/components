@@ -8,6 +8,8 @@ const COLORS = createDesignTokens(defaultDarkTheme.colors, parsers.formatWithVar
 
 export const css = String.raw;
 
+const spacing = createDesignTokens(defaultDarkTheme.spacing, parsers.cssVariable);
+
 const config: Partial<Config> = {
     theme: {
         extend: {
@@ -15,6 +17,7 @@ const config: Partial<Config> = {
                 DEFAULT: "cubic-bezier(0,0,.58,1)",
                 normal: "cubic-bezier(.25,.1,.25,1)",
             },
+            spacing,
             transitionDuration: { DEFAULT: "375ms" },
             minWidth: { xs: "20rem", screen: "100vh" },
             borderRadius: createDesignTokens(defaultDarkTheme.rounded, parsers.cssVariable),
@@ -47,12 +50,12 @@ const config: Partial<Config> = {
                 `:merge(.group[data-error=true][data-interactive=true]):has(.input) &`,
                 `:merge(.group[data-error=true][data-interactive=true]):has(.input[data-initialized=true]) &`,
             ]);
-            addVariant("group-checkbox-checked", [
-                `:merge(&:has(.form-checkbox[type=checkbox]:checked))`,
-            ]);
+            addVariant("group-checkbox-checked", [`:merge(&:has(.form-checkbox[type=checkbox]:checked))`]);
         }),
     ],
 };
+
+console.log(config.theme.extend)
 
 export { createDesignTokens, parsers, defaultDarkTheme };
 

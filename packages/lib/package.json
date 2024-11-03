@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.35",
+  "version": "0.0.37",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -74,7 +74,7 @@
     "tailwindcss": "3.4.4",
     "tslib": "2.6.3",
     "typescript": "5.5.4",
-    "vite": "5.3.4",
+    "vite": "5.4.6",
     "vite-tsconfig-paths": "4.3.2",
     "vitest": "2.0.4"
   },
@@ -121,11 +121,41 @@
       "require": "./dist/preset/preset.tailwind.js",
       "default": "./dist/preset/preset.tailwind.js"
     },
+    "./tag": {
+      "type": "./dist/components/core/tag.d.ts",
+      "import": "./dist/components/core/tag.js",
+      "require": "./dist/components/core/tag.js",
+      "default": "./dist/components/core/tag.js"
+    },
     "./button": {
       "type": "./dist/components/core/button.d.ts",
       "import": "./dist/components/core/button.js",
       "require": "./dist/components/core/button.js",
       "default": "./dist/components/core/button.js"
+    },
+    "./form": {
+      "type": "./dist/components/form/form.d.ts",
+      "import": "./dist/components/form/form.js",
+      "require": "./dist/components/form/form.js",
+      "default": "./dist/components/form/form.js"
+    },
+    "./transfer-list": {
+      "type": "./dist/components/form/transfer-list.d.ts",
+      "import": "./dist/components/form/transfer-list.js",
+      "require": "./dist/components/form/transfer-list.js",
+      "default": "./dist/components/form/transfer-list.js"
+    },
+    "./radiobox": {
+      "type": "./dist/components/form/radiobox.d.ts",
+      "import": "./dist/components/form/radiobox.js",
+      "require": "./dist/components/form/radiobox.js",
+      "default": "./dist/components/form/radiobox.js"
+    },
+    "./date-picker": {
+      "type": "./dist/components/form/date-picker.d.ts",
+      "import": "./dist/components/form/date-picker.js",
+      "require": "./dist/components/form/date-picker.js",
+      "default": "./dist/components/form/date-picker.js"
     },
     "./task-list": {
       "type": "./dist/components/form/task-list.d.ts",
@@ -169,6 +199,12 @@
       "require": "./dist/components/form/select.js",
       "default": "./dist/components/form/select.js"
     },
+    "./expand": {
+      "type": "./dist/components/floating/expand.d.ts",
+      "import": "./dist/components/floating/expand.js",
+      "require": "./dist/components/floating/expand.js",
+      "default": "./dist/components/floating/expand.js"
+    },
     "./dropdown": {
       "type": "./dist/components/floating/dropdown.d.ts",
       "import": "./dist/components/floating/dropdown.js",
@@ -186,6 +222,24 @@
       "import": "./dist/components/floating/tooltip.js",
       "require": "./dist/components/floating/tooltip.js",
       "default": "./dist/components/floating/tooltip.js"
+    },
+    "./notifications": {
+      "type": "./dist/components/display/notifications.d.ts",
+      "import": "./dist/components/display/notifications.js",
+      "require": "./dist/components/display/notifications.js",
+      "default": "./dist/components/display/notifications.js"
+    },
+    "./timeline": {
+      "type": "./dist/components/display/timeline.d.ts",
+      "import": "./dist/components/display/timeline.js",
+      "require": "./dist/components/display/timeline.js",
+      "default": "./dist/components/display/timeline.js"
+    },
+    "./list": {
+      "type": "./dist/components/display/list.d.ts",
+      "import": "./dist/components/display/list.js",
+      "require": "./dist/components/display/list.js",
+      "default": "./dist/components/display/list.js"
     },
     "./calendar": {
       "type": "./dist/components/display/calendar.d.ts",
