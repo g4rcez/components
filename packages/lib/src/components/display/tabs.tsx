@@ -1,11 +1,9 @@
 "use client";
-import { motion, useMotionValue } from "framer-motion";
-import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useMotionValue } from "framer-motion";
+import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { useReactive } from "../../hooks/use-reactive";
 import { useStableRef } from "../../hooks/use-stable-ref";
-import { Label, SetState } from "../../types";
-import { Button } from "../core/button";
-import { Modal } from "../floating/modal";
+import { Label } from "../../types";
 import { Card } from "./card";
 
 export type TabsProps = {
@@ -16,39 +14,6 @@ export type TabsProps = {
 };
 
 const Context = createContext<string>("");
-
-const SelectTab = (props: { items: any[]; active: string; setActive: SetState<string> }) => {
-    const [view, setView] = useState(false);
-    const title = props.items.find((x) => {
-        const inner = x.props as TabProps;
-        return inner.id === props.active;
-    });
-    return (
-        <div className="my-4 flex min-w-full px-8 text-center lg:hidden">
-            <Button className="min-w-full" onClick={() => setView(true)}>
-                {title?.props?.title}
-            </Button>
-            <Modal closable onChange={setView} open={view} type="dialog">
-                <ul className="mt-4 space-y-4">
-                    {props.items.map((x: any) => {
-                        const inner = x.props as TabProps;
-                        const onClick = () => {
-                            props.setActive(inner.id);
-                            setView(false);
-                        };
-                        return (
-                            <li key={inner.id} className="min-w-full">
-                                <Button className="w-full" onClick={onClick} theme={inner.id === props.active ? "primary" : "secondary"}>
-                                    {inner.title as any}
-                                </Button>
-                            </li>
-                        );
-                    })}
-                </ul>
-            </Modal>
-        </div>
-    );
-};
 
 export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     const [active, setActive] = useReactive(props.active);
@@ -87,6 +52,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     }, []);
 
     const onChangeRef = useStableRef(props.onChange);
+
     useEffect(() => {
         if (onChangeRef.current) onChangeRef.current(active);
     }, [onChangeRef, active]);
@@ -104,21 +70,12 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     return (
         <Context.Provider value={active}>
             <Card
-                container="pt-0"
                 className={props.className}
+                container="pt-0 max-w-full w-full min-w-0"
                 header={
-                    <header ref={ref} className="relative mb-2 border-b border-card-border">
-                        <motion.div
-                            layout
-                            initial={false}
-                            aria-hidden="true"
-                            style={{ left, width }}
-                            transition={{ type: "tween", left, width }}
-                            className="absolute bottom-0 hidden h-0.5 w-28 bg-primary transition-all duration-300 lg:block"
-                        />
-                        <nav>
-                            <SelectTab setActive={setActive} items={items} active={active} />
-                            <ul className="hidden justify-between divide-x divide-card-border overflow-x-auto md:justify-start lg:flex">
+                    <header ref={ref} className="relative mb-2 overflow-x-auto border-b border-card-border">
+                        <nav className="min-w-0">
+                            <ul className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
                                 {items.map((x: any) => {
                                     const inner = x.props as TabProps;
                                     return (
@@ -126,14 +83,14 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             data-id={inner.id}
                                             key={`tab-header-${inner.id}`}
                                             data-active={active === inner.id}
-                                            className="w-full data-[active=true]:text-primary md:w-auto"
+                                            className="w-full border-b-2 border-card-border data-[active=true]:border-primary data-[active=true]:font-bold data-[active=true]:text-primary"
                                         >
                                             <Render
                                                 data-id={inner.id}
                                                 onClick={onClick}
                                                 aria-current="page"
-                                                className="block w-full whitespace-nowrap px-10 py-4 font-medium"
                                                 href={props.useHash ? `#${inner.id}` : undefined}
+                                                className="block w-full whitespace-nowrap px-10 py-4"
                                             >
                                                 {inner.title as any}
                                             </Render>

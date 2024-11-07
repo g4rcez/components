@@ -5,13 +5,14 @@ import { type Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const buttonVariants = cva(
-    "inline-flex duration-700 enabled:hover:bg-opacity-80 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring ease-normal",
+    "inline-flex duration-500 enabled:hover:bg-opacity-70 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 border-2 border-transparent items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring ease-normal",
     {
         variants: {
             size: {
                 default: "h-10 px-4 py-2",
                 big: "h-12 px-6 py-4",
                 small: "h-8 p-2 text-sm",
+                min: "h-7 px-2 py-1 text-sm",
                 icon: "p-1",
             },
             rounded: {

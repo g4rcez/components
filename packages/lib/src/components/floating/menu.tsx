@@ -27,13 +27,13 @@ import {
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRightIcon, LucideProps } from "lucide-react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
-import { FLOATING_DELAY } from "../../constants";
+import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../constants";
 import { css } from "../../lib/dom";
 import { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
-        "w-full min-w-36 outline-none px-2 py-1 items-center flex justify-between text-left",
+        "w-full min-w-36 outline-none p-2.5  items-center flex justify-between text-left",
         "hover:bg-primary data-[open]:bg-primary focus:bg-primary aria-expanded:opacity-80",
         "first-of-type:rounded-t-lg last-of-type:rounded-b-lg",
         "disabled:opacity-40 disabled:cursor-not-allowed",
@@ -41,31 +41,33 @@ const menuItemClassName = (highlight: string = "") =>
     );
 
 const MenuContext = createContext<{
-    getItemProps: (userProps?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
     activeIndex: number | null;
+    getItemProps: (userProps?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
+    isOpen: boolean;
     setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
     setHasFocusInside: React.Dispatch<React.SetStateAction<boolean>>;
-    isOpen: boolean;
 }>({
-    isOpen: false,
     activeIndex: null,
     getItemProps: () => ({}),
+    isOpen: false,
     setActiveIndex: () => {},
     setHasFocusInside: () => {},
 });
 
 export type MenuProps = Partial<
     {
+        FloatingComponent: React.ElementType;
+        floatingClassName: string;
         hover: boolean;
         nested: boolean;
         isParent: boolean;
-        children: React.ReactNode;
         asChild: boolean;
+        children: React.ReactNode;
     } & ({ label: string } | { label: React.ReactElement; title: string })
 >;
 
 const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLProps<HTMLButtonElement>, MenuProps>>(
-    ({ children, hover = true, isParent, label, ...props }, forwardedRef) => {
+    ({ children, FloatingComponent = "div", hover = true, isParent, floatingClassName = "", label, ...props }, forwardedRef) => {
         const parentId = useFloatingParentNodeId();
         const isNested = parentId !== null;
 
@@ -78,14 +80,14 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
         const tree = useFloatingTree();
         const nodeId = useFloatingNodeId();
         const item = useListItem();
-
         const { floatingStyles, refs, context } = useFloating<HTMLButtonElement>({
             nodeId,
             open: isOpen,
             transform: true,
             onOpenChange: setIsOpen,
             whileElementsMounted: autoUpdate,
-            placement: isNested ? "right-start" : "bottom-start",
+            placement: isNested ? "right" : "bottom-start",
+            strategy: "absolute",
             middleware: [offset({ mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0 }), flip(), shift()],
         });
         const role = useRole(context, { role: "menu", enabled: true });
@@ -115,6 +117,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
         const typeahead = useTypeahead(context, {
             activeIndex,
             listRef: labelsRef,
+            resetMs: TYPEAHEAD_RESET_DELAY,
             onMatch: isOpen ? setActiveIndex : undefined,
         });
 
@@ -140,7 +143,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             if (isOpen && tree) tree.events.emit("menuopen", { parentId, nodeId });
         }, [tree, isOpen, nodeId, parentId]);
 
-        const className = isParent ? props.className : menuItemClassName(props.className);
+        const className = isParent ? props.className : css(menuItemClassName(props.className));
 
         return (
             <FloatingNode id={nodeId}>
@@ -168,6 +171,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                         />
                     ) : (
                         <button
+                            type="button"
                             ref={useMergeRefs([refs.setReference, item.ref, forwardedRef])}
                             tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
                             data-open={isOpen ? "" : undefined}
@@ -201,14 +205,17 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                         {isOpen && (
                             <FloatingPortal preserveTabOrder>
                                 <FloatingFocusManager context={context} modal={false} initialFocus={isNested ? -1 : 0} returnFocus={!isNested}>
-                                    <div
-                                        ref={refs.setFloating}
-                                        style={floatingStyles}
-                                        className="isolate z-tooltip flex flex-col items-start rounded-lg border border-floating-border bg-floating-background text-left shadow-xl outline-none"
+                                    <FloatingComponent
                                         {...getFloatingProps()}
+                                        ref={refs.setFloating}
+                                        style={{ ...props.style, ...floatingStyles }}
+                                        className={css(
+                                            "isolate z-tooltip flex flex-col items-start rounded-lg border border-floating-border bg-floating-background text-left shadow-xl outline-none",
+                                            floatingClassName
+                                        )}
                                     >
                                         {children}
-                                    </div>
+                                    </FloatingComponent>
                                 </FloatingFocusManager>
                             </FloatingPortal>
                         )}

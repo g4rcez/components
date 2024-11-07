@@ -57,12 +57,15 @@ const VirtualTable = React.forwardRef((props: any, ref) => (
 
 const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
     const ctx = useTable();
-    const style = { ...props.style, sticky: Is.number(ctx.sticky) ? `${ctx.sticky}px` : props.style?.sticky };
+    const style = {
+        ...(props as any)?.style,
+        sticky: Is.number(ctx.sticky) ? `${ctx.sticky}px` : (props as any)?.style?.sticky,
+    };
     return <thead {...props} style={style} role="rowgroup" className="shadow-xs group:sticky top-0 bg-card-background" ref={ref} />;
 });
 
 const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => (
-    <tr {...props} role="row" ref={ref} className={`table-row ${props.className ?? ""}`} />
+    <tr {...props} role="row" ref={ref} className={`table-row ${(props as any)?.className ?? ""}`} />
 ));
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
@@ -143,7 +146,7 @@ const InnerTable = <T extends {}>({
     setSorters,
     ...props
 }: InnerTableProps<T>) => {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
     const [showLoadingFooter, setShowLoadingFooter] = useState(false);
     const onScrollEndRef = useCallbackRef(onScrollEnd);
     const loadingMoreRef = useCallbackRef(props.loadingMore);
@@ -231,7 +234,7 @@ const dispatcherFun = <Prev extends any, T extends Prev | ((prev: Prev) => Prev)
 
 type DispatcherFun<T extends any> = T | ((prev: T) => T);
 
-const compareAndExec = <T,>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
+const compareAndExec = <T extends any[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
 
 export const Table = <T extends {}>(props: TableProps<T>) => {
     const contextState = useMemo((): ContextProps => ({ sticky: props.sticky }), [props.sticky]);
@@ -262,10 +265,10 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
             postMiddleware: [
                 (state, prev) => {
                     props.set?.(state as any);
-                    compareAndExec(prev.filters, state.filters, props.setFilters);
-                    compareAndExec(prev.sorters, state.sorters, props.setSorters);
-                    compareAndExec(prev.groups, state.groups, props.setGroups);
-                    compareAndExec(prev.cols, state.cols, props.setCols);
+                    compareAndExec(prev.filters ?? [], state.filters ?? [], props.setFilters);
+                    compareAndExec(prev.sorters ?? [], state.sorters ?? [], props.setSorters);
+                    compareAndExec(prev.groups ?? [], state.groups ?? [], props.setGroups);
+                    compareAndExec(prev.cols ?? [], state.cols ?? [], props.setCols);
                     return state;
                 },
             ],

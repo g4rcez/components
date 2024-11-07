@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -57,7 +57,7 @@
     "sidekicker": "0.1.8",
     "storage-manager-js": "4.2.6-5",
     "tailwind-merge": "2.4.0",
-    "the-mask-input": "3.3.12",
+    "the-mask-input": "3.3.13",
     "use-typed-reducer": "4.2.1",
     "zod": "3.23.8"
   },

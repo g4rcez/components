@@ -167,7 +167,7 @@ export const Modal = ({
 }: PropsWithChildren<ModalProps>) => {
     const headingId = useId();
     const descriptionId = useId();
-    const isDesktop = useMediaQuery("(min-width: 48rem)");
+    const isDesktop = useMediaQuery("(min-width: 64rem)");
     const useResizer = _type !== "dialog";
     const position = isDesktop ? (_type === "drawer" ? props.position : positions[_type]) : forceType ? positions[_type] : positions.sheet;
     const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;

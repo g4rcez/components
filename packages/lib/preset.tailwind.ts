@@ -55,8 +55,6 @@ const config: Partial<Config> = {
     ],
 };
 
-console.log(config.theme.extend)
-
 export { createDesignTokens, parsers, defaultDarkTheme };
 
 export default config;

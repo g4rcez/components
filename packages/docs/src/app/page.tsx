@@ -8,7 +8,7 @@ import { Fragment } from "react";
 const Grid = () => (
   <svg
     aria-hidden="true"
-    className="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+    className="absolute inset-0 -z-10 bg-black h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
   >
     <defs>
       <pattern
@@ -45,11 +45,10 @@ export default function Example() {
           <ToggleMode />
         </nav>
       </div>
-      <div className="relative isolate overflow-hidden bg-background text-foreground"></div>
       <Grid />
       <div
         aria-hidden="true"
-        className="absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
+        className="bg-slate-900/10 bg-blend-overlay absolute container overflow-hidden left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
       >
         <div
           style={{
@@ -59,7 +58,7 @@ export default function Example() {
           className="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-20"
         />
       </div>
-      <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-28">
+      <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 flex flex-col lg:flex-row lg:px-8 lg:py-28">
         <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
           <div className="mt-24 sm:mt-32 lg:mt-16">
             <Link href="/docs/changelog" className="inline-flex space-x-6">
@@ -98,11 +97,7 @@ export default function Example() {
           </div>
         </div>
         <div className="mx-auto mt-8 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
-          <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-            <div style={{ width: 2432, height: 600 }}>
-              <Showcase />
-            </div>
-          </div>
+          <Showcase />
         </div>
       </div>
     </Fragment>

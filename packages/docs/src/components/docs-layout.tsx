@@ -16,22 +16,29 @@ const sections = [
   {
     title: "Display",
     items: [
+      { title: "Button", href: "/docs/buttons" },
+      { title: "Table", href: "/docs/table" },
+      { title: "Tabs", href: "/docs/tabs" },
+      { title: "Tag", href: "/docs/tags" },
       { title: "Timeline", href: "/docs/timeline" },
     ],
-  },{
+  },
+  {
     title: "Floating",
     items: [
       { title: "Drawer/Dialog", href: "/docs/modal" },
-      { title: "Menu", href: "/docs/menu" },
       { title: "Expand", href: "/docs/expand" },
+      { title: "Menu", href: "/docs/menu" },
+      { title: "Tooltip", href: "/docs/tooltip" },
     ],
   },
   {
     title: "Form",
     items: [
-      { title: "Input", href: "/docs/input", },
-      { title: "useForm", href: "/docs/form", },
-      { title: "Calendar", href: "/docs/calendar", },
+      { title: "Calendar", href: "/docs/calendar" },
+      { title: "Checkbox", href: "/docs/checkbox" },
+      { title: "Input", href: "/docs/input" },
+      { title: "useForm", href: "/docs/form" },
     ],
   },
 ];

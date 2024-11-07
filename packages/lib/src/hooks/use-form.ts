@@ -152,13 +152,14 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
                     setErrors((prev) => ({ ...prev, [name]: errorMessage }));
                 }
             };
-            element.addEventListener("blur", onBlurField);
+            const trigger = element.getAttribute("data-trigger") || "blur";
+            element.addEventListener(trigger, onBlurField);
             if (element.tagName === "SELECT") element.addEventListener("change", onBlurField);
             return {
                 input,
                 hasInitialError: (element as HTMLInputElement).required ? !validation.success : false,
                 unsubscribe: () => {
-                    element.removeEventListener("blur", onBlurField);
+                    element.removeEventListener(trigger, onBlurField);
                     if (element.tagName === "SELECT") element.addEventListener("change", onBlurField);
                 },
             };
@@ -219,6 +220,5 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
         },
         []
     );
-
     return { input, datepicker, checkbox, select, onSubmit, errors, onInvalid, disabled: errors !== null };
 };

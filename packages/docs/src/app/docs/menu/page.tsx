@@ -14,6 +14,13 @@ export default function MenuExample() {
         <Card title="Simple menu" className="flex gap-8">
           <Menu label="I'm a menu">
             <MenuItem label="Item 1" />
+            <Menu label="Submenu">
+              <MenuItem label="Sub item 2" />
+              <MenuItem label="Sub item 3" />
+              <Menu label="Deep menu">
+                <MenuItem label="Last node" />
+              </Menu>
+            </Menu>
             <MenuItem label="Item 2" />
             <MenuItem label="Item 3" />
           </Menu>

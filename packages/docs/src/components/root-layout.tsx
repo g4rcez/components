@@ -10,7 +10,7 @@ export const RootLayout = (props: PropsWithChildren) => {
   const stylesLight = createTheme(defaultLightTheme);
   const stylesDark = createTheme(defaultDarkTheme, "dark");
   return (
-    <html className="bg-background text-foreground antialiased proportional-nums">
+    <html className="bg-background overflow-x-clip text-foreground antialiased proportional-nums dark">
       <head>
         <title>Components</title>
         <style>{stylesLight}</style>

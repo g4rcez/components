@@ -9,15 +9,59 @@ export default function Buttons() {
       section="display"
       description="The way to user interact with your actions"
     >
-      <Card title="All tag themes" className="flex gap-8">
-        <Button>Normal</Button>
-        <Button theme="danger">danger</Button>
-        <Button theme="info">info</Button>
-        <Button theme="neutral">neutral</Button>
-        <Button theme="secondary">secondary</Button>
-        <Button theme="success">success</Button>
-        <Button theme="warn">warn</Button>
-      </Card>
+      <div className="flex flex-col gap-8">
+        <Card title="All button themes" className="flex gap-8">
+          <Button>Normal</Button>
+          <Button theme="danger">danger</Button>
+          <Button theme="info">info</Button>
+          <Button theme="neutral">neutral</Button>
+          <Button theme="secondary">secondary</Button>
+          <Button theme="success">success</Button>
+          <Button theme="warn">warn</Button>
+        </Card>
+        <Card title="Small buttons" className="flex gap-8">
+          <Button size="small">Normal</Button>
+          <Button size="small" theme="danger">
+            danger
+          </Button>
+          <Button size="small" theme="info">
+            info
+          </Button>
+          <Button size="small" theme="neutral">
+            neutral
+          </Button>
+          <Button size="small" theme="secondary">
+            secondary
+          </Button>
+          <Button size="small" theme="success">
+            success
+          </Button>
+          <Button size="small" theme="warn">
+            warn
+          </Button>
+        </Card>
+        <Card title="Minimal buttons" className="flex gap-8">
+          <Button size="min">Normal</Button>
+          <Button size="min" theme="danger">
+            danger
+          </Button>
+          <Button size="min" theme="info">
+            info
+          </Button>
+          <Button size="min" theme="neutral">
+            neutral
+          </Button>
+          <Button size="min" theme="secondary">
+            secondary
+          </Button>
+          <Button size="min" theme="success">
+            success
+          </Button>
+          <Button size="min" theme="warn">
+            warn
+          </Button>
+        </Card>
+      </div>
     </DocsLayout>
   );
 }

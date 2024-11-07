@@ -127,8 +127,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0
       the-mask-input:
-        specifier: 3.3.12
-        version: 3.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 3.3.13
+        version: 3.3.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       use-typed-reducer:
         specifier: 4.2.1
         version: 4.2.1(react@18.3.1)
@@ -1801,8 +1801,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  the-mask-input@3.3.12:
-    resolution: {integrity: sha512-vYuanrCbpdkiIaoe6g4RgALN3GjuOgTCV+y0mkHpzwtpcaDP34TmYTkNpFpYmuPBiyAncpN1BwkN5hRO5RLZdw==}
+  the-mask-input@3.3.13:
+    resolution: {integrity: sha512-SFCEBBBYSklYZt/ECd0vDdHd9f3PXIAmSTkqctvFFQlA6gWM3hHJJUfSTdHsuV3LajUI7YWstFXUk3Hkki4RmA==}
     engines: {node: '>=8', npm: '>=4'}
     peerDependencies:
       react: '>= 16.8.3'
@@ -3451,7 +3451,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  the-mask-input@3.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  the-mask-input@3.3.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)

@@ -10,13 +10,27 @@ export default function CheckboxPage() {
       description="Do you have a task list or a multiple options to fill in a form? Use this component"
     >
       <Card title="Checkbox as task item">
-        <TaskList className="flex flex-row flex-wrap gap-8">
-          <Checkbox asTask>Task 1</Checkbox>
-          <Checkbox asTask>Task two</Checkbox>
-          <Checkbox asTask>Another task</Checkbox>
-          <Checkbox asTask>Coding</Checkbox>
-          <Checkbox asTask>Drink coffee</Checkbox>
-          <Checkbox asTask>Finish</Checkbox>
+        <TaskList>
+          <ul className="flex flex-col flex-wrap gap-2">
+            <li>
+              <Checkbox asTask>Task 1</Checkbox>
+            </li>
+            <li>
+              <Checkbox asTask>Task two</Checkbox>
+            </li>
+            <li>
+              <Checkbox asTask>Another task</Checkbox>
+            </li>
+            <li>
+              <Checkbox asTask>Coding</Checkbox>
+            </li>
+            <li>
+              <Checkbox asTask>Drink coffee</Checkbox>
+            </li>
+            <li>
+              <Checkbox asTask>Finish</Checkbox>
+            </li>
+          </ul>
         </TaskList>
       </Card>
     </DocsLayout>
