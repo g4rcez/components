@@ -46,16 +46,16 @@ const sections = [
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
   const ref = useRef<HTMLDivElement | null>(null);
   return (
-    <Fragment>
-      <nav className="[grid-area:header] isolate z-navbar mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
+    <div className="flex flex-nowrap flex-col flex-grow-0 flex-shrink">
+      <nav className="min-w-full isolate z-navbar mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
         <div className="container px-4 items-center mx-auto flex justify-between">
           <Brand />
           <ToggleMode />
         </div>
       </nav>
       <div className="container mx-auto w-full">
-        <div className="grid docs-container">
-          <nav className="[grid-area:sidebar] min-w-48 md:block hidden self-start sticky top-20">
+        <div className="grid grid-cols-12">
+          <nav className="min-w-48 md:block hidden self-start sticky top-20 col-span-2">
             <ul className="space-y-6">
               {sections.map((section) => (
                 <Fragment key={section.title}>
@@ -82,7 +82,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
               ))}
             </ul>
           </nav>
-          <main className="[grid-area:main] px-4">
+          <main className="col-span-12 lg:col-span-8 px-4">
             <header>
               <h1 className="font-extrabold text-5xl leading-none container mx-auto text-balance">
                 {props.title}
@@ -98,12 +98,11 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
               {props.children}
             </div>
           </main>
-          <aside className="[grid-area:index] px-4 min-w-48 md:block hidden self-start sticky top-20">
+          <aside className="px-4 min-w-48 md:block hidden self-start sticky top-20 col-span-2">
             Table of content
           </aside>
-          <footer className="hidden [grid-area:footer] px-4">footer</footer>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
