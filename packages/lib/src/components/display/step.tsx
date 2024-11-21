@@ -1,6 +1,6 @@
 "use client";
-import { motion, Transition } from "framer-motion";
-import { ComponentProps, PropsWithChildren } from "react";
+import { motion, stagger, Transition, useAnimate } from "framer-motion";
+import { ComponentProps, PropsWithChildren, useEffect } from "react";
 import { useColorParser } from "../../hooks/use-translate-context";
 
 const iconTransitions = {
@@ -55,19 +55,41 @@ const getCurrentStatus = (props: StepProps): StepStatus => {
     return "complete";
 };
 
-export const StepsContainer = (props: PropsWithChildren<{ steps: number; currentStep: number }>) => (
-    <div className="relative flex justify-between">
-        <div className="absolute top-1/2 h-1 w-[calc(100%)] bg-card-border" />
-        {props.children}
-    </div>
-);
+export const StepsContainer = (props: PropsWithChildren<{ steps: number; currentStep: number }>) => {
+    const [ref, animate] = useAnimate();
+    useEffect(() => {
+        if (props.currentStep === 0) return;
+        const container = ref.current as HTMLDivElement;
+        const first = container.querySelectorAll(`div[data-step]`)[0]! as HTMLDivElement;
+        const step = container.querySelector(`div[data-step="${props.currentStep}"]`)! as HTMLDivElement;
+        if (first && step) {
+            const diff = step.getBoundingClientRect().left - first.getBoundingClientRect().left;
+            animate(
+                "div[data-name='progress']",
+                { width: `${Math.max(0, diff)}px` },
+                {
+                    type: "spring",
+                    duration: 0.5,
+                    delay: stagger(0.075),
+                }
+            );
+        }
+    }, [props.currentStep]);
+    return (
+        <div className="relative flex justify-between" ref={ref}>
+            <div className="absolute top-1/2 h-1 w-[calc(100%)] bg-card-border" />
+            <div data-name="progress" className="absolute top-1/2 h-1 w-0 bg-success" />
+            {props.children}
+        </div>
+    );
+};
 
 export const Step = (props: StepProps) => {
     const parser = useColorParser();
     const status = getCurrentStatus(props);
 
     return (
-        <motion.div animate={status} className="relative">
+        <motion.div data-step={props.step} animate={status} className="relative">
             <motion.div
                 variants={variants}
                 transition={transitions}

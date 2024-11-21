@@ -1,14 +1,10 @@
 import forms from "@tailwindcss/forms";
-import { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import { createDesignTokens, parsers } from "./src/styles/design-tokens";
 import { defaultLightTheme as theme } from "./src/styles/theme";
-
 const COLORS = createDesignTokens(theme.colors, parsers.formatWithVar("hsla"));
-
 const spacing = createDesignTokens(theme.spacing, parsers.cssVariable);
-
-const config: Partial<Config> = {
+const config = {
     theme: {
         extend: {
             transitionTimingFunction: {
@@ -52,7 +48,5 @@ const config: Partial<Config> = {
         }),
     ],
 };
-
 export { createDesignTokens, parsers, theme };
-
 export default config;

@@ -14,44 +14,52 @@ import {
 } from "@floating-ui/react";
 import Fuzzy from "fuzzy-search";
 import { CheckIcon, ChevronDown } from "lucide-react";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useTranslations } from "../../hooks/use-translate-context";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
-type ItemProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
-    selected: boolean;
+export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
+
+export type AutocompleteOptionProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
     active: boolean;
-    option: OptionProps;
+    selected: boolean;
+    option: AutocompleteItemProps;
 };
 
-export const Option = forwardRef<HTMLLIElement, ItemProps>(({ selected, active, onClick, option, ...rest }, ref) => (
-    <li {...rest} ref={ref} role="option" aria-selected={active} className="w-full border-b border-tooltip-border last:border-transparent">
-        <button
-            type="button"
-            data-value={option.value}
-            onClick={onClick as any}
-            aria-selected={active}
-            aria-checked={active}
-            aria-current={active}
-            className={`flex w-full cursor-pointer justify-between p-2 text-left ${active ? "bg-primary text-primary-foreground" : ""} ${selected ? "bg-primary/70 text-primary-foreground" : ""}`}
-        >
-            {option.label ?? option.value}
-            {active ? (
-                <span>
-                    <CheckIcon aria-hidden className="text-current" absoluteStrokeWidth strokeWidth={2} size={22} />
-                </span>
-            ) : null}
-        </button>
-    </li>
-));
+const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>
+
+export const Option = forwardRef<HTMLLIElement, AutocompleteOptionProps>(({ selected, active, onClick, option, ...props }, ref) => {
+    const Label = (option.Render as React.FC<any>) ?? Frag;
+    const children = option.label ?? option.value;
+    return (
+        <li {...props} ref={ref} role="option" aria-selected={active} className="w-full border-b border-tooltip-border last:border-transparent">
+            <button
+                type="button"
+                data-value={option.value}
+                onClick={onClick as any}
+                aria-selected={active}
+                aria-checked={active}
+                aria-current={active}
+                className={`flex w-full cursor-pointer justify-between p-2 text-left ${active ? "bg-primary text-primary-foreground" : ""} ${selected ? "bg-primary/70 text-primary-foreground" : ""}`}
+            >
+                <Label {...props} label={option.label} value={option.value} children={children} />
+                {active ? (
+                    <span>
+                        <CheckIcon aria-hidden className="text-current" absoluteStrokeWidth strokeWidth={2} size={22} />
+                    </span>
+                ) : null}
+            </button>
+        </li>
+    );
+});
 
 export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
     value?: string;
-    options: OptionProps[];
     dynamicOption?: boolean;
+    options: AutocompleteItemProps[];
 };
 
 const transitionStyles = {
@@ -85,27 +93,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         }: AutocompleteProps,
         externalRef
     ) => {
+        const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
-        const ref = useRef<HTMLInputElement>(null);
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
-        const [value, setValue] = useState(props.value ?? props.defaultValue ?? "");
-        const [label, setLabel] = useState(props.value ?? props.defaultValue ?? "");
+        const [value, setValue] = useState(defaults);
+        const [label, setLabel] = useState(defaults);
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
-        const innerOptions: OptionProps[] =
+        const innerOptions: AutocompleteItemProps[] =
             dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
 
         const pattern = dynamicOption
             ? undefined
             : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
-
-        useEffect(() => {
-            const input = refs.reference.current as HTMLInputElement;
-            if (!input) return;
-            return initializeInputDataset(input);
-        }, []);
 
         useEffect(() => {
             if (props.value) {
@@ -117,21 +119,29 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
             transform: true,
+            strategy: "absolute",
             onOpenChange: setOpen,
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),
                 size({
+                    elementContext: "reference",
                     padding: 10,
                     apply(a) {
+                        const html = a.elements.reference as HTMLElement;
+                        const parent = html.parentElement!;
+                        const w = parent?.getBoundingClientRect().width;
                         Object.assign(a.elements.floating.style, {
-                            width: `${a.rects.reference.width}px`,
+                            width: `${w}px`,
+                            maxWidth: `${w}px`,
+                            minWidth: "max-content",
                             maxHeight: `${Math.min(480, a.availableHeight)}px`,
                         });
                     },
                 }),
             ],
         });
+
         const transitions = useTransitionStyles(context, transitionStyles);
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
             useRole(context, { role: "listbox" }),
@@ -151,12 +161,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             }),
         ]);
 
-        const onSelect = (opt: OptionProps, i: number) => {
+        useEffect(() => {
+            const input = refs.reference.current as HTMLInputElement;
+            if (!input) return;
+            return initializeInputDataset(input);
+        }, []);
+
+        const onSelect = (opt: AutocompleteItemProps, i: number) => {
             setValue(opt.value);
-            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", opt.value);
+            const input = refs.reference.current as HTMLInputElement
+            if (!input) return;
+            input?.setAttribute("data-value", opt.value);
+            input.value = opt.value
+            const event = new Event("change", {bubbles:false, cancelable:true})
+            input.dispatchEvent(event)
+            if (props.onChange) props.onChange(event as any)
             setLabel(opt.label ?? "");
-            const fakeEvent = dispatchInput(ref.current, opt.value);
-            if (fakeEvent) props.onChange?.(fakeEvent as any);
             setOpen(false);
             setShadow("");
             setIndex(i);
@@ -189,7 +209,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         return (
             <InputField
                 {...(props as any)}
-                container={css("group inline-block w-full", container)}
+                container={container}
                 error={error}
                 feedback={feedback}
                 form={props.form}
@@ -261,9 +281,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     aria-autocomplete="list"
                     autoComplete="off"
                     className={css(
-                        "input placeholder-input-mask group h-10 w-full flex-1 rounded-md bg-transparent px-2 py-1 text-base text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
-                        !!right || shadow ? "pe-12" : "",
-                        !!left ? "ps-8" : "",
+                        "input placeholder-input-mask group h-input-height w-full flex-1",
+                        "rounded-md bg-transparent px-input-x py-input-y text-foreground",
+                        "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+                        "group-error:text-danger group-error:placeholder-input-mask-error",
+                        "group-focus-within:border-primary group-hover:border-primary",
                         props.className
                     )}
                 />
@@ -282,7 +304,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <ul
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
-                                    style: { position: strategy, left: x ?? 0, top: y ?? 0, ...transitions.styles },
+                                    style: { position: strategy, left: (x ?? 0) + 16, top: y ?? 0, ...transitions.styles },
                                 })}
                                 data-floating="true"
                                 className="z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"

@@ -118,8 +118,8 @@ importers:
         specifier: 4.7.13
         version: 4.7.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sidekicker:
-        specifier: 0.1.8
-        version: 0.1.8
+        specifier: 0.1.9
+        version: 0.1.9
       storage-manager-js:
         specifier: 4.2.6-5
         version: 4.2.6-5
@@ -1600,12 +1600,12 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
-  qs@6.11.2:
-    resolution: {integrity: sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==}
-    engines: {node: '>=0.6'}
-
   qs@6.12.3:
     resolution: {integrity: sha512-AWJm14H1vVaO/iNZ4/hO+HyaTehuy9nRqVdkTqlJt0HWvBiBIEXFmb4C0DGeYo3Xes9rrEW+TxHsaigCbN5ICQ==}
+    engines: {node: '>=0.6'}
+
+  qs@6.13.0:
+    resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
     engines: {node: '>=0.6'}
 
   queue-microtask@1.2.3:
@@ -1701,8 +1701,8 @@ packages:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
     engines: {node: '>= 0.4'}
 
-  sidekicker@0.1.8:
-    resolution: {integrity: sha512-b+Pe4YbxlzUz/vpdGvQN07doiC+rtQv1vSv49VSC+qwiKL/P8fMJkpXJyZC5jAd2PTSsE3P6mSr2O5ieF3VOSw==}
+  sidekicker@0.1.9:
+    resolution: {integrity: sha512-EfXvtoOr+T353g8AzTTmsfzaJEWjlt4LDbzyRK5gpYO0ddHqwwxTorxqynuD6nAf+RhTaEjWKzsaOLjURaLbwQ==}
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
@@ -3181,11 +3181,11 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  qs@6.11.2:
+  qs@6.12.3:
     dependencies:
       side-channel: 1.0.6
 
-  qs@6.12.3:
+  qs@6.13.0:
     dependencies:
       side-channel: 1.0.6
 
@@ -3323,9 +3323,9 @@ snapshots:
       get-intrinsic: 1.2.4
       object-inspect: 1.13.2
 
-  sidekicker@0.1.8:
+  sidekicker@0.1.9:
     dependencies:
-      qs: 6.11.2
+      qs: 6.13.0
 
   siginfo@2.0.0: {}
 

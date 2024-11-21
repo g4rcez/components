@@ -39,7 +39,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
         let first = header.querySelector<HTMLElement>(`li[data-active=true]`);
         const hash = window.location.hash.replace(/^#/, "");
         if (props.active === "" && hash !== "") {
-            first = header.querySelector<HTMLElement>(`li[data-id=${hash}]`);
+            first = header.querySelector<HTMLElement>(`li[data-id="${hash}"]`);
             setActive(hash);
         }
         if (first === null) {

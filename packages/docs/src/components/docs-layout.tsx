@@ -38,9 +38,16 @@ const sections = [
       { title: "Calendar", href: "/docs/calendar" },
       { title: "Checkbox", href: "/docs/checkbox" },
       { title: "Input", href: "/docs/input" },
+      { title: "Step", href: "/docs/step" },
       { title: "useForm", href: "/docs/form" },
     ],
   },
+  {
+    title: "Utilities",
+    items: [
+      { title: "RenderOnView", href: "/docs/render-on-view" },
+    ],
+  }
 ];
 
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
@@ -55,7 +62,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
       </nav>
       <div className="container mx-auto w-full">
         <div className="grid grid-cols-12">
-          <nav className="min-w-48 md:block hidden self-start sticky top-20 col-span-2">
+          <nav className="md:block hidden self-start sticky top-20 col-span-2 w-full">
             <ul className="space-y-6">
               {sections.map((section) => (
                 <Fragment key={section.title}>
@@ -98,7 +105,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
               {props.children}
             </div>
           </main>
-          <aside className="px-4 min-w-48 md:block hidden self-start sticky top-20 col-span-2">
+          <aside className="px-4 w-full md:block hidden self-start sticky top-20 col-span-2">
             Table of content
           </aside>
         </div>

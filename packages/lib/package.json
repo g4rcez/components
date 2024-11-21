@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.38",
+  "version": "0.0.47",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "vite build --watch --minify false",
-    "build": "vite build; npm run lib:types; npm run preset; npm run lib:css",
+    "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css",
     "format": "npx prettier --write .",
     "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
     "lib:tailwind": "tsc -p tsconfig.tailwind.json",
@@ -54,7 +54,7 @@
     "react-dropzone": "14.2.3",
     "react-use-measure": "2.1.1",
     "react-virtuoso": "4.7.13",
-    "sidekicker": "0.1.8",
+    "sidekicker": "0.1.9",
     "storage-manager-js": "4.2.6-5",
     "tailwind-merge": "2.4.0",
     "the-mask-input": "3.3.13",
@@ -90,12 +90,12 @@
   "exports": {
     ".": {
       "types": {
-        "import": "./dist/index.d.ts",
-        "require": "./dist/index.d.ts",
-        "default": "./dist/index.d.ts"
+        "import": "./dist/src/index.d.ts",
+        "require": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.d.ts"
       },
       "default": {
-        "type": "./dist/index.d.ts",
+        "type": "./dist/src/index.d.ts",
         "import": "./dist/index.mjs",
         "require": "./dist/index.umd.js",
         "default": "./dist/index.mjs"
@@ -276,6 +276,12 @@
       "import": "./dist/components/display/stats.js",
       "require": "./dist/components/display/stats.js",
       "default": "./dist/components/display/stats.js"
+    },
+    "./alert": {
+      "type": "./dist/components/display/alert.d.ts",
+      "import": "./dist/components/display/alert.js",
+      "require": "./dist/components/display/alert.js",
+      "default": "./dist/components/display/alert.js"
     }
   }
 }

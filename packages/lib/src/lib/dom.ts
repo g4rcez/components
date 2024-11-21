@@ -30,9 +30,9 @@ export const isReactFC = (a: any) => Is.function(a);
 export const css = (...styles: ClassValue[]) => twMerge(clsx(styles));
 
 export const dispatchInput = (input: HTMLInputElement | undefined | null, newValue: string) => {
-    const event = new Event("input", { bubbles: true });
+    const event = new Event("input", { bubbles: true, composed: true });
     input?.dispatchEvent(event);
-    return event;
+    return Object.assign({}, event, { target: input, currentTarget: input });
 };
 
 export const initializeInputDataset = (input: HTMLInputElement | HTMLSelectElement) => {

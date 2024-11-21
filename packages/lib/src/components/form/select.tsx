@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translate-context";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
@@ -13,7 +13,8 @@ export type SelectProps = Override<
     {
         options: OptionProps[];
         selectContainer?: string;
-    }>;
+    }
+>;
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     (
@@ -48,7 +49,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             const change = () => input.setAttribute("data-selected", "true");
             input.addEventListener("change", change);
             return () => {
-              focus()
+                focus();
                 input.removeEventListener("change", change);
             };
         }, []);
@@ -57,7 +58,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
         return (
             <InputField<"select">
-                container={css("group inline-block w-full", container)}
+                container={container}
                 error={error}
                 feedback={feedback}
                 hideLeft={hideLeft}
@@ -76,7 +77,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 right={
                     <label htmlFor={id}>
                         <button onClick={onClickLabel} type="button" className="mt-2 transition-colors hover:text-primary">
-                            <ChevronDown size={20} />
+                            <ChevronDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
                     </label>
@@ -92,7 +93,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     data-selected={!!props.value || false}
                     defaultValue={props.value ? undefined : ""}
                     className={css(
-                        "input appearance-none select group h-10 py-1 px-2 w-full flex-1 rounded-md bg-transparent text-foreground placeholder-input-placeholder outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        "input select group h-10 w-full flex-1 appearance-none rounded-md",
+                        "bg-transparent px-2 py-1 text-foreground placeholder-input-placeholder",
+                        "outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         "data-[selected=false]:text-input-placeholder",
                         props.className
                     )}

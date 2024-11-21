@@ -10,6 +10,7 @@ export type DesignTokens = {
     colors: {
         tag: Record<ThemeState, { text: string; bg: string }>;
         button: Record<ThemeState, { text: string; bg: string }>;
+        alert: Record<ThemeState, { text: string; bg: string; border: string }>;
         foreground: string;
         background: string;
         disabled: string;
@@ -95,3 +96,4 @@ type Fn = (...a: any[]) => any;
 export type DeepParse<T extends GeneralTokens, F extends Fn> = {
     [K in keyof T]: T[K] extends GeneralTokens ? DeepParse<T[K], F> : ReturnType<Fn>;
 };
+

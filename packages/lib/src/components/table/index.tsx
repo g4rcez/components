@@ -264,11 +264,12 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
         {
             postMiddleware: [
                 (state, prev) => {
+                    console.log("->", state, prev);
                     props.set?.(state as any);
-                    compareAndExec(prev.filters ?? [], state.filters ?? [], props.setFilters);
-                    compareAndExec(prev.sorters ?? [], state.sorters ?? [], props.setSorters);
-                    compareAndExec(prev.groups ?? [], state.groups ?? [], props.setGroups);
-                    compareAndExec(prev.cols ?? [], state.cols ?? [], props.setCols);
+                    compareAndExec(prev?.filters ?? [], state.filters ?? [], props.setFilters);
+                    compareAndExec(prev?.sorters ?? [], state.sorters ?? [], props.setSorters);
+                    compareAndExec(prev?.groups ?? [], state.groups ?? [], props.setGroups);
+                    compareAndExec(prev?.cols ?? [], state.cols ?? [], props.setCols);
                     return state;
                 },
             ],

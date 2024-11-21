@@ -1,6 +1,7 @@
 export * from "./core/button";
 export * from "./core/polymorph";
 export * from "./core/tag";
+export * from "./core/render-on-view";
 export * from "./display/alert";
 export * from "./display/calendar";
 export * from "./display/card";

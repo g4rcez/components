@@ -57,7 +57,7 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
         return (
             <InputField<"input">
                 info={info}
-                container={css("group inline-block w-full", container)}
+                container={container}
                 error={error}
                 feedback={feedback}
                 hideLeft={hideLeft}
@@ -82,9 +82,11 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
                     id={id}
                     name={id}
                     className={css(
-                        "input  placeholder-input-mask h-input-height px-input-x py-input-y group w-full flex-1 rounded-md bg-transparent text-foreground outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
-                        !!right ? "pe-input-inline" : "",
-                        !!left ? "ps-input-inline" : "",
+                        "input placeholder-input-mask group h-input-height w-full flex-1",
+                        "rounded-md bg-transparent px-input-x py-input-y text-foreground",
+                        "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+                        "group-error:text-danger group-error:placeholder-input-mask-error",
+                        "group-focus-within:border-primary group-hover:border-primary",
                         props.className
                     )}
                 />

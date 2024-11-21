@@ -8,7 +8,7 @@ import { Fragment } from "react";
 const Grid = () => (
   <svg
     aria-hidden="true"
-    className="absolute inset-0 -z-10 bg-black h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+    className="absolute inset-0 -z-10 bg-primary/10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
   >
     <defs>
       <pattern
@@ -48,7 +48,7 @@ export default function Example() {
       <Grid />
       <div
         aria-hidden="true"
-        className="bg-slate-900/10 bg-blend-overlay absolute container overflow-hidden left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
+        className="bg-background/20 absolute container overflow-hidden left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
       >
         <div
           style={{

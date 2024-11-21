@@ -10,7 +10,7 @@ export default function Buttons() {
       description="The way to user interact with your actions"
     >
       <div className="flex flex-col gap-8">
-        <Card title="All button themes" className="flex gap-8">
+        <Card title="All button themes" className="flex flex-wrap gap-8">
           <Button>Normal</Button>
           <Button theme="danger">danger</Button>
           <Button theme="info">info</Button>
@@ -19,7 +19,7 @@ export default function Buttons() {
           <Button theme="success">success</Button>
           <Button theme="warn">warn</Button>
         </Card>
-        <Card title="Small buttons" className="flex gap-8">
+        <Card title="Small buttons" className="flex flex-wrap gap-8">
           <Button size="small">Normal</Button>
           <Button size="small" theme="danger">
             danger
@@ -40,7 +40,7 @@ export default function Buttons() {
             warn
           </Button>
         </Card>
-        <Card title="Minimal buttons" className="flex gap-8">
+        <Card title="Minimal buttons" className="flex flex-wrap gap-8">
           <Button size="min">Normal</Button>
           <Button size="min" theme="danger">
             danger
@@ -58,6 +58,24 @@ export default function Buttons() {
             success
           </Button>
           <Button size="min" theme="warn">
+            warn
+          </Button>
+        </Card>
+        <Card title="Ghost buttons" className="flex flex-wrap gap-8">
+          <Button theme="ghost-primary" size="min">Normal</Button>
+          <Button size="min" theme="ghost-danger">
+            danger
+          </Button>
+          <Button size="min" theme="ghost-info">
+            info
+          </Button>
+          <Button size="min" theme="ghost-secondary">
+            secondary
+          </Button>
+          <Button size="min" theme="ghost-success">
+            success
+          </Button>
+          <Button size="min" theme="ghost-warn">
             warn
           </Button>
         </Card>

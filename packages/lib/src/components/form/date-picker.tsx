@@ -113,12 +113,13 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     <Fragment>
                         <input
                             data-origin={props.name}
-                            hidden
-                            type="date"
-                            id={props.name}
-                            ref={externalRef}
-                            name={props.name}
                             defaultValue={htmlValue}
+                            form={props.form}
+                            hidden
+                            id={props.name}
+                            name={props.name}
+                            ref={externalRef}
+                            type="date"
                         />
                         <Dropdown
                             open={open}

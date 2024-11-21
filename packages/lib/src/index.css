@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 select.select {
-    @apply appearance-none pr-10 bg-no-repeat;
+    @apply appearance-none bg-no-repeat;
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;

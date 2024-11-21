@@ -1,6 +1,12 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import { Card, createColumns, Table, uuid } from "../../../../../lib/src";
+import {
+  Card,
+  createColumns,
+  Table,
+  useTablePreferences,
+  uuid,
+} from "../../../../../lib/src";
 
 type User = { id: string; name: string; type: string; document: string };
 
@@ -21,6 +27,9 @@ const clients = Array.from({ length: 50 })
   .sort((a, b) => a.id.localeCompare(b.id));
 
 export default function TablePage() {
+  const preferences = useTablePreferences("@lentium/processes", { cols });
+  console.log(preferences);
+
   return (
     <DocsLayout
       title="Table"
@@ -29,13 +38,12 @@ export default function TablePage() {
     >
       <Card className="px-4">
         <Table<User>
+          {...preferences}
           inlineFilter
           name="table"
-          cols={cols}
           rows={clients}
           operations={false}
           inlineSorter={false}
-          setFilters={(e) => console.log("FILTERS ", e)}
         />
       </Card>
     </DocsLayout>

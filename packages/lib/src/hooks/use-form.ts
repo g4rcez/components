@@ -1,14 +1,10 @@
 import { parse } from "qs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { AllPaths, Is, setPath } from "sidekicker";
-import { z, ZodArray, ZodNumber } from "zod";
-import { DatePickerProps } from "../components";
-import { AutocompleteProps } from "../components/form/autocomplete";
-import { CheckboxProps } from "../components/form/checkbox";
+import { type AllPaths, Is, setPath } from "sidekicker";
+import { z } from "zod";
+import type { AutocompleteProps, CheckboxProps, DatePickerProps, InputProps, SelectProps, SwitchProps } from "../components";
 import { formReset } from "../components/form/form";
-import { InputProps } from "../components/form/input";
-import { SelectProps } from "../components/form/select";
-import { SwitchProps } from "../components/form/switch";
+import { path } from "../lib/fns";
 
 const sort = (a: string, b: string) => a.localeCompare(b);
 
@@ -37,7 +33,7 @@ export const getSchemaShape = <T extends z.ZodObject<any>>(name: string, schema:
     convertPath(name).reduce((acc, el) => {
         if (el === "") return acc;
         const shape = acc.shape?.[el] || acc;
-        return shape instanceof ZodArray ? shape.element : shape;
+        return shape._def.typeName === "ZodArray" ? shape.element : shape;
     }, schema);
 
 type HTMLEntryElements = HTMLInputElement | HTMLSelectElement;
@@ -63,16 +59,20 @@ export type UseFormSubmitParams<T> = {
 
 type UseFormSubmit<T> = (args: UseFormSubmitParams<T>) => any;
 
-export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
+export const useForm = <T extends z.ZodObject<any>>(schema: T, formName?: string) => {
     const [errors, setErrors] = useState<Record<string, string | undefined> | null>(null);
     const ref = useRef<Record<string, { element: HTMLInputElement | HTMLSelectElement; schema: z.ZodType }>>({});
+    const [state, setState] = useState<T>({} as T);
 
-    const datepicker = <Props extends DatePickerProps>(name: AllPaths<z.infer<T>>, props?: Props): Props => {
+    type Fields = AllPaths<z.infer<T>>;
+
+    const datepicker = <Props extends DatePickerProps>(name: Fields, props?: Props): Props => {
         const validator = getSchemaShape(name, schema);
         return {
             ...props,
             name,
             id: name,
+            form: formName,
             required: !validator.isOptional(),
             error: errors?.[name],
             ref: (e: HTMLSelectElement) => {
@@ -82,12 +82,13 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
         } as any;
     };
 
-    const select = <Props extends SelectProps | AutocompleteProps>(name: AllPaths<z.infer<T>>, props?: Props): Props => {
+    const select = <Props extends SelectProps | AutocompleteProps>(name: Fields, props?: Props): Props => {
         const validator = getSchemaShape(name, schema);
         return {
             ...props,
             name,
             id: name,
+            form: formName,
             required: !validator.isOptional(),
             error: errors?.[name],
             ref: (e: HTMLSelectElement) => {
@@ -97,29 +98,31 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
         } as any;
     };
 
-    const checkbox = <Props extends CheckboxProps | SwitchProps>(name: AllPaths<z.infer<T>>, props?: Props): Props => {
+    const checkbox = <Props extends CheckboxProps | SwitchProps>(name: Fields, props?: Props): Props => {
         const validator = getSchemaShape(name, schema);
         return {
             ...props,
             name,
             id: name,
+            form: formName,
             required: !validator.isOptional(),
             error: errors?.[name],
-            ref: (e: HTMLSelectElement) => {
+            ref: (e: HTMLInputElement) => {
                 if (e === null) return;
                 ref.current[name] = { element: e, schema: validator };
             },
         } as any;
     };
 
-    const input = <Props extends InputProps>(name: AllPaths<z.infer<T>>, props?: Props): Props => {
+    const input = <Props extends InputProps>(name: Fields, props?: Props): Props => {
         const validator = getSchemaShape(name, schema);
         return {
             ...props,
             name,
             id: name,
             required: !validator.isOptional(),
-            type: Is.instance(validator, ZodNumber) ? "number" : (props?.type ?? "text"),
+            form: formName,
+            type: (validator._def.typeName as string) === "ZodNumber" ? "number" : (props?.type ?? "text"),
             error: errors?.[name],
             ref: (e: HTMLInputElement) => {
                 if (e === null) return;
@@ -131,7 +134,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
     useEffect(() => {
         const events = Object.values(ref.current).map((input) => {
             const element = input.element.dataset.origin
-                ? (document.querySelector(`[data-target=${input.element.name}]`) as HTMLEntryElements)
+                ? (document.querySelector(`[data-target="${input.element.name}"]`) as HTMLEntryElements)
                 : (input.element as HTMLEntryElements);
             const validation = input.schema.safeParse(getValueByType(element));
             const onBlurField = (e: any) => {
@@ -141,13 +144,14 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
                 const validation = input.schema.safeParse(value);
                 if (validation.success) {
                     element.setCustomValidity("");
+                    setState((prev) => setPath(prev, name, validation.data));
                     return setErrors((prev) => {
                         const { [name]: removed, ...rest } = prev || {};
                         return rest === null || Is.empty(rest) ? null : rest;
                     });
                 }
                 if (element.required) {
-                    const errorMessage = validation.error.issues[0].message;
+                    const errorMessage = validation.error.issues[0]?.message || "";
                     element.setCustomValidity(errorMessage);
                     setErrors((prev) => ({ ...prev, [name]: errorMessage }));
                 }
@@ -177,7 +181,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
                 const validation = input.schema.safeParse(getValueByType(field));
                 if (field.dataset.ignore === "ignore") return acc;
                 if (validation.success) return acc;
-                const errorMessage = validation.error.issues[0].message;
+                const errorMessage = validation.error.issues[0]?.message;
                 field.setAttribute("data-initialized", "true");
                 const name = field.dataset.name || field.name || "";
                 return { ...acc, [name]: errorMessage };
@@ -194,7 +198,8 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
             event.preventDefault();
             const form = event.currentTarget;
             let json = formToJson(form);
-            Array.from(form.elements).forEach((field) => {
+            const elements = formName ? Array.from(document.querySelectorAll(`[form="${formName}"]`)) : Array.from(form.elements);
+            elements.forEach((field) => {
                 if (field.tagName === "SELECT") {
                     const input = field as HTMLSelectElement;
                     json = setPath<any>(json as any, input.name, input.value);
@@ -204,9 +209,17 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
                     json = setPath<any>(json as any, input.name, getValueByType(input));
                 }
             });
-            const result = schema.safeParse(json);
+            const result = schema.safeParse(state);
             if (result.success) {
-                return exec({ form, json, data: result.data, event, reset: () => formReset(form), success: true, errors: [] });
+                return exec({
+                    form,
+                    json,
+                    data: result.data,
+                    event,
+                    reset: () => formReset(form),
+                    success: true,
+                    errors: [],
+                });
             }
             return exec({
                 form,
@@ -218,7 +231,22 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T) => {
                 errors: result.error.issues.map((x) => ({ message: x.message, path: x.path.map((x) => String(x)) })),
             });
         },
-        []
+        [formName]
     );
-    return { input, datepicker, checkbox, select, onSubmit, errors, onInvalid, disabled: errors !== null };
+
+    const get = (p: Fields) => path(state, p as any) || "";
+
+    return {
+        state,
+        input,
+        datepicker,
+        checkbox,
+        select,
+        onSubmit,
+        errors,
+        onInvalid,
+        disabled: errors !== null,
+        name: formName,
+        get,
+    };
 };
