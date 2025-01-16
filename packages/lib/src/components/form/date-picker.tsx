@@ -2,7 +2,7 @@ import { format, isValid, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import React, { forwardRef, Fragment, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useLocale, useTranslations } from "../../hooks/use-components-provider";
 import { Override } from "../../types";
 import { Calendar, CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
@@ -44,7 +44,8 @@ const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
 type Mask = string | RegExp;
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-    ({ date, locale, disabledDate, onChange, markToday, ...props }: DatePickerProps, externalRef) => {
+    ({ date, locale: inputLocal, disabledDate, onChange, markToday, ...props }: DatePickerProps, externalRef) => {
+        const locale = inputLocal || useLocale();
         const labelId = useId();
         const translation = useTranslations();
         const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale), [locale]);
@@ -55,6 +56,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
             ""
         );
+        console.log({ locale, datetimeFormat, placeholder });
 
         const [value, setValue] = useState(
             !innerDate

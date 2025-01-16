@@ -15,7 +15,7 @@ export default function ExpandPage() {
           theme="raw"
           trigger={
             <span className="flex gap-2 items-center">
-              Need help <HelpCircleIcon />
+              Need help <HelpCircleIcon size={14} />
             </span>
           }
         >

@@ -25,7 +25,7 @@ import { Is } from "sidekicker";
 import TheMaskInput, { Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { css } from "../../lib/dom";
 import { splitInto } from "../../lib/fns";
 
@@ -51,7 +51,9 @@ type OnChangeRange = (d: Range | undefined) => void;
 
 export type CalendarProps<T extends "date" | "range" | undefined = undefined> = Partial<
     {
+        labelRange: { to: string; from: string };
         locale: Locales;
+        markRange: boolean;
         markToday: boolean;
         rangeMode: boolean;
         changeOnlyOnClick: boolean;
@@ -66,7 +68,14 @@ export type CalendarProps<T extends "date" | "range" | undefined = undefined> = 
             dayFrame: string;
             calendar: string;
         }>;
-    } & (T extends "date" ? { date: Date; onChange: OnChangeDate } : T extends "range" ? { range: Range; onChange: OnChangeRange } : {}) &
+    } & (T extends "date"
+        ? { date: Date; onChange: OnChangeDate }
+        : T extends "range"
+          ? {
+                range: Range;
+                onChange: OnChangeRange;
+            }
+          : {}) &
         ({ date: Date; onChange: OnChangeDate } | { range: Range; onChange: OnChangeRange })
 >;
 
@@ -123,6 +132,7 @@ type SelectMode = "from" | "to";
 export const Calendar = ({
     RenderOnDay,
     changeOnlyOnClick = false,
+    labelRange,
     disabledDate,
     locale,
     markToday = true,
@@ -131,23 +141,24 @@ export const Calendar = ({
     rangeMode = false,
     onChange,
     styles,
+    markRange = true,
     ...props
 }: CalendarProps) => {
     const translate = useTranslations();
     const root = useRef<HTMLTableElement>(null);
     const { date, range } = props as { date: Date | undefined; range: Range };
-    const now = date || new Date();
+    const providedDate = date || new Date();
     const monthClicked = useRef<HTMLButtonElement | null>(null);
     const [state, dispatch] = useReducer(
         {
-            date: now,
+            date: providedDate,
             isAnimating: false,
-            year: formatYear(now),
-            months: getOptionsMonth(now, locale),
+            year: formatYear(providedDate),
             direction: undefined as number | undefined,
             range: { from: range?.from, to: range?.to },
+            months: getOptionsMonth(providedDate, locale),
             selectMode: (rangeMode ? "from" : undefined) as SelectMode | undefined,
-            week: eachDayOfInterval({ start: startOfWeek(now), end: endOfWeek(now) }),
+            week: eachDayOfInterval({ start: startOfWeek(providedDate), end: endOfWeek(providedDate) }),
         },
         (get) => ({
             onChangeYear: (year: string) => ({ year }),
@@ -368,20 +379,20 @@ export const Calendar = ({
                                                             onClick={dispatch.onSelectDate}
                                                             data-view={state.date.getMonth().toString()}
                                                             className={css(
-                                                                `flex size-10 items-center justify-center rounded-full font-semibold proportional-nums disabled:cursor-not-allowed ${today ? "text-primary" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
+                                                                `flex size-10 items-center justify-center rounded-full proportional-nums disabled:cursor-not-allowed ${today ? "text-emphasis" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
                                                                 styles?.day,
-                                                                isInRange ? "size-10 border border-dashed border-card-border" : ""
+                                                                isInRange && markRange ? "size-10 border border-dashed border-card-border" : ""
                                                             )}
                                                         >
                                                             {day.getDate()}
                                                             {isSelected && state.range.from?.toISOString() === key ? (
                                                                 <span className="absolute -top-2 left-0 h-full w-full">
-                                                                    <span className="text-xs">{translate.calendarFromDate}</span>
+                                                                    <span className="text-xs text-foreground">{labelRange?.from ?? translate.calendarFromDate}</span>
                                                                 </span>
                                                             ) : null}
                                                             {isSelected && state.range.to?.toISOString() === key ? (
                                                                 <span className="absolute -top-2 left-0 h-full w-full">
-                                                                    <span className="text-xs">{translate.calendarToDate}</span>
+                                                                    <span className="text-xs text-foreground">{labelRange?.to ?? translate.calendarToDate}</span>
                                                                 </span>
                                                             ) : null}
                                                         </button>
@@ -397,7 +408,7 @@ export const Calendar = ({
                     </AnimatePresence>
                 </div>
                 <footer className="mt-2 text-center text-primary">
-                    <button className="duration-300 transition-transform hover:scale-105" type="button" onClick={dispatch.setToday}>
+                    <button className="transition-transform duration-300 hover:scale-105" type="button" onClick={dispatch.setToday}>
                         Today
                     </button>
                 </footer>

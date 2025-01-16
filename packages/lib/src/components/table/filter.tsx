@@ -8,7 +8,7 @@ import { Dropdown } from "../floating/dropdown";
 import { Input } from "../form/input";
 import { OptionProps, Select } from "../form/select";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 
 type Operators = { value: string; label: string; symbol: string }
 

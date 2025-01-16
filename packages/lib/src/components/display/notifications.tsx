@@ -85,7 +85,6 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                         ) : null}
                         <RadixToast.Description className="select-text truncate">
                             {props.text}
-                            {props.index}
                         </RadixToast.Description>
                     </div>
                     {closable ? (

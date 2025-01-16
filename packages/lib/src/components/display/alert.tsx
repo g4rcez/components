@@ -1,7 +1,8 @@
+"use client";
 import { cva, type VariantProps } from "class-variance-authority";
 import { HTMLMotionProps, motion } from "framer-motion";
-import { CheckCircleIcon, CircleAlertIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
-import React, { forwardRef, PropsWithChildren } from "react";
+import { CheckCircleIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
+import React, { forwardRef, PropsWithChildren, useState } from "react";
 import { css } from "../../lib/dom";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
 
@@ -25,12 +26,12 @@ export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
         layoutRoot
         layoutScroll
         initial={false}
-        animate={props.open.toString()}
-        aria-hidden={!props.open}
-        className={props.className}
+        variants={variants}
         exit={variants.false}
         transition={transition}
-        variants={variants}
+        aria-hidden={!props.open}
+        animate={props.open.toString()}
+        className={css("aria-hidden:pointer-events-none", props.className)}
     >
         {props.children}
     </motion.div>
@@ -66,20 +67,18 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
     { className, theme, Icon, onClose, open = true, ...props }: AlertProps,
     ref: React.ForwardedRef<HTMLDivElement>
 ) {
+    const close = () => onClose?.(false);
+
     return (
-        <div
-            data-open={!!open}
-            aria-hidden={!open}
-            className="pointer-events-none w-full isolate data-[open=true]:pointer-events-auto data-[open=true]:mb-4"
-        >
+        <div data-open={!!open} aria-hidden={!open} className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}>
             <Collapse data-open={!!open} open={!!open}>
                 <Polymorph
                     {...props}
-                    className={css(alertVariants({ theme }), className)}
                     ref={ref}
-                    data-theme={theme}
                     role="alert"
+                    data-theme={theme}
                     as={props.as ?? "div"}
+                    className={css(alertVariants({ theme }), className)}
                 >
                     <h4 className="mb-2 flex items-center gap-2">
                         {!Icon && theme === "success" ? <CheckCircleIcon size={20} /> : null}
@@ -92,7 +91,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                     {onClose !== undefined ? (
                         <button
                             type="button"
-                            onClick={() => onClose(false)}
+                            onClick={close}
                             className="absolute right-3 top-3 text-foreground transition-colors duration-300 ease-in-out hover:text-danger"
                         >
                             <XIcon size={20} />
@@ -103,3 +102,5 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
         </div>
     );
 }) as never;
+
+type Props = {};

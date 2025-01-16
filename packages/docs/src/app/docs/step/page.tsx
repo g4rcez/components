@@ -18,7 +18,11 @@ export default function StepperPage() {
           <Step step={3} currentStep={step} />
           <Step step={4} currentStep={step} />
         </StepsContainer>
-        <div className="p-32 text-center">Step {step}</div>
+        {step < 5 ? (
+          <div className="p-32 text-center">Step {step}</div>
+        ) : (
+          <div className="p-32 text-center">Finish him!</div>
+        )}
         <div className="flex flex-row justify-between">
           <Button
             theme="neutral"

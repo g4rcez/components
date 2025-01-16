@@ -69,7 +69,8 @@ export const createTheme = (theme: DesignTokens, name?: string) => {
     const colors = reduceTokens(theme.colors, fn);
     const spacing = reduceTokens(theme.spacing, fn);
     const rounded = reduceTokens(theme.rounded, fn);
-    return createStyleContent(colors.concat(spacing, rounded), {
+    const customTokens = theme.custom ? reduceTokens(theme.custom, fn) : [];
+    return createStyleContent(colors.concat(spacing, rounded, customTokens), {
         result: (variables: string) => `html${name ? `.${name}` : ""} {${variables}}`,
         value: (_, v) => v.replace("hsla(", "").replace(")", ""),
     });

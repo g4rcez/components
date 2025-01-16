@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { Calendar, Card } from "../../../../../lib/src";
 
-const d = startOfDay(new Date());
+const d = startOfDay(new Date(1970, 0, 1));
 
 const today = d.toISOString();
 
@@ -87,10 +87,12 @@ export default function CalendarPage() {
         className="grid grid-cols-1 lg:grid-cols-2 gap-6"
       >
         <Calendar
+          markRange={false}
           rangeMode
           range={range}
           changeOnlyOnClick
           onChange={setRange as any}
+          labelRange={{ from: "Início", to: "Fim" }}
           styles={{
             week: "border-b border-card-border",
             weekDay: "h-16 border-b border-card-border",

@@ -12,6 +12,12 @@ export const LIGHT_THEME: DesignTokens = {
         foreground: "hsla(217, 15%, 30%)",
         background: "hsla(210, 34%, 96%)",
         disabled: "hsla(240, 10%, 78%)",
+        emphasis: {
+            foreground: "hsla(251,91%,95%)",
+            DEFAULT: "hsla(255,92%,76%)",
+            subtle: "hsla(252,95%,85%)",
+            hover: "hsla(262,83%,58%)",
+        },
         primary: {
             foreground: "hsla(210, 40%, 98%)",
             DEFAULT: "hsla(199, 89%, 54%)",

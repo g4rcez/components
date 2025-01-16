@@ -1,7 +1,7 @@
 "use client";
 import { ChevronDownIcon } from "lucide-react";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";

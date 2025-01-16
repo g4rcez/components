@@ -1,6 +1,6 @@
 import { Fragment, useId, useMemo } from "react";
 import { TablePagination } from "./table-lib";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 
 function createPaginationItems(current: number, max: number) {
     if (!current || !max) return [];

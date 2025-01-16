@@ -1,7 +1,7 @@
 "use client";
 import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
 import React, { Fragment, PropsWithChildren } from "react";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { css } from "../../lib/dom";
 import { Label } from "../../types";
 import { PolymorphicProps } from "../core/polymorph";
@@ -27,6 +27,8 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
                     <span className="flex items-center justify-center gap-1">
                         {info ? (
                             <Tooltip
+                                as="button"
+                                type="button"
                                 title={
                                     <span className="cursor-help">
                                         <span className="sr-only">{info}</span>
@@ -34,7 +36,7 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
                                     </span>
                                 }
                             >
-                                {info}
+                                <div className="w-full max-w-48 whitespace-break-spaces break-words">{info}</div>
                             </Tooltip>
                         ) : null}
                         {reportStatus ? (

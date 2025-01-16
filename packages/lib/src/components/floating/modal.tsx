@@ -213,16 +213,17 @@ export const Modal = ({
                         >
                             <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                                 <motion.div
-                                    animate="enter"
-                                    aria-describedby={descriptionId}
-                                    aria-labelledby={headingId}
-                                    className={variants({ position, type })}
                                     exit="exit"
-                                    layoutId={props.layoutId}
+                                    animate="enter"
                                     initial="initial"
-                                    ref={refs.setFloating}
-                                    style={type === "drawer" ? { width: value } : { height: value }}
                                     variants={animation}
+                                    ref={refs.setFloating}
+                                    aria-modal={props.open}
+                                    layoutId={props.layoutId}
+                                    aria-labelledby={headingId}
+                                    aria-describedby={descriptionId}
+                                    className={variants({ position, type })}
+                                    style={type === "drawer" ? { width: value } : { height: value }}
                                     {...getFloatingProps()}
                                 >
                                     {props.title ? (

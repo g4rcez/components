@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
 import { Notifications } from "../../../lib/src/components/display/notifications";
 import { createTheme } from "../../../lib/src/styles/design-tokens";
 import {
@@ -17,7 +18,9 @@ export const RootLayout = (props: PropsWithChildren) => {
         <style>{stylesDark}</style>
       </head>
       <body>
-        <Notifications>{props.children}</Notifications>
+        <ComponentsProvider locale="pt-BR">
+          <Notifications>{props.children}</Notifications>
+        </ComponentsProvider>
       </body>
     </html>
   );

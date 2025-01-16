@@ -1,17 +1,21 @@
-import React, { forwardRef } from "react";
+import React, { ComponentProps, ElementRef, ElementType, forwardRef, PropsWithChildren } from "react";
 import { Override } from "../../types";
 
-type Polymorphism<T extends React.ElementType> = React.PropsWithChildren<{ as?: T }>;
+type Polymorphism<T extends ElementType> = PropsWithChildren<{
+    as?: T;
+}>;
 
-type Props<T extends React.ElementType = React.ElementType> = Polymorphism<T> & Omit<React.ComponentPropsWithRef<T>, keyof Polymorphism<T>>;
+type Props<T extends ElementType = ElementType> = Polymorphism<T> & Omit<React.ComponentPropsWithRef<T>, keyof Polymorphism<T>>;
 
-export type PolymorphicProps<P extends {}, T extends React.ElementType = React.ElementType> = Omit<
-    T extends string ? Override<React.ComponentProps<T> & Props<T>, P> : Override<Props<T>, P>,
-    keyof Polymorphism<T>
-> &
-    Polymorphism<T>;
+export type PolymorphicProps<P extends {}, T extends ElementType = ElementType> = Override<Props<T>, P> & Polymorphism<T>;
 
-export const Polymorph = forwardRef(function Polymorph<T extends React.ElementType>({ as, ...props }: Props<T>, ref: React.ForwardedRef<any>) {
-    const Component = as || "span";
-    return <Component {...props} ref={ref} />;
-});
+export const Polymorph: <T extends ElementType>(p: PolymorphicProps<ComponentProps<T>, T>) => React.ReactElement = forwardRef(function Polymorph<
+    T extends ElementType,
+>({ as, children, ...props }: PolymorphicProps<{}, T>, ref: React.ForwardedRef<ElementRef<T>>) {
+    const Component = (as as any) || "span";
+    return (
+        <Component ref={ref} {...props}>
+            {children}
+        </Component>
+    );
+}) as any;

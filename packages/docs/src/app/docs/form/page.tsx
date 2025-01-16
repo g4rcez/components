@@ -21,6 +21,12 @@ const languages: AutocompleteItemProps[] = [
   { label: "Javascript", value: "js" },
   { label: "Kotlin", value: "kt", Render: () => <span>🗿 Kotlin</span> },
   { label: "Typescript", value: "typescript" },
+  { label: "Java", value: "java" },
+  { label: "Cobol", value: "cobol" },
+  { label: "C", value: "c" },
+  { label: "C++", value: "cpp" },
+  { label: "C#", value: "csharp" },
+  { label: "F#", value: "fsharp" },
 ] as const;
 
 const clamp = (min: number, x: number, max: number) =>
@@ -133,7 +139,6 @@ export default function FormPage() {
           <DatePicker
             {...form.datepicker("date", {
               title: "Date",
-              locale: "pt-BR",
               placeholder: "31/12/2077",
             })}
           />

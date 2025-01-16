@@ -12,6 +12,12 @@ export const DARK_THEME: DesignTokens = {
         foreground: "hsla(210, 50%, 98%)",
         background: "hsla(0, 0%, 9%)",
         disabled: "hsla(240, 4%, 33%)",
+        emphasis: {
+            foreground: "hsla(251, 91%, 95%)",
+            DEFAULT: "hsla(255, 92%, 76%)",
+            subtle: "hsla(252, 95%, 85%)",
+            hover: "hsla(262, 83%, 58%)",
+        },
         primary: {
             foreground: "hsla(210, 40%, 98%)",
             DEFAULT: "hsla(200,98%,39%)",

@@ -1,5 +1,7 @@
+"use client";
 import React, { createContext, Fragment, PropsWithChildren, useContext, useMemo } from "react";
 import { parsers } from "../../preset.tailwind";
+import { Locales } from "the-mask-input";
 
 const defaultTranslations = {
     inputCaretDown: "Click to see all options",
@@ -58,22 +60,34 @@ const defaultTranslations = {
 
 type Translations = typeof defaultTranslations;
 
-const Context = createContext({ translations: defaultTranslations, colorTokenParser: parsers.hsla });
+const Context = createContext({
+    colorTokenParser: parsers.hsla,
+    translations: defaultTranslations,
+    locale: undefined as Locales | undefined,
+});
 
-type ContextProps = {
-    parser?: typeof parsers.hsla,
-    map?: Partial<Translations>
-}
+type ContextProps = Partial<{
+    map: Partial<Translations>;
+    locale: Locales | undefined;
+    parser: typeof parsers.hsla;
+}>;
 
 export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
     const memoMap = useMemo(
         () => ({
+            locale: props.locale,
             translations: { ...defaultTranslations, ...props.map },
             colorTokenParser: props.parser || parsers.hsla,
         }),
-        [props.map]
+        [props]
     );
     return <Context.Provider value={memoMap}>{props.children}</Context.Provider>;
+};
+
+export const useLocale = (): Locales | undefined => {
+    const ctx = useContext(Context);
+    if (!ctx) return undefined;
+    return ctx.locale;
 };
 
 export const useTranslations = () => {

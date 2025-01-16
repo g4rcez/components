@@ -1,7 +1,7 @@
 "use client";
 import { motion, stagger, Transition, useAnimate } from "framer-motion";
 import { ComponentProps, PropsWithChildren, useEffect } from "react";
-import { useColorParser } from "../../hooks/use-translate-context";
+import { useColorParser } from "../../hooks/use-components-provider";
 
 const iconTransitions = {
     delay: 0.2,

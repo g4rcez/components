@@ -2,7 +2,7 @@ import { AnimatePresence, Reorder, TargetAndTransition } from "framer-motion";
 import { Order } from "linq-arrays";
 import { PlusIcon, SearchCheckIcon, SearchIcon, SearchXIcon, ZoomInIcon } from "lucide-react";
 import React from "react";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { Dropdown } from "../floating/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";

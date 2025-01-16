@@ -38,7 +38,7 @@ const config: Partial<Config> = {
     },
     plugins: [
         forms({ strategy: "class" }),
-        plugin(function ({ addVariant }) {
+        plugin(function ({ addVariant, theme, matchUtilities }) {
             addVariant("link", ["&:hover", "&:active"]);
             addVariant("landing", ["&"]);
             addVariant("group-assert", [`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);

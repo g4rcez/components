@@ -7,6 +7,7 @@ export type DesignTokens = {
     shadow: Record<"floating", string>;
     rounded: Record<"button" | "full" | "pill" | "card", string>;
     spacing: Record<"base" | "lg" | "sm", string>;
+    custom?: Record<string, string>;
     colors: {
         tag: Record<ThemeState, { text: string; bg: string }>;
         button: Record<ThemeState, { text: string; bg: string }>;
@@ -14,6 +15,12 @@ export type DesignTokens = {
         foreground: string;
         background: string;
         disabled: string;
+        emphasis: {
+            foreground: string;
+            DEFAULT: string;
+            subtle: string;
+            hover: string;
+        };
         primary: {
             foreground: string;
             DEFAULT: string;
@@ -96,4 +103,3 @@ type Fn = (...a: any[]) => any;
 export type DeepParse<T extends GeneralTokens, F extends Fn> = {
     [K in keyof T]: T[K] extends GeneralTokens ? DeepParse<T[K], F> : ReturnType<Fn>;
 };
-

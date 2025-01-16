@@ -1,7 +1,7 @@
 "use client";
 import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { uuid } from "../../lib/fns";
 import { Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";

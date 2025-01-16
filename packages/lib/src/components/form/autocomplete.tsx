@@ -15,7 +15,7 @@ import {
 import Fuzzy from "fuzzy-search";
 import { CheckIcon, ChevronDown } from "lucide-react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { InputField, InputFieldProps } from "./input-field";
@@ -29,21 +29,25 @@ export type AutocompleteOptionProps = Omit<React.HTMLProps<HTMLLIElement>, "chil
     option: AutocompleteItemProps;
 };
 
-const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>
+const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
 export const Option = forwardRef<HTMLLIElement, AutocompleteOptionProps>(({ selected, active, onClick, option, ...props }, ref) => {
     const Label = (option.Render as React.FC<any>) ?? Frag;
     const children = option.label ?? option.value;
+    if (option.hidden) {
+        return null;
+    }
     return (
         <li {...props} ref={ref} role="option" aria-selected={active} className="w-full border-b border-tooltip-border last:border-transparent">
             <button
                 type="button"
-                data-value={option.value}
-                onClick={onClick as any}
-                aria-selected={active}
+                aria-busy={option.disabled}
                 aria-checked={active}
                 aria-current={active}
-                className={`flex w-full cursor-pointer justify-between p-2 text-left ${active ? "bg-primary text-primary-foreground" : ""} ${selected ? "bg-primary/70 text-primary-foreground" : ""}`}
+                aria-selected={active}
+                onClick={onClick as any}
+                data-value={option.value}
+                className={`flex w-full cursor-pointer justify-between p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-primary text-primary-foreground" : ""}`}
             >
                 <Label {...props} label={option.label} value={option.value} children={children} />
                 {active ? (
@@ -64,7 +68,7 @@ export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
 
 const transitionStyles = {
     duration: 300,
-    initial: { transform: "scaleY(0)", opacity: 0.4 },
+    initial: { transform: "scaleY(0)", opacity: 0.2 },
     open: { transform: "scaleY(1)", opacity: 1 },
     close: { transform: "scaleY(0)", opacity: 0 },
 } as const;
@@ -98,11 +102,20 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
-        const [label, setLabel] = useState(defaults);
+        const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
         const innerOptions: AutocompleteItemProps[] =
-            dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options;
+            dynamicOption && shadow !== ""
+                ? [
+                      {
+                          value: shadow,
+                          label: shadow,
+                          "data-dynamic": "true",
+                      },
+                      ...options,
+                  ]
+                : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
 
         const pattern = dynamicOption
@@ -135,7 +148,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             width: `${w}px`,
                             maxWidth: `${w}px`,
                             minWidth: "max-content",
-                            maxHeight: `${Math.min(480, a.availableHeight)}px`,
+                            maxHeight: `${Math.min(250, a.availableHeight)}px`,
                         });
                     },
                 }),
@@ -147,16 +160,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             useRole(context, { role: "listbox" }),
             useDismiss(context),
             useListNavigation(context, {
-                activeIndex: index,
-                allowEscape: true,
                 cols: 0,
-                focusItemOnOpen: "auto",
                 listRef,
                 loop: true,
+                virtual: true,
+                allowEscape: true,
+                activeIndex: index,
+                selectedIndex: index,
+                focusItemOnOpen: "auto",
                 openOnArrowKeyDown: true,
                 scrollItemIntoView: true,
-                selectedIndex: index,
-                virtual: true,
                 onNavigate: (n) => setIndex((prev) => n ?? prev),
             }),
         ]);
@@ -169,13 +182,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const onSelect = (opt: AutocompleteItemProps, i: number) => {
             setValue(opt.value);
-            const input = refs.reference.current as HTMLInputElement
+            const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             input?.setAttribute("data-value", opt.value);
-            input.value = opt.value
-            const event = new Event("change", {bubbles:false, cancelable:true})
-            input.dispatchEvent(event)
-            if (props.onChange) props.onChange(event as any)
+            input.value = opt.value;
+            const event = new Event("change", { bubbles: false, cancelable: true });
+            input.dispatchEvent(event);
+            if (props.onChange) props.onChange(event as any);
             setLabel(opt.label ?? "");
             setOpen(false);
             setShadow("");
@@ -304,25 +317,32 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <ul
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
-                                    style: { position: strategy, left: (x ?? 0) + 16, top: y ?? 0, ...transitions.styles },
+                                    style: {
+                                        position: strategy,
+                                        left: (x ?? 0) + (!!value ? 26 : 16),
+                                        top: y ?? 0,
+                                        ...transitions.styles,
+                                    },
                                 })}
                                 data-floating="true"
                                 className="z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
-                                {list.map((option, i) => (
-                                    <Option
-                                        {...getItemProps({
-                                            onClick: () => onSelect(option, i),
-                                            ref: (node) => void (listRef.current[i] = node) as any,
-                                            selected: index === i,
-                                            active: value === option.value,
-                                        })}
-                                        key={`${option.value}-option`}
-                                        option={option}
-                                        selected={index === i}
-                                        active={value === option.value}
-                                    />
-                                ))}
+                                {list.map((option, i) => {
+                                    const active = value === option.value || value === option.label;
+                                    return (
+                                        <Option
+                                            key={`${option.value}-option`}
+                                            {...getItemProps({
+                                                onClick: () => onSelect(option, i),
+                                                ref: (node) => void (listRef.current[i] = node) as any,
+                                                selected: index === i,
+                                            })}
+                                            option={option}
+                                            active={active}
+                                            selected={index === i}
+                                        />
+                                    );
+                                })}
                             </ul>
                         </FloatingFocusManager>
                     ) : null}

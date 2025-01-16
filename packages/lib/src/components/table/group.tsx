@@ -4,7 +4,7 @@ import Linq from "linq-arrays";
 import { GripVerticalIcon, Trash2Icon, UngroupIcon } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { keys } from "sidekicker";
-import { useTranslations } from "../../hooks/use-translate-context";
+import { useTranslations } from "../../hooks/use-components-provider";
 import { uuid } from "../../lib/fns";
 import { Button } from "../core/button";
 import { Dropdown } from "../floating/dropdown";

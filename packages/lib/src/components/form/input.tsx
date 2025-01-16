@@ -76,11 +76,14 @@ export const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputPro
             >
                 <MaskInput
                     {...(props as any)}
-                    type={type}
-                    data-next={next}
-                    ref={mergeRefs(ref, inputRef)}
                     id={id}
                     name={id}
+                    type={type}
+                    data-next={next}
+                    aria-busy={props.disabled}
+                    aria-disabled={props.disabled}
+                    aria-readonly={props.readOnly}
+                    ref={mergeRefs(ref, inputRef)}
                     className={css(
                         "input placeholder-input-mask group h-input-height w-full flex-1",
                         "rounded-md bg-transparent px-input-x py-input-y text-foreground",
