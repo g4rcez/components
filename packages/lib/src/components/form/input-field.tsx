@@ -65,7 +65,7 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
     </div>
 );
 
-export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
+export type InputFieldProps<T extends "input" | "select" | "textarea"> = PolymorphicProps<
     Partial<{
         info: Label;
         labelClassName: string;
@@ -85,7 +85,7 @@ export type InputFieldProps<T extends "input" | "select"> = PolymorphicProps<
     T
 >;
 
-export const InputField = <T extends "input" | "select">({
+export const InputField = <T extends "input" | "select" | "textarea">({
     optionalText: _optionalText,
     left,
     rightLabel,

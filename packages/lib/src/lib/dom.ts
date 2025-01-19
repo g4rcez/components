@@ -35,7 +35,7 @@ export const dispatchInput = (input: HTMLInputElement | undefined | null, newVal
     return Object.assign({}, event, { target: input, currentTarget: input });
 };
 
-export const initializeInputDataset = (input: HTMLInputElement | HTMLSelectElement) => {
+export const initializeInputDataset = (input: HTMLInputElement| HTMLTextAreaElement | HTMLSelectElement) => {
     const focus = () => input.setAttribute("data-initialized", "true");
     input.addEventListener("focus", focus);
     return () => input.removeEventListener("focus", focus);

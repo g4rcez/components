@@ -32,8 +32,8 @@ const FileViewer = (props: { file: File; onDeleteFile?: (file: File) => void }) 
 
     if (info.type === "img") {
         return (
-            <div className="flex flex-row gap-jade-200 items-center justify-between w-full">
-                <header className="flex flex-row gap-jade-200 items-center">
+            <div className="gap-jade-200 flex w-full flex-row items-center justify-between">
+                <header className="gap-jade-200 flex flex-row items-center">
                     <img src={info.url} className="size-jade-500 rounded-jade-xsmall" alt={`Miniatura do arquivo ${props.file.name}`} />
                     <div className="flex flex-col">
                         <span>{props.file.name}</span>
@@ -44,7 +44,7 @@ const FileViewer = (props: { file: File; onDeleteFile?: (file: File) => void }) 
                     className="isolate"
                     type="button"
                     theme="raw"
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
                         props.onDeleteFile?.(props.file);
                     }}
@@ -55,10 +55,10 @@ const FileViewer = (props: { file: File; onDeleteFile?: (file: File) => void }) 
         );
     }
     return (
-        <div className="flex flex-row gap-jade-200 items-center justify-between w-full">
-            <header className="flex flex-row gap-4 items-center">
+        <div className="gap-jade-200 flex w-full flex-row items-center justify-between">
+            <header className="flex flex-row items-center gap-4">
                 <FileIcon size={48} />
-                <div className="flex flex-col text-left justify-start items-start">
+                <div className="flex flex-col items-start justify-start text-left">
                     <span>{props.file.name}</span>
                     <span>{info.size}</span>
                 </div>
@@ -67,7 +67,7 @@ const FileViewer = (props: { file: File; onDeleteFile?: (file: File) => void }) 
                 className="isolate"
                 type="button"
                 theme="raw"
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation();
                     props.onDeleteFile?.(props.file);
                 }}
@@ -80,7 +80,7 @@ const FileViewer = (props: { file: File; onDeleteFile?: (file: File) => void }) 
 
 const DefaultViewer = (props: { files: File[]; onDeleteFile?: (file: File) => void }) => {
     return (
-        <ul className="w-full space-y-jade-200">
+        <ul className="space-y-jade-200 w-full">
             {props.files.map((file) => {
                 return <FileViewer onDeleteFile={props.onDeleteFile} key={file.name} file={file} />;
             })}
@@ -99,7 +99,7 @@ const InteractiveArea = (props: { isDragActive: boolean; idle: React.ReactElemen
 };
 
 const DefaultIdle = (
-    <div className="flex flex-col gap-4 justify-center items-center">
+    <div className="flex flex-col items-center justify-center gap-4">
         <UploadIcon size={64} />
         <p>
             You can drag your files or{" "}
@@ -121,7 +121,7 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, onDrop, ...props 
         <div
             {...getRootProps()}
             data-active={props.files?.length ? props.files.length > 0 : false}
-            className="flex text-foreground flex-col items-center justify-center border-2 rounded-lg p-6 border-card-border data-[active=true]:bg-card-background data-[active=true]:border-solid data-[active=false]:border-dashed"
+            className="flex flex-col items-center justify-center rounded-lg border-2 border-card-border p-6 text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:bg-card-background"
         >
             <input {...getInputProps(props as any)} name={props.name} id={props.name} />
             <InteractiveArea onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={props.files ?? files} />

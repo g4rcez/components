@@ -20,6 +20,7 @@ export * from "./form/date-picker";
 export * from "./form/file-upload";
 export * from "./form/form";
 export * from "./form/input";
+export * from "./form/textarea";
 export * from "./form/input-field";
 export * from "./form/radiobox";
 export * from "./form/select";

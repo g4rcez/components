@@ -56,7 +56,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
             ""
         );
-        console.log({ locale, datetimeFormat, placeholder });
 
         const [value, setValue] = useState(
             !innerDate
@@ -105,7 +104,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 data-target={props.name}
                 className="uppercase"
                 formNoValidate={!open}
-                placeholder={placeholder}
+                placeholder={props.placeholder ?? placeholder}
                 onChange={onChangeDateInput}
                 required={props.required ?? true}
                 error={open ? undefined : props.error}
