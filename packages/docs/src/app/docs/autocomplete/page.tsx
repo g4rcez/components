@@ -29,6 +29,7 @@ export default function FormPage() {
           title="Control option"
           onChange={(e) => setValue(e.target.value)}
         />
+        <Autocomplete options={[]} title="Empty" />
       </Card>
     </DocsLayout>
   );

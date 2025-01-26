@@ -67,6 +67,7 @@ export type CellPropsElement<T extends POJO, K extends AllPaths<T>> = {
 
 type ColOptions<T extends POJO, K extends AllPaths<T>> = Partial<{
     type: ColType;
+    allowSort: boolean;
     headerLabel: string;
     allowFilter: boolean;
     thProps: React.HTMLAttributes<HTMLTableCellElement>;
@@ -142,21 +143,30 @@ type TablePreferenceState<T extends POJO> = {
 
 const noop = {};
 
-export const useTablePreferences = <T extends POJO>(name: string, options: Partial<TableGetters<T>> = noop) => {
-    const init: TableGetters<T> | null = isSsr() ? null : (LocalStorage.get(`@unamed/table-${name}`) as TableGetters<T>) || null;
+const mergeCols = <T extends POJO>(cols: Col<T>[], saved?: Col<T>[]) => {
+    if (!Array.isArray(saved)) return cols;
+    const map = new Map(cols.map((x) => [x.id, x]));
+    return saved.map((mock) => {
+        const original = map.get(mock.id);
+        return { ...mock, ...original };
+    });
+};
+
+export const useTablePreferences = <T extends POJO>(name: string, cols: Col<T>[], options: Partial<TableGetters<T>> = noop) => {
+    const init: TableGetters<T> | null = isSsr() ? null : (LocalStorage.get(`@components/table-${name}`) as TableGetters<T>) || null;
     const [state, dispatch] = useReducer(
         {
             name,
             groups: options.groups || init?.groups || [],
             sorters: options.sorters || init?.sorters || [],
             filters: options.filters || init?.filters || [],
-            cols: options.cols || init?.cols || [],
+            cols: mergeCols(cols, init?.cols),
         } as Omit<TableGetters<T>, "rows"> & { name: string },
         (get) => {
             const intercept = (partial: Partial<TablePreferenceState<T>>) => {
                 const prev = get.state();
                 const result = { ...prev, ...partial };
-                if (!isSsr()) LocalStorage.set(`@unamed/table-${prev.name}`, result);
+                if (!isSsr()) LocalStorage.set(`@components/table-${prev.name}`, result);
                 return result;
             };
             return {

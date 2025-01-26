@@ -67,6 +67,7 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
 
 export type InputFieldProps<T extends "input" | "select" | "textarea"> = PolymorphicProps<
     Partial<{
+        componentName: string;
         info: Label;
         labelClassName: string;
         error: string;
@@ -101,6 +102,7 @@ export const InputField = <T extends "input" | "select" | "textarea">({
     labelClassName = "",
     name,
     title,
+    componentName,
     placeholder,
     hideLeft,
     required,
@@ -112,6 +114,7 @@ export const InputField = <T extends "input" | "select" | "textarea">({
         <fieldset
             form={form}
             data-error={!!error}
+            data-component={componentName}
             data-interactive={!!interactive}
             className={css("group grid min-h-0 min-w-0 grid-cols-1 items-baseline", container)}
         >

@@ -84,8 +84,9 @@ export type DesignTokens = {
             border: string;
         };
         table: {
-            background: string;
             border: string;
+            header: string;
+            background: string;
         };
     };
 };

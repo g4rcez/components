@@ -7,6 +7,7 @@ const defaultTranslations = {
     inputCaretDown: "Click to see all options",
     datePickerCalendarButtonLabel: "Click to open a date picker",
     inputOptionalLabel: "Optional",
+    autocompleteEmpty: "Nothing here...",
 
     tableGroupLabel: "Group",
     tableGroupLabelWithCount: "Group",
@@ -19,6 +20,7 @@ const defaultTranslations = {
     tableSortAddButton: "Add sort",
     tableSortDropdownTitle: "Order by",
     tableSortDesc: "Descending",
+    tableColumnResizer: "Resize column",
 
     tableFilterTypeContains: "Contains",
     tableFilterTypeIs: "Is",

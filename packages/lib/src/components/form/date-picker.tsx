@@ -100,16 +100,17 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 {...props}
                 mask={mask}
                 value={value}
-                data-value={htmlValue}
-                data-target={props.name}
+                id={undefined}
+                name={undefined}
                 className="uppercase"
+                data-value={htmlValue}
                 formNoValidate={!open}
-                placeholder={props.placeholder ?? placeholder}
+                data-target={props.name}
+                data-component="date-picker"
                 onChange={onChangeDateInput}
                 required={props.required ?? true}
                 error={open ? undefined : props.error}
-                name={undefined}
-                id={undefined}
+                placeholder={props.placeholder ?? placeholder}
                 right={
                     <Fragment>
                         <input

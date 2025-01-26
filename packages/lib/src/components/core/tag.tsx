@@ -55,7 +55,14 @@ export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => 
     ref: React.ForwardedRef<HTMLButtonElement>
 ) {
     return (
-        <Polymorph {...props} ref={ref} data-theme={theme} as={props.as ?? "span"} className={css(tagVariants({ size, theme }), className)}>
+        <Polymorph
+            {...props}
+            ref={ref}
+            data-theme={theme}
+            data-component="tag"
+            as={props.as ?? "span"}
+            className={css(tagVariants({ size, theme }), className)}
+        >
             {indicator ? <span className={indicatorVariant({ theme: indicator })} /> : null}
             {icon}
             {props.children}

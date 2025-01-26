@@ -65,6 +65,7 @@ export const Button: <T extends React.ElementType = "button">(props: ButtonProps
             data-theme={theme}
             disabled={disabled}
             data-loading={loading}
+            data-component="button"
             aria-disabled={disabled}
             as={props.as ?? "button"}
             aria-busy={disabled || loading}

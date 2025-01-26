@@ -222,21 +222,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         return (
             <InputField
                 {...(props as any)}
-                container={container}
-                error={error}
-                feedback={feedback}
-                form={props.form}
-                hideLeft={hideLeft}
-                id={props.name || props.id}
-                interactive={interactive}
-                labelClassName={labelClassName}
                 left={left}
+                error={error}
+                form={props.form}
                 name={props.name}
-                optionalText={optionalText}
-                placeholder={props.placeholder}
+                feedback={feedback}
+                hideLeft={hideLeft}
                 required={required}
-                rightLabel={rightLabel}
                 title={props.title}
+                container={container}
+                rightLabel={rightLabel}
+                interactive={interactive}
+                id={props.name || props.id}
+                optionalText={optionalText}
+                componentName="autocomplete"
+                labelClassName={labelClassName}
+                placeholder={props.placeholder}
                 right={
                     <span className="flex items-center gap-0.5">
                         <button type="button" className="transition-colors link:text-primary">
@@ -325,7 +326,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     },
                                 })}
                                 data-floating="true"
-                                className="z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
+                                className="z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
                                 {list.map((option, i) => {
                                     const active = value === option.value || value === option.label;
@@ -343,6 +344,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         />
                                     );
                                 })}
+                                {list.length === 0 ? (
+                                    <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
+                                        <span className="flex w-full justify-between p-2 text-left text-disabled">
+                                            {translation.autocompleteEmpty}
+                                        </span>
+                                    </li>
+                                ) : null}
                             </ul>
                         </FloatingFocusManager>
                     ) : null}

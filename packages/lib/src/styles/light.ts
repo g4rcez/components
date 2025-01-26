@@ -81,6 +81,7 @@ export const LIGHT_THEME: DesignTokens = {
             border: "hsla(200, 1%, 80%)",
         },
         table: {
+            header: "hsla(221, 10%, 90%)",
             background: "hsla(0, 0%, 100%)",
             border: "hsla(210, 25%, 88%)",
         },

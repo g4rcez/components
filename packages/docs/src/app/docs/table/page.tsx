@@ -11,8 +11,9 @@ import {
 type User = { id: string; name: string; type: string; document: string };
 
 const cols = createColumns<User>((col) => {
-  col.add("name", "Name");
-  col.add("document", "Document");
+  col.add("name", "Name", { allowSort: false });
+  col.add("type", "Type", { allowSort: false, allowFilter: false });
+  col.add("document", "Document", { allowSort: false, allowFilter: false });
 });
 
 const clients = Array.from({ length: 50 })
@@ -27,8 +28,7 @@ const clients = Array.from({ length: 50 })
   .sort((a, b) => a.id.localeCompare(b.id));
 
 export default function TablePage() {
-  const preferences = useTablePreferences("@lentium/processes", { cols });
-  console.log(preferences);
+  const preferences = useTablePreferences("@test", cols);
 
   return (
     <DocsLayout
@@ -39,11 +39,10 @@ export default function TablePage() {
       <Card className="px-4">
         <Table<User>
           {...preferences}
-          inlineFilter
+          sticky={40}
           name="table"
           rows={clients}
           operations={false}
-          inlineSorter={false}
         />
       </Card>
     </DocsLayout>

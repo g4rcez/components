@@ -4,4 +4,4 @@ import { createFreeText, FreeTextProps } from "./free-text";
 
 export type InputProps = FreeTextProps<"input", TheMaskProps>; //Override<InputFieldProps<"input">, TheMaskProps & FeedbackProps & { next?: string }>;
 
-export const Input = createFreeText<"input", HTMLInputElement, TheMaskProps>(MaskInput, { type: "text" });
+export const Input = createFreeText<"input", HTMLInputElement, TheMaskProps>(MaskInput, "input", { type: "text" });

@@ -11,15 +11,16 @@ export type RadioboxProps = Override<
 
 export const Radiobox = ({ children, className = "", size, ...props }: RadioboxProps) => (
     <label
+        data-component="radiobox"
         data-disabled={props.disabled}
         aria-disabled={props.disabled}
-        className="group font-normal flex items-center gap-2 data-[disabled=true]:cursor-not-allowed"
+        className="group flex items-center gap-2 font-normal data-[disabled=true]:cursor-not-allowed"
     >
         <input
             {...props}
             type="radio"
             className={css(
-                "form-radio rounded-full h-4 w-4 app border-card-border text-primary focus:ring-primary appearance-none inline-block bg-origin-border group-aria-disabled:cursor-not-allowed disabled:opacity-70",
+                "app form-radio inline-block h-4 w-4 appearance-none rounded-full border-card-border bg-origin-border text-primary focus:ring-primary disabled:opacity-70 group-aria-disabled:cursor-not-allowed",
                 className
             )}
             {...props}

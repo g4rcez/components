@@ -81,6 +81,7 @@ export const DARK_THEME: DesignTokens = {
             border: "hsla(0, 0%, 19%)",
         },
         table: {
+            header: "hsla(0, 0%, 12%)",
             background: "hsla(0, 0%, 15%)",
             border: "hsla(240, 4%, 33%)",
         },

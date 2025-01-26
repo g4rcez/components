@@ -30,6 +30,7 @@ export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
         exit={variants.false}
         transition={transition}
         aria-hidden={!props.open}
+        data-component="collapse"
         animate={props.open.toString()}
         className={css("aria-hidden:pointer-events-none", props.className)}
     >
@@ -70,7 +71,12 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
     const close = () => onClose?.(false);
 
     return (
-        <div data-open={!!open} aria-hidden={!open} className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}>
+        <div
+            data-open={!!open}
+            aria-hidden={!open}
+            data-component="alert"
+            className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}
+        >
             <Collapse data-open={!!open} open={!!open}>
                 <Polymorph
                     {...props}

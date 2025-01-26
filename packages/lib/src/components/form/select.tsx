@@ -6,7 +6,13 @@ import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 
-export type OptionProps = Override<React.ComponentProps<"option">, { value: string; "data-dynamic"?: string }>;
+export type OptionProps = Override<
+    React.ComponentProps<"option">,
+    {
+        value: string;
+        "data-dynamic"?: string;
+    } & Partial<Record<`data-${string}`, string>>
+>;
 
 export type SelectProps = Override<
     InputFieldProps<"select">,
@@ -58,22 +64,23 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
         return (
             <InputField<"select">
-                container={container}
+                info={info}
+                left={left}
                 error={error}
+                form={props.form}
+                name={props.name}
                 feedback={feedback}
                 hideLeft={hideLeft}
-                left={left}
-                info={info}
-                optionalText={optionalText}
+                required={required}
+                title={props.title}
+                container={container}
+                componentName="select"
                 rightLabel={rightLabel}
                 interactive={interactive}
-                form={props.form}
                 id={props.name || props.id}
-                name={props.name}
+                optionalText={optionalText}
                 labelClassName={labelClassName}
-                title={props.title}
                 placeholder={props.placeholder}
-                required={required}
                 right={
                     <label htmlFor={id}>
                         <button onClick={onClickLabel} type="button" className="mt-2 transition-colors hover:text-primary">

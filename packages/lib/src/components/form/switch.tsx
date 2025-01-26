@@ -41,7 +41,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
     };
 
     return (
-        <fieldset className={css("flex flex-wrap items-center", container)}>
+        <fieldset className={css("flex flex-wrap items-center", container)} data-component="switch">
             <input
                 {...props}
                 checked={checked}

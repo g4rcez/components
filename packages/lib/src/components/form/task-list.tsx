@@ -27,5 +27,5 @@ export const TaskList = (props: PropsWithChildren<ComponentProps<"fieldset">>) =
         return () => container.removeEventListener("change", handler);
     }, []);
 
-    return <fieldset {...props} ref={ref} />;
+    return <fieldset {...props} data-component="task-list" ref={ref} />;
 };

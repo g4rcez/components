@@ -17,6 +17,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     ({ children, asTask = false, labelClassName, error, className = "", size, container, ...props }: CheckboxProps, ref) => (
         <label
             data-task={asTask}
+            data-component="checkbox"
             data-disabled={props.disabled}
             aria-disabled={props.disabled}
             className={css(

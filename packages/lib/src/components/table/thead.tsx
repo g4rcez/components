@@ -1,23 +1,19 @@
-import { AnimatePresence, Reorder, TargetAndTransition } from "framer-motion";
+import { AnimatePresence, motion, PanInfo, Reorder, useMotionValue } from "framer-motion";
 import { Order } from "linq-arrays";
-import { PlusIcon, SearchCheckIcon, SearchIcon, SearchXIcon, ZoomInIcon } from "lucide-react";
-import React from "react";
+import { PlusIcon, SearchCheckIcon, SearchXIcon } from "lucide-react";
+import React, { useCallback } from "react";
 import { useTranslations } from "../../hooks/use-components-provider";
 import { Dropdown } from "../floating/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
 import { Col, getLabel, TableOperationProps } from "./table-lib";
 
+const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
+
 type TableHeaderProps<T extends {}> = {
     loading: boolean;
     headers: Col<T>[];
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "setSorters" | "sorters" | "inlineSorter" | "inlineFilter">;
-
-const targetTransitionAnimate: TargetAndTransition = { opacity: 1 };
-
-const whileDrag: TargetAndTransition = { opacity: 0.75, backgroundColor: "var(--table-border)" };
-
-const exit: TargetAndTransition = { opacity: 0, transition: { duration: 0.4, type: "spring" } };
 
 type HeaderChildProps<T extends {}> = {
     header: Col<T>;
@@ -29,11 +25,30 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
     const hasFilters = ownFilters.length > 0;
     const FilterIcon = hasFilters ? SearchCheckIcon : SearchXIcon;
-    const { operationOptions, operations } = useOperators();
+    const defaultAllowSort = props.header.allowSort ?? true;
+    const defaultAllowFilter = props.header.allowFilter ?? true;
+    const operators = useOperators();
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         const id = e.currentTarget.dataset.id || "";
         return props.setFilters((prev) => prev.filter((x) => x.id !== id));
     };
+
+    const dragRef = useCallback((dom: HTMLButtonElement | null) => {
+        if (dom === null) return;
+        const controller = new AbortController();
+        dom.addEventListener(
+            "pointerdown",
+            (e) => {
+                const target = e.target as HTMLButtonElement;
+                if (target.dataset.type === "resizer") {
+                    e.stopPropagation();
+                    return e.stopImmediatePropagation();
+                }
+            },
+            { signal: controller.signal }
+        );
+        return () => controller.abort();
+    }, []);
 
     const ownSorter = props.sorters.find((x) => props.header.id === x.value);
 
@@ -41,83 +56,110 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
 
     const label = getLabel(props.header);
 
+    const width = useMotionValue<number | undefined>(undefined);
+
     return (
         <Reorder.Item
             {...(props.header.thProps as {})}
             as="th"
-            layout
-            exit={exit}
+            ref={dragRef}
             initial={false}
             dragSnapToOrigin
             dragDirectionLock
+            style={{ width }}
             role="columnheader"
-            value={props.header}
-            whileDrag={whileDrag}
             aria-sort={ariaSort}
+            value={props.header}
             aria-busy={props.loading}
-            animate={targetTransitionAnimate}
-            className={`hidden px-2 py-4 font-medium first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
+            className={`relative hidden min-w-0 border border-b border-transparent border-b-table-border border-r-table-border font-medium first:table-cell last:border-r-transparent md:table-cell ${props.header.thProps?.className ?? ""}`}
         >
-            <span className="flex items-center justify-between">
+            <span className="flex h-full items-center justify-between px-2 py-4">
                 <span className="flex items-center gap-1">
-                    <Dropdown
-                        arrow
-                        trigger={
-                            <span>
-                                <span id={`${props.header.id}-filter-dropdown-button`} className="sr-only">
-                                    {translation.tableFilterDropdownTitleUnique} {label}
+                    {props.inlineFilter && defaultAllowFilter ? (
+                        <Dropdown
+                            arrow
+                            trigger={
+                                <span>
+                                    <span id={`${props.header.id}-filter-dropdown-button`} className="sr-only">
+                                        {translation.tableFilterDropdownTitleUnique} {label}
+                                    </span>
+                                    <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} size={14} />
                                 </span>
-                                {props.inlineFilter ? <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} size={14} /> : null}
-                            </span>
-                        }
-                        title={
-                            <span className="font-medium text-lg">
-                                {translation.tableFilterDropdownTitleUnique} <span className="text-primary">{label}</span>
-                            </span>
-                        }
-                    >
-                        {(ownFilters.length === 0) === null ? null : (
-                            <ul className="font-medium">
-                                {ownFilters.map((filter) => (
-                                    <li key={`thead-filter-${filter.id}`} className="my-1">
-                                        <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
+                            }
+                            title={
+                                <span className="text-lg font-medium">
+                                    {translation.tableFilterDropdownTitleUnique} <span className="text-primary">{label}</span>
+                                </span>
+                            }
+                        >
+                            {(ownFilters.length === 0) === null ? null : (
+                                <ul className="font-medium">
+                                    {ownFilters.map((filter) => (
+                                        <li key={`thead-filter-${filter.id}`} className="my-1">
+                                            <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
+                                        </li>
+                                    ))}
+                                    <li>
+                                        <button
+                                            onClick={() =>
+                                                props.setFilters((prev) =>
+                                                    prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
+                                                )
+                                            }
+                                            type="button"
+                                            className="flex items-center gap-1 text-primary"
+                                        >
+                                            <PlusIcon size={14} /> {translation.tableFilterNewFilter}
+                                        </button>
                                     </li>
-                                ))}
-                                <li>
-                                    <button
-                                        onClick={() =>
-                                            props.setFilters((prev) => prev.concat(createFilterFromCol(props.header, operationOptions, operations)))
-                                        }
-                                        type="button"
-                                        className="flex items-center gap-1 text-primary"
-                                    >
-                                        <PlusIcon size={14} /> {translation.tableFilterNewFilter}
-                                    </button>
-                                </li>
-                            </ul>
-                        )}
-                    </Dropdown>
+                                </ul>
+                            )}
+                        </Dropdown>
+                    ) : null}
                     <span className="pointer-events-auto text-balance text-base">{props.header.thead}</span>
-                    {props.inlineSorter ? <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} /> : null}
+                    {props.inlineSorter && defaultAllowSort ? (
+                        <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
+                    ) : null}
                 </span>
             </span>
+            <motion.button
+                drag="x"
+                draggable
+                dragListener
+                dragMomentum
+                animate={false}
+                dragElastic={0}
+                dragPropagation
+                initial={false}
+                dragSnapToOrigin
+                dragDirectionLock
+                data-type="resizer"
+                dragConstraints={dragConstraints}
+                whileDrag={{ cursor: "grabbing" }}
+                className="absolute right-0 top-0 block h-full w-1 cursor-col-resize hover:bg-primary active:bg-primary"
+                onDrag={(e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+                    const div = e.target as HTMLElement;
+                    const v = width.get() || div.getBoundingClientRect().width;
+                    const delta = info.delta.x;
+                    return width.set(Math.abs(v + delta));
+                }}
+            />
         </Reorder.Item>
     );
 };
 
 export const TableHeader = <T extends {}>(props: TableHeaderProps<T>) => (
     <Reorder.Group
-        as="tr"
-        role="row"
-        axis="x"
-        drag
         layout
+        as="tr"
+        axis="x"
+        drag="x"
         layoutRoot
+        role="row"
         layoutScroll
-        initial={false}
         values={props.headers}
         onReorder={props.setCols}
-        className="border-none bg-table-background text-lg"
+        className="bg-table-header text-lg"
     >
         <AnimatePresence>
             {props.headers.map((header) => (

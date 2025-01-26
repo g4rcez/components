@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Linq from "linq-arrays";
 import React, { createContext, Fragment, HTMLAttributes, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
@@ -40,18 +40,31 @@ type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
         loadingMore?: boolean;
     };
 
-const TableBody = React.forwardRef((props: TableBodyProps, ref: any) => (
-    <tbody {...props} role="rowgroup" className={`divide-y divide-table-border ${props.className ?? ""}`} ref={ref}>
-        <AnimatePresence>{props.children}</AnimatePresence>
-    </tbody>
-));
+const TableBody = React.forwardRef(
+    (
+        {
+            context,
+            className = "",
+            ...props
+        }: TableBodyProps & {
+            context: any;
+        },
+        ref: any
+    ) => {
+        return (
+            <tbody {...props} role="rowgroup" className={`divide-y divide-table-border ${className}`} ref={ref}>
+                <AnimatePresence>{props.children}</AnimatePresence>
+            </tbody>
+        );
+    }
+);
 
-const VirtualTable = React.forwardRef((props: any, ref) => (
+const VirtualTable = React.forwardRef(({ context, className = "", ...props }: any, ref) => (
     <table
         {...props}
         ref={ref as any}
         role="table"
-        className={`table min-w-full table-auto divide-y divide-table-border text-left ${props.className ?? ""}`}
+        className={`table min-w-full table-auto divide-y divide-table-border text-left ${className ?? ""}`}
     />
 ));
 
@@ -59,7 +72,7 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
     const ctx = useTable();
     const style = {
         ...(props as any)?.style,
-        sticky: Is.number(ctx.sticky) ? `${ctx.sticky}px` : (props as any)?.style?.sticky,
+        top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
     };
     return <thead {...props} style={style} role="rowgroup" className="shadow-xs group:sticky top-0 bg-card-background" ref={ref} />;
 });
@@ -115,7 +128,7 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`hidden h-14 border-none px-2 first:table-cell md:table-cell ${className}`}
+                        className={`hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell ${className}`}
                     >
                         {loading ? (
                             <div className="h-2 w-10/12 animate-pulse rounded bg-table-border" />
@@ -184,10 +197,11 @@ const InnerTable = <T extends {}>({
 
     return (
         <div className="min-w-full">
-            <div className={`group rounded-lg px-1 ${border ? "border border-table-border" : ""}`}>
+            <div className={`group rounded-lg ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
                     data={rows}
                     useWindowScroll
+                    followOutput="smooth"
                     components={components}
                     totalCount={rows.length}
                     itemContent={ItemContent}
@@ -277,68 +291,68 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
 
     return (
         <TableContext.Provider value={contextState}>
-            <div className="relative min-w-full">
+            <div className="relative min-w-full" data-component="table">
                 {operations ? (
                     <Metadata
                         cols={state.cols}
-                        filters={state.filters}
+                        rows={props.rows}
+                        options={optionCols}
                         groups={state.groups}
+                        filters={state.filters}
+                        setCols={dispatch.cols}
+                        sorters={state.sorters}
+                        setGroups={dispatch.groups}
+                        setFilters={dispatch.filters}
+                        setSorters={dispatch.sorters}
+                        pagination={props.pagination ?? null}
                         inlineFilter={props.inlineFilter ?? true}
                         inlineSorter={props.inlineSorter ?? true}
-                        options={optionCols}
-                        pagination={props.pagination ?? null}
-                        rows={props.rows}
-                        setCols={dispatch.cols}
-                        setFilters={dispatch.filters}
-                        setGroups={dispatch.groups}
-                        setSorters={dispatch.sorters}
-                        sorters={state.sorters}
                     />
                 ) : null}
                 {state.groups.length === 0 ? (
                     <InnerTable
                         {...props}
+                        index={0}
+                        cols={state.cols}
+                        options={optionCols}
+                        groups={state.groups}
+                        filters={state.filters}
+                        optionCols={optionCols}
+                        setCols={dispatch.cols}
+                        sorters={state.sorters}
+                        setGroups={dispatch.groups}
+                        setFilters={dispatch.filters}
+                        setSorters={dispatch.sorters}
+                        onScrollEnd={props.onScrollEnd}
+                        pagination={props.pagination ?? null}
                         inlineFilter={props.inlineFilter ?? true}
                         inlineSorter={props.inlineSorter ?? true}
-                        onScrollEnd={props.onScrollEnd}
-                        cols={state.cols}
-                        filters={state.filters}
-                        groups={state.groups}
-                        index={0}
-                        optionCols={optionCols}
-                        options={optionCols}
-                        setCols={dispatch.cols}
-                        setFilters={dispatch.filters}
-                        setGroups={dispatch.groups}
-                        setSorters={dispatch.sorters}
-                        sorters={state.sorters}
-                        pagination={props.pagination ?? null}
                     />
                 ) : (
                     <div className="flex flex-wrap gap-4">
                         {state.groups.map((group, index) => (
-                            <motion.div className="min-w-full" key={`group-${group.groupId}`}>
+                            <div className="min-w-full" key={`group-${group.groupId}`}>
                                 <InnerTable
                                     {...props}
+                                    group={group}
+                                    index={index}
+                                    cols={state.cols}
+                                    pagination={null}
+                                    rows={group.rows}
+                                    options={optionCols}
+                                    groups={state.groups}
+                                    filters={state.filters}
+                                    optionCols={optionCols}
+                                    setCols={dispatch.cols}
+                                    sorters={state.sorters}
+                                    setGroups={dispatch.groups}
+                                    setFilters={dispatch.filters}
+                                    setSorters={dispatch.sorters}
+                                    onScrollEnd={props.onScrollEnd}
                                     inlineFilter={props.inlineFilter ?? true}
                                     inlineSorter={props.inlineSorter ?? true}
-                                    pagination={null}
-                                    onScrollEnd={props.onScrollEnd}
-                                    cols={state.cols}
-                                    filters={state.filters}
-                                    group={group}
-                                    groups={state.groups}
-                                    index={index}
-                                    optionCols={optionCols}
-                                    options={optionCols}
-                                    rows={group.rows}
-                                    setCols={dispatch.cols}
-                                    setFilters={dispatch.filters}
-                                    setGroups={dispatch.groups}
-                                    setSorters={dispatch.sorters}
-                                    sorters={state.sorters}
                                 />
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
                 )}

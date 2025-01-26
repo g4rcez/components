@@ -11,6 +11,13 @@ const today = d.toISOString();
 
 const to = add(today, { days: 5 });
 
+const options: Intl.DateTimeFormatOptions = {
+  day: "numeric",
+  weekday: "short",
+  month: "short",
+  year: "numeric",
+};
+
 const dates = {
   [today]: ["Study Typescript", "Start to learn Elixir", "CSS new features"],
   [to.toISOString()]: ["Go to the gym", "Learn about UX/UI"],
@@ -48,13 +55,14 @@ export default function CalendarPage() {
           }}
           styles={{
             week: "border-b border-card-border",
-            weekDay: "h-16 border-b border-card-border",
+            weekDay:
+              "h-16 border-b border-l first:border-l-transparent border-t border-card-border",
             dayFrame:
               "h-16 border-card-border border-l border-r first:border-l-transparent last:border-r-transparent",
           }}
           RenderOnDay={({ date }) =>
             date.toISOString() in dates ? (
-              <div className="absolute right-1 bottom-1 aspect-square size-5 text-sm rounded-full bg-warn text-warn-foreground items-center justify-center flex">
+              <div className="absolute right-0 top-0 aspect-square size-5 text-sm rounded-full bg-warn text-warn-foreground items-center justify-center flex">
                 {dates[date.toISOString()].length}
               </div>
             ) : null
@@ -64,12 +72,7 @@ export default function CalendarPage() {
           {date !== undefined ? (
             <motion.div className="w-full h-full">
               <header className="text-center pb-4 font-medium text-2xl">
-                {date.toLocaleDateString(undefined, {
-                  day: "numeric",
-                  weekday: "short",
-                  month: "short",
-                  year: "numeric",
-                })}
+                {date.toLocaleDateString(undefined, options)}
               </header>
               {Array.isArray(dates[date.toISOString()]) ? (
                 <ul>

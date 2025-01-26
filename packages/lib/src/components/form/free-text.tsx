@@ -14,6 +14,7 @@ export type FreeTextProps<T extends FreeTextTag, ExtraProps extends object> = Ov
 
 export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElement | HTMLTextAreaElement, Extra extends object>(
     Element: "input" | "textarea" | typeof MaskInput,
+    elementName: "input" | "textarea",
     defaultProps: FreeTextProps<T, Extra>,
     register?: (el: Html) => () => void
 ) => {
@@ -70,6 +71,7 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
             return (
                 <InputField<"input">
                     {...(defaultProps as any)}
+                    componentName={elementName}
                     info={info}
                     container={container}
                     error={error}
