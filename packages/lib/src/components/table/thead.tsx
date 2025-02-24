@@ -24,10 +24,11 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
     const translation = useTranslations();
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
     const hasFilters = ownFilters.length > 0;
-    const FilterIcon = hasFilters ? SearchCheckIcon : SearchXIcon;
     const defaultAllowSort = props.header.allowSort ?? true;
     const defaultAllowFilter = props.header.allowFilter ?? true;
     const operators = useOperators();
+    const FilterIcon = hasFilters ? SearchCheckIcon : SearchXIcon;
+
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         const id = e.currentTarget.dataset.id || "";
         return props.setFilters((prev) => prev.filter((x) => x.id !== id));
@@ -101,13 +102,13 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
                                     ))}
                                     <li>
                                         <button
+                                            type="button"
+                                            className="flex items-center gap-1 text-primary"
                                             onClick={() =>
                                                 props.setFilters((prev) =>
                                                     prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
                                                 )
                                             }
-                                            type="button"
-                                            className="flex items-center gap-1 text-primary"
                                         >
                                             <PlusIcon size={14} /> {translation.tableFilterNewFilter}
                                         </button>
@@ -127,6 +128,7 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
                 draggable
                 dragListener
                 dragMomentum
+                type="button"
                 animate={false}
                 dragElastic={0}
                 dragPropagation

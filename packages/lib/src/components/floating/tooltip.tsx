@@ -7,7 +7,9 @@ import {
     FloatingPortal,
     offset,
     type Placement,
+    safePolygon,
     shift,
+    useClick,
     useClientPoint,
     useDismiss,
     useFloating,
@@ -25,13 +27,27 @@ export type TooltipProps<T extends ComponentLike = "span"> = Override<
     PolymorphicProps<React.ComponentProps<T>, T>,
     {
         title: Label;
+        hover?: boolean;
+        focus?: boolean;
         enabled?: boolean;
+        popover?: boolean;
         placement?: Placement;
         followCursor?: boolean;
     }
 >;
 
-export const Tooltip = <T extends ComponentLike = "span">({ children, followCursor = false, placement, enabled, as, title, ...props }: TooltipProps<T>) => {
+export const Tooltip = <T extends ComponentLike = "span">({
+    as,
+    title,
+    children,
+    placement,
+    focus = true,
+    hover = true,
+    enabled = true,
+    popover = true,
+    followCursor = false,
+    ...props
+}: TooltipProps<T>) => {
     const [open, setOpen] = useState(false);
     const arrowRef = useRef(null);
     const Component: any = as || "span";
@@ -39,23 +55,45 @@ export const Tooltip = <T extends ComponentLike = "span">({ children, followCurs
         open,
         placement,
         transform: true,
+        strategy: "absolute",
         onOpenChange: setOpen,
         whileElementsMounted: autoUpdate,
-        middleware: [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift(), arrow({ element: arrowRef, padding: 5 })],
+        middleware: [
+            shift(),
+            offset(5),
+            flip({ fallbackAxisSideDirection: "start" }),
+            arrow({
+                padding: 5,
+                element: arrowRef,
+            }),
+        ],
     });
-    const hover = useHover(context, { move: true, enabled, delay: { open: FLOATING_DELAY } });
-    const focus = useFocus(context, { enabled });
+    const hoverController = useHover(context, {
+        move: true,
+        delay: { open: FLOATING_DELAY },
+        enabled: enabled ? hover : false,
+        handleClose: popover ? safePolygon() : null,
+    });
+    const focusController = useFocus(context, { enabled: enabled ? focus : false });
+    const clickController = useClick(context, { enabled: enabled ? popover : false });
     const dismiss = useDismiss(context, { enabled });
     const role = useRole(context, { role: "tooltip", enabled });
     const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
-    const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role, clientPoint]);
+    const { getReferenceProps, getFloatingProps } = useInteractions([
+        role,
+        dismiss,
+        clientPoint,
+        focus ? focusController : undefined,
+        hover ? hoverController : undefined,
+        popover ? clickController : undefined,
+    ]);
 
     return (
         <Fragment>
             <Component ref={refs.setReference} {...getReferenceProps(props)}>
                 {title}
             </Component>
-            <FloatingPortal>
+            <FloatingPortal preserveTabOrder>
                 {open && (
                     <Polymorph
                         {...getFloatingProps()}

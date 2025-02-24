@@ -4,7 +4,9 @@ import { parsers } from "../../preset.tailwind";
 import { Locales } from "the-mask-input";
 
 const defaultTranslations = {
+    emptyDataMessage: "No data",
     inputCaretDown: "Click to see all options",
+    inputCloseValue: "Click to clear the value",
     datePickerCalendarButtonLabel: "Click to open a date picker",
     inputOptionalLabel: "Optional",
     autocompleteEmpty: "Nothing here...",
@@ -55,12 +57,12 @@ const defaultTranslations = {
             {Array.isArray(pagination.sizes) ? pagination.select : null} per page.
         </Fragment>
     ),
-
     calendarFromDate: "From",
     calendarToDate: "To",
+    calendarToday: "Today",
 };
 
-type Translations = typeof defaultTranslations;
+export type Translations = typeof defaultTranslations;
 
 const Context = createContext({
     colorTokenParser: parsers.hsla,
@@ -76,11 +78,7 @@ type ContextProps = Partial<{
 
 export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
     const memoMap = useMemo(
-        () => ({
-            locale: props.locale,
-            translations: { ...defaultTranslations, ...props.map },
-            colorTokenParser: props.parser || parsers.hsla,
-        }),
+        () => ({ locale: props.locale, translations: { ...defaultTranslations, ...props.map }, colorTokenParser: props.parser || parsers.hsla, }),
         [props]
     );
     return <Context.Provider value={memoMap}>{props.children}</Context.Provider>;

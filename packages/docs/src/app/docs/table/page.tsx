@@ -16,7 +16,7 @@ const cols = createColumns<User>((col) => {
   col.add("document", "Document", { allowSort: false, allowFilter: false });
 });
 
-const clients = Array.from({ length: 50 })
+const clients = Array.from({ length: 0 })
   .map(
     (_, i): User => ({
       id: uuid(),
@@ -39,6 +39,7 @@ export default function TablePage() {
       <Card className="px-4">
         <Table<User>
           {...preferences}
+          loading
           sticky={40}
           name="table"
           rows={clients}

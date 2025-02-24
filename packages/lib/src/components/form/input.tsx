@@ -1,7 +1,35 @@
 "use client";
-import MaskInput, { TheMaskProps } from "the-mask-input";
+import MaskInput, {
+    AllMasks,
+    CurrencyCode,
+    CurrencyInputProps,
+    CurrencyMaskTypes,
+    Locales,
+    PercentInputMask,
+    PercentInputProps,
+    TheMaskProps,
+} from "the-mask-input";
 import { createFreeText, FreeTextProps } from "./free-text";
 
-export type InputProps = FreeTextProps<"input", TheMaskProps>; //Override<InputFieldProps<"input">, TheMaskProps & FeedbackProps & { next?: string }>;
+export type * from "the-mask-input";
 
-export const Input = createFreeText<"input", HTMLInputElement, TheMaskProps>(MaskInput, "input", { type: "text" });
+export type InputProps = FreeTextProps<
+    "input",
+    | ({
+          mask?: CurrencyMaskTypes;
+          locale?: Locales;
+          currency?: CurrencyCode;
+      } & CurrencyInputProps)
+    | ({
+          mask?: PercentInputMask;
+          locale?: Locales;
+          currency?: undefined;
+      } & PercentInputProps)
+    | ({
+          mask?: AllMasks | Array<string | RegExp> | ((p: string) => Array<string | RegExp> | AllMasks);
+          locale?: undefined;
+          currency?: undefined;
+      } & TheMaskProps)
+>;
+
+export const Input = createFreeText<"input", HTMLInputElement, InputProps>(MaskInput, "input", { type: "text" });

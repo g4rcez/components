@@ -2,7 +2,7 @@ import { parse } from "qs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { type AllPaths, Is, setPath } from "sidekicker";
 import { z } from "zod";
-import type { AutocompleteProps, CheckboxProps, DatePickerProps, InputProps, SelectProps, SwitchProps } from "../components";
+import type { VirtualCompleteProps, CheckboxProps, DatePickerProps, InputProps, SelectProps, SwitchProps } from "../components";
 import { formReset } from "../components/form/form";
 import { path } from "../lib/fns";
 
@@ -82,7 +82,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName?: string
         } as any;
     };
 
-    const select = <Props extends SelectProps | AutocompleteProps>(name: Fields, props?: Props): Props => {
+    const select = <Props extends SelectProps | VirtualCompleteProps>(name: Fields, props?: Props): Props => {
         const validator = getSchemaShape(name, schema);
         return {
             ...props,

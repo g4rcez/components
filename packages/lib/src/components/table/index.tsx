@@ -6,6 +6,7 @@ import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
 import { useCallbackRef } from "../../hooks/use-callback-ref";
 import { path } from "../../lib/fns";
+import { Empty } from "../display/empty";
 import { OptionProps } from "../form/select";
 import { FilterConfig } from "./filter";
 import { GroupItem } from "./group";
@@ -112,6 +113,18 @@ type ItemContentContext = {
     cols: Col<any>[];
 };
 
+const SkeletonLoading = <div className="h-2 w-10/12 animate-pulse rounded bg-table-border" />;
+
+const EmptyContent = (_: number, __: any, context: ItemContentContext) => (
+    <td
+        role="cell"
+        colSpan={context.cols.length}
+        className="hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell"
+    >
+        {context.loading ? SkeletonLoading : <Empty />}
+    </td>
+);
+
 const ItemContent = (index: number, row: any, context: ItemContentContext) => {
     const cols = context.cols;
     const loading = context.loading;
@@ -131,7 +144,7 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
                         className={`hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell ${className}`}
                     >
                         {loading ? (
-                            <div className="h-2 w-10/12 animate-pulse rounded bg-table-border" />
+                            SkeletonLoading
                         ) : Component ? (
                             <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
                         ) : (
@@ -146,17 +159,19 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
 
 const Frag = () => <Fragment />;
 
+const emptyRows = [{}];
+
 const InnerTable = <T extends {}>({
-    filters,
-    pagination = null,
-    onScrollEnd,
-    useControl = false,
-    setCols,
-    setFilters,
-    sorters,
     cols,
-    border = false,
+    filters,
+    setCols,
+    sorters,
+    setFilters,
     setSorters,
+    onScrollEnd,
+    border = false,
+    pagination = null,
+    useControl = false,
     ...props
 }: InnerTableProps<T>) => {
     const ref = useRef<HTMLDivElement | null>(null);
@@ -178,9 +193,7 @@ const InnerTable = <T extends {}>({
     }, [props.rows, filters, sorters, props.loading]);
 
     useEffect(() => {
-        if (ref.current === null) {
-            return () => {};
-        }
+        if (ref.current === null) return () => {};
         const div = ref.current;
         const observer = new IntersectionObserver((entries) => {
             const endOfPage = entries[entries.length - 1];
@@ -199,25 +212,25 @@ const InnerTable = <T extends {}>({
         <div className="min-w-full">
             <div className={`group rounded-lg ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
-                    data={rows}
                     useWindowScroll
                     followOutput="smooth"
                     components={components}
                     totalCount={rows.length}
-                    itemContent={ItemContent}
-                    context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols }}
+                    data={rows.length === 0 ? emptyRows : rows}
                     fixedFooterContent={showLoadingFooter ? Frag : null}
+                    itemContent={rows.length === 0 ? EmptyContent : ItemContent}
+                    context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols }}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
-                            filters={filters}
                             headers={cols}
-                            inlineFilter={props.inlineFilter}
-                            inlineSorter={props.inlineSorter}
-                            loading={!!props.loading}
+                            filters={filters}
                             setCols={setCols}
+                            sorters={sorters}
                             setFilters={setFilters}
                             setSorters={setSorters}
-                            sorters={sorters}
+                            loading={!!props.loading}
+                            inlineFilter={props.inlineFilter}
+                            inlineSorter={props.inlineSorter}
                         />
                     )}
                 />
@@ -257,9 +270,9 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
     const [state, dispatch] = useReducer(
         {
             cols: props.cols as Col<T>[],
-            filters: (props.filters ?? []) as FilterConfig<T>[],
-            groups: (props.groups ?? []) as GroupItem<T>[],
             sorters: (props.sorters ?? []) as Sorter<T>[],
+            groups: (props.groups ?? []) as GroupItem<T>[],
+            filters: (props.filters ?? []) as FilterConfig<T>[],
         },
         (get) => {
             const create =
@@ -270,9 +283,9 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
                 };
             return {
                 cols: create<DispatcherFun<Col<T>[]>>("cols"),
-                filters: create<DispatcherFun<FilterConfig<T>[]>>("filters"),
-                groups: create<DispatcherFun<GroupItem<T>[]>>("groups"),
                 sorters: create<DispatcherFun<Sorter<T>[]>>("sorters"),
+                groups: create<DispatcherFun<GroupItem<T>[]>>("groups"),
+                filters: create<DispatcherFun<FilterConfig<T>[]>>("filters"),
             };
         },
         {

@@ -1,6 +1,6 @@
 "use client";
 import React, { forwardRef, useEffect, useRef } from "react";
-import MaskInput, { InputTypes } from "the-mask-input";
+import MaskInput, { InputTypes, AllMasks } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
@@ -69,7 +69,7 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
             }, []);
 
             return (
-                <InputField<"input">
+                <InputField
                     {...(defaultProps as any)}
                     componentName={elementName}
                     info={info}
@@ -89,6 +89,7 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
                     title={props.title}
                     placeholder={props.placeholder}
                     required={props.required}
+                    disabled={props.disabled}
                 >
                     <Render
                         {...defaultProps}
@@ -107,6 +108,7 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
                             "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                             "group-error:text-danger group-error:placeholder-input-mask-error",
                             "resize-y group-focus-within:border-primary group-hover:border-primary",
+                            "disabled:cursor-not-allowed disabled:text-disabled",
                             props.className
                         )}
                     />

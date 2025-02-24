@@ -28,6 +28,9 @@ export default function MenuExample() {
             <MenuItem label="Item 1" />
             <MenuItem label="Item 2" />
             <MenuItem label="Item 3" />
+            <Menu label="Deep menu">
+              <MenuItem label="Last node" />
+            </Menu>
           </Menu>
         </Card>
         <Card title="Custom component item">

@@ -19,3 +19,8 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+.height-preserving-container:empty {
+    min-height: calc(var(--child-height));
+    box-sizing: border-box;
+}

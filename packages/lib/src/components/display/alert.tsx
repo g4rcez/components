@@ -109,4 +109,3 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
     );
 }) as never;
 
-type Props = {};

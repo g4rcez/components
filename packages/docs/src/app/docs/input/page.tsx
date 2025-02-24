@@ -1,10 +1,10 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useState } from "react";
-import { Card, Input } from "../../../../../lib/src";
+import { Card, Input, Locales, CurrencyCode } from "../../../../../lib/src";
 
 export default function FormPage() {
-  const [currency, setCurrency] = useState("BRL");
+  const [currency, setCurrency] = useState<CurrencyCode>("BRL");
   return (
     <DocsLayout
       title="Input"
@@ -43,24 +43,30 @@ export default function FormPage() {
         />
         <Input mask="int" title="Integer" placeholder="123" required />
         <Input
+          info="Input disabled"
+          title="Disabled"
+          disabled
+          defaultValue="000"
+          placeholder="disabled"
+          required
+        />
+        <Input
           mask="money"
           title="Monetary - Locale from browser"
           placeholder="$$$"
           required
         />
         <Input
-          mask="money"
+          mask="currency"
           title="Monetary - Locale en-US"
-          locale="en-US"
           placeholder="$$$"
-          currency="USD"
           required
         />
         <Input mask="percent" title="Percent %" placeholder="%%%" required />
         <Input
           mask="money"
           locale={currency === "BRL" ? "pt-BR" : "en-US"}
-          currency={currency as any}
+          currency={currency}
           title="Interactive Money"
           placeholder={currency}
           required
@@ -68,7 +74,7 @@ export default function FormPage() {
             <select
               value={currency}
               className="bg-transparent border-0"
-              onChange={(e) => setCurrency(e.target.value)}
+              onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
             >
               <option value="USD">USD</option>
               <option value="BRL">BRL</option>

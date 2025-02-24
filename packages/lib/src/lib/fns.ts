@@ -1,11 +1,18 @@
 import type { AllPaths } from "sidekicker";
 
-export const uuid = (): string =>
-    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-        let r = (Math.random() * 16) | 0;
-        let v = c == "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    });
+const toHex = (n: number, length: number = 2) => n.toString(16).padStart(length, "0");
+
+export const uuid = (): string => {
+    const now = Date.now();
+    const timeHigh = ((now / 1000) & 0x0fff) | 0x7000;
+    const timeLow = now % 1000;
+    const randomBytes = new Uint8Array(10);
+    for (let i = 0; i < randomBytes.length; i++) {
+        randomBytes[i] = Math.floor(Math.random() * 256);
+    }
+    randomBytes[0] = (randomBytes[0] & 0x3f) | 0x80;
+    return `${toHex(timeHigh, 4) + toHex(timeLow, 3)}-${toHex(randomBytes[0]) + toHex(randomBytes[1])}-${toHex(randomBytes[2]) + toHex(randomBytes[3])}-${toHex(randomBytes[4]) + toHex(randomBytes[5])}-${toHex(randomBytes[6]) + toHex(randomBytes[7]) + toHex(randomBytes[8]) + toHex(randomBytes[9])}`;
+};
 
 const travel = (path: string, regexp: RegExp, obj: any) =>
     path
@@ -24,13 +31,12 @@ export const isSsr = () => typeof window === "undefined";
 
 export const safeRegex = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-
 export const splitInto = <T extends any>(array: T[], size: number) => {
-  const newArray: T[][] = [];
-  for (let i = 0; i < size; i++) {
-    const init = i * size;
-    const result = array.slice(init, init + size);
-    if (result.length > 0) newArray.push(result);
-  }
-  return newArray;
+    const newArray: T[][] = [];
+    for (let i = 0; i < size; i++) {
+        const init = i * size;
+        const result = array.slice(init, init + size);
+        if (result.length > 0) newArray.push(result);
+    }
+    return newArray;
 };

@@ -1,6 +1,6 @@
 "use client";
 import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
-import React, { Fragment, PropsWithChildren } from "react";
+import React, { forwardRef, Fragment, PropsWithChildren } from "react";
 import { useTranslations } from "../../hooks/use-components-provider";
 import { css } from "../../lib/dom";
 import { Label } from "../../types";
@@ -21,7 +21,7 @@ export type FeedbackProps = React.PropsWithChildren<
 export const InputFeedback = ({ reportStatus, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <div className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
-            <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-error:text-danger">
+            <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:text-disabled group-error:text-danger">
                 {title}
                 {reportStatus || info ? (
                     <span className="flex items-center justify-center gap-1">
@@ -86,67 +86,78 @@ export type InputFieldProps<T extends "input" | "select" | "textarea"> = Polymor
     T
 >;
 
-export const InputField = <T extends "input" | "select" | "textarea">({
-    optionalText: _optionalText,
-    left,
-    rightLabel,
-    container,
-    feedback,
-    interactive,
-    right,
-    info,
-    children,
-    error,
-    form,
-    id,
-    labelClassName = "",
-    name,
-    title,
-    componentName,
-    placeholder,
-    hideLeft,
-    required,
-}: PropsWithChildren<InputFieldProps<T>>) => {
-    const ID = id ?? name;
-    const translation = useTranslations();
-    const optionalText = _optionalText ?? translation.inputOptionalLabel;
-    return (
-        <fieldset
-            form={form}
-            data-error={!!error}
-            data-component={componentName}
-            data-interactive={!!interactive}
-            className={css("group grid min-h-0 min-w-0 grid-cols-1 items-baseline", container)}
-        >
-            <label
+export const InputField: <T extends "input" | "select" | "textarea">(props: PropsWithChildren<InputFieldProps<T>>) => React.ReactElement = forwardRef(
+    <T extends "input" | "select" | "textarea">(
+        {
+            optionalText: _optionalText,
+            left,
+            rightLabel,
+            container,
+            feedback,
+            interactive,
+            right,
+            info,
+            children,
+            error,
+            form,
+            id,
+            labelClassName = "",
+            name,
+            title,
+            componentName,
+            placeholder,
+            hideLeft = false,
+            required,
+            disabled,
+        }: PropsWithChildren<InputFieldProps<T>>,
+        ref: any
+    ) => {
+        const ID = id ?? name;
+        const translation = useTranslations();
+        const optionalText = _optionalText ?? translation.inputOptionalLabel;
+        return (
+            <fieldset
+                ref={ref}
                 form={form}
-                htmlFor={ID}
-                className="inline-flex cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-error:text-danger"
+                disabled={disabled}
+                data-error={!!error}
+                aria-disabled={disabled}
+                data-component={componentName}
+                data-interactive={!!interactive}
+                className={css("group grid min-h-0 min-w-0 grid-cols-1 items-baseline", container)}
             >
-                {!hideLeft && !rightLabel ? (
+                <label
+                    form={form}
+                    htmlFor={ID}
+                    className="inline-flex cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
+                >
                     <InputFeedback info={info} hideLeft={hideLeft} reportStatus title={title} placeholder={placeholder}>
                         {optionalText || rightLabel ? (
                             <Fragment>
-                                {!required ? <span className="text-opacity-70">{optionalText}</span> : null}
+                                {!required ? (
+                                    <span aria-disabled={disabled} className="text-opacity-70 aria-disabled:text-disabled">
+                                        {optionalText}
+                                    </span>
+                                ) : null}
                                 {rightLabel ? <Fragment>{rightLabel}</Fragment> : null}
                             </Fragment>
                         ) : null}
                     </InputFeedback>
-                ) : null}
-                <div
-                    className={`group relative flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-hover:border-primary group-error:border-danger ${labelClassName}`}
-                >
-                    {left ? <span className="flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
-                    {children}
-                    {right ? <span className="flex flex-nowrap gap-2 whitespace-nowrap pr-2">{right}</span> : null}
-                </div>
-            </label>
-            <p className="mt-input-gap hidden flex-shrink-0 flex-grow-0 whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:inline-block group-error:inline-block group-error:text-danger">
-                {error}
-            </p>
-            <p className="mt-input-gap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">
-                {feedback}
-            </p>
-        </fieldset>
-    );
-};
+                    <div
+                        className={`group relative flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-hover:border-primary group-disabled:border-disabled group-error:border-danger ${labelClassName}`}
+                    >
+                        {left ? <span className="flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
+                        {children}
+                        {right ? <span className="flex flex-nowrap gap-2 whitespace-nowrap pr-2">{right}</span> : null}
+                    </div>
+                </label>
+                <p className="mt-input-gap hidden flex-shrink-0 flex-grow-0 whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:inline-block group-error:inline-block group-error:text-danger">
+                    {error}
+                </p>
+                <p className="mt-input-gap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">
+                    {feedback}
+                </p>
+            </fieldset>
+        );
+    }
+) as any;

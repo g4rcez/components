@@ -18,6 +18,7 @@ import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef,
 import { useTranslations } from "../../hooks/use-components-provider";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
+import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
@@ -26,6 +27,7 @@ export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProp
 export type AutocompleteOptionProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
     active: boolean;
     selected: boolean;
+    emptyMessage?: Label;
     option: AutocompleteItemProps;
 };
 
@@ -62,6 +64,7 @@ export const Option = forwardRef<HTMLLIElement, AutocompleteOptionProps>(({ sele
 
 export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
     value?: string;
+    emptyMessage?: Label;
     dynamicOption?: boolean;
     options: AutocompleteItemProps[];
 };
@@ -84,6 +87,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             dynamicOption = false,
             feedback = null,
             labelClassName,
+            emptyMessage,
             interactive,
             rightLabel,
             optionalText,
@@ -97,6 +101,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         }: AutocompleteProps,
         externalRef
     ) => {
+        const fieldset = useRef<HTMLFieldSetElement>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
         const [open, setOpen] = useState(false);
@@ -141,13 +146,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     elementContext: "reference",
                     padding: 10,
                     apply(a) {
-                        const html = a.elements.reference as HTMLElement;
-                        const parent = html.parentElement!;
-                        const w = parent?.getBoundingClientRect().width;
+                        const w = fieldset.current?.getBoundingClientRect().width!;
                         Object.assign(a.elements.floating.style, {
                             width: `${w}px`,
                             maxWidth: `${w}px`,
-                            minWidth: "max-content",
                             maxHeight: `${Math.min(250, a.availableHeight)}px`,
                         });
                     },
@@ -224,6 +226,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 {...(props as any)}
                 left={left}
                 error={error}
+                ref={fieldset}
                 form={props.form}
                 name={props.name}
                 feedback={feedback}
@@ -347,7 +350,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 {list.length === 0 ? (
                                     <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
-                                            {translation.autocompleteEmpty}
+                                            {emptyMessage || translation.autocompleteEmpty}
                                         </span>
                                     </li>
                                 ) : null}

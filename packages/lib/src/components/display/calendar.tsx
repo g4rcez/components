@@ -27,7 +27,7 @@ import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
 import { useTranslations } from "../../hooks/use-components-provider";
 import { css } from "../../lib/dom";
-import { splitInto } from "../../lib/fns";
+import { splitInto, uuid } from "../../lib/fns";
 
 const transition: Transition = { type: "spring", bounce: 0.3, duration: 0.6 };
 
@@ -88,12 +88,12 @@ const createDays = (month: Date) => {
 
 const formatMonth = (d: Date, locale?: Locales) => d.toLocaleDateString(locale, { month: "long" });
 
-const getOptionsMonth = (date: Date, locale?: Locales) =>
+const getOptionsMonth = (id: string, date: Date, locale?: Locales) =>
     Array.from({ length: 12 }).map((_, i) => {
-        const month = startOfMonth(new Date(date).setMonth(i));
+        const month = startOfMonth(new Date(1970, i, 1).setMonth(i));
         const label = formatMonth(month, locale);
         return (
-            <option key={label} value={label} data-index={i}>
+            <option value={label} key={`${id}-${label}`} data-index={i}>
                 {label}
             </option>
         );
@@ -216,6 +216,8 @@ export const Calendar = ({
     markRange = true,
     ...props
 }: CalendarProps) => {
+    const id = useRef(uuid());
+    const translations = useTranslations();
     const root = useRef<HTMLTableElement>(null);
     const { date, range } = props as { date: Date | undefined; range?: Range };
     const providedDate = date || new Date();
@@ -227,7 +229,7 @@ export const Calendar = ({
             year: formatYear(providedDate),
             direction: undefined as number | undefined,
             range: { from: range?.from, to: range?.to },
-            months: getOptionsMonth(providedDate, locale),
+            months: getOptionsMonth(id.current, providedDate, locale),
             selectMode: (rangeMode ? "from" : undefined) as SelectMode | undefined,
             week: eachDayOfInterval({ start: startOfWeek(providedDate), end: endOfWeek(providedDate) }),
         },
@@ -445,7 +447,7 @@ export const Calendar = ({
                 </div>
                 <footer className="mt-2 text-center text-primary">
                     <button className="transition-transform duration-300 hover:scale-105" type="button" onClick={dispatch.setToday}>
-                        Today
+                        {translations.calendarToday}
                     </button>
                 </footer>
             </div>

@@ -209,7 +209,7 @@ export const Modal = ({
                     {props.open ? (
                         <FloatingOverlay
                             lockScroll
-                            className={`inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "grid items-end justify-center lg:items-center"}`}
+                            className={`inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`}
                         >
                             <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                                 <motion.div

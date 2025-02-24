@@ -33,8 +33,9 @@ import { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
-        "w-full min-w-36 outline-none p-2.5  items-center flex justify-between text-left",
-        "hover:bg-primary data-[open]:bg-primary focus:bg-primary aria-expanded:opacity-80",
+        "w-full min-w-36 outline-none p-2.5 items-center flex justify-between text-left",
+        "hover:bg-primary focus:bg-primary aria-expanded:opacity-80",
+        "focus:text-primary-foreground hover:text-primary-foreground",
         "first-of-type:rounded-t-lg last-of-type:rounded-b-lg",
         "disabled:opacity-40 disabled:cursor-not-allowed",
         highlight
@@ -70,7 +71,6 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
     ({ children, FloatingComponent = "div", hover = true, isParent, floatingClassName = "", label, ...props }, forwardedRef) => {
         const parentId = useFloatingParentNodeId();
         const isNested = parentId !== null;
-
         const [isOpen, setIsOpen] = useState(false);
         const [hasFocusInside, setHasFocusInside] = useState(false);
         const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -84,10 +84,10 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             nodeId,
             open: isOpen,
             transform: true,
+            strategy: "absolute",
             onOpenChange: setIsOpen,
             whileElementsMounted: autoUpdate,
             placement: isNested ? "right" : "bottom-start",
-            strategy: "absolute",
             middleware: [offset({ mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0 }), flip(), shift()],
         });
         const role = useRole(context, { role: "menu", enabled: true });
@@ -95,7 +95,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
         const hoverModule = useHover(context, {
             enabled: hover,
             delay: { open: FLOATING_DELAY },
-            handleClose: safePolygon({ blockPointerEvents: true }),
+            handleClose: safePolygon({ blockPointerEvents: true, buffer: 1 }),
         });
 
         const click = useClick(context, {
@@ -242,6 +242,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 {...props}
                 ref={useMergeRefs([item.ref, forwardedRef])}
                 data-active={isActive}
+                data-open={menu.isOpen}
                 type="button"
                 role="menuitem"
                 disabled={disabled}

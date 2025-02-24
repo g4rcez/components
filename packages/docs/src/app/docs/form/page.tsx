@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { z } from "zod";
 import {
   Autocomplete,
-  AutocompleteItemProps,
+  VirtualCompleteItem,
   Button,
   Card,
   Checkbox,
@@ -16,7 +16,7 @@ import {
   UseFormSubmitParams,
 } from "../../../../../lib/src";
 
-const languages: AutocompleteItemProps[] = [
+const languages: VirtualCompleteItem[] = [
   { label: "Elixir", value: "ex", Render: () => <span>💧 Elixir</span> },
   { label: "Javascript", value: "js" },
   { label: "Kotlin", value: "kt", Render: () => <span>🗿 Kotlin</span> },
@@ -91,10 +91,10 @@ export default function FormPage() {
     >
       <Card>
         <form
-          onSubmit={form.onSubmit(onSubmit)}
-          onInvalid={form.onInvalid(console.log)}
           name="form"
           id="form"
+          onSubmit={form.onSubmit(onSubmit)}
+          onInvalid={form.onInvalid((e) => console.log(e))}
         />
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <Input
@@ -183,7 +183,7 @@ export default function FormPage() {
             </Button>
           </li>
         </ul>
-        <Button form={form.name} type="submit" disabled={form.disabled}>
+        <Button form={form.name} type="submit">
           Submit
         </Button>
       </Card>

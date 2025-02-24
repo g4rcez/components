@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { motion } from "framer-motion";
-import React, { PropsWithChildren, useId, useState } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import {
   Button,
   Card,
@@ -18,6 +18,13 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
     </Modal>
   );
 };
+
+const items = Array.from({ length: 700 }).map((x) => (
+  <span>
+    I'm a Dialog component
+    <br />
+  </span>
+));
 
 export default function ModalExamplePage() {
   const [state, setState] = useState({
@@ -62,7 +69,12 @@ export default function ModalExamplePage() {
             layoutId="dialog"
             trigger={<Button as={motion.button}>Dialog</Button>}
           >
-            I'm a Dialog component
+            {Array.from({ length: 10 }).map((x) => (
+              <span>
+                I'm a Dialog component
+                <br />
+              </span>
+            ))}
           </Element>
           <Element
             {...state}
@@ -70,7 +82,7 @@ export default function ModalExamplePage() {
             type="dialog"
             trigger={<Button>Dialog without title</Button>}
           >
-            I'm a Dialog component
+            {items}
           </Element>
         </Card>
         <Card title="Drawer">
