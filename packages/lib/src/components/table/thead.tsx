@@ -1,4 +1,5 @@
-import { AnimatePresence, motion, PanInfo, Reorder, useMotionValue } from "framer-motion";
+"use client";
+import { AnimatePresence, motion, PanInfo, Reorder, useMotionValue } from "motion/react";
 import { Order } from "linq-arrays";
 import { PlusIcon, SearchCheckIcon, SearchXIcon } from "lucide-react";
 import React, { useCallback } from "react";

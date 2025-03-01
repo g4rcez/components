@@ -1,7 +1,7 @@
 "use client";
 import * as RadixToast from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
-import { AnimatePresence, motion, TargetAndTransition } from "framer-motion";
+import { AnimatePresence, motion, TargetAndTransition } from "motion/react";
 import { XIcon } from "lucide-react";
 import { createContext, type ElementRef, forwardRef, type PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useHover } from "../../hooks/use-hover";

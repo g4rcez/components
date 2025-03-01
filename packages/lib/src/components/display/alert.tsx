@@ -1,8 +1,8 @@
 "use client";
 import { cva, type VariantProps } from "class-variance-authority";
-import { HTMLMotionProps, motion } from "framer-motion";
+import { HTMLMotionProps, motion } from "motion/react";
 import { CheckCircleIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
-import React, { forwardRef, PropsWithChildren, useState } from "react";
+import React, { forwardRef, PropsWithChildren } from "react";
 import { css } from "../../lib/dom";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
 
@@ -21,7 +21,7 @@ type CollapseProps = HTMLMotionProps<"section"> & { open: boolean };
 
 export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
     <motion.div
-        {...props}
+        {...(props as any)}
         layout
         layoutRoot
         layoutScroll
@@ -108,4 +108,3 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
         </div>
     );
 }) as never;
-

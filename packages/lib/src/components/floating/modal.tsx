@@ -11,7 +11,7 @@ import {
 } from "@floating-ui/react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
-import { AnimatePresence, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "framer-motion";
+import { AnimatePresence, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
 import { XIcon } from "lucide-react";
 import React, { Fragment, PropsWithChildren, useId } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";

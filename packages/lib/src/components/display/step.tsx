@@ -1,5 +1,5 @@
 "use client";
-import { motion, stagger, Transition, useAnimate } from "framer-motion";
+import { motion, stagger, Transition, useAnimate } from "motion/react";
 import { ComponentProps, PropsWithChildren, useEffect } from "react";
 import { useColorParser } from "../../hooks/use-components-provider";
 

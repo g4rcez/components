@@ -1,9 +1,12 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useEffect, useState } from "react";
-import { Autocomplete, VirtualAutocomplete, Card } from "../../../../../lib/src";
+import {
+  VirtualAutocomplete as Autocomplete,
+  Card,
+} from "../../../../../lib/src";
 
-const defaults = Array.from({ length: 5000 }).map((_, i) => ({
+const defaults = Array.from({ length: 3000 }).map((_, i) => ({
   value: i.toString(),
   label: `[${i + 1}] Paullum deliquit, ponderibus modulisque suis ratio utitur.`,
 }));
@@ -14,7 +17,7 @@ export default function FormPage() {
   const withHidden = options.map((x) => ({ ...x, hidden: value === x.value }));
   useEffect(() => {
     setTimeout(() => {
-      setOptions(defaults);
+      setOptions(defaults.slice(0, 10));
       setValue(defaults[0]?.value);
     }, 0);
   }, []);
@@ -28,7 +31,7 @@ export default function FormPage() {
         title="Brazilian masks"
         className="grid grid-cols-1 md:grid-cols-3 gap-6"
       >
-        <VirtualAutocomplete
+        <Autocomplete
           id="0"
           required
           value={value}

@@ -1,6 +1,6 @@
 "use client";
 import { FloatingFocusManager, FloatingPortal, useClick, useDismiss, useFloating, useInteractions, useRole } from "@floating-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { PropsWithChildren, useId, useRef, useState } from "react";
 import { Label, Override } from "../../types";
 import { Button, ButtonProps } from "../core/button";

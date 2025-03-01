@@ -1,10 +1,10 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { z } from "zod";
 import {
   Autocomplete,
-  VirtualCompleteItem,
+  AutocompleteItemProps,
   Button,
   Card,
   Checkbox,
@@ -13,10 +13,10 @@ import {
   Select,
   Switch,
   useForm,
-  UseFormSubmitParams,
+  UseOnSubmitArgs,
 } from "../../../../../lib/src";
 
-const languages: VirtualCompleteItem[] = [
+const languages: AutocompleteItemProps[] = [
   { label: "Elixir", value: "ex", Render: () => <span>💧 Elixir</span> },
   { label: "Javascript", value: "js" },
   { label: "Kotlin", value: "kt", Render: () => <span>🗿 Kotlin</span> },
@@ -44,6 +44,7 @@ const oabMask = (str: string) => {
 
 const schema = z.object({
   agree: z.literal(true),
+  number: z.number(),
   boolean: z.literal(true),
   date: z.string().datetime(),
   name: z.string().min(1),
@@ -54,9 +55,6 @@ const schema = z.object({
   items: z.array(
     z.object({ document: z.string().min(1), name: z.string().min(1) }),
   ),
-  documents: z.array(z.object({ document: z.string() }), {
-    message: "At least one document",
-  }),
   oab: z.array(
     z.object({
       document: z
@@ -70,16 +68,16 @@ const schema = z.object({
 
 type Data = z.infer<typeof schema>;
 
-type Args = UseFormSubmitParams<Data>;
+type Args = UseOnSubmitArgs<Data>;
 
 export default function FormPage() {
   const form = useForm(schema, "form");
   const [state, setState] = useState({});
   const [items, setItems] = useState<number[]>([0]);
 
-  const onSubmit = (args: Args) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>, args: Args) => {
     console.log(args);
-    args.event.preventDefault();
+    event.preventDefault();
     setState(args.data);
   };
 
@@ -101,17 +99,15 @@ export default function FormPage() {
             {...form.input("name", { title: "Name", placeholder: "Fulano" })}
           />
           <Input
-            {...form.input("surname", {
-              title: "Surname",
-              placeholder: "Silva",
+            {...form.input("number", {
+              title: "Number",
+              placeholder: "000",
             })}
           />
           <Input
-            {...form.input("oab", {
-              title: "Oab",
-              placeholder: "000000/ZZ",
-              mask: oabMask,
-              onChange: (e) => (e.target.value = e.target.value.toUpperCase()),
+            {...form.input("surname", {
+              title: "Surname",
+              placeholder: "Silva",
             })}
           />
           <Input

@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import Linq from "linq-arrays";
 import React, { createContext, Fragment, HTMLAttributes, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";

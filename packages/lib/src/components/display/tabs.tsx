@@ -1,5 +1,5 @@
 "use client";
-import { useMotionValue } from "framer-motion";
+import { useMotionValue } from "motion/react";
 import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { useReactive } from "../../hooks/use-reactive";
 import { useStableRef } from "../../hooks/use-stable-ref";

@@ -1,5 +1,5 @@
 "use client";
-import { motion, useMotionValue } from "framer-motion";
+import { motion, useMotionValue } from "motion/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { isSsr } from "../../lib/fns";
 

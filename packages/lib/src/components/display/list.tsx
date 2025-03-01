@@ -1,3 +1,4 @@
+"use client";
 import {
     FloatingContext,
     FloatingFocusManager,
@@ -9,7 +10,7 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
-import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { XIcon } from "lucide-react";
 import React, { Fragment, PropsWithChildren, useCallback, useId, useState } from "react";
 import { Label } from "../../types";

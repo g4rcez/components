@@ -1,15 +1,28 @@
 import { PropsWithChildren } from "react";
-import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
 import { Notifications } from "../../../lib/src/components/display/notifications";
-import { createTheme } from "../../../lib/src/styles/design-tokens";
+import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
+import {
+  createTokenStyles,
+  type TokenRemap,
+} from "../../../lib/src/styles/design-tokens";
 import {
   defaultDarkTheme,
   defaultLightTheme,
 } from "../../../lib/src/styles/theme";
 
+const tokenRemap: TokenRemap = { colors: (t) => {
+    t.value = t.value.replace("hsla(", "").replace(/\)$/, "");
+    return t;
+  },
+};
+
 export const RootLayout = (props: PropsWithChildren) => {
-  const stylesLight = createTheme(defaultLightTheme);
-  const stylesDark = createTheme(defaultDarkTheme, "dark");
+  const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
+  const stylesDark = createTokenStyles(defaultDarkTheme, {
+    ...tokenRemap,
+    name: "dark",
+  });
+
   return (
     <html className="bg-background overflow-x-clip text-foreground antialiased proportional-nums dark">
       <head>

@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { add, endOfMonth, startOfDay, startOfMonth } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Calendar, Card } from "../../../../../lib/src";
 

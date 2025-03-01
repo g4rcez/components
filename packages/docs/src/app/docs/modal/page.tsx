@@ -1,6 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import React, { PropsWithChildren, useState } from "react";
 import {
   Button,

@@ -1,5 +1,5 @@
 "use client";
-import { LayoutGroup, Reorder, useDragControls, useMotionValue } from "framer-motion";
+import { LayoutGroup, Reorder, useDragControls, useMotionValue } from "motion/react";
 import Linq from "linq-arrays";
 import { GripVerticalIcon, Trash2Icon, UngroupIcon } from "lucide-react";
 import React, { Fragment, useState } from "react";

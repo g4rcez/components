@@ -18,7 +18,7 @@ import {
     subWeeks,
     subYears,
 } from "date-fns";
-import { AnimatePresence, motion, MotionConfig, Transition, Variants } from "framer-motion";
+import { AnimatePresence, motion, MotionConfig, Transition, Variants } from "motion/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import React, { RefObject, useEffect, useRef } from "react";
 import { Is } from "sidekicker";
