@@ -1,4 +1,5 @@
-import { stagger, useAnimate } from "framer-motion";
+"use client";
+import { stagger, useAnimate } from "motion/react";
 import { ComponentProps, PropsWithChildren, useEffect } from "react";
 
 export const TaskList = (props: PropsWithChildren<ComponentProps<"fieldset">>) => {

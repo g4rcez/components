@@ -15,6 +15,7 @@ import {
 import Fuzzy from "fuzzy-search";
 import { CheckIcon, ChevronDown } from "lucide-react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "../../hooks/use-components-provider";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
@@ -40,7 +41,13 @@ export const Option = forwardRef<HTMLLIElement, AutocompleteOptionProps>(({ sele
         return null;
     }
     return (
-        <li {...props} ref={ref} role="option" aria-selected={active} className="w-full border-b border-tooltip-border last:border-transparent">
+        <motion.li
+            {...(props as any)}
+            ref={ref}
+            role="option"
+            aria-selected={active}
+            className="w-full border-b border-tooltip-border last:border-transparent"
+        >
             <button
                 type="button"
                 aria-busy={option.disabled}
@@ -58,7 +65,7 @@ export const Option = forwardRef<HTMLLIElement, AutocompleteOptionProps>(({ sele
                     </span>
                 ) : null}
             </button>
-        </li>
+        </motion.li>
     );
 });
 
@@ -221,6 +228,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const id = props.id || props.name;
 
+        const onCaretDownClick = () => {
+            setOpen(true);
+            setShadow("");
+            (refs.reference.current as HTMLInputElement)?.focus();
+        };
+
         return (
             <InputField
                 {...(props as any)}
@@ -243,7 +256,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 placeholder={props.placeholder}
                 right={
                     <span className="flex items-center gap-0.5">
-                        <button type="button" className="transition-colors link:text-primary">
+                        <button type="button" className="transition-colors link:text-primary" onClick={onCaretDownClick}>
                             <ChevronDown size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
@@ -263,6 +276,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 }
             >
                 <input
+                    data-shadow="true"
                     {...getReferenceProps({
                         ...props,
                         onChange,
@@ -331,29 +345,31 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 data-floating="true"
                                 className="z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
-                                {list.map((option, i) => {
-                                    const active = value === option.value || value === option.label;
-                                    return (
-                                        <Option
-                                            key={`${option.value}-option`}
-                                            {...getItemProps({
-                                                onClick: () => onSelect(option, i),
-                                                ref: (node) => void (listRef.current[i] = node) as any,
-                                                selected: index === i,
-                                            })}
-                                            option={option}
-                                            active={active}
-                                            selected={index === i}
-                                        />
-                                    );
-                                })}
-                                {list.length === 0 ? (
-                                    <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
-                                        <span className="flex w-full justify-between p-2 text-left text-disabled">
-                                            {emptyMessage || translation.autocompleteEmpty}
-                                        </span>
-                                    </li>
-                                ) : null}
+                                <AnimatePresence>
+                                    {list.map((option, i) => {
+                                        const active = value === option.value || value === option.label;
+                                        return (
+                                            <Option
+                                                key={`${option.value}-option`}
+                                                {...getItemProps({
+                                                    onClick: () => onSelect(option, i),
+                                                    ref: (node) => void (listRef.current[i] = node) as any,
+                                                    selected: index === i,
+                                                })}
+                                                option={option}
+                                                active={active}
+                                                selected={index === i}
+                                            />
+                                        );
+                                    })}
+                                    {list.length === 0 ? (
+                                        <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
+                                            <span className="flex w-full justify-between p-2 text-left text-disabled">
+                                                {emptyMessage || translation.autocompleteEmpty}
+                                            </span>
+                                        </li>
+                                    ) : null}
+                                </AnimatePresence>
                             </ul>
                         </FloatingFocusManager>
                     ) : null}

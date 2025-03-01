@@ -1,10 +1,10 @@
+"use client";
 import {
     autoUpdate,
     FloatingFocusManager,
     FloatingPortal,
     offset,
     size,
-    useClick,
     useDismiss,
     useFloating,
     useInteractions,
@@ -12,28 +12,29 @@ import {
     useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
-import { useVirtualizer, VirtualItem, Virtualizer } from "@tanstack/react-virtual";
+import { flushSync } from "react-dom"
 import Fuzzy from "fuzzy-search";
-import { CheckIcon, ChevronDown } from "lucide-react";
-import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
+import { ChevronDown } from "lucide-react";
+import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useTranslations } from "../../hooks/use-components-provider";
-import { css, dispatchInput } from "../../lib/dom";
+import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
-import type { OptionProps } from "./select";
+import { type OptionProps } from "./select";
 
-export type VirtualCompleteItem = OptionProps & { Render?: React.FC<OptionProps> };
+export type VirtualAutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
 
-export type VirtualCompleteProps = Omit<InputFieldProps<"input">, "value"> & {
+const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
+
+export type VirtualAutocomplete = Omit<InputFieldProps<"input">, "value"> & {
     value?: string;
     emptyMessage?: Label;
     dynamicOption?: boolean;
-    options: VirtualCompleteItem[];
+    options: VirtualAutocompleteItemProps[];
 };
-
-const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
 const transitionStyles = {
     duration: 300,
@@ -42,201 +43,142 @@ const transitionStyles = {
     close: { transform: "scaleY(0)", opacity: 0 },
 } as const;
 
-const ITEM_HEIGHT = 16;
-
-const overflowPadding = 10;
-
 const fuzzyOptions = { caseSensitive: false, sort: false };
 
-const Option = (props: {
-    virtual: Virtualizer<any, any>;
-    size: number;
-    getItemProps: any;
-    handleSelect: any;
-    listElementsRef: any;
-    virtualItem: VirtualItem;
-    activeIndex: number | null;
-    selectedIndex: number | null;
-    option: VirtualCompleteItem;
-}) => {
-    const [h, setH] = useState(44);
-    const index = props.virtualItem.index;
-    const option = props.option;
-    const Label = (option.Render as React.FC<any>) ?? Frag;
-    const children = option.label ?? option.value;
-    const selected = index === props.selectedIndex;
-    const active = props.activeIndex === index;
+const emptyRef: any[] = [];
+
+const List: Components["List"] = forwardRef(function VirtualList(props, ref) {
     return (
-        <li
-            id={`item-${index}`}
-            data-index={index}
-            tabIndex={-1}
-            ref={(node) => {
-                props.listElementsRef.current[index] = node;
-            }}
-            role="option"
-            aria-selected={active}
-            aria-setsize={props.size}
-            aria-posinset={index + 1}
-            {...props.getItemProps({
-                onClick: props.handleSelect,
-                style: {
-                    height: `${h}px`,
-                    transform: `translateY(${props.virtualItem.start}px)`,
-                },
-            })}
-        >
-            <button
-                type="button"
-                aria-checked={active}
-                aria-current={active}
-                aria-selected={active}
-                data-value={option.value}
-                aria-busy={option.disabled}
-                className={`flex w-full max-w-full cursor-pointer justify-between overflow-ellipsis p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-primary text-primary-foreground" : ""}`}
-            >
-                <Label {...option} label={option.label} value={option.value} children={children} />
-                {selected ? (
-                    <span>
-                        <CheckIcon aria-hidden className="text-current" absoluteStrokeWidth strokeWidth={2} size={22} />
-                    </span>
-                ) : null}
-            </button>
-        </li>
+        <motion.ul {...props} ref={ref as any} className="w-full border-b border-tooltip-border last:border-transparent rounded-lg" >
+            <AnimatePresence>{props.children}</AnimatePresence>
+        </motion.ul>
     );
-};
+});
 
-export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualCompleteProps>(function VirtualAutocomplete(
-    {
-        options,
-        emptyMessage,
-        dynamicOption = false,
-        feedback = null,
-        labelClassName,
-        interactive,
-        rightLabel,
-        optionalText,
-        container,
-        hideLeft = false,
-        right,
-        left,
-        error,
-        required = false,
-        ...props
-    }: VirtualCompleteProps,
-    externalRef: any
-) {
-    const [value, setValue] = useState(props.value);
-    const [shadow, setShadow] = useState("");
-    const [label, setLabel] = useState("");
-    const translation = useTranslations();
-    const fieldset = useRef<HTMLFieldSetElement | null>(null);
-    const [open, setOpen] = useState(false);
-    const [pointer, setPointer] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
-    const [maxHeight, setMaxHeight] = useState(400);
-    const wrapperRef = useRef<HTMLUListElement>(null);
-    const innerOptions: VirtualCompleteItem[] =
-        dynamicOption && shadow !== ""
-            ? [
-                  {
-                      value: shadow,
-                      label: shadow,
-                      "data-dynamic": "true",
-                  },
-                  ...options,
-              ]
-            : options;
-    const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
-    const listElementsRef = useRef<Array<HTMLElement | null>>([]);
-    useEffect(() => {
-        listElementsRef.current = Array.from({ length: list.length }).fill(null) as any[];
-    }, [list]);
+const Item: Components["List"] = forwardRef(function VirtualItem(props, ref) {
+    return (
+        <motion.li {...props} ref={ref as any} className="first:rounded-t-lg last:rounded-t-lg">
+            {props.children}
+        </motion.li>
+    );
+});
 
-    const onSelect = (opt: VirtualCompleteItem, i: number) => {
-        setValue(opt.value);
-        const input = refs.reference.current as HTMLInputElement;
-        if (!input) return;
-        input?.setAttribute("data-value", opt.value);
-        input.value = opt.value;
-        const event = new Event("change", { bubbles: false, cancelable: true });
-        input.dispatchEvent(event);
-        if (props.onChange) props.onChange(event as any);
-        setLabel(opt.label ?? "");
-        setOpen(false);
-        setShadow("");
-        setActiveIndex(i);
-    };
+const components = { List, Item };
 
-    if (!open && pointer) {
-        setPointer(false);
-    }
+export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocomplete>(
+    (
+        {
+            options,
+            dynamicOption = false,
+            feedback = null,
+            labelClassName,
+            emptyMessage,
+            interactive,
+            rightLabel,
+            optionalText,
+            container,
+            hideLeft = false,
+            right,
+            left,
+            error,
+            required = false,
+            ...props
+        }: VirtualAutocomplete,
+        externalRef
+    ) => {
+        const fieldset = useRef<HTMLFieldSetElement>(null);
+        const virtuoso = useRef<VirtuosoHandle | null>(null);
+        const defaults = props.value ?? props.defaultValue ?? "";
+        const translation = useTranslations();
+        const [h, setH] = useState(0);
+        const [open, setOpen] = useState(false);
+        const [shadow, setShadow] = useState("");
+        const [value, setValue] = useState(defaults);
+        const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
+        const [index, setIndex] = useState<number | null>(null);
+        const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
+        const innerOptions: VirtualAutocompleteItemProps[] =
+            dynamicOption && shadow !== ""
+                ? [
+                    {
+                        value: shadow,
+                        label: shadow,
+                        "data-dynamic": "true",
+                    },
+                    ...options,
+                ]
+                : options;
+        const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
 
-    const { refs, floatingStyles, context, isPositioned, x, y, strategy } = useFloating<HTMLButtonElement>({
-        open,
-        onOpenChange: setOpen,
-        whileElementsMounted: autoUpdate,
-        middleware: [
-            offset(8),
-            size({
-                padding: overflowPadding,
-                apply(args) {
-                    flushSync(() => setMaxHeight(args.availableHeight));
-                    const max = fieldset.current?.getBoundingClientRect().width;
-                    Object.assign(args.elements.floating.style, { width: `${max}px`, maxWidth: `${max}px` });
-                },
+        const pattern = dynamicOption
+            ? undefined
+            : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
+
+        useEffect(() => {
+            if (!open) setH(0);
+        }, [open])
+
+        useEffect(() => {
+            if (props.value) {
+                const item = options.find((x) => x.value === props.value);
+                setValue(item?.label ?? props.value);
+            }
+        }, [props.value]);
+
+        const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
+            open,
+            transform: true,
+            strategy: "absolute",
+            onOpenChange: setOpen,
+            whileElementsMounted: autoUpdate,
+            middleware: [
+                offset(4),
+                size({
+                    padding: 10,
+                    elementContext: "reference",
+                    apply(a) {
+                        const w = fieldset.current?.getBoundingClientRect().width!;
+                        const ul = a.elements.floating.querySelector("ul");
+                        const fullSize = ul?.getBoundingClientRect().height || 0;
+                        const maxH = Math.min(fullSize < 40 ? 300 : fullSize, 300);
+                        flushSync(() => setTimeout(() => setH(maxH), 200));
+                        Object.assign(a.elements.floating.style, {
+                            width: `${w}px`,
+                            maxWidth: `${w}px`,
+                            maxHeight: `${maxH}px`,
+                        });
+                    },
+                }),
+            ],
+        });
+
+        const transitions = useTransitionStyles(context, transitionStyles);
+        const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
+            useRole(context, { role: "listbox" }),
+            useDismiss(context),
+            useListNavigation(context, {
+                cols: 0,
+                listRef,
+                loop: true,
+                virtual: true,
+                allowEscape: true,
+                activeIndex: index,
+                selectedIndex: index,
+                focusItemOnOpen: "auto",
+                openOnArrowKeyDown: true,
+                scrollItemIntoView: true,
+                onNavigate: (n) => setIndex((prev) => n ?? prev),
             }),
-        ],
-    });
+        ]);
 
-    const transitions = useTransitionStyles(context, transitionStyles);
+        useEffect(() => {
+            const input = refs.reference.current as HTMLInputElement;
+            if (!input) return;
+            return initializeInputDataset(input);
+        }, []);
 
-    const virtualizer = useVirtualizer({
-        overscan: 10,
-        count: list.length,
-        estimateSize: (i) => {
-            if (fieldset.current === null) return ITEM_HEIGHT;
-            const item = list[i];
-            const width = fieldset.current.getBoundingClientRect().width;
-            const chars = item.label?.length ?? 1;
-            const r = Math.ceil((chars * 8) / width);
-            return Math.min(r, 3) * ITEM_HEIGHT;
-        },
-        getScrollElement: () => refs.floating.current,
-    });
-
-    const click = useClick(context);
-    const role = useRole(context, { role: "listbox" });
-    const dismiss = useDismiss(context);
-    const listNavigation = useListNavigation(context, {
-        loop: true,
-        activeIndex,
-        selectedIndex,
-        virtual: true,
-        disabledIndices: [],
-        listRef: listElementsRef,
-        onNavigate: setActiveIndex,
-    });
-
-    const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([click, role, dismiss, listNavigation]);
-
-    useLayoutEffect(() => {
-        if (isPositioned && !pointer) {
-            if (activeIndex === null && selectedIndex === null) {
-                virtualizer.scrollToIndex(0, { behavior: "auto" });
-            }
-            if (activeIndex !== null) {
-                wrapperRef.current?.focus({ preventScroll: true });
-                virtualizer.scrollToIndex(activeIndex, { behavior: "auto" });
-            }
-        }
-    }, [virtualizer, isPositioned, activeIndex, selectedIndex, pointer, refs]);
-
-    const handleSelect = () => {
-        if (activeIndex !== null) {
-            setSelectedIndex(activeIndex);
-            const opt = list[activeIndex];
+        const onSelect = (opt: VirtualAutocompleteItemProps, i: number) => {
+            setValue(opt.value);
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             input?.setAttribute("data-value", opt.value);
@@ -247,192 +189,207 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualCompleteP
             setLabel(opt.label ?? "");
             setOpen(false);
             setShadow("");
-        }
-    };
+            setIndex(i);
+        };
 
-    const onOpenCaret = () => {
-        setOpen(true);
-        (refs.reference.current as HTMLInputElement | null)?.focus();
-    };
+        const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            const value = event.target.value;
+            setShadow(value);
+            if (!open && value === "") return setOpen(true);
+            event.target.name = props.name || "";
+            return value ? setOpen(true) : props.onChange?.(event);
+        };
 
-    const onClose = () => {
-        setShadow("");
-        setValue("");
-        setLabel("");
-        setOpen(false);
-        dispatchInput(refs.reference.current as HTMLInputElement, "");
-    };
+        const onCaretDownClick = () => {
+            setOpen(true);
+            setShadow("");
+            (refs.reference.current as HTMLInputElement)?.focus();
+        };
 
-    const pattern = dynamicOption
-        ? undefined
-        : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
-    const id = props.id || props.name;
+        const onFocus = () => {
+            setOpen(true);
+            setShadow("");
+        };
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setShadow(value);
-        if (!open && value === "") return setOpen(true);
-        event.target.name = props.name || "";
-        return value ? setOpen(true) : props.onChange?.(event);
-    };
+        const onClose = () => {
+            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
+            setShadow("");
+            setValue("");
+            setLabel("");
+            dispatchInput(refs.reference.current as HTMLInputElement, "");
+            setOpen(false);
+        };
 
-    const onFocus = () => {
-        setOpen(true);
-        setShadow("");
-        setActiveIndex((prev) => (prev === null ? 0 : prev));
-    };
+        const id = props.id || props.name;
 
-    const itemsToRender = virtualizer.getVirtualItems();
-
-    return (
-        <InputField
-            {...(props as any)}
-            left={left}
-            error={error}
-            ref={fieldset}
-            form={props.form}
-            name={props.name}
-            feedback={feedback}
-            hideLeft={hideLeft}
-            required={required}
-            title={props.title}
-            container={container}
-            rightLabel={rightLabel}
-            interactive={interactive}
-            id={props.name || props.id}
-            optionalText={optionalText}
-            componentName="autocomplete"
-            labelClassName={labelClassName}
-            placeholder={props.placeholder}
-            right={
-                <span className="flex items-center gap-0.5">
-                    <button type="button" className="transition-colors link:text-primary" onClick={onOpenCaret}>
-                        <ChevronDown size={20} />
-                        <span className="sr-only">{translation.inputCaretDown}</span>
-                    </button>
-                    {value ? (
-                        <button type="button" onClick={onClose} className="transition-colors link:text-danger">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
-                                    fill="currentColor"
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
+        return (
+            <InputField
+                {...(props as any)}
+                left={left}
+                error={error}
+                ref={fieldset}
+                form={props.form}
+                name={props.name}
+                feedback={feedback}
+                hideLeft={hideLeft}
+                required={required}
+                title={props.title}
+                container={container}
+                rightLabel={rightLabel}
+                interactive={interactive}
+                id={props.name || props.id}
+                optionalText={optionalText}
+                componentName="autocomplete"
+                labelClassName={labelClassName}
+                placeholder={props.placeholder}
+                right={
+                    <span className="flex items-center gap-0.5">
+                        <button type="button" className="transition-colors link:text-primary" onClick={onCaretDownClick}>
+                            <ChevronDown size={20} />
+                            <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
-                    ) : null}
-                </span>
-            }
-        >
-            <input
-                {...getReferenceProps({
-                    ...props,
-                    onChange,
-                    onFocus,
-                    pattern,
-                    id: `${id}-shadow`,
-                    name: `${id}-shadow`,
-                    ref: refs.setReference,
-                    onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
-                    onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-                        if (event.key === "Escape") {
-                            event.currentTarget.blur();
-                            return setOpen(false);
-                        }
-                        if (event.key === "Enter") {
-                            if (activeIndex !== null && list[activeIndex]) {
-                                event.preventDefault();
-                                return onSelect(list[activeIndex], activeIndex);
+                        {value ? (
+                            <button type="button" onClick={onClose} className="transition-colors link:text-danger">
+                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
+                                        fill="currentColor"
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                        ) : null}
+                    </span>
+                }
+            >
+                <input
+                    data-shadow="true"
+                    {...getReferenceProps({
+                        ...props,
+                        onChange,
+                        onFocus,
+                        pattern,
+                        ref: refs.setReference,
+                        name: `${id}-shadow`,
+                        id: `${id}-shadow`,
+                        onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
+                        onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+                            if (event.key === "ArrowDown") {
+                                let next = index! + 1;
+                                if (next > list.length - 1) next = 0
+                                virtuoso.current?.scrollIntoView({ index: next })
+                                return setIndex(next)
                             }
-                            if (list.length === 1) {
-                                event.preventDefault();
-                                return onSelect(list[0], 0);
+                            if (event.key === "ArrowUp") {
+                                let next = index! - 1;
+                                if (next < 0) next = list.length - 1
+                                virtuoso.current?.scrollIntoView({ index: next })
+                                return setIndex(next)
                             }
-                        }
-                    },
-                })}
-                data-value={value}
-                data-error={!!error}
-                data-name={id}
-                data-target={id}
-                required={required}
-                value={open ? shadow : label || value}
-                aria-autocomplete="list"
-                autoComplete="off"
-                className={css(
-                    "input placeholder-input-mask group h-input-height w-full flex-1",
-                    "rounded-md bg-transparent px-input-x py-input-y text-foreground",
-                    "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
-                    "group-error:text-danger group-error:placeholder-input-mask-error",
-                    "group-focus-within:border-primary group-hover:border-primary",
-                    props.className
-                )}
-            />
-            <input
-                id={id}
-                name={id}
-                type="hidden"
-                data-origin={id}
-                ref={externalRef}
-                required={required}
-                defaultValue={props.value || value || undefined}
-            />
-            <FloatingPortal>
-                {open && (
-                    <FloatingFocusManager guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss modal={false}>
-                        <div
-                            tabIndex={-1}
-                            ref={refs.setFloating}
-                            className="isolate z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
-                            style={{
-                                ...floatingStyles,
-                                ...transitions.styles,
-                                maxHeight,
-                                top: y ?? 0,
-                                position: strategy,
-                                left: (x ?? 0) + (!!value ? 26 : 16),
-                            }}
-                        >
-                            <ul
-                                tabIndex={0}
-                                ref={wrapperRef}
-                                style={{ height: virtualizer.getTotalSize() }}
-                                className="relative w-full outline-0"
+                            if (event.key === "Escape") {
+                                event.currentTarget.blur();
+                                return setOpen(false);
+                            }
+                            if (event.key === "Enter") {
+                                if (index !== null && list[index]) {
+                                    event.preventDefault();
+                                    return onSelect(list[index], index);
+                                }
+                                if (list.length === 1) {
+                                    event.preventDefault();
+                                    return onSelect(list[0], 0);
+                                }
+                            }
+                        },
+                    })}
+                    data-value={value}
+                    data-error={!!error}
+                    data-name={id}
+                    data-target={id}
+                    required={required}
+                    value={open ? shadow : label || value}
+                    aria-autocomplete="list"
+                    autoComplete="off"
+                    className={css(
+                        "input placeholder-input-mask group h-input-height w-full flex-1",
+                        "rounded-md bg-transparent px-input-x py-input-y text-foreground",
+                        "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+                        "group-error:text-danger group-error:placeholder-input-mask-error",
+                        "group-focus-within:border-primary group-hover:border-primary",
+                        props.className
+                    )}
+                />
+                <input
+                    id={id}
+                    name={id}
+                    type="hidden"
+                    data-origin={id}
+                    ref={externalRef}
+                    required={required}
+                    defaultValue={props.value || value || undefined}
+                />
+                <FloatingPortal preserveTabOrder>
+                    {open ? (
+                        <FloatingFocusManager guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
+                            <div
                                 {...getFloatingProps({
-                                    onPointerMove() {
-                                        setPointer(true);
-                                    },
-                                    onKeyDown(e) {
-                                        setPointer(false);
-                                        if (e.key === "Enter" && activeIndex !== null) {
-                                            handleSelect();
-                                        }
+                                    ref: refs.setFloating,
+                                    style: {
+                                        ...transitions.styles,
+                                        position: strategy,
+                                        left: (x ?? 0) + (!!value ? 26 : 18),
+                                        top: y ?? 0,
                                     },
                                 })}
+                                data-floating="true"
+                                className="z-floating m-0 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
-                                {itemsToRender.map((virtualItem) => {
-                                    return (
-                                        <Option
-                                            virtual={virtualizer}
-                                            size={list.length}
-                                            key={virtualItem.key}
-                                            activeIndex={activeIndex}
-                                            virtualItem={virtualItem}
-                                            getItemProps={getItemProps}
-                                            handleSelect={handleSelect}
-                                            selectedIndex={selectedIndex}
-                                            option={list[virtualItem.index]}
-                                            listElementsRef={listElementsRef}
-                                        />
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                    </FloatingFocusManager>
-                )}
-            </FloatingPortal>
-        </InputField>
-    );
-});
+                                {list.length === 0 ? (
+                                    <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
+                                        <span className="flex w-full justify-between p-2 text-left text-disabled">
+                                            {emptyMessage || translation.autocompleteEmpty}
+                                        </span>
+                                    </li>
+                                ) : null}
+                                <Virtuoso
+                                    data={list}
+                                    ref={virtuoso}
+                                    hidden={list.length === 0}
+                                    components={components as any}
+                                    className="bg-floating-background p-0 text-foreground rounded-lg border-floating-border"
+                                    style={{ height: h }}
+                                    itemContent={(i, option) => {
+                                        const Label = (option.Render as React.FC<any>) ?? Frag;
+                                        const active = value === option.value || value === option.label;
+                                        const selected = index === i;
+                                        const children = option.label ?? option.value;
+                                        return (
+                                            <button
+                                                data-value={option.value}
+                                                {...getItemProps({
+                                                    ref: (node) => void (listRef.current[i] = node) as any,
+                                                    role: "option",
+                                                    type: "button",
+                                                    "aria-checked": active,
+                                                    "aria-current": active,
+                                                    "aria-selected": active,
+                                                    "aria-busy": option.disabled,
+                                                    onClick: () => onSelect(option, i),
+                                                    className: `cursor-pointer p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-primary text-primary-foreground" : ""}`
+                                                })}
+                                            >
+                                                <Label {...props} label={option.label} value={option.value} children={children} />
+                                            </button>
+                                        )
+                                    }}
+                                />
+                            </div>
+                        </FloatingFocusManager>
+                    ) : null}
+                </FloatingPortal>
+            </InputField >
+        );
+    }
+);

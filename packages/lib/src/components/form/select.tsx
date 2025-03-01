@@ -50,13 +50,16 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
         useEffect(() => {
             if (inputRef.current === null) return;
+            const controller = new AbortController();
             const input = inputRef.current;
             const focus = initializeInputDataset(inputRef.current);
-            const change = () => input.setAttribute("data-selected", "true");
-            input.addEventListener("change", change);
+            input.addEventListener("change", () => input.setAttribute("data-selected", "true"), {
+                once: true,
+                signal: controller.signal,
+            });
             return () => {
                 focus();
-                input.removeEventListener("change", change);
+                controller.abort();
             };
         }, []);
 
@@ -111,7 +114,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                         {props.placeholder}
                     </option>
                     {options.map((option) => (
-                        <option key={`${id}-select-option-${option.value}`} {...option} children={option.label ?? option.value} />
+                        <option
+                            {...option}
+                            value={option.value}
+                            children={option.label ?? option.value}
+                            key={`${id}-select-option-${option.value}`}
+                        />
                     ))}
                 </select>
             </InputField>
