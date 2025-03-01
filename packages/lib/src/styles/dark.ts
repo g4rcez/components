@@ -71,6 +71,7 @@ export const DARK_THEME: DesignTokens = {
             border: "hsla(240, 7%, 27%)",
         },
         floating: {
+            foreground: "hsla(210, 40%, 98%)",
             background: "hsla(0, 0%, 14%)",
             border: "hsla(240, 7%, 27%)",
             overlay: "hsla(0, 0%, 0%)",
@@ -79,11 +80,12 @@ export const DARK_THEME: DesignTokens = {
             foreground: "hsla(210, 40%, 98%)",
             background: "hsla(0, 0%, 8%)",
             border: "hsla(0, 0%, 19%)",
+            overlay: "hsla(0, 0%, 0%)",
         },
         table: {
             header: "hsla(0, 0%, 12%)",
-            background: "hsla(0, 0%, 15%)",
             border: "hsla(240, 4%, 33%)",
+            background: "hsla(0, 0%, 15%)",
         },
         button: {
             primary: {

@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { DesignTokens, DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types";
 
 export const parsers = {
@@ -61,17 +62,39 @@ export const createStyles = {
     dark: (tokens: Token[]) => createStyleContent(tokens, { result: modifiers.dark }),
 };
 
-export const createTheme = (theme: DesignTokens, name?: string) => {
-    const fn: DesignTokensBuilder = (value, _, key) => ({
-        key: `--${key}`,
-        value: `${value}`,
-    });
-    const colors = reduceTokens(theme.colors, fn);
-    const spacing = reduceTokens(theme.spacing, fn);
-    const rounded = reduceTokens(theme.rounded, fn);
-    const customTokens = theme.custom ? reduceTokens(theme.custom, fn) : [];
-    return createStyleContent(colors.concat(spacing, rounded, customTokens), {
+type TokenParsersType = "colors" | "spacing" | "rounded" | "customTokens";
+
+type TokenCustomParser = (token: Token) => Token;
+
+export type TokenRemap = Partial<Record<TokenParsersType, TokenCustomParser> & { name: string }>;
+
+const createTokens = (theme: DesignTokens, map?: TokenRemap) => {
+    const fn =
+        (p?: TokenCustomParser): DesignTokensBuilder =>
+        (value, _, key) => {
+            const r = { key: `--${key}`, value: `${value}` };
+            return p ? p(r) : r;
+        };
+    const colors = reduceTokens(theme.colors, fn(map?.colors));
+    const spacing = reduceTokens(theme.spacing, fn(map?.spacing));
+    const rounded = reduceTokens(theme.rounded, fn(map?.rounded));
+    const customTokens = theme.custom ? reduceTokens(theme.custom, fn(map?.customTokens)) : [];
+    return colors.concat(spacing, rounded, customTokens);
+};
+
+export const createTheme = (theme: DesignTokens, name?: string) =>
+    createStyleContent(createTokens(theme), {
         result: (variables: string) => `html${name ? `.${name}` : ""} {${variables}}`,
         value: (_, v) => v.replace("hsla(", "").replace(")", ""),
     });
+
+export const createCssProperties = (theme: DesignTokens, map?: TokenRemap): CSSProperties => {
+    const tokens = createTokens(theme, map);
+    return tokens.reduce<CSSProperties>((acc, el) => ({ ...acc, [el.key]: el.value }), {});
 };
+
+export const createTokenStyles = (theme: DesignTokens, map?: TokenRemap) =>
+    createStyleContent(createTokens(theme, map), {
+        result: (variables: string) => `html${map?.name ? `.${map.name}` : ""} {${variables}}`,
+        value: (_, v) => v,
+    });

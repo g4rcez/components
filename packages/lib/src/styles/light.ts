@@ -2,9 +2,9 @@ import { rounded, spacing } from "./common";
 import { DesignTokens } from "./theme.types";
 
 export const LIGHT_THEME: DesignTokens = {
-    name: "light",
     rounded,
     spacing,
+    name: "light",
     shadow: {
         floating: "rgba(50, 50, 50, 0.1) 0px 0px 0px 1px, rgba(50, 50, 50, 0.1) 0px 3px 6px, rgba(50, 50, 50, 0.1) 0px 2px 3px",
     },
@@ -71,6 +71,7 @@ export const LIGHT_THEME: DesignTokens = {
             border: "hsla(210, 25%, 88%)",
         },
         floating: {
+            foreground: "hsla(217, 15%, 20%)",
             background: "hsla(0, 0%, 100%)",
             border: "hsla(210, 25%, 88%)",
             overlay: "hsla(0, 0%, 0%)",
@@ -79,6 +80,7 @@ export const LIGHT_THEME: DesignTokens = {
             foreground: "hsla(217, 15%, 20%)",
             background: "hsla(210, 25%, 98%)",
             border: "hsla(200, 1%, 80%)",
+            overlay: "hsla(0, 0%, 0%)",
         },
         table: {
             header: "hsla(221, 10%, 90%)",

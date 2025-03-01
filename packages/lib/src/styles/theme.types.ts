@@ -1,6 +1,20 @@
 export type GeneralTokens = { [K in string]: string | GeneralTokens };
 
-type ThemeState = "primary" | "warn" | "secondary" | "info" | "danger" | "success" | "neutral";
+export type ThemeState = "primary" | "warn" | "secondary" | "info" | "danger" | "success" | "neutral";
+
+type BasicTokens = {
+    hover: string;
+    subtle: string;
+    DEFAULT: string;
+    foreground: string;
+};
+
+type ComponentToken = {
+    border: string;
+    overlay: string;
+    background: string;
+    foreground: string;
+};
 
 export type DesignTokens = {
     name: string;
@@ -9,84 +23,29 @@ export type DesignTokens = {
     spacing: Record<"base" | "lg" | "sm", string>;
     custom?: Record<string, string>;
     colors: {
+        disabled: string;
+        background: string;
+        foreground: string;
+        primary: BasicTokens;
+        emphasis: BasicTokens;
+        tooltip: ComponentToken;
+        floating: ComponentToken;
+        info: BasicTokens & { notification: string };
+        warn: BasicTokens & { notification: string };
+        card: { background: string; border: string };
+        danger: BasicTokens & { notification: string };
+        secondary: BasicTokens & { background: string };
+        success: BasicTokens & { notification: string };
         tag: Record<ThemeState, { text: string; bg: string }>;
         button: Record<ThemeState, { text: string; bg: string }>;
+        table: { border: string; header: string; background: string };
         alert: Record<ThemeState, { text: string; bg: string; border: string }>;
-        foreground: string;
-        background: string;
-        disabled: string;
-        emphasis: {
-            foreground: string;
-            DEFAULT: string;
-            subtle: string;
-            hover: string;
-        };
-        primary: {
-            foreground: string;
-            DEFAULT: string;
-            subtle: string;
-            hover: string;
-        };
-        warn: {
-            DEFAULT: string;
-            subtle: string;
-            hover: string;
-            foreground: string;
-            notification: string;
-        };
-        secondary: {
-            DEFAULT: string;
-            background: string;
-            subtle: string;
-            hover: string;
-            foreground: string;
-        };
-        info: {
-            DEFAULT: string;
-            subtle: string;
-            hover: string;
-            foreground: string;
-            notification: string;
-        };
-        danger: {
-            DEFAULT: string;
-            subtle: string;
-            hover: string;
-            foreground: string;
-            notification: string;
-        };
-        success: {
-            DEFAULT: string;
-            subtle: string;
-            hover: string;
-            foreground: string;
-            notification: string;
-        };
         input: {
             border: string;
             placeholder: string;
             "mask-error": string;
             "switch-bg": string;
             switch: string;
-        };
-        card: {
-            background: string;
-            border: string;
-        };
-        floating: {
-            background: string;
-            border: string;
-            overlay: string;
-        };
-        tooltip: {
-            foreground: string;
-            background: string;
-            border: string;
-        };
-        table: {
-            border: string;
-            header: string;
-            background: string;
         };
     };
 };
