@@ -84,10 +84,11 @@ export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
     return <Context.Provider value={memoMap}>{props.children}</Context.Provider>;
 };
 
-export const useLocale = (): Locales | undefined => {
+export const useLocale = (locale?: Locales): Locales | undefined => {
+    if (!!locale) return locale;
     const ctx = useContext(Context);
     if (!ctx) return undefined;
-    return ctx.locale;
+    return ctx.locale || locale;
 };
 
 export const useTranslations = () => {

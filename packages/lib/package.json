@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@8.15.3",
@@ -53,6 +53,7 @@
     "pretty-bytes": "6.1.1",
     "qs": "6.12.3",
     "react-dropzone": "14.2.3",
+    "react-remove-scroll": "2.6.3",
     "react-use-measure": "2.1.1",
     "react-virtuoso": "4.7.13",
     "sidekicker": "0.1.9",

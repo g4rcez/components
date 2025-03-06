@@ -10,7 +10,7 @@ export default function TagsPage() {
       description="Chips, tags...you can choose the name"
     >
       <div className="flex flex-col gap-8">
-        <Card title="All tag themes" className="flex gap-8">
+        <Card title="All tag themes" className="flex flex-wrap gap-8">
           <Tag>Normal</Tag>
           <Tag theme="danger">danger</Tag>
           <Tag theme="info">info</Tag>
