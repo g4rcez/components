@@ -384,7 +384,7 @@ export const Calendar = ({
                     <select
                       value={monthString}
                       onChange={dispatch.onChangeMonth}
-                      style={{ width: `${monthString.length}ch` }}
+                      style={{ width: `${monthString.length + 1}ch` }}
                       className="cursor-pointer appearance-none bg-transparent capitalize proportional-nums hover:text-primary"
                     >
                       {state.months}

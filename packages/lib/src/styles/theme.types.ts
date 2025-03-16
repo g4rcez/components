@@ -10,6 +10,7 @@ type BasicTokens = {
 };
 
 type ComponentToken = {
+    hover: string;
     border: string;
     overlay: string;
     background: string;

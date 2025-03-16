@@ -102,6 +102,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     ref={mergeRefs(ref, inputRef)}
                     data-selected={!!props.value || false}
                     defaultValue={props.value ? undefined : ""}
+                    title={typeof props.title === "string" ? props.title : undefined}
                     className={css(
                         "input select group h-10 w-full flex-1 appearance-none rounded-md",
                         "bg-transparent px-2 py-1 text-foreground placeholder-input-placeholder",

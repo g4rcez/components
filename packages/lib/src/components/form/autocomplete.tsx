@@ -13,9 +13,11 @@ import {
     useTransitionStyles,
 } from "@floating-ui/react";
 import Fuzzy from "fuzzy-search";
-import { CheckIcon, ChevronDown } from "lucide-react";
-import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
+import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useTranslations } from "../../hooks/use-components-provider";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
@@ -25,56 +27,15 @@ import { type OptionProps } from "./select";
 
 export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
 
-export type AutocompleteOptionProps = Omit<React.HTMLProps<HTMLLIElement>, "children"> & {
-    active: boolean;
-    selected: boolean;
-    emptyMessage?: Label;
-    option: AutocompleteItemProps;
-};
-
-const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
-
-export const Option = forwardRef<HTMLLIElement, AutocompleteOptionProps>(({ selected, active, onClick, option, ...props }, ref) => {
-    const Label = (option.Render as React.FC<any>) ?? Frag;
-    const children = option.label ?? option.value;
-    if (option.hidden) {
-        return null;
-    }
-    return (
-        <motion.li
-            {...(props as any)}
-            ref={ref}
-            role="option"
-            aria-selected={active}
-            className="w-full border-b border-tooltip-border last:border-transparent"
-        >
-            <button
-                type="button"
-                aria-busy={option.disabled}
-                aria-checked={active}
-                aria-current={active}
-                aria-selected={active}
-                onClick={onClick as any}
-                data-value={option.value}
-                className={`flex w-full cursor-pointer justify-between p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-primary text-primary-foreground" : ""}`}
-            >
-                <Label {...props} label={option.label} value={option.value} children={children} />
-                {active ? (
-                    <span>
-                        <CheckIcon aria-hidden className="text-current" absoluteStrokeWidth strokeWidth={2} size={22} />
-                    </span>
-                ) : null}
-            </button>
-        </motion.li>
-    );
-});
-
 export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
+    title?: string;
     value?: string;
     emptyMessage?: Label;
     dynamicOption?: boolean;
     options: AutocompleteItemProps[];
 };
+
+const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
 const transitionStyles = {
     duration: 300,
@@ -86,6 +47,22 @@ const transitionStyles = {
 const fuzzyOptions = { caseSensitive: false, sort: false };
 
 const emptyRef: any[] = [];
+
+const List: Components["List"] = forwardRef(function VirtualList(props, ref) {
+    return (
+        <motion.ul {...props} ref={ref as any} className="w-full rounded-lg border-b border-tooltip-border last:border-transparent">
+            <AnimatePresence>{props.children}</AnimatePresence>
+        </motion.ul>
+    );
+});
+
+const Item: Components["List"] = forwardRef(function VirtualItem({ item, context, ...props }: any, ref) {
+    return <motion.li {...props} ref={ref as any} className="first:rounded-t-lg last:rounded-t-lg" />;
+});
+
+const components = { List, Item };
+
+const DEFAULT_SIZE = 300;
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     (
@@ -109,8 +86,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         externalRef
     ) => {
         const fieldset = useRef<HTMLFieldSetElement>(null);
+        const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
+        const [h, setH] = useState(0);
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
@@ -135,11 +114,29 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
         useEffect(() => {
+            if (!open) setH(0);
+        }, [open]);
+
+        useEffect(() => {
             if (props.value) {
                 const item = options.find((x) => x.value === props.value);
                 setValue(item?.label ?? props.value);
             }
         }, [props.value]);
+
+        useEffect(() => {
+            if (!open) return;
+            const ul = refs.floating;
+            if (ul.current === null) return;
+            let size = 0;
+            const items = Array.from(ul.current.querySelectorAll<HTMLLIElement>("li")).slice(0, Math.min(list.length, 10));
+            items.forEach((x) => {
+                const rect = x.getBoundingClientRect();
+                size += rect.height;
+            });
+            const s = Math.min(size, DEFAULT_SIZE);
+            setH(s);
+        }, [shadow, open]);
 
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
@@ -150,14 +147,18 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             middleware: [
                 offset(4),
                 size({
-                    elementContext: "reference",
                     padding: 10,
+                    elementContext: "reference",
                     apply(a) {
                         const w = fieldset.current?.getBoundingClientRect().width!;
+                        const ul = a.elements.floating.querySelector("ul");
+                        const fullSize = ul?.getBoundingClientRect().height || 0;
+                        const maxH = Math.min(fullSize < 40 ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE);
+                        flushSync(() => setTimeout(() => setH(maxH), 200));
                         Object.assign(a.elements.floating.style, {
                             width: `${w}px`,
                             maxWidth: `${w}px`,
-                            maxHeight: `${Math.min(250, a.availableHeight)}px`,
+                            maxHeight: `${maxH}px`,
                         });
                     },
                 }),
@@ -212,27 +213,27 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             return value ? setOpen(true) : props.onChange?.(event);
         };
 
+        const onCaretDownClick = () => {
+            setOpen(true);
+            setShadow("");
+            (refs.reference.current as HTMLInputElement)?.focus();
+        };
+
         const onFocus = () => {
             setOpen(true);
             setShadow("");
         };
 
         const onClose = () => {
+            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
             setShadow("");
             setValue("");
-            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
             setLabel("");
             dispatchInput(refs.reference.current as HTMLInputElement, "");
             setOpen(false);
         };
 
         const id = props.id || props.name;
-
-        const onCaretDownClick = () => {
-            setOpen(true);
-            setShadow("");
-            (refs.reference.current as HTMLInputElement)?.focus();
-        };
 
         return (
             <InputField
@@ -287,6 +288,18 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         id: `${id}-shadow`,
                         onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
                         onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+                            if (event.key === "ArrowDown") {
+                                let next = index! + 1;
+                                if (next > list.length - 1) next = 0;
+                                virtuoso.current?.scrollIntoView({ index: next });
+                                return setIndex(next);
+                            }
+                            if (event.key === "ArrowUp") {
+                                let next = index! - 1;
+                                if (next < 0) next = list.length - 1;
+                                virtuoso.current?.scrollIntoView({ index: next });
+                                return setIndex(next);
+                            }
                             if (event.key === "Escape") {
                                 event.currentTarget.blur();
                                 return setOpen(false);
@@ -336,40 +349,54 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
                                     style: {
-                                        position: strategy,
-                                        left: (x ?? 0) + (!!value ? 26 : 16),
-                                        top: y ?? 0,
                                         ...transitions.styles,
+                                        position: strategy,
+                                        left: (x ?? 0) + (!!value ? 26 : 18),
+                                        top: y ?? 0,
                                     },
                                 })}
                                 data-floating="true"
-                                className="z-floating m-0 origin-[top_center] list-none overflow-auto overflow-y-auto overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
+                                className="z-floating m-0 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
-                                <AnimatePresence>
-                                    {list.map((option, i) => {
+                                {list.length === 0 ? (
+                                    <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
+                                        <span className="flex w-full justify-between p-2 text-left text-disabled">
+                                            {emptyMessage || translation.autocompleteEmpty}
+                                        </span>
+                                    </li>
+                                ) : null}
+                                <Virtuoso
+                                    data={list}
+                                    ref={virtuoso}
+                                    hidden={list.length === 0}
+                                    components={components as any}
+                                    className="rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
+                                    style={{ height: h }}
+                                    itemContent={(i, option) => {
+                                        const Label = (option.Render as React.FC<any>) ?? Frag;
                                         const active = value === option.value || value === option.label;
+                                        const selected = index === i;
+                                        const children = option.label ?? option.value;
                                         return (
-                                            <Option
-                                                key={`${option.value}-option`}
+                                            <button
+                                                data-value={option.value}
                                                 {...getItemProps({
-                                                    onClick: () => onSelect(option, i),
                                                     ref: (node) => void (listRef.current[i] = node) as any,
-                                                    selected: index === i,
+                                                    role: "option",
+                                                    type: "button",
+                                                    "aria-checked": active,
+                                                    "aria-current": active,
+                                                    "aria-selected": active,
+                                                    "aria-busy": option.disabled,
+                                                    onClick: () => onSelect(option, i),
+                                                    className: `cursor-pointer w-full p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
                                                 })}
-                                                option={option}
-                                                active={active}
-                                                selected={index === i}
-                                            />
+                                            >
+                                                <Label {...props} label={option.label} value={option.value} children={children} />
+                                            </button>
                                         );
-                                    })}
-                                    {list.length === 0 ? (
-                                        <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
-                                            <span className="flex w-full justify-between p-2 text-left text-disabled">
-                                                {emptyMessage || translation.autocompleteEmpty}
-                                            </span>
-                                        </li>
-                                    ) : null}
-                                </AnimatePresence>
+                                    }}
+                                />
                             </ul>
                         </FloatingFocusManager>
                     ) : null}

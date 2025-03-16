@@ -6,13 +6,13 @@ export default function TooltipPage() {
   return (
     <DocsLayout title="Tooltip" description="" section="floating">
       <Card className="flex gap-4">
-        <Tooltip as={Button} title="Hover me">
+        <Tooltip as={Button} title="Hover me" followCursor>
           Mouse follows you
         </Tooltip>
-        <Tooltip hover={false} popover={true} as={Button} title="Only click">
+        <Tooltip hover={false} popover={true} as={Button} title="Only click" followCursor>
           Mouse follows you
         </Tooltip>
-        <Tooltip enabled={false} as={Button} disabled title="Disabled">
+        <Tooltip enabled={false} as={Button} disabled title="Disabled" followCursor>
           Mouse follows you
         </Tooltip>
       </Card>

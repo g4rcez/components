@@ -36,7 +36,7 @@ export default function TablePage() {
       section="display"
       description="The tradicional tabular way to visualize your data."
     >
-      <Card className="px-4">
+      <Card container="px-0 py-0" className="px-0">
         <Table<User>
           {...preferences}
           loading

@@ -60,25 +60,50 @@ const defaultTranslations = {
     calendarFromDate: "From",
     calendarToDate: "To",
     calendarToday: "Today",
+
+    multiComboboxSelectedLabel: "Selected",
+    multiComboboxInnerPlaceholder: "Search...",
 };
 
 export type Translations = typeof defaultTranslations;
 
-const Context = createContext({
-    colorTokenParser: parsers.hsla,
-    translations: defaultTranslations,
-    locale: undefined as Locales | undefined,
-});
+type Tweaks = {
+    inputIconFeedback: boolean;
+};
+
+const defaultTweaks: Tweaks = {
+    inputIconFeedback: true,
+};
+
+type ContextType = Partial<{
+    tweaks: Tweaks;
+    map: Translations;
+    locale: Locales | undefined;
+    parser: typeof parsers.hsla;
+}>;
 
 type ContextProps = Partial<{
+    tweaks: Partial<Tweaks>;
     map: Partial<Translations>;
     locale: Locales | undefined;
     parser: typeof parsers.hsla;
 }>;
 
+const Context = createContext<ContextType>({
+    tweaks: defaultTweaks,
+    parser: parsers.hsla,
+    map: defaultTranslations,
+    locale: undefined as Locales | undefined,
+});
+
 export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
-    const memoMap = useMemo(
-        () => ({ locale: props.locale, translations: { ...defaultTranslations, ...props.map }, colorTokenParser: props.parser || parsers.hsla, }),
+    const memoMap = useMemo<ContextType>(
+        () => ({
+            locale: props.locale,
+            tweaks: { ...defaultTweaks, ...props.tweaks },
+            colorTokenParser: props.parser || parsers.hsla,
+            map: { ...defaultTranslations, ...props.map },
+        }),
         [props]
     );
     return <Context.Provider value={memoMap}>{props.children}</Context.Provider>;
@@ -94,11 +119,17 @@ export const useLocale = (locale?: Locales): Locales | undefined => {
 export const useTranslations = () => {
     const ctx = useContext(Context);
     if (!ctx) return defaultTranslations;
-    return ctx.translations;
+    return ctx.map!;
 };
 
 export const useColorParser = () => {
     const ctx = useContext(Context);
     if (!ctx) return parsers.hsla;
-    return ctx.colorTokenParser;
+    return ctx.parser!;
+};
+
+export const useTweaks = (): Tweaks => {
+    const ctx = useContext(Context);
+    if (!ctx) return defaultTweaks;
+    return ctx.tweaks!;
 };

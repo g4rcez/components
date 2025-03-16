@@ -208,7 +208,7 @@ export const Modal = ({
       <FloatingPortal>
         <AnimatePresence mode="wait" presenceAffectsLayout>
           {props.open ? (
-            <RemoveScroll forwardProps removeScrollBar allowPinchZoom noIsolation>
+            <RemoveScroll enabled forwardProps removeScrollBar inert noIsolation>
               <FloatingOverlay
                 lockScroll={true}
                 className={`inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`}

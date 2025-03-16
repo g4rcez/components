@@ -1,10 +1,10 @@
 "use client";
 import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
-import React, { forwardRef, Fragment, PropsWithChildren } from "react";
-import { useTranslations } from "../../hooks/use-components-provider";
+import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
+import { useTranslations, useTweaks } from "../../hooks/use-components-provider";
 import { css } from "../../lib/dom";
-import { Label } from "../../types";
-import { PolymorphicProps } from "../core/polymorph";
+import { type Label, Override } from "../../types";
+import { type PolymorphicProps } from "../core/polymorph";
 import { Tooltip } from "../floating/tooltip";
 
 export type FeedbackProps = React.PropsWithChildren<
@@ -66,23 +66,28 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
 );
 
 export type InputFieldProps<T extends "input" | "select" | "textarea"> = PolymorphicProps<
-    Partial<{
-        componentName: string;
-        info: Label;
-        labelClassName: string;
-        error: string;
-        hideLeft: boolean;
-        interactive: boolean;
-        container: string;
-        left: Label;
-        feedback: Label;
-        optionalText: string;
-        right: Label;
-        rightLabel: Label;
-        id: string;
-        name: string;
-        placeholder: string;
-    }>,
+    Partial<
+        Override<
+            FeedbackProps,
+            {
+                componentName: string;
+                info: Label;
+                labelClassName: string;
+                error: string;
+                hideLeft: boolean;
+                interactive: boolean;
+                container: string;
+                left: Label;
+                feedback: Label;
+                optionalText: string;
+                right: Label;
+                rightLabel: Label;
+                id: string;
+                name: string;
+                placeholder: string;
+            }
+        >
+    >,
     T
 >;
 
@@ -109,9 +114,12 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
             hideLeft = false,
             required,
             disabled,
+            reportStatus,
         }: PropsWithChildren<InputFieldProps<T>>,
         ref: any
     ) => {
+        const tweaks = useTweaks();
+        const reportStatusDefault = reportStatus !== undefined ? reportStatus : tweaks.inputIconFeedback;
         const ID = id ?? name;
         const translation = useTranslations();
         const optionalText = _optionalText ?? translation.inputOptionalLabel;
@@ -131,7 +139,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     htmlFor={ID}
                     className="inline-flex cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
                 >
-                    <InputFeedback info={info} hideLeft={hideLeft} reportStatus title={title} placeholder={placeholder}>
+                    <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder}>
                         {optionalText || rightLabel ? (
                             <Fragment>
                                 {!required ? (

@@ -1,23 +1,20 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useEffect, useState } from "react";
-import {
-  VirtualAutocomplete as Autocomplete,
-  Card,
-} from "../../../../../lib/src";
+import { Autocomplete, Card } from "../../../../../lib/src";
 
-const defaults = Array.from({ length: 3000 }).map((_, i) => ({
+const defaults = Array.from({ length: 300 }).map((_, i) => ({
   value: i.toString(),
   label: `[${i + 1}] Paullum deliquit, ponderibus modulisque suis ratio utitur.`,
 }));
 
 export default function FormPage() {
   const [options, setOptions] = useState<any[]>([]);
-  const [value, setValue] = useState(defaults[0]?.value);
+  const [value, setValue] = useState("");
   const withHidden = options.map((x) => ({ ...x, hidden: value === x.value }));
   useEffect(() => {
     setTimeout(() => {
-      setOptions(defaults.slice(0, 10));
+      setOptions(defaults);
       setValue(defaults[0]?.value);
     }, 0);
   }, []);

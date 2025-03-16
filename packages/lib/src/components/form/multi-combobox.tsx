@@ -12,29 +12,54 @@ import {
     useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
-import { flushSync } from "react-dom"
 import Fuzzy from "fuzzy-search";
 import { ChevronDown } from "lucide-react";
-import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
+import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { Nullable } from "sidekicker";
 import { useTranslations } from "../../hooks/use-components-provider";
+import { Dict } from "../../lib/dict";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
-import { safeRegex } from "../../lib/fns";
-import { Label } from "../../types";
+import { Label, Override } from "../../types";
+import { Tag } from "../core/tag";
+import { Checkbox } from "./checkbox";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
-export type VirtualAutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
+export type OnChangeMultiCombobox = (
+    e: Override<
+        React.ChangeEvent<HTMLInputElement>,
+        {
+            target: EventTarget &
+                Override<
+                    HTMLInputElement,
+                    {
+                        value: string[];
+                    }
+                >;
+        }
+    >
+) => void;
+
+export type MultiComboboxItemProps = OptionProps & { Render?: React.FC<OptionProps> };
+
+export type MultiComboboxProps = Override<
+    InputFieldProps<"input">,
+    {
+        title?: string;
+        value?: string[];
+        emptyMessage?: Label;
+        selectedLabel?: string;
+        defaultValue?: string[];
+        dynamicOption?: boolean;
+        onChange?: OnChangeMultiCombobox;
+        options: MultiComboboxItemProps[];
+    }
+>;
 
 const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
-
-export type VirtualAutocomplete = Omit<InputFieldProps<"input">, "value"> & {
-    value?: string;
-    emptyMessage?: Label;
-    dynamicOption?: boolean;
-    options: VirtualAutocompleteItemProps[];
-};
 
 const transitionStyles = {
     duration: 300,
@@ -49,81 +74,116 @@ const emptyRef: any[] = [];
 
 const List: Components["List"] = forwardRef(function VirtualList(props, ref) {
     return (
-        <motion.ul {...props} ref={ref as any} className="w-full border-b border-tooltip-border last:border-transparent rounded-lg" >
+        <motion.ul {...props} ref={ref as any} className="w-full rounded-b-lg border-b border-tooltip-border last:border-transparent">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
     );
 });
 
-const Item: Components["List"] = forwardRef(function VirtualItem(props, ref) {
-    return (
-        <motion.li {...props} ref={ref as any} className="first:rounded-t-lg last:rounded-t-lg">
-            {props.children}
-        </motion.li>
-    );
+const Item: Components["List"] = forwardRef(function VirtualItem({ item, context, ...props }: any, ref) {
+    return <motion.li {...props} ref={ref as any} className="last:rounded-t-lg" />;
 });
 
 const components = { List, Item };
 
-export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocomplete>(
+const OverflowControl = (props: PropsWithChildren<{ label?: string }>) => {
+    const translate = useTranslations();
+    const ref = useRef<HTMLSpanElement>(null);
+    const countable = React.Children.count(props.children);
+    const [normalView, setNormalView] = useState(false);
+
+    useEffect(() => {
+        if (ref.current === null) return;
+        const parent = ref.current.parentElement!.getBoundingClientRect();
+        const items = Array.from(ref.current.querySelectorAll("[data-component='tag']"));
+        const child = items.reduce((acc, el) => acc + el.getBoundingClientRect().width, 0);
+        const hasOnlyCounter = ref.current.querySelectorAll("[data-multicounter]").length;
+        if (hasOnlyCounter && countable <= 3) return setNormalView(false);
+        if (child > parent.width) return setNormalView(true);
+    }, [countable]);
+
+    return (
+        <span ref={ref} className="flex flex-nowrap gap-x-2">
+            {!normalView ? (
+                props.children
+            ) : (
+                <Tag size="small" data-multicounter="true">
+                    {countable} {translate.multiComboboxSelectedLabel}
+                </Tag>
+            )}
+        </span>
+    );
+};
+
+const noop = () => {};
+
+export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
     (
         {
-            options,
-            dynamicOption = false,
-            feedback = null,
-            labelClassName,
-            emptyMessage,
-            interactive,
-            rightLabel,
-            optionalText,
-            container,
-            hideLeft = false,
-            right,
             left,
             error,
+            right,
+            options,
+            container,
+            rightLabel,
+            interactive,
+            emptyMessage,
+            optionalText,
+            selectedLabel,
+            labelClassName,
+            feedback = null,
+            hideLeft = false,
             required = false,
+            dynamicOption = false,
             ...props
-        }: VirtualAutocomplete,
+        }: MultiComboboxProps,
         externalRef
     ) => {
+        const map = useMemo(() => new Dict(options.map((x) => [x.value, x])), [options]);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
-        const defaults = props.value ?? props.defaultValue ?? "";
+        const defaults = props.value ?? props.defaultValue ?? (emptyRef as string[]);
         const translation = useTranslations();
         const [h, setH] = useState(0);
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
-        const [value, setValue] = useState(defaults);
-        const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
+        const [value, setValue] = useState<Dict<string, MultiComboboxItemProps>>(() => {
+            const d = new Dict<string, MultiComboboxItemProps>();
+            defaults.forEach((x) => {
+                const result = map.get(x);
+                return result ? d.set(x, result) : undefined;
+            });
+            return d;
+        });
+        const deriveValue = useMemo(() => Array.from(value.keys()), [value]);
+        const [label, setLabel] = useState<string[]>(() => {
+            const d = new Set(defaults);
+            return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
+        });
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
-        const innerOptions: VirtualAutocompleteItemProps[] =
+        const innerOptions: MultiComboboxItemProps[] =
             dynamicOption && shadow !== ""
                 ? [
-                    {
-                        value: shadow,
-                        label: shadow,
-                        "data-dynamic": "true",
-                    },
-                    ...options,
-                ]
+                      {
+                          value: shadow,
+                          label: shadow,
+                          "data-dynamic": "true",
+                      },
+                      ...options,
+                  ]
                 : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
 
-        const pattern = dynamicOption
-            ? undefined
-            : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
-
         useEffect(() => {
             if (!open) setH(0);
-        }, [open])
+        }, [open]);
 
         useEffect(() => {
             if (props.value) {
-                const item = options.find((x) => x.value === props.value);
-                setValue(item?.label ?? props.value);
+                setValue(new Dict(props.value.map((x) => [x, map.get(x)!])));
             }
-        }, [props.value]);
+        }, [props.value, map]);
 
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
@@ -138,14 +198,13 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
                     elementContext: "reference",
                     apply(a) {
                         const w = fieldset.current?.getBoundingClientRect().width!;
-                        const ul = a.elements.floating.querySelector("ul");
-                        const fullSize = ul?.getBoundingClientRect().height || 0;
-                        const maxH = Math.min(fullSize < 40 ? 300 : fullSize, 300);
+                        const maxH = 360;
                         flushSync(() => setTimeout(() => setH(maxH), 200));
                         Object.assign(a.elements.floating.style, {
                             width: `${w}px`,
                             maxWidth: `${w}px`,
                             maxHeight: `${maxH}px`,
+                            height: `${maxH}px`,
                         });
                     },
                 }),
@@ -153,6 +212,7 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
         });
 
         const transitions = useTransitionStyles(context, transitionStyles);
+
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
             useRole(context, { role: "listbox" }),
             useDismiss(context),
@@ -177,17 +237,18 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
             return initializeInputDataset(input);
         }, []);
 
-        const onSelect = (opt: VirtualAutocompleteItemProps, i: number) => {
-            setValue(opt.value);
+        const onSelect = (opt: MultiComboboxItemProps, i: number) => {
+            const clone = value.clone();
+            value.has(opt.value) ? clone.delete(opt.value) : clone.set(opt.value, opt);
+            setValue(clone);
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             input?.setAttribute("data-value", opt.value);
-            input.value = opt.value;
+            input.value = Array.from(clone.values()) as any;
             const event = new Event("change", { bubbles: false, cancelable: true });
             input.dispatchEvent(event);
             if (props.onChange) props.onChange(event as any);
-            setLabel(opt.label ?? "");
-            setOpen(false);
+            setLabel((prev) => prev.concat(opt.label ?? ""));
             setShadow("");
             setIndex(i);
         };
@@ -197,7 +258,7 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
             setShadow(value);
             if (!open && value === "") return setOpen(true);
             event.target.name = props.name || "";
-            return value ? setOpen(true) : props.onChange?.(event);
+            return value ? setOpen(true) : undefined;
         };
 
         const onCaretDownClick = () => {
@@ -205,7 +266,6 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
             setShadow("");
             (refs.reference.current as HTMLInputElement)?.focus();
         };
-
 
         const onFocus = () => {
             setOpen(true);
@@ -215,13 +275,17 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
         const onClose = () => {
             (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
             setShadow("");
-            setValue("");
-            setLabel("");
             dispatchInput(refs.reference.current as HTMLInputElement, "");
             setOpen(false);
         };
 
         const id = props.id || props.name;
+
+        const tags = value.map((x) => (
+            <Tag key={`multicombobox-${x.value}-x`} size="small">
+                {x.label ?? x.value}
+            </Tag>
+        ));
 
         return (
             <InputField
@@ -264,63 +328,35 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
                     </span>
                 }
             >
-                <input
-                    data-shadow="true"
+                <button
                     {...getReferenceProps({
                         ...props,
-                        onChange,
                         onFocus,
-                        pattern,
-                        ref: refs.setReference,
-                        name: `${id}-shadow`,
                         id: `${id}-shadow`,
-                        onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
-                        onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-                            if (event.key === "ArrowDown") {
-                                let next = index! + 1;
-                                if (next > list.length - 1) next = 0
-                                virtuoso.current?.scrollIntoView({ index: next })
-                                return setIndex(next)
-                            }
-                            if (event.key === "ArrowUp") {
-                                let next = index! - 1;
-                                if (next < 0) next = list.length - 1
-                                virtuoso.current?.scrollIntoView({ index: next })
-                                return setIndex(next)
-                            }
-                            if (event.key === "Escape") {
-                                event.currentTarget.blur();
-                                return setOpen(false);
-                            }
-                            if (event.key === "Enter") {
-                                if (index !== null && list[index]) {
-                                    event.preventDefault();
-                                    return onSelect(list[index], index);
-                                }
-                                if (list.length === 1) {
-                                    event.preventDefault();
-                                    return onSelect(list[0], 0);
-                                }
-                            }
-                        },
+                        name: `${id}-shadow`,
+                        ref: refs.setReference,
                     })}
-                    data-value={value}
-                    data-error={!!error}
+                    type="button"
                     data-name={id}
                     data-target={id}
-                    required={required}
-                    value={open ? shadow : label || value}
+                    data-shadow="true"
+                    data-error={!!error}
                     aria-autocomplete="list"
-                    autoComplete="off"
+                    data-value={deriveValue.join(",")}
+                    value={open ? shadow : label || value}
                     className={css(
-                        "input placeholder-input-mask group h-input-height w-full flex-1",
+                        "input placeholder-input-mask group h-input-height w-full",
                         "rounded-md bg-transparent px-input-x py-input-y text-foreground",
                         "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                         "group-error:text-danger group-error:placeholder-input-mask-error",
                         "group-focus-within:border-primary group-hover:border-primary",
+                        "flex flex-row items-center gap-2 whitespace-nowrap text-left",
+                        "truncate overflow-ellipsis",
                         props.className
                     )}
-                />
+                >
+                    <OverflowControl label={selectedLabel}>{tags}</OverflowControl>
+                </button>
                 <input
                     id={id}
                     name={id}
@@ -328,7 +364,7 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
                     data-origin={id}
                     ref={externalRef}
                     required={required}
-                    defaultValue={props.value || value || undefined}
+                    defaultValue={props.value || deriveValue || undefined}
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
@@ -344,8 +380,44 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
                                     },
                                 })}
                                 data-floating="true"
-                                className="z-floating m-0 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
+                                className="z-floating m-0 w-full origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
+                                <input
+                                    autoFocus
+                                    value={shadow}
+                                    onChange={onChange}
+                                    title={props.title}
+                                    placeholder={translation.multiComboboxInnerPlaceholder}
+                                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (event.key === "ArrowDown") {
+                                            let next = index! + 1;
+                                            if (next > list.length - 1) next = 0;
+                                            virtuoso.current?.scrollIntoView({ index: next });
+                                            return setIndex(next);
+                                        }
+                                        if (event.key === "ArrowUp") {
+                                            let next = index! - 1;
+                                            if (next < 0) next = list.length - 1;
+                                            virtuoso.current?.scrollIntoView({ index: next });
+                                            return setIndex(next);
+                                        }
+                                        if (event.key === "Escape") {
+                                            event.currentTarget.blur();
+                                            return setOpen(false);
+                                        }
+                                        if (event.key === "Enter") {
+                                            if (index !== null && list[index]) {
+                                                event.preventDefault();
+                                                return onSelect(list[index], index);
+                                            }
+                                            if (list.length === 1) {
+                                                event.preventDefault();
+                                                return onSelect(list[0], 0);
+                                            }
+                                        }
+                                    }}
+                                    className="input placeholder-input-mask group mb-1 h-10 w-full flex-1 border-b border-input-border bg-transparent px-input-x py-input-y outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary"
+                                />
                                 {list.length === 0 ? (
                                     <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
@@ -357,12 +429,12 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
                                     data={list}
                                     ref={virtuoso}
                                     hidden={list.length === 0}
+                                    style={{ height: value.size === 0 ? h - 49 : h - 86 }}
                                     components={components as any}
-                                    className="bg-floating-background p-0 text-foreground rounded-lg border-floating-border"
-                                    style={{ height: h }}
+                                    className="border-floating-border bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;
-                                        const active = value === option.value || value === option.label;
+                                        const active = value.has(option.value) || value.has(option.label ?? "");
                                         const selected = index === i;
                                         const children = option.label ?? option.value;
                                         return (
@@ -377,19 +449,31 @@ export const VirtualAutocomplete = forwardRef<HTMLInputElement, VirtualAutocompl
                                                     "aria-selected": active,
                                                     "aria-busy": option.disabled,
                                                     onClick: () => onSelect(option, i),
-                                                    className: `cursor-pointer p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-primary text-primary-foreground" : ""}`
                                                 })}
+                                                className={`focus:bg-floating-hover hover:bg-floating-hover w-full cursor-pointer p-2 text-left ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
                                             >
-                                                <Label {...props} label={option.label} value={option.value} children={children} />
+                                                <Checkbox
+                                                    onChange={noop}
+                                                    checked={active}
+                                                    aria-checked={active}
+                                                    onClick={(e) => void (e.stopPropagation(), e.preventDefault())}
+                                                >
+                                                    <Label {...props} label={option.label} value={option.value} children={children} />
+                                                </Checkbox>
                                             </button>
-                                        )
+                                        );
                                     }}
                                 />
+                                {value.size === 0 ? null : (
+                                    <div className="sticky bottom-0 flex w-full flex-nowrap items-center gap-2 overflow-x-auto rounded-b-lg bg-floating-background p-2">
+                                        {tags}
+                                    </div>
+                                )}
                             </div>
                         </FloatingFocusManager>
                     ) : null}
                 </FloatingPortal>
-            </InputField >
+            </InputField>
         );
     }
 );

@@ -73,12 +73,14 @@ export const LIGHT_THEME: DesignTokens = {
         floating: {
             foreground: "hsla(217, 15%, 20%)",
             background: "hsla(0, 0%, 100%)",
+            hover: "hsla(0, 0%, 92%)",
             border: "hsla(210, 25%, 88%)",
             overlay: "hsla(0, 0%, 0%)",
         },
         tooltip: {
             foreground: "hsla(217, 15%, 20%)",
             background: "hsla(210, 25%, 98%)",
+            hover: "hsla(210, 25%, 92%)",
             border: "hsla(200, 1%, 80%)",
             overlay: "hsla(0, 0%, 0%)",
         },

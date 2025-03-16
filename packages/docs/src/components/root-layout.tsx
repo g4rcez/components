@@ -10,7 +10,8 @@ import {
   defaultLightTheme,
 } from "../../../lib/src/styles/theme";
 
-const tokenRemap: TokenRemap = { colors: (t) => {
+const tokenRemap: TokenRemap = {
+  colors: (t) => {
     t.value = t.value.replace("hsla(", "").replace(/\)$/, "");
     return t;
   },
@@ -31,7 +32,10 @@ export const RootLayout = (props: PropsWithChildren) => {
         <style>{stylesDark}</style>
       </head>
       <body>
-        <ComponentsProvider locale="pt-BR">
+        <ComponentsProvider
+          locale="pt-BR"
+          tweaks={{ inputIconFeedback: false }}
+        >
           <Notifications>{props.children}</Notifications>
         </ComponentsProvider>
       </body>

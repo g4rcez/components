@@ -1,6 +1,6 @@
 "use client";
 import React, { forwardRef, useEffect, useRef } from "react";
-import MaskInput, { InputTypes, AllMasks } from "the-mask-input";
+import MaskInput, { InputTypes } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
@@ -21,19 +21,19 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
     const FreeText: React.FC<FreeTextProps<T, Extra>> = forwardRef<Html, FreeTextProps<T, Extra>>(
         (
             {
-                type = "text",
-                feedback = null,
                 info,
-                labelClassName,
-                next,
-                interactive,
-                rightLabel,
-                optionalText,
-                container,
-                hideLeft = false,
-                right,
                 left,
+                next,
                 error,
+                right,
+                container,
+                rightLabel,
+                interactive,
+                optionalText,
+                type = "text",
+                labelClassName,
+                feedback = null,
+                hideLeft = false,
                 ...props
             }: FreeTextProps<T, Extra>,
             ref
@@ -71,25 +71,25 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
             return (
                 <InputField
                     {...(defaultProps as any)}
-                    componentName={elementName}
                     info={info}
-                    container={container}
+                    left={left}
                     error={error}
+                    right={right}
+                    form={props.form}
+                    name={props.name}
                     feedback={feedback}
                     hideLeft={hideLeft}
-                    left={left}
-                    optionalText={optionalText}
-                    right={right}
-                    rightLabel={rightLabel}
-                    interactive={interactive}
-                    form={props.form}
-                    id={props.name || props.id}
-                    name={props.name}
-                    labelClassName={labelClassName}
                     title={props.title}
-                    placeholder={props.placeholder}
-                    required={props.required}
+                    container={container}
+                    rightLabel={rightLabel}
                     disabled={props.disabled}
+                    interactive={interactive}
+                    required={props.required}
+                    componentName={elementName}
+                    id={props.name || props.id}
+                    optionalText={optionalText}
+                    labelClassName={labelClassName}
+                    placeholder={props.placeholder}
                 >
                     <Render
                         {...defaultProps}

@@ -137,6 +137,7 @@ const HeaderChild = <T extends {}>(props: HeaderChildProps<T>) => {
                 dragSnapToOrigin
                 dragDirectionLock
                 data-type="resizer"
+                title={props.header.id}
                 dragConstraints={dragConstraints}
                 whileDrag={{ cursor: "grabbing" }}
                 className="absolute right-0 top-0 block h-full w-1 cursor-col-resize hover:bg-primary active:bg-primary"
