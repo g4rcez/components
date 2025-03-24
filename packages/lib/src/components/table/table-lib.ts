@@ -145,10 +145,15 @@ const noop = {};
 
 const mergeCols = <T extends POJO>(cols: Col<T>[], saved?: Col<T>[]) => {
     if (!Array.isArray(saved)) return cols;
+    const savedSet = new Set(saved.map((x) => x.id));
+    if (!cols.every((x) => savedSet.has(x.id))) {
+        return cols;
+    }
     const map = new Map(cols.map((x) => [x.id, x]));
-    return saved.map((mock) => {
+    return saved.map((mock, index) => {
         const original = map.get(mock.id);
-        return { ...mock, ...original };
+        if (original === undefined) return cols[index];
+        return original;
     });
 };
 
@@ -169,6 +174,7 @@ export const useTablePreferences = <T extends POJO>(name: string, cols: Col<T>[]
                 if (!isSsr()) LocalStorage.set(`@components/table-${prev.name}`, result);
                 return result;
             };
+            intercept(get.state());
             return {
                 set: (getters: TableGetters<T>) => intercept(getters),
             };

@@ -365,12 +365,13 @@ export const Calendar = ({
             <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
               <header className="relative flex justify-between">
                 <motion.button
-                  type="button"
                   layout
+                  type="button"
                   data-focustrap="prev"
                   variants={removeImmediately}
                   onClick={dispatch.previousMonth}
-                  className="z-calendar rounded-full p-1.5 hover:bg-primary"
+                  title={translations.calendarBackMonth}
+                  className="z-calendar rounded-full p-1.5 hover:bg-primary hover:text-primary-foreground"
                 >
                   <ChevronLeftIcon className="h-4 w-4" />
                 </motion.button>
@@ -406,7 +407,8 @@ export const Calendar = ({
                   data-focustrap="next"
                   variants={removeImmediately}
                   onClick={dispatch.nextMonth}
-                  className="z-calendar rounded-full p-1.5 hover:bg-primary"
+                  title={translations.calendarNextMonth}
+                  className="z-calendar rounded-full p-1.5 hover:bg-primary hover:text-primary-foreground"
                 >
                   <ChevronRightIcon className="h-4 w-4" />
                 </motion.button>

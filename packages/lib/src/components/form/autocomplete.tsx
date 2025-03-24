@@ -64,6 +64,8 @@ const components = { List, Item };
 
 const DEFAULT_SIZE = 300;
 
+const MIN_SIZE = 40;
+
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     (
         {
@@ -89,7 +91,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
-        const [h, setH] = useState(0);
+        const [h, setH] = useState(() => Math.min(DEFAULT_SIZE, MIN_SIZE * options.length));
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
@@ -109,13 +111,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
 
+        const setClosed = () => {
+            setOpen(false);
+            setH(0);
+        }
+
+        const displayList = list.filter((x) => x.hidden !== true);
+
         const pattern = dynamicOption
             ? undefined
             : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
-
-        useEffect(() => {
-            if (!open) setH(0);
-        }, [open]);
 
         useEffect(() => {
             if (props.value) {
@@ -123,6 +128,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 setValue(item?.label ?? props.value);
             }
         }, [props.value]);
+
+        useEffect(() => {
+            if (!open) setH(0);
+        }, [open]);
 
         useEffect(() => {
             if (!open) return;
@@ -153,18 +162,23 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         const w = fieldset.current?.getBoundingClientRect().width!;
                         const ul = a.elements.floating.querySelector("ul");
                         const fullSize = ul?.getBoundingClientRect().height || 0;
-                        const maxH = Math.min(fullSize < 40 ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE);
-                        flushSync(() => setTimeout(() => setH(maxH), 200));
+                        const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE);
+                        flushSync(() =>
+                            setTimeout(() => {
+                                const currentH = ul?.getBoundingClientRect().height ?? 0;
+                                if (currentH < MIN_SIZE) return void setH(maxH);
+                                return void setH(Math.min(currentH, DEFAULT_SIZE));
+                            }, 50)
+                        );
                         Object.assign(a.elements.floating.style, {
                             width: `${w}px`,
                             maxWidth: `${w}px`,
-                            maxHeight: `${maxH}px`,
+                            maxHeight: `${DEFAULT_SIZE}`,
                         });
                     },
                 }),
             ],
         });
-
         const transitions = useTransitionStyles(context, transitionStyles);
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
             useRole(context, { role: "listbox" }),
@@ -200,7 +214,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             input.dispatchEvent(event);
             if (props.onChange) props.onChange(event as any);
             setLabel(opt.label ?? "");
-            setOpen(false);
+            setClosed();
             setShadow("");
             setIndex(i);
         };
@@ -212,6 +226,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             event.target.name = props.name || "";
             return value ? setOpen(true) : props.onChange?.(event);
         };
+
 
         const onCaretDownClick = () => {
             setOpen(true);
@@ -230,7 +245,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setValue("");
             setLabel("");
             dispatchInput(refs.reference.current as HTMLInputElement, "");
-            setOpen(false);
+            setClosed();
         };
 
         const id = props.id || props.name;
@@ -302,7 +317,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             }
                             if (event.key === "Escape") {
                                 event.currentTarget.blur();
-                                return setOpen(false);
+                                return setClosed();
                             }
                             if (event.key === "Enter") {
                                 if (index !== null && list[index]) {
@@ -366,10 +381,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     </li>
                                 ) : null}
                                 <Virtuoso
-                                    data={list}
                                     ref={virtuoso}
-                                    hidden={list.length === 0}
+                                    data={displayList}
                                     components={components as any}
+                                    hidden={displayList.length === 0}
                                     className="rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
                                     style={{ height: h }}
                                     itemContent={(i, option) => {

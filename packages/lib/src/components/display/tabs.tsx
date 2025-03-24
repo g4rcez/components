@@ -1,6 +1,6 @@
 "use client";
 import { useMotionValue } from "motion/react";
-import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useLayoutEffect, useRef } from "react";
+import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef } from "react";
 import { useReactive } from "../../hooks/use-reactive";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { Label } from "../../types";
@@ -22,7 +22,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const Render = props.useHash ? "a" : "button";
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const header = ref.current;
         if (header === null) return;
         const resize = (element?: HTMLElement | null) => {
@@ -83,7 +83,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             data-id={inner.id}
                                             key={`tab-header-${inner.id}`}
                                             data-active={active === inner.id}
-                                            className="w-full border-b-2 border-card-border data-[active=true]:border-primary data-[active=true]:font-bold data-[active=true]:text-primary"
+                                            className="w-full border-b-2 transition-all border-card-border data-[active=true]:border-primary data-[active=true]:text-primary"
                                         >
                                             <Render
                                                 data-id={inner.id}
@@ -122,3 +122,4 @@ export const Tab = (props: PropsWithChildren<TabProps>) => {
     const active = useTabs();
     return <Fragment>{props.id === active ? props.children : null}</Fragment>;
 };
+

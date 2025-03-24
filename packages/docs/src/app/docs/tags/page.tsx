@@ -14,6 +14,7 @@ export default function TagsPage() {
           <Tag>Normal</Tag>
           <Tag theme="danger">danger</Tag>
           <Tag theme="info">info</Tag>
+          <Tag theme="muted">muted</Tag>
           <Tag theme="neutral">neutral</Tag>
           <Tag theme="secondary">secondary</Tag>
           <Tag theme="success">success</Tag>

@@ -119,7 +119,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
         ref: any
     ) => {
         const tweaks = useTweaks();
-        const reportStatusDefault = reportStatus !== undefined ? reportStatus : tweaks.inputIconFeedback;
+        const reportStatusDefault = reportStatus !== undefined ? reportStatus : tweaks.input.iconFeedback;
         const ID = id ?? name;
         const translation = useTranslations();
         const optionalText = _optionalText ?? translation.inputOptionalLabel;

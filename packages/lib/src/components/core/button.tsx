@@ -5,7 +5,7 @@ import { type Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const buttonVariants = cva(
-    "relative overflow-hidden inline-flex duration-500 enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring ease-normal",
+    "relative overflow-hidden inline-flex duration-500 enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
     {
         variants: {
             size: {
@@ -23,15 +23,16 @@ const buttonVariants = cva(
             },
             theme: {
                 raw: "",
+                disabled: "bg-disabled opacity-70",
+                loading: "animate-pulse bg-disabled",
                 main: "bg-primary text-primary-foreground",
-                disabled: "bg-disabled duration-700 opacity-70",
                 info: "bg-button-info-bg text-button-info-text",
                 warn: "bg-button-warn-bg text-button-warn-text",
+                muted: "bg-button-muted-bg text-button-muted-text",
                 danger: "bg-button-danger-bg text-button-danger-text",
                 neutral: "bg-transparent border-2 border-card-border",
                 primary: "bg-button-primary-bg text-button-primary-text",
                 success: "bg-button-success-bg text-button-success-text",
-                loading: "animate-pulse bg-disabled duration-700 opacity-70",
                 secondary: "bg-button-secondary-bg text-button-secondary-text",
 
                 "ghost-info": "bg-transparent hover:bg-info/20 border border-info text-info",
@@ -56,7 +57,6 @@ export const Button: <T extends React.ElementType = "button">(props: ButtonProps
     ref: React.ForwardedRef<HTMLButtonElement>
 ) {
     const disabled = loading || props.disabled;
-
     return (
         <Polymorph
             {...props}

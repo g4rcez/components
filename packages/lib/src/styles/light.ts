@@ -11,6 +11,7 @@ export const LIGHT_THEME: DesignTokens = {
     colors: {
         foreground: "hsla(217, 15%, 30%)",
         background: "hsla(210, 34%, 96%)",
+        muted: "hsla(210, 30%, 86%)",
         disabled: "hsla(240, 10%, 78%)",
         emphasis: {
             foreground: "hsla(251,91%,95%)",
@@ -67,8 +68,9 @@ export const LIGHT_THEME: DesignTokens = {
             switch: "hsla(0, 0%, 100%)",
         },
         card: {
-            background: "hsla(0, 0%, 100%)",
+            muted: "hsla(210, 25%, 94%)",
             border: "hsla(210, 25%, 88%)",
+            background: "hsla(0, 0%, 100%)",
         },
         floating: {
             foreground: "hsla(217, 15%, 20%)",
@@ -90,6 +92,10 @@ export const LIGHT_THEME: DesignTokens = {
             border: "hsla(210, 25%, 88%)",
         },
         button: {
+            muted: {
+                bg: "hsla(210, 30%, 86%)",
+                text: "hsla(210, 10%, 15%)",
+            },
             primary: {
                 text: "hsla(0, 0%, 100%)",
                 bg: "hsla(207,96%,48%)",
@@ -120,6 +126,10 @@ export const LIGHT_THEME: DesignTokens = {
             },
         },
         tag: {
+            muted: {
+                bg: "hsla(210, 30%, 86%)",
+                text: "hsla(210, 30%, 86%)",
+            },
             primary: {
                 text: "hsla(0, 0%, 100%)",
                 bg: "hsla(207,70%,55%)",
@@ -150,6 +160,11 @@ export const LIGHT_THEME: DesignTokens = {
             },
         },
         alert: {
+            muted: {
+                bg: "hsla(210, 30%, 86%)",
+                text: "hsla(210, 30%, 86%)",
+                border: "hsla(210, 10%, 70%)",
+            },
             primary: {
                 text: "hsla(206,70%,50%)",
                 border: "hsla(206,90%,89%)",

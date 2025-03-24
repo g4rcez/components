@@ -5,9 +5,9 @@ type Polymorphism<T extends ElementType> = PropsWithChildren<{
     as?: T;
 }>;
 
-type Props<T extends ElementType = ElementType> = Polymorphism<T> & Omit<React.ComponentPropsWithRef<T>, keyof Polymorphism<T>>;
+type Props<T extends ElementType = ElementType> = Polymorphism<T> & React.ComponentPropsWithRef<T>;
 
-export type PolymorphicProps<P extends {}, T extends ElementType = ElementType> = Override<Props<T>, P> & Polymorphism<T>;
+export type PolymorphicProps<P extends {}, T extends ElementType = ElementType> = Override<Props<T>, P>;
 
 export const Polymorph: <T extends ElementType>(p: PolymorphicProps<ComponentProps<T>, T>) => React.ReactElement = forwardRef(function Polymorph<
     T extends ElementType,
@@ -19,3 +19,4 @@ export const Polymorph: <T extends ElementType>(p: PolymorphicProps<ComponentPro
         </Component>
     );
 }) as any;
+

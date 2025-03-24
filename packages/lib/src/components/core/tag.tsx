@@ -7,8 +7,9 @@ import { Polymorph, PolymorphicProps } from "./polymorph";
 const indicatorVariant = cva("size-2.5 aspect-square rounded-full border-0", {
     variants: {
         theme: {
-            warn: "bg-warn",
             info: "bg-info",
+            warn: "bg-warn",
+            muted: "bg-muted",
             main: "bg-primary",
             danger: "bg-danger",
             success: "bg-success",
@@ -32,6 +33,7 @@ const tagVariants = cva("inline-flex rounded-pill gap-1.5 border-2 border-transp
             success: "bg-tag-success-bg text-tag-success-text",
             secondary: "bg-tag-secondary-bg text-tag-secondary-text",
             warn: "bg-tag-warn-bg text-tag-warn-text",
+            muted: "bg-tag-muted-bg text-tag-muted-text",
             neutral: "bg-transparent border border-card-border",
             disabled: "bg-disabled duration-700 opacity-70",
             loading: "animate-pulse bg-disabled duration-700 opacity-70",

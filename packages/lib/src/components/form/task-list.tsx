@@ -10,13 +10,13 @@ export const TaskList = (props: PropsWithChildren<ComponentProps<"fieldset">>) =
         if (!container) return;
         const handler = (e: Event) => {
             const input = e.target as HTMLInputElement;
-            const items = Array.from(container.querySelectorAll("input"));
-            const allTaskChecked = items.every((el) => el.checked && el.getAttribute("data-task") === "true");
+            const items = Array.from(container.querySelectorAll("input[data-task=true]")) as HTMLInputElement[];
+            const allTaskChecked = items.every((el) => el.checked);
             const index = items.indexOf(input);
             if (allTaskChecked && index !== -1) {
                 animate(
                     "input",
-                    { scale: [1, 1.35, 1], rotate: [0, 10, -10, 0] },
+                    { scale: [1, 1.35, 1], rotate: [0, 20, -20, 0] },
                     {
                         duration: 0.5,
                         delay: stagger(0.075, { from: index }),

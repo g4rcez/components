@@ -12,22 +12,30 @@ export default function FormPage() {
   const [options, setOptions] = useState<any[]>([]);
   const [value, setValue] = useState("");
   const withHidden = options.map((x) => ({ ...x, hidden: value === x.value }));
+
   useEffect(() => {
     setTimeout(() => {
       setOptions(defaults);
       setValue(defaults[0]?.value);
     }, 0);
   }, []);
+
   return (
     <DocsLayout
-      title="Autocomplete"
       section="form"
+      title="Autocomplete"
       description="Multiple options with a beautiful search input."
     >
       <Card
         title="Brazilian masks"
         className="grid grid-cols-1 md:grid-cols-3 gap-6"
       >
+        <Autocomplete
+            id="3"
+            rightLabel=" "
+            title="One option"
+            options={withHidden.slice(0, 2)}
+        />
         <Autocomplete
           id="0"
           required
@@ -41,30 +49,24 @@ export default function FormPage() {
         />
         <Autocomplete
           id="1"
-          rightLabel=" "
           options={[]}
           title="Empty"
+          rightLabel=" "
           emptyMessage="Empty message..."
         />
         <Autocomplete
           id="2"
           disabled
-          rightLabel=" "
           options={[]}
+          rightLabel=" "
           title="Disabled"
           emptyMessage="Empty message..."
         />
         <Autocomplete
-          id="3"
-          rightLabel=" "
-          options={options.slice(0, 2)}
-          title="One option"
-        />
-        <Autocomplete
           id="5"
           rightLabel=" "
-          options={options}
           title="Overflow"
+          options={withHidden}
         />
         <Autocomplete
           id="6"

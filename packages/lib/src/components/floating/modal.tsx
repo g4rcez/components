@@ -12,12 +12,12 @@ import {
 } from "@floating-ui/react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
-import { AnimatePresence, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
 import { XIcon } from "lucide-react";
 import React, { Fragment, PropsWithChildren, useId } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { css } from "../../lib/dom";
-import { Label } from "../../types";
+import { Label, Override } from "../../types";
 
 type DrawerSides = "left" | "right";
 
@@ -76,21 +76,26 @@ const variants = cva(
   }
 );
 
-export type ModalProps = {
-  layoutId?: string;
-  title?: Label;
-  open: boolean;
-  footer?: Label;
-  resizer?: boolean;
-  asChild?: boolean;
-  closable?: boolean;
-  overlayClickClose?: boolean;
-  position?: "left" | "right";
-  trigger?: Label | React.FC<any>;
-  forceType?: boolean;
-  type?: "dialog" | "drawer" | "sheet";
-  onChange: (nextState: boolean) => void;
-};
+export type ModalProps = Override<
+  HTMLMotionProps<"div">,
+  {
+    open: boolean;
+    title?: Label;
+    footer?: Label;
+    asChild?: boolean;
+    layoutId?: string;
+    resizer?: boolean;
+    className?: string;
+    closable?: boolean;
+    forceType?: boolean;
+    overlayClassName?: string;
+    overlayClickClose?: boolean;
+    position?: "left" | "right";
+    trigger?: Label | React.FC<any>;
+    type?: "dialog" | "drawer" | "sheet";
+    onChange: (nextState: boolean) => void;
+  }
+>;
 
 type DraggableProps = {
   sheet: boolean;
@@ -159,47 +164,58 @@ const Draggable = (props: DraggableProps) => {
 const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
 export const Modal = ({
-  type: _type = "dialog",
+  open,
+  title,
+  footer,
+  asChild,
+  trigger,
+  children,
+  layoutId,
+  onChange,
+  className,
   resizer = true,
-  overlayClickClose = false,
-  forceType = false,
   closable = true,
+  forceType = false,
+  overlayClassName = "",
+  type: _type = "dialog",
+  position: propsPosition,
+  overlayClickClose = false,
   ...props
 }: PropsWithChildren<ModalProps>) => {
   const headingId = useId();
   const descriptionId = useId();
   const isDesktop = useMediaQuery("(min-width: 64rem)");
   const useResizer = _type !== "dialog";
-  const position = isDesktop ? (_type === "drawer" ? props.position : positions[_type]) : forceType ? positions[_type] : positions.sheet;
+  const position = isDesktop ? (_type === "drawer" ? propsPosition : positions[_type]) : forceType ? positions[_type] : positions.sheet;
   const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
   const animation = typeof func === "function" ? func(position as DrawerSides) : func;
   const type = isDesktop ? _type : forceType ? _type : "sheet";
 
-  const { refs, context } = useFloating({ open: props.open, onOpenChange: props.onChange });
+  const { refs, context } = useFloating({ open: open, onOpenChange: onChange });
   const click = useClick(context);
   const role = useRole(context);
   const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: overlayClickClose });
   const { getReferenceProps, getFloatingProps } = useInteractions([click, role, dismiss]);
-  const Trigger = props.trigger as any;
+  const Trigger = trigger as any;
 
   const value = useMotionValue<number | undefined>(undefined);
 
-  const onClose = () => props.onChange(false);
+  const onClose = () => onChange(false);
 
   return (
     <Fragment>
-      {props.trigger ? (
+      {trigger ? (
         <Fragment>
-          {props.asChild ? (
+          {asChild ? (
             <Slot
               ref={refs.setReference}
               {...getReferenceProps({
-                layoutId: props.layoutId,
+                layoutId: layoutId,
               } as any)}
               children={Trigger}
             />
           ) : (
-            <motion.button ref={refs.setReference} {...getReferenceProps()} layoutId={props.layoutId} type="button">
+            <motion.button ref={refs.setReference} {...getReferenceProps()} layoutId={layoutId} type="button">
               {Trigger}
             </motion.button>
           )}
@@ -207,40 +223,40 @@ export const Modal = ({
       ) : null}
       <FloatingPortal>
         <AnimatePresence mode="wait" presenceAffectsLayout>
-          {props.open ? (
+          {open ? (
             <RemoveScroll enabled forwardProps removeScrollBar inert noIsolation>
               <FloatingOverlay
                 lockScroll={true}
-                className={`inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`}
+                className={css(`inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`, overlayClassName)}
               >
                 <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                   <motion.div
+                    {...props}
                     exit="exit"
                     animate="enter"
                     initial="initial"
                     variants={animation}
+                    data-component="modal"
                     ref={refs.setFloating}
-                    aria-modal={props.open}
-                    layoutId={props.layoutId}
+                    aria-modal={open}
+                    layoutId={layoutId}
                     aria-labelledby={headingId}
                     aria-describedby={descriptionId}
-                    className={variants({ position, type })}
+                    className={css(variants({ position, type }), className)}
                     style={type === "drawer" ? { width: value } : { height: value }}
                     {...getFloatingProps()}
                   >
-                    {props.title ? (
+                    {title ? (
                       <header className="relative w-full">
-                        {props.title ? (
+                        {title ? (
                           <h2 className="border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed">
-                            {props.title}
+                            {title}
                           </h2>
                         ) : null}
                       </header>
                     ) : null}
-                    <section className="flex-1 overflow-y-auto px-8 py-1">{props.children}</section>
-                    {props.footer ? (
-                      <footer className="w-full border-t border-floating-border px-8 pt-4">{props.footer}</footer>
-                    ) : null}
+                    <section className="flex-1 overflow-y-auto px-8 py-1">{children}</section>
+                    {footer ? <footer className="w-full border-t border-floating-border px-8 pt-4">{footer}</footer> : null}
                     {closable ? (
                       <nav className="absolute right-4 top-1 z-floating">
                         <button
@@ -254,7 +270,7 @@ export const Modal = ({
                     ) : null}
                     {useResizer && resizer ? (
                       <Draggable
-                        onChange={props.onChange}
+                        onChange={onChange}
                         parent={refs.floating}
                         position={position as DrawerSides}
                         sheet={type === "sheet"}

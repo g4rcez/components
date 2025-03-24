@@ -1,6 +1,6 @@
 export type GeneralTokens = { [K in string]: string | GeneralTokens };
 
-export type ThemeState = "primary" | "warn" | "secondary" | "info" | "danger" | "success" | "neutral";
+export type ThemeState = "primary" | "warn" | "secondary" | "info" | "danger" | "success" | "neutral" | "muted";
 
 type BasicTokens = {
     hover: string;
@@ -26,6 +26,7 @@ export type DesignTokens = {
     colors: {
         disabled: string;
         background: string;
+        muted: string;
         foreground: string;
         primary: BasicTokens;
         emphasis: BasicTokens;
@@ -33,7 +34,7 @@ export type DesignTokens = {
         floating: ComponentToken;
         info: BasicTokens & { notification: string };
         warn: BasicTokens & { notification: string };
-        card: { background: string; border: string };
+        card: { background: string; border: string; muted: string };
         danger: BasicTokens & { notification: string };
         secondary: BasicTokens & { background: string };
         success: BasicTokens & { notification: string };

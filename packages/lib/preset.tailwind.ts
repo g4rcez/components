@@ -26,9 +26,9 @@ const config: Partial<Config> = {
             zIndex: {
                 normal: "1",
                 tooltip: "13",
-                floating: "12",
-                overlay: "11",
-                navbar: "10",
+                floating: "21",
+                overlay: "20",
+                navbar: "19",
                 calendar: "2",
             },
             boxShadow: {

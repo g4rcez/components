@@ -12,12 +12,14 @@ export default function Buttons() {
       <div className="flex flex-col gap-8">
         <Card title="All button themes" className="flex flex-wrap gap-8">
           <Button>Normal</Button>
+          <Button loading>Loading</Button>
           <Button theme="danger">danger</Button>
           <Button theme="info">info</Button>
           <Button theme="neutral">neutral</Button>
           <Button theme="secondary">secondary</Button>
           <Button theme="success">success</Button>
           <Button theme="warn">warn</Button>
+          <Button theme="muted">muted</Button>
         </Card>
         <Card title="Small buttons" className="flex flex-wrap gap-8">
           <Button size="small">Normal</Button>
@@ -35,6 +37,9 @@ export default function Buttons() {
           </Button>
           <Button size="small" theme="success">
             success
+          </Button>
+          <Button size="small" theme="muted">
+            muted
           </Button>
           <Button size="small" theme="warn">
             warn

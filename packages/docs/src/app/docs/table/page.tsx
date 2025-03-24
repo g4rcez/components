@@ -11,12 +11,12 @@ import {
 type User = { id: string; name: string; type: string; document: string };
 
 const cols = createColumns<User>((col) => {
-  col.add("name", "Name", { allowSort: false });
+  col.add("id", "Nome", { allowSort: false });
   col.add("type", "Type", { allowSort: false, allowFilter: false });
   col.add("document", "Document", { allowSort: false, allowFilter: false });
 });
 
-const clients = Array.from({ length: 0 })
+const clients = Array.from({ length: 100 })
   .map(
     (_, i): User => ({
       id: uuid(),
@@ -29,7 +29,6 @@ const clients = Array.from({ length: 0 })
 
 export default function TablePage() {
   const preferences = useTablePreferences("@test", cols);
-
   return (
     <DocsLayout
       title="Table"
@@ -39,7 +38,6 @@ export default function TablePage() {
       <Card container="px-0 py-0" className="px-0">
         <Table<User>
           {...preferences}
-          loading
           sticky={40}
           name="table"
           rows={clients}

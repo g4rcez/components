@@ -287,6 +287,8 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
             </Tag>
         ));
 
+        const displayList = list.filter((x) => x.hidden !== true);
+
         return (
             <InputField
                 {...(props as any)}
@@ -426,11 +428,11 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                                     </li>
                                 ) : null}
                                 <Virtuoso
-                                    data={list}
                                     ref={virtuoso}
-                                    hidden={list.length === 0}
-                                    style={{ height: value.size === 0 ? h - 49 : h - 86 }}
+                                    data={displayList}
                                     components={components as any}
+                                    hidden={displayList.length === 0}
+                                    style={{ height: value.size === 0 ? h - 49 : h - 86 }}
                                     className="border-floating-border bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;

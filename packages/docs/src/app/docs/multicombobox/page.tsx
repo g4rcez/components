@@ -32,7 +32,7 @@ export default function FormPage() {
 
   return (
     <DocsLayout
-      title="Autocomplete"
+      title="MultiCombobox"
       section="form"
       description="Multiple options with a beautiful search input."
     >
@@ -54,3 +54,4 @@ export default function FormPage() {
     </DocsLayout>
   );
 }
+

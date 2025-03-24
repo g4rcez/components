@@ -8,6 +8,7 @@ import {
   Modal,
   ModalProps,
   Switch,
+  Tooltip,
 } from "../../../../../lib/src";
 
 const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
@@ -15,6 +16,11 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
   return (
     <Modal {...props} open={open} onChange={setOpen}>
       {props.children}
+      <Tooltip title="Test">
+        <div className="min-w-full flex flex-1">
+          Paullum deliquit, ponderibus modulisque suis ratio utitur.
+        </div>
+      </Tooltip>
     </Modal>
   );
 };
@@ -75,6 +81,16 @@ export default function ModalExamplePage() {
                 <br />
               </span>
             ))}
+          </Element>
+          <Element
+            {...state}
+            asChild
+            type="dialog"
+            trigger={<Button>Dialog controlled width</Button>}
+            className="max-w-xs flex items-center justify-center"
+            overlayClassName="items-center justify-center testing"
+          >
+            class=max-w-x
           </Element>
           <Element
             {...state}

@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Notifications } from "../../../lib/src/components/display/notifications";
-import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
+import { ComponentsProvider, type Tweaks } from "../../../lib/src/hooks/use-components-provider";
 import {
   createTokenStyles,
   type TokenRemap,
@@ -17,6 +17,10 @@ const tokenRemap: TokenRemap = {
   },
 };
 
+const tweaks: Tweaks = {
+  input: { iconFeedback: false }
+}
+
 export const RootLayout = (props: PropsWithChildren) => {
   const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
   const stylesDark = createTokenStyles(defaultDarkTheme, {
@@ -32,10 +36,7 @@ export const RootLayout = (props: PropsWithChildren) => {
         <style>{stylesDark}</style>
       </head>
       <body>
-        <ComponentsProvider
-          locale="pt-BR"
-          tweaks={{ inputIconFeedback: false }}
-        >
+        <ComponentsProvider locale="pt-BR" tweaks={tweaks}>
           <Notifications>{props.children}</Notifications>
         </ComponentsProvider>
       </body>
