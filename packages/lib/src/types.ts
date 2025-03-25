@@ -10,6 +10,6 @@ export type SetState<T> = Dispatch<SetStateAction<T>>;
 
 export type POJO = {};
 
-export type ComponentLike = keyof JSX.IntrinsicElements | JSXElementConstructor<any>;
+export type ComponentLike = React.ElementType;
 
-export type Any = Record<string, any>
+export type Any = Record<string, any>;

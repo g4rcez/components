@@ -116,6 +116,7 @@ export default function ModalExamplePage() {
               position="left"
             >
               I'm a Drawer component. From left to right
+              {items}
             </Element>
             <Element
               {...state}
@@ -126,6 +127,7 @@ export default function ModalExamplePage() {
               trigger={<Button>Drawer Right</Button>}
             >
               I'm a Drawer component. From right to left
+              {items}
             </Element>
             <Element
               {...state}
@@ -135,6 +137,7 @@ export default function ModalExamplePage() {
               position="right"
             >
               I'm a Drawer component. From left to right
+              {items}
             </Element>
           </div>
         </Card>
@@ -153,6 +156,7 @@ export default function ModalExamplePage() {
             trigger={<Button className="w-fit">Open sheet</Button>}
           >
             I'm a sheet component
+            {items}
           </Element>
         </Card>
       </div>

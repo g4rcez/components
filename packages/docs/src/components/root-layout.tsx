@@ -29,7 +29,7 @@ export const RootLayout = (props: PropsWithChildren) => {
   });
 
   return (
-    <html className="bg-background overflow-x-clip text-foreground antialiased proportional-nums dark">
+    <html lang="en" className="bg-background overflow-x-clip text-foreground antialiased proportional-nums dark">
       <head>
         <title>Components</title>
         <style>{stylesLight}</style>

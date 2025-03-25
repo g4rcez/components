@@ -4,7 +4,7 @@ import React, { createContext, Fragment, HTMLAttributes, useContext, useEffect, 
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
-import { useCallbackRef } from "../../hooks/use-callback-ref";
+import { useStableRef } from "../../hooks/use-stable-ref";
 import { path } from "../../lib/fns";
 import { Empty } from "../display/empty";
 import { OptionProps } from "../form/select";
@@ -176,8 +176,8 @@ const InnerTable = <T extends {}>({
 }: InnerTableProps<T>) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const [showLoadingFooter, setShowLoadingFooter] = useState(false);
-    const onScrollEndRef = useCallbackRef(onScrollEnd);
-    const loadingMoreRef = useCallbackRef(props.loadingMore);
+    const onScrollEndRef = useStableRef(onScrollEnd);
+    const loadingMoreRef = useStableRef(props.loadingMore);
 
     const rows = useMemo(() => {
         if (props.loading) return loadingArray as any as T[];

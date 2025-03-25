@@ -22,6 +22,7 @@ import { Nullable } from "sidekicker";
 import { useTranslations } from "../../hooks/use-components-provider";
 import { Dict } from "../../lib/dict";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
+import { noop } from "../../lib/fns";
 import { Label, Override } from "../../types";
 import { Tag } from "../core/tag";
 import { Checkbox } from "./checkbox";
@@ -114,8 +115,6 @@ const OverflowControl = (props: PropsWithChildren<{ label?: string }>) => {
         </span>
     );
 };
-
-const noop = () => {};
 
 export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
     (
@@ -382,7 +381,7 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                                     },
                                 })}
                                 data-floating="true"
-                                className="z-floating m-0 w-full origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
+                                className="isolate z-floating m-0 w-full origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
                                 <input
                                     autoFocus
@@ -452,7 +451,7 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                                                     "aria-busy": option.disabled,
                                                     onClick: () => onSelect(option, i),
                                                 })}
-                                                className={`focus:bg-floating-hover hover:bg-floating-hover w-full cursor-pointer p-2 text-left ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
+                                                className={`w-full cursor-pointer p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
                                             >
                                                 <Checkbox
                                                     onChange={noop}

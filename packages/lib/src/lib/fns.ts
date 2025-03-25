@@ -40,3 +40,7 @@ export const splitInto = <T extends any>(array: T[], size: number) => {
     }
     return newArray;
 };
+
+export const negate = (b: boolean) => !b;
+
+export const noop = () => {};

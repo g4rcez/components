@@ -1,7 +1,7 @@
 "use client";
 import React, { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
-import { useCallbackRef } from "../../hooks/use-callback-ref";
-import { css, dispatchInput } from "../../lib/dom";
+import { useStableRef } from "../../hooks/use-stable-ref";
+import { css } from "../../lib/dom";
 
 export type SwitchProps = React.ComponentProps<"input"> & {
     error?: string;
@@ -14,7 +14,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
     const [innerChecked, setInnerChecked] = useState(props.checked ?? false);
     const checked = innerChecked;
     const innerRef = useRef<HTMLInputElement>(null);
-    const stableOnChange = useCallbackRef(props.onChange);
+    const stableOnChange = useStableRef(props.onChange);
     useImperativeHandle(ref, () => innerRef.current!);
 
     useEffect(() => {
