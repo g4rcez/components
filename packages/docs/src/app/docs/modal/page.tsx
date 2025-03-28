@@ -12,9 +12,9 @@ import {
 } from "../../../../../lib/src";
 
 const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(props.open ?? false);
   return (
-    <Modal {...props} open={open} onChange={setOpen}>
+    <Modal {...(props as any)} open={open} onChange={setOpen}>
       {props.children}
       <Tooltip title="Test">
         <div className="min-w-full flex flex-1">
@@ -131,8 +131,10 @@ export default function ModalExamplePage() {
             </Element>
             <Element
               {...state}
+              open
               asChild
               type="drawer"
+              ariaTitle="Title"
               trigger={<Button>Drawer right without title</Button>}
               position="right"
             >

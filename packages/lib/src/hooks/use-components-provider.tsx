@@ -62,6 +62,7 @@ const defaultTranslations = {
   calendarToday: "Today",
   calendarBackMonth: "Back month",
   calendarNextMonth: "Next month",
+  calendarMonthLabel: "Month",
 
   multiComboboxSelectedLabel: "Selected",
   multiComboboxInnerPlaceholder: "Search...",

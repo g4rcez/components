@@ -40,7 +40,7 @@ const config: Partial<Config> = {
         forms({ strategy: "class" }),
         plugin(function ({ addVariant, theme, matchUtilities }) {
             addVariant("link", ["&:hover", "&:active"]);
-            addVariant("landing", ["&"]);
+            addVariant("hocus", ["&:hover", "&:focus"]);
             addVariant("group-assert", [`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);
             addVariant("group-error", [
                 `:merge(.group):invalid:has(.input:not(:focus):invalid[data-initialized=true]) &`,

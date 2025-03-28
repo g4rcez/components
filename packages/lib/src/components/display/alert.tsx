@@ -94,7 +94,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                         <span className="tracking-3 text-balance text-lg font-semibold">{props.title}</span>
                     </h4>
                     {props.children}
-                    {onClose !== undefined ? (
+                    {onClose !== undefined && open ? (
                         <button
                             type="button"
                             onClick={close}

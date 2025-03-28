@@ -29,6 +29,7 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
                             <Tooltip
                                 as="button"
                                 type="button"
+                                aria-description={info}
                                 title={
                                     <span className="cursor-help">
                                         <span className="sr-only">{info}</span>
