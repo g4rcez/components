@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { motion } from "motion/react";
-import React, { PropsWithChildren, useState } from "react";
+import React, { Fragment, PropsWithChildren, useState } from "react";
 import {
   Button,
   Card,
@@ -12,16 +12,18 @@ import {
 } from "../../../../../lib/src";
 
 const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
-  const [open, setOpen] = useState(props.open ?? false);
+  const [open, setOpen] = useState(false);
   return (
-    <Modal {...(props as any)} open={open} onChange={setOpen}>
-      {props.children}
-      <Tooltip title="Test">
-        <div className="min-w-full flex flex-1">
-          Paullum deliquit, ponderibus modulisque suis ratio utitur.
-        </div>
-      </Tooltip>
-    </Modal>
+    <Fragment>
+      <Modal {...(props as any)} open={open} onChange={setOpen}>
+        {props.children}
+        <Tooltip title="Test">
+          <div className="min-w-full flex flex-1">
+            Paullum deliquit, ponderibus modulisque suis ratio utitur.
+          </div>
+        </Tooltip>
+      </Modal>
+    </Fragment>
   );
 };
 
@@ -40,7 +42,7 @@ export default function ModalExamplePage() {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
-    const value = e.currentTarget.checked;
+    const value = !e.currentTarget.checked;
     return setState((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -162,6 +164,8 @@ export default function ModalExamplePage() {
           </Element>
         </Card>
       </div>
+      {items}
+      {items}
     </DocsLayout>
   );
 }

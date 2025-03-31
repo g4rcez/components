@@ -3,7 +3,7 @@ import { DocsLayout } from "@/components/docs-layout";
 import React, { useEffect, useState } from "react";
 import { Autocomplete, Card } from "../../../../../lib/src";
 
-const defaults = Array.from({ length: 300 }).map((_, i) => ({
+const defaults = Array.from({ length: 5000 }).map((_, i) => ({
   value: i.toString(),
   label: `[${i + 1}] Paullum deliquit, ponderibus modulisque suis ratio utitur.`,
 }));

@@ -35,26 +35,26 @@ const sections = [
   {
     title: "Form",
     items: [
+      { title: "Autocomplete", href: "/docs/autocomplete" },
       { title: "Calendar", href: "/docs/calendar" },
       { title: "Checkbox", href: "/docs/checkbox" },
       { title: "Input", href: "/docs/input" },
+      { title: "MultiSelect", href: "/docs/multiselect" },
       { title: "Step", href: "/docs/step" },
       { title: "useForm", href: "/docs/form" },
     ],
   },
   {
     title: "Utilities",
-    items: [
-      { title: "RenderOnView", href: "/docs/render-on-view" },
-    ],
-  }
+    items: [{ title: "RenderOnView", href: "/docs/render-on-view" }],
+  },
 ];
 
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
   const ref = useRef<HTMLDivElement | null>(null);
   return (
     <div className="flex flex-nowrap flex-col flex-grow-0 flex-shrink">
-      <nav className="min-w-full isolate z-navbar mb-6 sticky top-0 h-10 flex items-center bg-neutral-900 text-white">
+      <nav className="min-w-full isolate sticky z-navbar mb-6 top-0 h-10 flex items-center bg-neutral-900 text-white">
         <div className="container px-4 items-center mx-auto flex justify-between">
           <Brand />
           <ToggleMode />

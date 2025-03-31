@@ -12,7 +12,7 @@ export default function MenuExample() {
     >
       <div className="flex flex-col gap-8">
         <Card title="Simple menu" className="flex gap-8">
-          <Menu label="I'm a menu" >
+          <Menu label="I'm a menu">
             <MenuItem title="Menu Item X" children="Item 1" />
             <Menu label="Submenu">
               <MenuItem title="Menu Item X" children="Sub item 2" />
@@ -59,3 +59,5 @@ export default function MenuExample() {
     </DocsLayout>
   );
 }
+
+const a = <img alt="" />;

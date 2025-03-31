@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useEffect, useState } from "react";
-import { MultiSelect, Card } from "../../../../../lib/src";
+import { MultiSelect, Card, MultiSelectItemProps } from "../../../../../lib/src";
 
 const defaults = [
   { label: "C#", value: "csharp" },
@@ -46,10 +46,7 @@ export default function FormPage() {
           required
           options={withHidden}
           title="Control option"
-          onChange={(e) => {
-            console.log(e.target.value);
-            setValue(e.target.value);
-          }}
+          onChangeOptions={setValue}
         />
       </Card>
     </DocsLayout>
