@@ -1,7 +1,9 @@
 "use client";
 import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
 import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
-import { useTranslations, useTweaks } from "../../hooks/use-components-provider";
+
+import { useTranslations } from "../../hooks/use-translations";
+import { useTweaks } from "../../hooks/use-tweaks";
 import { css } from "../../lib/dom";
 import { type Label, Override } from "../../types";
 import { type PolymorphicProps } from "../core/polymorph";

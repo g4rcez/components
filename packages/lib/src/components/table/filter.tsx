@@ -2,13 +2,13 @@ import { Symbols } from "linq-arrays";
 import { ListFilterIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useMemo } from "react";
 import { AllPaths } from "sidekicker";
+import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
-import { Label } from "../../types";
+import { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
 import { Input } from "../form/input";
 import { OptionProps, Select } from "../form/select";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
-import { useTranslations } from "../../hooks/use-components-provider";
 
 type Operators = { value: string; label: string; symbol: string; "data-default"?: string };
 
@@ -20,7 +20,7 @@ type OperationOptions = Partial<Record<ColType, OptionProps[]>>;
 
 type FilterValue = string | number | string[] | boolean;
 
-export type FilterConfig<T extends {} = {}> = {
+export type FilterConfig<T extends object = object> = {
     id: string;
     label: Label;
     name: AllPaths<T>;
@@ -29,7 +29,7 @@ export type FilterConfig<T extends {} = {}> = {
     value: FilterValue;
 };
 
-type Props<T extends {}> = TableConfiguration<
+type Props<T extends object> = TableConfiguration<
     T,
     {
         cols: Col<T>[];
@@ -38,7 +38,7 @@ type Props<T extends {}> = TableConfiguration<
     }
 >;
 
-export const createFilterFromCol = <T extends {}>(
+export const createFilterFromCol = <T extends Any>(
     f: Col<T>,
     options: OperationOptions,
     operations: Operations,
@@ -96,7 +96,7 @@ export const useOperators = () => {
     return { options, operations };
 };
 
-export const Filter = <T extends {}>(props: Props<T>) => {
+export const Filter = <T extends object>(props: Props<T>) => {
     const translation = useTranslations();
     const operators = useOperators();
 
@@ -204,13 +204,13 @@ export const Filter = <T extends {}>(props: Props<T>) => {
     );
 };
 
-type ColumnHeaderFilterProps<T extends {}> = {
+type ColumnHeaderFilterProps<T extends object> = {
     filter: FilterConfig<T>;
     onDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
     set: React.Dispatch<React.SetStateAction<FilterConfig<T>[]>>;
 };
 
-export const ColumnHeaderFilter = <T extends {}>({ filter, onDelete, set }: ColumnHeaderFilterProps<T>) => {
+export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: ColumnHeaderFilterProps<T>) => {
     const translation = useTranslations();
     const operators = useOperators();
 

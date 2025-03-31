@@ -83,9 +83,7 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                         {props.title ? (
                             <RadixToast.Title className="select-text truncate text-lg font-medium leading-relaxed">Title</RadixToast.Title>
                         ) : null}
-                        <RadixToast.Description className="select-text truncate">
-                            {props.text}
-                        </RadixToast.Description>
+                        <RadixToast.Description className="select-text truncate">{props.text}</RadixToast.Description>
                     </div>
                     {closable ? (
                         <RadixToast.Close className="absolute right-2 top-2 rounded-full p-1 text-foreground transition hover:bg-danger/10 hover:text-danger-hover">
@@ -106,14 +104,14 @@ type NotificationItem = {
 export type NotificationProps = Partial<{ max: number; duration: number }>;
 
 export function Notifications({ children, max = 5, duration = 5000 }: PropsWithChildren<NotificationProps>) {
-    const ref = useRef<HTMLOListElement>(null);
+    const ref = useRef<HTMLOListElement>(null!);
     const hover = useHover(ref);
     const [messages, setMessages] = useState<NotificationItem[]>([]);
 
     const clear = useCallback(() => setMessages([]), []);
 
     useEffect(() => {
-        return () => clear();
+        return clear;
     }, [clear]);
 
     const notify = useCallback(

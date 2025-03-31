@@ -6,5 +6,5 @@ export const useOnEvent = <K extends keyof WindowEventMap>(event: K, func: Liste
     useEffect(() => {
         window.addEventListener(event, func);
         return () => window.removeEventListener(event, func);
-    }, []);
+    }, [event]);
 };

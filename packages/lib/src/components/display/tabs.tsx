@@ -4,6 +4,7 @@ import React, { createContext, Fragment, PropsWithChildren, useContext, useEffec
 import { useReactive } from "../../hooks/use-reactive";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { Label } from "../../types";
+import { Polymorph } from "../core/polymorph";
 import { Card } from "./card";
 
 export type TabsProps = {
@@ -20,7 +21,6 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     const left = useMotionValue(0);
     const width = useMotionValue(0);
     const ref = useRef<HTMLDivElement | null>(null);
-    const Render = props.useHash ? "a" : "button";
 
     useEffect(() => {
         const header = ref.current;
@@ -85,15 +85,16 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             data-active={active === inner.id}
                                             className="w-full border-b-2 transition-all border-card-border data-[active=true]:border-primary data-[active=true]:text-primary"
                                         >
-                                            <Render
-                                                data-id={inner.id}
+                                            <Polymorph
                                                 onClick={onClick}
+                                                data-id={inner.id}
                                                 aria-current="page"
+                                                as={props.useHash ? "a" : "button" as any}
                                                 href={props.useHash ? `#${inner.id}` : undefined}
                                                 className="block w-full whitespace-nowrap px-10 py-4"
                                             >
                                                 {inner.title as any}
-                                            </Render>
+                                            </Polymorph>
                                         </li>
                                     );
                                 })}

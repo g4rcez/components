@@ -18,7 +18,7 @@ export type InputProps = FreeTextProps<
     | ({
           mask?: CurrencyMaskTypes;
           locale?: Locales;
-          currency?: CurrencyCode;
+          currency?: CurrencyCode | undefined;
       } & CurrencyInputProps)
     | ({
           mask?: PercentInputMask;

@@ -25,7 +25,7 @@ type AnimatedItemProps = {
 
 type IdAnimatedItem = AnimatedItemProps & { id: string };
 
-type AnimatedListProps = {};
+type AnimatedListProps = object;
 
 type FloatItemProps = {
     setter: () => void;
@@ -135,7 +135,7 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                                             <div className="flex flex-row flex-nowrap justify-between gap-4">
                                                 <button
                                                     onClick={setter}
-                                                    className="ease-out cursor-pointer text-left transition-all hover:scale-105 hover:text-primary"
+                                                    className="cursor-pointer text-left transition-all ease-out hover:scale-105 hover:text-primary"
                                                 >
                                                     <h3>{item.title}</h3>
                                                     <p className="text-sm leading-snug text-secondary">{item.description}</p>

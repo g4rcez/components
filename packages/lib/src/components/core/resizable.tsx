@@ -14,8 +14,6 @@ const defaultState = {
     right: 0,
 };
 
-type State = typeof defaultState;
-
 const useElementRect = <E extends Element = Element>() => {
     const [element, ref] = useState<E | null>(null);
     const motion = useMotionValue(defaultState);

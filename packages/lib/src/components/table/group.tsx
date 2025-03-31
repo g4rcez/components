@@ -4,14 +4,14 @@ import Linq from "linq-arrays";
 import { GripVerticalIcon, Trash2Icon, UngroupIcon } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { keys } from "sidekicker";
-import { useTranslations } from "../../hooks/use-components-provider";
+import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
 import { Button } from "../core/button";
 import { Dropdown } from "../floating/dropdown";
 import { Select } from "../form/select";
 import { Col, createOptionCols, TableConfiguration } from "./table-lib";
 
-export type GroupItem<T extends {}> = Col<T> & {
+export type GroupItem<T extends object> = Col<T> & {
     rows: T[];
     index: number;
     groupId: string;
@@ -19,7 +19,7 @@ export type GroupItem<T extends {}> = Col<T> & {
     groupKey: keyof T;
 };
 
-type Props<T extends {}> = TableConfiguration<
+type Props<T extends object> = TableConfiguration<
     T,
     {
         rows: T[];
@@ -47,7 +47,7 @@ const Item = ({ item, onPointerDown }: { item: GroupItem<any>; onPointerDown: an
     );
 };
 
-export const Group = <T extends {}>(props: Props<T>) => {
+export const Group = <T extends object>(props: Props<T>) => {
     const translations = useTranslations();
     const options = createOptionCols(props.cols);
     const controls = useDragControls();
@@ -79,7 +79,8 @@ export const Group = <T extends {}>(props: Props<T>) => {
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
                         <UngroupIcon size={14} />
-                        {translations.tableGroupLabelWithCount}{props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
+                        {translations.tableGroupLabelWithCount}
+                        {props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
                     </span>
                 }
             >

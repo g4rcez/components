@@ -4,7 +4,6 @@ import {
     autoUpdate,
     flip,
     FloatingArrow,
-    FloatingFocusManager,
     FloatingPortal,
     offset,
     type Placement,

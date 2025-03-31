@@ -2,13 +2,14 @@ import { format, isValid, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import React, { forwardRef, Fragment, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
-import { useLocale, useTranslations } from "../../hooks/use-components-provider";
+import { useLocale } from "../../hooks/use-locale";
+import { useTranslations } from "../../hooks/use-translations";
 import { Override } from "../../types";
 import { Calendar, CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
 import { Input, InputProps } from "./input";
 
-export type DatePickerProps = Override<InputProps, CalendarProps<"date">>;
+export type DatePickerProps = Omit<Override<InputProps, CalendarProps>, "currency">;
 
 const fixedDate = new Date(1970, 11, 31);
 
@@ -45,7 +46,7 @@ type Mask = string | RegExp;
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     ({ date, locale: inputLocal, disabledDate, onChange, markToday, ...props }: DatePickerProps, externalRef) => {
-        const locale = inputLocal || useLocale();
+        const locale = useLocale(inputLocal);
         const labelId = useId();
         const translation = useTranslations();
         const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale), [locale]);
@@ -137,7 +138,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                             buttonProps={{ "aria-describedby": labelId }}
                         >
                             <Calendar
-                                {...props}
+                                {...(props as any)}
                                 locale={locale}
                                 changeOnlyOnClick
                                 markToday={markToday}

@@ -18,7 +18,8 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
-import { useTranslations } from "../../hooks/use-components-provider";
+
+import { useTranslations } from "../../hooks/use-translations";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { Label } from "../../types";
@@ -243,7 +244,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setShadow("");
             setValue("");
             setLabel("");
-            dispatchInput(refs.reference.current as HTMLInputElement, "");
+            dispatchInput(refs.reference.current as HTMLInputElement);
             setClosed();
         };
 
@@ -271,6 +272,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 placeholder={props.placeholder}
                 right={
                     <span className="flex items-center gap-0.5">
+                        {right}
                         <button type="button" className="p-2 transition-colors link:text-primary md:p-1" onClick={onCaretDownClick}>
                             <ChevronDown size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
@@ -365,7 +367,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     style: {
                                         ...transitions.styles,
                                         position: strategy,
-                                        left: (x ?? 0) + (!!value ? 26 : 18),
+                                        left: (x ?? 0) + (!!value ? 36 : 25),
                                         top: y ?? 0,
                                     },
                                 })}

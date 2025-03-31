@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 type Fn = (...a: any[]) => any;
 
-const debounce = <T extends Fn>(fn: Fn, ms = 0) => {
+export const debounce = <T extends Fn>(fn: Fn, ms = 0) => {
     let timeoutId: NodeJS.Timeout | undefined = undefined;
     return function debounced(...args: Parameters<T>) {
         clearTimeout(timeoutId);

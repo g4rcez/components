@@ -14,19 +14,19 @@ export class Dict<K, V> extends Map<K, V> {
         return this;
     }
 
-    public delete(key: K) {
-        const o = super.delete(key);
+    public remove(key: K) {
+        super.delete(key);
         this.list = Array.from(this.entries()) ?? [];
-        return o;
+        return this;
     }
 
     public map(callback: (v: V) => any) {
         return this.list.map((x): any => callback(x[1]));
     }
 
-    public clone() {
-        return new Dict(this);
+    public clone(fn?: (dict: Dict<K,V>) => Dict<K,V>) {
+        const clone = new Dict(this);
+        if (fn) return fn(clone);
+        return clone
     }
 }
-
-const m = new Map();

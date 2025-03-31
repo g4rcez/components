@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useEffect, useState } from "react";
-import { MultiCombobox, Card } from "../../../../../lib/src";
+import { MultiSelect, Card } from "../../../../../lib/src";
 
 const defaults = [
   { label: "C#", value: "csharp" },
@@ -32,7 +32,7 @@ export default function FormPage() {
 
   return (
     <DocsLayout
-      title="MultiCombobox"
+      title="MultiSelect"
       section="form"
       description="Multiple options with a beautiful search input."
     >
@@ -41,17 +41,17 @@ export default function FormPage() {
         title="Brazilian masks"
         className="grid grid-cols-1 md:grid-cols-3 gap-6"
       >
-        <MultiCombobox
+        <MultiSelect
           id="0"
           required
           options={withHidden}
           title="Control option"
           onChange={(e) => {
-            console.log("handle", e.target.value);
+            console.log(e.target.value);
+            setValue(e.target.value);
           }}
         />
       </Card>
     </DocsLayout>
   );
 }
-

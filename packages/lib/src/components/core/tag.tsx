@@ -10,7 +10,7 @@ const indicatorVariant = cva("size-2.5 aspect-square rounded-full border-0", {
             info: "bg-info",
             warn: "bg-warn",
             muted: "bg-muted",
-            main: "bg-primary",
+            primary: "bg-primary",
             danger: "bg-danger",
             success: "bg-success",
             secondary: "bg-secondary",

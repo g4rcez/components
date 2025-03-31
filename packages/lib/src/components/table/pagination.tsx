@@ -1,6 +1,7 @@
 import { Fragment, useId, useMemo } from "react";
+import { useTranslations } from "../../hooks/use-translations";
+import { Polymorph } from "../core/polymorph";
 import { TablePagination } from "./table-lib";
-import { useTranslations } from "../../hooks/use-components-provider";
 
 function createPaginationItems(current: number, max: number) {
     if (!current || !max) return [];
@@ -25,45 +26,46 @@ function createPaginationItems(current: number, max: number) {
 
 export const Pagination = (pagination: TablePagination) => {
     const id = useId();
-    const translation = useTranslations()
-    const Render = pagination.asLink || "button";
+    const translation = useTranslations();
     const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination.current, pagination.pages]);
     const hasNext = pagination.current < pagination.pages;
 
     return (
-        <footer className="flex px-1 py-4 items-center justify-center gap-4 lg:justify-between flex-wrap lg:flex-nowrap">
+        <footer className="flex flex-wrap items-center justify-center gap-4 px-1 py-4 lg:flex-nowrap lg:justify-between">
             <p>
                 <translation.tablePaginationFooter
                     {...pagination}
                     sizes={pagination.sizes}
-                    select={pagination.onChangeSize && Array.isArray(pagination.sizes) ? (
-                        <Fragment>
-                            <label htmlFor={id}>{translation.tablePaginationSelectLabel}</label>
-                            <select
-                                id={id}
-                                value={pagination.size}
-                                className="cursor-pointer bg-transparent"
-                                onChange={(e) => {
-                                    pagination.onChangeSize?.(Number(e.target.value));
-                                }}
-                            >
-                                {pagination.sizes.map((value) => (
-                                    <option key={`pagination-opt-${value}`} value={value}>
-                                        {value}
-                                    </option>
-                                ))}
-                            </select>{" "}
-                        </Fragment>
-                    ) : null}
+                    select={
+                        pagination.onChangeSize && Array.isArray(pagination.sizes) ? (
+                            <Fragment>
+                                <label htmlFor={id}>{translation.tablePaginationSelectLabel}</label>
+                                <select
+                                    id={id}
+                                    value={pagination.size}
+                                    className="cursor-pointer bg-transparent"
+                                    onChange={(e) => {
+                                        pagination.onChangeSize?.(Number(e.target.value));
+                                    }}
+                                >
+                                    {pagination.sizes.map((value) => (
+                                        <option key={`pagination-opt-${value}`} value={value}>
+                                            {value}
+                                        </option>
+                                    ))}
+                                </select>{" "}
+                            </Fragment>
+                        ) : null
+                    }
                 />
             </p>
             <nav>
                 <ul className="flex items-center gap-2">
                     {pagination.current > 1 ? (
                         <li>
-                            <Render href="previous" className="">
+                            <Polymorph as={pagination.asLink || ("button" as any)} href="previous" className="">
                                 {translation.tablePaginationPrevious}
-                            </Render>
+                            </Polymorph>
                         </li>
                     ) : null}
                     {pageNavigation.map((x) => {
@@ -74,12 +76,13 @@ export const Pagination = (pagination: TablePagination) => {
                                     <li>...</li>
                                 ) : (
                                     <li>
-                                        <Render
+                                        <Polymorph
                                             href={x}
-                                            className={`cursor-pointer px-3 py-1 transition-colors border-b-2 hover:text-primary-subtle hover:border-primary-subtle proportional-nums ${x === pagination.current ? "text-primary border-primary" : "border-transparent"}`}
+                                            as={pagination.asLink || ("button" as any)}
+                                            className={`cursor-pointer border-b-2 px-3 py-1 proportional-nums transition-colors hover:border-primary-subtle hover:text-primary-subtle ${x === pagination.current ? "border-primary text-primary" : "border-transparent"}`}
                                         >
                                             {x}
-                                        </Render>
+                                        </Polymorph>
                                     </li>
                                 )}
                             </Fragment>
@@ -87,9 +90,9 @@ export const Pagination = (pagination: TablePagination) => {
                     })}
                     {hasNext ? (
                         <li>
-                            <Render href="next" className="">
+                            <Polymorph as={pagination.asLink || ("button" as any)} href="next" className="">
                                 {translation.tablePaginationNext}
-                            </Render>
+                            </Polymorph>
                         </li>
                     ) : null}
                 </ul>

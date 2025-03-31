@@ -18,10 +18,9 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
-import { Nullable } from "sidekicker";
-import { useTranslations } from "../../hooks/use-components-provider";
+import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
-import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
+import { css, initializeInputDataset } from "../../lib/dom";
 import { noop } from "../../lib/fns";
 import { Label, Override } from "../../types";
 import { Tag } from "../core/tag";
@@ -29,24 +28,9 @@ import { Checkbox } from "./checkbox";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
-export type OnChangeMultiCombobox = (
-    e: Override<
-        React.ChangeEvent<HTMLInputElement>,
-        {
-            target: EventTarget &
-                Override<
-                    HTMLInputElement,
-                    {
-                        value: string[];
-                    }
-                >;
-        }
-    >
-) => void;
+export type MultiSelectItemProps = OptionProps & { Render?: React.FC<OptionProps> };
 
-export type MultiComboboxItemProps = OptionProps & { Render?: React.FC<OptionProps> };
-
-export type MultiComboboxProps = Override<
+export type MultiSelectProps = Override<
     InputFieldProps<"input">,
     {
         title?: string;
@@ -55,8 +39,8 @@ export type MultiComboboxProps = Override<
         selectedLabel?: string;
         defaultValue?: string[];
         dynamicOption?: boolean;
-        onChange?: OnChangeMultiCombobox;
-        options: MultiComboboxItemProps[];
+        options: MultiSelectItemProps[];
+        onChangeOptions?: (options: string[]) => void;
     }
 >;
 
@@ -109,14 +93,14 @@ const OverflowControl = (props: PropsWithChildren<{ label?: string }>) => {
                 props.children
             ) : (
                 <Tag size="small" data-multicounter="true">
-                    {countable} {translate.multiComboboxSelectedLabel}
+                    {countable} {translate.multiSelectSelectedLabel}
                 </Tag>
             )}
         </span>
     );
 };
 
-export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
+export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
     (
         {
             left,
@@ -134,8 +118,9 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
             hideLeft = false,
             required = false,
             dynamicOption = false,
+            onChangeOptions,
             ...props
-        }: MultiComboboxProps,
+        }: MultiSelectProps,
         externalRef
     ) => {
         const map = useMemo(() => new Dict(options.map((x) => [x.value, x])), [options]);
@@ -146,8 +131,8 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
         const [h, setH] = useState(0);
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
-        const [value, setValue] = useState<Dict<string, MultiComboboxItemProps>>(() => {
-            const d = new Dict<string, MultiComboboxItemProps>();
+        const [value, setValue] = useState<Dict<string, MultiSelectItemProps>>(() => {
+            const d = new Dict<string, MultiSelectItemProps>();
             defaults.forEach((x) => {
                 const result = map.get(x);
                 return result ? d.set(x, result) : undefined;
@@ -161,7 +146,7 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
         });
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
-        const innerOptions: MultiComboboxItemProps[] =
+        const innerOptions: MultiSelectItemProps[] =
             dynamicOption && shadow !== ""
                 ? [
                       {
@@ -196,7 +181,8 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                     padding: 10,
                     elementContext: "reference",
                     apply(a) {
-                        const w = fieldset.current?.getBoundingClientRect().width!;
+                        if (fieldset.current === null) return;
+                        const w = fieldset.current.getBoundingClientRect().width;
                         const maxH = 360;
                         flushSync(() => setTimeout(() => setH(maxH), 200));
                         Object.assign(a.elements.floating.style, {
@@ -236,17 +222,17 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
             return initializeInputDataset(input);
         }, []);
 
-        const onSelect = (opt: MultiComboboxItemProps, i: number) => {
-            const clone = value.clone();
-            value.has(opt.value) ? clone.delete(opt.value) : clone.set(opt.value, opt);
+        const onSelect = (opt: MultiSelectItemProps, i: number) => {
+            const clone = value.clone((c) => {
+                if (c.has(opt.value)) return c.remove(opt.value);
+                return c.set(opt.value, opt);
+            });
             setValue(clone);
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
-            input?.setAttribute("data-value", opt.value);
-            input.value = Array.from(clone.values()) as any;
-            const event = new Event("change", { bubbles: false, cancelable: true });
-            input.dispatchEvent(event);
-            if (props.onChange) props.onChange(event as any);
+            const options = clone.map((x) => x.value);
+            input?.setAttribute("data-value", JSON.stringify(options));
+            if (onChangeOptions) onChangeOptions(options);
             setLabel((prev) => prev.concat(opt.label ?? ""));
             setShadow("");
             setIndex(i);
@@ -272,16 +258,17 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
         };
 
         const onClose = () => {
-            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
+            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "[]");
             setShadow("");
-            dispatchInput(refs.reference.current as HTMLInputElement, "");
             setOpen(false);
+            setValue(new Dict());
+            onChangeOptions?.([]);
         };
 
         const id = props.id || props.name;
 
         const tags = value.map((x) => (
-            <Tag key={`multicombobox-${x.value}-x`} size="small">
+            <Tag key={`MultiSelect-${x.value}-x`} size="small">
                 {x.label ?? x.value}
             </Tag>
         ));
@@ -310,6 +297,7 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                 placeholder={props.placeholder}
                 right={
                     <span className="flex items-center gap-0.5">
+                        {right}
                         <button type="button" className="transition-colors link:text-primary" onClick={onCaretDownClick}>
                             <ChevronDown size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
@@ -388,7 +376,7 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                                     value={shadow}
                                     onChange={onChange}
                                     title={props.title}
-                                    placeholder={translation.multiComboboxInnerPlaceholder}
+                                    placeholder={translation.multiSelectInnerPlaceholder}
                                     onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                                         if (event.key === "ArrowDown") {
                                             let next = index! + 1;
@@ -457,7 +445,10 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(
                                                     onChange={noop}
                                                     checked={active}
                                                     aria-checked={active}
-                                                    onClick={(e) => void (e.stopPropagation(), e.preventDefault())}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onSelect(option, i);
+                                                    }}
                                                 >
                                                     <Label {...props} label={option.label} value={option.value} children={children} />
                                                 </Checkbox>

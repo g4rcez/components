@@ -2,23 +2,23 @@
 import React, { forwardRef, useEffect, useRef } from "react";
 import MaskInput, { InputTypes } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
-import { Override } from "../../types";
+import { Any, Override, ReactComponent } from "../../types";
 import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
 
 type FreeTextTag = "input" | "textarea";
 
-export type FreeTextProps<T extends FreeTextTag, ExtraProps extends object> = Override<
-    ExtraProps & FeedbackProps,
-    InputFieldProps<T> & Partial<{ next: string; type: InputTypes }>
+export type FreeTextProps<T extends FreeTextTag, ExtraProps extends Any> = Override<
+    InputFieldProps<T> & FeedbackProps & Partial<{ next: string; type: InputTypes }>,
+    ExtraProps
 >;
 
-export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElement | HTMLTextAreaElement, Extra extends object>(
+export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElement | HTMLTextAreaElement, Extra extends Any>(
     Element: "input" | "textarea" | typeof MaskInput,
     elementName: "input" | "textarea",
     defaultProps: FreeTextProps<T, Extra>,
     register?: (el: Html) => () => void
 ) => {
-    const FreeText: React.FC<FreeTextProps<T, Extra>> = forwardRef<Html, FreeTextProps<T, Extra>>(
+    const FreeText: ReactComponent<FreeTextProps<T, Extra>> = forwardRef<Html, FreeTextProps<T, Extra>>(
         (
             {
                 info,
@@ -35,7 +35,7 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
                 feedback = null,
                 hideLeft = false,
                 ...props
-            }: FreeTextProps<T, Extra>,
+            },
             ref
         ): any => {
             const Render = Element as any;

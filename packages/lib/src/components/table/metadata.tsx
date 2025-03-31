@@ -1,9 +1,10 @@
+import { Any } from "../../types";
 import { Filter } from "./filter";
 import { Group } from "./group";
 import { Sort } from "./sort";
 import { TableOperationProps, valueFromType } from "./table-lib";
 
-export const Metadata = <T extends {}>(props: TableOperationProps<T>) => (
+export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
     <header className="min-w-full mb-1">
         <div className="flex flex-wrap min-w-full items-center justify-between gap-x-4 gap-y-1">
             <div className="flex w-fit items-centeend gap-4 whitespace-nowrap py-2">

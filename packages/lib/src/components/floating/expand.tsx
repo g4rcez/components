@@ -29,7 +29,7 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
     return (
         <div className="relative inline-flex items-center justify-center" ref={root}>
             <Button
-                {...getReferenceProps(props as any)}
+                {...getReferenceProps(props as never)}
                 as={motion.button}
                 layoutId={wrapperId}
                 ref={refs.setReference}

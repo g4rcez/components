@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
+import { Any } from "../../types";
 import { createFreeText, FreeTextProps } from "./free-text";
 
-export type TextareaProps = FreeTextProps<"textarea", {}>;
+export type TextareaProps = FreeTextProps<"textarea", Any>;
 
-export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTMLTextAreaElement, {}>(
+export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTMLTextAreaElement, Any>(
     "textarea",
     "textarea",
     { container: "w-full" },

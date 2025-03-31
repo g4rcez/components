@@ -1,14 +1,14 @@
 "use client";
 import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
-import { useTranslations } from "../../hooks/use-components-provider";
+import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
-import { Label } from "../../types";
+import { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
 import { OptionProps, Select } from "../form/select";
 import { Col, getLabel, TableConfiguration, TableOperationProps } from "./table-lib";
 
-type Keyof<T extends {}> = keyof T extends infer R extends string ? R : never;
+type Keyof<T extends Any> = keyof T extends infer R extends string ? R : never;
 
 enum Order {
     Asc = "asc",
@@ -16,10 +16,10 @@ enum Order {
     Undefined = "undefined",
 }
 
-export type Sorter<T extends {}> = { value: Keyof<T>; type: Order; label: Label; id: string };
+export type Sorter<T extends Any> = { value: Keyof<T>; type: Order; label: Label; id: string };
 
 const createSorterFn =
-    <T extends {}>(fields: Sorter<T>[]) =>
+    <T extends Any>(fields: Sorter<T>[]) =>
     (a: any, b: any) =>
         fields.reduce<number>((acc, x) => {
             const reverse = x.type === "desc" ? -1 : 1;
@@ -28,9 +28,9 @@ const createSorterFn =
             return acc !== 0 ? acc : p;
         }, 0);
 
-export const multiSort = <T extends {}>(array: T[], fields: Sorter<T>[]) => array.toSorted(createSorterFn(fields));
+export const multiSort = <T extends Any>(array: T[], fields: Sorter<T>[]) => array.toSorted(createSorterFn(fields));
 
-type Props<T extends {}> = TableConfiguration<
+type Props<T extends Any> = TableConfiguration<
     T,
     {
         cols: Col<T>[];
@@ -39,14 +39,14 @@ type Props<T extends {}> = TableConfiguration<
     }
 >;
 
-const createSorter = <T extends {}>(col: Col<T>, label: string, order: Order): Sorter<T> => ({
+const createSorter = <T extends Any>(col: Col<T>, label: string, order: Order): Sorter<T> => ({
+    label,
     id: uuid(),
     type: order,
     value: col.id as any,
-    label,
 });
 
-export const Sort = <T extends {}>(props: Props<T>) => {
+export const Sort = <T extends Any>(props: Props<T>) => {
     const translation = useTranslations();
 
     const orders = {
@@ -122,9 +122,9 @@ export const Sort = <T extends {}>(props: Props<T>) => {
     );
 };
 
-type SorterHeadProps<T extends {}> = Pick<TableOperationProps<T>, "sorters" | "setSorters"> & { col: Col<T> };
+type SorterHeadProps<T extends Any> = Pick<TableOperationProps<T>, "sorters" | "setSorters"> & { col: Col<T> };
 
-export const SorterHead = <T extends {}>(props: SorterHeadProps<T>) => {
+export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
     const translations = useTranslations();
     const [status, setStatus] = useState(() => {
         const sorter = props.sorters.find((sort) => sort.value === props.col.id);

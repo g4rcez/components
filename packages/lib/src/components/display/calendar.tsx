@@ -25,7 +25,8 @@ import { Is } from "sidekicker";
 import TheMaskInput, { Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
-import { useLocale, useTranslations } from "../../hooks/use-components-provider";
+import { useLocale } from "../../hooks/use-locale";
+import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import { splitInto, uuid } from "../../lib/fns";
 
@@ -59,29 +60,22 @@ type CalendarStyles = Partial<{
     calendar: string | ((daysOfMonth: Date[]) => string);
 }>;
 
-export type CalendarProps<T extends "date" | "range" | undefined = undefined> = Partial<
-    {
-        locale: Locales;
-        markRange: boolean;
-        markToday: boolean;
-        rangeMode: boolean;
-        styles: CalendarStyles;
-        changeOnlyOnClick: boolean;
-        onChangeYear: (d: Date) => void;
-        onChangeMonth: (d: Date) => void;
-        RenderOnDay: React.FC<{ date: Date }>;
-        disabledDate: (date: Date) => boolean;
-        labelRange: { to: string; from: string };
-    } & (T extends "date"
-        ? { date: Date; onChange: OnChangeDate }
-        : T extends "range"
-          ? {
-                range: Range;
-                onChange: OnChangeRange;
-            }
-          : {}) &
-        ({ date: Date; onChange: OnChangeDate } | { range: Range; onChange: OnChangeRange })
->;
+export type CalendarProps = Partial<{
+    date: Date;
+    range: Range;
+    markRange: boolean;
+    markToday: boolean;
+    rangeMode: boolean;
+    styles: CalendarStyles;
+    changeOnlyOnClick: boolean;
+    locale: Locales | undefined;
+    onChangeYear: (d: Date) => void;
+    onChangeMonth: (d: Date) => void;
+    RenderOnDay: React.FC<{ date: Date }>;
+    disabledDate: (date: Date) => boolean;
+    onChange: OnChangeRange | OnChangeDate;
+    labelRange: { to: string; from: string };
+}>;
 
 const createDays = (month: Date) => {
     const start = startOfWeek(startOfMonth(month));
@@ -108,10 +102,10 @@ const onChangeUsingKeyboard = {
     ArrowDown: (date: Date, duration: "days" | "month") => (duration === "days" ? addWeeks(date, 1) : addYears(date, 1)),
 } satisfies Record<string, (date: Date, duration: "days" | "month") => Date>;
 
-const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement>, next: Date, delay = 0) => {
+const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement | null>, next: Date, delay = 0) => {
     const d = next.toISOString();
     const select = () => {
-        if (!!origin?.dataset.focustrap) {
+        if (origin?.dataset.focustrap) {
             const el = root.current?.querySelector(`button[data-focustrap="${origin?.dataset.focustrap}"]`) as HTMLButtonElement;
             return setTimeout(() => el?.focus({ preventScroll: false }), delay);
         }

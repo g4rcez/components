@@ -26,7 +26,7 @@ const components = {
 };
 
 export const TransferList = <T extends POJO, K extends keyof T>(props: TransferListProps<T>) => {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null!);
     const h = useParentHeight(ref);
     return (
         <div className="flex flex-row gap-4" ref={ref}>

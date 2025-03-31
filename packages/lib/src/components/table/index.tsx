@@ -6,6 +6,7 @@ import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { path } from "../../lib/fns";
+import { Any } from "../../types";
 import { Empty } from "../display/empty";
 import { OptionProps } from "../form/select";
 import { FilterConfig } from "./filter";
@@ -22,7 +23,7 @@ const TableContext = createContext<ContextProps>({});
 
 const useTable = () => useContext(TableContext);
 
-type InnerTableProps<T extends {}> = HTMLAttributes<HTMLTableElement> &
+type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
         border?: boolean;
         useControl?: boolean;
@@ -108,9 +109,9 @@ const components = {
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 type ItemContentContext = {
+    cols: Col<Any>[];
     loading?: boolean;
     loadingMore?: boolean;
-    cols: Col<any>[];
 };
 
 const SkeletonLoading = <div className="h-2 w-10/12 animate-pulse rounded bg-table-border" />;
@@ -161,7 +162,7 @@ const Frag = () => <Fragment />;
 
 const emptyRows = [{}];
 
-const InnerTable = <T extends {}>({
+const InnerTable = <T extends Any>({
     cols,
     filters,
     setCols,
@@ -219,7 +220,7 @@ const InnerTable = <T extends {}>({
                     data={rows.length === 0 ? emptyRows : rows}
                     fixedFooterContent={showLoadingFooter ? Frag : null}
                     itemContent={rows.length === 0 ? EmptyContent : ItemContent}
-                    context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols }}
+                    context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols as any }}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
                             headers={cols}
@@ -241,29 +242,29 @@ const InnerTable = <T extends {}>({
     );
 };
 
-export type TableProps<T extends {}> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border"> & {
+export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border"> & {
     name: string;
 } & Partial<
         TableOperationProps<T> & {
+            sticky: number;
+            loading: boolean;
+            reference: keyof T;
+            operations: boolean;
+            useControl: boolean;
             inlineFilter: boolean;
             inlineSorter: boolean;
-            loading: boolean;
             onScrollEnd: () => void;
-            operations: boolean;
-            reference: keyof T;
-            sticky: number;
-            useControl: boolean;
         }
     >;
 
-const dispatcherFun = <Prev extends any, T extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: T) =>
+const dispatcherFun = <Prev extends Any, T extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: T) =>
     typeof setter === "function" ? setter(prev) : setter;
 
-type DispatcherFun<T extends any> = T | ((prev: T) => T);
+type DispatcherFun<T extends Any> = T | ((prev: T) => T);
 
 const compareAndExec = <T extends any[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
 
-export const Table = <T extends {}>(props: TableProps<T>) => {
+export const Table = <T extends Any>(props: TableProps<T>) => {
     const contextState = useMemo((): ContextProps => ({ sticky: props.sticky }), [props.sticky]);
     const operations = props.operations ?? true;
     const optionCols = useMemo(() => createOptionCols(props.cols), [props.cols]);
@@ -276,7 +277,7 @@ export const Table = <T extends {}>(props: TableProps<T>) => {
         },
         (get) => {
             const create =
-                <T extends any>(key: string) =>
+                <T extends Any>(key: string) =>
                 (arg: T) => {
                     const state = get.state();
                     return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };

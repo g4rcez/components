@@ -4,18 +4,18 @@ import { Label } from "../../types";
 
 export type StatsProps = {
     title: Label;
-    Icon: React.FC<any>;
     iconContainer?: string;
     footer?: React.ReactElement;
+    Icon: React.FC<{ className: string }>;
 };
 
 export const Stats = (props: React.PropsWithChildren<StatsProps>) => {
     return (
-        <div className="divide-y divide-card-border bg-card-background shadow border border-card-border rounded-card">
-            <header className="p-6 items-start flex gap-4">
-                <div className={css("size-10 p-8 rounded-card flex items-center justify-center aspect-square bg-primary", props.iconContainer)}>
+        <div className="divide-y divide-card-border rounded-card border border-card-border bg-card-background shadow">
+            <header className="flex items-start gap-4 p-6">
+                <div className={css("flex aspect-square size-10 items-center justify-center rounded-card bg-primary p-8", props.iconContainer)}>
                     <div>
-                        <props.Icon className="size-10 aspect-square text-primary-foreground" />
+                        <props.Icon className="aspect-square size-10 text-primary-foreground" />
                     </div>
                 </div>
                 <div className="flex flex-col gap-1">
