@@ -1,31 +1,27 @@
 "use client";
 import {
-    addDays,
-    addMonths,
-    addWeeks,
-    addYears,
+    add,
     eachDayOfInterval,
     endOfWeek,
     isAfter,
     isBefore,
     isSameMonth,
     isToday,
+    setYear,
     startOfDay,
     startOfMonth,
     startOfWeek,
-    subDays,
-    subMonths,
-    subWeeks,
-    subYears,
+    sub,
 } from "date-fns";
-import { AnimatePresence, motion, MotionConfig, Transition, Variants } from "motion/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import React, { RefObject, useEffect, useRef } from "react";
+import { AnimatePresence, motion, MotionConfig, type Transition, type Variants } from "motion/react";
+import React, { type RefObject, useEffect, useRef } from "react";
 import { Is } from "sidekicker";
-import TheMaskInput, { Locales } from "the-mask-input";
+import TheMaskInput, { type Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../hooks/use-debounce";
 import { useLocale } from "../../hooks/use-locale";
+import { useSwipe } from "../../hooks/use-swipe";
 import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import { splitInto, uuid } from "../../lib/fns";
@@ -37,9 +33,9 @@ const dir =
     (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
 
 const variants: Variants = {
-    middle: { x: "0%", opacity: 1 },
     enter: dir(1),
     exit: dir(-1),
+    middle: { x: "0%", opacity: 1 },
 };
 
 const removeImmediately: Variants = { exit: { visibility: "hidden" } };
@@ -79,7 +75,7 @@ export type CalendarProps = Partial<{
 
 const createDays = (month: Date) => {
     const start = startOfWeek(startOfMonth(month));
-    return eachDayOfInterval({ start, end: addDays(start, 41) });
+    return eachDayOfInterval({ start, end: add(start, { days: 41 }) });
 };
 
 const formatMonth = (d: Date, locale?: Locales) => d.toLocaleDateString(locale, { month: "long" });
@@ -96,10 +92,10 @@ const getOptionsMonth = (id: string, date: Date, locale?: Locales) =>
     });
 
 const onChangeUsingKeyboard = {
-    ArrowLeft: (date: Date, duration: "days" | "month") => (duration === "days" ? subDays(date, 1) : subMonths(date, 1)),
-    ArrowRight: (date: Date, duration: "days" | "month") => (duration === "days" ? addDays(date, 1) : addMonths(date, 1)),
-    ArrowUp: (date: Date, duration: "days" | "month") => (duration === "days" ? subWeeks(date, 1) : subYears(date, 1)),
-    ArrowDown: (date: Date, duration: "days" | "month") => (duration === "days" ? addWeeks(date, 1) : addYears(date, 1)),
+    ArrowLeft: (date: Date, duration: "days" | "month") => (duration === "days" ? sub(date, { days: 1 }) : sub(date, { months: 1 })),
+    ArrowRight: (date: Date, duration: "days" | "month") => (duration === "days" ? add(date, { days: 1 }) : add(date, { months: 1 })),
+    ArrowUp: (date: Date, duration: "days" | "month") => (duration === "days" ? sub(date, { weeks: 1 }) : sub(date, { years: 1 })),
+    ArrowDown: (date: Date, duration: "days" | "month") => (duration === "days" ? add(date, { weeks: 1 }) : add(date, { years: 1 })),
 } satisfies Record<string, (date: Date, duration: "days" | "month") => Date>;
 
 const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement | null>, next: Date, delay = 0) => {
@@ -126,21 +122,21 @@ const inRange = (start: Date | undefined, middle: Date, end: Date | undefined) =
 };
 
 type CalendarBodyProps = {
-    date: Date | null;
-    labelRange?: { to: string; from: string };
-    disabledDate?: (date: Date) => boolean;
     dispatch: any;
     range?: Range;
     zip: Date[][];
     onKeyDown: any;
+    stateDate: Date;
+    date: Date | null;
+    stateRange: Range;
     direction?: number;
-    markToday?: boolean;
     markRange?: boolean;
+    markToday?: boolean;
     rangeMode?: boolean;
     styles?: CalendarStyles;
     RenderOnDay?: React.FC<{ date: Date }>;
-    stateDate: Date;
-    stateRange: Range;
+    disabledDate?: (date: Date) => boolean;
+    labelRange?: { to: string; from: string };
 };
 
 const CalendarBody = (props: CalendarBodyProps) => {
@@ -211,6 +207,8 @@ const CalendarBody = (props: CalendarBodyProps) => {
 
 type SelectMode = "from" | "to";
 
+const setToday = () => startOfDay(new Date());
+
 export const Calendar = ({
     RenderOnDay,
     changeOnlyOnClick = false,
@@ -229,7 +227,7 @@ export const Calendar = ({
     const id = useRef(uuid());
     const translations = useTranslations();
     const currentLocale = useLocale(locale);
-    const root = useRef<HTMLTableElement>(null);
+    const root = useRef<HTMLDivElement>(null);
     const { date, range } = props as { date: Date | undefined; range?: Range };
     const providedDate = date || new Date();
     const monthClicked = useRef<HTMLButtonElement | null>(null);
@@ -247,7 +245,6 @@ export const Calendar = ({
         },
         (get) => ({
             onChangeYear: (year: string) => ({ year }),
-            setToday: () => ({ date: startOfDay(new Date()) }),
             onExitComplete: () => {
                 focusDate(monthClicked.current || null, root, get.state().date, 200);
                 monthClicked.current = null;
@@ -257,18 +254,18 @@ export const Calendar = ({
                 const newDate = callback(get.state().date);
                 return { date: newDate, year: formatYear(newDate) };
             },
-            nextMonth: (e: React.MouseEvent<HTMLButtonElement>) => {
-                monthClicked.current = e.currentTarget;
+            nextMonth: (e?: React.MouseEvent<HTMLButtonElement>) => {
+                if (e) monthClicked.current = e.currentTarget;
                 const state = get.state();
                 if (state.isAnimating) return state;
-                const date = addMonths(state.date, 1);
+                const date = add(state.date, { months: 1 });
                 return { date, isAnimating: true, direction: 1, year: formatYear(date) };
             },
-            previousMonth: (e: React.MouseEvent<HTMLButtonElement>) => {
-                monthClicked.current = e.currentTarget;
+            previousMonth: (e?: React.MouseEvent<HTMLButtonElement>) => {
+                if (e) monthClicked.current = e.currentTarget;
                 const state = get.state();
                 if (state.isAnimating) return state;
-                const date = subMonths(state.date, 1);
+                const date = sub(state.date, { months: 1 });
                 return { date, isAnimating: true, direction: -1, year: formatYear(date) };
             },
             onSelectDate: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -352,15 +349,9 @@ export const Calendar = ({
 
     useEffect(() => {
         if (!changeOnlyOnClick) onChange?.(state.date);
-    }, [currentAsString]);
+    }, [currentAsString, changeOnlyOnClick]);
 
-    const defer = useDebounce((y: string) => {
-        dispatch.date((prev) => {
-            const d = new Date(prev);
-            d.setFullYear(+y);
-            return d;
-        });
-    }, 1200);
+    const defer = useDebounce((y: string) => dispatch.date((prev) => setYear(new Date(prev), +y)), 1200);
 
     const internalOnChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
@@ -369,11 +360,18 @@ export const Calendar = ({
         defer(value);
     };
 
+    const swipe = useSwipe((event, direction) => {
+        event.preventDefault();
+        return direction === "right" ? dispatch.previousMonth() : dispatch.nextMonth();
+    }, 10);
+
     return (
         <MotionConfig transition={transition}>
             <div
-                data-component="calendar"
                 ref={root}
+                data-component="calendar"
+                onTouchEnd={swipe.onTouchEnd}
+                onTouchStart={swipe.onTouchStart}
                 className={css("relative overflow-hidden", Is.function(styles?.calendar) ? styles?.calendar(allDaysOfMonth) : styles?.calendar)}
             >
                 <div className="flex flex-col justify-center rounded text-center">
@@ -399,9 +397,9 @@ export const Calendar = ({
                                 >
                                     <span className="flex w-fit items-center justify-center gap-0.5 py-1">
                                         <select
-                                            aria-label={translations.calendarMonthLabel}
                                             value={monthString}
                                             onChange={dispatch.onChangeMonth}
+                                            aria-label={translations.calendarMonthLabel}
                                             style={{ width: `${monthString.length + 1}ch` }}
                                             className="cursor-pointer appearance-none bg-transparent capitalize proportional-nums hover:text-primary"
                                         >
@@ -476,7 +474,7 @@ export const Calendar = ({
                     </AnimatePresence>
                 </div>
                 <footer className="mt-2 text-center text-primary">
-                    <button className="transition-transform duration-300 hover:scale-105" type="button" onClick={dispatch.setToday}>
+                    <button type="button" onClick={() => dispatch.date(setToday)} className="transition-transform duration-300 hover:scale-105">
                         {translations.calendarToday}
                     </button>
                 </footer>
