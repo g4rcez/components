@@ -8,7 +8,7 @@ function createPaginationItems(current: number, max: number) {
     const items: Array<string | number> = [1];
     if (current === 1 && max === 1) return items;
     if (current > 4) items.push("-");
-    let r = 2;
+    const r = 2;
     const r1 = current - r;
     const r2 = current + r;
     for (let i = r1 > 2 ? r1 : 2; i <= Math.min(max, r2); i++) items.push(i);

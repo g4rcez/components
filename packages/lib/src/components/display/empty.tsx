@@ -1,11 +1,8 @@
 import { type LucideProps, FileIcon } from "lucide-react";
 import React from "react";
-
 import { useTranslations } from "../../hooks/use-translations";
 
-export type EmptyProps = {
-    Icon?: React.FC<LucideProps>;
-};
+export type EmptyProps = { Icon?: React.FC<LucideProps> };
 
 export const Empty = (props: EmptyProps) => {
     const Icon = props.Icon ?? FileIcon;

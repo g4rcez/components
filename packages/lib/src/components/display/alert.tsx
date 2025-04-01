@@ -87,9 +87,9 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                     className={css(alertVariants({ theme }), className)}
                 >
                     <h4 className="mb-2 flex items-center gap-2">
-                        {!Icon && theme === "success" ? <CheckCircleIcon size={20} /> : null}
-                        {!Icon && theme === "info" ? <InfoIcon size={20} /> : null}
-                        {!Icon && theme === "danger" ? <TriangleAlertIcon size={20} /> : null}
+                        {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" size={20} /> : null}
+                        {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" size={20} /> : null}
+                        {!Icon && theme === "danger" ? <TriangleAlertIcon aria-hidden="true" size={20} /> : null}
                         {Icon}
                         <span className="tracking-3 text-balance text-lg font-semibold">{props.title}</span>
                     </h4>

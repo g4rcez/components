@@ -65,7 +65,7 @@ export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => 
             as={props.as ?? "span"}
             className={css(tagVariants({ size, theme }), className)}
         >
-            {indicator ? <span className={indicatorVariant({ theme: indicator })} /> : null}
+            {indicator ? <span aria-hidden="true" className={indicatorVariant({ theme: indicator })} /> : null}
             {icon}
             {props.children}
         </Polymorph>

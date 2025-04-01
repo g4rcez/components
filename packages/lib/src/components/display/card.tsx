@@ -33,10 +33,10 @@ export const Card = ({
         className={css("flex flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-8 shadow", container)}
     >
         {title ? (
-            <header className={css("mb-2 w-full border-b border-card-border px-8 pb-4 text-xl font-medium", titleClassName)}>{title}</header>
+            <header className={css("mb-2 w-full border-b border-card-border lg:px-8 px-4 pb-4 text-xl font-medium", titleClassName)}>{title}</header>
         ) : (
             header
         )}
-        <div className={css("min-w-full px-8", className)}>{children}</div>
+        <div className={css("min-w-full lg:px-8 px-4", className)}>{children}</div>
     </Polymorph>
 );
