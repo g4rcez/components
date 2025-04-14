@@ -205,7 +205,7 @@ export const Modal = ({
 
     const { refs, context } = useFloating({ open: open, onOpenChange: onChange });
     const click = useClick(context);
-    const role = useRole(context);
+    const role = useRole(context, { role: "dialog" });
     const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: overlayClickClose });
     const { getReferenceProps, getFloatingProps } = useInteractions([click, role, dismiss]);
     const Trigger = trigger as any;

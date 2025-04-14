@@ -13,7 +13,7 @@ import {
     useTransitionStyles,
 } from "@floating-ui/react";
 import Fuzzy from "fuzzy-search";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
@@ -267,8 +267,16 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
 
         const id = props.id || props.name;
 
-        const tags = value.map((x) => (
-            <Tag key={`MultiSelect-${x.value}-x`} size="small">
+        const tags = value.map((x, i) => (
+            <Tag
+                size="small"
+                key={`MultiSelect-${x.value}-x`}
+                icon={
+                    <button type="button" onClick={() => onSelect(x, i)} className="focus:text-danger hover:text-danger text-current">
+                        <XIcon size={14} />
+                    </button>
+                }
+            >
                 {x.label ?? x.value}
             </Tag>
         ));
@@ -340,7 +348,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         "group-error:text-danger group-error:placeholder-input-mask-error",
                         "group-focus-within:border-primary group-hover:border-primary",
                         "flex flex-row items-center gap-2 whitespace-nowrap text-left",
-                        "truncate overflow-ellipsis",
+                        "max-w-full overflow-x-auto truncate overflow-ellipsis",
                         props.className
                     )}
                 >
@@ -357,7 +365,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
-                        <FloatingFocusManager guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
+                        <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
                             <div
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
@@ -380,13 +388,13 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                                         if (event.key === "ArrowDown") {
                                             let next = index! + 1;
-                                            if (next > list.length - 1) next = 0;
+                                            if (next > displayList.length - 1) next = 0;
                                             virtuoso.current?.scrollIntoView({ index: next });
                                             return setIndex(next);
                                         }
                                         if (event.key === "ArrowUp") {
                                             let next = index! - 1;
-                                            if (next < 0) next = list.length - 1;
+                                            if (next < 0) next = displayList.length - 1;
                                             virtuoso.current?.scrollIntoView({ index: next });
                                             return setIndex(next);
                                         }
@@ -395,19 +403,19 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             return setOpen(false);
                                         }
                                         if (event.key === "Enter") {
-                                            if (index !== null && list[index]) {
+                                            if (index !== null && displayList[index]) {
                                                 event.preventDefault();
-                                                return onSelect(list[index], index);
+                                                return onSelect(displayList[index], index);
                                             }
-                                            if (list.length === 1) {
+                                            if (displayList.length === 1) {
                                                 event.preventDefault();
-                                                return onSelect(list[0], 0);
+                                                return onSelect(displayList[0], 0);
                                             }
                                         }
                                     }}
                                     className="input placeholder-input-mask group mb-1 h-10 w-full flex-1 border-b border-input-border bg-transparent px-input-x py-input-y outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary"
                                 />
-                                {list.length === 0 ? (
+                                {displayList.length === 0 ? (
                                     <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
@@ -439,7 +447,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                     "aria-busy": option.disabled,
                                                     onClick: () => onSelect(option, i),
                                                 })}
-                                                className={`w-full cursor-pointer p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
+                                                className={`flex w-full max-w-full cursor-pointer items-center justify-start p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
                                             >
                                                 <Checkbox
                                                     onChange={noop}
@@ -449,9 +457,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                         e.stopPropagation();
                                                         onSelect(option, i);
                                                     }}
-                                                >
-                                                    <Label {...props} label={option.label} value={option.value} children={children} />
-                                                </Checkbox>
+                                                />
+                                                <Label {...props} label={option.label} value={option.value} children={children} />
                                             </button>
                                         );
                                     }}

@@ -1,7 +1,6 @@
 "use client";
 import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
 import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
-
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
 import { css } from "../../lib/dom";
@@ -21,7 +20,7 @@ export type FeedbackProps = React.PropsWithChildren<
 >;
 
 export const InputFeedback = ({ reportStatus, hideLeft = false, className, info, children, title }: FeedbackProps) => (
-    <div className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
+    <span className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
             <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:text-disabled group-error:text-danger">
                 {title}
@@ -43,7 +42,7 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
                             </Tooltip>
                         ) : null}
                         {reportStatus ? (
-                            <Fragment>
+                            <span className="flex h-3 min-w-6 items-center">
                                 <CheckCircle
                                     className="hidden aspect-square size-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100"
                                     aria-hidden="true"
@@ -58,14 +57,14 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
                                     strokeWidth={1}
                                     absoluteStrokeWidth
                                 />
-                            </Fragment>
+                            </span>
                         ) : null}
                     </span>
                 ) : null}
             </span>
         )}
         {children}
-    </div>
+    </span>
 );
 
 export type InputFieldProps<T extends "input" | "select" | "textarea"> = PolymorphicProps<
@@ -135,12 +134,12 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                 aria-disabled={disabled}
                 data-component={componentName}
                 data-interactive={!!interactive}
-                className={css("group grid min-h-0 min-w-0 grid-cols-1 items-baseline", container)}
+                className={css("group flex min-h-0 max-w-full min-w-0 flex-col items-start", container)}
             >
                 <label
                     form={form}
                     htmlFor={ID}
-                    className="inline-flex cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
+                    className="text-field-label max-w-full w-full relative inline-flex cursor-text flex-row flex-wrap justify-between gap-1 text-sm transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
                 >
                     <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder}>
                         {optionalText || rightLabel ? (
@@ -162,7 +161,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                         {right ? <span className="flex flex-nowrap gap-2 whitespace-nowrap pr-2">{right}</span> : null}
                     </div>
                 </label>
-                <p className="mt-input-gap hidden flex-shrink-0 flex-grow-0 whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:inline-block group-error:inline-block group-error:text-danger">
+                <p className="mt-input-gap hidden whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger">
                     {error}
                 </p>
                 <p className="mt-input-gap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">

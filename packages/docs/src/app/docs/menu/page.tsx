@@ -23,6 +23,13 @@ export default function MenuExample() {
             </Menu>
             <MenuItem title="Menu Item X" children="Item 2" />
             <MenuItem title="Menu Item X" children="Item 3" />
+            <MenuItem title="Menu Item X" children="Item 4" />
+            <MenuItem title="Menu Item X" children="Item 5" />
+            <MenuItem title="Menu Item X" children="Item 6" />
+            <MenuItem title="Menu Item X" children="Item 7" />
+            <MenuItem title="Menu Item X" children="Item 8" />
+            <MenuItem title="Menu Item X" children="Item 9" />
+            <MenuItem title="Menu Item X" children="Item 10" />
           </Menu>
           <Menu label="I'm a menu without hover" hover={false}>
             <MenuItem title="Menu Item X" children="Item 1" />

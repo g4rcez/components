@@ -20,8 +20,8 @@ export class Dict<K, V> extends Map<K, V> {
         return this;
     }
 
-    public map(callback: (v: V) => any) {
-        return this.list.map((x): any => callback(x[1]));
+    public map(callback: (v: V, i: number) => any) {
+        return this.list.map((x, i): any => callback(x[1], i));
     }
 
     public clone(fn?: (dict: Dict<K,V>) => Dict<K,V>) {

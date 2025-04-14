@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 type SwipeDirection = "left" | "right";
 
-export function useSwipe(onSwipe: (e: React.TouchEvent, direction: SwipeDirection) => void, threshold: number) {
+export function useSwipe(onSwipe: (e: React.TouchEvent, d: SwipeDirection) => void, threshold: number) {
     const touchStartX = useRef<number | null>(null);
 
     const onTouchStart = (e: React.TouchEvent) => (touchStartX.current = e.touches[0].clientX);

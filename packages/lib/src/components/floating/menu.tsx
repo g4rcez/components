@@ -94,7 +94,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             placement: isNested ? "right" : "bottom-start",
             middleware: [offset({ mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0 }), flip(), shift()],
         });
-        const role = useRole(context, { role: "menu", enabled: true });
+        const role = useRole(context, { role: "menu" });
         const dismiss = useDismiss(context, { bubbles: true });
         const hoverModule = useHover(context, {
             move: false,
@@ -222,7 +222,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                         ref={refs.setFloating}
                                         style={{ ...props.style, ...floatingStyles }}
                                         className={css(
-                                            "isolate z-tooltip flex flex-col items-start rounded-lg border border-floating-border bg-floating-background text-left shadow-xl outline-none",
+                                            "isolate z-tooltip flex max-h-80 flex-col items-start overflow-y-auto rounded-lg border border-floating-border bg-floating-background text-left shadow-xl outline-none",
                                             floatingClassName
                                         )}
                                     >

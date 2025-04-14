@@ -2,12 +2,13 @@
 import { AnimatePresence, motion, PanInfo, Reorder } from "motion/react";
 import { Order } from "linq-arrays";
 import { PlusIcon, SearchCheckIcon, SearchXIcon } from "lucide-react";
-import React, { useCallback, useRef } from "react";
+import React, { Fragment, useCallback, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
+import { useTweaks } from "../../hooks/use-tweaks";
 import { Dropdown } from "../floating/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
-import { Col, getLabel, TableOperationProps } from "./table-lib";
+import { Col, getLabel, TableOperationProps, useWidthControl } from "./table-lib";
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 
@@ -17,17 +18,19 @@ type TableHeaderProps<T extends object> = {
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "setSorters" | "sorters" | "inlineSorter" | "inlineFilter">;
 
 type HeaderChildProps<T extends object> = {
+    index: number;
     isLast: boolean;
     header: Col<T>;
     loading: boolean;
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "sorters" | "setSorters" | "inlineFilter" | "inlineSorter">;
 
 const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
+    const tweaks = useTweaks();
     const translation = useTranslations();
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
     const hasFilters = ownFilters.length > 0;
-    const defaultAllowSort = props.header.allowSort ?? true;
-    const defaultAllowFilter = props.header.allowFilter ?? true;
+    const defaultAllowSort = props.header.allowSort ?? tweaks.table.sorters ?? true;
+    const defaultAllowFilter = props.header.allowFilter ?? tweaks.table.filters ?? true;
     const operators = useOperators();
     const FilterIcon = hasFilters ? SearchCheckIcon : SearchXIcon;
     const th = useRef<HTMLTableCellElement | null>(null);
@@ -73,6 +76,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-sort={ariaSort}
             value={props.header}
             aria-busy={props.loading}
+            data-colid={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
             className={`relative hidden min-w-0 cursor-grab border border-b border-transparent border-b-table-border border-r-table-border font-medium first:table-cell last:border-r-transparent md:table-cell ${props.header.thProps?.className ?? ""}`}
         >
@@ -90,33 +94,35 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 </span>
                             }
                             title={
-                                <span className="text-lg font-medium">
-                                    {translation.tableFilterDropdownTitleUnique} <span className="text-primary">{label}</span>
+                                <span className="text-lg">
+                                    {translation.tableFilterDropdownTitleUnique} <span className="font-medium">{label}</span>
                                 </span>
                             }
                         >
-                            {ownFilters.length === 0 ? null : (
-                                <ul className="font-medium">
-                                    {ownFilters.map((filter) => (
-                                        <li key={`thead-filter-${filter.id}`} className="my-1">
-                                            <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
-                                        </li>
-                                    ))}
-                                    <li>
-                                        <button
-                                            type="button"
-                                            className="flex items-center gap-1 text-primary"
-                                            onClick={() =>
-                                                props.setFilters((prev) =>
-                                                    prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
-                                                )
-                                            }
-                                        >
-                                            <PlusIcon size={14} /> {translation.tableFilterNewFilter}
-                                        </button>
-                                    </li>
-                                </ul>
-                            )}
+                            <ul className="font-medium">
+                                {ownFilters.length === 0 ? null : (
+                                    <Fragment>
+                                        {ownFilters.map((filter) => (
+                                            <li key={`thead-filter-${filter.id}`} className="my-1">
+                                                <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
+                                            </li>
+                                        ))}
+                                    </Fragment>
+                                )}
+                                <li>
+                                    <button
+                                        type="button"
+                                        className="flex items-center gap-1 text-primary"
+                                        onClick={() =>
+                                            props.setFilters((prev) =>
+                                                prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
+                                            )
+                                        }
+                                    >
+                                        <PlusIcon size={14} /> {translation.tableFilterNewFilter}
+                                    </button>
+                                </li>
+                            </ul>
                         </Dropdown>
                     ) : null}
                     <span className="pointer-events-auto text-balance text-base">{props.header.thead}</span>
@@ -129,21 +135,37 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                 <motion.button
                     drag="x"
                     draggable
-                    type="button"
-                    animate={false}
-                    initial={false}
                     dragListener
                     dragMomentum
+                    type="button"
+                    animate={false}
                     dragElastic={0}
                     dragPropagation
+                    initial={false}
                     dragSnapToOrigin
                     dragDirectionLock
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
                     className="absolute right-0 top-0 block h-full w-1.5 cursor-col-resize hover:bg-primary active:bg-primary"
+                    onClick={(e) => void e.currentTarget.focus()}
+                    onKeyDown={(e) => {
+                        if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                            if (th.current === null) return;
+                            th.current.setAttribute("data-resized", "true");
+                            const v = th.current.getBoundingClientRect().width;
+                            const move = e.shiftKey ? 50 : 10;
+                            const delta = move * (e.key === "ArrowLeft" ? -1 : 1);
+                            th.current.style.width = `${Math.abs(v + delta)}px`;
+                        }
+                    }}
+                    onDoubleClick={() => {
+                        if (th.current === null) return;
+                        th.current.style.width = "auto";
+                    }}
                     onDrag={(_: never, info: PanInfo) => {
                         if (th.current === null) return;
+                        th.current.setAttribute("data-resized", "true");
                         const v = th.current.getBoundingClientRect().width;
                         const delta = info.delta.x;
                         th.current.style.width = `${Math.abs(v + delta)}px`;
@@ -154,34 +176,39 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
     );
 };
 
-export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => (
-    <Reorder.Group
-        layout
-        as="tr"
-        axis="x"
-        drag="x"
-        layoutRoot
-        role="row"
-        layoutScroll
-        values={props.headers}
-        onReorder={props.setCols}
-        className="bg-table-header text-lg"
-    >
-        <AnimatePresence>
-            {props.headers.map((header, index) => (
-                <HeaderChild<T>
-                    header={header}
-                    filters={props.filters}
-                    loading={props.loading}
-                    sorters={props.sorters}
-                    setFilters={props.setFilters}
-                    setSorters={props.setSorters}
-                    inlineFilter={props.inlineFilter}
-                    inlineSorter={props.inlineSorter}
-                    isLast={index === props.headers.length - 1}
-                    key={`header-child-item-${header.id as string}`}
-                />
-            ))}
-        </AnimatePresence>
-    </Reorder.Group>
-);
+export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
+    const [ref, onChange] = useWidthControl(props.setCols);
+    return (
+        <Reorder.Group
+            layout
+            as="tr"
+            axis="x"
+            drag="x"
+            layoutRoot
+            role="row"
+            layoutScroll
+            ref={ref}
+            onReorder={onChange}
+            values={props.headers}
+            className="bg-table-header text-lg"
+        >
+            <AnimatePresence>
+                {props.headers.map((header, index) => (
+                    <HeaderChild<T>
+                        index={index}
+                        header={header}
+                        filters={props.filters}
+                        loading={props.loading}
+                        sorters={props.sorters}
+                        setFilters={props.setFilters}
+                        setSorters={props.setSorters}
+                        inlineFilter={props.inlineFilter}
+                        inlineSorter={props.inlineSorter}
+                        isLast={index === props.headers.length - 1}
+                        key={`header-child-item-${header.id as string}`}
+                    />
+                ))}
+            </AnimatePresence>
+        </Reorder.Group>
+    );
+};

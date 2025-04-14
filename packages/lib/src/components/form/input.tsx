@@ -32,4 +32,6 @@ export type InputProps = FreeTextProps<
       } & TheMaskProps)
 >;
 
-export const Input = createFreeText<"input", HTMLInputElement, InputProps>(MaskInput, "input", { type: "text" });
+export const Input = createFreeText<"input", HTMLInputElement, InputProps>(MaskInput, "input", {
+    type: "text",
+});

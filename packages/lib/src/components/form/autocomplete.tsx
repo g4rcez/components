@@ -18,7 +18,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
-
+import { Is } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
 import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
@@ -70,20 +70,21 @@ const MIN_SIZE = 40;
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     (
         {
-            options,
-            dynamicOption = false,
-            feedback = null,
-            labelClassName,
-            emptyMessage,
-            interactive,
-            rightLabel,
-            optionalText,
-            container,
-            hideLeft = false,
-            right,
             left,
             error,
+            right,
+            loading,
+            options,
+            container,
+            rightLabel,
+            interactive,
+            emptyMessage,
+            optionalText,
+            labelClassName,
+            feedback = null,
+            hideLeft = false,
             required = false,
+            dynamicOption = false,
             ...props
         }: AutocompleteProps,
         externalRef
@@ -139,7 +140,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             const ul = refs.floating;
             if (ul.current === null) return;
             let size = 0;
-            const items = Array.from(ul.current.querySelectorAll<HTMLLIElement>("li")).slice(0, Math.min(list.length, 10));
+            const items = Array.from(ul.current.querySelectorAll<HTMLLIElement>("li")).slice(0, Math.min(displayList.length, 10));
             items.forEach((x) => {
                 const rect = x.getBoundingClientRect();
                 size += rect.height;
@@ -160,7 +161,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     padding: 10,
                     elementContext: "reference",
                     apply(a) {
-                        const w = fieldset.current?.getBoundingClientRect().width!;
+                        const w = fieldset.current!.getBoundingClientRect().width!;
                         const ul = a.elements.floating.querySelector("ul");
                         const fullSize = ul?.getBoundingClientRect().height || 0;
                         const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE);
@@ -195,7 +196,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 focusItemOnOpen: "auto",
                 openOnArrowKeyDown: true,
                 scrollItemIntoView: true,
-                onNavigate: (n) => setIndex((prev) => n ?? prev),
+                // onNavigate: (n) => setIndex((prev) => n ?? prev)
             }),
         ]);
 
@@ -235,6 +236,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         };
 
         const onFocus = () => {
+            setIndex((prev) => (prev === null ? 0 : prev));
             setOpen(true);
             setShadow("");
         };
@@ -257,6 +259,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 error={error}
                 ref={fieldset}
                 form={props.form}
+                loading={loading}
                 name={props.name}
                 feedback={feedback}
                 hideLeft={hideLeft}
@@ -304,30 +307,31 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         id: `${id}-shadow`,
                         onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
                         onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-                            if (event.key === "ArrowDown") {
-                                let next = index! + 1;
-                                if (next > list.length - 1) next = 0;
-                                virtuoso.current?.scrollIntoView({ index: next });
-                                return setIndex(next);
-                            }
-                            if (event.key === "ArrowUp") {
-                                let next = index! - 1;
-                                if (next < 0) next = list.length - 1;
-                                virtuoso.current?.scrollIntoView({ index: next });
-                                return setIndex(next);
-                            }
                             if (event.key === "Escape") {
                                 event.currentTarget.blur();
                                 return setClosed();
                             }
+                            if (!open) return;
+                            if (event.key === "ArrowDown") {
+                                let next = Is.number(index) ? index + 1 : 0;
+                                if (next > displayList.length - 1) next = 0;
+                                virtuoso.current?.scrollIntoView({ index: next });
+                                return setIndex(next);
+                            }
+                            if (event.key === "ArrowUp") {
+                                let next = Is.number(index) ? index! - 1 : displayList.length - 1;
+                                if (next < 0) next = displayList.length - 1;
+                                virtuoso.current?.scrollIntoView({ index: next });
+                                return setIndex(next);
+                            }
                             if (event.key === "Enter") {
-                                if (index !== null && list[index]) {
+                                if (index !== null && displayList[index]) {
                                     event.preventDefault();
-                                    return onSelect(list[index], index);
+                                    return onSelect(displayList[index], index);
                                 }
-                                if (list.length === 1) {
+                                if (displayList.length === 1) {
                                     event.preventDefault();
-                                    return onSelect(list[0], 0);
+                                    return onSelect(displayList[0], 0);
                                 }
                             }
                         },
@@ -361,20 +365,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 <FloatingPortal preserveTabOrder>
                     {open ? (
                         <FloatingFocusManager guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
-                            <ul
+                            <motion.ul
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
                                     style: {
                                         ...transitions.styles,
-                                        position: strategy,
-                                        left: (x ?? 0) + (!!value ? 36 : 25),
                                         top: y ?? 0,
+                                        position: strategy,
+                                        left: (x ?? 0) + (value ? 36 : 25),
                                     },
                                 })}
+                                initial={false}
                                 data-floating="true"
+                                animate={{ height: h }}
                                 className="isolate z-floating m-0 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
-                                {list.length === 0 ? (
+                                {displayList.length === 0 ? (
                                     <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
@@ -384,10 +390,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 <Virtuoso
                                     ref={virtuoso}
                                     data={displayList}
+                                    style={{ height: h }}
                                     components={components as any}
                                     hidden={displayList.length === 0}
                                     className="rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
-                                    style={{ height: h }}
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;
                                         const active = value === option.value || value === option.label;
@@ -413,7 +419,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         );
                                     }}
                                 />
-                            </ul>
+                            </motion.ul>
                         </FloatingFocusManager>
                     ) : null}
                 </FloatingPortal>

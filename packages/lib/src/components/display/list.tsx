@@ -93,7 +93,7 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
         onOpenChange: (open) => (open ? undefined : setSelected(null)),
     });
     const click = useClick(context);
-    const role = useRole(context);
+    const role = useRole(context, { role: "dialog" });
     const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: true });
     const { getFloatingProps } = useInteractions([click, role, dismiss]);
 

@@ -3,6 +3,7 @@ import { ListFilterIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useMemo } from "react";
 import { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
+import { useTweaks } from "../../hooks/use-tweaks";
 import { uuid } from "../../lib/fns";
 import { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
@@ -246,6 +247,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 placeholder={translation.tableFilterColumnPlaceholder}
             />
             <Input
+                optionalText=" "
                 data-id={filter.id}
                 onChange={onChangeValue}
                 type={filter.type as any}

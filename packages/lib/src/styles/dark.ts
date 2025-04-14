@@ -1,8 +1,9 @@
-import { rounded, spacing } from "./common";
+import { rounded, spacing, zIndex } from "./common";
 import { DesignTokens } from "./theme.types";
 
 export const DARK_THEME: DesignTokens = {
     name: "dark",
+    zIndex,
     rounded,
     spacing,
     shadow: {

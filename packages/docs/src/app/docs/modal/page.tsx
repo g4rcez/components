@@ -8,7 +8,7 @@ import {
   Modal,
   ModalProps,
   Switch,
-  Tooltip,
+  Tooltip, uuid,
 } from "../../../../../lib/src";
 
 const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
@@ -27,8 +27,8 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
   );
 };
 
-const items = Array.from({ length: 700 }).map((x) => (
-  <span>
+const items = Array.from({ length: 70 }).map((x) => (
+  <span key={uuid()}>
     I'm a Dialog component
     <br />
   </span>
@@ -36,8 +36,8 @@ const items = Array.from({ length: 700 }).map((x) => (
 
 export default function ModalExamplePage() {
   const [state, setState] = useState({
-    overlayClickClose: false,
     closable: false,
+    overlayClickClose: true,
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,7 @@ export default function ModalExamplePage() {
             Close on X
           </Switch>
         </Card>
-        <Card className="flex gap-6" title="Dialog">
+        <Card className="flex flex-row flex-wrap gap-6" title="Dialog">
           <Element
             {...state}
             asChild
@@ -89,7 +89,7 @@ export default function ModalExamplePage() {
             asChild
             type="dialog"
             trigger={<Button>Dialog controlled width</Button>}
-            className="max-w-xs flex items-center justify-center"
+            className="lg:max-w-xs flex items-center justify-center"
             overlayClassName="items-center justify-center testing"
           >
             class=max-w-x
@@ -164,7 +164,6 @@ export default function ModalExamplePage() {
           </Element>
         </Card>
       </div>
-      {items}
       {items}
     </DocsLayout>
   );

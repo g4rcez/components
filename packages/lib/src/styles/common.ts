@@ -1,3 +1,5 @@
+import { ZIndex } from "./theme.types";
+
 export const rounded = {
     button: "0.4rem",
     pill: "2rem",
@@ -9,9 +11,20 @@ export const spacing = {
     base: "1rem",
     lg: "1.5rem",
     sm: "0.75rem",
+    "field-height": "1.5rem",
+    "field-label": "1.875rem",
     "input-height": "2.5rem",
     "input-x": "0.5rem",
     "input-y": "0.25rem",
     "input-inline": "0.25rem",
     "input-gap": "0.3rem",
+} as const;
+
+export const zIndex: ZIndex = {
+    normal: "1",
+    navbar: "19",
+    calendar: "2",
+    overlay: "20",
+    tooltip: "13",
+    floating: "21",
 } as const;

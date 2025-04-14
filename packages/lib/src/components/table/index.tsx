@@ -5,6 +5,7 @@ import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
 import { useStableRef } from "../../hooks/use-stable-ref";
+import { useTweaks } from "../../hooks/use-tweaks";
 import { path } from "../../lib/fns";
 import { Any } from "../../types";
 import { Empty } from "../display/empty";
@@ -66,7 +67,7 @@ const VirtualTable = React.forwardRef(({ context, className = "", ...props }: an
         {...props}
         ref={ref as any}
         role="table"
-        className={`table min-w-full table-auto divide-y divide-table-border text-left ${className ?? ""}`}
+        className={`table min-w-full table-fixed border-collapse divide-y divide-table-border text-left ${className ?? ""}`}
     />
 ));
 
@@ -79,9 +80,9 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
     return <thead {...props} style={style} role="rowgroup" className="shadow-xs group:sticky top-0 bg-card-background" ref={ref} />;
 });
 
-const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => (
-    <tr {...props} role="row" ref={ref} className={`table-row ${(props as any)?.className ?? ""}`} />
-));
+const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
+    return <tr {...props} role="row" ref={ref} className={`table-row group ${(props as any)?.className ?? ""}`} />;
+});
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
     if (props.context.loadingMore) {
@@ -142,7 +143,7 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell ${className}`}
+                        className={`relative hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell ${className}`}
                     >
                         {loading ? (
                             SkeletonLoading
@@ -191,7 +192,7 @@ const InnerTable = <T extends Any>({
         }
         if (sorters.length === 0) return linq.Select();
         return multiSort(linq.Select(), sorters);
-    }, [props.rows, filters, sorters, props.loading]);
+    }, [props.loading, props.rows, useControl, filters, sorters]);
 
     useEffect(() => {
         if (ref.current === null) return () => {};
@@ -207,7 +208,7 @@ const InnerTable = <T extends Any>({
         });
         observer.observe(div);
         return () => observer.disconnect();
-    }, []);
+    }, [loadingMoreRef, onScrollEndRef]);
 
     return (
         <div className="min-w-full">
@@ -266,7 +267,8 @@ const compareAndExec = <T extends any[]>(prev: T, state: T, exec?: (t: T) => voi
 
 export const Table = <T extends Any>(props: TableProps<T>) => {
     const contextState = useMemo((): ContextProps => ({ sticky: props.sticky }), [props.sticky]);
-    const operations = props.operations ?? true;
+    const tweaks = useTweaks();
+    const operations = props.operations ?? tweaks.table.operations ?? true;
     const optionCols = useMemo(() => createOptionCols(props.cols), [props.cols]);
     const [state, dispatch] = useReducer(
         {

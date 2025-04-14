@@ -9,7 +9,7 @@ export type SwitchProps = React.ComponentProps<"input"> & {
     onCheck?: (nextValue: boolean) => void;
 };
 
-export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, container, error, ...props }: SwitchProps, ref) => {
+export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, container, loading, error, ...props }: SwitchProps, ref) => {
     const id = useId();
     const [innerChecked, setInnerChecked] = useState(props.checked ?? false);
     const checked = innerChecked;
@@ -21,8 +21,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
         if (innerRef.current !== null) {
             if (stableOnChange.current) {
                 const onChange = (e: any) => {
-                    e.target.checked = !e.target.checked;
-                    stableOnChange.current && stableOnChange.current(e);
+                    if (stableOnChange.current) stableOnChange.current(e);
                 };
                 innerRef.current.addEventListener("change", onChange);
                 return () => innerRef.current?.removeEventListener("change", onChange);
@@ -41,18 +40,19 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
     };
 
     return (
-        <fieldset className={css("flex flex-col flex-wrap justify-center", container)} data-component="switch">
+        <fieldset className={css("flex flex-col flex-wrap justify-center", container)} data-component="switch" disabled={props.disabled || loading}>
             <span className="flex flex-row flex-wrap items-center">
                 <input
                     {...props}
-                    checked={checked}
-                    data-checked={checked}
-                    data-trigger="change"
                     hidden
-                    id={props.id || id}
-                    onChange={(e) => setInnerChecked(e.target.checked)}
                     ref={innerRef}
                     type="checkbox"
+                    checked={checked}
+                    id={props.id || id}
+                    data-trigger="change"
+                    data-checked={checked}
+                    disabled={props.disabled || loading}
+                    onChange={(e) => setInnerChecked(e.target.checked)}
                 />
                 <button
                     type="button"
@@ -61,6 +61,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
                     aria-checked={checked}
                     data-checked={checked}
                     aria-labelledby={`${id}-label`}
+                    disabled={props.disabled || loading}
                     className="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 data-[checked=false]:bg-input-switch-bg data-[checked=true]:bg-primary"
                 >
                     <span

@@ -17,11 +17,21 @@ type ComponentToken = {
     foreground: string;
 };
 
+export type ZIndex = {
+    navbar: `${number}`;
+    normal: `${number}`;
+    overlay: `${number}`;
+    tooltip: `${number}`;
+    calendar: `${number}`;
+    floating: `${number}`;
+};
+
 export type DesignTokens = {
     name: string;
+    zIndex: ZIndex;
     shadow: Record<"floating", string>;
-    rounded: Record<"button" | "full" | "pill" | "card", string>;
     spacing: Record<"base" | "lg" | "sm", string>;
+    rounded: Record<"button" | "full" | "pill" | "card", string>;
     custom?: Record<string, string>;
     colors: {
         disabled: string;

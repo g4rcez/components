@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { AllPaths } from "sidekicker";
 import { LocalStorage } from "storage-manager-js";
 import { useReducer } from "use-typed-reducer";
+import { useStableRef } from "../../hooks/use-stable-ref";
 import { isSsr } from "../../lib/fns";
 import { Any, POJO, SetState } from "../../types";
 import { OptionProps } from "../form/select";
@@ -30,7 +31,6 @@ export enum ColType {
     Text = "text",
 }
 
-
 export const valueFromType = (input: HTMLInputElement) => (input.type === "number" ? input.valueAsNumber : input.value);
 
 type THead = React.ReactElement | React.ReactNode;
@@ -41,18 +41,18 @@ export type ColMatrix = `${number},${number}`;
 type ParsePath<path, output extends string[] = [], currentChunk extends string = ""> = path extends number
     ? [`${path}`]
     : path extends `${infer first}${infer rest}`
-        ? first extends "." | "[" | "]"
-            ? ParsePath<rest, [...output, ...(currentChunk extends "" ? [] : [currentChunk])], "">
-            : ParsePath<rest, output, `${currentChunk}${first}`>
-        : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
+      ? first extends "." | "[" | "]"
+          ? ParsePath<rest, [...output, ...(currentChunk extends "" ? [] : [currentChunk])], "">
+          : ParsePath<rest, output, `${currentChunk}${first}`>
+      : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
 
 type RecursiveGet<Obj, pathList> = Obj extends any
     ? pathList extends [infer first, ...infer rest]
         ? first extends keyof Obj
             ? RecursiveGet<Obj[first], rest>
             : [first, Obj] extends [`${number}` | "number", readonly any[]]
-                ? RecursiveGet<Extract<Obj, any[]>[number], rest>
-                : undefined
+              ? RecursiveGet<Extract<Obj, any[]>[number], rest>
+              : undefined
         : Obj
     : never;
 
@@ -83,19 +83,19 @@ export type ColConstructor<T extends POJO> = {
 
 const cols =
     <T extends POJO>() =>
-        <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
+    <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
 
 export type Col<T extends POJO> = ReturnType<ReturnType<typeof cols<T>>>;
 
 export type TablePagination = {
-    sizes?: number[];
-    onChangeSize?: (size: number) => void;
     size: number;
     pages: number;
     current: number;
     hasNext: boolean;
+    sizes?: number[];
     totalItems: number;
     hasPrevious: boolean;
+    onChangeSize?: (size: number) => void;
     asLink?: React.FC<React.PropsWithChildren<{ href: number | "previous" | "next"; className: string }>>;
 };
 
@@ -118,12 +118,12 @@ type TableSetters<T extends POJO> = {
 export type TableOperationProps<T extends POJO> = TableConfiguration<
     T,
     TableSetters<T> &
-    TableGetters<T> & {
-    set?: (v: TableGetters<T>) => void;
-} & {
-    inlineSorter: boolean;
-    inlineFilter: boolean;
-}
+        TableGetters<T> & {
+            set?: (v: TableGetters<T>) => void;
+        } & {
+            inlineSorter: boolean;
+            inlineFilter: boolean;
+        }
 >;
 
 export const createColumns = <T extends POJO>(callback: (o: ColConstructor<T>) => void) => {
@@ -179,7 +179,26 @@ export const useTablePreferences = <T extends POJO>(name: string, cols: Col<T>[]
             return {
                 set: (getters: TableGetters<T>) => intercept(getters),
             };
-        },
+        }
     );
     return { ...state, ...dispatch, name };
+};
+
+export const useWidthControl = <T extends object>(reorder: (c: Col<T>[]) => void) => {
+    const stableRef = useStableRef(reorder);
+    const ref = useRef<HTMLTableRowElement>(null);
+
+    const onChange = useCallback(
+        (cols: Col<T>[]) => {
+            stableRef.current(cols);
+            cols.forEach((x) => {
+                const c = ref.current!.querySelector(`th[data-colid="${x.id}"]`) as HTMLElement | null;
+                if (!c) return;
+                c.style.width = "auto";
+            });
+        },
+        [stableRef]
+    );
+
+    return [ref, onChange] as const;
 };

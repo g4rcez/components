@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react";
+import { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
-import { ComponentsProvider, type Tweaks } from "../../../lib/src/hooks/use-components-provider";
+import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
 import {
   createTokenStyles,
   type TokenRemap,
@@ -18,8 +19,8 @@ const tokenRemap: TokenRemap = {
 };
 
 const tweaks: Tweaks = {
-  input: { iconFeedback: false }
-}
+  input: { iconFeedback: true },
+};
 
 export const RootLayout = (props: PropsWithChildren) => {
   const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
@@ -29,7 +30,10 @@ export const RootLayout = (props: PropsWithChildren) => {
   });
 
   return (
-    <html lang="en" className="bg-background overflow-x-clip text-foreground antialiased proportional-nums">
+    <html
+      lang="en"
+      className="bg-background text-foreground antialiased proportional-nums dark"
+    >
       <head>
         <title>Components</title>
         <style>{stylesLight}</style>

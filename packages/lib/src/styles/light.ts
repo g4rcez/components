@@ -1,4 +1,4 @@
-import { rounded, spacing } from "./common";
+import { rounded, spacing, zIndex } from "./common";
 import { DesignTokens } from "./theme.types";
 
 export const LIGHT_THEME: DesignTokens = {
@@ -8,6 +8,7 @@ export const LIGHT_THEME: DesignTokens = {
     shadow: {
         floating: "rgba(50, 50, 50, 0.1) 0px 0px 0px 1px, rgba(50, 50, 50, 0.1) 0px 3px 6px, rgba(50, 50, 50, 0.1) 0px 2px 3px",
     },
+    zIndex,
     colors: {
         foreground: "hsla(217, 15%, 30%)",
         background: "hsla(210, 34%, 96%)",

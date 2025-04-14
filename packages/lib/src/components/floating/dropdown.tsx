@@ -60,7 +60,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
 
     const click = useClick(context);
     const dismiss = useDismiss(context);
-    const role = useRole(context);
+    const role = useRole(context, {role: "tooltip"});
 
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
@@ -73,7 +73,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="relative isolate z-floating min-w-96 rounded-lg border border-floating-border bg-floating-background p-6 shadow-2xl"
+                            className="relative isolate z-floating min-w-96 rounded-lg border border-floating-border bg-floating-background p-4 shadow-2xl"
                             ref={refs.setFloating}
                             style={floatingStyles}
                             aria-labelledby={headingId}

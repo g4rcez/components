@@ -34,6 +34,7 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
                 labelClassName,
                 feedback = null,
                 hideLeft = false,
+                loading,
                 ...props
             },
             ref
@@ -75,12 +76,13 @@ export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElem
                     left={left}
                     error={error}
                     right={right}
+                    loading={loading}
                     form={props.form}
                     name={props.name}
                     feedback={feedback}
                     hideLeft={hideLeft}
                     title={props.title}
-                    container={container}
+                    container={css(container, defaultProps.container)}
                     rightLabel={rightLabel}
                     disabled={props.disabled}
                     interactive={interactive}

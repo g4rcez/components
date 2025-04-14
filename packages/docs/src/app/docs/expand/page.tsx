@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { HelpCircleIcon } from "lucide-react";
-import { Card, Expand, Tag } from "../../../../../lib/src";
+import { Button, Card, Expand, Tag } from "../../../../../lib/src";
 
 export default function ExpandPage() {
   return (
@@ -23,7 +23,9 @@ export default function ExpandPage() {
             Cras mattis iudicium purus sit amet fermentum. Curabitur blandit
             tempus ardua ridiculus sed magna.
             <Tag>Tags</Tag>
-            <Tag indicator="success" theme="neutral">Tags</Tag>
+            <Tag indicator="success" theme="neutral">
+              Tags
+            </Tag>
           </div>
         </Expand>
       </Card>

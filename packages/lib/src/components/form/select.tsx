@@ -33,6 +33,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             labelClassName,
             interactive,
             rightLabel,
+            loading,
             optionalText,
             container,
             hideLeft = false,
@@ -71,6 +72,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 left={left}
                 error={error}
                 form={props.form}
+                loading={loading}
                 name={props.name}
                 feedback={feedback}
                 hideLeft={hideLeft}
@@ -86,6 +88,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 placeholder={props.placeholder}
                 right={
                     <label htmlFor={id}>
+                        {right}
                         <button onClick={onClickLabel} type="button" className="mt-2 transition-colors hover:text-primary">
                             <ChevronDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>

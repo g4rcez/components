@@ -1,11 +1,18 @@
 "use client";
 import { FloatingFocusManager, FloatingPortal, useClick, useDismiss, useFloating, useInteractions, useRole } from "@floating-ui/react";
 import { AnimatePresence, motion } from "motion/react";
-import { PropsWithChildren, useId, useRef, useState } from "react";
+import { PropsWithChildren, useEffect, useId, useRef, useState } from "react";
 import { Label, Override } from "../../types";
 import { Button, ButtonProps } from "../core/button";
 
-export type ExpandProps = Override<ButtonProps<typeof motion.button>, { trigger: Label }>;
+export type ExpandProps = Override<
+    ButtonProps<typeof motion.button>,
+    {
+        trigger: Label;
+        open?: boolean;
+        disabled?: boolean;
+    }
+>;
 
 export const Expand = (props: PropsWithChildren<ExpandProps>) => {
     const root = useRef<HTMLDivElement | null>(null);
@@ -13,7 +20,10 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
     const wrapperId = `${id}:wrapper`;
     const titleId = `${id}:title`;
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(props.open ?? false);
+    useEffect(() => {
+        setOpen(props.open ?? false);
+    }, [props.open]);
     const { context, refs } = useFloating({
         transform: true,
         open: open !== null,
@@ -21,9 +31,13 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
         onOpenChange: setOpen,
         strategy: "absolute",
     });
-    const click = useClick(context);
-    const role = useRole(context);
-    const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: true });
+    const click = useClick(context, { enabled: props.disabled ?? true });
+    const role = useRole(context, { role: "tooltip" });
+    const dismiss = useDismiss(context, {
+        escapeKey: true,
+        referencePress: true,
+        outsidePress: true,
+    });
     const { getFloatingProps, getReferenceProps } = useInteractions([click, role, dismiss]);
 
     return (

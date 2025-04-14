@@ -2,13 +2,14 @@ import { CSSProperties } from "react";
 import { DesignTokens, DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types";
 
 export const parsers = {
-    cssVariable: (_, __, k) => `var(--${k})` as const,
-    rgba: (v: string) => `rgba(${v})` as const,
-    rgb: (v: string) => `rgb(${v})` as const,
-    hsl: (v: string) => `hsl(${v})` as const,
-    hsla: (v: string) => `hsla(${v})` as const,
     hex: (v: string) => v,
     raw: (v: string) => v,
+    hsl: (v: string) => `hsl(${v})` as const,
+    rgb: (v: string) => `rgb(${v})` as const,
+    z: (_, __, k) => `var(--z-${k})` as const,
+    hsla: (v: string) => `hsla(${v})` as const,
+    rgba: (v: string) => `rgba(${v})` as const,
+    cssVariable: (_, __, k) => `var(--${k})` as const,
     formatWithVar: (format: string) => (_: string, __: string, v: string) => `${format}(var(--${v}), <alpha-value>)` as const,
 } satisfies Record<string, DesignTokensParser>;
 
@@ -62,24 +63,28 @@ export const createStyles = {
     dark: (tokens: Token[]) => createStyleContent(tokens, { result: modifiers.dark }),
 };
 
-type TokenParsersType = "colors" | "spacing" | "rounded" | "customTokens";
+type TokenParsersType = "colors" | "spacing" | "rounded" | "customTokens" | "zIndex";
 
-type TokenCustomParser = (token: Token) => Token;
+type TokenCustomParser = (t: Token) => Token;
 
 export type TokenRemap = Partial<Record<TokenParsersType, TokenCustomParser> & { name: string }>;
 
+const fn =
+    (p?: TokenCustomParser): DesignTokensBuilder =>
+    (value, _, key) => {
+        const r = { key: `--${key}`, value: `${value}` };
+        return p ? p(r) : r;
+    };
+
+const zIndexParser = (t: Token): Token => ({ key: t.key.replace(/^--/, "--z-"), value: t.value });
+
 const createTokens = (theme: DesignTokens, map?: TokenRemap) => {
-    const fn =
-        (p?: TokenCustomParser): DesignTokensBuilder =>
-        (value, _, key) => {
-            const r = { key: `--${key}`, value: `${value}` };
-            return p ? p(r) : r;
-        };
     const colors = reduceTokens(theme.colors, fn(map?.colors));
     const spacing = reduceTokens(theme.spacing, fn(map?.spacing));
     const rounded = reduceTokens(theme.rounded, fn(map?.rounded));
+    const zIndex = reduceTokens(theme.zIndex, fn(map?.zIndex ?? zIndexParser));
     const customTokens = theme.custom ? reduceTokens(theme.custom, fn(map?.customTokens)) : [];
-    return colors.concat(spacing, rounded, customTokens);
+    return colors.concat(spacing, rounded, customTokens, zIndex);
 };
 
 export const createTheme = (theme: DesignTokens, name?: string) =>
