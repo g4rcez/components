@@ -169,6 +169,10 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             }
         }, [props.value, map]);
 
+        const displayList = list.filter((x) => x.hidden !== true);
+
+        const isEmpty = displayList.length === 0;
+
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
             transform: true,
@@ -188,8 +192,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         Object.assign(a.elements.floating.style, {
                             width: `${w}px`,
                             maxWidth: `${w}px`,
-                            maxHeight: `${maxH}px`,
-                            height: `${maxH}px`,
+                            maxHeight: isEmpty ? "auto" : `${maxH}px`,
+                            height: isEmpty ? "auto" : `${maxH}px`,
                         });
                     },
                 }),
@@ -272,7 +276,14 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 size="small"
                 key={`MultiSelect-${x.value}-x`}
                 icon={
-                    <button type="button" onClick={() => onSelect(x, i)} className="focus:text-danger hover:text-danger text-current">
+                    <button
+                        type="button"
+                        className="text-current hover:text-danger focus:text-danger"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onSelect(x, i);
+                        }}
+                    >
                         <XIcon size={14} />
                     </button>
                 }
@@ -280,8 +291,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 {x.label ?? x.value}
             </Tag>
         ));
-
-        const displayList = list.filter((x) => x.hidden !== true);
 
         return (
             <InputField
@@ -371,9 +380,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     ref: refs.setFloating,
                                     style: {
                                         ...transitions.styles,
-                                        position: strategy,
-                                        left: (x ?? 0) + (!!value ? 26 : 18),
                                         top: y ?? 0,
+                                        position: strategy,
+                                        left: (x ?? 0) + (value ? 26 : 18),
                                     },
                                 })}
                                 data-floating="true"
@@ -415,54 +424,56 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     }}
                                     className="input placeholder-input-mask group mb-1 h-10 w-full flex-1 border-b border-input-border bg-transparent px-input-x py-input-y outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary"
                                 />
-                                {displayList.length === 0 ? (
+                                {isEmpty ? (
                                     <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
                                         </span>
                                     </li>
                                 ) : null}
-                                <Virtuoso
-                                    ref={virtuoso}
-                                    data={displayList}
-                                    components={components as any}
-                                    hidden={displayList.length === 0}
-                                    style={{ height: value.size === 0 ? h - 49 : h - 86 }}
-                                    className="border-floating-border bg-floating-background p-0 text-foreground"
-                                    itemContent={(i, option) => {
-                                        const Label = (option.Render as React.FC<any>) ?? Frag;
-                                        const active = value.has(option.value) || value.has(option.label ?? "");
-                                        const selected = index === i;
-                                        const children = option.label ?? option.value;
-                                        return (
-                                            <button
-                                                data-value={option.value}
-                                                {...getItemProps({
-                                                    ref: (node) => void (listRef.current[i] = node) as any,
-                                                    role: "option",
-                                                    type: "button",
-                                                    "aria-checked": active,
-                                                    "aria-current": active,
-                                                    "aria-selected": active,
-                                                    "aria-busy": option.disabled,
-                                                    onClick: () => onSelect(option, i),
-                                                })}
-                                                className={`flex w-full max-w-full cursor-pointer items-center justify-start p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
-                                            >
-                                                <Checkbox
-                                                    onChange={noop}
-                                                    checked={active}
-                                                    aria-checked={active}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        onSelect(option, i);
-                                                    }}
-                                                />
-                                                <Label {...props} label={option.label} value={option.value} children={children} />
-                                            </button>
-                                        );
-                                    }}
-                                />
+                                {isEmpty ? null : (
+                                    <Virtuoso
+                                        ref={virtuoso}
+                                        hidden={isEmpty}
+                                        data={displayList}
+                                        components={components as any}
+                                        style={{ height: isEmpty ? "0" : value.size === 0 ? h - 49 : h - 86 }}
+                                        className="border-floating-border bg-floating-background p-0 text-foreground"
+                                        itemContent={(i, option) => {
+                                            const Label = (option.Render as React.FC<any>) ?? Frag;
+                                            const active = value.has(option.value) || value.has(option.label ?? "");
+                                            const selected = index === i;
+                                            const children = option.label ?? option.value;
+                                            return (
+                                                <button
+                                                    data-value={option.value}
+                                                    {...getItemProps({
+                                                        ref: (node) => void (listRef.current[i] = node) as any,
+                                                        role: "option",
+                                                        type: "button",
+                                                        "aria-checked": active,
+                                                        "aria-current": active,
+                                                        "aria-selected": active,
+                                                        "aria-busy": option.disabled,
+                                                        onClick: () => onSelect(option, i),
+                                                    })}
+                                                    className={`flex w-full max-w-full cursor-pointer items-center justify-start p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
+                                                >
+                                                    <Checkbox
+                                                        onChange={noop}
+                                                        checked={active}
+                                                        aria-checked={active}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            onSelect(option, i);
+                                                        }}
+                                                    />
+                                                    <Label {...props} label={option.label} value={option.value} children={children} />
+                                                </button>
+                                            );
+                                        }}
+                                    />
+                                )}
                                 {value.size === 0 ? null : (
                                     <div className="sticky bottom-0 flex w-full flex-nowrap items-center gap-2 overflow-x-auto rounded-b-lg bg-floating-background p-2">
                                         {tags}

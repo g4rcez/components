@@ -5,11 +5,12 @@ import { css } from "../../lib/dom";
 
 export type SwitchProps = React.ComponentProps<"input"> & {
     error?: string;
+    loading?: boolean;
     container?: string;
     onCheck?: (nextValue: boolean) => void;
 };
 
-export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, container, loading, error, ...props }: SwitchProps, ref) => {
+export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, loading, container, error, ...props }: SwitchProps, ref) => {
     const id = useId();
     const [innerChecked, setInnerChecked] = useState(props.checked ?? false);
     const checked = innerChecked;
@@ -23,8 +24,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, con
                 const onChange = (e: any) => {
                     if (stableOnChange.current) stableOnChange.current(e);
                 };
-                innerRef.current.addEventListener("change", onChange);
-                return () => innerRef.current?.removeEventListener("change", onChange);
+                const ref = innerRef.current;
+                ref.addEventListener("change", onChange);
+                return () => ref?.removeEventListener("change", onChange);
             }
         }
     }, []);

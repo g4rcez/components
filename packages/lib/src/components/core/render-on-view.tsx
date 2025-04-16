@@ -1,8 +1,14 @@
+"use client";
 import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from "react";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { PolymorphicProps } from "./polymorph";
 
-export type RenderOnViewProps<T extends React.ElementType = "div"> = PolymorphicProps<{ onIntersection?: () => void }, T>;
+export type RenderOnViewProps<T extends React.ElementType = "div"> = PolymorphicProps<
+    {
+        onIntersection?: () => void;
+    },
+    T
+>;
 
 function isInViewport(el: HTMLElement): boolean {
     const rect = el.getBoundingClientRect();

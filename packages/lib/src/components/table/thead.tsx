@@ -78,9 +78,11 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-colid={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`relative hidden min-w-0 cursor-grab border border-b border-transparent border-b-table-border border-r-table-border font-medium first:table-cell last:border-r-transparent md:table-cell ${props.header.thProps?.className ?? ""}`}
+            className={`relative hidden min-w-0 cursor-grab border-0 font-medium first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
         >
-            <span className="flex h-full items-center justify-between px-2 py-4">
+            <span
+                className={`flex h-full items-center justify-between bg-table-header px-2 py-4 ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}
+            >
                 <span className="flex items-center gap-1">
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
@@ -147,7 +149,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="absolute right-0 top-0 block h-full w-1.5 cursor-col-resize hover:bg-primary active:bg-primary"
+                    className="absolute -right-[0.5px] top-0 z-calendar block h-full w-[1px] cursor-col-resize bg-table-border hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
                     onClick={(e) => void e.currentTarget.focus()}
                     onKeyDown={(e) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
@@ -190,7 +192,7 @@ export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
             ref={ref}
             onReorder={onChange}
             values={props.headers}
-            className="bg-table-header text-lg"
+            className="text-lg"
         >
             <AnimatePresence>
                 {props.headers.map((header, index) => (

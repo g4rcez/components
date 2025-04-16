@@ -252,6 +252,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const id = props.id || props.name;
 
+        const isEmpty = displayList.length === 0;
+
         return (
             <InputField
                 {...(props as any)}
@@ -377,10 +379,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 })}
                                 initial={false}
                                 data-floating="true"
-                                animate={{ height: h }}
+                                animate={{ height: isEmpty ? "auto" : h }}
                                 className="isolate z-floating m-0 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
-                                {displayList.length === 0 ? (
+                                {isEmpty ? (
                                     <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
@@ -389,10 +391,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 ) : null}
                                 <Virtuoso
                                     ref={virtuoso}
+                                    hidden={isEmpty}
                                     data={displayList}
                                     style={{ height: h }}
                                     components={components as any}
-                                    hidden={displayList.length === 0}
                                     className="rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;

@@ -72,6 +72,7 @@ export type InputFieldProps<T extends "input" | "select" | "textarea"> = Polymor
         Override<
             FeedbackProps,
             {
+                loading: boolean;
                 componentName: string;
                 info: Label;
                 labelClassName: string;

@@ -1,3 +1,4 @@
+"use client";
 import { createContext } from "react";
 import type { Locales } from "the-mask-input";
 import type { ContextType } from "../hooks/use-components-provider";

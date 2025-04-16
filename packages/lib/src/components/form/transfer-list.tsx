@@ -1,3 +1,4 @@
+"use client";
 import { ChevronRightIcon } from "lucide-react";
 import React, { forwardRef, Fragment, useRef } from "react";
 import { Virtuoso } from "react-virtuoso";

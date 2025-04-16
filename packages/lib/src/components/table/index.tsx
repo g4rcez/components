@@ -1,3 +1,4 @@
+"use client";
 import { AnimatePresence } from "motion/react";
 import Linq from "linq-arrays";
 import React, { createContext, Fragment, HTMLAttributes, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -67,7 +68,7 @@ const VirtualTable = React.forwardRef(({ context, className = "", ...props }: an
         {...props}
         ref={ref as any}
         role="table"
-        className={`table min-w-full table-fixed border-collapse divide-y divide-table-border text-left ${className ?? ""}`}
+        className={`table min-w-full table-fixed border-collapse divide-y divide-table-border border-0 text-left ${className ?? ""}`}
     />
 ));
 
@@ -77,11 +78,11 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
         ...(props as any)?.style,
         top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
     };
-    return <thead {...props} style={style} role="rowgroup" className="shadow-xs group:sticky top-0 bg-card-background" ref={ref} />;
+    return <thead {...props} style={style} role="rowgroup" className="shadow-xs group:sticky top-0 bg-transparent" ref={ref} />;
 });
 
 const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
-    return <tr {...props} role="row" ref={ref} className={`table-row group ${(props as any)?.className ?? ""}`} />;
+    return <tr {...props} role="row" ref={ref} className={`group table-row ${(props as any)?.className ?? ""}`} />;
 });
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
@@ -117,15 +118,11 @@ type ItemContentContext = {
 
 const SkeletonLoading = <div className="h-2 w-10/12 animate-pulse rounded bg-table-border" />;
 
-const EmptyContent = (_: number, __: any, context: ItemContentContext) => (
-    <td
-        role="cell"
-        colSpan={context.cols.length}
-        className="hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell"
-    >
-        {context.loading ? SkeletonLoading : <Empty />}
-    </td>
+const EmptyContent = (props: { loading?: boolean }) => (
+    <div className="flex h-48 w-full items-center justify-center px-2">{props.loading ? SkeletonLoading : <Empty />}</div>
 );
+
+const EmptyCell = () => <Fragment />;
 
 const ItemContent = (index: number, row: any, context: ItemContentContext) => {
     const cols = context.cols;
@@ -161,7 +158,7 @@ const ItemContent = (index: number, row: any, context: ItemContentContext) => {
 
 const Frag = () => <Fragment />;
 
-const emptyRows = [{}];
+const emptyRows: any[] = [];
 
 const InnerTable = <T extends Any>({
     cols,
@@ -210,6 +207,8 @@ const InnerTable = <T extends Any>({
         return () => observer.disconnect();
     }, [loadingMoreRef, onScrollEndRef]);
 
+    const empty = rows.length === 0;
+
     return (
         <div className="min-w-full">
             <div className={`group rounded-lg ${border ? "border border-table-border" : ""}`}>
@@ -218,9 +217,9 @@ const InnerTable = <T extends Any>({
                     followOutput="smooth"
                     components={components}
                     totalCount={rows.length}
-                    data={rows.length === 0 ? emptyRows : rows}
+                    data={empty ? (emptyRows as T[]) : rows}
+                    itemContent={empty ? EmptyCell : ItemContent}
                     fixedFooterContent={showLoadingFooter ? Frag : null}
-                    itemContent={rows.length === 0 ? EmptyContent : ItemContent}
                     context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols as any }}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
@@ -236,6 +235,7 @@ const InnerTable = <T extends Any>({
                         />
                     )}
                 />
+                {empty ? <EmptyContent loading={props.loading} /> : null}
                 <div aria-hidden="true" ref={ref} className="h-0.5 w-full" />
             </div>
             {pagination !== null ? <Pagination {...pagination} /> : null}

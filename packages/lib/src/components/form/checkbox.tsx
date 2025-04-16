@@ -7,6 +7,7 @@ export type CheckboxProps = Override<
     {
         error?: string;
         asTask?: boolean;
+        loading?: boolean;
         container?: string;
         labelClassName?: string;
         size?: "medium" | "large";
