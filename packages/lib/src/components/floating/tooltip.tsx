@@ -18,9 +18,10 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { forwardRef, Fragment, useEffect, useRef, useState } from "react";
 import { Polymorph, PolymorphicProps } from "../../components/core/polymorph";
 import { FLOATING_DELAY } from "../../constants";
+import { mergeRefs } from "../../lib/dom";
 import { noop } from "../../lib/fns";
 import { ComponentLike, Label } from "../../types";
 
@@ -39,20 +40,23 @@ export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProp
     T
 >;
 
-export const Tooltip = <T extends ComponentLike = "span">({
-    as,
-    title,
-    children,
-    placement,
-    open,
-    focus = true,
-    hover = true,
-    enabled = true,
-    popover = true,
-    followCursor = false,
-    onChange = noop,
-    ...props
-}: TooltipProps<T>) => {
+export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement = forwardRef(function Tooltip<T extends ComponentLike = "span">(
+    {
+        as,
+        title,
+        children,
+        placement,
+        open,
+        focus = true,
+        hover = true,
+        enabled = true,
+        popover = true,
+        followCursor = false,
+        onChange = noop,
+        ...props
+    }: TooltipProps<T>,
+    outerRef: any
+) {
     const [innerOpen, setInnerOpen] = useState<boolean>(open ?? false);
     const arrowRef = useRef(null);
     const Component: any = as || "span";
@@ -104,7 +108,7 @@ export const Tooltip = <T extends ComponentLike = "span">({
 
     return (
         <Fragment>
-            <Component ref={refs.setReference} {...getReferenceProps(props)}>
+            <Component {...getReferenceProps(props)} ref={mergeRefs(refs.setReference, outerRef)}>
                 {title}
             </Component>
             {innerOpen && (
@@ -122,4 +126,4 @@ export const Tooltip = <T extends ComponentLike = "span">({
             )}
         </Fragment>
     );
-};
+}) as any;

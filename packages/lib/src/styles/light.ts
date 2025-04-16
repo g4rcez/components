@@ -88,9 +88,9 @@ export const LIGHT_THEME: DesignTokens = {
             overlay: "hsla(0, 0%, 0%)",
         },
         table: {
-            header: "hsla(221, 10%, 90%)",
+            header: "hsla(221, 20%, 97%)",
             background: "hsla(0, 0%, 100%)",
-            border: "hsla(210, 25%, 88%)",
+            border: "hsla(210, 20%, 92%)",
         },
         button: {
             muted: {
@@ -128,8 +128,8 @@ export const LIGHT_THEME: DesignTokens = {
         },
         tag: {
             muted: {
-                bg: "hsla(210, 30%, 86%)",
-                text: "hsla(210, 30%, 86%)",
+                bg: "hsla(210, 30%, 92%)",
+                text: "hsla(210, 10%, 25%)",
             },
             primary: {
                 text: "hsla(0, 0%, 100%)",
