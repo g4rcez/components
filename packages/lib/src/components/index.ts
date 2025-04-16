@@ -26,6 +26,7 @@ export * from "./form/input-field";
 export * from "./form/multi-select";
 export * from "./form/radiobox";
 export * from "./form/select";
+export * from "./form/slider";
 export * from "./form/switch";
 export * from "./form/task-list";
 export * from "./form/textarea";

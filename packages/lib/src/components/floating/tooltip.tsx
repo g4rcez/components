@@ -40,7 +40,10 @@ export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProp
     T
 >;
 
-export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement = forwardRef(function Tooltip<T extends ComponentLike = "span">(
+export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement = forwardRef<
+    HTMLSpanElement,
+    TooltipProps
+>(function Tooltip<T extends ComponentLike = "span">(
     {
         as,
         title,
