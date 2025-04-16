@@ -62,7 +62,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
       </nav>
       <div className="container mx-auto w-full">
         <div className="grid grid-cols-12">
-          <nav className="md:block hidden self-start sticky top-20 col-span-2 w-full">
+          <nav className="lg:block hidden self-start sticky top-20 col-span-2 w-full">
             <ul className="space-y-6">
               {sections.map((section) => (
                 <Fragment key={section.title}>

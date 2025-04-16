@@ -1,6 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Card,
   ColType,
@@ -14,6 +14,8 @@ type User = { id: string; name: number; type: string; document: string };
 
 const cols = createColumns<User>((col) => {
   col.add("name", "Nome", {
+    allowSort: true,
+    allowFilter: true,
     type: ColType.Number,
     Element: (props) => (
       <Fragment>
@@ -21,21 +23,34 @@ const cols = createColumns<User>((col) => {
       </Fragment>
     ),
   });
-  col.add("type", "Type", { allowSort: false, allowFilter: false });
-  col.add("document", "Document", { allowSort: false, allowFilter: false });
+  col.add("id", "ID");
+  col.add("type", "Type");
+  col.add("document", "Document");
 });
 
-const clients = Array.from({ length: 100 }).map(
-  (_, i): User => ({
-    id: uuid(),
-    name: i,
-    type: i % 2 === 0 ? "pj" : "pf",
-    document: i % 2 === 0 ? "00000000000" : "00000000000000",
-  }),
-);
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function TablePage() {
   const preferences = useTablePreferences("@test", cols);
+  const [clients, setClients] = useState<User[]>([]);
+
+  useEffect(() => {
+    const req = async () => {
+      await sleep(3000);
+      setClients(
+        Array.from({ length: 1000 }).map(
+          (_, i): User => ({
+            id: uuid(),
+            name: i,
+            type: i % 2 === 0 ? "pj" : "pf",
+            document: i % 2 === 0 ? "00000000000" : "00000000000000",
+          }),
+        ),
+      );
+    };
+    req();
+  }, []);
+
   return (
     <DocsLayout
       title="Table"
@@ -45,6 +60,7 @@ export default function TablePage() {
       <Card container="px-0 py-0 pb-0" className="py-0 pb-0 lg:px-0 px-0">
         <Table<User>
           {...preferences}
+          loading={clients.length === 0}
           sticky={40}
           name="table"
           rows={clients}

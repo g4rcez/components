@@ -19,6 +19,7 @@ const tokenRemap: TokenRemap = {
 };
 
 const tweaks: Tweaks = {
+  table: { filters: false, sorters: false, operations: false },
   input: { iconFeedback: true },
 };
 
