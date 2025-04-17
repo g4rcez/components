@@ -1,4 +1,11 @@
+@import "../../../lib/src/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+[data-component="cell-aside"]:has(input[checked]),
+[data-component="cell-aside"]:has(input:focus) {
+    @apply opacity-100;
+}
