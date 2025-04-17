@@ -58,6 +58,12 @@ type RecursiveGet<Obj, pathList> = Obj extends any
 
 type GetFromPath<Obj, path> = RecursiveGet<Obj, ParsePath<path>>;
 
+export type CellAsideElement<T extends POJO> = {
+    row: T;
+    rowIndex: number;
+    col: ColOptions<T, AllPaths<T>>;
+};
+
 export type CellPropsElement<T extends POJO, K extends AllPaths<T>> = {
     row: T;
     value: GetFromPath<T, K>;
@@ -71,9 +77,9 @@ type ColOptions<T extends POJO, K extends AllPaths<T>> = Partial<{
     allowSort: boolean;
     headerLabel: string;
     allowFilter: boolean;
+    Element: React.FC<CellPropsElement<T, K>>;
     thProps: React.HTMLAttributes<HTMLTableCellElement>;
     cellProps: React.HTMLAttributes<HTMLTableCellElement>;
-    Element: (props: CellPropsElement<T, K>) => React.ReactNode;
 }>;
 
 export type ColConstructor<T extends POJO> = {

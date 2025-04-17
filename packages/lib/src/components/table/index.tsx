@@ -1,22 +1,23 @@
 "use client";
-import { AnimatePresence } from "motion/react";
 import Linq from "linq-arrays";
+import { AnimatePresence } from "motion/react";
 import React, { createContext, Fragment, HTMLAttributes, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useReducer } from "use-typed-reducer";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { useTweaks } from "../../hooks/use-tweaks";
-import { path } from "../../lib/fns";
 import { Any } from "../../types";
 import { Empty } from "../display/empty";
+import { SkeletonCell } from "../display/skeleton";
 import { OptionProps } from "../form/select";
 import { FilterConfig } from "./filter";
 import { GroupItem } from "./group";
 import { Metadata } from "./metadata";
 import { Pagination } from "./pagination";
+import { Row } from "./row";
 import { multiSort, Sorter } from "./sort";
-import { CellPropsElement, Col, ColMatrix, createOptionCols, TableOperationProps } from "./table-lib";
+import { CellAsideElement, Col, createOptionCols, TableOperationProps } from "./table-lib";
 import { TableHeader } from "./thead";
 
 type ContextProps = Partial<{ sticky: number }>;
@@ -27,6 +28,7 @@ const useTable = () => useContext(TableContext);
 
 type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
+        Aside?: React.FC<CellAsideElement<T>>;
         border?: boolean;
         useControl?: boolean;
         loading?: boolean;
@@ -82,7 +84,7 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
 });
 
 const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
-    return <tr {...props} role="row" ref={ref} className={`group table-row ${(props as any)?.className ?? ""}`} />;
+    return <tr {...props} role="row" ref={ref} className={`group-table-row table-row ${(props as any)?.className ?? ""}`} />;
 });
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
@@ -110,51 +112,11 @@ const components = {
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-type ItemContentContext = {
-    cols: Col<Any>[];
-    loading?: boolean;
-    loadingMore?: boolean;
-};
-
-const SkeletonLoading = <div className="h-2 w-10/12 animate-pulse rounded bg-table-border" />;
-
 const EmptyContent = (props: { loading?: boolean }) => (
-    <div className="flex h-48 w-full items-center justify-center px-2">{props.loading ? SkeletonLoading : <Empty />}</div>
+    <div className="flex h-48 w-full items-center justify-center px-2">{props.loading ? SkeletonCell : <Empty />}</div>
 );
 
 const EmptyCell = () => <Fragment />;
-
-const ItemContent = (index: number, row: any, context: ItemContentContext) => {
-    const cols = context.cols;
-    const loading = context.loading;
-    return (
-        <Fragment>
-            {cols.map((col, colIndex) => {
-                const matrix: ColMatrix = `${colIndex},${index}`;
-                const value: any = path(row, col.id as any);
-                const Component: React.FC<CellPropsElement<any, any>> = col.Element as any;
-                const className = col.cellProps?.className || "";
-                return (
-                    <td
-                        {...col.cellProps}
-                        role="cell"
-                        data-matrix={matrix}
-                        key={`accessor-${index}-${colIndex}`}
-                        className={`relative hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell ${className}`}
-                    >
-                        {loading ? (
-                            SkeletonLoading
-                        ) : Component ? (
-                            <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
-                        ) : (
-                            <Fragment>{Is.nil(value) ? "" : value}</Fragment>
-                        )}
-                    </td>
-                );
-            })}
-        </Fragment>
-    );
-};
 
 const Frag = () => <Fragment />;
 
@@ -209,6 +171,8 @@ const InnerTable = <T extends Any>({
 
     const empty = rows.length === 0;
 
+    const context = { loading: props.loading, loadingMore: props.loadingMore, cols: cols as any, Aside: props.Aside };
+
     return (
         <div className="min-w-full">
             <div className={`group rounded-lg ${border ? "border border-table-border" : ""}`}>
@@ -218,9 +182,9 @@ const InnerTable = <T extends Any>({
                     components={components}
                     totalCount={rows.length}
                     data={empty ? (emptyRows as T[]) : rows}
-                    itemContent={empty ? EmptyCell : ItemContent}
+                    itemContent={empty ? EmptyCell : Row}
                     fixedFooterContent={showLoadingFooter ? Frag : null}
-                    context={{ loading: props.loading, loadingMore: props.loadingMore, cols: cols as any }}
+                    context={context}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
                             headers={cols}
@@ -243,7 +207,7 @@ const InnerTable = <T extends Any>({
     );
 };
 
-export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border"> & {
+export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
 } & Partial<
         TableOperationProps<T> & {

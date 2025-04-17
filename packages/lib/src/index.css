@@ -19,3 +19,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+.group-table-row:hover .group-table-cell-aside {
+    @apply opacity-100;
+}
