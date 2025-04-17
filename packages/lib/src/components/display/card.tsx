@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from "react";
+import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
 import { Label, Override } from "../../types";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
@@ -29,15 +30,22 @@ export const Card = ({
     <Polymorph
         {...props}
         as={as}
-        data-componen="card"
+        data-component="card"
         className={css("flex flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-8 shadow", container)}
     >
         {title ? (
-            <header className={css("mb-2 w-full border-b border-card-border px-4 pb-4 text-xl font-medium lg:px-8", titleClassName)}>{title}</header>
+            <header
+                data-component="card-title"
+                className={css("mb-2 w-full border-b border-card-border px-4 pb-4 text-xl font-medium lg:px-8", titleClassName)}
+            >
+                {title}
+            </header>
         ) : (
             header
         )}
-        <div className={css("min-w-full px-4 lg:px-8", className)}>{children}</div>
+        <div data-component="card-body" className={css("min-w-full px-4 lg:px-8", className)}>
+            {children}
+        </div>
     </Polymorph>
 );
 
@@ -57,6 +65,7 @@ Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<Ca
     return (
         <Component
             {...props}
+            title={Is.string(props.title) ? props.title : undefined}
             className={css("flex w-full flex-col flex-wrap items-start justify-between gap-base sm:flex-row sm:items-center", props.className)}
         >
             <Title className="font-semibold">{props.title}</Title>
