@@ -1,7 +1,7 @@
 {
   "name": "@g4rcez/components",
   "description": "Customizable react components.",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.7.0",
@@ -126,172 +126,172 @@
       "default": "./dist/preset/src/styles/design-tokens.js"
     },
     "./preset.tailwind": {
-      "type": "./dist/preset/preset.tailwind.d.ts",
-      "import": "./dist/preset/preset.tailwind.js",
-      "require": "./dist/preset/preset.tailwind.js",
-      "default": "./dist/preset/preset.tailwind.js"
+      "type": "./dist/preset.tailwind.d.ts",
+      "import": "./dist/preset.tailwind.js",
+      "require": "./dist/preset.tailwind.js",
+      "default": "./dist/preset.tailwind.js"
     },
     "./tag": {
-      "type": "./dist/components/core/tag.d.ts",
-      "import": "./dist/components/core/tag.js",
-      "require": "./dist/components/core/tag.js",
-      "default": "./dist/components/core/tag.js"
+      "type": "./dist/src/components/core/tag.d.ts",
+      "import": "./dist/src/components/core/tag.js",
+      "require": "./dist/src/components/core/tag.js",
+      "default": "./dist/src/components/core/tag.js"
     },
     "./button": {
-      "type": "./dist/components/core/button.d.ts",
-      "import": "./dist/components/core/button.js",
-      "require": "./dist/components/core/button.js",
-      "default": "./dist/components/core/button.js"
+      "type": "./dist/src/components/core/button.d.ts",
+      "import": "./dist/src/components/core/button.js",
+      "require": "./dist/src/components/core/button.js",
+      "default": "./dist/src/components/core/button.js"
     },
     "./form": {
-      "type": "./dist/components/form/form.d.ts",
-      "import": "./dist/components/form/form.js",
-      "require": "./dist/components/form/form.js",
-      "default": "./dist/components/form/form.js"
+      "type": "./dist/src/components/form/form.d.ts",
+      "import": "./dist/src/components/form/form.js",
+      "require": "./dist/src/components/form/form.js",
+      "default": "./dist/src/components/form/form.js"
     },
     "./transfer-list": {
-      "type": "./dist/components/form/transfer-list.d.ts",
-      "import": "./dist/components/form/transfer-list.js",
-      "require": "./dist/components/form/transfer-list.js",
-      "default": "./dist/components/form/transfer-list.js"
+      "type": "./dist/src/components/form/transfer-list.d.ts",
+      "import": "./dist/src/components/form/transfer-list.js",
+      "require": "./dist/src/components/form/transfer-list.js",
+      "default": "./dist/src/components/form/transfer-list.js"
     },
     "./radiobox": {
-      "type": "./dist/components/form/radiobox.d.ts",
-      "import": "./dist/components/form/radiobox.js",
-      "require": "./dist/components/form/radiobox.js",
-      "default": "./dist/components/form/radiobox.js"
+      "type": "./dist/src/components/form/radiobox.d.ts",
+      "import": "./dist/src/components/form/radiobox.js",
+      "require": "./dist/src/components/form/radiobox.js",
+      "default": "./dist/src/components/form/radiobox.js"
     },
     "./date-picker": {
-      "type": "./dist/components/form/date-picker.d.ts",
-      "import": "./dist/components/form/date-picker.js",
-      "require": "./dist/components/form/date-picker.js",
-      "default": "./dist/components/form/date-picker.js"
+      "type": "./dist/src/components/form/date-picker.d.ts",
+      "import": "./dist/src/components/form/date-picker.js",
+      "require": "./dist/src/components/form/date-picker.js",
+      "default": "./dist/src/components/form/date-picker.js"
     },
     "./task-list": {
-      "type": "./dist/components/form/task-list.d.ts",
-      "import": "./dist/components/form/task-list.js",
-      "require": "./dist/components/form/task-list.js",
-      "default": "./dist/components/form/task-list.js"
+      "type": "./dist/src/components/form/task-list.d.ts",
+      "import": "./dist/src/components/form/task-list.js",
+      "require": "./dist/src/components/form/task-list.js",
+      "default": "./dist/src/components/form/task-list.js"
     },
     "./checkbox": {
-      "type": "./dist/components/form/checkbox.d.ts",
-      "import": "./dist/components/form/checkbox.js",
-      "require": "./dist/components/form/checkbox.js",
-      "default": "./dist/components/form/checkbox.js"
+      "type": "./dist/src/components/form/checkbox.d.ts",
+      "import": "./dist/src/components/form/checkbox.js",
+      "require": "./dist/src/components/form/checkbox.js",
+      "default": "./dist/src/components/form/checkbox.js"
     },
     "./input": {
-      "type": "./dist/components/form/input.d.ts",
-      "import": "./dist/components/form/input.js",
-      "require": "./dist/components/form/input.js",
-      "default": "./dist/components/form/input.js"
+      "type": "./dist/src/components/form/input.d.ts",
+      "import": "./dist/src/components/form/input.js",
+      "require": "./dist/src/components/form/input.js",
+      "default": "./dist/src/components/form/input.js"
     },
     "./autocomplete": {
-      "type": "./dist/components/form/autocomplete.d.ts",
-      "import": "./dist/components/form/autocomplete.js",
-      "require": "./dist/components/form/autocomplete.js",
-      "default": "./dist/components/form/autocomplete.js"
+      "type": "./dist/src/components/form/autocomplete.d.ts",
+      "import": "./dist/src/components/form/autocomplete.js",
+      "require": "./dist/src/components/form/autocomplete.js",
+      "default": "./dist/src/components/form/autocomplete.js"
     },
     "./switch": {
-      "type": "./dist/components/form/switch.d.ts",
-      "import": "./dist/components/form/switch.js",
-      "require": "./dist/components/form/switch.js",
-      "default": "./dist/components/form/switch.js"
+      "type": "./dist/src/components/form/switch.d.ts",
+      "import": "./dist/src/components/form/switch.js",
+      "require": "./dist/src/components/form/switch.js",
+      "default": "./dist/src/components/form/switch.js"
     },
     "./file-upload": {
-      "type": "./dist/components/form/file-upload.d.ts",
-      "import": "./dist/components/form/file-upload.js",
-      "require": "./dist/components/form/file-upload.js",
-      "default": "./dist/components/form/file-upload.js"
+      "type": "./dist/src/components/form/file-upload.d.ts",
+      "import": "./dist/src/components/form/file-upload.js",
+      "require": "./dist/src/components/form/file-upload.js",
+      "default": "./dist/src/components/form/file-upload.js"
     },
     "./select": {
-      "type": "./dist/components/form/select.d.ts",
-      "import": "./dist/components/form/select.js",
-      "require": "./dist/components/form/select.js",
-      "default": "./dist/components/form/select.js"
+      "type": "./dist/src/components/form/select.d.ts",
+      "import": "./dist/src/components/form/select.js",
+      "require": "./dist/src/components/form/select.js",
+      "default": "./dist/src/components/form/select.js"
     },
     "./expand": {
-      "type": "./dist/components/floating/expand.d.ts",
-      "import": "./dist/components/floating/expand.js",
-      "require": "./dist/components/floating/expand.js",
-      "default": "./dist/components/floating/expand.js"
+      "type": "./dist/src/components/floating/expand.d.ts",
+      "import": "./dist/src/components/floating/expand.js",
+      "require": "./dist/src/components/floating/expand.js",
+      "default": "./dist/src/components/floating/expand.js"
     },
     "./dropdown": {
-      "type": "./dist/components/floating/dropdown.d.ts",
-      "import": "./dist/components/floating/dropdown.js",
-      "require": "./dist/components/floating/dropdown.js",
-      "default": "./dist/components/floating/dropdown.js"
+      "type": "./dist/src/components/floating/dropdown.d.ts",
+      "import": "./dist/src/components/floating/dropdown.js",
+      "require": "./dist/src/components/floating/dropdown.js",
+      "default": "./dist/src/components/floating/dropdown.js"
     },
     "./modal": {
-      "type": "./dist/components/floating/modal.d.ts",
-      "import": "./dist/components/floating/modal.js",
-      "require": "./dist/components/floating/modal.js",
-      "default": "./dist/components/floating/modal.js"
+      "type": "./dist/src/components/floating/modal.d.ts",
+      "import": "./dist/src/components/floating/modal.js",
+      "require": "./dist/src/components/floating/modal.js",
+      "default": "./dist/src/components/floating/modal.js"
     },
     "./tooltip": {
-      "type": "./dist/components/floating/tooltip.d.ts",
-      "import": "./dist/components/floating/tooltip.js",
-      "require": "./dist/components/floating/tooltip.js",
-      "default": "./dist/components/floating/tooltip.js"
+      "type": "./dist/src/components/floating/tooltip.d.ts",
+      "import": "./dist/src/components/floating/tooltip.js",
+      "require": "./dist/src/components/floating/tooltip.js",
+      "default": "./dist/src/components/floating/tooltip.js"
     },
     "./notifications": {
-      "type": "./dist/components/display/notifications.d.ts",
-      "import": "./dist/components/display/notifications.js",
-      "require": "./dist/components/display/notifications.js",
-      "default": "./dist/components/display/notifications.js"
+      "type": "./dist/src/components/display/notifications.d.ts",
+      "import": "./dist/src/components/display/notifications.js",
+      "require": "./dist/src/components/display/notifications.js",
+      "default": "./dist/src/components/display/notifications.js"
     },
     "./timeline": {
-      "type": "./dist/components/display/timeline.d.ts",
-      "import": "./dist/components/display/timeline.js",
-      "require": "./dist/components/display/timeline.js",
-      "default": "./dist/components/display/timeline.js"
+      "type": "./dist/src/components/display/timeline.d.ts",
+      "import": "./dist/src/components/display/timeline.js",
+      "require": "./dist/src/components/display/timeline.js",
+      "default": "./dist/src/components/display/timeline.js"
     },
     "./list": {
-      "type": "./dist/components/display/list.d.ts",
-      "import": "./dist/components/display/list.js",
-      "require": "./dist/components/display/list.js",
-      "default": "./dist/components/display/list.js"
+      "type": "./dist/src/components/display/list.d.ts",
+      "import": "./dist/src/components/display/list.js",
+      "require": "./dist/src/components/display/list.js",
+      "default": "./dist/src/components/display/list.js"
     },
     "./calendar": {
-      "type": "./dist/components/display/calendar.d.ts",
-      "import": "./dist/components/display/calendar.js",
-      "require": "./dist/components/display/calendar.js",
-      "default": "./dist/components/display/calendar.js"
+      "type": "./dist/src/components/display/calendar.d.ts",
+      "import": "./dist/src/components/display/calendar.js",
+      "require": "./dist/src/components/display/calendar.js",
+      "default": "./dist/src/components/display/calendar.js"
     },
     "./card": {
-      "type": "./dist/components/display/card.d.ts",
-      "import": "./dist/components/display/card.js",
-      "require": "./dist/components/display/card.js",
-      "default": "./dist/components/display/card.js"
+      "type": "./dist/src/components/display/card.d.ts",
+      "import": "./dist/src/components/display/card.js",
+      "require": "./dist/src/components/display/card.js",
+      "default": "./dist/src/components/display/card.js"
     },
     "./table": {
-      "type": "./dist/components/table/table.d.ts",
-      "import": "./dist/components/table/table.js",
-      "require": "./dist/components/table/table.js",
-      "default": "./dist/components/table/table.js"
+      "type": "./dist/src/components/table/table.d.ts",
+      "import": "./dist/src/components/table/table.js",
+      "require": "./dist/src/components/table/table.js",
+      "default": "./dist/src/components/table/table.js"
     },
     "./menu": {
-      "type": "./dist/components/floating/menu.d.ts",
-      "import": "./dist/components/floating/menu.js",
-      "require": "./dist/components/floating/menu.js",
-      "default": "./dist/components/floating/menu.js"
+      "type": "./dist/src/components/floating/menu.d.ts",
+      "import": "./dist/src/components/floating/menu.js",
+      "require": "./dist/src/components/floating/menu.js",
+      "default": "./dist/src/components/floating/menu.js"
     },
     "./tabs": {
-      "type": "./dist/components/display/tabs.d.ts",
-      "import": "./dist/components/display/tabs.js",
-      "require": "./dist/components/display/tabs.js",
-      "default": "./dist/components/display/tabs.js"
+      "type": "./dist/src/components/display/tabs.d.ts",
+      "import": "./dist/src/components/display/tabs.js",
+      "require": "./dist/src/components/display/tabs.js",
+      "default": "./dist/src/components/display/tabs.js"
     },
     "./stats": {
-      "type": "./dist/components/display/stats.d.ts",
-      "import": "./dist/components/display/stats.js",
-      "require": "./dist/components/display/stats.js",
-      "default": "./dist/components/display/stats.js"
+      "type": "./dist/src/components/display/stats.d.ts",
+      "import": "./dist/src/components/display/stats.js",
+      "require": "./dist/src/components/display/stats.js",
+      "default": "./dist/src/components/display/stats.js"
     },
     "./alert": {
-      "type": "./dist/components/display/alert.d.ts",
-      "import": "./dist/components/display/alert.js",
-      "require": "./dist/components/display/alert.js",
-      "default": "./dist/components/display/alert.js"
+      "type": "./dist/src/components/display/alert.d.ts",
+      "import": "./dist/src/components/display/alert.js",
+      "require": "./dist/src/components/display/alert.js",
+      "default": "./dist/src/components/display/alert.js"
     }
   }
 }

@@ -46,7 +46,7 @@ const buttonVariants = cva(
     {
         variants,
         defaultVariants: { theme: "main", size: "default", rounded: "default" },
-    } as const
+    }
 );
 
 type Variants = CvaVariants<typeof variants>;

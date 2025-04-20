@@ -37,7 +37,7 @@ const variants = {
         disabled: "bg-disabled duration-700 opacity-70",
         loading: "animate-pulse bg-disabled duration-700 opacity-70",
     },
-} as const;
+};
 
 const tagVariants = cva("inline-flex rounded-pill gap-1.5 border-2 border-transparent items-center justify-center align-middle whitespace-nowrap", {
     variants,

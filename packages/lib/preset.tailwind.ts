@@ -53,6 +53,6 @@ const config: Partial<Config> = {
     ],
 };
 
-export { createDesignTokens, parsers, theme };
+export { createDesignTokens, parsers, theme, config };
 
 export default config;
