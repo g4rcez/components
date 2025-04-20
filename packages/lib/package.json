@@ -1,6 +1,6 @@
 {
   "name": "@g4rcez/components",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.7.0",
