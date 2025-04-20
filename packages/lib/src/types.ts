@@ -21,5 +21,10 @@ export type Nil<T> = T | null | undefined;
 export interface ReactComponent<P = Any> {
     propTypes?: any;
     displayName?: string | undefined;
+
     (props: P): ReactNode | Promise<ReactNode>;
 }
+
+export type CvaVariants<T extends object> = {
+    [K in keyof T]?: keyof T[K];
+};

@@ -4,6 +4,7 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { CheckCircleIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
 import React, { forwardRef, PropsWithChildren } from "react";
 import { css } from "../../lib/dom";
+import { CvaVariants } from "../../types";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
 
 const variants = {
@@ -38,27 +39,29 @@ export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
     </motion.div>
 );
 
-const alertVariants = cva("p-4 w-full block border relative rounded-lg text-sm", {
-    variants: {
-        theme: {
-            primary: "bg-alert-primary-bg text-alert-primary-text border-alert-primary-border",
-            danger: "bg-alert-danger-bg text-alert-danger-text border-alert-danger-border",
-            info: "bg-alert-info-bg text-alert-info-text border-alert-info-border",
-            success: "bg-alert-success-bg text-alert-success-text border-alert-success-border",
-            secondary: "bg-alert-secondary-bg text-alert-secondary-text border-alert-secondary-border",
-            warn: "bg-alert-warn-bg text-alert-warn-text border-alert-warn-border",
-            neutral: "bg-transparent border border-card-border text-alert-primary-text",
-        },
+const themeVariants = {
+    theme: {
+        primary: "bg-alert-primary-bg text-alert-primary-text border-alert-primary-border",
+        danger: "bg-alert-danger-bg text-alert-danger-text border-alert-danger-border",
+        info: "bg-alert-info-bg text-alert-info-text border-alert-info-border",
+        success: "bg-alert-success-bg text-alert-success-text border-alert-success-border",
+        secondary: "bg-alert-secondary-bg text-alert-secondary-text border-alert-secondary-border",
+        warn: "bg-alert-warn-bg text-alert-warn-text border-alert-warn-border",
+        neutral: "bg-transparent border border-card-border text-alert-primary-text",
     },
+};
+
+const alertVariants = cva("p-4 w-full block border relative rounded-lg text-sm", {
+    variants: themeVariants,
     defaultVariants: { theme: "neutral" },
 });
 
 export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
-    VariantProps<typeof alertVariants> &
+    CvaVariants<typeof themeVariants> &
         Partial<{
-            Icon: React.ReactElement;
-            container: string;
             open?: boolean;
+            container: string;
+            Icon: React.ReactElement;
             onClose: (nextState: boolean) => void;
         }>,
     T
