@@ -18,9 +18,10 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
-import { css, initializeInputDataset } from "../../lib/dom";
+import { css, getRemainingSize, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { noop } from "../../lib/fns";
 import { Label, Override } from "../../types";
 import { Tag } from "../core/tag";
@@ -43,6 +44,8 @@ export type MultiSelectProps = Override<
         onChangeOptions?: (options: string[]) => void;
     }
 >;
+
+const MIN_SIZE = 40;
 
 const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
@@ -159,15 +162,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
 
-        useEffect(() => {
-            if (!open) setH(0);
-        }, [open]);
-
-        useEffect(() => {
-            if (props.value) {
-                setValue(new Dict(props.value.map((x) => [x, map.get(x)!])));
-            }
-        }, [props.value, map]);
+        const removeScrollRef = useRemoveScroll<HTMLDivElement>(open, "block-only");
 
         const displayList = list.filter((x) => x.hidden !== true);
 
@@ -176,6 +171,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
             transform: true,
+            placement: "bottom-start",
             strategy: "absolute",
             onOpenChange: setOpen,
             whileElementsMounted: autoUpdate,
@@ -184,17 +180,14 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 size({
                     padding: 10,
                     elementContext: "reference",
-                    apply(a) {
-                        if (fieldset.current === null) return;
-                        const w = fieldset.current.getBoundingClientRect().width;
-                        const maxH = 360;
-                        flushSync(() => setTimeout(() => setH(maxH), 200));
-                        Object.assign(a.elements.floating.style, {
-                            width: `${w}px`,
-                            maxWidth: `${w}px`,
-                            maxHeight: isEmpty ? "auto" : `${maxH}px`,
-                            height: isEmpty ? "auto" : `${maxH}px`,
-                        });
+                    apply(args) {
+                        const ul = args.elements.floating.querySelector("ul");
+                        const fullSize = ul?.getBoundingClientRect().height || 0;
+                        const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
+                        const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE, args.availableHeight);
+                        const size = displayList.length === 0 ? MIN_SIZE : Math.min(maxH, DEFAULT_SIZE, fullSize);
+                        const mw = `${fieldset.current!.getBoundingClientRect().width!}px`;
+                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw, height: size });
                     },
                 }),
             ],
@@ -219,6 +212,20 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 onNavigate: (n) => setIndex((prev) => n ?? prev),
             }),
         ]);
+
+        useEffect(() => {
+            if (!open) return setH(0);
+            const inputRef = refs.reference;
+            if (inputRef.current === null) return;
+            const s = getRemainingSize(inputRef.current as HTMLElement, window.innerHeight);
+            setTimeout(() => setH(Math.min(s, displayList.length * 40)), 100);
+        }, [shadow, open, refs.reference]);
+
+        useEffect(() => {
+            if (props.value) {
+                setValue(new Dict(props.value.map((x) => [x, map.get(x)!])));
+            }
+        }, [props.value, map]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -280,8 +287,10 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         type="button"
                         className="text-current hover:text-danger focus:text-danger"
                         onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             onSelect(x, i);
+                            setOpen(false);
                         }}
                     >
                         <XIcon size={14} />
@@ -291,6 +300,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 {x.label ?? x.value}
             </Tag>
         ));
+
+        const scrollableContainerStyle = { height: isEmpty ? "0" : value.size === 0 ? h - 49 : h - 86 };
 
         return (
             <InputField
@@ -334,7 +345,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     </span>
                 }
             >
-                <button
+                <li
                     {...getReferenceProps({
                         ...props,
                         onFocus,
@@ -342,7 +353,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         name: `${id}-shadow`,
                         ref: refs.setReference,
                     })}
-                    type="button"
+                    tabIndex={0}
+                    role="button"
                     data-name={id}
                     data-target={id}
                     data-shadow="true"
@@ -362,7 +374,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     )}
                 >
                     <OverflowControl label={selectedLabel}>{tags}</OverflowControl>
-                </button>
+                </li>
                 <input
                     id={id}
                     name={id}
@@ -378,15 +390,10 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                             <div
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
-                                    style: {
-                                        ...transitions.styles,
-                                        top: y ?? 0,
-                                        position: strategy,
-                                        left: (x ?? 0) + (value ? 26 : 18),
-                                    },
+                                    style: { ...transitions.styles, top: y ?? 0, position: strategy, left: x },
                                 })}
                                 data-floating="true"
-                                className="isolate z-floating m-0 w-full origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
+                                className="isolate z-floating m-0 max-h-80 w-full origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
                             >
                                 <input
                                     autoFocus
@@ -432,47 +439,63 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     </li>
                                 ) : null}
                                 {isEmpty ? null : (
-                                    <Virtuoso
-                                        ref={virtuoso}
-                                        hidden={isEmpty}
-                                        data={displayList}
-                                        components={components as any}
-                                        style={{ height: isEmpty ? "0" : value.size === 0 ? h - 49 : h - 86 }}
-                                        className="border-floating-border bg-floating-background p-0 text-foreground"
-                                        itemContent={(i, option) => {
-                                            const Label = (option.Render as React.FC<any>) ?? Frag;
-                                            const active = value.has(option.value) || value.has(option.label ?? "");
-                                            const selected = index === i;
-                                            const children = option.label ?? option.value;
-                                            return (
-                                                <button
-                                                    data-value={option.value}
-                                                    {...getItemProps({
-                                                        ref: (node) => void (listRef.current[i] = node) as any,
-                                                        role: "option",
-                                                        type: "button",
-                                                        "aria-checked": active,
-                                                        "aria-current": active,
-                                                        "aria-selected": active,
-                                                        "aria-busy": option.disabled,
-                                                        onClick: () => onSelect(option, i),
-                                                    })}
-                                                    className={`flex w-full max-w-full cursor-pointer items-center justify-start p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
-                                                >
-                                                    <Checkbox
-                                                        onChange={noop}
-                                                        checked={active}
-                                                        aria-checked={active}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            onSelect(option, i);
-                                                        }}
-                                                    />
-                                                    <Label {...props} label={option.label} value={option.value} children={children} />
-                                                </button>
-                                            );
+                                    <motion.div
+                                        initial={false}
+                                        data-floating="true"
+                                        ref={removeScrollRef}
+                                        animate={{ height: isEmpty ? "auto" : h }}
+                                        style={scrollableContainerStyle}
+                                        className="max-h-80 w-full overscroll-contain"
+                                        onAnimationComplete={() => {
+                                            if (!open) return setH(0);
+                                            const ul = refs.floating.current as HTMLElement;
+                                            const li = ul.querySelectorAll("li").item(0);
+                                            const sum = (li ? li.getBoundingClientRect().height : 40) * displayList.length;
+                                            return flushSync(() => setH(sum + 2));
                                         }}
-                                    />
+                                    >
+                                        <Virtuoso
+                                            ref={virtuoso}
+                                            hidden={isEmpty}
+                                            data={displayList}
+                                            components={components as any}
+                                            style={scrollableContainerStyle}
+                                            className="max-h-80 border-floating-border bg-floating-background p-0 text-foreground"
+                                            itemContent={(i, option) => {
+                                                const Label = (option.Render as React.FC<any>) ?? Frag;
+                                                const active = value.has(option.value) || value.has(option.label ?? "");
+                                                const selected = index === i;
+                                                const children = option.label ?? option.value;
+                                                return (
+                                                    <button
+                                                        data-value={option.value}
+                                                        {...getItemProps({
+                                                            ref: (node) => void (listRef.current[i] = node) as any,
+                                                            role: "option",
+                                                            type: "button",
+                                                            "aria-checked": active,
+                                                            "aria-current": active,
+                                                            "aria-selected": active,
+                                                            "aria-busy": option.disabled,
+                                                            onClick: () => onSelect(option, i),
+                                                        })}
+                                                        className={`flex w-full max-w-full cursor-pointer items-center justify-start p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
+                                                    >
+                                                        <Checkbox
+                                                            onChange={noop}
+                                                            checked={active}
+                                                            aria-checked={active}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                onSelect(option, i);
+                                                            }}
+                                                        />
+                                                        <Label {...props} label={option.label} value={option.value} children={children} />
+                                                    </button>
+                                                );
+                                            }}
+                                        />
+                                    </motion.div>
                                 )}
                                 {value.size === 0 ? null : (
                                     <div className="sticky bottom-0 flex w-full flex-nowrap items-center gap-2 overflow-x-auto rounded-b-lg bg-floating-background p-2">

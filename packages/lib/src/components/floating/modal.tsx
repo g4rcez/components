@@ -16,7 +16,7 @@ import { AnimatePresence, HTMLMotionProps, motion, MotionValue, PanInfo, TargetA
 import React, { Fragment, PropsWithChildren, useId } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
-import { css } from "../../lib/dom";
+import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
 
 type DrawerSides = "left" | "right";
@@ -193,7 +193,7 @@ export const Modal = ({
     ariaTitle,
     ...props
 }: PropsWithChildren<ModalProps>) => {
-    useRemoveScroll(open);
+    const removeScrollRef = useRemoveScroll(open, "overflow-hidden");
     const headingId = useId();
     const descriptionId = useId();
     const isDesktop = useMediaQuery("(min-width: 64rem)");
@@ -244,12 +244,12 @@ export const Modal = ({
                                     {...props}
                                     exit="exit"
                                     animate="enter"
+                                    aria-modal={open}
                                     initial="initial"
+                                    layoutId={layoutId}
                                     variants={animation}
                                     data-component="modal"
-                                    ref={refs.setFloating}
-                                    aria-modal={open}
-                                    layoutId={layoutId}
+                                    ref={mergeRefs(refs.setFloating, removeScrollRef)}
                                     className={css(variants({ position, type }), className)}
                                     style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
                                     {...(title

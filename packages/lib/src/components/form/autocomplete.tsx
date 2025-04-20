@@ -19,8 +19,9 @@ import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef,
 import { flushSync } from "react-dom";
 import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
+import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
-import { css, dispatchInput, initializeInputDataset } from "../../lib/dom";
+import { css, dispatchInput, getRemainingSize, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
@@ -51,7 +52,11 @@ const emptyRef: any[] = [];
 
 const List: Components["List"] = forwardRef(function VirtualList(props, ref) {
     return (
-        <motion.ul {...props} ref={ref as any} className="w-full rounded-lg border-b border-tooltip-border last:border-transparent">
+        <motion.ul
+            {...props}
+            ref={ref as any}
+            className="w-full overscroll-contain rounded-lg border-b border-tooltip-border last:border-transparent"
+        >
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
     );
@@ -62,8 +67,6 @@ const Item: Components["List"] = forwardRef(function VirtualItem({ item, context
 });
 
 const components = { List, Item };
-
-const DEFAULT_SIZE = 320;
 
 const MIN_SIZE = 40;
 
@@ -89,11 +92,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         }: AutocompleteProps,
         externalRef
     ) => {
+        const scroller = useRef<HTMLElement | null>(null);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
-        const [h, setH] = useState(() => Math.min(DEFAULT_SIZE, MIN_SIZE * options.length));
+        const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
@@ -112,6 +116,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                   ]
                 : options;
         const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
+        const removeScrollRef = useRemoveScroll(open, "block-only");
 
         const setClosed = () => {
             setOpen(false);
@@ -124,35 +129,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             ? undefined
             : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
-        useEffect(() => {
-            if (props.value) {
-                const item = options.find((x) => x.value === props.value);
-                setValue(item?.label ?? props.value);
-            }
-        }, [props.value]);
-
-        useEffect(() => {
-            if (!open) setH(0);
-        }, [open]);
-
-        useEffect(() => {
-            if (!open) return;
-            const ul = refs.floating;
-            if (ul.current === null) return;
-            let size = 0;
-            const items = Array.from(ul.current.querySelectorAll<HTMLLIElement>("li")).slice(0, Math.min(displayList.length, 10));
-            items.forEach((x) => {
-                const rect = x.getBoundingClientRect();
-                size += rect.height;
-            });
-            const s = Math.min(size, DEFAULT_SIZE);
-            setH(s);
-        }, [shadow, open]);
-
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
             transform: true,
-            strategy: "absolute",
+            placement: "bottom-start",
             onOpenChange: setOpen,
             whileElementsMounted: autoUpdate,
             middleware: [
@@ -160,23 +140,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 size({
                     padding: 10,
                     elementContext: "reference",
-                    apply(a) {
-                        const w = fieldset.current!.getBoundingClientRect().width!;
-                        const ul = a.elements.floating.querySelector("ul");
+                    apply(args) {
+                        const ul = args.elements.floating.querySelector("ul");
                         const fullSize = ul?.getBoundingClientRect().height || 0;
-                        const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE);
-                        flushSync(() =>
-                            setTimeout(() => {
-                                const currentH = ul?.getBoundingClientRect().height ?? 0;
-                                if (currentH < MIN_SIZE) return void setH(maxH);
-                                return void setH(Math.min(currentH, DEFAULT_SIZE));
-                            }, 50)
-                        );
-                        Object.assign(a.elements.floating.style, {
-                            width: `${w}px`,
-                            maxWidth: `${w}px`,
-                            maxHeight: `${DEFAULT_SIZE}`,
-                        });
+                        const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
+                        const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE, args.availableHeight);
+                        const size = displayList.length === 0 ? MIN_SIZE : Math.min(maxH, DEFAULT_SIZE, fullSize);
+                        const mw = `${fieldset.current!.getBoundingClientRect().width!}px`;
+                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw, height: size });
                     },
                 }),
             ],
@@ -196,9 +167,23 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 focusItemOnOpen: "auto",
                 openOnArrowKeyDown: true,
                 scrollItemIntoView: true,
-                // onNavigate: (n) => setIndex((prev) => n ?? prev)
             }),
         ]);
+
+        useEffect(() => {
+            if (props.value) {
+                const item = options.find((x) => x.value === props.value);
+                setValue(item?.label ?? props.value);
+            }
+        }, [props.value]);
+
+        useEffect(() => {
+            if (!open) return setH(0);
+            const inputRef = refs.reference;
+            if (inputRef.current === null) return;
+            const s = getRemainingSize(inputRef.current as HTMLElement, window.innerHeight);
+            setTimeout(() => setH(Math.min(s, displayList.length * MIN_SIZE)), 100);
+        }, [shadow, open, refs.reference]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -366,36 +351,41 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
-                        <FloatingFocusManager guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
-                            <motion.ul
+                        <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
+                            <motion.div
                                 {...getFloatingProps({
-                                    ref: refs.setFloating,
-                                    style: {
-                                        ...transitions.styles,
-                                        top: y ?? 0,
-                                        position: strategy,
-                                        left: (x ?? 0) + (value ? 36 : 25),
-                                    },
+                                    ref: mergeRefs(removeScrollRef, refs.setFloating),
+                                    style: { ...transitions.styles, left: x, top: y ?? 0, position: strategy },
                                 })}
                                 initial={false}
                                 data-floating="true"
                                 animate={{ height: isEmpty ? "auto" : h }}
-                                className="isolate z-floating m-0 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating"
+                                className="isolate z-floating m-0 max-h-80 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground shadow-floating ease-in-out"
+                                onAnimationComplete={() => {
+                                    if (!open) return setH(0);
+                                    const ul = refs.floating.current as HTMLElement;
+                                    const li = ul.querySelectorAll("li").item(0);
+                                    const sum = (li ? li.getBoundingClientRect().height : MIN_SIZE) * displayList.length;
+                                    return flushSync(() => setH(sum + 2));
+                                }}
                             >
                                 {isEmpty ? (
-                                    <li role="option" className="w-full border-b border-tooltip-border last:border-transparent">
+                                    <div role="option" className="w-full border-b border-tooltip-border last:border-transparent">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
                                         </span>
-                                    </li>
+                                    </div>
                                 ) : null}
                                 <Virtuoso
+                                    overscan={40}
                                     ref={virtuoso}
                                     hidden={isEmpty}
                                     data={displayList}
                                     style={{ height: h }}
+                                    defaultItemHeight={MIN_SIZE}
                                     components={components as any}
-                                    className="rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
+                                    scrollerRef={(e) => void (scroller.current = e as HTMLElement)}
+                                    className="max-h-80 overscroll-contain rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;
                                         const active = value === option.value || value === option.label;
@@ -413,7 +403,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                                     "aria-selected": active,
                                                     "aria-busy": option.disabled,
                                                     onClick: () => onSelect(option, i),
-                                                    className: `cursor-pointer w-full p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
+                                                    className: `cursor-pointer min-h-10 hover:bg-floating-hover w-full p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
                                                 })}
                                             >
                                                 <Label {...props} label={option.label} value={option.value} children={children} />
@@ -421,7 +411,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         );
                                     }}
                                 />
-                            </motion.ul>
+                            </motion.div>
                         </FloatingFocusManager>
                     ) : null}
                 </FloatingPortal>

@@ -42,3 +42,8 @@ export const initializeInputDataset = (input: HTMLInputElement | HTMLTextAreaEle
 };
 
 export const hasVerticalScroll = (htmlElement: HTMLElement) => htmlElement.scrollHeight > htmlElement.clientHeight;
+
+export const getRemainingSize = (element: HTMLElement, windowSize: number) => {
+    const rect = element.getBoundingClientRect();
+    return Math.abs(windowSize - rect.bottom);
+};
