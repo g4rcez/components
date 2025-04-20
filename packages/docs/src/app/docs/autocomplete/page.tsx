@@ -3,7 +3,7 @@ import { DocsLayout } from "@/components/docs-layout";
 import React, { useEffect, useState } from "react";
 import { Autocomplete, Card } from "../../../../../lib/src";
 
-const defaults = Array.from({ length: 5000 }).map((_, i) => ({
+const defaults = Array.from({ length: 4000 }).map((_, i) => ({
   value: i.toString(),
   label: `[${i + 1}] Paullum deliquit, ponderibus modulisque suis ratio utitur.`,
 }));
@@ -31,10 +31,10 @@ export default function FormPage() {
         className="grid grid-cols-1 md:grid-cols-3 gap-6"
       >
         <Autocomplete
-            id="3"
-            rightLabel=" "
-            title="One option"
-            options={withHidden.slice(0, 2)}
+          id="3"
+          rightLabel=" "
+          title="One option"
+          options={withHidden.slice(0, 2)}
         />
         <Autocomplete
           id="0"
@@ -77,6 +77,7 @@ export default function FormPage() {
           onChange={(e) => setValue(e.target.value)}
         />
       </Card>
+      <div className="h-screen bg-black w-2">Scroll</div>
     </DocsLayout>
   );
 }

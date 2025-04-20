@@ -56,6 +56,7 @@ export default function FormPage() {
           onChangeOptions={setValue}
         />
       </Card>
+      <div className="w-2 bg-black h-screen" />
     </DocsLayout>
   );
 }

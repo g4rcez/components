@@ -22,7 +22,7 @@ export const spacing = {
 
 export const zIndex: ZIndex = {
     normal: "1",
-    navbar: "19",
+    navbar: "22",
     calendar: "2",
     overlay: "21",
     tooltip: "20",
