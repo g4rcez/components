@@ -69,6 +69,8 @@ export const defaultTranslations = {
 
     multiSelectSelectedLabel: "Selected",
     multiSelectInnerPlaceholder: "Search...",
+
+    commandPaletteEmpty: "Nothing here...",
 };
 
 export type Translations = typeof defaultTranslations;

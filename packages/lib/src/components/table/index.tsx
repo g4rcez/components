@@ -178,13 +178,12 @@ const InnerTable = <T extends Any>({
             <div className={`group rounded-lg ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
                     useWindowScroll
-                    followOutput="smooth"
+                    context={context}
                     components={components}
                     totalCount={rows.length}
-                    data={empty ? (emptyRows as T[]) : rows}
                     itemContent={empty ? EmptyCell : Row}
+                    data={empty ? (emptyRows as T[]) : rows}
                     fixedFooterContent={showLoadingFooter ? Frag : null}
-                    context={context}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
                             headers={cols}

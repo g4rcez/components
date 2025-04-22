@@ -1,5 +1,6 @@
 "use client";
 import {
+    type ElementProps,
     FloatingFocusManager,
     FloatingOverlay,
     FloatingPortal,
@@ -13,7 +14,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { AnimatePresence, HTMLMotionProps, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
-import React, { Fragment, PropsWithChildren, useId } from "react";
+import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useId, useImperativeHandle } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { css, mergeRefs } from "../../lib/dom";
@@ -84,20 +85,24 @@ export type ModalProps = Override<
     HTMLMotionProps<"div">,
     ({ title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label }) & {
         open: boolean;
-        footer?: Label;
-        asChild?: boolean;
-        layoutId?: string;
-        resizer?: boolean;
-        type?: DialogType;
-        className?: string;
-        closable?: boolean;
-        forceType?: boolean;
-        overlayClassName?: string;
-        position?: DrawerPosition;
-        overlayClickClose?: boolean;
-        trigger?: Label | React.FC<any>;
         onChange: (nextState: boolean) => void;
-    }
+    } & Partial<{
+            interactions?: ElementProps[];
+            role?: "dialog" | "listbox";
+            footer?: Label;
+            asChild?: boolean;
+            layoutId?: string;
+            resizer?: boolean;
+            type?: DialogType;
+            className?: string;
+            bodyClassName?: string;
+            closable?: boolean;
+            forceType?: boolean;
+            overlayClassName?: string;
+            position?: DrawerPosition;
+            overlayClickClose?: boolean;
+            trigger?: Label | React.FC<any>;
+        }>
 >;
 
 type DraggableProps = {
@@ -173,133 +178,155 @@ const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsTy
     return forceType ? positions[type] : positions.sheet;
 };
 
-export const Modal = ({
-    open,
-    title,
-    footer,
-    asChild,
-    trigger,
-    children,
-    layoutId,
-    onChange,
-    className,
-    resizer = true,
-    closable = true,
-    forceType = false,
-    overlayClassName = "",
-    type: _type = "dialog",
-    position: propsPosition,
-    overlayClickClose = false,
-    ariaTitle,
-    ...props
-}: PropsWithChildren<ModalProps>) => {
-    const removeScrollRef = useRemoveScroll(open, "overflow-hidden");
-    const headingId = useId();
-    const descriptionId = useId();
-    const isDesktop = useMediaQuery("(min-width: 64rem)");
-    const useResizer = _type !== "dialog";
-    const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
-    const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
-    const animation = typeof func === "function" ? func(position as DrawerSides) : func;
-    const type = isDesktop ? _type : forceType ? _type : "sheet";
+type ModalRef = { context: any; floating: HTMLElement | null };
 
-    const { refs, context } = useFloating({ open: open, onOpenChange: onChange });
-    const click = useClick(context);
-    const role = useRole(context, { role: "dialog" });
-    const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: overlayClickClose });
-    const { getReferenceProps, getFloatingProps } = useInteractions([click, role, dismiss]);
-    const Trigger = trigger as any;
+const noop: any[] = [];
 
-    const floatingSize = useMotionValue<number | undefined>(undefined);
+export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
+    (
+        {
+            interactions: outInteractions = noop,
+            open,
+            title,
+            footer,
+            asChild,
+            trigger,
+            children,
+            layoutId,
+            role: roleName = "dialog",
+            onChange,
+            className,
+            bodyClassName,
+            resizer = true,
+            closable = true,
+            forceType = false,
+            overlayClassName = "",
+            type: _type = "dialog",
+            position: propsPosition,
+            overlayClickClose = false,
+            ariaTitle,
+            ...props
+        }: PropsWithChildren<ModalProps>,
+        externalRef: ForwardedRef<ModalRef>
+    ) => {
+        const removeScrollRef = useRemoveScroll(open, "overflow-hidden");
+        const headingId = useId();
+        const descriptionId = useId();
+        const isDesktop = useMediaQuery("(min-width: 64rem)");
+        const useResizer = _type !== "dialog";
+        const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
+        const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
+        const animation = typeof func === "function" ? func(position as DrawerSides) : func;
+        const type = isDesktop ? _type : forceType ? _type : "sheet";
 
-    const onClose = () => onChange(false);
+        const floating = useFloating({ open: open, onOpenChange: onChange, transform: true, strategy: "absolute" });
+        const click = useClick(floating.context);
+        const role = useRole(floating.context, { role: roleName });
+        const dismiss = useDismiss(floating.context, {
+            escapeKey: true,
+            referencePress: true,
+            outsidePress: overlayClickClose,
+        });
 
-    return (
-        <Fragment>
-            {trigger ? (
-                <Fragment>
-                    {asChild ? (
-                        <Slot ref={refs.setReference} {...getReferenceProps({ layoutId: layoutId } as any)}>
-                            {Trigger}
-                        </Slot>
-                    ) : (
-                        <motion.button ref={refs.setReference} {...getReferenceProps()} layoutId={layoutId} type="button">
-                            {Trigger}
-                        </motion.button>
-                    )}
-                </Fragment>
-            ) : null}
-            <FloatingPortal>
-                <AnimatePresence mode="wait" presenceAffectsLayout>
-                    {open ? (
-                        <FloatingOverlay
-                            lockScroll={false}
-                            className={css(
-                                `inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`,
-                                overlayClassName
-                            )}
-                        >
-                            <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
-                                <motion.div
-                                    {...props}
-                                    exit="exit"
-                                    animate="enter"
-                                    aria-modal={open}
-                                    initial="initial"
-                                    layoutId={layoutId}
-                                    variants={animation}
-                                    data-component="modal"
-                                    ref={mergeRefs(refs.setFloating, removeScrollRef)}
-                                    className={css(variants({ position, type }), className)}
-                                    style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
-                                    {...(title
-                                        ? {
-                                              "aria-labelledby": headingId,
-                                              "aria-describedby": descriptionId,
-                                          }
-                                        : { "aria-label": ariaTitle })}
-                                    {...getFloatingProps()}
-                                >
-                                    {title ? (
-                                        <header className="relative w-full">
-                                            {title ? (
-                                                <h2
-                                                    id={headingId}
-                                                    className="border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed"
+        const interactions = useInteractions([click, role, dismiss].concat(outInteractions));
+
+        const Trigger = trigger as any;
+
+        const floatingSize = useMotionValue<number | undefined>(undefined);
+
+        const onClose = () => onChange(false);
+
+        useImperativeHandle(externalRef, () => {
+            return { context: floating.context, floating: removeScrollRef.current };
+        }, [floating]);
+
+        return (
+            <Fragment>
+                {trigger ? (
+                    <Fragment>
+                        {asChild ? (
+                            <Slot ref={floating.refs.setReference} {...interactions.getReferenceProps({ layoutId: layoutId } as any)}>
+                                {Trigger}
+                            </Slot>
+                        ) : (
+                            <motion.button ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
+                                {Trigger}
+                            </motion.button>
+                        )}
+                    </Fragment>
+                ) : null}
+                <FloatingPortal>
+                    <AnimatePresence mode="wait" presenceAffectsLayout>
+                        {open ? (
+                            <FloatingOverlay
+                                lockScroll={false}
+                                className={css(
+                                    `inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`,
+                                    overlayClassName
+                                )}
+                            >
+                                <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={floating.context}>
+                                    <motion.div
+                                        {...props}
+                                        exit="exit"
+                                        animate="enter"
+                                        aria-modal={open}
+                                        initial="initial"
+                                        layoutId={layoutId}
+                                        variants={animation}
+                                        data-component="modal"
+                                        ref={mergeRefs(floating.refs.setFloating, removeScrollRef)}
+                                        className={css(variants({ position, type }), className, "overscroll-contain")}
+                                        style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
+                                        {...(title
+                                            ? {
+                                                  "aria-labelledby": headingId,
+                                                  "aria-describedby": descriptionId,
+                                              }
+                                            : { "aria-label": ariaTitle })}
+                                        {...interactions.getFloatingProps()}
+                                    >
+                                        {title ? (
+                                            <header className="relative w-full">
+                                                {title ? (
+                                                    <h2
+                                                        id={headingId}
+                                                        className="border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed"
+                                                    >
+                                                        {title}
+                                                    </h2>
+                                                ) : null}
+                                            </header>
+                                        ) : null}
+                                        <section className={css("flex-1 overflow-y-auto px-8 py-1", bodyClassName)}>{children}</section>
+                                        {footer ? <footer className="w-full border-t border-floating-border px-8 pt-4">{footer}</footer> : null}
+                                        {closable ? (
+                                            <nav className="absolute right-4 top-1 z-floating">
+                                                <button
+                                                    type="button"
+                                                    onClick={onClose}
+                                                    className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                                 >
-                                                    {title}
-                                                </h2>
-                                            ) : null}
-                                        </header>
-                                    ) : null}
-                                    <section className="flex-1 overflow-y-auto px-8 py-1">{children}</section>
-                                    {footer ? <footer className="w-full border-t border-floating-border px-8 pt-4">{footer}</footer> : null}
-                                    {closable ? (
-                                        <nav className="absolute right-4 top-1 z-floating">
-                                            <button
-                                                type="button"
-                                                onClick={onClose}
-                                                className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
-                                            >
-                                                <XIcon />
-                                            </button>
-                                        </nav>
-                                    ) : null}
-                                    {useResizer && resizer ? (
-                                        <Draggable
-                                            onChange={onChange}
-                                            parent={refs.floating as any}
-                                            position={position as DrawerSides}
-                                            sheet={type === "sheet"}
-                                            value={floatingSize}
-                                        />
-                                    ) : null}
-                                </motion.div>
-                            </FloatingFocusManager>
-                        </FloatingOverlay>
-                    ) : null}
-                </AnimatePresence>
-            </FloatingPortal>
-        </Fragment>
-    );
-};
+                                                    <XIcon />
+                                                </button>
+                                            </nav>
+                                        ) : null}
+                                        {useResizer && resizer ? (
+                                            <Draggable
+                                                onChange={onChange}
+                                                parent={floating.refs.floating as any}
+                                                position={position as DrawerSides}
+                                                sheet={type === "sheet"}
+                                                value={floatingSize}
+                                            />
+                                        ) : null}
+                                    </motion.div>
+                                </FloatingFocusManager>
+                            </FloatingOverlay>
+                        ) : null}
+                    </AnimatePresence>
+                </FloatingPortal>
+            </Fragment>
+        );
+    }
+);

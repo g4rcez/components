@@ -44,9 +44,10 @@ export const splitInto = <T>(array: T[], size: number) => {
 
 export const negate = (b: boolean) => !b;
 
-export const noop = () => {};
+export const noop = () => { };
 
 export const isMobile = () => {
     const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
     return /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent);
 }
+

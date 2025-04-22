@@ -12,7 +12,7 @@ export const DARK_THEME: DesignTokens = {
     colors: {
         foreground: "hsla(210, 50%, 98%)",
         background: "hsla(0, 0%, 9%)",
-        muted: "hsla(0, 0%, 12%)",
+        muted: "hsla(210, 10%, 40%)",
         disabled: "hsla(240, 4%, 33%)",
         emphasis: {
             foreground: "hsla(251, 91%, 95%)",

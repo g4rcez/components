@@ -12,15 +12,15 @@ export const useRemoveScroll = <T extends HTMLElement>(remove: boolean, removeSt
     const prev = useRef(isSsr() ? "" : document.documentElement.style.overflowY);
 
     useEffect(() => {
-        const html = document.documentElement;
+        if (ref.current === null && !remove) return;
         if (removeStyle === "overflow-hidden") {
             if (remove) {
                 prev.current = document.documentElement.style.overflowY;
-                html.style.overflowY = "hidden";
+                document.documentElement.style.overflowY = "hidden";
                 if (isCoarseDevice || isMobile()) return;
-                html.style.padding = hasVerticalScroll(html) ? "0 15px 0 0" : "";
+                document.documentElement.style.padding = hasVerticalScroll(document.documentElement) ? "0 15px 0 0" : "";
             } else {
-                html.style.padding = "";
+                document.documentElement.style.padding = "";
                 document.documentElement.style.overflowY = prev.current;
             }
         }

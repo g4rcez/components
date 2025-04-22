@@ -12,7 +12,6 @@ import {
     useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
-import Fuzzy from "fuzzy-search";
 import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -26,6 +25,7 @@ import { safeRegex } from "../../lib/fns";
 import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
+import { fzf } from "../../lib/fzf";
 
 export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
 
@@ -45,8 +45,6 @@ const transitionStyles = {
     open: { transform: "scaleY(1)", opacity: 1 },
     close: { transform: "scaleY(0)", opacity: 0 },
 } as const;
-
-const fuzzyOptions = { caseSensitive: false, sort: false };
 
 const emptyRef: any[] = [];
 
@@ -104,6 +102,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
+        const removeScrollRef = useRemoveScroll(open, "block-only");
         const innerOptions: AutocompleteItemProps[] =
             dynamicOption && shadow !== ""
                 ? [
@@ -115,8 +114,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                       ...options,
                   ]
                 : options;
-        const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
-        const removeScrollRef = useRemoveScroll(open, "block-only");
+
+        const list = shadow
+            ? fzf(innerOptions, "value", [
+                  { key: "value", value: shadow },
+                  { key: "label", value: shadow },
+              ])
+            : innerOptions;
 
         const setClosed = () => {
             setOpen(false);
@@ -132,8 +136,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
             open,
             transform: true,
-            placement: "bottom-start",
             onOpenChange: setOpen,
+            placement: "bottom-start",
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),

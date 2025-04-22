@@ -12,7 +12,6 @@ import {
     useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
-import Fuzzy from "fuzzy-search";
 import { ChevronDown, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
@@ -21,8 +20,9 @@ import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
-import { css, getRemainingSize, initializeInputDataset, mergeRefs } from "../../lib/dom";
+import { css, getRemainingSize, initializeInputDataset } from "../../lib/dom";
 import { noop } from "../../lib/fns";
+import { fzf } from "../../lib/fzf";
 import { Label, Override } from "../../types";
 import { Tag } from "../core/tag";
 import { Checkbox } from "./checkbox";
@@ -160,7 +160,13 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                       ...options,
                   ]
                 : options;
-        const list = new Fuzzy(innerOptions, ["value", "label"], fuzzyOptions).search(shadow);
+        const list =
+            shadow.length === 0
+                ? innerOptions
+                : fzf(innerOptions, "value", [
+                      { key: "value", value: shadow },
+                      { key: "label", value: shadow },
+                  ]);
 
         const removeScrollRef = useRemoveScroll<HTMLDivElement>(open, "block-only");
 

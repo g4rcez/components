@@ -10,6 +10,7 @@ export * from "./display/notifications";
 export * from "./display/stats";
 export * from "./display/tabs";
 export * from "./display/timeline";
+export * from "./floating/command-palette";
 export * from "./floating/dropdown";
 export * from "./floating/expand";
 export * from "./floating/menu";

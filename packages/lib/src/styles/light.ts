@@ -28,7 +28,7 @@ export const LIGHT_THEME: DesignTokens = {
         },
         secondary: {
             background: "hsla(210, 25%, 35%)",
-            DEFAULT: "hsla(210, 25%, 35%)",
+            DEFAULT: "hsla(210, 25%, 45%)",
             subtle: "hsla(207, 29%, 39%)",
             hover: "hsla(210, 21%, 67%)",
             foreground: "hsla(210, 40%, 98%)",

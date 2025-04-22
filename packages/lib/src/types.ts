@@ -28,3 +28,19 @@ export interface ReactComponent<P = Any> {
 export type CvaVariants<T extends object> = {
     [K in keyof T]?: keyof T[K];
 };
+
+type Irreducible = string | number | null | undefined | Date | symbol;
+
+export type Walk<T> = T extends object
+    ? {
+          [K in keyof T]: T[K] extends any[]
+              ? K
+              : K extends Irreducible
+                ? T[K] extends object
+                    ? K | T[K] extends Date
+                        ? K
+                        : `${K & string}.${Walk<T[K]> & string}`
+                    : K
+                : never;
+      }[keyof T]
+    : never;
