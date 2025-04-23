@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { path } from "../src";
+import { path } from "../src/lib/fns";
 
 describe("should test fns.ts module", () => {
     it("should test path function", () => {

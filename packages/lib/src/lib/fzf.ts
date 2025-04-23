@@ -1,3 +1,4 @@
+import { Is } from "sidekicker";
 import { Any, Walk } from "../types";
 
 export const fuzzyMatch = (text: string, search: string): number | null => {
@@ -108,33 +109,30 @@ const strCompare = (text: string, value: string, _?: number, match: Match = "FUZ
     return false;
 };
 
-const compare = (search: string, value: string | string[], defaultScore?: number, match: Match = "FUZZY"): boolean => {
-    if (Array.isArray(value)) {
-        return value.some((x) => strCompare(search, x, defaultScore, match));
-    }
-    return strCompare(search, value, defaultScore, match);
-};
+const compare = (search: string, value: string | string[], defaultScore?: number, match: Match = "FUZZY"): boolean =>
+    Array.isArray(value) ? value.some((x) => strCompare(search, x, defaultScore, match)) : strCompare(search, value, defaultScore, match);
 
 export const fzf = <T extends Any, ID extends Walk<T>>(items: T[], id: ID, keys: MatchValue<T>[]) => {
     if (keys.length === 0) {
         return items;
     }
     const map = new Map<ID, T>();
-    const remap = keys.map((x) => ({
-        ...x,
-        value: Array.isArray(x.value) ? x.value.map(diacritics) : diacritics(`${x.value}`),
-    }));
+    const remap = keys.map((x) => {
+        return { ...x, value: Is.array(x.value) ? x.value.map(diacritics) : diacritics(`${x.value}`) };
+    });
     items.forEach((item) => {
         const idVal = path<T, ID>(item, id);
         remap.forEach((filter) => {
             const searchValue = path(item, filter.key);
             if (!searchValue) return;
-            const search = diacritics(`${searchValue}`.toLocaleLowerCase()).trim();
             const target = diacritics(`${filter.value}`.toLocaleLowerCase()).trim();
+            const search = diacritics(`${searchValue}`.toLocaleLowerCase()).trim();
             if (compare(search, target, filter.score, filter.match)) {
-                map.set(idVal, item);
-            } else if (filter.ifNotMatch && filter.ifNotMatch(search, target)) {
-                map.set(idVal, item);
+                return void map.set(idVal, item);
+            }
+            if (Is.function(filter.ifNotMatch)) {
+                const result = filter.ifNotMatch(target, search);
+                if (result) map.set(idVal, item);
             }
         });
     });

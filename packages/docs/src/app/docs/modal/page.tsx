@@ -1,15 +1,19 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
+import { BrainIcon } from "lucide-react";
 import { motion } from "motion/react";
 import React, { Fragment, PropsWithChildren, useState } from "react";
 import {
   Button,
   Card,
+  CommandItemTypes,
   Modal,
   ModalProps,
   Switch,
-  Tooltip, uuid,
+  Tooltip,
+  uuid,
 } from "../../../../../lib/src";
+import { CommandPalette } from "../../../../../lib/src/components/floating/command-palette";
 
 const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
   const [open, setOpen] = useState(false);
@@ -34,7 +38,99 @@ const items = Array.from({ length: 70 }).map((x) => (
   </span>
 ));
 
+const commands: CommandItemTypes[] = [
+  {
+    type: "group",
+    title: "Commands",
+    items: [
+      {
+        hint: ["#", "aleatório"],
+        type: "shortcut",
+        title: "Random item",
+        action: (e) => void (e.setOpen(false), alert(Math.random())),
+      },
+      {
+        type: "shortcut",
+        shortcut: "Mod+G",
+        title: "Google",
+        enabled: (props) => props.text !== "" && !props.text.startsWith("@"),
+        action: (e) => void (e.setOpen(false), alert("Hello google")),
+      },
+      {
+        type: "shortcut",
+        shortcut: "Mod+A",
+        Icon: <BrainIcon size={18} />,
+        title: (props) => `Ask to AI: ${props.text}`,
+        enabled: (props) => props.text !== "",
+        action: (e) => void (e.setOpen(false), alert("A")),
+      },
+      {
+        title: "Find",
+        type: "shortcut",
+        shortcut: "Mod+f",
+        action: (e) => void (e.setOpen(false), alert("f")),
+      },
+      {
+        title: "Logout",
+        type: "shortcut",
+        shortcut: "Mod+l",
+        action: () => alert("l"),
+      },
+      {
+        title: "Extra",
+        type: "shortcut",
+        shortcut: "Mod+E",
+        action: () => alert("e"),
+      },
+      {
+        title: "Go",
+        type: "shortcut",
+        shortcut: "Mod+E",
+        action: () => alert("e"),
+      },
+    ],
+  },
+  {
+    type: "group",
+    title: "Pages",
+    items: [
+      {
+        title: "Menu",
+        type: "shortcut",
+        shortcut: "Mod + Alt + o",
+        action: () => alert("m"),
+      },
+      {
+        title: "Button",
+        type: "shortcut",
+        shortcut: "Mod+b",
+        action: () => alert("b"),
+      },
+      {
+        title: "useForm",
+        type: "shortcut",
+        shortcut: "Mod + U",
+        action: () => alert("U"),
+      },
+    ],
+  },
+];
+
+const Preview = (props: any) => {
+  if (!props.text) return null;
+  if (!props.command) return null;
+  return (
+    <div className="w-1/2 max-w-[50%] px-4">
+      <ul>
+        <li>{props.command.title}</li>
+        <li>{props.text}</li>
+      </ul>
+    </div>
+  );
+};
+
 export default function ModalExamplePage() {
+  const [open, setOpen] = useState(true);
   const [state, setState] = useState({
     closable: false,
     overlayClickClose: true,
@@ -42,7 +138,7 @@ export default function ModalExamplePage() {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
-    const value = !e.currentTarget.checked;
+    const value = e.currentTarget.checked;
     return setState((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -53,6 +149,12 @@ export default function ModalExamplePage() {
       description="Dialog, Drawer or BottomSheet. This component can do with all these options. For responsive websites, BottomSheet will be used for mobile, while desktop preserve the dialog/drawer."
     >
       <div className="flex flex-col gap-6">
+        <CommandPalette
+          onChangeVisibility={setOpen}
+          open={open}
+          commands={commands}
+          Preview={Preview}
+        />
         <Card
           title="Global configuration"
           className="flex gap-8 items-center flex-wrap"

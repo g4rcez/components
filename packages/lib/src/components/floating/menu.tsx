@@ -20,7 +20,6 @@ import {
     useInteractions,
     useListItem,
     useListNavigation,
-    useMergeRefs,
     useRole,
     useTypeahead,
 } from "@floating-ui/react";
@@ -28,7 +27,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { ChevronRightIcon, LucideProps } from "lucide-react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../constants";
-import { css } from "../../lib/dom";
+import { css, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
@@ -104,17 +103,18 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
         });
 
         const click = useClick(context, {
-            event: "mousedown",
             toggle: !isNested,
+            event: "mousedown",
             ignoreMouse: isNested,
             keyboardHandlers: true,
+            enabled: props.disabled === false,
         });
 
         const listNavigation = useListNavigation(context, {
             loop: true,
-            listRef: elementsRef,
             activeIndex,
             nested: isNested,
+            listRef: elementsRef,
             onNavigate: setActiveIndex,
         });
 
@@ -129,20 +129,12 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
 
         useEffect(() => {
             if (!tree) return;
-
-            function handleTreeClick() {
-                setIsOpen(false);
-            }
-
-            function onSubMenuOpen(event: { nodeId: string; parentId: string }) {
-                if (event.nodeId !== nodeId && event.parentId === parentId) {
-                    setIsOpen(false);
-                }
-            }
-
+            const handleTreeClick = () => setIsOpen(false);
+            const onSubMenuOpen = (event: { nodeId: string; parentId: string }) => {
+                if (event.nodeId !== nodeId && event.parentId === parentId) setIsOpen(false);
+            };
             tree.events.on("click", handleTreeClick);
             tree.events.on("menuopen", onSubMenuOpen);
-
             return () => {
                 tree.events.off("click", handleTreeClick);
                 tree.events.off("menuopen", onSubMenuOpen);
@@ -150,9 +142,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
         }, [tree, nodeId, parentId]);
 
         useEffect(() => {
-            if (isOpen && tree) {
-                tree.events.emit("menuopen", { parentId, nodeId });
-            }
+            if (isOpen && tree) tree.events.emit("menuopen", { parentId, nodeId });
         }, [tree, isOpen, nodeId, parentId]);
 
         const className = isParent ? props.className : css(menuItemClassName(props.className));
@@ -173,13 +163,13 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                 })
                             )}
                             children={label}
-                            ref={useMergeRefs([refs.setReference, item.ref, forwardedRef])}
-                            tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
+                            className={className}
                             data-open={isOpen ? "" : undefined}
                             data-nested={isNested ? "" : undefined}
                             role={isNested ? "menuitem" : undefined}
                             data-focus-inside={hasFocusInside ? "" : undefined}
-                            className={className}
+                            ref={mergeRefs(refs.setReference, item.ref, forwardedRef)}
+                            tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
                         />
                     ) : (
                         <button
@@ -189,7 +179,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                             data-nested={isNested ? "" : undefined}
                             role={isNested ? "menuitem" : undefined}
                             data-focus-inside={hasFocusInside ? "" : undefined}
-                            ref={useMergeRefs([refs.setReference, item.ref, forwardedRef])}
+                            ref={mergeRefs(refs.setReference, item.ref, forwardedRef)}
                             tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
                             {...getReferenceProps(
                                 parent.getItemProps({
@@ -257,7 +247,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 data-active={isActive}
                 data-open={menu.isOpen}
                 tabIndex={isActive ? 0 : -1}
-                ref={useMergeRefs([item.ref, forwardedRef])}
+                ref={mergeRefs(item.ref, forwardedRef)}
                 className={menuItemClassName(`${props.className ?? ""} ${isActive ? "bg-primary text-primary-foreground" : ""}`)}
                 {...menu.getItemProps({
                     onClick(event: React.MouseEvent<HTMLButtonElement>) {

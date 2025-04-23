@@ -24,9 +24,13 @@ export class Dict<K, V> extends Map<K, V> {
         return this.list.map((x, i): any => callback(x[1], i));
     }
 
-    public clone(fn?: (dict: Dict<K,V>) => Dict<K,V>) {
+    public clone(fn?: (dict: Dict<K, V>) => Dict<K, V>) {
         const clone = new Dict(this);
         if (fn) return fn(clone);
-        return clone
+        return clone;
+    }
+
+    public static unique<T>(items: T[], selector: (t: T) => any) {
+        return Array.from(new Map(items.map((x) => [selector(x), x])).values());
     }
 }

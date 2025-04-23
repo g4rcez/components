@@ -1,11 +1,11 @@
-import { CommandIcon } from "lucide-react";
+import { CommandIcon, OptionIcon } from "lucide-react";
 import { Fragment } from "react";
 import { isMac } from "../../lib/combi-keys";
 
 const remap = (x: string) => {
-    if (x === "Mod") {
-        return isMac() ? <CommandIcon aria-label="Command" size={14} /> : "Ctrl";
-    }
+    x = x.trim();
+    if (x === "Alt") return isMac() ? <OptionIcon aria-label="Option" size={14} /> : "Alt";
+    if (x === "Mod") return isMac() ? <CommandIcon aria-label="Command" size={14} /> : "Ctrl";
     return x;
 };
 

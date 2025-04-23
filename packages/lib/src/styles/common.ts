@@ -9,7 +9,7 @@ export const rounded = {
 
 export const spacing = {
     base: "1rem",
-    lg: "1.5rem",
+    lg: "1.125rem",
     sm: "0.75rem",
     "field-height": "1.5rem",
     "field-label": "1.875rem",

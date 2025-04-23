@@ -1,6 +1,6 @@
-const osx = /Mac|iPod|iPhone|iPad/;
+export const osxRegex = /Mac|iPod|iPhone|iPad/;
 
-export const isMac = () => osx.test(navigator.userAgent);
+export const isMac = () => osxRegex.test(navigator.userAgent);
 
 const parseCombination = (combination: string): string[] =>
     combination.split("+").map((k) => {
@@ -14,13 +14,23 @@ type Handler = (e: KeyboardEvent) => void;
 
 const combine = (keys: string[]) => keys.map((x) => x.trim()).join("+");
 
-export class CombiKeys {
-    public combinations: Array<{ key: string; fn: Handler }> = [];
+type Combi = { key: string; fn: Handler };
 
-    public add<S extends string>(combi: S, fn: Handler) {
+export class CombiKeys<T extends Combi> {
+    public combinations: Combi[] = [];
+
+    public constructor(combi: T[] = []) {
+        this.combinations = this.combinations.concat(combi);
+        this.combinations.forEach((x) => {
+            this.add(x.key, x.fn);
+        })
+    }
+
+    public add<S extends string, H extends Handler>(combi: S, fn: H) {
         const key = combine(parseCombination(combi));
         if (this.combinations.find((x) => x.key === key)) return;
         this.combinations.push({ fn, key });
+        return this;
     }
 
     public register() {
@@ -35,7 +45,10 @@ export class CombiKeys {
             if (event.metaKey) activeKeys.add("Meta");
             if (event.ctrlKey) activeKeys.add("Control");
             if (event.altKey) activeKeys.add("Alt");
-            activeKeys.add(event.shiftKey ? event.key.toUpperCase() : event.key);
+            if (event.key.charCodeAt(0) > 127) {
+                const char = event.code.replace(/^Digit/, "").replace(/^Key/, "");
+                activeKeys.add(event.shiftKey ? char.toUpperCase() : char.toLowerCase());
+            } else activeKeys.add(event.shiftKey ? event.key.toUpperCase() : event.key);
             const action = combine(Array.from(activeKeys));
             this.combinations.forEach((bind) => {
                 if (bind.key === action) {

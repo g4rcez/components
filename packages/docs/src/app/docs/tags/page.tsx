@@ -21,7 +21,7 @@ export default function TagsPage() {
           <Tag theme="warn">warn</Tag>
         </Card>
 
-        <Card title="Small tags" className="flex gap-8">
+        <Card title="Small tags" className="flex flex-wrap gap-8">
           <Tag size="small">Normal</Tag>
           <Tag size="small" theme="danger">
             danger
@@ -43,7 +43,7 @@ export default function TagsPage() {
           </Tag>
         </Card>
 
-        <Card title="Small tags" className="flex gap-8">
+        <Card title="Small tags" className="flex flex-wrap gap-8">
           <Tag theme="neutral">Normal</Tag>
           <Tag theme="neutral" indicator="danger">danger</Tag>
           <Tag theme="neutral" indicator="info">info</Tag>

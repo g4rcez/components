@@ -1,76 +1,61 @@
 import React, { Fragment } from "react";
 
 export const defaultTranslations = {
+    autocompleteEmpty: "Nothing here...",
+    calendarBackMonth: "Back month",
+    calendarFromDate: "From",
+    calendarMonthLabel: "Month",
+    calendarNextMonth: "Next month",
+    calendarToDate: "To",
+    calendarToday: "Today",
+    commandPaletteEmpty: "Nothing here...",
+    commandPaletteLoading: "Loading...",
+    datePickerCalendarButtonLabel: "Click to open a date picker",
     emptyDataMessage: "No data",
     inputCaretDown: "Click to see all options",
     inputCloseValue: "Click to clear the value",
-    datePickerCalendarButtonLabel: "Click to open a date picker",
     inputOptionalLabel: "Optional",
-    autocompleteEmpty: "Nothing here...",
-
+    multiSelectInnerPlaceholder: "Search...",
+    multiSelectSelectedLabel: "Selected",
+    tableColumnResizer: "Resize column",
+    tableFilterColumnPlaceholder: "Filter by",
+    tableFilterColumnTitle: "Filter by",
+    tableFilterDropdownTitle: "Filters",
+    tableFilterDropdownTitleUnique: "Filter by",
+    tableFilterLabel: "Filters",
+    tableFilterNewFilter: "New filter",
+    tableFilterOperatorPlaceholder: "Equals to...",
+    tableFilterOperatorTitle: "Operation",
+    tableFilterTypeContains: "Contains",
+    tableFilterTypeEndsWith: "Ends with",
+    tableFilterTypeGreaterThan: "Greater than",
+    tableFilterTypeIs: "Is",
+    tableFilterTypeIsNot: "Is not",
+    tableFilterTypeLessThan: "Less than",
+    tableFilterTypeNotContains: "Not contains",
+    tableFilterTypeStartsWith: "Starts with",
+    tableFilterValuePlaceholder: "Something...",
+    tableFilterValueTitle: "Value",
     tableGroupLabel: "Group",
     tableGroupLabelWithCount: "Group",
+    tablePaginationFooter: (pagination: { pages: number; totalItems: number; sizes?: number[]; current: number; select: React.ReactNode }) => (
+        <Fragment>
+            {pagination.current} to {pagination.pages} of {pagination.totalItems} items.{Array.isArray(pagination.sizes) ? pagination.select : null}{" "}
+            per page.
+        </Fragment>
+    ),
+    tablePaginationNext: "Next",
+    tablePaginationPrevious: "Previous",
+    tablePaginationSelectLabel: "Select the size of page",
+    tableSortAddButton: "Add sort",
     tableSortAsc: "Ascending",
+    tableSortDesc: "Descending",
+    tableSortDropdownTitle: "Order by",
     tableSortOrderByLabel: "Order by",
     tableSortOrderInputPlaceholder: "Order by",
     tableSortOrderInputTitle: "Order by",
     tableSortTypeInputPlaceholder: "Ascending",
     tableSortTypeInputTitle: "Sort type",
-    tableSortAddButton: "Add sort",
-    tableSortDropdownTitle: "Order by",
-    tableSortDesc: "Descending",
-    tableColumnResizer: "Resize column",
-
-    tableFilterTypeContains: "Contains",
-    tableFilterTypeIs: "Is",
-    tableFilterTypeIsNot: "Is not",
-    tableFilterTypeNotContains: "Not contains",
-    tableFilterTypeLessThan: "Less than",
-    tableFilterTypeGreaterThan: "Greater than",
-    tableFilterTypeStartsWith: "Starts with",
-    tableFilterTypeEndsWith: "Ends with",
-
-    tableFilterNewFilter: "New filter",
-
-    tableFilterColumnTitle: "Filter by",
-    tableFilterColumnPlaceholder: "Filter by",
-
-    tableFilterOperatorTitle: "Operation",
-    tableFilterOperatorPlaceholder: "Equals to...",
-
-    tableFilterValueTitle: "Value",
-    tableFilterValuePlaceholder: "Something...",
-
-    tableFilterLabel: "Filters",
-    tableFilterDropdownTitle: "Filters",
-    tableFilterDropdownTitleUnique: "Filter by",
-
-    tablePaginationPrevious: "Previous",
-    tablePaginationNext: "Next",
-    tablePaginationSelectLabel: "Select the size of page",
-    tablePaginationFooter: (pagination: {
-        pages: number;
-        totalItems: number;
-        sizes?: number[];
-        current: number;
-        select: React.ReactNode
-    }) => (
-        <Fragment>
-            {pagination.current} to {pagination.pages} of {pagination.totalItems} items.
-            {Array.isArray(pagination.sizes) ? pagination.select : null} per page.
-        </Fragment>
-    ),
-    calendarFromDate: "From",
-    calendarToDate: "To",
-    calendarToday: "Today",
-    calendarBackMonth: "Back month",
-    calendarNextMonth: "Next month",
-    calendarMonthLabel: "Month",
-
-    multiSelectSelectedLabel: "Selected",
-    multiSelectInnerPlaceholder: "Search...",
-
-    commandPaletteEmpty: "Nothing here...",
 };
 
 export type Translations = typeof defaultTranslations;

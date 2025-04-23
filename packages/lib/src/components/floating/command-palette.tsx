@@ -1,42 +1,45 @@
 "use client";
-import { autoUpdate, useFloating, useInteractions, useListNavigation, useRole } from "@floating-ui/react";
+import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
+import { FilterIcon, LucideProps } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
+import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { useTranslations } from "../../hooks/use-translations";
 import { CombiKeys } from "../../lib/combi-keys";
+import { Dict } from "../../lib/dict";
 import { css, isReactFC } from "../../lib/dom";
 import { fzf, MatchValue } from "../../lib/fzf";
 import { Label } from "../../types";
 import { Shortcut } from "../display/shortcut";
+import { SkeletonCell } from "../display/skeleton";
 import { Modal } from "./modal";
 
 type ViewProps = { text: string };
 
 type CommandItem<T extends string, P extends object> = {
     type: T;
-    hint?: string;
-    enabled?: (props: ViewProps) => boolean;
+    hint?: string | string[];
+    Icon?: React.ReactElement;
+    enabled?: ((props: ViewProps) => boolean) | boolean;
 } & P;
 
-type View = Label | React.FC<ViewProps>;
+type View = string | ((props: ViewProps) => string);
 
 type CommandShortcutItem = CommandItem<
     "shortcut",
     {
         title: View;
         shortcut?: string;
-        action: (args: { text: string; setOpen: (state: boolean) => void; event: KeyboardEvent | React.MouseEvent | React.KeyboardEvent }) => void;
+        action: (args: {
+            text: string;
+            setOpen: (state: boolean) => void;
+            event: KeyboardEvent | React.MouseEvent | React.KeyboardEvent;
+        }) => void | Promise<void>;
     }
 >;
 
-type CommandGroupItem = CommandItem<
-    "group",
-    {
-        title: View;
-        items: CommandItemTypes[];
-    }
->;
+type CommandGroupItem = CommandItem<"group", { title: View; items: CommandItemTypes[] }>;
 
 export type CommandItemTypes = CommandGroupItem | CommandShortcutItem;
 
@@ -44,7 +47,7 @@ type ItemProps = {
     text: string;
     active: boolean;
     item: CommandItemTypes;
-    onChange: (next: boolean) => void;
+    onChangeVisibility: (next: boolean) => void;
 };
 
 const Group = (props: { item: CommandGroupItem; text: string }) => (
@@ -53,99 +56,106 @@ const Group = (props: { item: CommandGroupItem; text: string }) => (
     </span>
 );
 
-const Item = forwardRef<HTMLButtonElement, ItemProps>((props, ref) => {
+const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">>((props, ref) => {
     const id = useId();
     const active = props.active;
-    const classNameBase = "h-10";
     const item = props.item;
-    if (item.type === "group") {
+    if (item.type === "group")
         return (
             <motion.div id={id} className="h-10 px-2 pb-1 pt-2">
                 <Group text={props.text} item={item} />
             </motion.div>
         );
-    }
-    if (item.type === "shortcut") {
-        return (
-            <motion.button
-                id={id}
-                ref={ref}
-                role="option"
-                aria-selected={active}
-                data-component="command-palette-item"
-                onClick={(event) => item.action({ event, setOpen: props.onChange, text: props.text })}
-                className={css(
-                    classNameBase,
-                    "flex items-center justify-between rounded-lg p-2 hover:bg-primary hover:text-primary-foreground",
-                    active ? "bg-primary text-primary-foreground" : ""
-                )}
-            >
+    if (item.type !== "shortcut") return <Fragment />;
+    return (
+        <motion.button
+            {...props}
+            id={id}
+            ref={ref}
+            role="option"
+            type="button"
+            aria-selected={active}
+            data-component="command-palette-item"
+            className={css(
+                "flex h-10 items-center justify-between rounded-lg p-2 hover:bg-floating-hover hover:text-floating-foreground",
+                active ? "bg-floating-hover text-primary-foreground" : ""
+            )}
+        >
+            <span className="flex items-center gap-2">
+                {item.Icon ? item.Icon : null}
                 <span>{isReactFC(item.title) ? <item.title text={props.text} /> : item.title}</span>
-                {item.shortcut ? <Shortcut value={item.shortcut} /> : null}
-            </motion.button>
-        );
-    }
-    return <Fragment />;
+            </span>
+            {item.shortcut ? <Shortcut value={item.shortcut} /> : null}
+        </motion.button>
+    );
 });
 
 export type CommandPaletteProps = {
-    open: boolean;
     bind?: string;
+    open: boolean;
+    loading?: boolean;
     emptyMessage?: Label;
     footer?: React.ReactElement;
     commands: CommandItemTypes[];
-    onChange: (next: boolean) => void;
+    onChangeText?: (text: string) => void;
+    onChangeVisibility: (next: boolean) => void;
+    Preview?: React.FC<{ command: CommandItemTypes; text: string }>;
+    Icon?: React.FC<LucideProps & { text: string; Default: React.FC<LucideProps> }>;
 };
 
+const getFuzzyData = (commands: CommandItemTypes[], value: string) => {
+    if (value.length === 0) return commands;
+    const rules: MatchValue<CommandItemTypes>[] = [
+        { key: "title", value },
+        { key: "shortcut", value },
+        { key: "hint", value },
+    ];
+    const normalize = commands.map((x) => ({ ...x, title: Is.function(x.title) ? x.title({ text: value }) : x.title }));
+    const target = normalize.reduce<CommandItemTypes[]>((acc, x) => {
+        const enabled = Is.function(x.enabled) ? x.enabled({ text: value }) : (x.enabled ?? true);
+        if (enabled) acc.push({ ...x, enabled: enabled });
+        return acc;
+    }, []);
+    const filter = fzf(target, "title", rules);
+    const withEnabled = normalize.filter((x) => (Is.function(x.enabled) ? x.enabled({ text: value }) : false));
+    return Dict.unique(filter.concat(withEnabled), (x) => x.title);
+};
+
+const loadingSkeleton = [0, 0, 0, 0, 0];
+
 export const CommandPalette = (props: CommandPaletteProps) => {
+    const bindKey = props.bind ?? "Mod + k";
+    const listRef = useRef<Array<HTMLElement | null>>([]);
     const translations = useTranslations();
     const [value, setValue] = useState("");
     const valueRef = useStableRef(value);
-    const bindKey = props.bind ?? "Mod + k";
-    const [combi] = useState(new CombiKeys());
     const id = useId();
     const ref = useRef<any>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const floating = useFloating<HTMLInputElement>({
         open: props.open,
-        onOpenChange: props.onChange,
+        strategy: "absolute",
+        onOpenChange: props.onChangeVisibility,
         whileElementsMounted: autoUpdate,
     });
-    const listRef = useRef<Array<HTMLElement | null>>([]);
     const listNav = useListNavigation(floating.context, {
         listRef,
         loop: true,
         activeIndex,
         virtual: true,
         allowEscape: true,
-        onNavigate: setActiveIndex,
         scrollItemIntoView: true,
+        onNavigate: (n) =>
+            setActiveIndex((prev) => {
+                if (Is.number(n)) return n;
+                return props.open ? (prev ?? 0) : null;
+            }),
     });
-    const role = useRole(floating.context, { role: "listbox" });
-    const { getItemProps } = useInteractions([role, listNav]);
+    const { getItemProps } = useInteractions([listNav]);
 
-    const commands = props.commands.flatMap((x) =>
-        x.type !== "group"
-            ? x.enabled
-                ? x.enabled({ text: value })
-                    ? [x]
-                    : []
-                : [x]
-            : [x, ...x.items].filter((x) => (x.enabled === undefined ? true : x.enabled({ text: value })))
-    );
+    const commands = props.commands.flatMap((x) => (x.type === "group" ? [x, ...x.items] : [x]));
 
-    const fuzzy =
-        commands.length === 0
-            ? commands
-            : fzf(commands, "title", [
-                  { key: "title", value },
-                  { key: "shortcut", value },
-                  { key: "hint", value },
-                  ...commands.reduce<MatchValue<CommandItemTypes>[]>((acc, el) => {
-                      if (!el.hint) return acc;
-                      return [...acc, { key: "hint", value: el.hint }];
-                  }, []),
-              ]);
+    const fuzzy = getFuzzyData(commands, value);
 
     const displayItems: CommandItemTypes[] =
         value === ""
@@ -160,7 +170,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
               ];
 
     useEffect(() => {
-        combi.add(bindKey, () => props.onChange?.(true));
+        const combi = new CombiKeys();
+        combi.add(bindKey, () => props.onChangeVisibility?.(true));
         commands.forEach((cmd) => {
             if (cmd.type === "group") return;
             if (cmd.type === "shortcut" && cmd.shortcut !== undefined)
@@ -168,12 +179,14 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                     cmd.action({
                         event,
                         text: valueRef.current,
-                        setOpen: props.onChange,
+                        setOpen: props.onChangeVisibility,
                     })
                 );
         });
         return combi.register();
-    }, [combi, bindKey]);
+    }, [bindKey]);
+
+    const Icon = props.Icon ?? FilterIcon;
 
     return (
         <Fragment>
@@ -183,19 +196,23 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 open={props.open}
                 overlayClickClose
                 interactions={[listNav]}
-                onChange={props.onChange}
+                onChange={props.onChangeVisibility}
                 ariaTitle="Command palette"
                 bodyClassName="px-0 py-0 pt-2"
+                data-component="command-palette"
                 className="container relative py-0 md:max-w-screen-sm lg:max-w-screen-md"
             >
-                <header className="h-12 isolate z-floating bg-floating-background w-full sticky top-0 border-b border-floating-border px-4">
+                <header className="sticky top-0 isolate z-floating flex h-12 w-full items-center border-b border-floating-border bg-floating-background px-4">
+                    <div className="flex size-10 items-center justify-center">
+                        <Icon Default={FilterIcon} text={value} size={16} />
+                    </div>
                     <input
                         autoFocus
                         value={value}
                         data-combikeysbypass="true"
                         placeholder="Search for..."
                         onChange={(e) => setValue(e.target.value)}
-                        className="h-12 w-full bg-transparent pb-2 outline-none"
+                        className="h-12 w-full items-center bg-transparent px-2 py-2 pb-2 text-left text-lg outline-none"
                         onKeyDown={(e) => {
                             if (e.key === "ArrowDown" || e.key === "ArrowUp") {
                                 if (activeIndex !== null)
@@ -212,7 +229,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                     if (x.type === "shortcut")
                                         return x.action({
                                             event: e,
-                                            setOpen: props.onChange,
+                                            setOpen: props.onChangeVisibility,
                                             text,
                                         });
                                 }
@@ -223,7 +240,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                     if (x.type === "shortcut")
                                         return x.action({
                                             event: e,
-                                            setOpen: props.onChange,
+                                            setOpen: props.onChangeVisibility,
                                             text,
                                         });
                                 }
@@ -231,38 +248,73 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         }}
                     />
                 </header>
-                <motion.ul
-                    initial={{ transform: "scaleY(0)", opacity: 0.3 }}
-                    animate={{ transform: "scaleY(1)", opacity: 1 }}
-                    className="my-2 flex h-fit max-h-96 origin-[top_center] flex-col gap-1 px-2"
-                >
-                    <AnimatePresence>
-                        {displayItems.map((item, index) => (
-                            <Item
-                                {...getItemProps({
-                                    ref(node) {
-                                        listRef.current[index] = node;
-                                    },
-                                    onClick(e) {
-                                        e.preventDefault();
-                                        props.onChange(false);
-                                        floating.refs.domReference.current?.focus();
-                                    },
-                                })}
-                                item={item}
-                                text={value}
-                                onChange={props.onChange}
-                                active={activeIndex === index}
-                                key={`${id}-${item.type}-${index}`}
-                            />
-                        ))}
-                        {displayItems.length === 1 ? (
-                            <motion.div className={css("flex items-center justify-between rounded-lg p-2 text-secondary")}>
-                                {translations.commandPaletteEmpty ?? props.emptyMessage}
-                            </motion.div>
-                        ) : null}
-                    </AnimatePresence>
-                </motion.ul>
+                <AnimatePresence>
+                    {props.loading ? (
+                        <motion.ul
+                            role="listbox"
+                            data-component="command-palette-list"
+                            animate={{ transform: "scaleY(1)", opacity: 1 }}
+                            initial={{ transform: "scaleY(0)", opacity: 0.3 }}
+                            className="my-2 flex max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
+                        >
+                            <motion.div className="h-10 px-2 pb-1 pt-2">{translations.commandPaletteLoading}</motion.div>
+                            {loadingSkeleton.map((x, i) => {
+                                return (
+                                    <motion.li
+                                        key={`${id}-${i}-skeleton-index`}
+                                        className={css(
+                                            "flex h-10 items-center justify-between rounded-lg p-2 hover:bg-primary hover:text-primary-foreground"
+                                        )}
+                                    >
+                                        {SkeletonCell}
+                                    </motion.li>
+                                );
+                            })}
+                        </motion.ul>
+                    ) : (
+                        <motion.div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
+                            <motion.ul
+                                role="listbox"
+                                data-component="command-palette-list"
+                                animate={{ transform: "scaleY(1)", opacity: 1 }}
+                                initial={{ transform: "scaleY(0)", opacity: 0.3 }}
+                                className="my-2 flex h-fit max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
+                            >
+                                {displayItems.map((item, index) => (
+                                    <Item
+                                        {...getItemProps({
+                                            onMouseEnter: () => setActiveIndex(index),
+                                            ref(node) {
+                                                listRef.current[index] = node;
+                                            },
+                                            onClick(e) {
+                                                e.preventDefault();
+                                                props.onChangeVisibility(false);
+                                                floating.refs.domReference.current?.focus();
+                                                if (item.type === "shortcut")
+                                                    item.action({
+                                                        event: e,
+                                                        setOpen: props.onChangeVisibility,
+                                                        text: value,
+                                                    });
+                                            },
+                                        })}
+                                        item={item}
+                                        text={value}
+                                        active={activeIndex === index}
+                                        key={`${id}-${item.type}-${index}`}
+                                    />
+                                ))}
+                                {displayItems.length === 1 ? (
+                                    <motion.div className={css("flex items-center justify-between rounded-lg p-2 text-secondary")}>
+                                        {translations.commandPaletteEmpty ?? props.emptyMessage}
+                                    </motion.div>
+                                ) : null}
+                            </motion.ul>
+                            {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={value} /> : null}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
                 {props.footer ? <footer className="flex h-8 items-center rounded-b-lg bg-background p-2">{props.footer}</footer> : null}
             </Modal>
         </Fragment>
