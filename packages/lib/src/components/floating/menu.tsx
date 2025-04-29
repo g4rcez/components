@@ -42,7 +42,7 @@ const menuItemClassName = (highlight: string = "") =>
 
 const MenuContext = createContext<{
     activeIndex: number | null;
-    getItemProps: (userProps?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
+    getItemProps: (props?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
     isOpen: boolean;
     setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
     setHasFocusInside: React.Dispatch<React.SetStateAction<boolean>>;
@@ -107,7 +107,6 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             event: "mousedown",
             ignoreMouse: isNested,
             keyboardHandlers: true,
-            enabled: props.disabled === false,
         });
 
         const listNavigation = useListNavigation(context, {
