@@ -14,23 +14,25 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { AnimatePresence, HTMLMotionProps, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
-import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useId, useImperativeHandle } from "react";
+import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useId, useImperativeHandle, useEffect, RefObject } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
 
-type DrawerSides = "left" | "right";
-
 type AnimationLabels = "initial" | "enter" | "exit";
+
+export type ModalType = "dialog" | "drawer" | "sheet";
+
+export type DrawerPosition = "left" | "right";
 
 type Animations = {
     sheet: Record<AnimationLabels, TargetAndTransition>;
     dialog: Record<AnimationLabels, TargetAndTransition>;
-    drawer: (type: DrawerSides) => Record<AnimationLabels, TargetAndTransition>;
+    drawer: (type: DrawerPosition) => Record<AnimationLabels, TargetAndTransition>;
 };
 
-const animationDuration = "600ms";
+const animationDuration = "500ms";
 
 const drawerLeft = {
     exit: { translateX: ["0%", "-30%"], opacity: 0, animationDuration },
@@ -52,8 +54,8 @@ const animations: Animations = {
         exit: { opacity: 0.1, translateY: "50%", animationDuration, originY: "bottom" },
     },
     dialog: {
-        exit: { opacity: 0, scale: 0.97, animationDuration },
-        initial: { opacity: 0, scale: 0.95, animationDuration },
+        exit: { opacity: 0, scale: 0.95, animationDuration },
+        initial: { opacity: 0.5, scale: 0.95, animationDuration, type: "spring" },
         enter: { opacity: 1, scale: [1.05, 1], animationDuration },
     },
 };
@@ -65,7 +67,7 @@ const variants = cva(
             type: {
                 drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
                 dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
-                sheet: "w-screen absolute bottom-0 h-[85vh] max-h-[85vh] max-h-[85svh] pt-6 pb-4 rounded-t-lg",
+                sheet: "w-screen absolute bottom-0 max-h-[calc(100vh-15%)] max-h-[calc(100svh-5%)] h-screen pt-6 pb-4 rounded-t-lg",
             },
             position: {
                 none: "",
@@ -76,10 +78,6 @@ const variants = cva(
         defaultVariants: { position: "right", type: "dialog" },
     }
 );
-
-type DialogType = "dialog" | "drawer" | "sheet";
-
-type DrawerPosition = "left" | "right";
 
 export type ModalProps = Override<
     HTMLMotionProps<"div">,
@@ -93,7 +91,7 @@ export type ModalProps = Override<
             asChild?: boolean;
             layoutId?: string;
             resizer?: boolean;
-            type?: DialogType;
+            type?: ModalType;
             className?: string;
             bodyClassName?: string;
             closable?: boolean;
@@ -107,7 +105,7 @@ export type ModalProps = Override<
 
 type DraggableProps = {
     sheet: boolean;
-    position: DrawerSides;
+    position: DrawerPosition;
     parent: React.RefObject<HTMLElement>;
     onChange: (nextState: boolean) => void;
     value: MotionValue<number | undefined>;
@@ -115,7 +113,7 @@ type DraggableProps = {
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 
-const calculateClose = (n: number) => n * 0.62;
+const calculateClose = (n: number) => n * 0.65;
 
 const Draggable = (props: DraggableProps) => {
     const onDrag = (_: any, info: PanInfo) => {
@@ -172,7 +170,7 @@ const Draggable = (props: DraggableProps) => {
 
 const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
-const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsType: Nil<DialogType>, propsPosition: Nil<DrawerPosition>) => {
+const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsType: Nil<ModalType>, propsPosition: Nil<DrawerPosition>) => {
     const type = propsType || "dialog";
     if (isDesktop) return propsType === "drawer" ? (propsPosition ?? positions.drawer) : positions[type];
     return forceType ? positions[type] : positions.sheet;
@@ -185,38 +183,38 @@ const noop: any[] = [];
 export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
     (
         {
-            interactions: outInteractions = noop,
             open,
             title,
             footer,
             asChild,
             trigger,
             children,
-            layoutId,
-            role: roleName = "dialog",
             onChange,
+            ariaTitle,
             className,
             bodyClassName,
             resizer = true,
             closable = true,
             forceType = false,
+            layoutId = undefined,
             overlayClassName = "",
             type: _type = "dialog",
             position: propsPosition,
             overlayClickClose = false,
-            ariaTitle,
+            role: roleName = "dialog",
+            interactions: outInteractions = noop,
             ...props
         }: PropsWithChildren<ModalProps>,
         externalRef: ForwardedRef<ModalRef>
     ) => {
-        const removeScrollRef = useRemoveScroll(open, "overflow-hidden");
+        const removeScrollRef = useRemoveScroll(open, "block-only");
         const headingId = useId();
         const descriptionId = useId();
         const isDesktop = useMediaQuery("(min-width: 64rem)");
         const useResizer = _type !== "dialog";
         const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
         const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
-        const animation = typeof func === "function" ? func(position as DrawerSides) : func;
+        const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
         const type = isDesktop ? _type : forceType ? _type : "sheet";
 
         const floating = useFloating({ open: open, onOpenChange: onChange, transform: true, strategy: "absolute" });
@@ -234,11 +232,31 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
 
         const floatingSize = useMotionValue<number | undefined>(undefined);
 
+        useEffect(() => {
+            floatingSize.set(undefined);
+        }, [type]);
+
         const onClose = () => onChange(false);
 
         useImperativeHandle(externalRef, () => {
             return { context: floating.context, floating: removeScrollRef.current };
         }, [floating]);
+
+        const onDrag = (_: any, info: PanInfo) => {
+            const parent = floating.refs.floating as RefObject<HTMLElement | null>;
+            if (parent.current && type === "sheet") {
+                const div = parent.current as HTMLElement;
+                const rect = div.getBoundingClientRect();
+                const v = floatingSize.get() || rect.height;
+                const result = Math.abs(v - info.delta.y);
+                const screenHeightToClose = calculateClose(window.outerHeight);
+                if (result < screenHeightToClose) {
+                    onClose();
+                    return setTimeout(() => floatingSize.set(window.outerHeight), 350);
+                }
+                return floatingSize.set(result);
+            }
+        };
 
         return (
             <Fragment>
@@ -259,7 +277,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                     <AnimatePresence mode="wait" presenceAffectsLayout>
                         {open ? (
                             <FloatingOverlay
-                                lockScroll={false}
+                                lockScroll
                                 className={css(
                                     `inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`,
                                     overlayClassName
@@ -268,13 +286,24 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                 <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={floating.context}>
                                     <motion.div
                                         {...props}
+                                        layout
                                         exit="exit"
+                                        dragListener
+                                        dragMomentum
                                         animate="enter"
+                                        dragElastic={0}
+                                        dragPropagation
+                                        onDrag={onDrag}
+                                        dragSnapToOrigin
                                         aria-modal={open}
+                                        dragDirectionLock
                                         initial="initial"
                                         layoutId={layoutId}
                                         variants={animation}
                                         data-component="modal"
+                                        draggable={type === "sheet"}
+                                        dragConstraints={dragConstraints}
+                                        drag={type === "sheet" ? "y" : "x"}
                                         ref={mergeRefs(floating.refs.setFloating, removeScrollRef)}
                                         className={css(variants({ position, type }), className, "overscroll-contain")}
                                         style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
@@ -315,7 +344,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                             <Draggable
                                                 onChange={onChange}
                                                 parent={floating.refs.floating as any}
-                                                position={position as DrawerSides}
+                                                position={position as DrawerPosition}
                                                 sheet={type === "sheet"}
                                                 value={floatingSize}
                                             />
