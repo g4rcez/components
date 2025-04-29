@@ -340,7 +340,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         "rounded-md bg-transparent px-input-x py-input-y text-foreground",
                         "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                         "group-error:text-danger group-error:placeholder-input-mask-error",
-                        "group-focus-within:border-primary group-hover:border-primary",
+                        "group-focus-within:border-primary group-hover:border-primary text-base",
                         props.className
                     )}
                 />
