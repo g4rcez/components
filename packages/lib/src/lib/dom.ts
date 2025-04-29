@@ -47,3 +47,9 @@ export const getRemainingSize = (element: HTMLElement, windowSize: number) => {
     const rect = element.getBoundingClientRect();
     return Math.abs(windowSize - rect.bottom);
 };
+
+export const getCoords = (elem: HTMLElement, docEl: HTMLElement) => {
+    const box = elem.getBoundingClientRect();
+    const parent = docEl.getBoundingClientRect();
+    return { top: Math.round(box.top - parent.top), left: Math.round(box.left - parent.left) };
+};

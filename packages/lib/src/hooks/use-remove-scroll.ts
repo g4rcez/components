@@ -13,6 +13,7 @@ export const useRemoveScroll = <T extends HTMLElement>(remove: boolean, removeSt
 
     useEffect(() => {
         if (ref.current === null && !remove) return;
+        if (removeStyle === "block-only") return;
         if (removeStyle === "overflow-hidden") {
             if (remove) {
                 prev.current = document.documentElement.style.overflowY;
