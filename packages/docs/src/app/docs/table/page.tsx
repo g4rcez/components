@@ -1,6 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import {
   Card,
   Checkbox,
@@ -25,34 +25,28 @@ const cols = createColumns<User>((col) => {
       </Fragment>
     ),
   });
-  col.add("id", "ID", {
-    Element: (props) => (
-      <Fragment>
-        {props.value}.{props.value}.{props.value}.{props.value}
-      </Fragment>
-    ),
-  });
+  col.add("id", "ID", );
   col.add("type", "Type");
   col.add("document", "Document");
 });
 
-const clients = Array.from({ length: 10000 }).map(
+const clients = Array.from({ length: 100 }).map(
   (_, i): User => ({
     id: uuid(),
     name: i,
     type: i % 2 === 0 ? "pj" : "pf",
-    document: i % 2 === 0 ? "00000000000" : "00000000000000",
+    document: i % 2 === 0 ? "000.000.000-00" : "00.000.000/0001-00",
   }),
 );
 
 export default function TablePage() {
   const preferences = useTablePreferences("@test", cols);
   const [map, setMap] = useState(new Map<string, any>());
-  const mapRef = useStableRef(map)
+  const mapRef = useStableRef(map);
 
   const Aside = useCallback(
     (props: any) => (
-      <div className="flex h-full px-4 items-center">
+      <div className="flex h-full px-1 items-center">
         <Checkbox
           checked={mapRef.current.has(props.row.id)}
           onChange={(e) => {
@@ -79,7 +73,7 @@ export default function TablePage() {
       <Card container="px-0 py-0 pb-0" className="py-0 pb-0 lg:px-0 px-0">
         <Table<User>
           {...preferences}
-          sticky={39}
+          sticky={55}
           name="table"
           Aside={Aside}
           rows={clients}

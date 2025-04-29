@@ -11,11 +11,11 @@ const Click = () => {
       <Tooltip
         as={Button}
         open={open}
-        title="Controlled"
-        hover={false}
         focus={false}
+        hover={false}
+        title="Controlled"
       >
-        Controlled
+        <div className="flex flex-col gap-4">Controlled</div>
       </Tooltip>
       <Button onClick={toggle} theme="muted">
         {open ? "Close" : "Open"}
@@ -27,7 +27,7 @@ const Click = () => {
 export default function TooltipPage() {
   return (
     <DocsLayout title="Tooltip" description="" section="floating">
-      <Card className="flex gap-4">
+      <Card className="flex flex-row flex-wrap gap-4">
         <Tooltip as={Button} title="Hover me" followCursor>
           Mouse follows you
         </Tooltip>

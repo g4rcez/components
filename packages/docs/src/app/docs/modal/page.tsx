@@ -31,12 +31,16 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
   );
 };
 
-const items = Array.from({ length: 70 }).map((x) => (
-  <span key={uuid()}>
-    I'm a Dialog component
-    <br />
-  </span>
-));
+const Items = () => (
+  <Fragment>
+    {Array.from({ length: 70 }).map((x) => (
+      <span key={uuid()}>
+        I'm a Dialog component
+        <br />
+      </span>
+    ))}
+  </Fragment>
+);
 
 const commands: CommandItemTypes[] = [
   {
@@ -130,7 +134,7 @@ const Preview = (props: any) => {
 };
 
 export default function ModalExamplePage() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [state, setState] = useState({
     closable: false,
     overlayClickClose: true,
@@ -176,7 +180,6 @@ export default function ModalExamplePage() {
             asChild
             type="dialog"
             title="Dialog"
-            layoutId="dialog"
             trigger={<Button as={motion.button}>Dialog</Button>}
           >
             {Array.from({ length: 10 }).map((x) => (
@@ -202,7 +205,7 @@ export default function ModalExamplePage() {
             type="dialog"
             trigger={<Button>Dialog without title</Button>}
           >
-            {items}
+            <Items />
           </Element>
         </Card>
         <Card title="Drawer">
@@ -220,7 +223,7 @@ export default function ModalExamplePage() {
               position="left"
             >
               I'm a Drawer component. From left to right
-              {items}
+              <Items />
             </Element>
             <Element
               {...state}
@@ -231,7 +234,7 @@ export default function ModalExamplePage() {
               trigger={<Button>Drawer Right</Button>}
             >
               I'm a Drawer component. From right to left
-              {items}
+              <Items />
             </Element>
             <Element
               {...state}
@@ -243,7 +246,7 @@ export default function ModalExamplePage() {
               position="right"
             >
               I'm a Drawer component. From left to right
-              {items}
+              <Items />
             </Element>
           </div>
         </Card>
@@ -262,11 +265,11 @@ export default function ModalExamplePage() {
             trigger={<Button className="w-fit">Open sheet</Button>}
           >
             I'm a sheet component
-            {items}
+            <Items />
           </Element>
         </Card>
       </div>
-      {items}
+      <Items />
     </DocsLayout>
   );
 }

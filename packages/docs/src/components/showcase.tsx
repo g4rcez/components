@@ -8,18 +8,31 @@ import {
   AnimatedListItem,
 } from "../../../lib/src/components/display/list";
 
+type State = {
+  type: "drawer" | "dialog";
+};
+
 export const Showcase = () => {
-  const [open, setOpen] = useState(false);
+  const [state, setState] = useState<State | null>(null);
   return (
     <div className="h-full flex flex-col gap-4 p-8 w-fit">
       <h2 className="font-bold leading-loose tracking-wide text-4xl text-center">
         Our components
       </h2>
-      <Alert title="Fyi!" theme="success" open>
-        You can customize using design tokens from your tailwindcss config
-      </Alert>
-      <Button onClick={() => setOpen(true)}>Open dialog</Button>
-      <Modal open={open} onChange={setOpen} title="Hello">
+      <div className="flex justify-center w-full gap-4">
+        <Button onClick={() => setState({ type: "dialog" })}>
+          Dialog
+        </Button>
+        <Button onClick={() => setState({ type: "drawer" })}>
+          Drawer
+        </Button>
+      </div>
+      <Modal
+        type={state?.type}
+        open={state !== null}
+        title={state?.type ?? ""}
+        onChange={() => setState(null)}
+      >
         <div className="max-w-lg h-min">
           Open in mobile? You will see a bottom sheet. Open in desktop? A
           regular dialog. Automatically and without zero code for this. An

@@ -21,6 +21,11 @@ export default function FormPage() {
           title="CNPJ"
           placeholder="00.000.000/0001-00"
           required
+          info={
+            <div>
+              Testing <button>nested button</button>
+            </div>
+          }
         />
         <Input
           mask="cellphone"

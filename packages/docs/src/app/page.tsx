@@ -1,105 +1,41 @@
-import { Brand } from "@/components/brand";
-import { Showcase } from "@/components/showcase";
-import { ToggleMode } from "@/components/toggle-mode";
-import { ChevronRightIcon } from "lucide-react";
-import Link from "next/link";
 import { Fragment } from "react";
-
-const Grid = () => (
-  <svg
-    aria-hidden="true"
-    className="absolute inset-0 -z-10 bg-primary/10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-  >
-    <defs>
-      <pattern
-        x="50%"
-        y={-1}
-        width={200}
-        height={200}
-        patternUnits="userSpaceOnUse"
-        id="grid-ref"
-      >
-        <path d="M.5 200V.5H200" fill="none" />
-      </pattern>
-    </defs>
-    <svg
-      x="50%"
-      y={-1}
-      className="overflow-visible fill-primary/10 dark:fill-gray-800/20"
-    >
-      <path
-        d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
-        strokeWidth={0}
-      />
-    </svg>
-    <rect width="100%" height="100%" strokeWidth={0} fill="url(#grid-ref)" />
-  </svg>
-);
+import { Button } from "../../../lib/src/components/core/button";
+import Link from "next/link";
+import { ModalExample } from "@/components/examples/modal";
+import { AlertExample } from "@/components/examples/alert";
 
 export default function Example() {
   return (
     <Fragment>
-      <div className="w-full sticky top-0 dark:bg-black/10 bg-white/10 backdrop-blur-xl">
-        <nav className="mx-auto max-w-7xl px-6 lg:flex lg:px-8 py-4 flex justify-between items-center">
-          <Brand />
-          <ToggleMode />
+      <header className="relative gap-4 py-16 px-10 flex justify-center flex-col">
+        <div className="absolute -z-10 inset-0 h-full bg-gradient-to-tr from-background via-background to-primary/10 w-full" />
+        <h2 className="text-foreground text-3xl font-bold tracking-wide leading-relaxed">
+          Your next UI library
+        </h2>
+        <p className="text-base text-pretty text-foreground max-w-xl">
+          <b>React + Tailwind + Framer Motion = Design System</b>. With battle
+          tested, a11y focus and great DX, you can use for many usecases.
+        </p>
+        <nav className="flex flex-row gap-2">
+          <Link href="/docs">
+            <Button size="small" theme="muted">
+              Intro
+            </Button>
+          </Link>
+          <Link href="/docs/get-started">
+            <Button size="small">Get started</Button>
+          </Link>
         </nav>
-      </div>
-      <Grid />
-      <div
-        aria-hidden="true"
-        className="bg-background/20 absolute container overflow-hidden left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
-      >
-        <div
-          style={{
-            clipPath:
-              "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
-          }}
-          className="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-20"
-        />
-      </div>
-      <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 flex flex-col lg:flex-row lg:px-8 lg:py-28">
-        <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-          <div className="mt-24 sm:mt-32 lg:mt-16">
-            <Link href="/docs/changelog" className="inline-flex space-x-6">
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold leading-6 text-primary ring-1 ring-inset ring-primary/20">
-                What's new
-              </span>
-              <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6">
-                <span>Check the latest version</span>
-                <ChevronRightIcon
-                  aria-hidden="true"
-                  className="h-5 w-5 text-gray-500"
-                />
-              </span>
-            </Link>
-          </div>
-          <h1 className="mt-10 text-4xl font-bold tracking-tight sm:text-6xl">
-            Your next UI library
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-foreground/60">
-            Battle tested, well designed and awesome DX components using React,
-            Tailwind and Framer Motion.
-          </p>
-          <div className="mt-10 flex items-center gap-x-6">
-            <Link
-              href="/docs/get-started"
-              className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              Get started
-            </Link>
-            <Link
-              href="/docs/intro"
-              className="text-sm font-semibold leading-6 text-foreground/70"
-            >
-              Learn more <span aria-hidden="true">→</span>
-            </Link>
-          </div>
+      </header>
+      <section className="px-10">
+        <h3 className="border-b border-card-border font-semibold text-xl pb-4">
+          Components
+        </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-8">
+          <ModalExample />
+          <AlertExample />
         </div>
-        <div className="mx-auto mt-8 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
-          <Showcase />
-        </div>
-      </div>
+      </section>
     </Fragment>
   );
 }
