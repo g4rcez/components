@@ -30,11 +30,12 @@ export type DesignTokens = {
     name: string;
     zIndex: ZIndex;
     shadow: Record<"floating", string>;
-    spacing: Record<"base" | "lg" | "sm", string>;
+    spacing: Record<"base" | "lg" | "sm" | "hairline", string>;
     rounded: Record<"button" | "full" | "pill" | "card", string>;
     custom?: Record<string, string>;
     colors: {
         disabled: string;
+        border: string;
         background: string;
         muted: string;
         foreground: string;

@@ -12,6 +12,7 @@ export const DARK_THEME: DesignTokens = {
     colors: {
         foreground: "hsla(210, 50%, 98%)",
         background: "hsla(0, 0%, 9%)",
+        border: "hsla(240, 7%, 27%)",
         muted: "hsla(210, 10%, 40%)",
         disabled: "hsla(240, 4%, 33%)",
         emphasis: {
@@ -70,7 +71,7 @@ export const DARK_THEME: DesignTokens = {
         },
         card: {
             muted: "hsla(0, 0%, 22%)",
-            border: "hsla(240, 7%, 27%)",
+            border: "hsla(240, 7%, 20%)",
             background: "hsla(0, 0%, 15%)",
         },
         floating: {
@@ -89,7 +90,7 @@ export const DARK_THEME: DesignTokens = {
         },
         table: {
             header: "hsla(0, 0%, 12%)",
-            border: "hsla(240, 4%, 33%)",
+            border: "hsla(240, 4%, 20%)",
             background: "hsla(0, 0%, 15%)",
         },
         button: {

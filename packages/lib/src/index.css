@@ -2,12 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  -webkit-text-size-adjust: 100%; 
+}
+
 select.select {
     @apply appearance-none bg-no-repeat;
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
+}
+
+input, select, textarea {
+    font-size: 16px;
 }
 
 input::-webkit-outer-spin-button,

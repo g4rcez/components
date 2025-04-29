@@ -9,6 +9,7 @@ export const rounded = {
 
 export const spacing = {
     base: "1rem",
+    hairline: "0.0625rem",
     lg: "1.125rem",
     sm: "0.75rem",
     "field-height": "1.5rem",

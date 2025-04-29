@@ -12,6 +12,7 @@ export const LIGHT_THEME: DesignTokens = {
     colors: {
         foreground: "hsla(217, 15%, 30%)",
         background: "hsla(210, 34%, 96%)",
+        border: "hsla(210, 25%, 88%)",
         muted: "hsla(210, 30%, 86%)",
         disabled: "hsla(240, 10%, 78%)",
         emphasis: {
