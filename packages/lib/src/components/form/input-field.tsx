@@ -10,6 +10,7 @@ import { Tooltip } from "../floating/tooltip";
 
 export type FeedbackProps = React.PropsWithChildren<
     Partial<{
+        id: string;
         info: Label;
         title: Label;
         hideLeft?: boolean;
@@ -19,7 +20,7 @@ export type FeedbackProps = React.PropsWithChildren<
     }>
 >;
 
-export const InputFeedback = ({ reportStatus, hideLeft = false, className, info, children, title }: FeedbackProps) => (
+export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <span className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
             <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:text-disabled group-error:text-danger">
@@ -30,15 +31,15 @@ export const InputFeedback = ({ reportStatus, hideLeft = false, className, info,
                             <Tooltip
                                 as="button"
                                 type="button"
-                                aria-description={info}
+                                aria-description={typeof info === "string" ? info : undefined}
+                                aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}`: undefined}
                                 title={
                                     <span className="cursor-help">
-                                        <span className="sr-only">{info}</span>
                                         <InfoIcon className="aspect-square size-3" aria-hidden="true" size={16} strokeWidth={1} absoluteStrokeWidth />
                                     </span>
                                 }
                             >
-                                <div className="w-full max-w-48 whitespace-break-spaces break-words">{info}</div>
+                                <div id={id ? `tooltip-info-content-${id}`: undefined} className="w-full max-w-48 whitespace-break-spaces break-words">{info}</div>
                             </Tooltip>
                         ) : null}
                         {reportStatus ? (
