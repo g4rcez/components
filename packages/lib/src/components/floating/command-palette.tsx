@@ -76,10 +76,7 @@ const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">
             type="button"
             aria-selected={active}
             data-component="command-palette-item"
-            className={css(
-                "flex h-10 items-center justify-between rounded-lg p-2 hover:bg-floating-hover hover:text-floating-foreground",
-                active ? "bg-floating-hover text-primary-foreground" : ""
-            )}
+            className={css("flex h-10 items-center justify-between rounded-lg p-2 hover:bg-floating-hover", active ? "bg-floating-hover" : "")}
         >
             <span className="flex items-center gap-2">
                 {item.Icon ? item.Icon : null}
@@ -215,11 +212,12 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         className="h-12 w-full items-center bg-transparent px-2 py-2 pb-2 text-left text-lg outline-none"
                         onKeyDown={(e) => {
                             if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-                                if (activeIndex !== null)
+                                if (activeIndex !== null) {
                                     listRef.current[activeIndex]?.scrollIntoView({
                                         block: "start",
                                         inline: "start",
                                     });
+                                }
                             }
                             if (e.key === "Enter") {
                                 if (activeIndex !== null && displayItems[activeIndex]) {
