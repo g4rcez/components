@@ -73,18 +73,21 @@ export const Row = (index: number, row: any, context: ItemContentContext) => {
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`group-table-cell relative hidden h-14 border-l border-table-border px-2 first:table-cell first:border-transparent md:table-cell ${className}`}
+                        className={`group-table-cell py-2 sm:py-2 flex flex-col md:table-cell md:h-14 md:border-l md:border-table-border px-2 first:border-transparent ${className}`}
                     >
                         {exposeAside ? (
                             <RowAside>
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
+                        <span className="block md:hidden text-sm font-bold leading-tight">{col.thead}</span>
                         <span className="relative">
                             {loading ? (
                                 SkeletonCell
                             ) : Component ? (
-                                <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
+                                <Fragment>
+                                    <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
+                                </Fragment>
                             ) : (
                                 <Fragment>{Is.nil(value) ? "" : value}</Fragment>
                             )}

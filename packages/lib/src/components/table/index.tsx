@@ -70,7 +70,7 @@ const VirtualTable = React.forwardRef(({ context, className = "", ...props }: an
         {...props}
         ref={ref as any}
         role="table"
-        className={`table min-w-full table-fixed border-collapse divide-y divide-table-border border-0 text-left ${className ?? ""}`}
+        className={`table min-w-full table-fixed border-collapse text-left ${className ?? ""}`}
     />
 ));
 
@@ -80,11 +80,11 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
         ...(props as any)?.style,
         top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
     };
-    return <thead {...props} style={style} role="rowgroup" className="shadow-xs group:sticky top-0 bg-transparent" ref={ref} />;
+    return <thead {...props} style={style} role="rowgroup" className="shadow-xs hidden md:table-header-group group:sticky top-0 bg-transparent" ref={ref} />;
 });
 
 const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
-    return <tr {...props} role="row" ref={ref} className={`group-table-row table-row ${(props as any)?.className ?? ""}`} />;
+    return <tr {...props} role="row" ref={ref} className={`group-table-row h-fit flex flex-wrap gap-1 flex-col justify-center md:table-row ${(props as any)?.className ?? ""}`} />;
 });
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
@@ -175,7 +175,7 @@ const InnerTable = <T extends Any>({
 
     return (
         <div className="min-w-full">
-            <div className={`group rounded-lg ${border ? "border border-table-border" : ""}`}>
+            <div className={`group w-full rounded-lg ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
                     useWindowScroll
                     context={context}

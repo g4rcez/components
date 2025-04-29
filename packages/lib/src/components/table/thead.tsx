@@ -78,7 +78,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-colid={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`relative hidden min-w-0 cursor-grab border-0 font-medium first:table-cell md:table-cell ${props.header.thProps?.className ?? ""}`}
+            className={`relative min-w-0 cursor-grab font-medium ${props.header.thProps?.className ?? ""}`}
         >
             <span
                 className={`flex h-full items-center justify-between bg-table-header px-2 py-4 ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}
@@ -192,7 +192,6 @@ export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
             ref={ref}
             onReorder={onChange}
             values={props.headers}
-            className="text-lg"
         >
             <AnimatePresence>
                 {props.headers.map((header, index) => (
