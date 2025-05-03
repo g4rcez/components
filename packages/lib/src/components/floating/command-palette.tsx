@@ -1,7 +1,6 @@
 "use client";
 import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
 import { FilterIcon, LucideProps } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
@@ -62,13 +61,13 @@ const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">
     const item = props.item;
     if (item.type === "group")
         return (
-            <motion.div id={id} className="h-10 px-2 pb-1 pt-2">
+            <div id={id} className="h-10 px-2 pb-1 pt-2">
                 <Group text={props.text} item={item} />
-            </motion.div>
+            </div>
         );
     if (item.type !== "shortcut") return <Fragment />;
     return (
-        <motion.button
+        <button
             {...props}
             id={id}
             ref={ref}
@@ -83,7 +82,7 @@ const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">
                 <span>{isReactFC(item.title) ? <item.title text={props.text} /> : item.title}</span>
             </span>
             {item.shortcut ? <Shortcut value={item.shortcut} /> : null}
-        </motion.button>
+        </button>
     );
 });
 
@@ -189,14 +188,15 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         <Fragment>
             <Modal
                 ref={ref}
+                animated={false}
                 closable={false}
                 open={props.open}
                 overlayClickClose
                 interactions={[listNav]}
-                onChange={props.onChangeVisibility}
                 ariaTitle="Command palette"
                 bodyClassName="px-0 py-0 pt-2"
                 data-component="command-palette"
+                onChange={props.onChangeVisibility}
                 className="container relative py-0 md:max-w-screen-sm lg:max-w-screen-md"
             >
                 <header className="sticky top-0 isolate z-floating flex h-12 w-full items-center border-b border-floating-border bg-floating-background px-4">
@@ -246,73 +246,65 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         }}
                     />
                 </header>
-                <AnimatePresence>
-                    {props.loading ? (
-                        <motion.ul
+                {props.loading ? (
+                    <ul
+                        role="listbox"
+                        data-component="command-palette-list"
+                        className="my-2 flex max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
+                    >
+                        <div className="h-10 px-2 pb-1 pt-2">{translations.commandPaletteLoading}</div>
+                        {loadingSkeleton.map((x, i) => (
+                            <li
+                                key={`${id}-${i}-skeleton-index`}
+                                className={css(
+                                    "flex h-10 items-center justify-between rounded-lg p-2 hover:bg-primary hover:text-primary-foreground"
+                                )}
+                            >
+                                {SkeletonCell}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
+                        <ul
                             role="listbox"
                             data-component="command-palette-list"
-                            animate={{ transform: "scaleY(1)", opacity: 1 }}
-                            initial={{ transform: "scaleY(0)", opacity: 0.3 }}
-                            className="my-2 flex max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
+                            className="my-2 flex h-fit max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
                         >
-                            <motion.div className="h-10 px-2 pb-1 pt-2">{translations.commandPaletteLoading}</motion.div>
-                            {loadingSkeleton.map((x, i) => {
-                                return (
-                                    <motion.li
-                                        key={`${id}-${i}-skeleton-index`}
-                                        className={css(
-                                            "flex h-10 items-center justify-between rounded-lg p-2 hover:bg-primary hover:text-primary-foreground"
-                                        )}
-                                    >
-                                        {SkeletonCell}
-                                    </motion.li>
-                                );
-                            })}
-                        </motion.ul>
-                    ) : (
-                        <motion.div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
-                            <motion.ul
-                                role="listbox"
-                                data-component="command-palette-list"
-                                animate={{ transform: "scaleY(1)", opacity: 1 }}
-                                initial={{ transform: "scaleY(0)", opacity: 0.3 }}
-                                className="my-2 flex h-fit max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
-                            >
-                                {displayItems.map((item, index) => (
-                                    <Item
-                                        {...getItemProps({
-                                            onMouseEnter: () => setActiveIndex(index),
-                                            ref(node) {
-                                                listRef.current[index] = node;
-                                            },
-                                            onClick(e) {
-                                                e.preventDefault();
-                                                props.onChangeVisibility(false);
-                                                floating.refs.domReference.current?.focus();
-                                                if (item.type === "shortcut")
-                                                    item.action({
-                                                        event: e,
-                                                        setOpen: props.onChangeVisibility,
-                                                        text: value,
-                                                    });
-                                            },
-                                        })}
-                                        item={item}
-                                        text={value}
-                                        active={activeIndex === index}
-                                        key={`${id}-${item.type}-${index}`}
-                                    />
-                                ))}
-                                {displayItems.length === 1 ? (
-                                    <motion.div className={css("flex items-center justify-between rounded-lg p-2 text-secondary")}>
-                                        {translations.commandPaletteEmpty ?? props.emptyMessage}
-                                    </motion.div>
-                                ) : null}
-                            </motion.ul>
-                            {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={value} /> : null}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                            {displayItems.map((item, index) => (
+                                <Item
+                                    {...getItemProps({
+                                        onMouseEnter: () => setActiveIndex(index),
+                                        ref(node) {
+                                            listRef.current[index] = node;
+                                        },
+                                        onClick(e) {
+                                            e.preventDefault();
+                                            props.onChangeVisibility(false);
+                                            floating.refs.domReference.current?.focus();
+                                            if (item.type === "shortcut")
+                                                item.action({
+                                                    event: e,
+                                                    setOpen: props.onChangeVisibility,
+                                                    text: value,
+                                                });
+                                        },
+                                    })}
+                                    item={item}
+                                    text={value}
+                                    active={activeIndex === index}
+                                    key={`${id}-${item.type}-${index}`}
+                                />
+                            ))}
+                            {displayItems.length === 1 ? (
+                                <div className={css("flex items-center justify-between rounded-lg p-2 text-secondary")}>
+                                    {translations.commandPaletteEmpty ?? props.emptyMessage}
+                                </div>
+                            ) : null}
+                        </ul>
+                        {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={value} /> : null}
+                    </div>
+                )}
                 {props.footer ? <footer className="flex h-8 items-center rounded-b-lg bg-background p-2">{props.footer}</footer> : null}
             </Modal>
         </Fragment>
