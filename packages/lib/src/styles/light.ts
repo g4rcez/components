@@ -6,12 +6,12 @@ export const LIGHT_THEME: DesignTokens = {
     spacing,
     name: "light",
     shadow: {
-        floating: "rgba(50, 50, 50, 0.1) 0px 0px 0px 1px, rgba(50, 50, 50, 0.1) 0px 3px 6px, rgba(50, 50, 50, 0.1) 0px 2px 3px",
+        floating: "0 1px 1px 0 rgb(0 0 0 / 0.02)",
     },
     zIndex,
     colors: {
         foreground: "hsla(217, 15%, 30%)",
-        background: "hsla(210, 34%, 96%)",
+        background: "hsla(210, 40%, 98%)",
         border: "hsla(210, 25%, 88%)",
         muted: "hsla(210, 30%, 86%)",
         disabled: "hsla(240, 10%, 78%)",
@@ -68,6 +68,7 @@ export const LIGHT_THEME: DesignTokens = {
             "mask-error": "hsla(0, 94%, 81%)",
             "switch-bg": "hsla(0, 0%, 45%)",
             switch: "hsla(0, 0%, 100%)",
+            slider: "hsla(0, 0%, 100%)",
         },
         card: {
             muted: "hsla(210, 25%, 94%)",

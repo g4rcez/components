@@ -30,7 +30,15 @@ export class Dict<K, V> extends Map<K, V> {
         return clone;
     }
 
+    public static from<T>(items: T[], selector: (t: T) => any) {
+        return new Dict(items.map((x) => [selector(x), x]));
+    }
+
     public static unique<T>(items: T[], selector: (t: T) => any) {
-        return Array.from(new Map(items.map((x) => [selector(x), x])).values());
+        return Array.from(Dict.from(items, selector).values());
+    }
+
+    public toArray() {
+        return Array.from(this.values());
     }
 }

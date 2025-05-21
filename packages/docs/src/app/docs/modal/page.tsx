@@ -21,7 +21,7 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
     <Fragment>
       <Modal {...(props as any)} open={open} onChange={setOpen}>
         {props.children}
-        <Tooltip title="Test">
+        <Tooltip title={<b>Test</b>}>
           <div className="min-w-full flex flex-1">
             Paullum deliquit, ponderibus modulisque suis ratio utitur.
           </div>

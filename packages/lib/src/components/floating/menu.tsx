@@ -50,8 +50,8 @@ const MenuContext = createContext<{
     isOpen: false,
     activeIndex: null,
     getItemProps: () => ({}),
-    setActiveIndex: () => {},
-    setHasFocusInside: () => {},
+    setActiveIndex: () => { },
+    setHasFocusInside: () => { },
 });
 
 export type MenuProps = Partial<
@@ -61,6 +61,7 @@ export type MenuProps = Partial<
         nested: boolean;
         asChild: boolean;
         isParent: boolean;
+        restoreFocus: boolean;
         children: React.ReactNode;
         floatingClassName: string;
         FloatingComponent: React.ElementType;
@@ -68,7 +69,7 @@ export type MenuProps = Partial<
 >;
 
 const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLProps<HTMLButtonElement>, MenuProps>>(
-    ({ children, FloatingComponent = "div", hover = true, open, isParent, floatingClassName = "", label, ...props }, forwardedRef) => {
+    ({ children, FloatingComponent = "div", hover = true, open, isParent = false, restoreFocus = false, floatingClassName = "", label, ...props }, forwardedRef) => {
         const [isOpen, setIsOpen] = useState<boolean>(open ?? false);
         const [hasFocusInside, setHasFocusInside] = useState(false);
         const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -205,7 +206,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                     <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
                         {isOpen && (
                             <FloatingPortal preserveTabOrder>
-                                <FloatingFocusManager context={context} modal={false} initialFocus={isNested ? -1 : 0} returnFocus={!isNested}>
+                                <FloatingFocusManager context={context} modal={false} initialFocus={isNested ? -1 : 0} returnFocus={isParent ? restoreFocus : !isNested}>
                                     <FloatingComponent
                                         {...getFloatingProps()}
                                         ref={refs.setFloating}

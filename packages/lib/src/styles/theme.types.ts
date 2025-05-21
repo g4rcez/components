@@ -59,6 +59,7 @@ export type DesignTokens = {
             "mask-error": string;
             "switch-bg": string;
             switch: string;
+            slider: string;
         };
     };
 };

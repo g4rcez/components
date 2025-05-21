@@ -104,7 +104,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 value={value}
                 id={undefined}
                 name={undefined}
-                className="uppercase"
                 data-value={htmlValue}
                 formNoValidate={!open}
                 data-target={props.name}

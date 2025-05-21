@@ -22,10 +22,10 @@ import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { css, dispatchInput, getRemainingSize, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
+import { fzf } from "../../lib/fzf";
 import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
-import { fzf } from "../../lib/fzf";
 
 export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
 
@@ -187,7 +187,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             if (inputRef.current === null) return;
             const s = getRemainingSize(inputRef.current as HTMLElement, window.innerHeight);
             setTimeout(() => setH(Math.min(s, displayList.length * MIN_SIZE)), 100);
-        }, [shadow, open, refs.reference]);
+        }, [shadow, open, refs.reference, displayList.length]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -340,7 +340,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         "rounded-md bg-transparent px-input-x py-input-y text-foreground",
                         "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                         "group-error:text-danger group-error:placeholder-input-mask-error",
-                        "group-focus-within:border-primary group-hover:border-primary text-base",
+                        "text-base group-focus-within:border-primary group-hover:border-primary",
                         props.className
                     )}
                 />

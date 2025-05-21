@@ -10,6 +10,7 @@ import {
   Checkbox,
   DatePicker,
   Input,
+  MultiSelect,
   Select,
   Switch,
   useForm,
@@ -19,7 +20,7 @@ import {
 const languages: AutocompleteItemProps[] = [
   { label: "Elixir", value: "ex", Render: () => <span>💧 Elixir</span> },
   { label: "Javascript", value: "js" },
-  { label: "Kotlin", value: "kt", Render: () => <span>🗿 Kotlin</span> },
+  { label: "Kotlin", value: "kt" },
   { label: "Typescript", value: "typescript" },
   { label: "Java", value: "java" },
   { label: "Cobol", value: "cobol" },
@@ -46,6 +47,7 @@ const schema = z.object({
   agree: z.literal(true),
   number: z.number(),
   boolean: z.literal(true),
+  languages: z.array(z.string()),
   date: z.string().datetime(),
   name: z.string().min(1),
   document: z.string().min(1),
@@ -122,6 +124,13 @@ export default function FormPage() {
               title: "Language",
               placeholder: "Select a language",
               options: languages,
+            })}
+          />
+          <MultiSelect
+            {...form.multiselect("languages", {
+              title: "All language",
+              options: languages,
+              placeholder: "Select your languages",
             })}
           />
           <Autocomplete

@@ -7,7 +7,7 @@ export const DARK_THEME: DesignTokens = {
     rounded,
     spacing,
     shadow: {
-        floating: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 5px 12px",
+        floating: "0 1px 1px 0 rgb(0 0 0 / 0.02)",
     },
     colors: {
         foreground: "hsla(210, 50%, 98%)",
@@ -68,6 +68,7 @@ export const DARK_THEME: DesignTokens = {
             "mask-error": "hsla(0, 94%, 81%)",
             "switch-bg": "hsla(0, 0%, 9%)",
             switch: "hsla(0, 0%, 100%)",
+            slider: "hsla(0, 0%, 100%)",
         },
         card: {
             muted: "hsla(0, 0%, 22%)",
@@ -170,7 +171,7 @@ export const DARK_THEME: DesignTokens = {
             warn: {
                 bg: "hsla(28,33%,9%)",
                 border: "hsla(29,65%,12%)",
-                text: "hsla(27,100%,78%)"
+                text: "hsla(27,100%,78%)",
             },
             info: {
                 text: "hsla(253,100%,83%)",

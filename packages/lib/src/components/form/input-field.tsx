@@ -147,7 +147,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                         {optionalText || rightLabel ? (
                             <Fragment>
                                 {!required ? (
-                                    <span aria-disabled={disabled} className="text-opacity-70 aria-disabled:text-disabled">
+                                    <span aria-disabled={disabled} className="transition-colors text-opacity-70 aria-disabled:text-disabled group-focus-within:text-primary group-hover:text-primary">
                                         {optionalText}
                                     </span>
                                 ) : null}

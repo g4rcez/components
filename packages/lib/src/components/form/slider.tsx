@@ -37,7 +37,7 @@ const Thumb = (props: { tooltip: boolean }) => {
             ref={ref}
             as={RadixSlider.Thumb}
             enabled={props.tooltip}
-            className="block size-5 cursor-grab rounded-full border-2 border-card-border bg-card-background shadow active:cursor-grabbing"
+            className="block bg-input-switch size-5 cursor-grab rounded-full border-1 border-input-border shadow active:cursor-grabbing"
         >
             {float}
         </Tooltip>

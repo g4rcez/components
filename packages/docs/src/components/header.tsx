@@ -48,7 +48,10 @@ export const Header = () => {
           >
             <GithubIcon className="fill-foreground text-foreground size-6 aspect-square" />
           </a>
-          <button onClick={() => setOpen(true)}>
+          <button
+            className="inline-block lg:hidden"
+            onClick={() => setOpen(true)}
+          >
             <span className="sr-only">Open menu</span>
             <MenuIcon className="fill-foreground text-foreground size-6 aspect-square" />
           </button>

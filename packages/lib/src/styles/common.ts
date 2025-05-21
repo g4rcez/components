@@ -1,7 +1,7 @@
 import { ZIndex } from "./theme.types";
 
 export const rounded = {
-    button: "0.4rem",
+    button: "0.55rem",
     pill: "2rem",
     card: "0.75rem",
     full: "9999px",

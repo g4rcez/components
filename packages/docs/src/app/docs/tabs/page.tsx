@@ -23,9 +23,8 @@ export default function FormPage() {
         <Tab id="other" title="Other">
           0192fc45-add4-7552-8e6f-fc06085040d4
         </Tab>
-        <Tab id="last" title="Last">
-          Curabitur est gravida et libero vitae dictum. Nec dubitamus multa iter
-          quae et nos invenerat.
+        <Tab id="last" title="Disabled" disabled>
+          null
         </Tab>
       </Tabs>
     </DocsLayout>
