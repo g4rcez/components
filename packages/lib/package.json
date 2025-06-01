@@ -1,7 +1,7 @@
 {
   "name": "@g4rcez/components",
   "description": "Customizable react components.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.7.0",
@@ -60,7 +60,7 @@
     "tailwind-merge": "3.0.2",
     "the-mask-input": "3.3.13",
     "use-typed-reducer": "4.2.5",
-    "zod": "3.24.2"
+    "zod": "3.24.4"
   },
   "devDependencies": {
     "@eslint/js": "9.21.0",

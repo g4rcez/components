@@ -16,6 +16,7 @@ import {
   TextareaProps,
 } from "../components";
 import { path } from "../lib/fns";
+import { Any, SetState } from "../types";
 
 const isValidJSON = (value: any): boolean => {
   if (typeof value !== "string") {
@@ -157,6 +158,7 @@ export type UseOnSubmitArgs<T> = {
   success: boolean;
   reset: () => void;
   form: HTMLFormElement;
+  setErrors: SetState<Any>;
   event: React.FormEvent<HTMLFormElement>;
   errors: Array<{ message: string; path: string[] }>;
 };
@@ -187,7 +189,7 @@ const getName = (e: HTMLEntryElements) => e.dataset.target || e.name;
 export const createFormStorage = (name: string): Interceptor<any> => {
   const key = `@use-form/${name}`;
   return {
-    get: <T extends object>(): T | {} => {
+    get: <T extends object>(): T | object => {
       const state = LocalStorage.get(key);
       return isValidJSON(state) ? (state as T) : {};
     },
@@ -497,6 +499,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
         form,
         event,
         reset,
+        setErrors,
         errors: [],
         success: true,
         data: result.data,
@@ -514,6 +517,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
       json,
       event,
       reset,
+      setErrors,
       data: json,
       success: false,
       errors: result.error.issues.map((x) => ({ message: x.message, path: x.path.map((x) => String(x)) })),

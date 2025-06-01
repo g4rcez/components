@@ -50,8 +50,8 @@ const MenuContext = createContext<{
     isOpen: false,
     activeIndex: null,
     getItemProps: () => ({}),
-    setActiveIndex: () => { },
-    setHasFocusInside: () => { },
+    setActiveIndex: () => {},
+    setHasFocusInside: () => {},
 });
 
 export type MenuProps = Partial<
@@ -69,7 +69,10 @@ export type MenuProps = Partial<
 >;
 
 const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLProps<HTMLButtonElement>, MenuProps>>(
-    ({ children, FloatingComponent = "div", hover = true, open, isParent = false, restoreFocus = false, floatingClassName = "", label, ...props }, forwardedRef) => {
+    (
+        { children, FloatingComponent = "div", hover = true, open, isParent = false, restoreFocus = false, floatingClassName = "", label, ...props },
+        forwardedRef
+    ) => {
         const [isOpen, setIsOpen] = useState<boolean>(open ?? false);
         const [hasFocusInside, setHasFocusInside] = useState(false);
         const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -206,7 +209,12 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                     <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
                         {isOpen && (
                             <FloatingPortal preserveTabOrder>
-                                <FloatingFocusManager context={context} modal={false} initialFocus={isNested ? -1 : 0} returnFocus={isParent ? restoreFocus : !isNested}>
+                                <FloatingFocusManager
+                                    context={context}
+                                    modal={false}
+                                    initialFocus={isNested ? -1 : 0}
+                                    returnFocus={isParent ? restoreFocus : !isNested}
+                                >
                                     <FloatingComponent
                                         {...getFloatingProps()}
                                         ref={refs.setFloating}
@@ -269,11 +277,11 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
 
 export const Menu = React.forwardRef<HTMLButtonElement, Override<React.ComponentProps<"button">, MenuProps>>((props, ref) => {
     const parentId = useFloatingParentNodeId();
-    return parentId !== null ? (
-        <MenuComponent {...props} isParent={false} ref={ref} />
-    ) : (
+    return parentId === null ? (
         <FloatingTree>
             <MenuComponent {...props} isParent ref={ref} />
         </FloatingTree>
+    ) : (
+        <MenuComponent {...props} isParent={false} ref={ref} />
     );
 });

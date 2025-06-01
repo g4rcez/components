@@ -97,9 +97,7 @@ export default function FormPage() {
           onInvalid={form.onInvalid((e) => console.log(e))}
         />
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
-          <Input
-            {...form.input("name", { title: "Name", placeholder: "Fulano" })}
-          />
+          <Input{...form.input("name", { title: "Name", placeholder: "Fulano" })} />
           <Input
             {...form.input("number", {
               title: "Number",

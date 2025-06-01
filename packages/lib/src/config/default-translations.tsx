@@ -56,6 +56,11 @@ export const defaultTranslations = {
     tableSortOrderInputTitle: "Order by",
     tableSortTypeInputPlaceholder: "Ascending",
     tableSortTypeInputTitle: "Sort type",
+
+    uploadIdle: "You can drag your files here",
+    uploadIdleButton: "Choose your files",
+    uploadDragging: (props: { n: number }) => `Dragging ${props.n} ${props.n > 0 ? "files" : "file"}`,
+    uploadDialogTitle: "Details of your file",
 };
 
 export type Translations = typeof defaultTranslations;
