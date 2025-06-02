@@ -23,7 +23,7 @@ const tokenRemap: TokenRemap = {
 
 const tweaks: Tweaks = {
   input: { iconFeedback: true },
-  table: { filters: false, sorters: false, operations: false },
+  table: { filters: false, sorters: false, operations: false, sticky: 55 },
 };
 
 const sidebarVariables = {
@@ -66,9 +66,7 @@ export const RootLayout = (props: PropsWithChildren) => {
                 <Navigation />
               </nav>
               <Header />
-              <main className="[grid-area:main]">
-                {props.children}
-              </main>
+              <main className="[grid-area:main]">{props.children}</main>
             </div>
           </Notifications>
         </ComponentsProvider>

@@ -73,7 +73,6 @@ export default function TablePage() {
       <Card container="px-0 py-0 pb-0" className="py-0 pb-0 lg:px-0 px-0">
         <Table<User>
           {...preferences}
-          sticky={55}
           name="table"
           Aside={Aside}
           rows={clients}

@@ -27,7 +27,7 @@ export const Header = () => {
   }, [pathname, prevPathname, open]);
 
   return (
-    <header className="sticky z-navbar border-b border-card-border shadow-xs top-0 bg-card-background [grid-area:header] bg-card-background/50 h-14 flex items-center px-4 lg:px-8 backdrop-blur-lg">
+    <header className="sticky z-navbar border-b border-card-border shadow-xs top-0 bg-card-background [grid-area:header] bg-card-background/70 h-14 flex items-center px-4 lg:px-8 backdrop-blur-lg">
       <Modal
         closable
         open={open}

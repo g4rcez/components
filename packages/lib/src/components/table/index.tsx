@@ -66,12 +66,7 @@ const TableBody = React.forwardRef(
 );
 
 const VirtualTable = React.forwardRef(({ context, className = "", ...props }: any, ref) => (
-    <table
-        {...props}
-        ref={ref as any}
-        role="table"
-        className={`table min-w-full table-fixed border-collapse text-left ${className ?? ""}`}
-    />
+    <table {...props} ref={ref as any} role="table" className={`table min-w-full table-fixed border-collapse text-left ${className ?? ""}`} />
 ));
 
 const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
@@ -80,11 +75,26 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
         ...(props as any)?.style,
         top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
     };
-    return <thead {...props} style={style} role="rowgroup" className="shadow-xs hidden md:table-header-group group:sticky top-0 bg-transparent" ref={ref} />;
+    return (
+        <thead
+            {...props}
+            style={style}
+            role="rowgroup"
+            className="shadow-xs group:sticky top-0 hidden bg-transparent md:table-header-group"
+            ref={ref}
+        />
+    );
 });
 
 const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
-    return <tr {...props} role="row" ref={ref} className={`group-table-row h-fit flex flex-wrap gap-1 flex-col justify-center md:table-row ${(props as any)?.className ?? ""}`} />;
+    return (
+        <tr
+            {...props}
+            role="row"
+            ref={ref}
+            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-1 md:table-row ${(props as any)?.className ?? ""}`}
+        />
+    );
 });
 
 const TFoot = React.forwardRef((props: any, ref: any) => {
@@ -229,8 +239,8 @@ type DispatcherFun<T extends Any> = T | ((prev: T) => T);
 const compareAndExec = <T extends any[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
 
 export const Table = <T extends Any>(props: TableProps<T>) => {
-    const contextState = useMemo((): ContextProps => ({ sticky: props.sticky }), [props.sticky]);
     const tweaks = useTweaks();
+    const contextState = useMemo((): ContextProps => ({ sticky: props.sticky || tweaks.table.sticky }), [props.sticky, tweaks.table.sticky]);
     const operations = props.operations ?? tweaks.table.operations ?? true;
     const optionCols = useMemo(() => createOptionCols(props.cols), [props.cols]);
     const [state, dispatch] = useReducer(

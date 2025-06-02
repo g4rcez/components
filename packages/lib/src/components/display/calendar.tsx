@@ -365,6 +365,12 @@ export const Calendar = ({
         return direction === "right" ? dispatch.previousMonth() : dispatch.nextMonth();
     }, 10);
 
+    const onSetToday = () => {
+        const d = setToday();
+        dispatch.date(() => d);
+        onChange?.(d);
+    };
+
     return (
         <MotionConfig transition={transition}>
             <div
@@ -474,7 +480,7 @@ export const Calendar = ({
                     </AnimatePresence>
                 </div>
                 <footer className="mt-2 text-center text-primary">
-                    <button type="button" onClick={() => dispatch.date(setToday)} className="transition-transform duration-300 hover:scale-105">
+                    <button type="button" onClick={onSetToday} className="transition-transform duration-300 hover:scale-105">
                         {translations.calendarToday}
                     </button>
                 </footer>
