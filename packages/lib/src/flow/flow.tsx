@@ -116,7 +116,7 @@ const Input = memo((node: CustomNodeProps) => {
     return (
         <div
             className={css(
-                "relative flex border-2 min-h-10 min-w-24 items-center justify-center rounded-lg bg-floating-background px-4 py-2 shadow-md",
+                "relative flex border min-h-10 min-w-24 items-center justify-center rounded-lg bg-floating-background px-4 py-2 shadow-shadow-floating",
                 node.selected ? "border-primary" : "",
                 "border-floating-border"
             )}
@@ -134,8 +134,8 @@ const Connection = memo((node: CustomNodeProps) => {
     return (
         <div
             className={css(
-                "relative flex min-h-10 min-w-24 items-center justify-center rounded-lg bg-floating-background px-4 py-2 shadow-md",
-                node.selected ? "border-4" : "border",
+                "relative border flex min-h-10 min-w-24 items-center justify-center rounded-lg bg-floating-background px-4 py-2 shadow-shadow-floating",
+                node.selected ? "border-primary" : "border-muted",
                 "border-floating-border"
             )}
         >

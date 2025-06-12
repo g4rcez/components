@@ -171,7 +171,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                             data-nested={isNested ? "" : undefined}
                             role={isNested ? "menuitem" : undefined}
                             data-focus-inside={hasFocusInside ? "" : undefined}
-                            ref={mergeRefs(refs.setReference, item.ref, forwardedRef)}
+                            ref={mergeRefs(refs.setReference, item.ref, forwardedRef) as any}
                             tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
                         />
                     ) : (
@@ -220,7 +220,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                         ref={refs.setFloating}
                                         style={{ ...props.style, ...floatingStyles }}
                                         className={css(
-                                            "isolate z-tooltip flex max-h-80 flex-col items-start overflow-y-auto rounded-lg border border-floating-border bg-floating-background text-left shadow-xl outline-none",
+                                            "isolate z-tooltip flex max-h-80 flex-col items-start overflow-y-auto rounded-lg border border-floating-border bg-floating-background text-left shadow-shadow-floating outline-none",
                                             floatingClassName
                                         )}
                                     >

@@ -10,7 +10,7 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot as RadixSlot } from "radix-ui";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { AnimatePresence, HTMLMotionProps, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
@@ -19,6 +19,8 @@ import { useMediaQuery } from "../../hooks/use-media-query";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
+
+const Slot = RadixSlot.Slot
 
 type AnimationLabels = "initial" | "enter" | "exit";
 
@@ -309,7 +311,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                     overlayClassName
                                 )}
                             >
-                                <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={floating.context}>
+                                <FloatingFocusManager guards visuallyHiddenDismiss modal closeOnFocusOut context={floating.context}>
                                     <motion.div
                                         {...props}
                                         {...animationProps}
@@ -346,7 +348,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                                 ) : null}
                                             </header>
                                         ) : null}
-                                        <section className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}>{children}</section>
+                                        <section data-component="modal-body" className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}>{children}</section>
                                         {footer ? (
                                             <footer className="w-full select-text border-t border-floating-border px-8 pt-4">{footer}</footer>
                                         ) : null}

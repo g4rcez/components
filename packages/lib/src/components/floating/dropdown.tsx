@@ -73,7 +73,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="relative isolate z-floating min-w-96 rounded-lg border border-floating-border bg-floating-background p-4 shadow-2xl"
+                            className="relative isolate z-floating min-w-96 rounded-lg border border-floating-border bg-floating-background p-4 shadow-shadow-floating"
                             ref={refs.setFloating}
                             style={floatingStyles}
                             aria-labelledby={headingId}

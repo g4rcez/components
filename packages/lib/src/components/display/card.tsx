@@ -31,7 +31,7 @@ export const Card = ({
         {...props}
         as={as}
         data-component="card"
-        className={css("flex flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-8 shadow", container)}
+        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-8", container)}
     >
         {title ? (
             <header

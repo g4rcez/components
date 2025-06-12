@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CSSProperties, PropsWithChildren } from "react";
 import { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
@@ -10,9 +11,8 @@ import {
   defaultDarkTheme,
   defaultLightTheme,
 } from "../../../lib/src/styles/theme";
-import Link from "next/link";
-import { Navigation } from "./navigation";
 import { Header } from "./header";
+import { Navigation } from "./navigation";
 
 const tokenRemap: TokenRemap = {
   colors: (t) => {
@@ -41,7 +41,7 @@ export const RootLayout = (props: PropsWithChildren) => {
   return (
     <html
       lang="en"
-      className="bg-background text-foreground antialiased proportional-nums"
+      className="dark bg-background text-foreground antialiased proportional-nums"
     >
       <head>
         <meta charSet="utf-8" />

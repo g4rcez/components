@@ -56,7 +56,7 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
                                 <motion.div
                                     layout
                                     layoutId={`item-${item.id}`}
-                                    className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow"
+                                    className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow-shadow-card"
                                     ref={refs.setFloating}
                                     {...get()}
                                 >

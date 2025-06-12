@@ -11,7 +11,7 @@ export type StatsProps = {
 
 export const Stats = (props: React.PropsWithChildren<StatsProps>) => {
     return (
-        <div className="divide-y divide-card-border rounded-card border border-card-border bg-card-background shadow">
+        <div className="divide-y divide-card-border rounded-card border border-card-border bg-card-background shadow-shadow-card">
             <header className="flex items-start gap-4 p-6">
                 <div className={css("flex aspect-square size-10 items-center justify-center rounded-card bg-primary p-8", props.iconContainer)}>
                     <div>

@@ -28,22 +28,23 @@ const useTable = () => useContext(TableContext);
 
 type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
-        Aside?: React.FC<CellAsideElement<T>>;
+        rows: T[];
+        index: number;
+        cols: Col<T>[];
         border?: boolean;
-        useControl?: boolean;
         loading?: boolean;
         group?: GroupItem<T>;
-        groups?: GroupItem<T>[];
-        optionCols: OptionProps[];
-        index: number;
-        rows: T[];
-        cols: Col<T>[];
+        useControl?: boolean;
+        loadingMore?: boolean;
         sorters?: Sorter<T>[];
         showMetadata?: boolean;
-        filters?: FilterConfig<T>[];
-        setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
+        groups?: GroupItem<T>[];
         onScrollEnd?: () => void;
-        loadingMore?: boolean;
+        optionCols: OptionProps[];
+        filters?: FilterConfig<T>[];
+        Aside?: React.FC<CellAsideElement<T>>;
+        getScrollRef?: () => HTMLElement | undefined;
+        setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
     };
 
 const TableBody = React.forwardRef(
@@ -66,7 +67,7 @@ const TableBody = React.forwardRef(
 );
 
 const VirtualTable = React.forwardRef(({ context, className = "", ...props }: any, ref) => (
-    <table {...props} ref={ref as any} role="table" className={`table min-w-full table-fixed border-collapse text-left ${className ?? ""}`} />
+    <table {...props} ref={ref as any} role="table" className={`table min-w-full table-fixed border-separate text-left ${className ?? ""}`} />
 ));
 
 const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
@@ -80,7 +81,7 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
             {...props}
             style={style}
             role="rowgroup"
-            className="shadow-xs group:sticky top-0 hidden bg-transparent md:table-header-group"
+            className="hidden top-0 bg-transparent md:table-header-group shadow-shadow-card group:sticky"
             ref={ref}
         />
     );
@@ -102,8 +103,8 @@ const TFoot = React.forwardRef((props: any, ref: any) => {
         return (
             <tfoot {...props} ref={ref} className="bg-card-background">
                 <tr role="row" className="bg-card-background">
-                    <td colSpan={999} className="h-14 bg-card-background px-2">
-                        <span className="block h-2 w-full animate-pulse rounded bg-foreground opacity-60" />
+                    <td colSpan={999} className="px-2 h-14 bg-card-background">
+                        <span className="block w-full h-2 rounded opacity-60 animate-pulse bg-foreground" />
                     </td>
                 </tr>
             </tfoot>
@@ -123,7 +124,7 @@ const components = {
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const EmptyContent = (props: { loading?: boolean }) => (
-    <div className="flex h-48 w-full items-center justify-center px-2">{props.loading ? SkeletonCell : <Empty />}</div>
+    <div className="flex justify-center items-center px-2 w-full h-48">{props.loading ? SkeletonCell : <Empty />}</div>
 );
 
 const EmptyCell = () => <Fragment />;
@@ -140,6 +141,7 @@ const InnerTable = <T extends Any>({
     setFilters,
     setSorters,
     onScrollEnd,
+    getScrollRef,
     border = false,
     pagination = null,
     useControl = false,
@@ -164,7 +166,7 @@ const InnerTable = <T extends Any>({
     }, [props.loading, props.rows, useControl, filters, sorters]);
 
     useEffect(() => {
-        if (ref.current === null) return () => {};
+        if (ref.current === null) return () => { };
         const div = ref.current;
         const observer = new IntersectionObserver((entries) => {
             const endOfPage = entries[entries.length - 1];
@@ -183,17 +185,20 @@ const InnerTable = <T extends Any>({
 
     const context = { loading: props.loading, loadingMore: props.loadingMore, cols: cols as any, Aside: props.Aside };
 
+
     return (
         <div className="min-w-full">
-            <div className={`group w-full rounded-lg ${border ? "border border-table-border" : ""}`}>
+            <div className={`group w-full relative rounded-lg ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
-                    useWindowScroll
                     context={context}
                     components={components}
                     totalCount={rows.length}
+                    style={{ height: "100%" }}
                     itemContent={empty ? EmptyCell : Row}
                     data={empty ? (emptyRows as T[]) : rows}
+                    useWindowScroll={getScrollRef ? false : true}
                     fixedFooterContent={showLoadingFooter ? Frag : null}
+                    customScrollParent={getScrollRef ? getScrollRef() : undefined}
                     fixedHeaderContent={() => (
                         <TableHeader<T>
                             headers={cols}
@@ -209,7 +214,7 @@ const InnerTable = <T extends Any>({
                     )}
                 />
                 {empty ? <EmptyContent loading={props.loading} /> : null}
-                <div aria-hidden="true" ref={ref} className="h-0.5 w-full" />
+                <div aria-hidden="true" ref={ref} className="w-full h-0.5" />
             </div>
             {pagination !== null ? <Pagination {...pagination} /> : null}
         </div>
@@ -219,17 +224,18 @@ const InnerTable = <T extends Any>({
 export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
 } & Partial<
-        TableOperationProps<T> & {
-            sticky: number;
-            loading: boolean;
-            reference: keyof T;
-            operations: boolean;
-            useControl: boolean;
-            inlineFilter: boolean;
-            inlineSorter: boolean;
-            onScrollEnd: () => void;
-        }
-    >;
+    TableOperationProps<T> & {
+        loading: boolean;
+        reference: keyof T;
+        operations: boolean;
+        useControl: boolean;
+        inlineFilter: boolean;
+        inlineSorter: boolean;
+        sticky: number | null;
+        onScrollEnd: () => void;
+        getScrollRef?: () => HTMLElement | undefined;
+    }
+>;
 
 const dispatcherFun = <Prev extends Any, T extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: T) =>
     typeof setter === "function" ? setter(prev) : setter;
@@ -240,7 +246,9 @@ const compareAndExec = <T extends any[]>(prev: T, state: T, exec?: (t: T) => voi
 
 export const Table = <T extends Any>(props: TableProps<T>) => {
     const tweaks = useTweaks();
-    const contextState = useMemo((): ContextProps => ({ sticky: props.sticky || tweaks.table.sticky }), [props.sticky, tweaks.table.sticky]);
+    const contextState = useMemo((): ContextProps => ({
+        sticky: props.sticky === undefined ? tweaks.table.sticky ?? undefined : props.sticky ?? undefined
+    }), [props.sticky, tweaks.table.sticky]);
     const operations = props.operations ?? tweaks.table.operations ?? true;
     const optionCols = useMemo(() => createOptionCols(props.cols), [props.cols]);
     const [state, dispatch] = useReducer(
@@ -253,10 +261,10 @@ export const Table = <T extends Any>(props: TableProps<T>) => {
         (get) => {
             const create =
                 <T extends Any>(key: string) =>
-                (arg: T) => {
-                    const state = get.state();
-                    return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
-                };
+                    (arg: T) => {
+                        const state = get.state();
+                        return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
+                    };
             return {
                 cols: create<DispatcherFun<Col<T>[]>>("cols"),
                 sorters: create<DispatcherFun<Sorter<T>[]>>("sorters"),
@@ -280,72 +288,70 @@ export const Table = <T extends Any>(props: TableProps<T>) => {
 
     return (
         <TableContext.Provider value={contextState}>
-            <div className="relative min-w-full" data-component="table">
-                {operations ? (
-                    <Metadata
-                        cols={state.cols}
-                        rows={props.rows}
-                        options={optionCols}
-                        groups={state.groups}
-                        filters={state.filters}
-                        setCols={dispatch.cols}
-                        sorters={state.sorters}
-                        setGroups={dispatch.groups}
-                        setFilters={dispatch.filters}
-                        setSorters={dispatch.sorters}
-                        pagination={props.pagination ?? null}
-                        inlineFilter={props.inlineFilter ?? true}
-                        inlineSorter={props.inlineSorter ?? true}
-                    />
-                ) : null}
-                {state.groups.length === 0 ? (
-                    <InnerTable
-                        {...props}
-                        index={0}
-                        cols={state.cols}
-                        options={optionCols}
-                        groups={state.groups}
-                        filters={state.filters}
-                        optionCols={optionCols}
-                        setCols={dispatch.cols}
-                        sorters={state.sorters}
-                        setGroups={dispatch.groups}
-                        setFilters={dispatch.filters}
-                        setSorters={dispatch.sorters}
-                        onScrollEnd={props.onScrollEnd}
-                        pagination={props.pagination ?? null}
-                        inlineFilter={props.inlineFilter ?? true}
-                        inlineSorter={props.inlineSorter ?? true}
-                    />
-                ) : (
-                    <div className="flex flex-wrap gap-4">
-                        {state.groups.map((group, index) => (
-                            <div className="min-w-full" key={`group-${group.groupId}`}>
-                                <InnerTable
-                                    {...props}
-                                    group={group}
-                                    index={index}
-                                    cols={state.cols}
-                                    pagination={null}
-                                    rows={group.rows}
-                                    options={optionCols}
-                                    groups={state.groups}
-                                    filters={state.filters}
-                                    optionCols={optionCols}
-                                    setCols={dispatch.cols}
-                                    sorters={state.sorters}
-                                    setGroups={dispatch.groups}
-                                    setFilters={dispatch.filters}
-                                    setSorters={dispatch.sorters}
-                                    onScrollEnd={props.onScrollEnd}
-                                    inlineFilter={props.inlineFilter ?? true}
-                                    inlineSorter={props.inlineSorter ?? true}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            {operations ? (
+                <Metadata
+                    cols={state.cols}
+                    rows={props.rows}
+                    options={optionCols}
+                    groups={state.groups}
+                    filters={state.filters}
+                    setCols={dispatch.cols}
+                    sorters={state.sorters}
+                    setGroups={dispatch.groups}
+                    setFilters={dispatch.filters}
+                    setSorters={dispatch.sorters}
+                    pagination={props.pagination ?? null}
+                    inlineFilter={props.inlineFilter ?? true}
+                    inlineSorter={props.inlineSorter ?? true}
+                />
+            ) : null}
+            {state.groups.length === 0 ? (
+                <InnerTable
+                    {...props}
+                    index={0}
+                    cols={state.cols}
+                    options={optionCols}
+                    groups={state.groups}
+                    filters={state.filters}
+                    optionCols={optionCols}
+                    setCols={dispatch.cols}
+                    sorters={state.sorters}
+                    setGroups={dispatch.groups}
+                    setFilters={dispatch.filters}
+                    setSorters={dispatch.sorters}
+                    onScrollEnd={props.onScrollEnd}
+                    pagination={props.pagination ?? null}
+                    inlineFilter={props.inlineFilter ?? true}
+                    inlineSorter={props.inlineSorter ?? true}
+                />
+            ) : (
+                <div className="flex flex-wrap gap-4">
+                    {state.groups.map((group, index) => (
+                        <div className="min-w-full" key={`group-${group.groupId}`}>
+                            <InnerTable
+                                {...props}
+                                group={group}
+                                index={index}
+                                cols={state.cols}
+                                pagination={null}
+                                rows={group.rows}
+                                options={optionCols}
+                                groups={state.groups}
+                                filters={state.filters}
+                                optionCols={optionCols}
+                                setCols={dispatch.cols}
+                                sorters={state.sorters}
+                                setGroups={dispatch.groups}
+                                setFilters={dispatch.filters}
+                                setSorters={dispatch.sorters}
+                                onScrollEnd={props.onScrollEnd}
+                                inlineFilter={props.inlineFilter ?? true}
+                                inlineSorter={props.inlineSorter ?? true}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
         </TableContext.Provider>
     );
 };

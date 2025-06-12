@@ -1,5 +1,5 @@
 "use client";
-import * as RadixToast from "@radix-ui/react-toast";
+import { Toast as RadixToast } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
 import { AnimatePresence, motion, TargetAndTransition } from "motion/react";
 import { XIcon } from "lucide-react";
@@ -8,7 +8,7 @@ import { useHover } from "../../hooks/use-hover";
 import { Label } from "../../types";
 
 const variants = cva(
-    "relative isolate z-tooltip flex justify-between overflow-hidden whitespace-nowrap rounded-lg border text-sm shadow-sm supports-[backdrop-filter]:backdrop-blur-xl",
+    "relative isolate z-tooltip flex justify-between overflow-hidden whitespace-nowrap rounded-lg border text-sm shadow-shadow-notification supports-[backdrop-filter]:backdrop-blur-xl",
     {
         variants: {
             theme: {
@@ -69,7 +69,7 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                 animate={variant}
                 data-index={props.index}
                 initial={{ y: -100, zIndex: -1 }}
-                className="text-select pointer-events-auto absolute right-0 top-0 w-80"
+                className="absolute top-0 right-0 w-80 pointer-events-auto text-select"
                 variants={{
                     isLast: { y: 10, scale: 1, animationDuration: "300ms", opacity: 1 },
                     hover: { y: 0, position: "static", scale: 1, opacity: 1 },
@@ -81,13 +81,13 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                 <div className={className}>
                     <div className="flex flex-col p-4">
                         {props.title ? (
-                            <RadixToast.Title className="select-text truncate text-lg font-medium leading-relaxed">Title</RadixToast.Title>
+                            <RadixToast.Title className="text-lg font-medium leading-relaxed select-text truncate">Title</RadixToast.Title>
                         ) : null}
                         <RadixToast.Description className="select-text truncate">{props.text}</RadixToast.Description>
                     </div>
                     {closable ? (
-                        <RadixToast.Close className="absolute right-2 top-2 rounded-full p-1 text-foreground transition hover:bg-danger/10 hover:text-danger-hover">
-                            <XIcon className="h-5 w-5" />
+                        <RadixToast.Close className="absolute top-2 right-2 p-1 rounded-full transition text-foreground hover:bg-danger/10 hover:text-danger-hover">
+                            <XIcon className="w-5 h-5" />
                         </RadixToast.Close>
                     ) : null}
                 </div>

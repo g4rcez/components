@@ -53,7 +53,7 @@ const sections: Section[] = [
 export const Navigation = () => {
   const path = usePathname();
   return (
-    <ul className="lg:px-[var(--sidebar-padding)] lg:py-4 space-y-4 text-sm">
+    <ul className="lg:px-[var(--sidebar-padding)] lg:py-4 space-y-4 text-base">
       {sections.map((section) => (
         <li key={`section-${section.title}`}>
           <header className="mb-2 font-semibold leading-relaxed tracking-wide">

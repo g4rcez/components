@@ -2,15 +2,18 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { Fragment, useCallback, useState } from "react";
 import {
+  Button,
   Card,
   Checkbox,
   ColType,
   createColumns,
+  Modal,
   Table,
   useTablePreferences,
   uuid,
+  getModalScrollerRef,
+  useStableRef,
 } from "../../../../../lib/src";
-import { useStableRef } from "../../../../../lib/src/hooks/use-stable-ref";
 
 type User = { id: string; name: number; type: string; document: string };
 
@@ -25,12 +28,12 @@ const cols = createColumns<User>((col) => {
       </Fragment>
     ),
   });
-  col.add("id", "ID", );
+  col.add("id", "ID");
   col.add("type", "Type");
   col.add("document", "Document");
 });
 
-const clients = Array.from({ length: 100 }).map(
+const clients = Array.from({ length: 500 }).map(
   (_, i): User => ({
     id: uuid(),
     name: i,
@@ -39,6 +42,29 @@ const clients = Array.from({ length: 100 }).map(
   }),
 );
 
+const TableInModal = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Fragment>
+      <div className="py-8 px-4">
+        <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      </div>
+      <Modal title="Table in <Dialog/>" open={open} onChange={setOpen}>
+        <Table<User>
+          name="table"
+          cols={cols}
+          rows={clients}
+          operations={false}
+          sticky={null}
+          loading={clients.length === 0}
+          getScrollRef={getModalScrollerRef}
+        />
+        <Button onClick={() => alert(1)}>Click here</Button>
+      </Modal>
+    </Fragment>
+  );
+};
+
 export default function TablePage() {
   const preferences = useTablePreferences("@test", cols);
   const [map, setMap] = useState(new Map<string, any>());
@@ -46,7 +72,7 @@ export default function TablePage() {
 
   const Aside = useCallback(
     (props: any) => (
-      <div className="flex h-full px-1 items-center">
+      <div className="flex items-center px-1 h-full">
         <Checkbox
           checked={mapRef.current.has(props.row.id)}
           onChange={(e) => {
@@ -70,7 +96,8 @@ export default function TablePage() {
       section="display"
       description="The tradicional tabular way to visualize your data."
     >
-      <Card container="px-0 py-0 pb-0" className="py-0 pb-0 lg:px-0 px-0">
+      <Card container="px-0 py-0 pb-0" className="py-0 px-0 pb-0 lg:px-0">
+        <TableInModal />
         <Table<User>
           {...preferences}
           name="table"

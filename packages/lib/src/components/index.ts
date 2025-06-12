@@ -7,6 +7,7 @@ export * from "./display/calendar";
 export * from "./display/card";
 export * from "./display/empty";
 export * from "./display/notifications";
+export * from "./display/progress";
 export * from "./display/stats";
 export * from "./display/tabs";
 export * from "./display/timeline";

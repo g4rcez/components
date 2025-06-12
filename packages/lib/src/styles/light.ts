@@ -6,7 +6,9 @@ export const LIGHT_THEME: DesignTokens = {
     spacing,
     name: "light",
     shadow: {
-        floating: "0 1px 1px 0 rgb(0 0 0 / 0.02)",
+        "shadow-notification": "1px 2px 2px 2px hsla(210, 25%, 40%,  0.15)",
+        "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "shadow-card": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
     },
     zIndex,
     colors: {
@@ -72,7 +74,7 @@ export const LIGHT_THEME: DesignTokens = {
         },
         card: {
             muted: "hsla(210, 25%, 94%)",
-            border: "hsla(210, 25%, 88%)",
+            border: "hsla(210, 25%, 95%)",
             background: "hsla(0, 0%, 100%)",
         },
         floating: {

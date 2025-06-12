@@ -22,7 +22,7 @@ const variants = {
         raw: "",
         disabled: "bg-disabled opacity-70",
         loading: "animate-pulse bg-disabled",
-        main: "bg-primary text-primary-foreground",
+        main: "bg-button-primary-bg text-button-primary-text",
         info: "bg-button-info-bg text-button-info-text",
         warn: "bg-button-warn-bg text-button-warn-text",
         muted: "bg-button-muted-bg text-button-muted-text",

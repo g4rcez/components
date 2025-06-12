@@ -208,3 +208,6 @@ export const useWidthControl = <T extends object>(reorder: (c: Col<T>[]) => void
 
     return [ref, onChange] as const;
 };
+
+export const getModalScrollerRef = () => isSsr() ? undefined : document.querySelector(`[data-component="modal-body"]`) as HTMLElement;
+

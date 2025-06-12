@@ -1,14 +1,17 @@
-@import "../../../lib/src/index.css";
-
+@layer components {
+  @import "../../../lib/src/index.css";
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .grid-template-area {
-    @apply grid min-h-screen w-full;
-    grid-template-columns: auto 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
+  display: grid;
+  min-height: 100vh;
+  width: 100%;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
     "sidebar header header"
     "sidebar main main"
     "sidebar footer footer";
@@ -16,6 +19,5 @@
 
 [data-component="cell-aside"]:has(input[checked]),
 [data-component="cell-aside"]:has(input:focus) {
-    @apply opacity-100;
+  opacity: 100%;
 }
-

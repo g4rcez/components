@@ -1,5 +1,5 @@
 "use client";
-import * as RadixSlider from "@radix-ui/react-slider";
+import { Slider as RadixSlider } from "radix-ui";
 import { type SliderProps as RadixSliderProps } from "@radix-ui/react-slider";
 import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
@@ -37,7 +37,7 @@ const Thumb = (props: { tooltip: boolean }) => {
             ref={ref}
             as={RadixSlider.Thumb}
             enabled={props.tooltip}
-            className="block bg-input-switch size-5 cursor-grab rounded-full border-1 border-input-border shadow active:cursor-grabbing"
+            className="block rounded-full bg-input-switch size-5 cursor-grab border-1 border-input-border shadow-shadow-floating active:cursor-grabbing"
         >
             {float}
         </Tooltip>
@@ -56,7 +56,7 @@ export const Slider = (props: SliderProps) => {
             value={value}
             className={css("relative flex h-5 w-full touch-none select-none items-center", className)}
         >
-            <RadixSlider.Track className="relative h-2 grow rounded-full bg-background">
+            <RadixSlider.Track className="relative h-2 rounded-full grow bg-background">
                 <RadixSlider.Range className="absolute h-full rounded-full bg-primary" />
             </RadixSlider.Track>
             {array.map((_, i) => (

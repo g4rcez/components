@@ -40,93 +40,97 @@ export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProp
     T
 >;
 
-export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement = forwardRef<
-    HTMLSpanElement,
-    TooltipProps
->(function Tooltip<T extends ComponentLike = "span">(
-    {
-        as,
-        title,
-        children,
-        placement,
-        open,
-        focus = true,
-        hover = true,
-        enabled = true,
-        popover = true,
-        followCursor = false,
-        onChange = noop,
-        ...props
-    }: TooltipProps<T>,
-    outerRef: any
-) {
-    const [innerOpen, setInnerOpen] = useState<boolean>(open ?? false);
-    const arrowRef = useRef(null);
-    const Component: any = as || "span";
-    const toggleBoth = (b: boolean) => {
-        setInnerOpen(b);
-        onChange?.(b);
-    };
-    const { refs, floatingStyles, context } = useFloating({
-        open: innerOpen,
-        placement,
-        transform: true,
-        strategy: "absolute",
-        whileElementsMounted: autoUpdate,
-        onOpenChange: open ? undefined : toggleBoth,
-        middleware: [
-            shift(),
-            offset(5),
-            flip({ fallbackAxisSideDirection: "start" }),
-            arrow({
-                padding: 5,
-                element: arrowRef,
-            }),
-        ],
-    });
-    const hoverController = useHover(context, {
-        move: true,
-        delay: { open: FLOATING_DELAY },
-        enabled: enabled ? hover : false,
-        handleClose: popover ? safePolygon() : null,
-    });
-    const focusController = useFocus(context, { enabled: enabled ? focus : false });
-    const clickController = useClick(context, { enabled: enabled ? popover : false });
-    const dismiss = useDismiss(context, { enabled });
-    const role = useRole(context, { role: "tooltip", enabled });
-    const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
-    const { getReferenceProps, getFloatingProps } = useInteractions([
-        role,
-        dismiss,
-        clientPoint,
-        focus ? focusController : undefined,
-        hover ? hoverController : undefined,
-        popover ? clickController : undefined,
-    ]);
+export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement = forwardRef<HTMLSpanElement, TooltipProps>(
+    function Tooltip<T extends ComponentLike = "span">(
+        {
+            as,
+            title,
+            children,
+            placement,
+            open,
+            focus = true,
+            hover = true,
+            enabled = true,
+            popover = true,
+            followCursor = false,
+            onChange = noop,
+            ...props
+        }: TooltipProps<T>,
+        outerRef: any
+    ) {
+        const [innerOpen, setInnerOpen] = useState<boolean>(open ?? false);
+        const arrowRef = useRef(null);
+        const Component: any = as || "span";
+        const toggleBoth = (b: boolean) => {
+            setInnerOpen(b);
+            onChange?.(b);
+        };
+        const { refs, floatingStyles, context } = useFloating({
+            open: innerOpen,
+            placement,
+            transform: true,
+            strategy: "absolute",
+            whileElementsMounted: autoUpdate,
+            onOpenChange: open ? undefined : toggleBoth,
+            middleware: [
+                shift(),
+                offset(5),
+                flip({ fallbackAxisSideDirection: "start" }),
+                arrow({
+                    padding: 5,
+                    element: arrowRef,
+                }),
+            ],
+        });
+        const hoverController = useHover(context, {
+            move: true,
+            delay: { open: FLOATING_DELAY },
+            enabled: enabled ? hover : false,
+            handleClose: popover ? safePolygon() : null,
+        });
+        const focusController = useFocus(context, { enabled: enabled ? focus : false });
+        const clickController = useClick(context, { enabled: enabled ? popover : false });
+        const dismiss = useDismiss(context, { enabled });
+        const role = useRole(context, { role: "tooltip", enabled });
+        const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
+        const { getReferenceProps, getFloatingProps } = useInteractions([
+            role,
+            dismiss,
+            clientPoint,
+            focus ? focusController : undefined,
+            hover ? hoverController : undefined,
+            popover ? clickController : undefined,
+        ]);
 
-    useEffect(() => {
-        if (open === undefined) return setInnerOpen(false);
-        return setInnerOpen(open);
-    }, [open]);
+        useEffect(() => {
+            if (open === undefined) return setInnerOpen(false);
+            return setInnerOpen(open);
+        }, [open]);
 
-    return (
-        <Fragment>
-            <Component {...getReferenceProps(props)} ref={mergeRefs(refs.setReference, outerRef)}>
-                {title}
-            </Component>
-            {innerOpen && (
-                <FloatingPortal preserveTabOrder>
-                    <Polymorph
-                        {...getFloatingProps()}
-                        ref={refs.setFloating}
-                        style={floatingStyles}
-                        className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-lg"
-                    >
-                        <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="fill-tooltip-background stroke-tooltip-border" />
-                        {children}
-                    </Polymorph>
-                </FloatingPortal>
-            )}
-        </Fragment>
-    );
-}) as any;
+        return (
+            <Fragment>
+                <Component {...getReferenceProps(props)} ref={mergeRefs(refs.setReference, outerRef)}>
+                    {title}
+                </Component>
+                {innerOpen && (
+                    <FloatingPortal preserveTabOrder>
+                        <Polymorph
+                            {...getFloatingProps()}
+                            ref={refs.setFloating}
+                            style={floatingStyles}
+                            className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-shadow-floating"
+                        >
+                            <FloatingArrow
+                                ref={arrowRef}
+                                context={context}
+                                strokeWidth={0.1}
+                                className="fill-tooltip-background stroke-tooltip-border"
+                            />
+                            {children}
+                        </Polymorph>
+                    </FloatingPortal>
+                )}
+            </Fragment>
+        );
+    }
+) as any;

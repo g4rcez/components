@@ -1,3 +1,5 @@
+type N = `${number}`;
+
 export type GeneralTokens = { [K in string]: string | GeneralTokens };
 
 export type ThemeState = "primary" | "warn" | "secondary" | "info" | "danger" | "success" | "neutral" | "muted";
@@ -18,18 +20,20 @@ type ComponentToken = {
 };
 
 export type ZIndex = {
-    navbar: `${number}`;
-    normal: `${number}`;
-    overlay: `${number}`;
-    tooltip: `${number}`;
-    calendar: `${number}`;
-    floating: `${number}`;
+    navbar: N;
+    normal: N;
+    overlay: N;
+    tooltip: N;
+    calendar: N;
+    floating: N;
 };
+
+type Shadows = "floating" | "card" | "notification";
 
 export type DesignTokens = {
     name: string;
     zIndex: ZIndex;
-    shadow: Record<"floating", string>;
+    shadow: Record<`shadow-${Shadows}`, string>;
     spacing: Record<"base" | "lg" | "sm" | "hairline", string>;
     rounded: Record<"button" | "full" | "pill" | "card", string>;
     custom?: Record<string, string>;

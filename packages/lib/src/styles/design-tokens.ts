@@ -82,9 +82,10 @@ const createTokens = (theme: DesignTokens, map?: TokenRemap) => {
     const colors = reduceTokens(theme.colors, fn(map?.colors));
     const spacing = reduceTokens(theme.spacing, fn(map?.spacing));
     const rounded = reduceTokens(theme.rounded, fn(map?.rounded));
+    const shadow = reduceTokens(theme.shadow, fn(map?.rounded));
     const zIndex = reduceTokens(theme.zIndex, fn(map?.zIndex ?? zIndexParser));
     const customTokens = theme.custom ? reduceTokens(theme.custom, fn(map?.customTokens)) : [];
-    return colors.concat(spacing, rounded, customTokens, zIndex);
+    return colors.concat(spacing, rounded, customTokens, zIndex, shadow);
 };
 
 export const createTheme = (theme: DesignTokens, name?: string) =>

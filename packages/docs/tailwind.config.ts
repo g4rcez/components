@@ -6,11 +6,8 @@ const config: Config = {
   darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "../lib/src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../lib/src/**/*.{js,ts,jsx,tsx,mdx,css}",
   ],
-  theme: {
-    extend: {},
-  },
 };
 
 export default config;

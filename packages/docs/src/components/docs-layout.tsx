@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { type Label } from "../../../lib/src";
 
 type Props = {
