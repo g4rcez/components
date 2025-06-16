@@ -1,7 +1,7 @@
 {
   "name": "@g4rcez/components",
   "description": "Customizable react components.",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.7.0",
