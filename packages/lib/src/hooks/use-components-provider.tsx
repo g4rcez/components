@@ -1,7 +1,7 @@
 "use client";
 import React, { PropsWithChildren, useMemo } from "react";
 import { Locales } from "the-mask-input";
-import { parsers } from "../../preset.tailwind";
+import { parsers } from "../styles/design-tokens";
 import { Context, ContextProps } from "../config/context";
 import { defaultTranslations, Translations } from "../config/default-translations";
 import { defaultTweaks, Tweaks } from "../config/default-tweaks";

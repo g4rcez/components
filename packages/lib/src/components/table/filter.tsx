@@ -3,11 +3,10 @@ import { ListFilterIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Fragment, useMemo } from "react";
 import { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
-import { useTweaks } from "../../hooks/use-tweaks";
 import { uuid } from "../../lib/fns";
 import { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
-import { Input } from "../form/input";
+import { Input, InputTypes } from "../form/input";
 import { OptionProps, Select } from "../form/select";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
 
@@ -48,8 +47,8 @@ export const createFilterFromCol = <T extends Any>(
     const name = f.id;
     const type = f.type ?? ColType.Text;
     const typeOptions = options[type] ?? [];
-    const operatorId = typeOptions.find((x) => x["data-default"])?.value ?? typeOptions[0]?.value;
-    const operation = (operations as any)[operatorId];
+    const operatorId = (typeOptions.find((x) => x["data-default"])?.value ?? typeOptions[0]?.value) as OperatorTypes;
+    const operation = operations[operatorId];
     return { id: uuid(), operation, label: getLabel(f), name, type, value: "", ...rest };
 };
 
@@ -92,7 +91,7 @@ export const useOperators = () => {
             [ColType.Boolean]: [operations.is, operations.isNot],
             [ColType.Number]: [operations.is, operations.isNot, operations.greaterThan, operations.lessThan],
         }),
-        [translation]
+        [operations]
     );
     return { options, operations };
 };
@@ -125,9 +124,9 @@ export const Filter = <T extends object>(props: Props<T>) => {
             prev.map((x) =>
                 x.id === id
                     ? {
-                          ...x,
-                          operation: operators.operations[operator as OperatorTypes],
-                      }
+                        ...x,
+                        operation: operators.operations[operator as OperatorTypes],
+                    }
                     : x
             )
         );
@@ -150,7 +149,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="flex items-center gap-1 proportional-nums">
+                    <span className="flex gap-1 items-center proportional-nums">
                         <ListFilterIcon size={14} />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
@@ -178,15 +177,15 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     placeholder={translation.tableFilterOperatorPlaceholder}
                                 />
                                 <Input
+                                    optionalText=""
                                     data-id={filter.id}
                                     onChange={onChangeValue}
+                                    value={filter.value as string}
+                                    type={filter.type as InputTypes}
                                     title={translation.tableFilterValueTitle}
                                     placeholder={translation.tableFilterValuePlaceholder}
-                                    type={filter.type as any}
-                                    value={filter.value as string}
-                                    optionalText=""
                                 />
-                                <div className="mt-5 flex items-center justify-center">
+                                <div className="flex justify-center items-center mt-5">
                                     <button data-id={filter.id} type="button" onClick={onDelete}>
                                         <Trash2Icon className="text-danger" size={16} />
                                     </button>
@@ -195,7 +194,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="flex items-center gap-1 text-primary">
+                        <button type="button" onClick={onAddFilter} className="flex gap-1 items-center text-primary">
                             <PlusIcon size={14} /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
@@ -222,9 +221,9 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
             prev.map((x) =>
                 x.id === id
                     ? {
-                          ...x,
-                          operation: operators.operations[operator as OperatorTypes],
-                      }
+                        ...x,
+                        operation: operators.operations[operator as OperatorTypes],
+                    }
                     : x
             )
         );
@@ -237,7 +236,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="flex flex-nowrap items-center gap-4 py-2">
+        <div className="flex flex-nowrap gap-4 items-center py-2">
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}
@@ -250,8 +249,8 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 optionalText=" "
                 data-id={filter.id}
                 onChange={onChangeValue}
-                type={filter.type as any}
                 value={filter.value as string}
+                type={filter.type as InputTypes}
                 title={translation.tableFilterValueTitle}
                 placeholder={translation.tableFilterValueTitle}
             />
