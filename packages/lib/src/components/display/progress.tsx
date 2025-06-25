@@ -8,6 +8,7 @@ type ProgressProps = {
   percent?: number;
   container?: string;
   className?: string;
+  textClassName?: string;
 }
 
 export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
@@ -23,8 +24,12 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
         className={css("bg-primary transition-transform ease-in-out size-full duration-500", props.className)}
       />
       {Is.number(props.percent)
-        ? <p className="absolute inset-0 w-full font-semibold flex items-center justify-center tabular-nums text-foreground">{props.percent} %</p>
+        ? <p
+          className={css("flex absolute inset-0 justify-center items-center w-full font-semibold tabular-nums text-primary-foreground", props.textClassName)}>
+          {props.percent} %
+        </p>
         : null}
     </RadixProgress.Root>
   );
 }
+

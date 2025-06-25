@@ -36,28 +36,28 @@ type Animations = {
 
 const animationDuration = "500ms";
 
-const drawerLeft = {
-    exit: { translateX: ["0%", "-30%"], opacity: 0, animationDuration },
-    enter: { translateX: ["-30%", "0%"], opacity: 1, animationDuration },
-    initial: { translateX: ["-30%", "0%"], opacity: 0.8, animationDuration },
+const drawerLeft: Record<string, TargetAndTransition> = {
+    exit: { x: ["0%", "-30%"], opacity: 0, animationDuration },
+    enter: { x: ["-30%", "0%"], opacity: 1, animationDuration },
+    initial: { x: ["-30%", "0%"], opacity: 0.8, animationDuration },
 };
 
-const drawerRight = {
-    initial: { translateX: ["30%", "0%"], opacity: 0.8 },
-    enter: { translateX: "0%", opacity: 1, animationDuration },
-    exit: { translateX: ["0%", "30%"], opacity: 0, animationDuration },
-} satisfies Record<string, TargetAndTransition>;
+const drawerRight: Record<string, TargetAndTransition> = {
+    initial: { x: ["30%", "0%"], opacity: 0.8 },
+    enter: { x: "0%", opacity: 1, animationDuration },
+    exit: { x: ["0%", "30%"], opacity: 0, animationDuration },
+}
 
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     sheet: {
-        initial: { opacity: 0.5, translateY: "25%", animationDuration, originY: "bottom" },
-        enter: { opacity: 1, translateY: "0%", animationDuration, originY: "bottom" },
-        exit: { opacity: 0.1, translateY: "50%", animationDuration, originY: "bottom" },
+        initial: { opacity: 0.5, y: "25%", animationDuration, transformOrigin: "bottom" },
+        enter: { opacity: 1, y: "0%", animationDuration, transformOrigin: "bottom" },
+        exit: { opacity: 0.1, y: "50%", animationDuration, transformOrigin: "bottom" },
     },
     dialog: {
         exit: { opacity: 0, scale: 0.95, animationDuration },
-        initial: { opacity: 0.5, scale: 0.95, animationDuration, type: "spring" },
+        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: 'easeInOut' } },
         enter: { opacity: 1, scale: [1.05, 1], animationDuration },
     },
 };
@@ -87,23 +87,23 @@ export type ModalProps = Override<
         open: boolean;
         onChange: (nextState: boolean) => void;
     } & Partial<{
-            footer: Label;
-            type: ModalType;
-            animated: boolean;
-            asChild: boolean;
-            layoutId: string;
-            resizer: boolean;
-            className: string;
-            closable: boolean;
-            forceType: boolean;
-            bodyClassName: string;
-            overlayClassName: string;
-            position: DrawerPosition;
-            overlayClickClose: boolean;
-            role: "dialog" | "listbox";
-            interactions: ElementProps[];
-            trigger: Label | React.FC<any>;
-        }>
+        footer: Label;
+        type: ModalType;
+        animated: boolean;
+        asChild: boolean;
+        layoutId: string;
+        resizer: boolean;
+        className: string;
+        closable: boolean;
+        forceType: boolean;
+        bodyClassName: string;
+        overlayClassName: string;
+        position: DrawerPosition;
+        overlayClickClose: boolean;
+        role: "dialog" | "listbox";
+        interactions: ElementProps[];
+        trigger: Label | React.FC<any>;
+    }>
 >;
 
 type DraggableProps = {
@@ -160,11 +160,11 @@ const Draggable = (props: DraggableProps) => {
                 props.sheet
                     ? "top-1 flex h-3 w-full justify-center py-2"
                     : props.position === "left"
-                      ? "right-5 top-1/2 h-10 w-2"
-                      : "left-2 top-1/2 h-10 w-2"
+                        ? "right-5 top-1/2 h-10 w-2"
+                        : "left-2 top-1/2 h-10 w-2"
             )}
         >
-            {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
+            {props.sheet ? <div className="w-1/4 h-2 rounded-lg bg-floating-border" /> : null}
         </motion.div>
     );
 };
@@ -272,18 +272,18 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
         const animationProps =
             animated && type === "sheet"
                 ? ({
-                      dragElastic: 0,
-                      onDrag: onDrag,
-                      dragConstraints,
-                      ...commonAnimated,
-                      dragListener: true,
-                      dragMomentum: true,
-                      dragPropagation: true,
-                      dragSnapToOrigin: true,
-                      dragDirectionLock: true,
-                      draggable: type === "sheet",
-                      drag: type === "sheet" ? "y" : "x",
-                  } as const)
+                    dragElastic: 0,
+                    onDrag: onDrag,
+                    dragConstraints,
+                    ...commonAnimated,
+                    dragListener: true,
+                    dragMomentum: true,
+                    dragPropagation: true,
+                    dragSnapToOrigin: true,
+                    dragDirectionLock: true,
+                    draggable: type === "sheet",
+                    drag: type === "sheet" ? "y" : "x",
+                } as const)
                 : commonAnimated;
 
         return (
@@ -317,9 +317,9 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                         {...animationProps}
                                         {...(title
                                             ? {
-                                                  "aria-labelledby": headingId,
-                                                  "aria-describedby": descriptionId,
-                                              }
+                                                "aria-labelledby": headingId,
+                                                "aria-describedby": descriptionId,
+                                            }
                                             : { "aria-label": ariaTitle })}
                                         {...interactions.getFloatingProps({
                                             "aria-modal": open,
@@ -341,7 +341,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                                 {title ? (
                                                     <h2
                                                         id={headingId}
-                                                        className="select-text border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed"
+                                                        className="px-8 pb-2 text-3xl font-medium leading-relaxed border-b select-text border-floating-border"
                                                     >
                                                         {title}
                                                     </h2>
@@ -350,14 +350,14 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                         ) : null}
                                         <section data-component="modal-body" className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}>{children}</section>
                                         {footer ? (
-                                            <footer className="w-full select-text border-t border-floating-border px-8 pt-4">{footer}</footer>
+                                            <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer>
                                         ) : null}
                                         {closable ? (
-                                            <nav className="absolute right-4 top-1 z-floating">
+                                            <nav className="absolute top-1 right-4 z-floating">
                                                 <button
                                                     type="button"
                                                     onClick={onClose}
-                                                    className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                                    className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
                                                 >
                                                     <XIcon />
                                                 </button>

@@ -3,7 +3,7 @@ import { motion, stagger, Transition, useAnimate } from "motion/react";
 import React, { ComponentProps, PropsWithChildren, useEffect } from "react";
 import { useColorParser } from "../../hooks/use-color-parser";
 
-const iconTransitions = {
+const iconTransitions: Transition = {
   delay: 0.2,
   duration: 0.3,
   type: "tween",

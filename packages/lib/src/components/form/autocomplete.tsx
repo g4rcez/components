@@ -179,7 +179,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 const item = options.find((x) => x.value === props.value);
                 setValue(item?.label ?? props.value);
             }
-        }, [props.value]);
+        }, [props.value, options.length]);
 
         useEffect(() => {
             if (!open) return setH(0);
