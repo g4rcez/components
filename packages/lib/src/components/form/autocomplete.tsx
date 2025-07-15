@@ -53,7 +53,7 @@ const List: Components["List"] = forwardRef(function VirtualList(props, ref) {
         <motion.ul
             {...props}
             ref={ref as any}
-            className="w-full overscroll-contain rounded-lg border-b border-tooltip-border last:border-transparent"
+            className="w-full overscroll-contain rounded-lg"
         >
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
@@ -66,7 +66,7 @@ const Item: Components["List"] = forwardRef(function VirtualItem({ item, context
 
 const components = { List, Item };
 
-const MIN_SIZE = 40;
+const MIN_SIZE = 44;
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     (
@@ -106,20 +106,20 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const innerOptions: AutocompleteItemProps[] =
             dynamicOption && shadow !== ""
                 ? [
-                      {
-                          value: shadow,
-                          label: shadow,
-                          "data-dynamic": "true",
-                      },
-                      ...options,
-                  ]
+                    {
+                        value: shadow,
+                        label: shadow,
+                        "data-dynamic": "true",
+                    },
+                    ...options,
+                ]
                 : options;
 
         const list = shadow
             ? fzf(innerOptions, "value", [
-                  { key: "value", value: shadow },
-                  { key: "label", value: shadow },
-              ])
+                { key: "value", value: shadow },
+                { key: "label", value: shadow },
+            ])
             : innerOptions;
 
         const setClosed = () => {
@@ -241,6 +241,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const id = props.id || props.name;
 
+        const shadowId = `${id}-shadow`;
+
         const isEmpty = displayList.length === 0;
 
         return (
@@ -259,7 +261,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 container={container}
                 rightLabel={rightLabel}
                 interactive={interactive}
-                id={props.name || props.id}
+                id={shadowId}
                 optionalText={optionalText}
                 componentName="autocomplete"
                 labelClassName={labelClassName}
@@ -290,12 +292,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     data-shadow="true"
                     {...getReferenceProps({
                         ...props,
-                        onChange,
                         onFocus,
                         pattern,
+                        onChange,
+                        id: shadowId,
+                        name: shadowId,
                         ref: refs.setReference,
-                        name: `${id}-shadow`,
-                        id: `${id}-shadow`,
                         onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
                         onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
                             if (event.key === "Escape") {
@@ -370,11 +372,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     const ul = refs.floating.current as HTMLElement;
                                     const li = ul.querySelectorAll("li").item(0);
                                     const sum = (li ? li.getBoundingClientRect().height : MIN_SIZE) * displayList.length;
-                                    return flushSync(() => setH(sum + 2));
+                                    return flushSync(() => setH(sum + 10));
                                 }}
                             >
                                 {isEmpty ? (
-                                    <div role="option" className="w-full border-b border-tooltip-border last:border-transparent">
+                                    <div role="option" className="w-full border-b border-tooltip-border">
                                         <span className="flex w-full justify-between p-2 text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
                                         </span>
@@ -385,11 +387,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     ref={virtuoso}
                                     hidden={isEmpty}
                                     data={displayList}
-                                    style={{ height: h }}
+                                    style={{ height: h - 10 }}
                                     defaultItemHeight={MIN_SIZE}
                                     components={components as any}
                                     scrollerRef={(e) => void (scroller.current = e as HTMLElement)}
-                                    className="max-h-80 overscroll-contain rounded-lg border-floating-border bg-floating-background p-0 text-foreground"
+                                    className="max-h-[calc(100%-2px)] overscroll-contain rounded-lg border-floating bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;
                                         const active = value === option.value || value === option.label;

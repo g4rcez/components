@@ -23,7 +23,7 @@ type ContextItem = { file: File; url: string; type: string; size: string };
 
 type ContextProps = null | ContextItem;
 
-const Context = createContext<[state: ContextProps, setState: SetState<ContextProps>]>([null, () => {}]);
+const Context = createContext<[state: ContextProps, setState: SetState<ContextProps>]>([null, () => { }]);
 
 const useFileManager = () => useContext(Context);
 
@@ -81,31 +81,31 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 
     const Element =
         info.type === "img" ? (
-            <img src={info.url} className="block w-full" alt={props.file.name} />
+            <img src={info.url} className="object-contain w-full" alt={props.file.name} />
         ) : (
             <Icon strokeWidth={2} absoluteStrokeWidth size={48} />
         );
 
     return (
-        <li className="flex w-full flex-row justify-between gap-4 border-b border-card-border last:border-b-transparent">
+        <li className="flex flex-row gap-4 justify-between w-full border-b border-card-border last:border-b-transparent">
             <div className="flex flex-col gap-4">
-                <div className="flex flex-row items-center gap-4">
-                    <button type="button" onClick={onViewFile} className="flex size-20 items-center justify-center">
+                <div className="flex flex-row gap-4 items-center">
+                    <button type="button" onClick={onViewFile} className="flex overflow-hidden justify-center items-center max-w-16 m-2 size-16">
                         {Element}
                     </button>
-                    <div className="flex flex-col items-start justify-start text-left">
+                    <div className="flex flex-col justify-start items-start text-left">
                         <span>{props.file.name}</span>
                         <span className="text-sm italic">{info.size}</span>
                     </div>
                 </div>
                 {props.File ? (
-                    <div className="min-w-full flex-1">
+                    <div className="flex-1 min-w-full">
                         <props.File file={props.file} />
                     </div>
                 ) : null}
             </div>
-            <div className="align-start justify-start flex py-4 transition-colors duration-300 ease-linear hover:text-danger-hover">
-                <button onClick={onDeleteFile} type="button" className="size-6 flex items-center justify-center">
+            <div className="flex justify-start py-4 transition-colors duration-300 ease-linear align-start hover:text-danger-hover">
+                <button onClick={onDeleteFile} type="button" className="flex justify-center items-center size-6">
                     <XIcon size={16} />
                 </button>
             </div>
@@ -114,7 +114,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 };
 
 const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => (
-    <ul className="w-full space-y-8">
+    <ul className="space-y-8 w-full">
         {props.files.map((file) => {
             return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} key={file.name} file={file} />;
         })}
@@ -125,13 +125,13 @@ const Idle = (props: { dragging: boolean; files?: File[] }) => {
     const t = useTranslations();
     const Icon = props.dragging ? FolderOpenIcon : FolderIcon;
     return (
-        <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col gap-2 justify-center items-center">
                 <Icon className="text-primary" size={80} />
             </div>
-            <div className="my-4 flex flex-col items-center gap-1">
+            <div className="flex flex-col gap-1 items-center my-4">
                 <p>{t.uploadIdle}</p>
-                <button className="text-primary underline" type="button">
+                <button className="underline text-primary" type="button">
                     {t.uploadIdleButton}
                 </button>
             </div>
@@ -165,7 +165,7 @@ const FileViewer = (props: { item: ContextItem }) => {
             <p className="text-lg font-medium">{props.item.file.name}</p>
             <p className="text-base">{props.item.size}</p>
             {type === "img" ? (
-                <img className="container block w-full max-w-96" src={props.item.url} alt={file.name} />
+                <img className="container inline-block w-full max-w-96" src={props.item.url} alt={file.name} />
             ) : type === "video" ? (
                 <video className="container block w-full max-w-96" src={props.item.url} controls muted />
             ) : type === "audio" ? (

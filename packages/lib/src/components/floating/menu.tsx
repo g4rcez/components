@@ -103,7 +103,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             move: false,
             enabled: hover,
             delay: { open: FLOATING_DELAY },
-            handleClose: safePolygon({ blockPointerEvents: true }),
+            handleClose: safePolygon({ blockPointerEvents: true, requireIntent: false }),
         });
 
         const click = useClick(context, {

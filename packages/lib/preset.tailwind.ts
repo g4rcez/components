@@ -1,29 +1,14 @@
 import forms from "@tailwindcss/forms";
 import { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin";
 import { createDesignTokens, parsers } from "./src/styles/design-tokens";
 import { defaultLightTheme as theme } from "./src/styles/theme";
+import customPlugins from "./plugin.tailwind";
 
 const COLORS = createDesignTokens(theme.colors, parsers.formatWithVar("hsla"));
 
 const spacing = createDesignTokens(theme.spacing, parsers.cssVariable);
 
 const shadows = createDesignTokens(theme.shadow, parsers.cssVariable);
-
-const x = String.raw;
-
-const customPlugins = plugin(function ({ addVariant }) {
-    addVariant("hocus", ["&:hover", "&:focus"]);
-    addVariant("link", ["&:hover", "&:active"]);
-    addVariant("group-assert", [x`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);
-    addVariant("group-checkbox-checked", [x`:merge(&:has(.form-checkbox[type="checkbox"]:checked))`]);
-    addVariant("group-error", [
-        x`:merge(.group):invalid:has(.input:not(:focus):invalid[data-initialized=true]) &`,
-        x`:merge(.group[data-error=true]:has(.input[data-initialized=true])) &`,
-        x`:merge(.group[data-error=true][data-interactive=true]):has(.input) &`,
-        x`:merge(.group[data-error=true][data-interactive=true]):has(.input[data-initialized=true]) &`,
-    ]);
-});
 
 const config: Partial<Config> = {
     theme: {

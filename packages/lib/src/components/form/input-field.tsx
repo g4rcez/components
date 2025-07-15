@@ -31,7 +31,7 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                             <Tooltip
                                 as="button"
                                 type="button"
-                                aria-description={typeof info === "string" ? info : undefined}
+                                aria-label={typeof info === "string" ? info : undefined}
                                 aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}`: undefined}
                                 title={
                                     <span className="cursor-help">
