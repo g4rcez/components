@@ -119,6 +119,12 @@
       "require": "./dist/styles/design-tokens.js",
       "default": "./dist/styles/design-tokens.js"
     },
+    "./plugin.tailwind": {
+      "type": "./dist/preset/plugin.tailwind.d.ts",
+      "import": "./dist/preset/plugin.tailwind.js",
+      "require": "./dist/preset/plugin.tailwind.js",
+      "default": "./dist/preset/plugin.tailwind.js"
+    },
     "./preset.tailwind": {
       "type": "./dist/preset/preset.tailwind.d.ts",
       "import": "./dist/preset/preset.tailwind.js",

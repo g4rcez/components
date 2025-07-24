@@ -13,7 +13,7 @@ export const spacing = {
     lg: "1.125rem",
     sm: "0.75rem",
     "field-height": "1.5rem",
-    "field-label": "1.875rem",
+    "field-label": "0.875rem",
     "input-height": "2.5rem",
     "input-x": "0.5rem",
     "input-y": "0.25rem",
