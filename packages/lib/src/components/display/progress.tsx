@@ -2,9 +2,11 @@ import { Is } from "sidekicker"
 import { Progress as RadixProgress } from "radix-ui"
 import { css } from "../../lib/dom";
 import { PropsWithoutRef } from "react";
+import { Label } from "../../types";
 
 type ProgressProps = {
   max?: number
+  label?: Label;
   percent?: number;
   container?: string;
   className?: string;
@@ -26,10 +28,9 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
       {Is.number(props.percent)
         ? <p
           className={css("flex absolute inset-0 justify-center items-center w-full font-semibold tabular-nums text-primary-foreground", props.textClassName)}>
-          {props.percent} %
+          {props.label ? props.label : `${props.percent} %`}
         </p>
         : null}
     </RadixProgress.Root>
   );
 }
-

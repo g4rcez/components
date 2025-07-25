@@ -6,16 +6,51 @@
 @tailwind components;
 @tailwind utilities;
 
-.grid-template-area {
-  display: grid;
-  min-height: 100vh;
-  width: 100%;
-  grid-template-columns: auto 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "sidebar header header"
-    "sidebar main main"
-    "sidebar footer footer";
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-track-transparent {
+  scrollbar-color: transparent transparent;
+}
+
+.scrollbar-thumb-card-border {
+  scrollbar-color: hsl(var(--card-border)) transparent;
+}
+
+.scrollbar-thumb-card-border\/80 {
+  scrollbar-color: hsl(var(--card-border) / 0.8) transparent;
+}
+
+/* Webkit scrollbar styles */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: hsl(var(--card-border));
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--card-border) / 0.8);
+}
+
+/* Smooth transitions for layout changes */
+@media (prefers-reduced-motion: no-preference) {
+  .transition-layout {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Focus styles for better accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background;
 }
 
 [data-component="cell-aside"]:has(input[checked]),

@@ -18,6 +18,12 @@ import {
 import { path } from "../lib/fns";
 import { Any, SetState } from "../types";
 
+/**
+ * Validates if a value is valid JSON
+ * @param value - The value to validate
+ * @returns True if the value is valid JSON
+ * @internal
+ */
 const isValidJSON = (value: any): boolean => {
   if (typeof value !== "string") {
     try {
@@ -119,6 +125,11 @@ const options = {
   parameterLimit: Number.MAX_SAFE_INTEGER,
 } as const;
 
+/**
+ * Converts a form element to a JSON object
+ * @param form - The HTML form element to convert
+ * @returns A JSON object representing the form data
+ */
 export const formToJson = (form: HTMLFormElement): any => {
   const formData = new FormData(form);
   const urlSearchParams = new URLSearchParams(formData as any);
@@ -186,6 +197,11 @@ const defaultOptions: UseFormOptions<any> = {
 
 const getName = (e: HTMLEntryElements) => e.dataset.target || e.name;
 
+/**
+ * Creates a form storage interceptor for persisting form state
+ * @param name - The unique name for the form storage
+ * @returns An interceptor object with get, set, and clear methods
+ */
 export const createFormStorage = (name: string): Interceptor<any> => {
   const key = `@use-form/${name}`;
   return {
@@ -198,6 +214,42 @@ export const createFormStorage = (name: string): Interceptor<any> => {
   };
 };
 
+/**
+ * A comprehensive form management hook with Zod schema validation.
+ * 
+ * Provides form state management, validation, and component binding for React forms.
+ * Supports automatic validation, error handling, and form persistence.
+ * 
+ * @example
+ * ```tsx
+ * const schema = z.object({
+ *   name: z.string().min(1, "Name is required"),
+ *   email: z.string().email("Invalid email"),
+ *   age: z.number().min(18, "Must be 18 or older")
+ * });
+ * 
+ * const MyForm = () => {
+ *   const form = useForm(schema, "user-form");
+ * 
+ *   return (
+ *     <form {...form.controller()} onSubmit={form.onSubmit((e, { data }) => {
+ *       console.log("Form data:", data);
+ *     })}>
+ *       <Input {...form.input("name")} placeholder="Name" />
+ *       <Input {...form.input("email")} type="email" placeholder="Email" />
+ *       <Input {...form.input("age")} type="number" placeholder="Age" />
+ *       <Button type="submit">Submit</Button>
+ *     </form>
+ *   );
+ * };
+ * ```
+ * 
+ * @template T - The Zod schema type
+ * @param schema - Zod schema for form validation
+ * @param formName - Unique identifier for the form
+ * @param opts - Optional configuration including initial state and interceptors
+ * @returns Form management object with input helpers and handlers
+ */
 export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string, opts: UseFormOptions<z.infer<T>> = defaultOptions) => {
   type Fields = AllPaths<z.infer<T>>;
 

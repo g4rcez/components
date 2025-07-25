@@ -9,6 +9,7 @@ import {
   CommandItemTypes,
   Modal,
   ModalProps,
+  negate,
   Switch,
   Tooltip,
   uuid,
@@ -19,10 +20,10 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
   const [open, setOpen] = useState(false);
   return (
     <Fragment>
-      <Modal {...(props as any)} open={open} onChange={setOpen}>
+      <Modal {...(props as any)} open={open} onChange={() => setOpen(negate)}>
         {props.children}
         <Tooltip title={<b>Test</b>}>
-          <div className="min-w-full flex flex-1">
+          <div className="flex flex-1 min-w-full">
             Paullum deliquit, ponderibus modulisque suis ratio utitur.
           </div>
         </Tooltip>
@@ -161,7 +162,7 @@ export default function ModalExamplePage() {
         />
         <Card
           title="Global configuration"
-          className="flex gap-8 items-center flex-wrap"
+          className="flex flex-wrap gap-8 items-center"
         >
           <Switch
             name="overlayClickClose"
@@ -194,7 +195,7 @@ export default function ModalExamplePage() {
             asChild
             type="dialog"
             trigger={<Button>Dialog controlled width</Button>}
-            className="lg:max-w-xs flex items-center justify-center"
+            className="flex justify-center items-center lg:max-w-xs"
             overlayClassName="items-center justify-center testing"
           >
             class=max-w-x
@@ -213,7 +214,7 @@ export default function ModalExamplePage() {
             Drawer element is resized by default. You can omit this behaviour
             using the property resizer=false
           </p>
-          <div className="flex flex-col lg:flex-row gap-6 mt-4">
+          <div className="flex flex-col gap-6 mt-4 lg:flex-row">
             <Element
               {...state}
               asChild

@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CSSProperties, PropsWithChildren } from "react";
 import { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
@@ -26,12 +28,18 @@ const tweaks: Tweaks = {
   table: { filters: false, sorters: false, operations: false, sticky: 55 },
 };
 
-const sidebarVariables = {
+const layoutVariables = {
+  "--sidebar-width": "280px",
+  "--header-height": "64px",
   "--sidebar-padding": "1.5rem",
   "--sidebar-item-padding": "0.875rem",
+  "--content-max-width": "1200px",
 } as CSSProperties;
 
 export const RootLayout = (props: PropsWithChildren) => {
+  const pathname = usePathname();
+  const isLandingPage = pathname === "/";
+
   const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
   const stylesDark = createTokenStyles(defaultDarkTheme, {
     ...tokenRemap,
@@ -41,7 +49,7 @@ export const RootLayout = (props: PropsWithChildren) => {
   return (
     <html
       lang="en"
-      className="dark bg-background text-foreground antialiased proportional-nums"
+      className="antialiased proportional-nums bg-background text-foreground dark"
     >
       <head>
         <meta charSet="utf-8" />
@@ -53,20 +61,45 @@ export const RootLayout = (props: PropsWithChildren) => {
       <body>
         <ComponentsProvider locale="pt-BR" tweaks={tweaks}>
           <Notifications>
-            <div className="isolate bg-background text-foreground grid grid-template-area w-full">
-              <nav
-                style={sidebarVariables}
-                className="sticky hidden lg:block top-0 h-screen w-64 bg-card-background [grid-area:sidebar]"
-              >
-                <header className="h-14 px-[var(--sidebar-padding)] flex items-center">
-                  <Link href="/" className="font-bold tracking-wide text-lg">
-                    UI
-                  </Link>
-                </header>
-                <Navigation />
-              </nav>
-              <Header />
-              <main className="[grid-area:main]">{props.children}</main>
+            <div
+              style={
+                {
+                  ...layoutVariables,
+                  "--sidebar-width": isLandingPage ? "0px" : "280px",
+                } as CSSProperties
+              }
+              className="min-h-screen isolate bg-background text-foreground"
+            >
+              {isLandingPage ? (
+                <div className="min-h-screen">
+                  <Header />
+                  <main className="bg-gradient-to-br from-background via-background to-card-background/20">
+                    {props.children}
+                  </main>
+                </div>
+              ) : (
+                <div className="grid min-h-screen grid-rows-[var(--header-height)_1fr] lg:grid-cols-[var(--sidebar-width)_1fr] lg:grid-rows-[var(--header-height)_1fr]">
+                  <nav className="hidden overflow-hidden fixed bottom-0 flex-col h-screen border-r lg:flex w-[var(--sidebar-width)] bg-card-background/95 backdrop-blur-sm border-card-border">
+                    <header className="flex items-center border-b h-[var(--header-height)] px-[var(--sidebar-padding)] border-card-border/50">
+                      <Link
+                        href="/"
+                        className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80"
+                      >
+                        Components
+                      </Link>
+                    </header>
+                    <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-card-border hover:scrollbar-thumb-card-border/80">
+                      <Navigation />
+                    </div>
+                  </nav>
+                  <div className="flex flex-col min-h-screen lg:col-start-2">
+                    <Header />
+                    <main className="flex-1 mt-12 bg-gradient-to-br from-background via-background to-card-background/20">
+                      {props.children}
+                    </main>
+                  </div>
+                </div>
+              )}
             </div>
           </Notifications>
         </ComponentsProvider>
