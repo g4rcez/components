@@ -73,7 +73,7 @@ type Data = z.infer<typeof schema>;
 type Args = UseOnSubmitArgs<Data>;
 
 export default function FormPage() {
-  const form = useForm(schema, "form");
+  const form = useForm(schema as any, "form");
   const [state, setState] = useState({});
   const [items, setItems] = useState<number[]>([0]);
 
