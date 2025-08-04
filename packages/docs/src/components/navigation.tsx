@@ -147,20 +147,6 @@ export const Navigation = () => {
           );
         })}
       </div>
-
-      <div className="pt-6 mt-8 border-t border-card-border/50">
-        <div className="py-2 px-3 bg-gradient-to-r rounded-lg border from-primary/5 to-primary/10 border-primary/20">
-          <div className="flex gap-2 items-center mb-1">
-            <div className="w-2 h-2 rounded-full animate-pulse bg-primary" />
-            <span className="text-xs font-medium text-primary">
-              Latest Updates
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            New components and features added regularly
-          </p>
-        </div>
-      </div>
     </nav>
   );
 };

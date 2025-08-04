@@ -1,5 +1,5 @@
 "use client";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { HTMLMotionProps, motion } from "motion/react";
 import { CheckCircleIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
 import React, { forwardRef, PropsWithChildren } from "react";

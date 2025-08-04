@@ -20,7 +20,7 @@ import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
 
-const Slot = RadixSlot.Slot
+const Slot = RadixSlot.Slot;
 
 type AnimationLabels = "initial" | "enter" | "exit";
 
@@ -46,7 +46,7 @@ const drawerRight: Record<string, TargetAndTransition> = {
     initial: { x: ["30%", "0%"], opacity: 0.8 },
     enter: { x: "0%", opacity: 1, animationDuration },
     exit: { x: ["0%", "30%"], opacity: 0, animationDuration },
-}
+};
 
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
@@ -57,7 +57,7 @@ const animations: Animations = {
     },
     dialog: {
         exit: { opacity: 0, scale: 0.95, animationDuration },
-        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: 'easeInOut' } },
+        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: "easeInOut" } },
         enter: { opacity: 1, scale: [1.05, 1], animationDuration },
     },
 };
@@ -116,7 +116,7 @@ type DraggableProps = {
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
 
-const calculateClose = (n: number) => n * 0.65;
+const calculateClose = (n: number) => n * 0.6;
 
 const Draggable = (props: DraggableProps) => {
     const onDrag = (_: any, info: PanInfo) => {
@@ -132,10 +132,14 @@ const Draggable = (props: DraggableProps) => {
             const rect = div.getBoundingClientRect();
             const v = props.value.get() || rect.height;
             const result = Math.abs(v - info.delta.y);
-            const screenHeightToClose = calculateClose(window.outerHeight);
+            const max = window.outerHeight;
+            const screenHeightToClose = calculateClose(max);
             if (result >= screenHeightToClose) return props.value.set(result);
+            if (document.activeElement instanceof HTMLElement) {
+                document.activeElement?.blur();
+            }
             props.onChange(false);
-            return setTimeout(() => props.value.set(window.outerHeight), 350);
+            return setTimeout(() => props.value.set(undefined), 350);
         }
     };
 
@@ -164,7 +168,7 @@ const Draggable = (props: DraggableProps) => {
                         : "left-2 top-1/2 h-10 w-2"
             )}
         >
-            {props.sheet ? <div className="w-1/4 h-2 rounded-lg bg-floating-border" /> : null}
+            {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
         </motion.div>
     );
 };
@@ -219,12 +223,11 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
         const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
         const type = isDesktop ? _type : forceType ? _type : "sheet";
 
-        const floating = useFloating({ open: open, onOpenChange: onChange, transform: true, strategy: "absolute" });
-        const click = useClick(floating.context);
+        const floating = useFloating({ open, onOpenChange: onChange });
+        const click = useClick(floating.context, {});
         const role = useRole(floating.context, { role: roleName });
         const dismiss = useDismiss(floating.context, {
             escapeKey: true,
-            referencePress: true,
             outsidePress: overlayClickClose,
         });
 
@@ -236,7 +239,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
 
         useEffect(() => {
             floatingSize.set(undefined);
-        }, [floatingSize, type]);
+        }, [type]);
 
         const onClose = () => onChange(false);
 
@@ -272,10 +275,10 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
         const animationProps =
             animated && type === "sheet"
                 ? ({
+                    ...commonAnimated,
                     dragElastic: 0,
                     onDrag: onDrag,
                     dragConstraints,
-                    ...commonAnimated,
                     dragListener: true,
                     dragMomentum: true,
                     dragPropagation: true,
@@ -302,12 +305,13 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                     </Fragment>
                 ) : null}
                 <FloatingPortal preserveTabOrder>
-                    <AnimatePresence key={headingId} mode="wait" propagate presenceAffectsLayout initial={false}>
+                    <AnimatePresence propagate key={headingId} mode="wait" initial={false}>
                         {open ? (
                             <FloatingOverlay
                                 lockScroll
                                 className={css(
-                                    `inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70 ${type === "drawer" ? "" : "flex items-start justify-center p-10"}`,
+                                    "inset-0 isolate z-overlay h-[100dvh] !overflow-clip bg-floating-overlay/70",
+                                    type === "drawer" ? "" : "flex items-start justify-center p-10",
                                     overlayClassName
                                 )}
                             >
@@ -341,23 +345,28 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                                 {title ? (
                                                     <h2
                                                         id={headingId}
-                                                        className="px-8 pb-2 text-3xl font-medium leading-relaxed border-b select-text border-floating-border"
+                                                        className="select-text border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed"
                                                     >
                                                         {title}
                                                     </h2>
                                                 ) : null}
                                             </header>
                                         ) : null}
-                                        <section data-component="modal-body" className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}>{children}</section>
+                                        <section
+                                            data-component="modal-body"
+                                            className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
+                                        >
+                                            {children}
+                                        </section>
                                         {footer ? (
-                                            <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer>
+                                            <footer className="w-full select-text border-t border-floating-border px-8 pt-4">{footer}</footer>
                                         ) : null}
                                         {closable ? (
-                                            <nav className="absolute top-1 right-4 z-floating">
+                                            <nav className="absolute right-4 top-1 z-floating">
                                                 <button
                                                     type="button"
                                                     onClick={onClose}
-                                                    className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
+                                                    className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                                 >
                                                     <XIcon />
                                                 </button>

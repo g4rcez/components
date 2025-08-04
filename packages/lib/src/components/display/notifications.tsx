@@ -1,22 +1,24 @@
 "use client";
-import { Toast as RadixToast } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { AnimatePresence, motion, TargetAndTransition } from "motion/react";
 import { XIcon } from "lucide-react";
-import { createContext, type ElementRef, forwardRef, type PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, TargetAndTransition } from "motion/react";
+import { Toast as RadixToast } from "radix-ui";
+import { type ComponentRef, createContext, forwardRef, type PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useHover } from "../../hooks/use-hover";
 import { Label } from "../../types";
 
 const variants = cva(
-    "relative isolate z-tooltip flex justify-between overflow-hidden whitespace-nowrap rounded-lg border text-sm shadow-shadow-notification supports-[backdrop-filter]:backdrop-blur-xl",
+    "relative isolate z-tooltip flex justify-between overflow-hidden whitespace-nowrap rounded-lg border text-sm shadow-shadow-notification",
     {
         variants: {
             theme: {
-                warn: "bg-warn-notification/90 text-warn-hover border-warn/50",
-                info: "bg-info-notification supports-[backdrop-filter]:bg-info-notification/50 supports-[backdrop-filter]:bg-info/20 text-info border-info/50",
-                danger: "bg-danger-notification supports-[backdrop-filter]:bg-danger-notification/60 text-danger border-danger/50",
-                success: "bg-success-notification supports-[backdrop-filter]:bg-success-notification/50 text-success border-success/50",
                 default: "border-card-border bg-card-background text-foreground",
+                info: "bg-alert-info-bg text-alert-info-text border-alert-info-border",
+                warn: "bg-alert-warn-bg text-alert-warn-text border-alert-warn-border",
+                danger: "bg-alert-danger-bg text-alert-danger-text border-alert-danger-border",
+                success: "bg-alert-success-bg text-alert-success-text border-alert-success-border",
+                secondary: "bg-alert-secondary-bg text-alert-secondary-text border-alert-secondary-border",
+                muted: "bg-alert-muted-bg text-alert-muted-text border-alert-muted-border",
             },
         },
         defaultVariants: { theme: "default" },
@@ -56,7 +58,7 @@ const animatedIndex: Record<string, TargetAndTransition> = {
     default: { opacity: 1, y: [25, 30], scale: [1, 0.95] },
 };
 
-const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, NotificationItemProps>(function Toast(props, forwardedRef) {
+const Notification = forwardRef<ComponentRef<typeof RadixToast.Root>, NotificationItemProps>(function Toast(props, forwardedRef) {
     const closable = props.closable ?? true;
     const duration = props.duration;
     const variant = props.hover ? "hover" : props.isLast ? "isLast" : "other";
@@ -69,7 +71,7 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                 animate={variant}
                 data-index={props.index}
                 initial={{ y: -100, zIndex: -1 }}
-                className="absolute top-0 right-0 w-80 pointer-events-auto text-select"
+                className="text-select pointer-events-auto absolute right-0 top-0 w-80"
                 variants={{
                     isLast: { y: 10, scale: 1, animationDuration: "300ms", opacity: 1 },
                     hover: { y: 0, position: "static", scale: 1, opacity: 1 },
@@ -81,13 +83,13 @@ const Notification = forwardRef<ElementRef<typeof RadixToast.Root>, Notification
                 <div className={className}>
                     <div className="flex flex-col p-4">
                         {props.title ? (
-                            <RadixToast.Title className="text-lg font-medium leading-relaxed select-text truncate">Title</RadixToast.Title>
+                            <RadixToast.Title className="select-text truncate text-lg font-medium leading-relaxed">{props.title}</RadixToast.Title>
                         ) : null}
                         <RadixToast.Description className="select-text truncate">{props.text}</RadixToast.Description>
                     </div>
                     {closable ? (
-                        <RadixToast.Close className="absolute top-2 right-2 p-1 rounded-full transition text-foreground hover:bg-danger/10 hover:text-danger-hover">
-                            <XIcon className="w-5 h-5" />
+                        <RadixToast.Close className="absolute right-2 top-2 rounded-full p-1 text-foreground transition hover:bg-danger/10 hover:text-danger-hover">
+                            <XIcon className="size-5" />
                         </RadixToast.Close>
                     ) : null}
                 </div>
@@ -131,22 +133,24 @@ export function Notifications({ children, max = 5, duration = 5000 }: PropsWithC
     return (
         <RadixToast.Provider duration={duration} swipeThreshold={150}>
             <NotificationContext.Provider value={notify}>{children}</NotificationContext.Provider>
-            <AnimatePresence presenceAffectsLayout mode="popLayout">
-                {messages.map((toast, index, list) => {
-                    const close = () => setMessages((prev) => prev.filter((t) => t.id !== toast.id));
-                    return (
-                        <Notification
-                            {...toast}
-                            key={toast.id}
-                            hover={hover}
-                            index={index}
-                            onClose={close}
-                            isLast={list.length - 1 === index}
-                            reversedIndex={list.length - (index + 1)}
-                        />
-                    );
-                })}
-            </AnimatePresence>
+            <motion.ol>
+                <AnimatePresence presenceAffectsLayout mode="popLayout">
+                    {messages.map((toast, index, list) => {
+                        const close = () => setMessages((prev) => prev.filter((t) => t.id !== toast.id));
+                        return (
+                            <Notification
+                                {...toast}
+                                hover={hover}
+                                index={index}
+                                key={toast.id}
+                                onClose={close}
+                                isLast={list.length - 1 === index}
+                                reversedIndex={list.length - (index + 1)}
+                            />
+                        );
+                    })}
+                </AnimatePresence>
+            </motion.ol>
             <RadixToast.Viewport
                 ref={ref}
                 data-items={messages.length}

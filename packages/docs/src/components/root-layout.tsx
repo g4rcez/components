@@ -88,7 +88,7 @@ export const RootLayout = (props: PropsWithChildren) => {
                         Components
                       </Link>
                     </header>
-                    <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-card-border hover:scrollbar-thumb-card-border/80">
+                    <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent overscroll-contain scrollbar-thumb-card-border hover:scrollbar-thumb-card-border/80">
                       <Navigation />
                     </div>
                   </nav>

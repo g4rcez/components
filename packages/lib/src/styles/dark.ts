@@ -7,7 +7,7 @@ export const DARK_THEME: DesignTokens = {
     rounded,
     spacing,
     shadow: {
-        "shadow-notification": "1px 2px 2px 2px hsla(210, 25%, 40%,  0.15)",
+        "shadow-notification": "1px 2px 2px 2px hsla(210, 15%, 20%,  0.15)",
         "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
         "shadow-card": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
     },
@@ -62,7 +62,7 @@ export const DARK_THEME: DesignTokens = {
             subtle: "hsla(160, 75%, 75%)",
             hover: "hsla(160, 91%, 27%)",
             foreground: "hsla(160, 91%, 50%)",
-            notification: "hsla(161,62%,17%)",
+            notification: "hsla(160,90%,5%)",
         },
         input: {
             border: "hsla(240, 4%, 25%)",

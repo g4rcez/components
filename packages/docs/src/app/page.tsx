@@ -1,25 +1,24 @@
 "use client";
-import { Fragment, useState } from "react";
-import Link from "next/link";
-import { Button } from "../../../lib/src/components/core/button";
-import { Card } from "../../../lib/src/components/display/card";
-import { Modal } from "../../../lib/src/components/floating/modal";
-import { Tabs, Tab } from "../../../lib/src/components/display/tabs";
+import { FeatureShowcase } from "@/components/examples/feature-showcase";
+import { HeroDemo } from "@/components/examples/hero-demo";
+import { FloatingAction } from "@/components/floating-action";
+import { Footer } from "@/components/footer";
 import {
   ArrowRightIcon,
   CheckIcon,
   CodeIcon,
   PaletteIcon,
-  ZapIcon,
+  RocketIcon,
   ShieldCheckIcon,
   SparklesIcon,
-  RocketIcon,
+  ZapIcon,
 } from "lucide-react";
-import { HeroDemo } from "@/components/examples/hero-demo";
-import { FeatureShowcase } from "@/components/examples/feature-showcase";
-import { Testimonials } from "@/components/examples/testimonials";
-import { Footer } from "@/components/footer";
-import { FloatingAction } from "@/components/floating-action";
+import Link from "next/link";
+import { Fragment, useState } from "react";
+import { Button } from "../../../lib/src/components/core/button";
+import { Card } from "../../../lib/src/components/display/card";
+import { Tab, Tabs } from "../../../lib/src/components/display/tabs";
+import { Modal } from "../../../lib/src/components/floating/modal";
 
 const CODE = `import { Button, Card, Input } from "@g4rcez/components";
 
@@ -234,14 +233,13 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-      <section className="py-20 bg-gradient-to-r from-primary to-secondary">
+      <section className="py-20 bg-gradient-to-r from-primary to-primary-hover">
         <div className="px-4 mx-auto max-w-4xl text-center sm:px-6 lg:px-8">
           <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
             Ready to build something amazing?
           </h2>
           <p className="mb-8 text-xl">
-            Join thousands of developers who are already building with our
-            components.
+            Join with developers who are already building with our components.
           </p>
           <div className="flex flex-col gap-4 justify-center sm:flex-row">
             <Link href="/docs/get-started">

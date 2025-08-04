@@ -1,6 +1,6 @@
 "use client";
 import { PropsWithChildren } from "react";
-import { type Label } from "../../../lib/src";
+import { type Label, Tag } from "../../../lib/src";
 
 type Props = {
   title: Label;
@@ -11,20 +11,16 @@ type Props = {
 
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
   return (
-    <div className="min-h-full">
-      <div className="max-w-[var(--content-max-width)] mx-auto px-6 lg:px-10 py-8">
-        <header className="mb-8 pb-6 border-b border-card-border">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full border border-primary/20">
-              {props.section}
-            </div>
-          </div>
+    <div className="gap-8 w-full min-h-full">
+      <div className="max-w-[var(--content-max-width)] flex flex-col gap-6 mx-auto px-6 lg:px-10 py-8">
+        <header className="border-b border-card-border flex flex-col gap-2 pb-4">
           <h1 className="text-3xl font-bold tracking-tight mb-3 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
             {props.title}
           </h1>
           <p className="text-muted-foreground leading-relaxed">
             {props.description}
           </p>
+          <Tag className="w-fit" size="small">{props.section}</Tag>
         </header>
         <div className="space-y-12">{props.children}</div>
         <footer className="mt-16 pt-8 border-t border-card-border/30">

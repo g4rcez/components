@@ -4,15 +4,14 @@ import { BrainIcon } from "lucide-react";
 import { motion } from "motion/react";
 import React, { Fragment, PropsWithChildren, useState } from "react";
 import {
-  Button,
-  Card,
-  CommandItemTypes,
-  Modal,
-  ModalProps,
-  negate,
-  Switch,
-  Tooltip,
-  uuid,
+    Button,
+    Card,
+    CommandItemTypes,
+    Modal,
+    ModalProps,
+    Switch,
+    Tooltip,
+    uuid
 } from "../../../../../lib/src";
 import { CommandPalette } from "../../../../../lib/src/components/floating/command-palette";
 
@@ -20,7 +19,7 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
   const [open, setOpen] = useState(false);
   return (
     <Fragment>
-      <Modal {...(props as any)} open={open} onChange={() => setOpen(negate)}>
+      <Modal {...(props as any)} open={open} onChange={setOpen}>
         {props.children}
         <Tooltip title={<b>Test</b>}>
           <div className="flex flex-1 min-w-full">
