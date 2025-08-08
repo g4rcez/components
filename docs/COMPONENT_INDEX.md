@@ -22,14 +22,14 @@ Components for presenting information and organizing content.
 | Component         | Description                                                | Documentation                     |
 | ----------------- | ---------------------------------------------------------- | --------------------------------- |
 | **Alert**         | Notification and message display with animations           | [Alert.md](./components/Alert.md) |
-| **Calendar**      | Calendar display and date selection                        | _Documentation pending_           |
+| **Calendar**      | Calendar display and date selection                        | [Calendar.md](./components/Calendar.md) |
 | **Card**          | Container component with header, body, and footer sections | [Card.md](./components/Card.md)   |
-| **Empty**         | Empty state placeholder component                          | _Documentation pending_           |
+| **Empty**         | Empty state placeholder component                          | [Empty.md](./components/Empty.md) |
 | **List**          | List display component with virtualization support         | _Documentation pending_           |
-| **Notifications** | Toast notification system                                  | _Documentation pending_           |
-| **Progress**      | Progress indicators and loading states                     | _Documentation pending_           |
+| **Notifications** | Toast notification system                                  | [Notifications.md](./components/Notifications.md) |
+| **Progress**      | Progress indicators and loading states                     | [Progress.md](./components/Progress.md) |
 | **Shortcut**      | Keyboard shortcut display component                        | _Documentation pending_           |
-| **Skeleton**      | Loading skeleton placeholders                              | _Documentation pending_           |
+| **Skeleton**      | Loading skeleton placeholders                              | [Skeleton.md](./components/Skeleton.md) |
 | **Stats**         | Statistics and metrics display                             | _Documentation pending_           |
 | **Step**          | Step indicator for multi-step processes                    | _Documentation pending_           |
 | **Tabs**          | Tab navigation with keyboard support                       | [Tabs.md](./components/Tabs.md)   |
@@ -41,13 +41,13 @@ Overlay components using Floating UI for positioning.
 
 | Component          | Description                              | Documentation                     |
 | ------------------ | ---------------------------------------- | --------------------------------- |
-| **CommandPalette** | Command palette with search and actions  | _Documentation pending_           |
-| **Dropdown**       | Dropdown menu component                  | _Documentation pending_           |
+| **CommandPalette** | Command palette with search and actions  | [CommandPalette.md](./components/CommandPalette.md) |
+| **Dropdown**       | Dropdown menu component                  | [Dropdown.md](./components/Dropdown.md) |
 | **Expand**         | Expandable content container             | _Documentation pending_           |
 | **Menu**           | Context menu component                   | _Documentation pending_           |
 | **Modal**          | Modal dialog with multiple display types | [Modal.md](./components/Modal.md) |
 | **Toolbar**        | Floating toolbar component               | _Documentation pending_           |
-| **Tooltip**        | Hover tooltip component                  | _Documentation pending_           |
+| **Tooltip**        | Hover tooltip component                  | [Tooltip.md](./components/Tooltip.md) |
 
 ### 📝 Form Components
 
@@ -55,10 +55,10 @@ Input and form-related components with validation support.
 
 | Component        | Description                            | Documentation                           |
 | ---------------- | -------------------------------------- | --------------------------------------- |
-| **Autocomplete** | Searchable select with fuzzy search    | _Documentation pending_                 |
+| **Autocomplete** | Searchable select with fuzzy search    | [Autocomplete.md](./components/Autocomplete.md) |
 | **Checkbox**     | Styled checkbox with task mode support | [Checkbox.md](./components/Checkbox.md) |
 | **DatePicker**   | Date selection with calendar popup     | _Documentation pending_                 |
-| **FileUpload**   | File upload with drag & drop           | _Documentation pending_                 |
+| **FileUpload**   | File upload with drag & drop           | [FileUpload.md](./components/FileUpload.md) |
 | **Form**         | Form wrapper with validation           | _Documentation pending_                 |
 | **Input**        | Text input with advanced masking       | [Input.md](./components/Input.md)       |
 | **InputField**   | Base input field component             | _Documentation pending_                 |
@@ -130,25 +130,25 @@ import { Button, Input, Modal } from "@g4rcez/components";
 ### ✅ Completed Documentation
 
 - **Core Components**: Button, Polymorph, RenderOnView, Tag
-- **Display Components**: Alert, Card, Tabs
-- **Floating Components**: Modal
-- **Form Components**: Input, Select, Checkbox
+- **Display Components**: Alert, Calendar, Card, Empty, Notifications, Progress, Skeleton, Tabs
+- **Floating Components**: CommandPalette, Dropdown, Modal, Tooltip
+- **Form Components**: Autocomplete, Checkbox, FileUpload, Input, Select
 
 ### 🚧 Pending Documentation
 
 The following components are exported and functional but need detailed documentation:
 
-**Display Components (9 remaining)**:
+**Display Components (4 remaining)**:
 
-- Calendar, Empty, List, Notifications, Progress, Shortcut, Skeleton, Stats, Step, Timeline
+- List, Shortcut, Stats, Step, Timeline
 
-**Floating Components (5 remaining)**:
+**Floating Components (3 remaining)**:
 
-- CommandPalette, Dropdown, Expand, Menu, Toolbar, Tooltip
+- Expand, Menu, Toolbar
 
-**Form Components (11 remaining)**:
+**Form Components (9 remaining)**:
 
-- Autocomplete, DatePicker, FileUpload, Form, InputField, MultiSelect, Radiobox, Slider, Switch, TaskList, Textarea, TransferList
+- DatePicker, Form, InputField, MultiSelect, Radiobox, Slider, Switch, TaskList, Textarea, TransferList
 
 **Table Components (1 remaining)**:
 
@@ -160,15 +160,15 @@ The following components are exported and functional but need detailed documenta
 
 Foundation components providing basic functionality, polymorphic capabilities, and performance optimizations.
 
-### Display Components (3/12 documented)
+### Display Components (8/12 documented)
 
 Components focused on presenting information, organizing content, and providing visual feedback to users.
 
-### Floating Components (1/6 documented)
+### Floating Components (4/6 documented)
 
 Overlay components that appear above other content, using Floating UI for proper positioning and interactions.
 
-### Form Components (3/14 documented)
+### Form Components (5/14 documented)
 
 Input and form-related components with built-in validation, accessibility features, and form library integration.
 
@@ -221,7 +221,7 @@ See [TAILWIND_V4_INTEGRATION.md](./TAILWIND_V4_INTEGRATION.md) for the complete 
 ---
 
 **Total Components**: 38 exported components and utilities  
-**Documented**: 11 components (29%)  
-**Remaining**: 27 components (71%)
+**Documented**: 21 components (55%)  
+**Remaining**: 17 components (45%)
 
 This index will be updated as more component documentation is completed.
