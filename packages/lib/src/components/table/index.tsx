@@ -67,7 +67,7 @@ const TableBody = React.forwardRef(
 );
 
 const VirtualTable = React.forwardRef(({ context, className = "", ...props }: any, ref) => (
-    <table {...props} ref={ref as any} role="table" className={`table min-w-full table-fixed border-separate text-left ${className ?? ""}`} />
+    <table {...props} ref={ref as any} role="table" className={`table min-w-full table-fixed border-spacing-0 border-separate text-left ${className ?? ""}`} />
 ));
 
 const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
@@ -79,10 +79,10 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
     return (
         <thead
             {...props}
+            ref={ref}
             style={style}
             role="rowgroup"
             className="hidden top-0 bg-transparent md:table-header-group shadow-shadow-card group:sticky"
-            ref={ref}
         />
     );
 });
@@ -185,15 +185,13 @@ const InnerTable = <T extends Any>({
 
     const context = { loading: props.loading, loadingMore: props.loadingMore, cols: cols as any, Aside: props.Aside };
 
-
     return (
         <div className="min-w-full">
-            <div className={`group w-full relative rounded-lg ${border ? "border border-table-border" : ""}`}>
+            <div className={`group h-full w-full relative rounded-lg ${border ? "border border-table-border" : ""}`}>
                 <TableVirtuoso
                     context={context}
                     components={components}
                     totalCount={rows.length}
-                    style={{ height: "100%" }}
                     itemContent={empty ? EmptyCell : Row}
                     data={empty ? (emptyRows as T[]) : rows}
                     useWindowScroll={getScrollRef ? false : true}

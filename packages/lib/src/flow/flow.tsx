@@ -58,14 +58,14 @@ const Sidebar = (props: { items: CreatableOpts[] }) => {
     };
 
     return (
-        <aside className="absolute top-0 right-0 p-2 rounded-lg border shadow min-w-24 border-floating-border bg-background">
+        <aside className="absolute top-0 right-0 p-2 rounded-lg border shadow min-w-24 border-floating-border bg-card-background shadow-lg">
             <ul className="space-y-2">
                 {props.items.map((item) => (
                     <li
                         draggable
-                        className="flex gap-1.5 items-center text-lg hover:cursor-grab hover:text-primary"
                         key={`${item.id}-flow-side-item`}
                         onDragStart={(event) => onDragStart(event, item)}
+                        className="flex gap-1.5 items-center text-lg hover:cursor-grab hover:text-primary"
                     >
                         {item.Icon ? <item.Icon size={16} /> : null}
                         {item.title}
@@ -101,13 +101,17 @@ type CustomNodeProps = FlowItem<any> & {
     type: "input" | "custom" | "output";
 };
 
-const Handlers = (props: { id: string; type: "source" | "target" }) => {
+const Handlers = (props: { id: string }) => {
     return (
         <Fragment>
-            <Handle id={`${props.id}-handle-top`} type={props.type} position={Position.Top} className="h-1 w-10 !bg-primary" />
-            <Handle id={`${props.id}-handle-left`} type={props.type} position={Position.Left} className="h-4 w-1 !bg-primary" />
-            <Handle id={`${props.id}-handle-right`} type={props.type} position={Position.Right} className="h-4 w-1 !bg-primary" />
-            <Handle id={`${props.id}-handle-bottom`} type={props.type} position={Position.Bottom} className="h-1 w-10 !bg-primary" />
+            <Handle id={`${props.id}-handle-top`} type="source" position={Position.Top} className="h-0.5 w-10 !bg-primary" />
+            <Handle id={`${props.id}-handle-left`} type="source" position={Position.Left} className="h-4 w-0.5 !bg-primary" />
+            <Handle id={`${props.id}-handle-right`} type="source" position={Position.Right} className="h-4 w-0.5 !bg-primary" />
+            <Handle id={`${props.id}-handle-bottom`} type="source" position={Position.Bottom} className="h-0.5 w-10 !bg-primary" />
+            <Handle id={`${props.id}-handle-top`} type="target" position={Position.Top} className="h-0.5 w-10 !bg-primary" />
+            <Handle id={`${props.id}-handle-left`} type="target" position={Position.Left} className="h-4 w-0.5 !bg-primary" />
+            <Handle id={`${props.id}-handle-right`} type="target" position={Position.Right} className="h-4 w-0.5 !bg-primary" />
+            <Handle id={`${props.id}-handle-bottom`} type="target" position={Position.Bottom} className="h-0.5 w-10 !bg-primary" />
         </Fragment>
     );
 };
@@ -121,7 +125,7 @@ const Input = memo((node: CustomNodeProps) => {
                 "border-floating-border"
             )}
         >
-            <Handlers id={node.data.id} type="source" />
+            <Handlers id={node.data.id} />
             {node.data.Item ? <node.data.Item {...node} /> : <h3 className="text-center">{node.data.title}</h3>}
         </div>
     );
@@ -145,7 +149,7 @@ const Connection = memo((node: CustomNodeProps) => {
             >
                 <XIcon size={18} />
             </button>
-            <Handlers id={node.data.id} type="target" />
+            <Handlers id={node.data.id} />
             {node.data.Item ? <node.data.Item {...node} /> : <h3 className="text-center">{node.data.title}</h3>}
         </div>
     );
@@ -163,11 +167,13 @@ const AddNodeOnEdgeDrop = <T extends Node = Node>(props: Props<T>) => {
 
     useEffect(() => {
         props.onChange(nodes);
-    }, [nodes.length]);
+    }, [nodes.length, edges.length]);
 
     const onConnect = useCallback<OnConnect>(
         (params) => {
-            setEdges((eds) => addEdge({ ...params, animated: true, markerEnd: { type: MarkerType.Arrow } }, eds));
+            setEdges((eds) => addEdge({
+                ...params, animated: true, deletable: true, reconnectable: true,
+            }, eds));
         },
         [setEdges]
     );
@@ -211,18 +217,17 @@ const AddNodeOnEdgeDrop = <T extends Node = Node>(props: Props<T>) => {
                 nodeOrigin={[0, 0]}
                 onConnect={onConnect}
                 onDragOver={onDragOver}
-                className="bg-background"
+                className="bg-transparent"
                 nodeTypes={nodeTypes as any}
                 onEdgesChange={onEdgesChange}
                 onNodesChange={onNodesChange}
-                attributionPosition="top-right"
+                attributionPosition="bottom-left"
                 fitViewOptions={{ padding: 2 }}
                 onDragStart={onDragStart as any}
                 colorMode={props.theme ?? "dark"}
             >
-                <MiniMap />
-                <Background bgColor="hsla(var(--floating-background))" />
                 <Controls />
+                <Background bgColor="hsla(var(--floating-background))" />
             </ReactFlow>
             <Sidebar items={props.parents} />
         </div>

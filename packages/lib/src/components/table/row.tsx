@@ -44,11 +44,11 @@ const RowAside = (props: PropsWithChildren) => {
             onMouseEnter={onEnter}
             onMouseLeave={onLeave}
             data-component="cell-aside"
-            // inert={ariaHidden ? true : undefined}
+            inert={ariaHidden ? true : undefined}
             tabIndex={ariaHidden ? -1 : undefined}
-            className={`group-table-cell-aside absolute inset-0 top-0 flex h-full w-full min-w-8 max-w-20 items-stretch transition-opacity duration-300 ease-in-out ${className}`}
+            className={`group-table-cell-aside absolute inset-0 top-0 flex h-full w-full items-stretch transition-opacity duration-300 ease-in-out ${className}`}
         >
-            <div ref={ref} className="isolate block h-full w-auto">
+            <div ref={ref} className="block isolate">
                 {props.children}
             </div>
         </div>
@@ -80,7 +80,7 @@ export const Row = (index: number, row: any, context: ItemContentContext) => {
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className="block md:hidden text-sm font-bold leading-tight">{col.thead}</span>
+                        <span className="block text-sm font-bold leading-tight md:hidden">{col.thead}</span>
                         <span className="relative">
                             {loading ? (
                                 SkeletonCell

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  -webkit-text-size-adjust: 100%; 
+    -webkit-text-size-adjust: 100%;
 }
 
 select.select {
@@ -14,7 +14,9 @@ select.select {
     text-overflow: '';
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     font-size: 16px;
 }
 
@@ -29,6 +31,11 @@ input[type="number"] {
 }
 
 @layer components {
+
+    a[href="https://reactflow.dev"] {
+        display: none;
+    }
+
     .group-table-row:hover .group-table-cell-aside {
         @apply opacity-100;
     }
@@ -63,9 +70,7 @@ input[type="number"] {
         --xy-selection-background-color-default: rgba(150, 150, 180, 0.1);
         --xy-selection-border-default: 1px dotted rgba(155, 155, 155, 0.8);
         --xy-resize-background-color-default: #3367d9;
-
         direction: ltr;
-        background-color: var(--xy-background-color, var(--xy-background-color-default));
     }
 
     .react-flow.dark {
@@ -94,8 +99,7 @@ input[type="number"] {
     }
 
     .react-flow__background {
-        background-color: var(--xy-background-color, var(--xy-background-color-props, var(--xy-background-color-default)));
-        pointer-events: none;
+        @apply bg-transparent pointer-events-none;
         z-index: -1;
     }
 
@@ -319,7 +323,8 @@ input[type="number"] {
         bottom: 0;
     }
 
-    .react-flow__panel.top.center, .react-flow__panel.bottom.center {
+    .react-flow__panel.top.center,
+    .react-flow__panel.bottom.center {
         left: 50%;
         transform: translateX(-50%);
     }
@@ -332,7 +337,8 @@ input[type="number"] {
         right: 0;
     }
 
-    .react-flow__panel.left.center, .react-flow__panel.right.center {
+    .react-flow__panel.left.center,
+    .react-flow__panel.right.center {
         top: 50%;
         transform: translateY(-50%);
     }
@@ -379,10 +385,8 @@ input[type="number"] {
     }
 
     .react-flow__minimap {
-        background: var(
-                --xy-minimap-background-color-props,
-                var(--xy-minimap-background-color, var(--xy-minimap-background-color-default))
-        );
+        background: var(--xy-minimap-background-color-props,
+                var(--xy-minimap-background-color, var(--xy-minimap-background-color-default)));
     }
 
     .react-flow__minimap-svg {
@@ -390,54 +394,36 @@ input[type="number"] {
     }
 
     .react-flow__minimap-mask {
-        fill: var(
-                --xy-minimap-mask-background-color-props,
-                var(--xy-minimap-mask-background-color, var(--xy-minimap-mask-background-color-default))
-        );
-        stroke: var(
-                --xy-minimap-mask-stroke-color-props,
-                var(--xy-minimap-mask-stroke-color, var(--xy-minimap-mask-stroke-color-default))
-        );
-        stroke-width: var(
-                --xy-minimap-mask-stroke-width-props,
-                var(--xy-minimap-mask-stroke-width, var(--xy-minimap-mask-stroke-width-default))
-        );
+        fill: var(--xy-minimap-mask-background-color-props,
+                var(--xy-minimap-mask-background-color, var(--xy-minimap-mask-background-color-default)));
+        stroke: var(--xy-minimap-mask-stroke-color-props,
+                var(--xy-minimap-mask-stroke-color, var(--xy-minimap-mask-stroke-color-default)));
+        stroke-width: var(--xy-minimap-mask-stroke-width-props,
+                var(--xy-minimap-mask-stroke-width, var(--xy-minimap-mask-stroke-width-default)));
     }
 
     .react-flow__minimap-node {
-        fill: var(
-                --xy-minimap-node-background-color-props,
-                var(--xy-minimap-node-background-color, var(--xy-minimap-node-background-color-default))
-        );
-        stroke: var(
-                --xy-minimap-node-stroke-color-props,
-                var(--xy-minimap-node-stroke-color, var(--xy-minimap-node-stroke-color-default))
-        );
-        stroke-width: var(
-                --xy-minimap-node-stroke-width-props,
-                var(--xy-minimap-node-stroke-width, var(--xy-minimap-node-stroke-width-default))
-        );
+        fill: var(--xy-minimap-node-background-color-props,
+                var(--xy-minimap-node-background-color, var(--xy-minimap-node-background-color-default)));
+        stroke: var(--xy-minimap-node-stroke-color-props,
+                var(--xy-minimap-node-stroke-color, var(--xy-minimap-node-stroke-color-default)));
+        stroke-width: var(--xy-minimap-node-stroke-width-props,
+                var(--xy-minimap-node-stroke-width, var(--xy-minimap-node-stroke-width-default)));
     }
 
     .react-flow__background-pattern.dots {
-        fill: var(
-                --xy-background-pattern-color-props,
-                var(--xy-background-pattern-color, var(--xy-background-pattern-dots-color-default))
-        );
+        fill: var(--xy-background-pattern-color-props,
+                var(--xy-background-pattern-color, var(--xy-background-pattern-dots-color-default)));
     }
 
     .react-flow__background-pattern.lines {
-        stroke: var(
-                --xy-background-pattern-color-props,
-                var(--xy-background-pattern-color, var(--xy-background-pattern-lines-color-default))
-        );
+        stroke: var(--xy-background-pattern-color-props,
+                var(--xy-background-pattern-color, var(--xy-background-pattern-lines-color-default)));
     }
 
     .react-flow__background-pattern.cross {
-        stroke: var(
-                --xy-background-pattern-color-props,
-                var(--xy-background-pattern-color, var(--xy-background-pattern-cross-color-default))
-        );
+        stroke: var(--xy-background-pattern-color-props,
+                var(--xy-background-pattern-color, var(--xy-background-pattern-cross-color-default)));
     }
 
     .react-flow__controls {

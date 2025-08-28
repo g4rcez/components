@@ -1,7 +1,7 @@
 {
   "name": "@g4rcez/components",
   "description": "Customizable react components.",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.12.3",
@@ -37,8 +37,8 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@floating-ui/react": "0.27.12",
-    "@xyflow/react": "12.7.1",
+    "@floating-ui/react": "0.27.15",
+    "@xyflow/react": "12.8.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
@@ -50,7 +50,7 @@
     "radix-ui": "1.4.2",
     "react-dropzone": "14.3.8",
     "react-use-measure": "2.1.7",
-    "react-virtuoso": "4.13.0",
+    "react-virtuoso": "4.14.0",
     "sidekicker": "0.1.10",
     "storage-manager-js": "4.2.6-5",
     "tailwind-merge": "3.3.1",

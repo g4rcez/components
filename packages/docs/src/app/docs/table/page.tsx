@@ -15,7 +15,7 @@ import {
   useStableRef,
 } from "../../../../../lib/src";
 
-type User = { id: string; name: number; type: string; document: string };
+type User = { id: string; name: string; type: string; document: string };
 
 const cols = createColumns<User>((col) => {
   col.add("name", "Nome", {
@@ -23,12 +23,19 @@ const cols = createColumns<User>((col) => {
     allowFilter: true,
     type: ColType.Number,
     Element: (props) => (
-      <Fragment>
+      <span className="break-words whitespace-pre-line">
         {props.rowIndex}. {props.value}
-      </Fragment>
+      </span>
     ),
   });
-  col.add("id", "ID");
+  col.add("id", "ID", {
+    Element: (props) => (
+      <span className="whitespace-nowrap">
+        {props.rowIndex}. {props.value}
+      </span>
+    ),
+
+  });
   col.add("type", "Type");
   col.add("document", "Document");
 });
@@ -36,7 +43,7 @@ const cols = createColumns<User>((col) => {
 const clients = Array.from({ length: 500 }).map(
   (_, i): User => ({
     id: uuid(),
-    name: i,
+    name: `${i}`.repeat(i).substring(0, 30),
     type: i % 2 === 0 ? "pj" : "pf",
     document: i % 2 === 0 ? "000.000.000-00" : "00.000.000/0001-00",
   }),
