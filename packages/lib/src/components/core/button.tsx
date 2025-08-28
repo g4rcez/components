@@ -15,6 +15,7 @@ const variants = {
         default: "h-10 px-4 py-2",
         min: "h-7 px-3 py-1 text-sm",
         small: "h-8 px-4 py-2 text-sm",
+        tiny: "h-6 px-2 py-1 text-sm",
     },
     rounded: {
         rough: "rounded-sm",

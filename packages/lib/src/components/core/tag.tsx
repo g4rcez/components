@@ -45,7 +45,7 @@ const indicatorVariant = cva("size-2.5 aspect-square rounded-full border-0", {
     },
 });
 
-const tagVariants = cva("inline-flex rounded-pill gap-1.5 border-2 border-transparent items-center justify-center align-middle whitespace-nowrap", {
+const tagVariants = cva("inline-flex rounded-pill gap-1.5 border-0 items-center justify-center align-middle whitespace-nowrap", {
     variants,
     defaultVariants: { theme: "primary", size: "default" },
 });

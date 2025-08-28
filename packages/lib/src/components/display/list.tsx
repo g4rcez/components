@@ -31,54 +31,50 @@ type FloatItemProps = {
     setter: () => void;
     context: FloatingContext;
     item: IdAnimatedItem | null;
-    get: ReturnType<typeof useInteractions>["getFloatingProps"];
     refs: { setFloating: any };
+    get: ReturnType<typeof useInteractions>["getFloatingProps"];
 };
 
 const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
     <FloatingPortal>
-        <MotionConfig reducedMotion="user" transition={{ type: "tween", stiffness: 25, duration: 0.2 }}>
+        <MotionConfig reducedMotion="user" transition={{ type: "tween", stiffness: 25, duration: 0.3 }}>
             <AnimatePresence presenceAffectsLayout>
-                <AnimatePresence>
-                    {item ? (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="pointer-events-none fixed inset-0 top-0 z-floating h-screen w-screen bg-floating-overlay/70"
-                        />
-                    ) : null}
-                </AnimatePresence>
-                <AnimatePresence>
-                    {item ? (
-                        <FloatingOverlay lockScroll className="absolute inset-0 z-tooltip flex items-center justify-center">
-                            <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
-                                <motion.div
-                                    layout
-                                    layoutId={`item-${item.id}`}
-                                    className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow-shadow-card"
-                                    ref={refs.setFloating}
-                                    {...get()}
-                                >
-                                    <nav className="absolute right-4 top-1 lg:right-2">
-                                        <button
-                                            type="button"
-                                            onClick={setter}
-                                            className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
-                                        >
-                                            <XIcon />
-                                        </button>
-                                    </nav>
-                                    <header className="flex w-full flex-wrap items-center justify-between gap-2">
-                                        <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
-                                        <p className="text-sm leading-snug text-secondary">{item.description}</p>
-                                    </header>
-                                    {item.children}
-                                </motion.div>
-                            </FloatingFocusManager>
-                        </FloatingOverlay>
-                    ) : null}
-                </AnimatePresence>
+                {item ? (
+                    <motion.div
+                        exit={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        initial={{ opacity: 0 }}
+                        className="pointer-events-none fixed inset-0 top-0 z-overlay h-screen w-screen bg-floating-overlay/70"
+                    />
+                ) : null}
+                {item ? (
+                    <FloatingOverlay lockScroll className="absolute inset-0 z-floating flex items-center justify-center">
+                        <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
+                            <motion.div
+                                layout
+                                layoutId={`item-${item.id}`}
+                                className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow-shadow-card"
+                                ref={refs.setFloating}
+                                {...get()}
+                            >
+                                <nav className="absolute right-4 top-1 lg:right-2">
+                                    <button
+                                        type="button"
+                                        onClick={setter}
+                                        className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                    >
+                                        <XIcon />
+                                    </button>
+                                </nav>
+                                <header className="flex w-full flex-wrap items-center justify-between gap-2">
+                                    <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
+                                    <p className="text-sm leading-snug text-secondary">{item.description}</p>
+                                </header>
+                                {item.children}
+                            </motion.div>
+                        </FloatingFocusManager>
+                    </FloatingOverlay>
+                ) : null}
             </AnimatePresence>
         </MotionConfig>
     </FloatingPortal>
@@ -135,7 +131,7 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                                             <div className="flex flex-row flex-nowrap justify-between gap-4">
                                                 <button
                                                     onClick={setter}
-                                                    className="cursor-pointer text-left transition-all ease-out hover:scale-105 hover:text-primary"
+                                                    className="cursor-pointer text-left transition-all ease-out hover:text-primary"
                                                 >
                                                     <h3>{item.title}</h3>
                                                     <p className="text-sm leading-snug text-secondary">{item.description}</p>

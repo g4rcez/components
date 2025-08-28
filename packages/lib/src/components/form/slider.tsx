@@ -1,13 +1,12 @@
 "use client";
 import { Slider as RadixSlider } from "radix-ui";
-import { type SliderProps as RadixSliderProps } from "@radix-ui/react-slider";
 import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
 import { Tooltip } from "../floating/tooltip";
 import { useEffect, useRef, useState } from "react";
 import { uuid } from "../../lib/fns";
 
-type SliderProps = RadixSliderProps & {
+type SliderProps = Parameters<typeof RadixSlider.Root>[0] & {
     tooltip?: boolean;
 };
 

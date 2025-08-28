@@ -11,6 +11,7 @@ export * from "./display/progress";
 export * from "./display/stats";
 export * from "./display/tabs";
 export * from "./display/timeline";
+export * from "./display/list";
 export * from "./floating/command-palette";
 export * from "./floating/dropdown";
 export * from "./floating/expand";

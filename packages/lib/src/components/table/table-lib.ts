@@ -87,7 +87,7 @@ export type ColConstructor<T extends POJO> = {
     remove: <K extends AllPaths<T>>(id: K) => void;
     filter: (c: (c: Col<T>) => boolean) => Col<T>[];
     add: <K extends AllPaths<T>>(id: K, thead: THead, props?: ColOptions<T, K>) => void;
-};
+};;
 
 const cols =
     <T extends POJO>() =>
