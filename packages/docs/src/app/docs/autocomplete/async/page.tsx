@@ -85,6 +85,23 @@ export default function FormPage() {
           placeholder="Your language"
           onChange={(e) => setValue(e.target.value)}
         />
+        <Autocomplete
+          required
+          id="async"
+          title="Async"
+          value={value}
+          options={defaults}
+          placeholder="Your language"
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <Autocomplete
+          required
+          id="async"
+          title="Async"
+          value=""
+          options={options}
+          placeholder="Your language"
+        />
       </Card>
     </DocsLayout>
   );

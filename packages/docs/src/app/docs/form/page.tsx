@@ -49,6 +49,7 @@ const schema = z.object({
   boolean: z.literal(true),
   languages: z.array(z.string()),
   date: z.string().datetime(),
+  datetime: z.string().datetime(),
   name: z.string().min(1),
   document: z.string().min(1),
   surname: z.string().min(1),
@@ -142,9 +143,14 @@ export default function FormPage() {
             })}
           />
           <DatePicker
-            {...form.datepicker("date", {
+            {...form.datepicker("date", { title: "Date", clickToClose: true })}
+          />
+          <DatePicker
+            {...form.datepicker("datetime", {
               title: "Date",
-              placeholder: "31/12/2077",
+              type: "datetime",
+              datetimeTitle: "Localtime",
+              onChange: (d) => console.log(d),
             })}
           />
           <Switch

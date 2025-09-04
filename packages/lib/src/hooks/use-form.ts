@@ -299,7 +299,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
     []
   );
 
-  const datepicker = <Props extends DatePickerProps>(name: Fields, props: Props = noop): Props => {
+  const datepicker = (name: Fields, props: DatePickerProps = noop): DatePickerProps => {
     const validator = getSchemaShape(name, schema);
     const onChange = (date: Date) => {
       if (!isValid(date)) return;

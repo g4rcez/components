@@ -12,6 +12,8 @@ import {
     startOfMonth,
     startOfWeek,
     sub,
+    format,
+    set,
 } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig, type Transition, type Variants } from "motion/react";
@@ -25,12 +27,15 @@ import { useSwipe } from "../../hooks/use-swipe";
 import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import { splitInto, uuid } from "../../lib/fns";
+import { Input } from "../form/input";
+
+const timeRegex = /^(?<hour>\d\d):(?<min>\d\d)$/
 
 const transition: Transition = { type: "spring", bounce: 0.3, duration: 0.6 };
 
 const dir =
     (mod: number) =>
-    (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
+        (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
 
 const variants: Variants = {
     enter: dir(1),
@@ -62,13 +67,15 @@ export type CalendarProps = Partial<{
     markRange: boolean;
     markToday: boolean;
     rangeMode: boolean;
+    datetimeTitle: string
     styles: CalendarStyles;
+    type?: "date" | "datetime"
     changeOnlyOnClick: boolean;
     locale: Locales | undefined;
     onChangeYear: (d: Date) => void;
     onChangeMonth: (d: Date) => void;
-    RenderOnDay: React.FC<{ date: Date }>;
     disabledDate: (date: Date) => boolean;
+    RenderOnDay: React.FC<{ date: Date }>;
     onChange: OnChangeRange | OnChangeDate;
     labelRange: { to: string; from: string };
 }>;
@@ -151,7 +158,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
                             const key = day.toISOString();
                             const isSelected = props.rangeMode
                                 ? key === props.range?.to?.toISOString() || key === props.range?.from?.toISOString()
-                                : key === props.date?.toISOString();
+                                : key === (props.date ? startOfDay(props.date).toISOString() : undefined)
                             const today = isToday(day) && props.markToday;
                             const disabledByFn = props.disabledDate?.(day) || false;
                             const sameMonth = isSameMonth(day, props.stateDate);
@@ -207,7 +214,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
 
 type SelectMode = "from" | "to";
 
-const setToday = () => startOfDay(new Date());
+const getToday = () => startOfDay(new Date());
 
 export const Calendar = ({
     RenderOnDay,
@@ -222,6 +229,8 @@ export const Calendar = ({
     onChange,
     styles,
     markRange = true,
+    type = "date",
+    datetimeTitle,
     ...props
 }: CalendarProps) => {
     const id = useRef(uuid());
@@ -280,9 +289,9 @@ export const Calendar = ({
                     range: !isRangeMode
                         ? state.range
                         : {
-                              from: state.selectMode === "from" ? date : state.range.from,
-                              to: state.selectMode === "to" ? date : state.range.to,
-                          },
+                            from: state.selectMode === "from" ? date : state.range.from,
+                            to: state.selectMode === "to" ? date : state.range.to,
+                        },
                 };
             },
             onChangeMonth: (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -366,7 +375,7 @@ export const Calendar = ({
     }, 10);
 
     const onSetToday = () => {
-        const d = setToday();
+        const d = getToday();
         dispatch.date(() => d);
         onChange?.(d);
     };
@@ -479,6 +488,29 @@ export const Calendar = ({
                         </motion.div>
                     </AnimatePresence>
                 </div>
+                {type === "datetime" ? (
+                    <section className="grid items-center my-4">
+                        <Input
+                            info={null}
+                            mask="time"
+                            optionalText=" "
+                            container="w-full"
+                            reportStatus={false}
+                            defaultValue={date ? format(date, "HH:mm") : undefined}
+                            title={datetimeTitle || translations.calendarDatetimeTitle}
+                            onChange={e => {
+                                const value = e.target.value;
+                                const match = timeRegex.exec(value);
+                                if (!match) return;
+                                const hour = match.groups!.hour;
+                                const min = match.groups!.min;
+                                const d = set(state.date, { hours: Number(hour), minutes: Number(min), seconds: 0 })
+                                dispatch.date(() => d);
+                                onChange?.(d)
+                            }}
+                        />
+                    </section>
+                ) : null}
                 <footer className="mt-2 text-center text-primary">
                     <button type="button" onClick={onSetToday} className="transition-transform duration-300 hover:scale-105">
                         {translations.calendarToday}

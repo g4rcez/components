@@ -6,6 +6,7 @@ export const defaultTranslations = {
     calendarFromDate: "From",
     calendarMonthLabel: "Month",
     calendarNextMonth: "Next month",
+    calendarDatetimeTitle: "Time",
     calendarToDate: "To",
     calendarToday: "Today",
     commandPaletteEmpty: "Nothing here...",

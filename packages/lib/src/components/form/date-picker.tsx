@@ -10,34 +10,46 @@ import { Calendar, CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
 import { Input, InputProps } from "./input";
 
-export type DatePickerProps = Omit<Override<InputProps, CalendarProps>, "currency">;
-
+export type DatePickerProps = Omit<Override<InputProps, CalendarProps & {
+    clickToClose?: boolean
+}>, "currency">
 const fixedDate = new Date(1970, 11, 31);
 
 const parts = {
     year: () => [/\d/, /\d/, /\d/, /\d/],
     month: () => [/\d/, /\d/],
     day: () => [/\d/, /\d/],
+    hour: () => [/\d/, /\d/],
+    minute: () => [/\d/, /\d/],
     literal: (str: string) => str.split(""),
 } satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, (str: string) => Array<string | RegExp>>>;
 
 const placeholders = {
-    year: () => "yyyy",
-    month: () => "MM",
     day: () => "dd",
+    hour: () => "HH",
+    month: () => "MM",
+    minute: () => "mm",
+    year: () => "yyyy",
     literal: (str: string) => str,
-};
+} satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, string | ((x: string) => string)>>;
 
 const partValues = {
-    literal: (date: Date, str: string) => str,
-    year: (date: Date) => date.getFullYear(),
+    literal: (_: Date, str: string) => str,
+    hour: (date: Date) => date.getHours().toString(),
+    year: (date: Date) => date.getFullYear().toString(),
+    minute: (date: Date) => date.getMinutes().toString(),
     day: (date: Date) => date.getDate().toString().padStart(2, "0"),
     month: (date: Date) => (date.getMonth() + 1).toString().padStart(2, "0"),
-};
+} satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, ((date: Date, str: string) => string)>>
 
 const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
     try {
-        return datetimeFormat.formatToParts(date);
+        return datetimeFormat.formatToParts(date).map(x => {
+            if ((x.type === "literal" && x.value === ", ")) {
+                return { type: x.type, value: " " };
+            }
+            return x
+        });
     } catch (e) {
         return [];
     }
@@ -46,11 +58,15 @@ const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
 type Mask = string | RegExp;
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-    ({ date, locale: inputLocal, disabledDate, onChange, markToday, ...props }: DatePickerProps, externalRef) => {
+    ({ date, locale: inputLocal, disabledDate, onChange, markToday, clickToClose, type, ...props }: DatePickerProps, externalRef) => {
         const locale = useLocale(inputLocal);
         const labelId = useId();
         const translation = useTranslations();
-        const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale), [locale]);
+        const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale, type === "datetime"
+            ? { day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric" }
+            : { day: "numeric", month: "numeric", year: "numeric" }),
+            [locale, type]
+        );
         const [innerDate, setInnerDate] = useState(date || undefined);
         const [open, setOpen] = useState(false);
         const mask: Mask[] = formatParts(datetimeFormat, fixedDate).flatMap((x) => (Is.keyof(parts, x.type) ? (parts[x.type](x.value) as any) : []));
@@ -63,9 +79,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             !innerDate
                 ? ""
                 : formatParts(datetimeFormat, innerDate).reduce(
-                      (acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""),
-                      ""
-                  )
+                    (acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""),
+                    ""
+                )
         );
 
         const onChangeDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +93,8 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     return typeof x === "string" ? c === x : x.test(c);
                 });
                 if (matches) {
-                    const d = startOfDay(parse(v, placeholder, new Date()));
+                    const parsed = parse(v, placeholder, new Date())
+                    const d = type === "datetime" ? parsed : startOfDay(parsed);
                     setInnerDate(d);
                     return onChange?.(d);
                 }
@@ -89,6 +106,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         const onChangeDate = (d: Date | undefined) => {
             setInnerDate(d);
             onChange?.(d);
+            if (clickToClose) setOpen(false);
             if (d) return setValue(format(d, placeholder));
             return setValue("");
         };
@@ -111,7 +129,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 onChange={onChangeDateInput}
                 required={props.required ?? true}
                 error={open ? undefined : props.error}
-                placeholder={props.placeholder ?? placeholder}
+                placeholder={props.placeholder || placeholder}
                 right={
                     <Fragment>
                         <input
@@ -127,6 +145,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                         <Dropdown
                             open={open}
                             onChange={setOpen}
+                            buttonProps={{ "aria-describedby": labelId }}
                             trigger={
                                 <span aria-labelledby={labelId}>
                                     <span id={labelId} className="sr-only">
@@ -135,10 +154,10 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                                     <CalendarIcon />
                                 </span>
                             }
-                            buttonProps={{ "aria-describedby": labelId }}
                         >
                             <Calendar
                                 {...(props as any)}
+                                type={type}
                                 locale={locale}
                                 changeOnlyOnClick
                                 markToday={markToday}

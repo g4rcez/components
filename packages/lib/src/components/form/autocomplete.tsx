@@ -26,7 +26,6 @@ import { fzf } from "../../lib/fzf";
 import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
-import { useReducer } from "use-typed-reducer";
 
 export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
 
@@ -94,53 +93,37 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const scroller = useRef<HTMLElement | null>(null);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
-        const defaults = options.length === 0 ? "" : props.value ?? props.defaultValue ?? "";
+        const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
-        const [state, dispatch] = useReducer({
-            open: false,
-            shadow: "",
-            value: defaults,
-            label: options.find((x) => x.value === defaults)?.label ?? defaults,
-            index: null as number | null
-        }, (get) => ({
-            open: (open: boolean) => ({ open }),
-            index: (index: number) => ({ index }),
-            shadow: (shadow: string) => ({ shadow }),
-            option: (value: string, label: string) => ({ value, label }),
-            select: (value: string, label: string, index: number) => ({ open: false, shadow: "", index, value, label }),
-            caretDown: () => ({ open: true, shadow: "" }),
-            onClose: () => ({ open: false, label: "", value: "", shadow: "" }),
-            onFocus: () => {
-                const prev = get.state();
-                return { index: prev.index === null ? 0 : prev.index, open: true, shadow: "" }
-            }
-
-        }))
         const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
+        const [open, setOpen] = useState(false);
+        const [shadow, setShadow] = useState("");
+        const [value, setValue] = useState(defaults);
+        const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
+        const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
-        const removeScrollRef = useRemoveScroll(state.open, "block-only");
+        const removeScrollRef = useRemoveScroll(open, "block-only");
         const innerOptions: AutocompleteItemProps[] =
-            dynamicOption && state.shadow !== ""
+            dynamicOption && shadow !== ""
                 ? [
                     {
-                        value: state.shadow,
-                        label: state.shadow,
+                        value: shadow,
+                        label: shadow,
                         "data-dynamic": "true",
                     },
                     ...options,
                 ]
                 : options;
 
-        const list = state.shadow
-            ? fzf(innerOptions, "value", [
-                { key: "value", value: state.shadow },
-                { key: "label", value: state.shadow },
-            ])
+        const openDropdown = () => flushSync(() => setOpen(true));
+
+        const list = shadow
+            ? fzf(innerOptions, "value", [{ key: "value", value: shadow }, { key: "label", value: shadow }])
             : innerOptions;
 
         const setClosed = () => {
+            setOpen(false);
             setH(0);
-            dispatch.open(false);
         };
 
         const displayList = list.filter((x) => x.hidden !== true);
@@ -150,10 +133,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
         const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
-            open: state.open,
+            open,
             transform: true,
+            onOpenChange: setOpen,
             placement: "bottom-start",
-            onOpenChange: dispatch.open,
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),
@@ -182,19 +165,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 loop: true,
                 virtual: true,
                 allowEscape: true,
+                activeIndex: index,
+                selectedIndex: index,
                 focusItemOnOpen: "auto",
                 openOnArrowKeyDown: true,
                 scrollItemIntoView: true,
-                activeIndex: state.index,
-                selectedIndex: state.index,
             }),
         ]);
 
         useEffect(() => {
             if (props.value) {
-                if (options.length === 0) return dispatch.option("", "");
                 const item = options.find((x) => x.value === props.value);
-                if (item) return dispatch.option(item.value, item.label ?? item.value)
+                if (item) {
+                    setLabel(item.label ?? item.value);
+                    setValue(props.value);
+                }
             }
         }, [props.value, options.length]);
 
@@ -204,7 +189,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             if (inputRef.current === null) return;
             const s = getRemainingSize(inputRef.current as HTMLElement, window.innerHeight);
             setTimeout(() => setH(Math.min(s, displayList.length * MIN_SIZE)), 100);
-        }, [state.shadow, state.open, refs.reference, displayList.length]);
+        }, [shadow, open, refs.reference, displayList.length]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -213,36 +198,47 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         }, []);
 
         const onSelect = (opt: AutocompleteItemProps, i: number) => {
+            setValue(opt.value);
             const input = refs.reference.current as HTMLInputElement;
-            if (!input) {
-                return void dispatch.option(opt.value, opt.label ?? opt.value)
-            }
+            if (!input) return;
             input?.setAttribute("data-value", opt.value);
             input.value = opt.value;
             const event = new Event("change", { bubbles: false, cancelable: true });
             input.dispatchEvent(event);
             if (props.onChange) props.onChange(event as any);
-            const label = options.find(x => x.value === opt.value)?.label || opt.value;
-            dispatch.select(opt.value, label, i);
+            setLabel(opt.label ?? "");
+            setClosed();
+            setShadow("");
+            setIndex(i);
         };
 
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             const value = event.target.value;
-            dispatch.shadow(value);
-            if (!open && value === "") return dispatch.open(true);
+            setShadow(value);
+            if (!open && value === "") return setOpen(true);
             event.target.name = props.name || "";
-            return value ? dispatch.open(true) : props.onChange?.(event);
+            return value ? setOpen(true) : props.onChange?.(event);
         };
 
         const onCaretDownClick = () => {
-            dispatch.caretDown();
+            openDropdown();
+            setShadow("");
             (refs.reference.current as HTMLInputElement)?.focus();
+        };
+
+        const onFocus = () => {
+            setIndex((prev) => (prev === null ? 0 : prev));
+            openDropdown();
+            setShadow("");
         };
 
         const onClose = () => {
             (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
-            dispatch.onClose();
+            setShadow("");
+            setValue("");
+            setLabel("");
             dispatchInput(refs.reference.current as HTMLInputElement);
+            setClosed();
         };
 
         const id = props.id || props.name;
@@ -279,7 +275,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <ChevronDown size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
-                        {state.value ? (
+                        {value ? (
                             <button type="button" onClick={onClose} className="p-2 transition-colors link:text-danger md:p-1">
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -298,8 +294,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     data-shadow="true"
                     {...getReferenceProps({
                         ...props,
-                        onFocus: dispatch.onFocus,
+                        onFocus,
                         pattern,
+                        onChange,
                         id: shadowId,
                         name: shadowId,
                         ref: refs.setReference,
@@ -311,21 +308,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             }
                             if (!open) return;
                             if (event.key === "ArrowDown") {
-                                let next = Is.number(state.index) ? state.index + 1 : 0;
+                                let next = Is.number(index) ? index + 1 : 0;
                                 if (next > displayList.length - 1) next = 0;
                                 virtuoso.current?.scrollIntoView({ index: next });
-                                return dispatch.index(next);
+                                return setIndex(next);
                             }
                             if (event.key === "ArrowUp") {
-                                let next = Is.number(state.index) ? state.index! - 1 : displayList.length - 1;
+                                let next = Is.number(index) ? index! - 1 : displayList.length - 1;
                                 if (next < 0) next = displayList.length - 1;
                                 virtuoso.current?.scrollIntoView({ index: next });
-                                return dispatch.index(next);
+                                return setIndex(next);
                             }
                             if (event.key === "Enter") {
-                                if (state.index !== null && displayList[state.index]) {
+                                if (index !== null && displayList[index]) {
                                     event.preventDefault();
-                                    return onSelect(displayList[state.index], state.index);
+                                    return onSelect(displayList[index], index);
                                 }
                                 if (displayList.length === 1) {
                                     event.preventDefault();
@@ -334,16 +331,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             }
                         },
                     })}
+                    data-value={value}
+                    data-error={!!error}
                     data-name={id}
                     data-target={id}
-                    autoComplete="off"
-                    onChange={onChange}
                     required={required}
-                    data-error={!!error}
+                    value={open ? shadow : options.length === 0 ? "" : label || value}
                     aria-autocomplete="list"
-                    data-value={state.value}
-                    placeholder={props.placeholder}
-                    value={state.open ? state.shadow : state.label || state.value}
+                    autoComplete="off"
                     className={css(
                         "input placeholder-input-mask group h-input-height w-full flex-1",
                         "rounded-md bg-transparent px-input-x py-input-y text-foreground",
@@ -360,7 +355,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     data-origin={id}
                     ref={externalRef}
                     required={required}
-                    defaultValue={props.value || state.value || undefined}
+                    defaultValue={props.value || value || undefined}
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
@@ -401,8 +396,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     className="max-h-[calc(100%-2px)] overscroll-contain rounded-lg border-floating bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;
-                                        const active = state.value === option.value || state.value === option.label;
-                                        const selected = state.index === i;
+                                        const active = value === option.value || value === option.label;
+                                        const selected = index === i;
                                         const children = option.label ?? option.value;
                                         return (
                                             <button

@@ -12,7 +12,7 @@ export type FreeTextProps<T extends FreeTextTag, ExtraProps extends Any> = Overr
     ExtraProps
 >;
 
-export const createFreeText = <T extends FreeTextTag, Html extends HTMLInputElement | HTMLTextAreaElement, Extra extends Any>(
+export const createFreeText = <const T extends FreeTextTag, const Html extends HTMLInputElement | HTMLTextAreaElement, Extra extends Any>(
     Element: "input" | "textarea" | typeof MaskInput,
     elementName: "input" | "textarea",
     defaultProps: FreeTextProps<T, Extra>,

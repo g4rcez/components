@@ -14,7 +14,7 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
-import React, { Fragment, PropsWithChildren, useId, useMemo, useRef, useState } from "react";
+import React, { Fragment, PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
 
 type DropdownProps = {
     open?: boolean;
@@ -30,6 +30,7 @@ type DropdownProps = {
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const headingId = useId();
     const [open, setOpen] = useState(props.open);
+    useEffect(() => setOpen(props.open), [props.open]);
     const arrowRef = useRef(null);
     const middleware = useMemo(
         () => [
