@@ -1,6 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { z } from "zod";
 import {
   Autocomplete,
@@ -16,6 +16,7 @@ import {
   useForm,
   UseOnSubmitArgs,
 } from "../../../../../lib/src";
+import { add } from "date-fns";
 
 const languages: AutocompleteItemProps[] = [
   { label: "Elixir", value: "ex", Render: () => <span>💧 Elixir</span> },
@@ -72,6 +73,18 @@ const schema = z.object({
 type Data = z.infer<typeof schema>;
 
 type Args = UseOnSubmitArgs<Data>;
+
+const DatePickerControlled = () => {
+  const [date, setDate] = useState(new Date());
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("CHANGING");
+      setDate((prev) => new Date(add(prev, { days: 10, years: 1 })));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+  return <DatePicker title="UseDate" date={date} />;
+};
 
 export default function FormPage() {
   const form = useForm(schema as any, "form");
@@ -153,6 +166,7 @@ export default function FormPage() {
               onChange: (d) => console.log(d),
             })}
           />
+          <DatePickerControlled />
           <Switch
             {...form.checkbox("agree")}
             container="md:col-span-2 lg:col-span-3"

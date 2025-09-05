@@ -14,7 +14,7 @@ import { Slot as RadixSlot } from "radix-ui";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { AnimatePresence, HTMLMotionProps, motion, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
-import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useId, useImperativeHandle, useEffect, RefObject } from "react";
+import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useId, useImperativeHandle, useEffect, RefObject, useRef } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { css, mergeRefs } from "../../lib/dom";
@@ -43,22 +43,22 @@ const drawerLeft: Record<string, TargetAndTransition> = {
 };
 
 const drawerRight: Record<string, TargetAndTransition> = {
-    initial: { x: ["30%", "0%"], opacity: 0.8 },
     enter: { x: "0%", opacity: 1, animationDuration },
     exit: { x: ["0%", "30%"], opacity: 0, animationDuration },
+    initial: { x: ["30%", "0%"], opacity: 0.8, animationDuration },
 };
 
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     sheet: {
-        initial: { opacity: 0.5, y: "25%", animationDuration, transformOrigin: "bottom" },
         enter: { opacity: 1, y: "0%", animationDuration, transformOrigin: "bottom" },
-        exit: { opacity: 0.1, y: "50%", animationDuration, transformOrigin: "bottom" },
+        exit: { opacity: 0.4, y: "10%", animationDuration, transformOrigin: "bottom" },
+        initial: { opacity: 0.7, y: "10%", animationDuration, transformOrigin: "bottom" },
     },
     dialog: {
         exit: { opacity: 0, scale: 0.95, animationDuration },
-        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: "easeInOut" } },
         enter: { opacity: 1, scale: [1.05, 1], animationDuration },
+        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: "easeInOut" } },
     },
 };
 
@@ -119,47 +119,50 @@ const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
 const calculateClose = (n: number) => n * 0.6;
 
 const Draggable = (props: DraggableProps) => {
-    const onDrag = (_: any, info: PanInfo) => {
-        if (props.parent.current) {
-            if (!props.sheet) {
+    if (!props.sheet) {
+        const onDrag = (_: any, info: PanInfo) => {
+            if (props.parent.current) {
                 const div = props.parent.current as HTMLElement;
                 const v = props.value.get() || div.getBoundingClientRect().width;
                 const delta = props.position === "right" ? -info.delta.x : info.delta.x;
                 const value = Math.abs(v + delta);
                 return props.value.set(value);
             }
-            const div = props.parent.current as HTMLElement;
-            const rect = div.getBoundingClientRect();
-            const v = props.value.get() || rect.height;
-            const result = Math.abs(v - info.delta.y);
-            const max = window.outerHeight;
-            const screenHeightToClose = calculateClose(max);
-            if (result >= screenHeightToClose) return props.value.set(result);
-            if (document.activeElement instanceof HTMLElement) {
-                document.activeElement?.blur();
-            }
-            props.onChange(false);
-            return setTimeout(() => props.value.set(undefined), 350);
-        }
-    };
+        };
 
+        return (
+            <motion.button
+                draggable
+                dragMomentum
+                dragListener
+                dragPropagation
+                onDrag={onDrag}
+                animate={false}
+                initial={false}
+                dragElastic={0}
+                dragDirectionLock
+                dragSnapToOrigin
+                drag={props.sheet ? "y" : "x"}
+                dragConstraints={dragConstraints}
+                whileDrag={{ cursor: "grabbing" }}
+                className={css(
+                    "absolute rounded-lg isolate",
+                    props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
+                    props.sheet
+                        ? "top-1 flex h-3 w-full justify-center py-2"
+                        : props.position === "left"
+                            ? "right-5 top-1/2 h-10 w-2"
+                            : "left-2 top-1/2 h-10 w-2"
+                )}
+            >
+                {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
+            </motion.button>
+        );
+    }
     return (
-        <motion.div
-            draggable
-            dragMomentum
-            dragListener
-            dragPropagation
-            onDrag={onDrag}
-            animate={false}
-            initial={false}
-            dragElastic={0}
-            dragDirectionLock
-            dragSnapToOrigin
-            drag={props.sheet ? "y" : "x"}
-            dragConstraints={dragConstraints}
-            whileDrag={{ cursor: "grabbing" }}
+        <div
             className={css(
-                "absolute rounded-lg",
+                "absolute rounded-lg isolate",
                 props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
                 props.sheet
                     ? "top-1 flex h-3 w-full justify-center py-2"
@@ -169,7 +172,7 @@ const Draggable = (props: DraggableProps) => {
             )}
         >
             {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
-        </motion.div>
+        </div>
     );
 };
 
@@ -213,6 +216,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
         }: PropsWithChildren<ModalProps>,
         externalRef: ForwardedRef<ModalRef>
     ) => {
+        const innerContent = useRef<HTMLDivElement>(null)
         const removeScrollRef = useRemoveScroll(open, "block-only");
         const headingId = useId();
         const descriptionId = useId();
@@ -248,13 +252,17 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
         }, [floating.context, removeScrollRef]);
 
         const onDrag = (_: any, info: PanInfo) => {
-            const parent = floating.refs.floating as RefObject<HTMLElement | null>;
-            if (parent.current && type === "sheet") {
-                const div = parent.current as HTMLElement;
+            const root = floating.refs.floating as RefObject<HTMLElement | null>;
+            if (innerContent.current === null) return;
+            const content = innerContent.current
+            if (root.current && type === "sheet") {
+                if (content.scrollTop > 0) return;
+                const div = root.current as HTMLElement;
                 const rect = div.getBoundingClientRect();
                 const v = floatingSize.get() || rect.height;
                 const result = Math.abs(v - info.delta.y);
                 const screenHeightToClose = calculateClose(window.outerHeight);
+                console.log({ scroll: content.scrollTop, size: floatingSize.get(), info })
                 if (result < screenHeightToClose) {
                     onClose();
                     return setTimeout(() => floatingSize.set(window.outerHeight), 350);
@@ -276,8 +284,8 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
             animated && type === "sheet"
                 ? ({
                     ...commonAnimated,
+                    onDrag,
                     dragElastic: 0,
-                    onDrag: onDrag,
                     dragConstraints,
                     dragListener: true,
                     dragMomentum: true,
@@ -304,8 +312,8 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                         )}
                     </Fragment>
                 ) : null}
-                <FloatingPortal preserveTabOrder>
-                    <AnimatePresence propagate key={headingId} mode="wait" initial={false}>
+                <AnimatePresence propagate key={headingId} mode="wait" initial={false}>
+                    <FloatingPortal preserveTabOrder>
                         {open ? (
                             <FloatingOverlay
                                 lockScroll
@@ -334,12 +342,21 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                                     type,
                                                 }),
                                                 className,
-                                                "overscroll-contain"
+                                                "overscroll-contain bg-black"
                                             ),
                                         })}
                                         data-component="modal"
                                         style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
                                     >
+                                        {useResizer && resizer ? (
+                                            <Draggable
+                                                onChange={onChange}
+                                                value={floatingSize}
+                                                sheet={type === "sheet"}
+                                                position={position as DrawerPosition}
+                                                parent={floating.refs.floating as any}
+                                            />
+                                        ) : null}
                                         {title ? (
                                             <header className="relative w-full">
                                                 {title ? (
@@ -353,6 +370,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                             </header>
                                         ) : null}
                                         <section
+                                            ref={innerContent}
                                             data-component="modal-body"
                                             className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
                                         >
@@ -372,21 +390,12 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                                 </button>
                                             </nav>
                                         ) : null}
-                                        {useResizer && resizer ? (
-                                            <Draggable
-                                                onChange={onChange}
-                                                value={floatingSize}
-                                                sheet={type === "sheet"}
-                                                position={position as DrawerPosition}
-                                                parent={floating.refs.floating as any}
-                                            />
-                                        ) : null}
                                     </motion.div>
                                 </FloatingFocusManager>
                             </FloatingOverlay>
                         ) : null}
-                    </AnimatePresence>
-                </FloatingPortal>
+                    </FloatingPortal>
+                </AnimatePresence>
             </Fragment>
         );
     }

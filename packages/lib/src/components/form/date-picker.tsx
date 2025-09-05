@@ -1,7 +1,7 @@
 "use client";
 import { format, isValid, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import React, { forwardRef, Fragment, useId, useMemo, useState } from "react";
+import React, { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
 import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
@@ -35,10 +35,10 @@ const placeholders = {
 
 const partValues = {
     literal: (_: Date, str: string) => str,
-    hour: (date: Date) => date.getHours().toString(),
     year: (date: Date) => date.getFullYear().toString(),
-    minute: (date: Date) => date.getMinutes().toString(),
     day: (date: Date) => date.getDate().toString().padStart(2, "0"),
+    hour: (date: Date) => date.getHours().toString().padStart(2, "0"),
+    minute: (date: Date) => date.getMinutes().toString().padStart(2, "0"),
     month: (date: Date) => (date.getMonth() + 1).toString().padStart(2, "0"),
 } satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, ((date: Date, str: string) => string)>>
 
@@ -57,16 +57,16 @@ const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
 
 type Mask = string | RegExp;
 
+const DATE_TIME_FORMAT = { day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric" } as const;
+
+const DATE_FORMAT = { day: "numeric", month: "numeric", year: "numeric" } as const;
+
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     ({ date, locale: inputLocal, disabledDate, onChange, markToday, clickToClose, type, ...props }: DatePickerProps, externalRef) => {
         const locale = useLocale(inputLocal);
         const labelId = useId();
         const translation = useTranslations();
-        const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale, type === "datetime"
-            ? { day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric" }
-            : { day: "numeric", month: "numeric", year: "numeric" }),
-            [locale, type]
-        );
+        const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale, type === "datetime" ? DATE_TIME_FORMAT : DATE_FORMAT), [locale, type]);
         const [innerDate, setInnerDate] = useState(date || undefined);
         const [open, setOpen] = useState(false);
         const mask: Mask[] = formatParts(datetimeFormat, fixedDate).flatMap((x) => (Is.keyof(parts, x.type) ? (parts[x.type](x.value) as any) : []));
@@ -74,6 +74,8 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
             ""
         );
+
+        const isoDateEffect = date?.toISOString();
 
         const [value, setValue] = useState(
             !innerDate
@@ -102,6 +104,15 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             setInnerDate(undefined);
             return onChange?.(undefined);
         };
+
+
+        useEffect(() => {
+            if (isValid(date)) {
+                setInnerDate(date);
+                setValue(format(date!, placeholder));
+            }
+        }, [isoDateEffect])
+
 
         const onChangeDate = (d: Date | undefined) => {
             setInnerDate(d);
