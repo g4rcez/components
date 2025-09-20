@@ -110,11 +110,11 @@ const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement | nul
     const select = () => {
         if (origin?.dataset.focustrap) {
             const el = root.current?.querySelector(`button[data-focustrap="${origin?.dataset.focustrap}"]`) as HTMLButtonElement;
-            return setTimeout(() => el?.focus({ preventScroll: false }), delay);
+            return setTimeout(() => el?.focus({ preventScroll: true }), delay);
         }
         if (root.current) {
             const element = root.current.querySelector<HTMLButtonElement>(`button[data-date="${d}"]`);
-            if (element) return element.focus({ preventScroll: false });
+            if (element) return element.focus({ preventScroll: true });
         }
     };
     if (delay === 0) select();
