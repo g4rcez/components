@@ -10,6 +10,7 @@ export const DARK_THEME: DesignTokens = {
         "shadow-notification": "1px 2px 2px 2px hsla(210, 15%, 20%,  0.15)",
         "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
         "shadow-card": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
+        "shadow-table": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
     },
     colors: {
         foreground: "hsla(210, 50%, 98%)",

@@ -42,14 +42,22 @@ export default function TagsPage() {
             warn
           </Tag>
         </Card>
-
         <Card title="Small tags" className="flex flex-wrap gap-8">
-          <Tag theme="neutral">Normal</Tag>
-          <Tag theme="neutral" indicator="danger">danger</Tag>
-          <Tag theme="neutral" indicator="info">info</Tag>
-          <Tag theme="neutral" indicator="secondary">secondary</Tag>
-          <Tag theme="neutral" indicator="success">success</Tag>
-          <Tag theme="neutral" indicator="warn">warn</Tag>
+          <Tag size="small" theme="neutral">Normal</Tag>
+          <Tag size="small" theme="neutral" indicator="danger">danger</Tag>
+          <Tag size="small" theme="neutral" indicator="info">info</Tag>
+          <Tag size="small" theme="neutral" indicator="secondary">secondary</Tag>
+          <Tag size="small" theme="neutral" indicator="success">success</Tag>
+          <Tag size="small" theme="neutral" indicator="warn">warn</Tag>
+        </Card>
+
+        <Card title="Tiny tags" className="flex flex-wrap gap-8">
+          <Tag theme="primary" size="tiny">Normal</Tag>
+          <Tag theme="danger" size="tiny">danger</Tag>
+          <Tag theme="info" size="tiny">info</Tag>
+          <Tag theme="secondary" size="tiny">secondary</Tag>
+          <Tag theme="success" size="tiny">success</Tag>
+          <Tag theme="warn" size="tiny">warn</Tag>
         </Card>
       </div>
     </DocsLayout>

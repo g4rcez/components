@@ -73,7 +73,7 @@ export const Row = (index: number, row: any, context: ItemContentContext) => {
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`group-table-cell py-2 sm:py-2 flex flex-col md:table-cell md:h-14 md:border-l md:border-table-border px-2 first:border-transparent ${className}`}
+                        className={`typography group-table-cell p-[var(--table-cell-padding)] whitespace-pre-wrap flex flex-col md:table-cell border-b border md:border-l-transparent md:border-b-0 border-y border-collapse border-table-border md:border-r md:last:border-r-transparent ${className}`}
                     >
                         {exposeAside ? (
                             <RowAside>

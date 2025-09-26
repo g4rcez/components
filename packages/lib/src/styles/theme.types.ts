@@ -28,7 +28,7 @@ export type ZIndex = {
     floating: N;
 };
 
-type Shadows = "floating" | "card" | "notification";
+type Shadows = "floating" | "card" | "notification" | "table";
 
 export type DesignTokens = {
     name: string;

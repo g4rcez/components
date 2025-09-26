@@ -24,6 +24,8 @@ const config: Partial<Config> = {
             fontSize: spacing,
             boxShadow: shadows,
             dropShadow: shadows,
+            lineHeight: { typography: "1.45" },
+            letterSpacing:{ typography: "0.0175" },
             placeholderColor: COLORS,
             transitionDuration: { DEFAULT: "375ms" },
             minWidth: { xs: "20rem", screen: "100vh" },

@@ -1,6 +1,7 @@
 "use client";
 import {
     arrow,
+    autoPlacement,
     autoUpdate,
     flip,
     FloatingArrow,
@@ -44,16 +45,16 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
     function Tooltip<T extends ComponentLike = "span">(
         {
             as,
+            open,
             title,
             children,
             placement,
-            open,
             focus = true,
             hover = true,
             enabled = true,
             popover = true,
-            followCursor = false,
             onChange = noop,
+            followCursor = false,
             ...props
         }: TooltipProps<T>,
         outerRef: any
@@ -66,33 +67,29 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             onChange?.(b);
         };
         const { refs, floatingStyles, context } = useFloating({
-            open: innerOpen,
             placement,
-            transform: true,
-            strategy: "absolute",
+            open: innerOpen,
             whileElementsMounted: autoUpdate,
             onOpenChange: open ? undefined : toggleBoth,
             middleware: [
                 shift(),
                 offset(5),
+                autoPlacement(),
+                arrow({ padding: 5, element: arrowRef }),
                 flip({ fallbackAxisSideDirection: "start" }),
-                arrow({
-                    padding: 5,
-                    element: arrowRef,
-                }),
             ],
         });
+        const dismiss = useDismiss(context, { enabled });
+        const role = useRole(context, { role: "tooltip", enabled });
+        const focusController = useFocus(context, { enabled: enabled ? focus : false });
+        const clickController = useClick(context, { enabled: enabled ? popover : false });
+        const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
         const hoverController = useHover(context, {
             move: true,
             delay: { open: FLOATING_DELAY },
             enabled: enabled ? hover : false,
             handleClose: popover ? safePolygon() : null,
         });
-        const focusController = useFocus(context, { enabled: enabled ? focus : false });
-        const clickController = useClick(context, { enabled: enabled ? popover : false });
-        const dismiss = useDismiss(context, { enabled });
-        const role = useRole(context, { role: "tooltip", enabled });
-        const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
         const { getReferenceProps, getFloatingProps } = useInteractions([
             role,
             dismiss,
@@ -113,7 +110,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                     {title}
                 </Component>
                 {innerOpen && (
-                    <FloatingPortal preserveTabOrder>
+                    <FloatingPortal>
                         <Polymorph
                             {...getFloatingProps()}
                             ref={refs.setFloating}

@@ -6,9 +6,10 @@ export const LIGHT_THEME: DesignTokens = {
     spacing,
     name: "light",
     shadow: {
-        "shadow-notification": "1px 2px 2px 2px hsla(210, 25%, 40%,  0.15)",
+        "shadow-notification": "1px 2px 2px 2px hsla(210, 25%, 40%, 0.15)",
         "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-        "shadow-card": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
+        "shadow-card": "0px 1px 2px 1px hsla(210, 25%, 20%, 0.1)",
+        "shadow-table": "0px 1px 1px 1px hsla(210, 0%, 0%,  0.1)",
     },
     zIndex,
     colors: {
@@ -92,7 +93,7 @@ export const LIGHT_THEME: DesignTokens = {
             overlay: "hsla(0, 0%, 0%)",
         },
         table: {
-            header: "hsla(221, 20%, 97%)",
+            header: "hsla(210, 20%, 98%)",
             background: "hsla(0, 0%, 100%)",
             border: "hsla(210, 20%, 92%)",
         },

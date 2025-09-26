@@ -3,16 +3,19 @@ import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
 import { Label, Override } from "../../types";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
+import { InfoIcon, LucideIcon } from "lucide-react";
+import { Skeleton } from "./skeleton";
 
 export type CardProps = PolymorphicProps<
     Override<
         React.ComponentProps<"div">,
-        {
-            titleClassName?: string;
-            title?: Label;
-            container?: string;
-            header?: React.ReactElement | null;
-        }
+        Partial<{
+            title: Label;
+            loading: boolean;
+            container: string;
+            titleClassName: string;
+            header: React.ReactElement | null;
+        }>
     >,
     "div"
 >;
@@ -25,13 +28,14 @@ export const Card = ({
     container = "",
     header = null,
     className = "",
+    loading,
     ...props
 }: PropsWithChildren<CardProps>) => (
     <Polymorph
         {...props}
         as={as}
         data-component="card"
-        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-8", container)}
+        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-5", container)}
     >
         {title ? (
             <header
@@ -44,7 +48,14 @@ export const Card = ({
             header
         )}
         <div data-component="card-body" className={css("min-w-full px-4 lg:px-8", className)}>
-            {children}
+            {loading ? (
+                <div className="flex flex-col gap-4">
+                    <Skeleton className="w-full" />
+                    <Skeleton className="w-8/12" />
+                    <Skeleton className="w-10/12" />
+                    <Skeleton className="w-1/2" />
+                </div>
+            ) : children}
         </div>
     </Polymorph>
 );
@@ -70,8 +81,33 @@ Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<Ca
         >
             <Title className="font-semibold">{props.title}</Title>
             {children ? (
-                <Nav className="gap-kilo flex flex-col items-start justify-start sm:flex-row sm:items-center sm:justify-end">{children}</Nav>
+                <Nav className="flex flex-col justify-start items-start sm:flex-row sm:justify-end sm:items-center gap-kilo">{children}</Nav>
             ) : null}
         </Component>
+    );
+};
+
+export const StatsCard = (props: PolymorphicProps<{ Icon: LucideIcon; title: string; value: Label; href?: string; mark?: string; interactive?: boolean }, "div">) => {
+    const interactive = props.interactive ?? true;
+    const Icon = props.Icon ?? InfoIcon
+    return (
+        <Card {...props} title={null} container="px-0 py-0" className="flex gap-4 items-center px-0 lg:px-0">
+            <div
+                className={`flex w-full items-center gap-4 rounded-card px-0 lg:px-0 ${interactive ? "transition-colors duration-300 ease-linear hover:bg-primary-hover/10" : ""}`}
+            >
+                <div
+                    className={css(
+                        "flex aspect-square h-[stretch] w-20 items-center justify-center rounded-l-card bg-primary p-4 text-primary-foreground",
+                        props.mark
+                    )}
+                >
+                    {<Icon size={48} />}
+                </div>
+                <div className="flex flex-col gap-2 justify-center py-2">
+                    <p className="text-lg">{props.title}</p>
+                    <p className="text-4xl font-bold tracking-wide">{props.value}</p>
+                </div>
+            </div>
+        </Card>
     );
 };

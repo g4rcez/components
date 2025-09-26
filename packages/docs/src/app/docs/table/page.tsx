@@ -23,21 +23,25 @@ const cols = createColumns<User>((col) => {
     allowFilter: true,
     type: ColType.Number,
     Element: (props) => (
-      <span className="break-words whitespace-pre-line">
+      <span className="whitespace-pre-line break-words">
         {props.rowIndex}. {props.value}
       </span>
     ),
   });
   col.add("id", "ID", {
+    thProps: { style: { width: "40%" } },
     Element: (props) => (
-      <span className="whitespace-nowrap">
+      <span>
         {props.rowIndex}. {props.value}
       </span>
     ),
-
   });
-  col.add("type", "Type");
-  col.add("document", "Document");
+  col.add("type", "Type", {
+    thProps: { style: { width: "10%" } },
+  });
+  col.add("document", "Document", {
+    thProps: { style: { width: "22%" } },
+  });
 });
 
 const clients = Array.from({ length: 500 }).map(
@@ -61,8 +65,8 @@ const TableInModal = () => {
           name="table"
           cols={cols}
           rows={clients}
+          sticky={-5}
           operations={false}
-          sticky={null}
           loading={clients.length === 0}
           getScrollRef={getModalScrollerRef}
         />
@@ -105,6 +109,8 @@ export default function TablePage() {
     >
       <Card container="px-0 py-0 pb-0" className="py-0 px-0 pb-0 lg:px-0">
         <TableInModal />
+      </Card>
+      <Card container="px-0 py-0 pb-0" className="py-0 px-0 pb-0 lg:px-0">
         <Table<User>
           {...preferences}
           name="table"

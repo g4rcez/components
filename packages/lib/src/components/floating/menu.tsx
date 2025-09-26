@@ -208,7 +208,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                 <MenuContext.Provider value={{ activeIndex, setActiveIndex, getItemProps, setHasFocusInside, isOpen }}>
                     <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
                         {isOpen && (
-                            <FloatingPortal preserveTabOrder>
+                            <FloatingPortal>
                                 <FloatingFocusManager
                                     context={context}
                                     modal={false}

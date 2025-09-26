@@ -10,6 +10,7 @@ const variants = {
         big: "h-12 px-6 py-4",
         default: "h-8 px-4 py-2",
         small: "h-6 p-2 px-3 text-sm",
+        tiny: "h-6 p-2 px-3 text-xs",
     },
     theme: {
         custom: "",
