@@ -1,6 +1,4 @@
-@layer components {
-  @import "../../../lib/src/index.css";
-}
+@import "../../../lib/src/index.css";
 
 @tailwind base;
 @tailwind components;
