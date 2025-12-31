@@ -48,10 +48,10 @@ const transitions: Transition = {
   ease: "circOut",
 };
 
-const getCurrentStatus = (props: StepProps): StepStatus => {
-  if (props.status === "error") return "error";
-  if (props.currentStep === props.step) return "active";
-  if (props.currentStep < props.step) return "inactive";
+const getCurrentStatus = (step: StepProps["step"], currentStep: StepProps["currentStep"], status: StepProps["status"]): StepStatus => {
+  if (status === "error") return "error";
+  if (currentStep === step) return "active";
+  if (currentStep < step) return "inactive";
   return "complete";
 };
 
@@ -78,27 +78,29 @@ export const StepsContainer = (props: PropsWithChildren<{ steps: number; current
   }, [props.currentStep]);
 
   return (
-    <div className="relative flex justify-between" ref={ref}>
+    <div className="flex relative justify-between" ref={ref}>
       <div className="absolute top-1/2 h-1 w-[calc(100%)] bg-card-border" />
-      <div data-name="progress" className="absolute top-1/2 h-1 w-0 bg-success transition-all duration-300 ease-out" />
+      <div data-name="progress" className="absolute top-1/2 w-0 h-1 transition-all duration-300 ease-out bg-success" />
       {props.children}
     </div>
   );
 };
 
-export const Step = (props: StepProps) => {
+export const Step = ({ step, currentStep, status, ...props }: StepProps) => {
   const parser = useColorParser();
-  const status = getCurrentStatus(props);
+  const innerStatus = getCurrentStatus(step, currentStep, status);
 
   return (
-    <motion.button {...(props as any)} type="button" data-step={props.step} animate={status} className="relative block w-auto">
+    <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="block relative w-auto">
       <motion.div
         variants={variants}
         transition={transitions}
-        className={`absolute inset-0 rounded-full ${props.status === "error" ? "bg-danger" : ""}`}
+        className={`absolute inset-0 rounded-full ${innerStatus === "error" ? "bg-danger" : ""}`}
       />
       <motion.div
         initial={false}
+        transition={{ duration: 0.2 }}
+        className="flex relative justify-center items-center w-10 h-10 font-semibold rounded-full"
         variants={{
           error: {
             backgroundColor: parser("var(--danger-DEFAULT)"),
@@ -121,16 +123,14 @@ export const Step = (props: StepProps) => {
             color: parser("var(--success-foreground)"),
           },
         }}
-        transition={{ duration: 0.2 }}
-        className="relative flex h-10 w-10 items-center justify-center rounded-full font-semibold"
       >
-        <div className="flex items-center justify-center">
-          {status === "complete" ? (
-            <CheckIcon className="h-6 w-6 text-primary-foreground" />
-          ) : status === "error" ? (
-            <ErrorIcon className="h-6 w-6 text-danger-foreground" />
+        <div className="flex justify-center items-center">
+          {innerStatus === "complete" ? (
+            <CheckIcon className="w-6 h-6 text-primary-foreground" />
+          ) : innerStatus === "error" ? (
+            <ErrorIcon className="w-6 h-6 text-danger-foreground" />
           ) : (
-            <span>{props.step}</span>
+            <span>{step}</span>
           )}
         </div>
       </motion.div>

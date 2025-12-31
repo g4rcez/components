@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import React, { useEffect, useState } from "react";
-import { Autocomplete, Card } from "../../../../../lib/src";
+import React, { Fragment, useEffect, useState } from "react";
+import { Autocomplete, Button, Card, Modal } from "../../../../../lib/src";
 
 const defaults = [
   { label: "JavaScript", value: "javascript" },
@@ -55,6 +55,23 @@ const defaults = [
   { label: "Verilog", value: "verilog" },
   { label: "Assembly", value: "assembly" },
 ];
+
+const SelectOnModal = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Fragment>
+      <Modal open={open} onChange={setOpen} title="Select on modal">
+        <Autocomplete
+          id="select-on-modal"
+          rightLabel=" "
+          title="One option"
+          options={defaults}
+        />
+      </Modal>
+      <Button onClick={() => setOpen(true)}>Open modal</Button>
+    </Fragment>
+  );
+};
 
 export default function FormPage() {
   const [options, setOptions] = useState<any[]>([]);
@@ -124,6 +141,7 @@ export default function FormPage() {
           title="Control option"
           onChange={(e) => setValue(e.target.value)}
         />
+        <SelectOnModal />
       </Card>
       <div className="h-screen bg-black w-2">Scroll</div>
     </DocsLayout>

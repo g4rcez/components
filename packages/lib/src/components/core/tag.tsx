@@ -56,9 +56,9 @@ export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
     T
 >;
 
-export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => any = forwardRef(function Tag(
+export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => any = forwardRef(function Tag(
     { className, indicator = undefined, icon, loading, theme, size, ...props }: TagProps,
-    ref: React.ForwardedRef<HTMLButtonElement>
+    ref: React.Ref<any>,
 ) {
     return (
         <Polymorph
@@ -67,11 +67,11 @@ export const Tag: <T extends React.ElementType = "span">(props: TagProps<T>) => 
             data-theme={theme}
             data-component="tag"
             as={props.as ?? "span"}
-            className={css(tagVariants({ size, theme }), className)}
+            className={css(tagVariants({ size, theme: loading ? "loading" : theme }), className)}
         >
             {indicator ? <span aria-hidden="true" className={indicatorVariant({ theme: indicator })} /> : null}
             {icon}
             {props.children}
         </Polymorph>
     );
-});
+}) as any;

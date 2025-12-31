@@ -8,8 +8,7 @@ import {
   PocketKnifeIcon,
   UserIcon,
 } from "lucide-react";
-import { Autocomplete, Input, Card, Dict } from "../../../../../lib/src";
-import { createGlobalReducer } from "use-typed-reducer";
+import { Autocomplete, Input, Card, Dict } from "../../../../../lib/src"; import { createGlobalReducer } from "use-typed-reducer";
 import {
   type CreatableOpts,
   Flow,

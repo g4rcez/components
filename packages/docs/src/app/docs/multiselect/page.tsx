@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import React, { useEffect, useState } from "react";
-import { MultiSelect, Card } from "../../../../../lib/src";
+import { useEffect, useState } from "react";
+import { Card, MultiSelect } from "../../../../../lib/src";
 
 const defaults = [
   { label: "C#", value: "csharp" },

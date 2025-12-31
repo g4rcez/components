@@ -115,7 +115,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                             {...getFloatingProps()}
                             ref={refs.setFloating}
                             style={floatingStyles}
-                            className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-shadow-floating"
+                            className="p-3 rounded-lg border isolate z-tooltip border-tooltip-border bg-tooltip-background text-tooltip-foreground shadow-shadow-floating"
                         >
                             <FloatingArrow
                                 ref={arrowRef}

@@ -49,7 +49,7 @@ export const RootLayout = (props: PropsWithChildren) => {
   return (
     <html
       lang="en"
-      className="antialiased proportional-nums bg-background text-foreground"
+      className="antialiased proportional-nums bg-background text-foreground dark"
     >
       <head>
         <meta charSet="utf-8" />

@@ -1,6 +1,6 @@
 import Linq from "linq-arrays";
 import { AnimatePresence } from "motion/react";
-import React, { CSSProperties, Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
+import React, { ComponentProps, CSSProperties, Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
 import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
@@ -35,6 +35,7 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
     filters?: FilterConfig<T>[];
     Aside?: React.FC<CellAsideElement<T>>;
     getScrollRef?: () => HTMLElement | undefined;
+    getRowProps?: (_: T) => ComponentProps<"tr">;
     setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
   };
 
@@ -85,9 +86,11 @@ const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
 });
 
 const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
+  const contextProps = context?.getRowProps?.(item);
+  const innerProps = { ...props, ...contextProps };
   return (
     <tr
-      {...props}
+      {...innerProps}
       role="row"
       ref={ref}
       className={`group-table-row pb-4 flex h-fit flex-col flex-wrap justify-center gap-1 md:table-row ${(props as any)?.className ?? ""}`}
@@ -111,11 +114,11 @@ const TFoot = React.forwardRef((props: any, ref: any) => {
 });
 
 const components = {
+  TableRow: TRow as any,
+  TableFoot: TFoot as any,
   TableHead: Thead as any,
   Table: VirtualTable as any,
   TableBody: TableBody as any,
-  TableRow: TRow as any,
-  TableFoot: TFoot as any,
 };
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -125,8 +128,6 @@ const EmptyContent = (props: { loading?: boolean }) => (
 );
 
 const EmptyCell = () => <Fragment />;
-
-const Frag = () => <Fragment />;
 
 const emptyRows: any[] = [];
 
@@ -180,7 +181,13 @@ export const InnerTable = <T extends Any>({
 
   const empty = rows.length === 0;
 
-  const context = { loading: props.loading, loadingMore: props.loadingMore, cols: cols as any, Aside: props.Aside };
+  const context = {
+    cols: cols as any,
+    Aside: props.Aside,
+    loading: props.loading,
+    getRowProps: props.getRowProps,
+    loadingMore: props.loadingMore,
+  };
 
   return (
     <div className="flex relative flex-col w-full whitespace-nowrap rounded-lg group">

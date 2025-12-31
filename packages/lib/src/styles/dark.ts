@@ -87,7 +87,7 @@ export const DARK_THEME: DesignTokens = {
         },
         tooltip: {
             foreground: "hsla(210, 40%, 98%)",
-            background: "hsla(0, 0%, 8%)",
+            background: "hsla(221, 5%, 15%)",
             hover: "hsla(221, 10%, 35%)",
             border: "hsla(0, 0%, 19%)",
             overlay: "hsla(0, 0%, 0%)",

@@ -1,5 +1,5 @@
 "use client";
-import { format, isValid, parse, startOfDay } from "date-fns";
+import { format, isValid, Locale, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import React, { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
@@ -11,8 +11,10 @@ import { Dropdown } from "../floating/dropdown";
 import { Input, InputProps } from "./input";
 
 export type DatePickerProps = Omit<Override<InputProps, CalendarProps & {
+    floating?: boolean;
     clickToClose?: boolean
 }>, "currency">
+
 const fixedDate = new Date(1970, 11, 31);
 
 const parts = {
@@ -31,7 +33,7 @@ const placeholders = {
     minute: () => "mm",
     year: () => "yyyy",
     literal: (str: string) => str,
-} satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, string | ((x: string) => string)>>;
+} satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, string | ((x: string, locale: Intl.RelativeTimeFormat) => string)>>;
 
 const partValues = {
     literal: (_: Date, str: string) => str,
@@ -62,7 +64,7 @@ const DATE_TIME_FORMAT = { day: "numeric", month: "numeric", year: "numeric", ho
 const DATE_FORMAT = { day: "numeric", month: "numeric", year: "numeric" } as const;
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-    ({ date, locale: inputLocal, disabledDate, onChange, markToday, clickToClose, type, ...props }: DatePickerProps, externalRef) => {
+    ({ date, locale: inputLocal, disabledDate, onChange, markToday, clickToClose, floating = true, type, ...props }: DatePickerProps, externalRef) => {
         const locale = useLocale(inputLocal);
         const labelId = useId();
         const translation = useTranslations();
@@ -70,10 +72,12 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         const [innerDate, setInnerDate] = useState(date || undefined);
         const [open, setOpen] = useState(false);
         const mask: Mask[] = formatParts(datetimeFormat, fixedDate).flatMap((x) => (Is.keyof(parts, x.type) ? (parts[x.type](x.value) as any) : []));
-        const placeholder = formatParts(datetimeFormat, fixedDate).reduce(
-            (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
-            ""
-        );
+        const placeholder = useMemo(() => {
+            return formatParts(datetimeFormat, fixedDate).reduce(
+                (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
+                ""
+            )
+        }, [datetimeFormat]);
 
         const isoDateEffect = date?.toISOString();
 
@@ -111,7 +115,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 setInnerDate(date);
                 setValue(format(date!, placeholder));
             }
-        }, [isoDateEffect])
+        }, [isoDateEffect, placeholder])
 
 
         const onChangeDate = (d: Date | undefined) => {
@@ -126,60 +130,66 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
         const htmlValue = validDate ? innerDate!.toISOString() : undefined;
 
+        const CalendarComponent = <Calendar
+            {...(props as any)}
+            type={type}
+            locale={locale}
+            changeOnlyOnClick
+            markToday={markToday}
+            onChange={onChangeDate}
+            disabledDate={disabledDate}
+            date={validDate ? innerDate : undefined}
+        />
+
+
         return (
-            <Input
-                {...props}
-                mask={mask}
-                value={value}
-                id={undefined}
-                name={undefined}
-                data-value={htmlValue}
-                formNoValidate={!open}
-                data-target={props.name}
-                data-component="date-picker"
-                onChange={onChangeDateInput}
-                required={props.required ?? true}
-                error={open ? undefined : props.error}
-                placeholder={props.placeholder || placeholder}
-                right={
-                    <Fragment>
-                        <input
-                            data-origin={props.name}
-                            defaultValue={htmlValue}
-                            form={props.form}
-                            hidden
-                            id={props.name}
-                            name={props.name}
-                            ref={externalRef}
-                            type="date"
-                        />
-                        <Dropdown
-                            open={open}
-                            onChange={setOpen}
-                            buttonProps={{ "aria-describedby": labelId }}
-                            trigger={
-                                <span aria-labelledby={labelId}>
-                                    <span id={labelId} className="sr-only">
-                                        {translation.datePickerCalendarButtonLabel}
-                                    </span>
-                                    <CalendarIcon />
-                                </span>
-                            }
-                        >
-                            <Calendar
-                                {...(props as any)}
-                                type={type}
-                                locale={locale}
-                                changeOnlyOnClick
-                                markToday={markToday}
-                                onChange={onChangeDate}
-                                disabledDate={disabledDate}
-                                date={validDate ? innerDate : undefined}
+            <Fragment>
+                <Input
+                    {...props}
+                    mask={mask}
+                    value={value}
+                    id={undefined}
+                    name={undefined}
+                    data-value={htmlValue}
+                    formNoValidate={!open}
+                    data-target={props.name}
+                    data-component="date-picker"
+                    onChange={onChangeDateInput}
+                    required={props.required ?? true}
+                    error={open ? undefined : props.error}
+                    placeholder={props.placeholder || translation.datepickerPlaceholder(placeholder)}
+                    right={
+                        floating ? <Fragment>
+                            <input
+                                data-origin={props.name}
+                                defaultValue={htmlValue}
+                                form={props.form}
+                                hidden
+                                id={props.name}
+                                name={props.name}
+                                ref={externalRef}
+                                type="date"
                             />
-                        </Dropdown>
-                    </Fragment>
-                }
-            />
+                            <Dropdown
+                                open={open}
+                                onChange={setOpen}
+                                buttonProps={{ "aria-describedby": labelId }}
+                                trigger={
+                                    <span aria-labelledby={labelId}>
+                                        <span id={labelId} className="sr-only">
+                                            {translation.datePickerCalendarButtonLabel}
+                                        </span>
+                                        <CalendarIcon />
+                                    </span>
+                                }
+                            >
+                                {CalendarComponent}
+                            </Dropdown>
+                        </Fragment> : null
+                    }
+                />
+                {CalendarComponent}
+            </Fragment>
         );
     }
 );

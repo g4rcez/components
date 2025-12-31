@@ -366,7 +366,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     aria-autocomplete="list"
                     data-value={values.join(",")}
                     className={css(
-                        "input placeholder-input-mask group h-input-height w-full",
+                        "input text-base placeholder-input-mask group h-input-height w-full",
                         "rounded-md bg-transparent px-input-x py-input-y text-foreground",
                         "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                         "group-error:text-danger group-error:placeholder-input-mask-error",

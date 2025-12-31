@@ -16,7 +16,6 @@ import { AnimatePresence, HTMLMotionProps, motion, MotionConfig, MotionValue, Pa
 import { Slot as RadixSlot } from "radix-ui";
 import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useEffect, useId, useImperativeHandle, useRef } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
-import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
 
@@ -217,15 +216,15 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
         externalRef: ForwardedRef<ModalRef>
     ) => {
         const innerContent = useRef<HTMLDivElement>(null)
-        const removeScrollRef = useRemoveScroll(open, "block-only");
+        const removeScrollRef = useRef<HTMLDivElement>(null);
         const headingId = useId();
         const descriptionId = useId();
         const isDesktop = useMediaQuery("(min-width: 64rem)");
-        const useResizer = _type !== "dialog";
         const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
         const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
         const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
         const type = isDesktop ? _type : forceType ? _type : "sheet";
+        const useResizer = type !== "dialog";
 
         const floating = useFloating({ open, onOpenChange: onChange });
         const click = useClick(floating.context, {});
@@ -254,7 +253,6 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
             const result = Math.abs(v - info.delta.y);
             const max = window.outerHeight;
             const screenHeightToClose = calculateClose(max);
-            console.log({ max, result, v, screenHeightToClose })
             if (result >= screenHeightToClose) return floatingSize.set(result);
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement?.blur();
@@ -318,7 +316,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                     </Fragment>
                 ) : null}
                 <FloatingPortal preserveTabOrder>
-                    <AnimatePresence propagate key={headingId} mode="wait" initial={false}>
+                    <AnimatePresence presenceAffectsLayout propagate key={headingId} mode="wait" initial={false}>
                         {open ? (
                             <FloatingOverlay
                                 lockScroll
@@ -377,8 +375,8 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                                                 ref={innerContent}
                                                 data-component="modal-body"
                                                 dragConstraints={dragConstraints}
-                                                drag={isDesktop ? "y" : undefined}
-                                                onDrag={type === "sheet" ? (isDesktop ? onDragBody : undefined) : undefined}
+                                                drag={isDesktop ? undefined : "y"}
+                                                onDrag={type === "sheet" ? (isDesktop ? undefined : onDragBody) : undefined}
                                                 className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
                                                 onTouchEnd={() => {
                                                     scroll.set(undefined);

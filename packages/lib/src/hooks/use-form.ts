@@ -28,14 +28,14 @@ const isValidJSON = (value: any): boolean => {
   if (typeof value !== "string") {
     try {
       value = JSON.stringify(value);
-    } catch (error) {
+    } catch {
       return false;
     }
   }
   try {
     JSON.parse(value);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
@@ -609,3 +609,4 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
 
 export const getJsonForm = <T extends z.ZodObject<any>>(form?: HTMLFormElement | null): z.infer<T> =>
   !form ? {} : (JSON.parse(form.getAttribute("data-json")!) as any);
+

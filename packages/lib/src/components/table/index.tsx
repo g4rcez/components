@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence } from "motion/react";
-import { useMemo } from "react";
+import { ComponentProps, useMemo } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
 import { Any } from "../../types";
@@ -26,6 +26,7 @@ export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows"
         sticky: number | null;
         onScrollEnd: () => void;
         getScrollRef?: () => HTMLElement | undefined;
+        getRowProps: (row: T) => ComponentProps<"tr">;
     }
 >;
 

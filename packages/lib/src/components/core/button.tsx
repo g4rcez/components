@@ -66,11 +66,11 @@ type Variants = CvaVariants<typeof variants>;
  * @template T - The HTML element type to render as (defaults to "button")
  */
 export type ButtonProps<T extends React.ElementType = "button"> = PropsWithChildren<
-    PolymorphicProps<Variants & Partial<{ 
+    PolymorphicProps<Variants & Partial<{
         /** Icon to display in the button */
-        icon: Label; 
+        icon: Label;
         /** Whether the button is in a loading state */
-        loading: boolean 
+        loading: boolean
     }>, T>
 >;
 
@@ -100,9 +100,9 @@ export type ButtonProps<T extends React.ElementType = "button"> = PropsWithChild
  * @param ref - Forwarded ref to the button element
  * @returns A styled button component
  */
-export const Button: <T extends React.ElementType = "button">(props: ButtonProps<T>) => React.ReactNode = forwardRef(function Button(
+export const Button: <T extends React.ElementType = "button">(_: ButtonProps<T>) => React.ReactNode = forwardRef(function Button(
     { className, icon, loading, theme, type = "button", size, rounded, ...props }: ButtonProps,
-    ref: React.ForwardedRef<HTMLButtonElement>
+    ref: React.Ref<"button">
 ) {
     const disabled = loading || props.disabled;
     return (
@@ -124,4 +124,4 @@ export const Button: <T extends React.ElementType = "button">(props: ButtonProps
             {props.children}
         </Polymorph>
     );
-});
+}) as any;

@@ -1,6 +1,6 @@
 "use client";
 import { cva } from "class-variance-authority";
-import { HTMLMotionProps, motion } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { CheckCircleIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
 import React, { forwardRef, PropsWithChildren } from "react";
 import { css } from "../../lib/dom";
@@ -58,12 +58,12 @@ const alertVariants = cva("p-4 w-full block border relative rounded-lg text-sm",
 
 export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
     CvaVariants<typeof themeVariants> &
-        Partial<{
-            open?: boolean;
-            container: string;
-            Icon: React.ReactElement;
-            onClose: (nextState: boolean) => void;
-        }>,
+    Partial<{
+        open?: boolean;
+        container: string;
+        Icon: React.ReactElement;
+        onClose: (nextState: boolean) => void;
+    }>,
     T
 >;
 
@@ -74,40 +74,42 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
     const close = () => onClose?.(false);
 
     return (
-        <div
-            data-open={!!open}
-            aria-hidden={!open}
-            data-component="alert"
-            className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}
-        >
-            <Collapse data-open={!!open} open={!!open}>
-                <Polymorph
-                    {...props}
-                    ref={ref}
-                    role="alert"
-                    data-theme={theme}
-                    as={props.as ?? "div"}
-                    className={css(alertVariants({ theme }), className)}
-                >
-                    <h4 className="mb-2 flex items-center gap-2">
-                        {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" size={20} /> : null}
-                        {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" size={20} /> : null}
-                        {!Icon && theme === "danger" ? <TriangleAlertIcon aria-hidden="true" size={20} /> : null}
-                        {Icon}
-                        <span className="tracking-3 text-balance text-lg font-semibold">{props.title}</span>
-                    </h4>
-                    {props.children}
-                    {onClose !== undefined && open ? (
-                        <button
-                            type="button"
-                            onClick={close}
-                            className="absolute right-3 top-3 text-foreground transition-colors duration-300 ease-in-out hover:text-danger"
-                        >
-                            <XIcon size={20} />
-                        </button>
-                    ) : null}
-                </Polymorph>
-            </Collapse>
-        </div>
+        <AnimatePresence presenceAffectsLayout propagate mode="sync">
+            {open ? <motion.div
+                data-open={!!open}
+                aria-hidden={!open}
+                data-component="alert"
+                className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}
+            >
+                <Collapse data-open={!!open} open={!!open}>
+                    <Polymorph
+                        {...props}
+                        ref={ref}
+                        role="alert"
+                        data-theme={theme}
+                        as={props.as ?? "div"}
+                        className={css(alertVariants({ theme }), className)}
+                    >
+                        <h4 className="flex gap-2 items-center mb-2">
+                            {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" size={20} /> : null}
+                            {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" size={20} /> : null}
+                            {!Icon && theme === "danger" ? <TriangleAlertIcon aria-hidden="true" size={20} /> : null}
+                            {Icon}
+                            <span className="text-lg font-semibold tracking-3 text-balance">{props.title}</span>
+                        </h4>
+                        {props.children}
+                        {onClose !== undefined && open ? (
+                            <button
+                                type="button"
+                                onClick={close}
+                                className="absolute top-3 right-3 transition-colors duration-300 ease-in-out text-foreground hover:text-danger"
+                            >
+                                <XIcon size={20} />
+                            </button>
+                        ) : null}
+                    </Polymorph>
+                </Collapse>
+            </motion.div> : null}
+        </AnimatePresence>
     );
 }) as never;

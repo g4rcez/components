@@ -5,8 +5,6 @@ import {
     Controls,
     type Edge,
     Handle,
-    MarkerType,
-    MiniMap,
     type Node,
     OnConnect,
     Position,
@@ -14,7 +12,7 @@ import {
     ReactFlowProvider,
     useEdgesState,
     useNodesState,
-    useReactFlow,
+    useReactFlow
 } from "@xyflow/react";
 import { LucideProps, XIcon } from "lucide-react";
 import React, { createContext, Fragment, memo, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
@@ -167,7 +165,7 @@ const AddNodeOnEdgeDrop = <T extends Node = Node>(props: Props<T>) => {
 
     useEffect(() => {
         props.onChange(nodes);
-    }, [nodes.length, edges.length]);
+    }, [nodes, edges]);
 
     const onConnect = useCallback<OnConnect>(
         (params) => {

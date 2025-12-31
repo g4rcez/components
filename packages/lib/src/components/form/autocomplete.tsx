@@ -66,7 +66,7 @@ const Item: Components["List"] = forwardRef(function VirtualItem({ item, context
 
 const components = { List, Item };
 
-const MIN_SIZE = 44;
+const MIN_SIZE = 40;
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     (
@@ -363,7 +363,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <motion.div
                                 {...getFloatingProps({
                                     ref: mergeRefs(removeScrollRef, refs.setFloating),
-                                    style: { ...transitions.styles, left: x, top: y ?? 0, position: strategy },
+                                    style: { ...transitions.styles, left: x, top: y ?? 0, position: strategy, height: "auto" },
                                 })}
                                 initial={false}
                                 data-floating="true"
@@ -389,11 +389,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     ref={virtuoso}
                                     hidden={isEmpty}
                                     data={displayList}
-                                    style={{ height: h - 10 }}
+                                    // style={{ height: h - 10 }}
                                     defaultItemHeight={MIN_SIZE}
                                     components={components as any}
                                     scrollerRef={(e) => void (scroller.current = e as HTMLElement)}
-                                    className="max-h-[calc(100%-2px)] overscroll-contain rounded-lg border-floating bg-floating-background p-0 text-foreground"
+                                    className="max-h-full overscroll-contain rounded-lg border-floating bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = (option.Render as React.FC<any>) ?? Frag;
                                         const active = value === option.value || value === option.label;

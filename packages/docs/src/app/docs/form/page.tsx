@@ -163,7 +163,7 @@ export default function FormPage() {
               title: "Date",
               type: "datetime",
               datetimeTitle: "Localtime",
-              onChange: (d) => console.log(d),
+              onChange: (d:any) => console.log(d),
             })}
           />
           <DatePickerControlled />

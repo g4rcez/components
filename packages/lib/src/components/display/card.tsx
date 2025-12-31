@@ -1,53 +1,49 @@
-import React, { PropsWithChildren } from "react";
+import { InfoIcon, LucideIcon } from "lucide-react";
+import React, { type PropsWithChildren } from "react";
 import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
-import { Label, Override } from "../../types";
+import { Label } from "../../types";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
-import { InfoIcon, LucideIcon } from "lucide-react";
 import { Skeleton } from "./skeleton";
 
-export type CardProps = PolymorphicProps<
-    Override<
-        React.ComponentProps<"div">,
-        Partial<{
-            title: Label;
-            loading: boolean;
-            container: string;
-            titleClassName: string;
-            header: React.ReactElement | null;
-        }>
-    >,
-    "div"
+export type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<
+    {
+        title?: Label;
+        loading?: boolean;
+        container?: string;
+        titleClassName?: string;
+        header?: React.ReactElement | null;
+    },
+    T
 >;
 
-export const Card = ({
-    children,
+export const Card = <T extends React.ElementType = "div">({
     title,
-    titleClassName = "",
-    as = "div",
-    container = "",
-    header = null,
-    className = "",
     loading,
+    children,
+    as,
+    header = null,
+    container = "",
+    titleClassName = "",
     ...props
-}: PropsWithChildren<CardProps>) => (
+}: PropsWithChildren<CardProps<T>>) => (
     <Polymorph
         {...props}
-        as={as}
+        as={as || "div"}
         data-component="card"
-        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background py-4 pb-5", container)}
+        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background w-full py-4", container)}
     >
         {title ? (
             <header
                 data-component="card-title"
-                className={css("mb-2 w-full border-b border-card-border px-4 pb-4 text-xl font-medium lg:px-8", titleClassName)}
+                className={css("mb-2 w-full border-b border-card-border px-6 pb-4 text-xl font-medium", titleClassName)}
             >
                 {title}
             </header>
         ) : (
             header
         )}
-        <div data-component="card-body" className={css("min-w-full px-4 lg:px-8", className)}>
+        <div data-component="card-body" className={css("min-w-full px-6", props.className)}>
             {loading ? (
                 <div className="flex flex-col gap-4">
                     <Skeleton className="w-full" />
@@ -87,11 +83,15 @@ Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<Ca
     );
 };
 
-export const StatsCard = (props: PolymorphicProps<{ Icon: LucideIcon; title: string; value: Label; href?: string; mark?: string; interactive?: boolean }, "div">) => {
+export type StatsCardProps = CardProps<React.ElementType> & {
+    Icon?: LucideIcon; title: string; value: Label; mark?: string; interactive?: boolean
+}
+
+export const StatsCard = (props: StatsCardProps) => {
     const interactive = props.interactive ?? true;
     const Icon = props.Icon ?? InfoIcon
     return (
-        <Card {...props} title={null} container="px-0 py-0" className="flex gap-4 items-center px-0 lg:px-0">
+        <Card {...props} title={null} loading={undefined} container="px-0 py-0" className="flex gap-4 items-center px-0">
             <div
                 className={`flex w-full items-center gap-4 rounded-card px-0 lg:px-0 ${interactive ? "transition-colors duration-300 ease-linear hover:bg-primary-hover/10" : ""}`}
             >
@@ -105,7 +105,7 @@ export const StatsCard = (props: PolymorphicProps<{ Icon: LucideIcon; title: str
                 </div>
                 <div className="flex flex-col gap-2 justify-center py-2">
                     <p className="text-lg">{props.title}</p>
-                    <p className="text-4xl font-bold tracking-wide">{props.value}</p>
+                    {props.loading ? <Skeleton className="h-10" /> : <p className="text-4xl font-bold tracking-wide">{props.value}</p>}
                 </div>
             </div>
         </Card>

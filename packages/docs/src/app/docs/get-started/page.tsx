@@ -51,10 +51,7 @@ export default function GetStartedPage() {
                   const prev = count.current;
                   const c = prev + 1;
                   count.current = c;
-                  notification(`Notification ${c}`, {
-                    title: "Success",
-                    theme: "danger",
-                  });
+                  notification(`Notification ${c}`, { title: "Success", theme: "success" });
                 }}
                 className="w-full"
               >

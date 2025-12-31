@@ -118,6 +118,7 @@ export default function TablePage() {
           rows={clients}
           operations={false}
           loading={clients.length === 0}
+          getRowProps={(item: User) => item.type === "pf" ? ({ style: { background: "#232323" } }) : {}}
         />
       </Card>
     </DocsLayout>

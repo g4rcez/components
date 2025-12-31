@@ -31,7 +31,7 @@ export const Pagination = (pagination: TablePagination) => {
     const hasNext = pagination.current < pagination.pages;
 
     return (
-        <footer className="flex flex-wrap items-center justify-center gap-4 px-1 py-4 lg:flex-nowrap lg:justify-between">
+        <footer className="flex flex-wrap items-center justify-center gap-4 p-3 border-t-muted text-sm lg:flex-nowrap lg:justify-between">
             <p>
                 <translation.tablePaginationFooter
                     {...pagination}
