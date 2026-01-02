@@ -1,25 +1,25 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import React, { useState } from "react";
-import { Button, Card } from "../../../../../lib/src";
-import {
-  Step,
-  StepsContainer,
-} from "../../../../../lib/src/components/display/step";
+import { Button, Card, Steps, Step } from "../../../../../lib/src";
 
 export default function StepperPage() {
   const [step, setStep] = useState(2);
-  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => setStep(Number(e.currentTarget.dataset.step))
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) =>
+    setStep(Number(e.currentTarget.dataset.step));
 
   return (
-    <DocsLayout title="Steppter" section="display" description="">
-      <Card>
-        <StepsContainer steps={4} currentStep={step}>
-          <Step onClick={onClick} step={1} currentStep={step} />
-          <Step onClick={onClick} step={2} currentStep={step} />
-          <Step onClick={onClick} step={3} currentStep={step} />
-          <Step onClick={onClick} step={4} currentStep={step} />
-        </StepsContainer>
+    <DocsLayout title="Steps" section="display" description="">
+      <Card
+        title={
+          <Steps steps={4} currentStep={step}>
+            <Step onClick={onClick} step={1} currentStep={step} />
+            <Step onClick={onClick} step={2} currentStep={step} />
+            <Step onClick={onClick} step={3} currentStep={step} />
+            <Step onClick={onClick} step={4} currentStep={step} />
+          </Steps>
+        }
+      >
         {step < 5 ? (
           <div className="p-32 text-center">Step {step}</div>
         ) : (

@@ -9,6 +9,7 @@ export * from "./table/index";
 export * from "./display/card";
 export * from "./display/list";
 export * from "./display/tabs";
+export * from "./display/step";
 export * from "./display/alert";
 export * from "./display/empty";
 export * from "./display/stats";
