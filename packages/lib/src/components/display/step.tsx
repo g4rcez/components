@@ -1,7 +1,8 @@
 "use client";
 import { motion, Transition, useAnimate } from "motion/react";
-import React, { ComponentProps, createContext, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
+import React, { ComponentProps, createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
 import { useColorParser } from "../../hooks/use-color-parser";
+import { Label } from "../../types";
 
 const PROGRESS_BAR_DURATION = 0.3;
 
@@ -40,9 +41,21 @@ const CheckIcon = (props: ComponentProps<"svg">) => (
 
 type StepStatus = "active" | "inactive" | "complete" | "error";
 
-export type StepProps = React.ComponentProps<"button"> & { step: number; currentStep: number; status?: StepStatus };
+export type StepProps = React.ComponentProps<"button"> & {
+  step: number;
+  title?: Label;
+  currentStep: number;
+  status?: StepStatus;
+  titleClassName?: string;
+};
 
-const variants = { complete: { scale: 1.25 }, active: { scale: 1, transition: { delay: 0, duration: 0.3 } } };
+const variants = {
+  complete: { scale: 1.25 },
+  active: {
+    scale: 1,
+    transition: { delay: 0, duration: 0.3 }
+  }
+};
 
 const transitions: Transition = { duration: 0.6, delay: 0.2, type: "tween", ease: "circOut", };
 
@@ -51,6 +64,110 @@ const getCurrentStatus = (step: StepProps["step"], currentStep: StepProps["curre
   if (currentStep === step) return "active";
   if (currentStep < step) return "inactive";
   return "complete";
+};
+
+
+const calculateStepDelay = (
+  step: number,
+  currentStep: number,
+  previousStep: number,
+  duration: number
+): number => {
+  if (currentStep === previousStep) return 0;
+  const isForward = currentStep > previousStep;
+  if (isForward) {
+    if (step <= previousStep || step > currentStep) return 0;
+    return ((step - previousStep) / (currentStep - previousStep)) * duration;
+  }
+  if (step <= currentStep || step > previousStep) return 0;
+  return ((previousStep - step) / (previousStep - currentStep)) * duration;
+};
+
+export const useStepContext = () => useContext(StepContext);
+
+export const Step = ({ step, currentStep, status, title, titleClassName, ...props }: StepProps) => {
+  const parser = useColorParser();
+  const context = useStepContext();
+  const [visualCurrentStep, setVisualCurrentStep] = useState(currentStep);
+
+  useEffect(() => {
+    if (!context) {
+      setVisualCurrentStep(currentStep);
+      return;
+    }
+    const delay = calculateStepDelay(
+      step,
+      context.currentStep,
+      context.previousStep,
+      context.progressBarDuration
+    );
+
+    if (delay === 0) {
+      setVisualCurrentStep(currentStep);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setVisualCurrentStep(currentStep);
+    }, delay * 1000);
+    return () => clearTimeout(timer);
+  }, [currentStep, context, step]);
+
+  const innerStatus = getCurrentStatus(step, visualCurrentStep, status);
+
+  return (
+    <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="relative w-auto text-center flex items-center justify-center">
+      <motion.div
+        variants={variants}
+        transition={transitions}
+        className={`absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
+      />
+      <motion.div
+        initial={false}
+        animate={innerStatus}
+        transition={transition}
+        className="flex relative justify-center items-center w-10 h-10 font-semibold rounded-full"
+        variants={{
+          error: {
+            color: parser("var(--danger-foreground)"),
+            borderColor: parser("var(--danger-hover)"),
+            backgroundColor: parser("var(--danger-DEFAULT)"),
+          },
+          inactive: {
+            transition,
+            color: parser("var(--disabled)"),
+            borderColor: parser("var(--card-border)"),
+            backgroundColor: parser("var(--background)"),
+          },
+          active: {
+            transition,
+            color: parser("var(--primary-foreground)"),
+            borderColor: parser("var(--primary-DEFAULT)"),
+            backgroundColor: parser("var(--primary-DEFAULT)"),
+          },
+          complete: {
+            transition,
+            color: parser("var(--success-foreground)"),
+            borderColor: parser("var(--success-DEFAULT)"),
+            backgroundColor: parser("var(--success-DEFAULT)"),
+          },
+        }}
+      >
+        <div className="flex justify-center items-center">
+          {innerStatus === "complete" ? (
+            <CheckIcon className="size-6 text-primary-foreground" />
+          ) : innerStatus === "error" ? (
+            <ErrorIcon className="size-6 text-danger-foreground" />
+          ) : (
+            <Fragment>
+              <span>{step}</span>
+            </Fragment>
+          )}
+        </div>
+      </motion.div>
+      {title && innerStatus === "active" ? <span className={`h-full flex items-center px-4 ${titleClassName}`}>{title}</span> : null}
+    </motion.button>
+  );
 };
 
 export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: number }>) => {
@@ -98,102 +215,3 @@ export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: num
   );
 };
 
-const calculateStepDelay = (
-  step: number,
-  currentStep: number,
-  previousStep: number,
-  duration: number
-): number => {
-  if (currentStep === previousStep) return 0;
-  const isForward = currentStep > previousStep;
-  if (isForward) {
-    if (step <= previousStep || step > currentStep) return 0;
-    return ((step - previousStep) / (currentStep - previousStep)) * duration;
-  }
-  if (step <= currentStep || step > previousStep) return 0;
-  return ((previousStep - step) / (previousStep - currentStep)) * duration;
-};
-
-export const useStepContext = () => useContext(StepContext);
-
-export const Step = ({ step, currentStep, status, ...props }: StepProps) => {
-  const parser = useColorParser();
-  const context = useStepContext();
-  const [visualCurrentStep, setVisualCurrentStep] = useState(currentStep);
-
-  useEffect(() => {
-    if (!context) {
-      setVisualCurrentStep(currentStep);
-      return;
-    }
-    const delay = calculateStepDelay(
-      step,
-      context.currentStep,
-      context.previousStep,
-      context.progressBarDuration
-    );
-
-    if (delay === 0) {
-      setVisualCurrentStep(currentStep);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setVisualCurrentStep(currentStep);
-    }, delay * 1000);
-    return () => clearTimeout(timer);
-  }, [currentStep, context, step]);
-
-  const innerStatus = getCurrentStatus(step, visualCurrentStep, status);
-
-  return (
-    <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="block relative w-auto">
-      <motion.div
-        variants={variants}
-        transition={transitions}
-        className={`absolute inset-0 rounded-full ${innerStatus === "error" ? "bg-danger" : ""}`}
-      />
-      <motion.div
-        initial={false}
-        animate={innerStatus}
-        transition={transition}
-        className="flex relative justify-center items-center w-10 h-10 font-semibold rounded-full"
-        variants={{
-          error: {
-            color: parser("var(--danger-foreground)"),
-            borderColor: parser("var(--danger-hover)"),
-            backgroundColor: parser("var(--danger-DEFAULT)"),
-          },
-          inactive: {
-            transition,
-            color: parser("var(--disabled)"),
-            borderColor: parser("var(--card-border)"),
-            backgroundColor: parser("var(--background)"),
-          },
-          active: {
-            transition,
-            color: parser("var(--primary-foreground)"),
-            borderColor: parser("var(--primary-DEFAULT)"),
-            backgroundColor: parser("var(--primary-DEFAULT)"),
-          },
-          complete: {
-            transition,
-            color: parser("var(--success-foreground)"),
-            borderColor: parser("var(--success-DEFAULT)"),
-            backgroundColor: parser("var(--success-DEFAULT)"),
-          },
-        }}
-      >
-        <div className="flex justify-center items-center">
-          {innerStatus === "complete" ? (
-            <CheckIcon className="w-6 h-6 text-primary-foreground" />
-          ) : innerStatus === "error" ? (
-            <ErrorIcon className="w-6 h-6 text-danger-foreground" />
-          ) : (
-            <span>{step}</span>
-          )}
-        </div>
-      </motion.div>
-    </motion.button>
-  );
-};

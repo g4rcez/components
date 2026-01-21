@@ -13,8 +13,8 @@ export default function StepperPage() {
       <Card
         title={
           <Steps steps={4} currentStep={step}>
-            <Step onClick={onClick} step={1} currentStep={step} />
-            <Step onClick={onClick} step={2} currentStep={step} />
+            <Step title="First" onClick={onClick} step={1} currentStep={step} />
+            <Step title="Second" onClick={onClick} step={2} currentStep={step} />
             <Step onClick={onClick} step={3} currentStep={step} />
             <Step onClick={onClick} step={4} currentStep={step} />
           </Steps>

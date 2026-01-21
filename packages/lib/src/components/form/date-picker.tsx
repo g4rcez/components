@@ -141,7 +141,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             date={validDate ? innerDate : undefined}
         />
 
-
         return (
             <Fragment>
                 <Input
@@ -188,7 +187,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                         </Fragment> : null
                     }
                 />
-                {CalendarComponent}
             </Fragment>
         );
     }
