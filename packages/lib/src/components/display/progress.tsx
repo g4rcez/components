@@ -1,5 +1,5 @@
 import { Is } from "sidekicker"
-import { Progress as RadixProgress } from "radix-ui"
+import { Progress as RadixProgress } from "@base-ui/react/progress"
 import { css } from "../../lib/dom";
 import { PropsWithoutRef } from "react";
 import { Label } from "../../types";
@@ -17,7 +17,7 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
   return (
     <RadixProgress.Root
       max={props.max}
-      value={props.percent}
+      value={props.percent ?? null}
       style={{ transform: "translateZ(0)", }}
       className={css("overflow-hidden relative w-full rounded-full h-6 bg-background", props.container)}
     >

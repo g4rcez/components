@@ -192,7 +192,6 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 closable={false}
                 open={props.open}
                 overlayClickClose
-                interactions={[listNav]}
                 ariaTitle="Command palette"
                 bodyClassName="px-0 py-0 pt-2"
                 data-component="command-palette"

@@ -23,7 +23,7 @@ import {
     useRole,
     useTypeahead,
 } from "@floating-ui/react";
-import { Slot } from "radix-ui";
+import { Slot } from "../core/slot";
 import { ChevronRightIcon, LucideProps } from "lucide-react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../constants";
@@ -154,7 +154,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             <FloatingNode id={nodeId}>
                 <Fragment>
                     {props.asChild ? (
-                        <Slot.Root
+                        <Slot
                             {...getReferenceProps(
                                 parent.getItemProps({
                                     ...props,

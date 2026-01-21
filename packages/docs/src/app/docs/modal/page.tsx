@@ -4,14 +4,16 @@ import { BrainIcon } from "lucide-react";
 import { motion } from "motion/react";
 import React, { Fragment, PropsWithChildren, useState } from "react";
 import {
-    Button,
-    Card,
-    CommandItemTypes,
-    Modal,
-    ModalProps,
-    Switch,
-    Tooltip,
-    uuid
+  Autocomplete,
+  Button,
+  Card,
+  CommandItemTypes,
+  DatePicker,
+  Modal,
+  ModalProps,
+  Switch,
+  Tooltip,
+  uuid,
 } from "../../../../../lib/src";
 import { CommandPalette } from "../../../../../lib/src/components/floating/command-palette";
 
@@ -33,6 +35,8 @@ const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
 
 const Items = () => (
   <Fragment>
+    <Autocomplete title="Ok" options={[]} />
+    <DatePicker title="Ok" />
     {Array.from({ length: 70 }).map((x) => (
       <span key={uuid()}>
         I'm a Dialog component
@@ -269,7 +273,6 @@ export default function ModalExamplePage() {
           </Element>
         </Card>
       </div>
-      <Items />
     </DocsLayout>
   );
 }
