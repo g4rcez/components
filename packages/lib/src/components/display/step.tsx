@@ -116,11 +116,11 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
   const innerStatus = getCurrentStatus(step, visualCurrentStep, status);
 
   return (
-    <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="relative w-auto text-center flex items-center justify-center">
+    <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="flex relative justify-center items-center w-auto text-center">
       <motion.div
         variants={variants}
         transition={transitions}
-        className={`absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
+        className={`hidden lg:block absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
       />
       <motion.div
         initial={false}
@@ -165,7 +165,9 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
           )}
         </div>
       </motion.div>
-      {title && innerStatus === "active" ? <span className={`h-full flex items-center px-4 ${titleClassName}`}>{title}</span> : null}
+      {title && innerStatus === "active" ? <span className={`h-full flex items-center px-4 ${titleClassName}`}>{title}</span> :
+        <span className={`block lg:hidden h-full items-center px-4 ${titleClassName}`}>{title}</span>
+      }
     </motion.button>
   );
 };
@@ -206,12 +208,11 @@ export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: num
 
   return (
     <StepContext.Provider value={contextValue}>
-      <div className="flex relative justify-between" ref={ref}>
-        <div className="absolute top-1/2 h-1 w-[calc(100%)] bg-card-border" />
-        <div data-name="progress" className="absolute top-1/2 w-0 h-1 bg-success" />
+      <div className="flex relative flex-col gap-4 justify-center lg:justify-between items-start w-full lg:flex-row lg:items-center" ref={ref}>
+        <div className="hidden lg:block absolute top-1/2 h-1 w-[calc(100%)] bg-card-border" />
+        <div data-name="progress" className="hidden absolute top-1/2 w-0 h-1 lg:block bg-success" />
         {props.children}
       </div>
     </StepContext.Provider>
   );
 };
-

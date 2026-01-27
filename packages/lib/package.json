@@ -1,7 +1,7 @@
 {
   "name": "@g4rcez/components",
   "description": "Customizable react components.",
-  "version": "2.0.29",
+  "version": "2.0.30",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.12.3",
@@ -45,7 +45,7 @@
     "date-fns": "4.1.0",
     "linq-arrays": "3.2.5",
     "lucide-react": "0.562.0",
-    "motion": "12.27.5",
+    "motion": "12.28.1",
     "pretty-bytes": "7.1.0",
     "qs": "6.14.1",
     "react-dropzone": "14.3.8",

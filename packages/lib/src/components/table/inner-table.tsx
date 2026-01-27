@@ -51,7 +51,7 @@ const TableBody = React.forwardRef(
     ref: any
   ) => {
     return (
-      <tbody {...props} role="rowgroup" className={`divide-y divide-table-border ${className}`} ref={ref}>
+      <tbody {...(props as any)} role="rowgroup" className={`divide-y divide-table-border ${className}`} ref={ref}>
         <AnimatePresence>{props.children}</AnimatePresence>
       </tbody>
     );

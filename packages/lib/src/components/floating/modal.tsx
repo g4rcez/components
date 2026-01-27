@@ -324,7 +324,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                         layoutId={layoutId}
                         variants={animation}
                         data-component="modal"
-                        ref={mergeRefs(floatingRef, removeScrollRef)}
+                        ref={mergeRefs(floatingRef as any, removeScrollRef as any) as any}
                         style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
                         className={css(
                           variants({ position, type }),

@@ -198,7 +198,7 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {state[0] ? <FileViewer item={state[0]!} /> : null}
             </Modal>
             <div
-                {...getRootProps()}
+                {...getRootProps() as any}
                 data-active={items ? items.length > 0 : false}
                 className="flex flex-col items-center justify-center rounded-lg border border-card-border p-6 text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
             >
