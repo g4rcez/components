@@ -140,13 +140,12 @@ export const InnerTable = <T extends Any>({
   setSorters,
   onScrollEnd,
   getScrollRef,
-  border = true,
   pagination = null,
   useControl = false,
   ...props
 }: InnerTableProps<T>) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [showLoadingFooter, setShowLoadingFooter] = useState(false);
+  const [, setShowLoadingFooter] = useState(false);
   const onScrollEndRef = useStableRef(onScrollEnd);
   const loadingMoreRef = useStableRef(props.loadingMore);
 
@@ -182,7 +181,7 @@ export const InnerTable = <T extends Any>({
   const empty = rows.length === 0;
 
   const context = {
-    cols: cols as any,
+    cols: cols,
     Aside: props.Aside,
     loading: props.loading,
     getRowProps: props.getRowProps,
@@ -192,8 +191,8 @@ export const InnerTable = <T extends Any>({
   return (
     <div className="flex relative flex-col w-full whitespace-nowrap rounded-lg group">
       <TableVirtuoso
-        context={context}
         components={components}
+        context={context as any}
         totalCount={rows.length}
         itemContent={empty ? EmptyCell : Row}
         data={empty ? (emptyRows as T[]) : rows}

@@ -72,7 +72,6 @@ export const RootLayout = (props: PropsWithChildren) => {
             >
               {isLandingPage ? (
                 <div className="min-h-screen">
-                  <Header />
                   <main className="bg-gradient-to-br from-background via-background to-card-background/20">
                     {props.children}
                   </main>

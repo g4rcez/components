@@ -12,7 +12,6 @@ import { Sorter } from "./sort";
 import { Col, createOptionCols, TableOperationProps } from "./table-lib";
 import { TableContextProps, TableProvider } from "./table.context";
 
-
 export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
   name: string;
 } & Partial<

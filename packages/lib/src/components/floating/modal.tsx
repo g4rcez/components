@@ -1,13 +1,23 @@
 "use client";
-import { Dialog } from "@base-ui/react/dialog";
+import {
+  FloatingFocusManager,
+  FloatingOverlay,
+  FloatingPortal,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useRole,
+  type ElementProps,
+} from "@floating-ui/react";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
-import { AnimatePresence, HTMLMotionProps, motion, MotionConfig, MotionValue, PanInfo, TargetAndTransition, useMotionValue } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion, MotionConfig, MotionValue, PanInfo, TargetAndTransition, useMotionValue, animate } from "motion/react";
+import { Slot } from "../core/slot";
 import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useEffect, useId, useImperativeHandle, useRef } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
-import { Slot } from "../core/slot";
 
 type AnimationLabels = "initial" | "enter" | "exit";
 
@@ -55,7 +65,7 @@ const variants = cva(
     variants: {
       type: {
         drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
-        dialog: "max-h-[calc(100lvh-10%)] container h-min rounded-lg py-4",
+        dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
         sheet: "w-screen absolute bottom-0 max-h-[calc(100vh-15%)] max-h-[calc(100svh-5%)] h-screen pt-6 pb-4 rounded-t-lg",
       },
       position: {
@@ -87,6 +97,8 @@ export type ModalProps = Override<
     overlayClassName: string;
     position: DrawerPosition;
     overlayClickClose: boolean;
+    role: "dialog";
+    interactions: ElementProps[];
     trigger: Label | React.FC<any>;
   }>
 >;
@@ -169,7 +181,9 @@ const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsTy
   return forceType ? positions[type] : positions.sheet;
 };
 
-type ModalRef = { floating: HTMLElement | null };
+type ModalRef = { context: any; floating: HTMLElement | null };
+
+const noop: any[] = [];
 
 export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
   (
@@ -193,12 +207,12 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
       type: _type = "dialog",
       position: propsPosition,
       overlayClickClose = false,
+      interactions: outInteractions = noop,
       ...props
     }: PropsWithChildren<ModalProps>,
     externalRef: ForwardedRef<ModalRef>
   ) => {
-    const innerContent = useRef<HTMLDivElement>(null);
-    const floatingRef = useRef<HTMLDivElement>(null);
+    const innerContent = useRef<HTMLDivElement>(null)
     const removeScrollRef = useRef<HTMLDivElement>(null);
     const headingId = useId();
     const descriptionId = useId();
@@ -209,18 +223,35 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
     const type = isDesktop ? _type : forceType ? _type : "sheet";
     const useResizer = type !== "dialog";
 
+    const floating = useFloating({ open, onOpenChange: onChange, strategy: "fixed" });
+    const click = useClick(floating.context, {});
+    const role = useRole(floating.context, { role: "dialog" });
+    const dismiss = useDismiss(floating.context, {
+      bubbles: true,
+      escapeKey: true,
+      outsidePress: overlayClickClose,
+    });
+
+    const interactions = useInteractions([click, dismiss, role].concat(outInteractions));
+
     const Trigger = trigger as any;
 
     const floatingSize = useMotionValue<number | undefined>(undefined);
+    const sheetY = useMotionValue<number | undefined>(undefined);
+    const isDragging = useRef(false);
+    const dragStart = useRef(0);
 
-    useEffect(() => floatingSize.set(undefined), [type, floatingSize]);
+    useEffect(() => {
+        floatingSize.set(undefined);
+        sheetY.set(undefined);
+    }, [type, floatingSize, sheetY]);
 
     const onClose = () => onChange(false);
 
-    useImperativeHandle(externalRef, () => ({ floating: removeScrollRef.current }), [removeScrollRef]);
+    useImperativeHandle(externalRef, () => ({ context: floating.context, floating: removeScrollRef.current }), [floating.context, removeScrollRef]);
 
     const onDragHeader = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      const div = floatingRef.current as HTMLElement;
+      const div = floating.refs.floating.current as HTMLElement;
       const rect = div.getBoundingClientRect();
       const v = floatingSize.get() || rect.height;
       const result = Math.abs(v - info.delta.y);
@@ -232,194 +263,167 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
       }
       onChange?.(false);
       return setTimeout(() => floatingSize.set(undefined), 350);
-    };
+    }
 
-    const onDragBody = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      const div = floatingRef.current as HTMLElement;
-      if (info.delta.y < 0 && info.offset.y < 0) {
-        div.scrollTo({ top: div.scrollTop + Math.abs(info.offset.y), behavior: "smooth" });
-        return;
-      }
-      const rect = div.getBoundingClientRect();
-      const v = floatingSize.get() || rect.height;
-      const result = Math.abs(v - info.delta.y);
-      const max = window.outerHeight;
-      const screenHeightToClose = calculateClose(max);
-      if (result >= screenHeightToClose) return floatingSize.set(result);
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement?.blur();
-      }
-      onChange?.(false);
-      return setTimeout(() => floatingSize.set(undefined), 350);
-    };
 
-    const draggableMotionProps =
-      type === "sheet"
-        ? ({
-          drag: "y",
-          animate: false,
-          dragElastic: 0,
-          initial: false,
-          dragConstraints,
-          draggable: true,
-          dragListener: true,
-          dragMomentum: true,
-          onDrag: onDragHeader,
-          dragPropagation: true,
-          dragSnapToOrigin: true,
-          dragDirectionLock: true,
-          whileDrag: { cursor: "grabbing" },
-        } as const)
-        : { animate: animated, initial: false };
+    const draggableMotionProps = type === "sheet" ? {
+      drag: "y",
+      animate: false,
+      dragElastic: 0,
+      initial: false,
+      dragConstraints,
+      draggable: true,
+      dragListener: true,
+      dragMomentum: true,
+      onDrag: onDragHeader,
+      dragPropagation: true,
+      dragSnapToOrigin: true,
+      dragDirectionLock: true,
+      whileDrag: { cursor: "grabbing" },
+    } as const : { animate: animated, initial: false }
 
     const scrollInitial = useMotionValue<number | undefined>(undefined);
     const scroll = useMotionValue<number | undefined>(undefined);
 
+    const Component = asChild ? Slot : motion.button;
+
     return (
-      <Dialog.Root open={open} onOpenChange={onChange} disablePointerDismissal={!overlayClickClose}>
+      <Fragment>
         {trigger ? (
-          <Fragment>
-            {asChild ? (
-              <Dialog.Trigger render={<Slot />}>
-                {Trigger}
-              </Dialog.Trigger>
-            ) : (
-              <Dialog.Trigger render={<motion.button layoutId={layoutId} type="button" />}>
-                {Trigger}
-              </Dialog.Trigger>
-            )}
-          </Fragment>
+          <Component ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
+            {Trigger}
+          </Component>
         ) : null}
-        <AnimatePresence mode="wait" initial={false}>
-          {open ? (
-            <Dialog.Portal keepMounted={false}>
-              <Dialog.Backdrop
+        <FloatingPortal preserveTabOrder>
+          <AnimatePresence custom presenceAffectsLayout propagate mode="sync" initial={false}>
+            {open ? (
+              <FloatingOverlay
+                lockScroll
                 className={css(
-                  "fixed inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh]",
+                  "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh] !overflow-clip",
                   type === "drawer" ? "" : "items-start justify-center p-10",
                   overlayClassName
                 )}
-              />
-              <Dialog.Viewport
-                className={css(
-                  "fixed inset-0 flex isolate z-overlay h-[100dvh]",
-                  type === "drawer" ? "" : "items-start justify-center p-10",
-                  overlayClassName
-                )}>
+              >
                 <MotionConfig reducedMotion={animated ? "user" : "always"}>
-                  <Dialog.Popup
-                    render={
-                      <motion.div
-                        {...props}
-                        {...(title
-                          ? {
-                            "aria-labelledby": headingId,
-                            "aria-describedby": descriptionId,
-                          }
-                          : { "aria-label": ariaTitle })}
-                        exit="exit"
-                        layout={true}
-                        animate="enter"
-                        initial="initial"
-                        layoutId={layoutId}
-                        variants={animation}
-                        data-component="modal"
-                        ref={mergeRefs(floatingRef as any, removeScrollRef as any) as any}
-                        style={type === "drawer" ? { width: floatingSize } : { height: floatingSize }}
-                        className={css(
-                          variants({ position, type }),
-                          className,
-                          "isolate overscroll-contain fixed",
-                          type === "dialog" ? "max-w-[calc(100vw-3rem)]" : ""
-                        )}
-                      />
-                    }
-                  >
-                    {useResizer && resizer ? (
-                      <Draggable
-                        onChange={onChange}
-                        value={floatingSize}
-                        sheet={type === "sheet"}
-                        position={position as DrawerPosition}
-                        parent={floatingRef as any}
-                      />
-                    ) : null}
-                    {title ? (
-                      <motion.header {...draggableMotionProps} className="relative w-full isolate">
-                        <Dialog.Title
-                          render={
+                  <FloatingFocusManager guards visuallyHiddenDismiss modal closeOnFocusOut context={floating.context}>
+                    <motion.div
+                      {...props}
+                      {...(title
+                        ? {
+                          "aria-labelledby": headingId,
+                          "aria-describedby": descriptionId,
+                        }
+                        : { "aria-label": ariaTitle })}
+                      {...interactions.getFloatingProps({
+                        "aria-modal": open,
+                        ref: mergeRefs(floating.refs.setFloating, removeScrollRef) as any,
+                        className: css(variants({ position, type }), className, "isolate overscroll-contain"),
+                      })}
+                      exit="exit"
+                      layout={true}
+                      animate="enter"
+                      initial="initial"
+                      layoutId={layoutId}
+                      variants={animation}
+                      data-component="modal"
+                      style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
+                    >
+                      {useResizer && resizer ? (
+                        <Draggable
+                          onChange={onChange}
+                          value={floatingSize}
+                          sheet={type === "sheet"}
+                          position={position as DrawerPosition}
+                          parent={floating.refs.floating as any}
+                        />
+                      ) : null}
+                      {title ? (
+                        <motion.header {...draggableMotionProps} className="relative w-full isolate" >
+                          {title ? (
                             <h2
                               id={headingId}
                               className="block px-8 pb-2 text-3xl font-medium leading-relaxed border-b select-text border-floating-border"
-                            />
+                            >
+                              {title}
+                            </h2>
+                          ) : null}
+                        </motion.header>
+                      ) : null}
+                      <motion.section
+                        ref={innerContent}
+                        data-component="modal-body"
+                        className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
+                        onTouchEnd={async () => {
+                          scroll.set(undefined);
+                          scrollInitial.set(undefined);
+                          
+                          if (isDragging.current) {
+                            const currentY = sheetY.get() || 0;
+                            const threshold = window.innerHeight * 0.2;
+                            
+                            if (currentY > threshold) {
+                                await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" }).finished;
+                                onChange(false);
+                            } else {
+                                animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
+                            }
+                            isDragging.current = false;
                           }
-                        >
-                          {title}
-                        </Dialog.Title>
-                      </motion.header>
-                    ) : null}
-                    <motion.section
-                      ref={innerContent}
-                      data-component="modal-body"
-                      dragConstraints={dragConstraints}
-                      drag={isDesktop ? undefined : "y"}
-                      onDrag={type === "sheet" ? (isDesktop ? undefined : onDragBody) : undefined}
-                      className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
-                      onTouchEnd={() => {
-                        scroll.set(undefined);
-                        scrollInitial.set(undefined);
-                      }}
-                      onTouchStart={(e) => {
-                        const touch = e.changedTouches[0];
-                        scrollInitial.set(touch.pageY);
-                        scroll.set(touch.pageY);
-                      }}
-                      onTouchMove={(e) => {
-                        const touch = e.changedTouches[0];
-                        const y = touch.pageY;
-                        const initial = scrollInitial.get();
-                        if (initial !== undefined && initial < y) {
-                          const distanceFromTop = innerContent.current?.scrollTop;
-                          if (distanceFromTop === 0) {
-                            const div = floatingRef.current as HTMLElement;
-                            const rect = div.getBoundingClientRect();
-                            const v = floatingSize.get() || rect.height;
-                            const diff = (initial - y) / 10;
-                            const down = v + diff;
-                            const max = window.outerHeight;
-                            const screenHeightToClose = calculateClose(max);
-                            if (down < screenHeightToClose) onChange?.(false);
-                            floatingSize.set(down);
+                        }}
+                        onTouchStart={(e) => {
+                          const touch = e.changedTouches[0];
+                          scrollInitial.set(touch.pageY);
+                          scroll.set(touch.pageY);
+                          isDragging.current = false;
+                        }}
+                        onTouchMove={(e) => {
+                          const touch = e.changedTouches[0];
+                          const y = touch.pageY;
+                          const prevY = scroll.get() || y;
+                          const scrollTop = innerContent.current?.scrollTop || 0;
+                          
+                          if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
+                            isDragging.current = true;
+                            dragStart.current = y;
                           }
-                        }
-                        scroll.set(touch.pageY);
-                      }}
-                    >
-                      {children}
-                    </motion.section>
-                    {footer ? <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer> : null}
-                    {closable ? (
-                      <nav className="absolute top-1 right-4 z-floating">
-                        <Dialog.Close
-                          render={
-                            <button
-                              type="button"
-                              onClick={onClose}
-                              className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
-                            />
+
+                          if (isDragging.current) {
+                            const delta = y - dragStart.current;
+                            if (delta < 0) {
+                                sheetY.set(delta * 0.2);
+                            } else {
+                                sheetY.set(delta);
+                            }
                           }
-                        >
-                          <XIcon />
-                        </Dialog.Close>
-                      </nav>
-                    ) : null}
-                  </Dialog.Popup>
+
+                          scroll.set(y);
+                        }}
+                      >
+                        {children}
+                      </motion.section>
+                      {footer ? (
+                        <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer>
+                      ) : null}
+                      {closable ? (
+                        <nav className="absolute top-1 right-4 z-floating">
+                          <button
+                            type="button"
+                            onClick={onClose}
+                            className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
+                          >
+                            <XIcon />
+                          </button>
+                        </nav>
+                      ) : null}
+                    </motion.div>
+                  </FloatingFocusManager>
                 </MotionConfig>
-              </Dialog.Viewport>
-            </Dialog.Portal>
-          ) : null}
-        </AnimatePresence>
-      </Dialog.Root>
+              </FloatingOverlay>
+            ) : null}
+          </AnimatePresence>
+        </FloatingPortal>
+      </Fragment>
     );
   }
 );

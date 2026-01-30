@@ -1,6 +1,6 @@
 "use client";
-import { motion, Transition, useAnimate } from "motion/react";
-import React, { ComponentProps, createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
+import { motion, Transition } from "motion/react";
+import React, { ComponentProps, createContext, CSSProperties, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
 import { useColorParser } from "../../hooks/use-color-parser";
 import { Label } from "../../types";
 
@@ -8,7 +8,7 @@ const PROGRESS_BAR_DURATION = 0.3;
 
 const transition: Transition = { duration: PROGRESS_BAR_DURATION, type: "tween", ease: "easeInOut" };
 
-type StepContextValue = { currentStep: number; previousStep: number; progressBarDuration: number };
+type StepContextValue = { currentStep: number; previousStep: number; progressBarDuration: number; steps: number };
 
 const StepContext = createContext<StepContextValue | null>(null);
 
@@ -51,10 +51,7 @@ export type StepProps = React.ComponentProps<"button"> & {
 
 const variants = {
   complete: { scale: 1.25 },
-  active: {
-    scale: 1,
-    transition: { delay: 0, duration: 0.3 }
-  }
+  active: { scale: 1, transition: { delay: 0, duration: 0.3 } }
 };
 
 const transitions: Transition = { duration: 0.6, delay: 0.2, type: "tween", ease: "circOut", };
@@ -115,82 +112,71 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
 
   const innerStatus = getCurrentStatus(step, visualCurrentStep, status);
 
+  const widthPerStep = context?.steps ? 100 / (context?.steps) : undefined;
+
   return (
-    <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="flex relative justify-center items-center w-auto text-center">
-      <motion.div
-        variants={variants}
-        transition={transitions}
-        className={`hidden lg:block absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
-      />
-      <motion.div
-        initial={false}
-        animate={innerStatus}
-        transition={transition}
-        className="flex relative justify-center items-center w-10 h-10 font-semibold rounded-full"
-        variants={{
-          error: {
-            color: parser("var(--danger-foreground)"),
-            borderColor: parser("var(--danger-hover)"),
-            backgroundColor: parser("var(--danger-DEFAULT)"),
-          },
-          inactive: {
-            transition,
-            color: parser("var(--disabled)"),
-            borderColor: parser("var(--card-border)"),
-            backgroundColor: parser("var(--background)"),
-          },
-          active: {
-            transition,
-            color: parser("var(--primary-foreground)"),
-            borderColor: parser("var(--primary-DEFAULT)"),
-            backgroundColor: parser("var(--primary-DEFAULT)"),
-          },
-          complete: {
-            transition,
-            color: parser("var(--success-foreground)"),
-            borderColor: parser("var(--success-DEFAULT)"),
-            backgroundColor: parser("var(--success-DEFAULT)"),
-          },
-        }}
-      >
-        <div className="flex justify-center items-center">
-          {innerStatus === "complete" ? (
-            <CheckIcon className="size-6 text-primary-foreground" />
-          ) : innerStatus === "error" ? (
-            <ErrorIcon className="size-6 text-danger-foreground" />
-          ) : (
-            <Fragment>
-              <span>{step}</span>
-            </Fragment>
-          )}
-        </div>
-      </motion.div>
-      {title && innerStatus === "active" ? <span className={`h-full flex items-center px-4 ${titleClassName}`}>{title}</span> :
-        <span className={`block lg:hidden h-full items-center px-4 ${titleClassName}`}>{title}</span>
-      }
-    </motion.button>
+    <Fragment>
+      <div className={`h-[2px] w-full xl:block bg-card-border hidden first:hidden ${innerStatus === "active" || innerStatus === "complete" ? "bg-success" : ""}`} />
+      <motion.button {...(props as any)} type="button" data-step={step} animate={innerStatus} className="flex relative justify-center items-center w-auto text-center">
+        <motion.div
+          variants={variants}
+          transition={transitions}
+          className={`hidden xl:block aspect-square absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
+        />
+        <motion.div
+          initial={false}
+          animate={innerStatus}
+          transition={transition}
+          className="flex relative justify-center items-center font-semibold rounded-full size-10 aspect-square"
+          variants={{
+            error: {
+              color: parser("var(--danger-foreground)"),
+              borderColor: parser("var(--danger-hover)"),
+              backgroundColor: parser("var(--danger-DEFAULT)"),
+            },
+            inactive: {
+              transition,
+              color: parser("var(--disabled)"),
+              borderColor: parser("var(--card-border)"),
+              backgroundColor: parser("var(--background)"),
+            },
+            active: {
+              transition,
+              color: parser("var(--primary-foreground)"),
+              borderColor: parser("var(--primary-DEFAULT)"),
+              backgroundColor: parser("var(--primary-DEFAULT)"),
+            },
+            complete: {
+              transition,
+              color: parser("var(--success-foreground)"),
+              borderColor: parser("var(--success-DEFAULT)"),
+              backgroundColor: parser("var(--success-DEFAULT)"),
+            },
+          }}
+        >
+          <div className="flex justify-center items-center">
+            {innerStatus === "complete" ? (
+              <CheckIcon className="size-6 text-primary-foreground" />
+            ) : innerStatus === "error" ? (
+              <ErrorIcon className="size-6 text-danger-foreground" />
+            ) : (
+              <Fragment>
+                <span>{step}</span>
+              </Fragment>
+            )}
+          </div>
+        </motion.div>
+        <header className="flex flex-col justify-start items-start px-2">
+          <h3 className={`h-full whitespace-nowrap flex items-center ${titleClassName}`}>{title}</h3>
+        </header>
+        </motion.button>
+    </Fragment>
   );
 };
 
 export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: number }>) => {
-  const [ref, animate] = useAnimate();
   const previousStepRef = useRef(props.currentStep);
   const [previousStep, setPreviousStep] = useState(props.currentStep);
-
-  useEffect(() => {
-    if (props.currentStep === 0) return;
-    const container = ref.current as HTMLDivElement;
-    const first = container.querySelectorAll('[data-step]')[0]! as HTMLDivElement;
-    const step = container.querySelector(`[data-step="${props.currentStep}"]`)! as HTMLDivElement;
-    if (first && step) {
-      const diff = step.getBoundingClientRect().left - first.getBoundingClientRect().left;
-      animate(
-        "div[data-name='progress']",
-        { width: `${Math.max(0, diff)}px` },
-        transition
-      );
-    }
-  }, [props.currentStep]);
 
   useEffect(() => {
     previousStepRef.current = previousStep;
@@ -198,19 +184,18 @@ export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: num
       setPreviousStep(props.currentStep);
     }, PROGRESS_BAR_DURATION * 1000);
     return () => clearTimeout(timer);
-  }, [props.currentStep]);
+  }, [props.currentStep, previousStep]);
 
   const contextValue: StepContextValue = {
     currentStep: props.currentStep,
     previousStep: previousStepRef.current,
     progressBarDuration: PROGRESS_BAR_DURATION,
+    steps: React.Children.count(props.children),
   };
 
   return (
     <StepContext.Provider value={contextValue}>
-      <div className="flex relative flex-col gap-4 justify-center lg:justify-between items-start w-full lg:flex-row lg:items-center" ref={ref}>
-        <div className="hidden lg:block absolute top-1/2 h-1 w-[calc(100%)] bg-card-border" />
-        <div data-name="progress" className="hidden absolute top-1/2 w-0 h-1 lg:block bg-success" />
+      <div className="flex relative flex-col gap-4 justify-center items-start w-full lg:flex-row lg:justify-between lg:items-center">
         {props.children}
       </div>
     </StepContext.Provider>

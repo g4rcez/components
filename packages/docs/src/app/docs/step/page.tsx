@@ -13,15 +13,15 @@ export default function StepperPage() {
       <Card
         title={
           <Steps steps={4} currentStep={step}>
-            <Step title="Step" onClick={onClick} step={1} currentStep={step} />
+            <Step title="First step" onClick={onClick} step={1} currentStep={step} />
             <Step
               step={2}
-              title="sTep"
+              title="Second"
               onClick={onClick}
               currentStep={step}
             />
-            <Step title="stEp" onClick={onClick} step={3} currentStep={step} />
-            <Step titleClassName="bg-inherit" title="steP" onClick={onClick} step={4} currentStep={step} />
+            <Step title="Third" onClick={onClick} step={3} currentStep={step} />
+            <Step titleClassName="bg-inherit" title="Giant title to use as last step" onClick={onClick} step={4} currentStep={step} />
           </Steps>
         }
       >
