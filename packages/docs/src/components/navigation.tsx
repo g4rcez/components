@@ -101,7 +101,6 @@ export const Navigation = () => {
                   {section.title}
                 </h3>
               </div>
-
               <ul className="space-y-1">
                 {section.items.map((item) => {
                   const isActive = path === item.href;
@@ -112,7 +111,7 @@ export const Navigation = () => {
                       <Link
                         href={item.href}
                         className={`
-                          group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                          group flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm font-medium transition-all duration-200
                           ${
                             isActive
                               ? "bg-primary/10 text-primary border-l-2 border-primary shadow-sm"

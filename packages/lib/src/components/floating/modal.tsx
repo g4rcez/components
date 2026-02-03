@@ -60,7 +60,7 @@ const animations: Animations = {
 };
 
 const variants = cva(
-  "z-floating border border-card-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background",
+  "z-floating border border-floating-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background",
   {
     variants: {
       type: {
@@ -242,8 +242,8 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
     const dragStart = useRef(0);
 
     useEffect(() => {
-        floatingSize.set(undefined);
-        sheetY.set(undefined);
+      floatingSize.set(undefined);
+      sheetY.set(undefined);
     }, [type, floatingSize, sheetY]);
 
     const onClose = () => onChange(false);
@@ -301,7 +301,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                 lockScroll
                 className={css(
                   "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh] !overflow-clip",
-                  type === "drawer" ? "" : "items-start justify-center p-10",
+                  type === "drawer" ? "" : "items-start justify-center lg:p-10 pt-10",
                   overlayClassName
                 )}
               >
@@ -357,16 +357,16 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                         onTouchEnd={async () => {
                           scroll.set(undefined);
                           scrollInitial.set(undefined);
-                          
+
                           if (isDragging.current) {
                             const currentY = sheetY.get() || 0;
                             const threshold = window.innerHeight * 0.2;
-                            
+
                             if (currentY > threshold) {
-                                await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" }).finished;
-                                onChange(false);
+                              await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" }).finished;
+                              onChange(false);
                             } else {
-                                animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
+                              animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
                             }
                             isDragging.current = false;
                           }
@@ -382,7 +382,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                           const y = touch.pageY;
                           const prevY = scroll.get() || y;
                           const scrollTop = innerContent.current?.scrollTop || 0;
-                          
+
                           if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
                             isDragging.current = true;
                             dragStart.current = y;
@@ -391,9 +391,9 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                           if (isDragging.current) {
                             const delta = y - dragStart.current;
                             if (delta < 0) {
-                                sheetY.set(delta * 0.2);
+                              sheetY.set(delta * 0.2);
                             } else {
-                                sheetY.set(delta);
+                              sheetY.set(delta);
                             }
                           }
 

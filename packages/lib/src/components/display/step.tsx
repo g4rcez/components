@@ -121,7 +121,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
         <motion.div
           variants={variants}
           transition={transitions}
-          className={`hidden xl:block aspect-square absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
+          className={`hidden xl:block absolute inset-0 rounded-full text-center ${innerStatus === "error" ? "bg-danger" : ""}`}
         />
         <motion.div
           initial={false}

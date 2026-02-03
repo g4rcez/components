@@ -158,10 +158,10 @@ export default function ModalExamplePage() {
     >
       <div className="flex flex-col gap-6">
         <CommandPalette
-          onChangeVisibility={setOpen}
           open={open}
-          commands={commands}
           Preview={Preview}
+          commands={commands}
+          onChangeVisibility={setOpen}
         />
         <Card
           title="Global configuration"

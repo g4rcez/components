@@ -8,17 +8,17 @@ import { useHover } from "../../hooks/use-hover";
 import { Label } from "../../types";
 
 const variants = cva(
-  "relative isolate z-tooltip flex justify-between overflow-hidden whitespace-nowrap rounded-lg border text-sm shadow-shadow-notification",
+  "relative isolate z-tooltip flex justify-between overflow-hidden whitespace-wrap rounded-lg border text-sm shadow-shadow-notification",
   {
     variants: {
       theme: {
         default: "border-card-border bg-card-background text-foreground",
         info: "bg-alert-info-bg text-alert-info-text border-alert-info-border",
         warn: "bg-alert-warn-bg text-alert-warn-text border-alert-warn-border",
+        muted: "bg-alert-muted-bg text-alert-muted-text border-alert-muted-border",
         danger: "bg-alert-danger-bg text-alert-danger-text border-alert-danger-border",
         success: "bg-alert-success-bg text-alert-success-text border-alert-success-border",
         secondary: "bg-alert-secondary-bg text-alert-secondary-text border-alert-secondary-border",
-        muted: "bg-alert-muted-bg text-alert-muted-text border-alert-muted-border",
       },
     },
     defaultVariants: { theme: "default" },
@@ -72,20 +72,20 @@ function Notification(props: NotificationItemProps) {
         data-index={props.index}
         initial={{ y: -100, zIndex: -1 }}
         className="absolute top-0 right-0 w-80 pointer-events-auto text-select"
+        transition={{ type: "spring", mass: 1.2, damping: 30, stiffness: 200 }}
+        exit={{ opacity: [0.9, 0], transition: { opacity: { bounce: 0.25, duration: 0.3 } } }}
         variants={{
           isLast: { y: 10, scale: 1, animationDuration: "300ms", opacity: 1 },
           hover: { y: 0, position: "static", scale: 1, opacity: 1 },
           other: animatedIndex[props.reversedIndex] || animatedIndex.default,
         }}
-        transition={{ type: "spring", mass: 1.2, damping: 30, stiffness: 200 }}
-        exit={{ opacity: [0.9, 0], transition: { opacity: { bounce: 0.25, duration: 0.3 } } }}
       >
         <Base.Content className={className}>
           <div className="flex flex-col p-4">
             {props.toast.title ? (
-              <Base.Title className="text-lg font-medium leading-relaxed select-text truncate" />
+              <Base.Title className="text-lg font-medium leading-relaxed select-text" />
             ) : null}
-            <Base.Description className="select-text truncate" />
+            <Base.Description className="select-text" />
           </div>
           {closable ? (
             <Base.Close className="absolute top-2 right-2 p-1 rounded-full transition text-foreground hover:bg-danger/10 hover:text-danger-hover">
