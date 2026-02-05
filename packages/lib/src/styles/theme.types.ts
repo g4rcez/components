@@ -20,6 +20,7 @@ type ComponentToken = {
 };
 
 export type ZIndex = {
+    wizard: N;
     navbar: N;
     normal: N;
     overlay: N;

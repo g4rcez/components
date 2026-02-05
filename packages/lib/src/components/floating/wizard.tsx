@@ -162,7 +162,7 @@ export const Wizard = ({
   const hasPrevious = index > 0;
   return (
     <FloatingPortal>
-      <div className="fixed inset-0 pointer-events-none z-[9999]">
+      <div className="fixed inset-0 pointer-events-none z-wizard">
         <svg
           className="absolute inset-0 w-full h-full fill-current text-floating-overlay/70"
           xmlns="http://www.w3.org/2000/svg"

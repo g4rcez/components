@@ -7,15 +7,17 @@ import { defaultTranslations, type Translations } from "./default-translations";
 import { defaultTweaks, type Tweaks } from "./default-tweaks";
 
 export type ContextProps = Partial<{
-    tweaks: Partial<Tweaks>;
-    map: Partial<Translations>;
-    locale: Locales | undefined;
-    parser: typeof parsers.hsla;
+  tweaks: Partial<Tweaks>;
+  map: Partial<Translations>;
+  locale: Locales | undefined;
+  parser: typeof parsers.hsla;
+  rootFloating?: HTMLElement | null;
 }>;
 
 export const Context = createContext<ContextType>({
-    tweaks: defaultTweaks,
-    parser: parsers.hsla,
-    map: defaultTranslations,
-    locale: undefined as Locales | undefined,
+  parser: parsers.hsla,
+  tweaks: defaultTweaks,
+  floatingRef: undefined,
+  map: defaultTranslations,
+  locale: undefined as Locales | undefined,
 });

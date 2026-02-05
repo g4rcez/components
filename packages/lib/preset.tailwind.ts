@@ -32,6 +32,7 @@ const config: Partial<Config> = {
             borderColors: { ...COLORS, DEFAULT: COLORS.card.border },
             borderRadius: createDesignTokens(theme.rounded, parsers.cssVariable),
             zIndex: {
+                wizard: "var(--z-wizard)",
                 navbar: "var(--z-navbar)",
                 normal: "var(--z-normal)",
                 overlay: "var(--z-overlay)",

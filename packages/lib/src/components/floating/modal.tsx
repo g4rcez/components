@@ -18,6 +18,7 @@ import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useEffect
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
+import { useFloatingRef } from "../../hooks/use-floating-ref";
 
 type AnimationLabels = "initial" | "enter" | "exit";
 
@@ -97,6 +98,7 @@ export type ModalProps = Override<
     overlayClassName: string;
     position: DrawerPosition;
     overlayClickClose: boolean;
+    closeOnFocusOut: boolean;
     role: "dialog";
     interactions: ElementProps[];
     trigger: Label | React.FC<any>;
@@ -207,11 +209,13 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
       type: _type = "dialog",
       position: propsPosition,
       overlayClickClose = false,
+      closeOnFocusOut = false,
       interactions: outInteractions = noop,
       ...props
     }: PropsWithChildren<ModalProps>,
     externalRef: ForwardedRef<ModalRef>
   ) => {
+    const root = useFloatingRef();
     const innerContent = useRef<HTMLDivElement>(null)
     const removeScrollRef = useRef<HTMLDivElement>(null);
     const headingId = useId();
@@ -229,7 +233,10 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
     const dismiss = useDismiss(floating.context, {
       bubbles: true,
       escapeKey: true,
-      outsidePress: overlayClickClose,
+      outsidePress: (event) => {
+        const target = event.target as Node;
+        return overlayClickClose && !!target?.isConnected;
+      },
     });
 
     const interactions = useInteractions([click, dismiss, role].concat(outInteractions));
@@ -294,8 +301,8 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
             {Trigger}
           </Component>
         ) : null}
-        <FloatingPortal preserveTabOrder>
-          <AnimatePresence custom presenceAffectsLayout propagate mode="sync" initial={false}>
+        <FloatingPortal preserveTabOrder root={root}>
+          <AnimatePresence root={root} custom presenceAffectsLayout propagate mode="popLayout" initial={false}>
             {open ? (
               <FloatingOverlay
                 lockScroll
@@ -306,7 +313,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
                 )}
               >
                 <MotionConfig reducedMotion={animated ? "user" : "always"}>
-                  <FloatingFocusManager guards visuallyHiddenDismiss modal closeOnFocusOut context={floating.context}>
+                  <FloatingFocusManager guards modal closeOnFocusOut={closeOnFocusOut} context={floating.context}>
                     <motion.div
                       {...props}
                       {...(title
