@@ -32,7 +32,7 @@ import { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
-        "w-full min-w-36 outline-none p-2.5 items-center flex justify-between text-left",
+        "w-full min-w-36 outline-hidden p-2.5 items-center flex justify-between text-left",
         "hover:bg-primary focus:bg-primary aria-expanded:opacity-80",
         "focus:text-primary-foreground hover:text-primary-foreground",
         "first-of-type:rounded-t-lg last-of-type:rounded-b-lg",
@@ -220,7 +220,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                         ref={refs.setFloating}
                                         style={{ ...props.style, ...floatingStyles }}
                                         className={css(
-                                            "isolate z-tooltip flex max-h-80 flex-col items-start overflow-y-auto rounded-lg border border-floating-border bg-floating-background text-left shadow-shadow-floating outline-none",
+                                            "isolate z-tooltip flex max-h-80 flex-col items-start overflow-y-auto rounded-lg border border-floating-border bg-floating-background text-left shadow-shadow-floating outline-hidden",
                                             floatingClassName
                                         )}
                                     >

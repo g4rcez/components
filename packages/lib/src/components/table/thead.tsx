@@ -81,7 +81,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             className={`relative md:h-14 typography min-w-0 cursor-grab font-medium ${props.header.thProps?.className ?? ""}`}
         >
             <span
-                className={`flex h-full items-center justify-between bg-table-header p-[var(--table-cell-padding)] ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}
+                className={`flex h-full items-center justify-between bg-table-header p-(--table-cell-padding) ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}
             >
                 <span className="flex gap-1 items-center">
                     {props.inlineFilter && defaultAllowFilter ? (
@@ -149,7 +149,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="block absolute top-0 h-full hover:w-1.5 active:w-1.5 -right-[0.5px] z-calendar w-[1px] cursor-col-resize bg-transparent hover:bg-primary active:bg-primary"
+                    className="block absolute top-0 h-full hover:w-1.5 active:w-1.5 -right-[0.5px] z-calendar w-px cursor-col-resize bg-transparent hover:bg-primary active:bg-primary"
                     onClick={(e) => void e.currentTarget.focus()}
                     onKeyDown={(e) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {

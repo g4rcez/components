@@ -98,7 +98,7 @@ export default function LandingPage() {
             </div>
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               Build faster with{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-primary">
                 beautiful components
               </span>
             </h1>
@@ -233,7 +233,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-      <section className="py-20 bg-gradient-to-r from-slate-600 to-slate-800">
+      <section className="py-20 bg-linear-to-r from-slate-600 to-slate-800">
         <div className="px-4 mx-auto max-w-4xl text-center sm:px-6 lg:px-8">
           <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
             Ready to build something amazing?

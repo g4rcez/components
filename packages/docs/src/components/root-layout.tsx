@@ -74,17 +74,17 @@ export const RootLayout = (props: PropsWithChildren) => {
               >
                 {isLandingPage ? (
                   <div className="min-h-screen">
-                    <main className="bg-gradient-to-br from-background via-background to-card-background/20">
+                    <main className="bg-linear-to-br from-background via-background to-card-background/20">
                       {props.children}
                     </main>
                   </div>
                 ) : (
                   <div className="grid min-h-screen grid-rows-[var(--header-height)_1fr] lg:grid-cols-[var(--sidebar-width)_1fr] lg:grid-rows-[var(--header-height)_1fr]">
-                    <nav className="hidden overflow-hidden fixed bottom-0 flex-col h-screen border-r lg:flex w-[var(--sidebar-width)] bg-card-background/95 backdrop-blur-sm border-card-border">
-                      <header className="flex items-center border-b h-[var(--header-height)] px-[var(--sidebar-padding)] border-card-border/50">
+                    <nav className="hidden overflow-hidden fixed bottom-0 flex-col h-screen border-r lg:flex w-(--sidebar-width) bg-card-background/95 backdrop-blur-sm border-card-border">
+                      <header className="flex items-center border-b h-(--header-height) px-(--sidebar-padding) border-card-border/50">
                         <Link
                           href="/"
-                          className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80"
+                          className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-linear-to-r from-primary to-primary/80"
                         >
                           Components
                         </Link>
@@ -95,7 +95,7 @@ export const RootLayout = (props: PropsWithChildren) => {
                     </nav>
                     <div className="flex flex-col min-h-screen lg:col-start-2">
                       <Header />
-                      <main className="flex-1 mt-12 bg-gradient-to-br from-background via-background to-card-background/20">
+                      <main className="flex-1 mt-12 bg-linear-to-br from-background via-background to-card-background/20">
                         {props.children}
                       </main>
                     </div>

@@ -18,7 +18,7 @@ export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
           <Group rows={props.rows} groups={props.groups} setGroups={props.setGroups} options={props.options} cols={props.cols} />
         </span>
       </div>
-      <ul className="flex flex-row flex-wrap flex-1 flex-grow gap-4 items-center w-full md:justify-end">
+      <ul className="flex flex-row flex-wrap flex-1 grow gap-4 items-center w-full md:justify-end">
         {props.filters.map((x) => (
           <li key={`filter-table-${x.id}`} className="flex gap-1 items-center py-0.5 px-4 rounded-xl border border-card-border">
             <span>
@@ -32,7 +32,7 @@ export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
               <input
                 type={x.type}
                 value={x.value as string}
-                className="absolute left-0 top-0 m-0 inline-block w-full bg-transparent p-0 placeholder-primary/70 outline-none [appearance:textfield] after:empty:text-primary/70 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="absolute left-0 top-0 m-0 inline-block w-full bg-transparent p-0 placeholder-primary/70 outline-hidden [appearance:textfield] empty:after:text-primary/70 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 onChange={(e) => {
                   const value = valueFromType(e.target);
                   props.setFilters((prev) =>

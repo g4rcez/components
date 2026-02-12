@@ -1,5 +1,6 @@
 "use client";
 import {
+  autoPlacement,
   autoUpdate,
   FloatingFocusManager,
   FloatingPortal,
@@ -16,7 +17,7 @@ import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
@@ -40,7 +41,7 @@ export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
 const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
 const transitionStyles = {
-  duration: 300,
+  duration: 200,
   initial: { transform: "scaleY(0)", opacity: 0.2 },
   open: { transform: "scaleY(1)", opacity: 1 },
   close: { transform: "scaleY(0)", opacity: 0 },
@@ -53,7 +54,7 @@ const List = forwardRef(function VirtualList(props: any, ref: any) {
     <motion.ul
       {...props}
       ref={ref as any}
-      className="overscroll-contain w-full rounded-lg"
+      className="overscroll-contain w-full rounded-lg h-96"
     >
       <AnimatePresence>{props.children}</AnimatePresence>
     </motion.ul>
@@ -132,14 +133,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       ? undefined
       : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
 
-    const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
+    const { x, y, strategy, refs, context, placement } = useFloating<HTMLInputElement>({
       open,
       transform: true,
       onOpenChange: setOpen,
-      placement: "bottom-start",
       whileElementsMounted: autoUpdate,
       middleware: [
         offset(4),
+        autoPlacement({ allowedPlacements: ['top-start', 'bottom-start'], alignment: "start" }),
         size({
           padding: 10,
           elementContext: "reference",
@@ -247,6 +248,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
     const isEmpty = displayList.length === 0;
 
+    const isTopPlacement = placement === "top" || placement === "top-start";
+
     return (
       <InputField
         {...(props as any)}
@@ -256,7 +259,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         form={props.form}
         loading={loading}
         name={props.name}
-        feedback={feedback}
+        feedback={open && (isTopPlacement) ? props.title : feedback}
         hideLeft={hideLeft}
         required={required}
         title={props.title}
@@ -342,7 +345,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           className={css(
             "input placeholder-input-mask group h-input-height w-full flex-1",
             "rounded-md bg-transparent px-input-x py-input-y text-foreground",
-            "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+            "outline-hidden transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
             "group-error:text-danger group-error:placeholder-input-mask-error",
             "text-base group-focus-within:border-primary group-hover:border-primary",
             props.className
@@ -368,13 +371,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 initial={false}
                 data-floating="true"
                 animate={{ height: isEmpty ? "auto" : h }}
-                className="overscroll-contain p-0 m-0 max-h-80 list-none rounded-t-lg rounded-b-lg border ease-in-out isolate z-floating origin-[top_center] border-floating-border bg-floating-background text-foreground shadow-floating"
+                className={css("overscroll-contain p-0 m-0 max-h-80 list-none rounded-t-lg rounded-b-lg border ease-in-out isolate z-floating border-floating-border bg-floating-background text-foreground shadow-floating",
+                  isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
+                )}
                 onAnimationComplete={() => {
                   if (!open) return setH(0);
                   const ul = refs.floating.current as HTMLElement;
                   const li = ul.querySelectorAll("li").item(0);
                   const sum = (li ? li.getBoundingClientRect().height : MIN_SIZE) * displayList.length;
-                  return flushSync(() => setH(sum + 10));
+                  return flushSync(() => setH(sum + 2));
                 }}
               >
                 {isEmpty ? (
@@ -389,7 +394,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                   ref={virtuoso}
                   hidden={isEmpty}
                   data={displayList}
-                  // style={{ height: h - 10 }}
+                  style={{ height: h }}
                   defaultItemHeight={MIN_SIZE}
                   components={components as any}
                   scrollerRef={(e) => void (scroller.current = e as HTMLElement)}

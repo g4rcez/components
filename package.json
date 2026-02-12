@@ -11,8 +11,8 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "prettier": "3.5.3",
-    "prettier-plugin-tailwindcss": "0.6.12"
+    "prettier": "3.8.1",
+    "prettier-plugin-tailwindcss": "0.7.2"
   },
   "scripts": {
     "build": "pnpm run --filter ./packages/lib lib:css; pnpm run -r build",

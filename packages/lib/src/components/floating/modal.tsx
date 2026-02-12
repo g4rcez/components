@@ -306,7 +306,7 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
             <FloatingOverlay
               lockScroll
               className={css(
-                "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh] !overflow-clip",
+                "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-dvh overflow-clip!",
                 type === "drawer" ? "" : "items-start justify-center lg:p-10 pt-10",
                 overlayClassName
               )}

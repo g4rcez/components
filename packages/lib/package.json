@@ -40,7 +40,6 @@
   "dependencies": {
     "@base-ui/react": "1.1.0",
     "@floating-ui/react": "0.27.16",
-    "@xyflow/react": "12.10.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
@@ -62,6 +61,7 @@
   "devDependencies": {
     "@eslint/js": "9.39.2",
     "@tailwindcss/forms": "0.5.11",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "25.0.9",
     "@types/qs": "6.14.0",
     "@types/react": "19.2.9",
@@ -75,7 +75,7 @@
     "globals": "17.0.0",
     "postcss": "8.5.6",
     "prettier": "3.8.0",
-    "tailwindcss": "3.4.14",
+    "tailwindcss": "4.1.18",
     "tslib": "2.8.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.35.0",
@@ -125,6 +125,12 @@
       "import": "./dist/preset/plugin.tailwind.js",
       "require": "./dist/preset/plugin.tailwind.js",
       "default": "./dist/preset/plugin.tailwind.js"
+    },
+    "./tailwindcssv4.ts": {
+      "type": "./dist/preset/tailwindcssv4.d.ts",
+      "import": "./dist/preset/tailwindcssv4.d.ts.js",
+      "require": "./dist/preset/tailwindcssv4.js",
+      "default": "./dist/preset/tailwindcssv4.js"
     },
     "./preset.tailwind": {
       "type": "./dist/preset/preset.tailwind.d.ts",

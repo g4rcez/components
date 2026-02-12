@@ -107,7 +107,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     className={css(
                         "input select group text-base h-10 w-full flex-1 appearance-none rounded-md",
                         "bg-transparent px-2 py-1 text-foreground placeholder-input-placeholder",
-                        "outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
+                        "outline-hidden transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         "data-[selected=false]:text-input-placeholder",
                         props.className
                     )}

@@ -89,7 +89,7 @@ const sections: Section[] = [
 export const Navigation = () => {
   const path = usePathname();
   return (
-    <nav className="py-6 px-[var(--sidebar-padding)]">
+    <nav className="py-6 px-(--sidebar-padding)">
       <div className="space-y-6">
         {sections.map((section) => {
           const SectionIcon = section.icon;

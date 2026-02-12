@@ -37,7 +37,7 @@ const Thumb = (props: { tooltip: boolean }) => {
       ref={ref}
       as={Base.Thumb}
       enabled={props.tooltip}
-      className="block rounded-full focus-within:border-primary focus-within::scale-105 bg-input-switch size-5 cursor-grab border-2 border-input-border shadow-shadow-floating focus-within:outline active:cursor-grabbing"
+      className="block rounded-full focus-within:border-primary focus-within::scale-105 bg-input-switch size-5 cursor-grab border-2 border-input-border shadow-shadow-floating focus-within:outline-solid active:cursor-grabbing"
     >
       {float}
     </Tooltip>

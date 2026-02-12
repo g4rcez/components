@@ -104,7 +104,7 @@ const TFoot = React.forwardRef((props: any, ref: any) => {
       <tfoot {...props} ref={ref} className="bg-card-background">
         <tr role="row" className="bg-card-background">
           <td colSpan={999} className="px-2 h-14 bg-card-background">
-            <span className="block w-full h-2 rounded opacity-60 animate-pulse bg-foreground" />
+            <span className="block w-full h-2 rounded-sm opacity-60 animate-pulse bg-foreground" />
           </td>
         </tr>
       </tfoot>

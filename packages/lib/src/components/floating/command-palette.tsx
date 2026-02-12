@@ -206,7 +206,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         bodyClassName="px-0 py-0 pt-0"
         data-component="command-palette"
         onChange={props.onChangeVisibility}
-        className="container relative py-0 md:max-w-screen-sm lg:max-w-screen-md overflow-clip"
+        className="container relative py-0 md:max-w-(--breakpoint-sm) lg:max-w-(--breakpoint-md) overflow-clip"
       >
         <header className="flex sticky top-0 items-center w-full h-12 border-b overflow-clip isolate z-floating border-floating-border bg-floating-background">
           <div className="flex justify-center items-center size-10">
@@ -231,7 +231,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             data-combikeysbypass="true"
             placeholder="Search for..."
             onChange={(e) => setValue(e.target.value)}
-            className="items-center py-2 px-2 pb-2 w-full h-12 text-lg text-left bg-transparent outline-none"
+            className="items-center py-2 px-2 pb-2 w-full h-12 text-lg text-left bg-transparent outline-hidden"
           />
         </header>
         {props.loading ? (

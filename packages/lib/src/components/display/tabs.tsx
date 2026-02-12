@@ -92,7 +92,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                 container={css("pt-0 max-w-full w-full min-w-0", props.container)}
                 header={
                     <header className="overflow-x-auto relative mb-2">
-                        <div className="absolute bottom-0 w-full h-[1px] bg-card-border" />
+                        <div className="absolute bottom-0 w-full h-px bg-card-border" />
                         <nav className="min-w-0">
                             <ul onKeyDown={onKeyDown} ref={ref} className="flex overflow-x-auto flex-1 justify-start w-0 min-w-full">
                                 {items.map((x: any) => {

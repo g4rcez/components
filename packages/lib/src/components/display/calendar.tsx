@@ -389,7 +389,7 @@ export const Calendar = ({
                 onTouchStart={swipe.onTouchStart}
                 className={css("relative overflow-hidden", Is.function(styles?.calendar) ? styles?.calendar(allDaysOfMonth) : styles?.calendar)}
             >
-                <div className="flex flex-col justify-center rounded text-center">
+                <div className="flex flex-col justify-center rounded-sm text-center">
                     <AnimatePresence initial={false} mode="popLayout" custom={state.direction} onExitComplete={dispatch.onExitComplete}>
                         <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
                             <header className="relative flex justify-between">

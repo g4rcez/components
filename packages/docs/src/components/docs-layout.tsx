@@ -12,9 +12,9 @@ type Props = {
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
   return (
     <div className="gap-8 w-full min-h-full">
-      <div className="max-w-[var(--content-max-width)] flex flex-col gap-6 mx-auto px-6 lg:px-10 py-8">
+      <div className="max-w-(--content-max-width) flex flex-col gap-6 mx-auto px-6 lg:px-10 py-8">
         <header className="border-b border-card-border flex flex-col gap-2 pb-4">
-          <h1 className="text-3xl font-bold tracking-tight mb-3 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold tracking-tight mb-3 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
             {props.title}
           </h1>
           <p className="text-muted-foreground leading-relaxed">

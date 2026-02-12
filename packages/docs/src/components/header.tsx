@@ -11,7 +11,7 @@ import { Navigation } from "./navigation";
 
 const Brand = () => (
   <Link href="/" className="flex flex-col gap-2 items-start">
-    <span className="text-lg font-bold leading-none text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/80">
+    <span className="text-lg font-bold leading-none text-transparent bg-clip-text bg-linear-to-r from-foreground to-foreground/80">
       Components
     </span>
     <span className="mt-0.5 text-xs leading-none text-muted-foreground">
@@ -33,7 +33,7 @@ export const Header = () => {
   }, [pathname, prevPathname, open]);
 
   return (
-    <header className="flex fixed w-full lg:w-[calc(100%-var(--sidebar-width))] top-0 z-50 justify-between border-b shadow-sm h-[var(--header-height)] bg-card-background/70 backdrop-blur-md border-card-border/50">
+    <header className="flex fixed w-full lg:w-[calc(100%-var(--sidebar-width))] top-0 z-50 justify-between border-b shadow-sm h-(--header-height) bg-card-background/70 backdrop-blur-md border-card-border/50">
       <Modal
         closable
         open={open}
@@ -43,7 +43,7 @@ export const Header = () => {
       >
         <Navigation />
       </Modal>
-      <div className="flex justify-between w-full items-center px-4 lg:px-6 h-[var(--header-height)]">
+      <div className="flex justify-between w-full items-center px-4 lg:px-6 h-(--header-height)">
         <Brand />
         <div className="flex gap-3 items-center">
           <nav className="hidden gap-1 items-center sm:flex">

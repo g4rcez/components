@@ -107,7 +107,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         className={css(
                             "input placeholder-input-mask group h-input-height w-full flex-1",
                             "rounded-md bg-transparent px-input-x py-input-y text-base text-foreground",
-                            "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+                            "outline-hidden transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                             "group-error:text-danger group-error:placeholder-input-mask-error",
                             "resize-y group-focus-within:border-primary group-hover:border-primary",
                             "disabled:cursor-not-allowed disabled:text-disabled",

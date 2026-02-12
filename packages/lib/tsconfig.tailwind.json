@@ -26,6 +26,6 @@
         "strictPropertyInitialization": true,
         "target": "ES5"
     },
-    "include": ["./src/styles", "./preset.tailwind.ts"],
+    "include": ["./src/styles", "./preset.tailwind.ts", "./tailwindcssv4.ts"],
     "exclude": ["node_modules", "docs"]
 }

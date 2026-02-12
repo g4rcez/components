@@ -23,7 +23,7 @@ const cols = createColumns<User>((col) => {
     allowFilter: true,
     type: ColType.Number,
     Element: (props) => (
-      <span className="whitespace-pre-line break-words">
+      <span className="whitespace-pre-line wrap-break-word">
         {props.rowIndex}. {props.value}
       </span>
     ),

@@ -205,7 +205,7 @@ export const Wizard = ({
                 left: "50%",
                 transform: "translate(-50%, -50%)"
               }}
-              className="outline-none pointer-events-auto"
+              className="outline-hidden pointer-events-auto"
             >
               <motion.div
                 transition={{ duration: 0.2 }}

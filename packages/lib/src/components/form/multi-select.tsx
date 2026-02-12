@@ -368,11 +368,11 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
           className={css(
             "input text-base placeholder-input-mask group h-input-height w-full",
             "rounded-md bg-transparent px-input-x py-input-y text-foreground",
-            "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+            "outline-hidden transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
             "group-error:text-danger group-error:placeholder-input-mask-error",
             "group-focus-within:border-primary group-hover:border-primary",
             "flex flex-row items-center gap-2 whitespace-nowrap text-left",
-            "max-w-full overflow-x-auto truncate overflow-ellipsis",
+            "max-w-full overflow-x-auto truncate text-ellipsis",
             props.className
           )}
         >
@@ -412,7 +412,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     onChange={onChange}
                     title={props.title}
                     placeholder={translation.multiSelectInnerPlaceholder}
-                    className="flex-1 mb-1 w-full h-10 bg-transparent rounded border-b transition-colors outline-none focus:ring-2 focus:ring-inset input placeholder-input-mask group border-input-border px-input-x py-input-y focus:ring-primary"
+                    className="flex-1 mb-1 w-full h-10 bg-transparent rounded-sm border-b transition-colors outline-hidden focus:ring-2 focus:ring-inset input placeholder-input-mask group border-input-border px-input-x py-input-y focus:ring-primary"
                     onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                       if (event.key === "ArrowDown") {
                         let next = index! + 1;

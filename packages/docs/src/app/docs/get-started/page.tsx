@@ -15,7 +15,7 @@ export default function GetStartedPage() {
       description="Learn how to install and use our modern React component library in your projects."
     >
       <section className="space-y-8">
-        <div className="p-6 bg-gradient-to-r rounded-xl border from-primary/5 to-primary/10 border-primary/20">
+        <div className="p-6 bg-linear-to-r rounded-xl border from-primary/5 to-primary/10 border-primary/20">
           <h2 className="mb-3 text-xl font-semibold text-primary">
             Welcome to UI Components
           </h2>

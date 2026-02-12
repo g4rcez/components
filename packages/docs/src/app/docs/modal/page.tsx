@@ -2,12 +2,10 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { BrainIcon } from "lucide-react";
 import { motion } from "motion/react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, {
   Fragment,
   PropsWithChildren,
-  useCallback,
-  useState,
+  useState
 } from "react";
 import {
   Autocomplete,
@@ -143,40 +141,6 @@ const Preview = (props: any) => {
   );
 };
 
-export const useUpdateQueryString = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const updateQueryString = useCallback(
-    (name: string, value: any) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router, searchParams],
-  );
-  return updateQueryString;
-};
-
-const TestingRouteChanges = () => {
-  const write = useUpdateQueryString();
-  const qs = useSearchParams();
-  const open = qs.get("modal") === "true";
-  return (
-    <Card title="Change route" className="flex gap-6">
-      <Modal open={open} onChange={() => write("modal", false)} title="Modal">
-        ok
-      </Modal>
-      <Button onClick={() => write("modal", true)}>Set true</Button>
-      <Button onClick={() => write("modal", false)}>Set false</Button>
-    </Card>
-  );
-};
 
 export default function ModalExamplePage() {
   const [open, setOpen] = useState(false);
@@ -204,7 +168,6 @@ export default function ModalExamplePage() {
           commands={commands}
           onChangeVisibility={setOpen}
         />
-        <TestingRouteChanges />
         <Card
           title="Global configuration"
           className="flex flex-wrap gap-8 items-center"

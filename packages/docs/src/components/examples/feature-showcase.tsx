@@ -126,7 +126,7 @@ export const FeatureShowcase = () => {
       <Card title="User Profile" className="p-6">
         <div className="space-y-4">
           <div className="flex gap-4 items-center">
-            <div className="flex justify-center items-center w-12 h-12 font-semibold text-white bg-gradient-to-br from-blue-500 to-purple-500 rounded-full">
+            <div className="flex justify-center items-center w-12 h-12 font-semibold text-white bg-linear-to-br from-blue-500 to-purple-500 rounded-full">
               JD
             </div>
             <div>

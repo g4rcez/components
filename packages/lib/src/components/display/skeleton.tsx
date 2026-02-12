@@ -2,10 +2,10 @@ import React, { CSSProperties, useRef, type ElementType } from "react";
 import { css } from "../../lib/dom";
 import { Polymorph } from "../core/polymorph";
 
-export const SkeletonCell = <div className="w-10/12 h-6 rounded animate-pulse bg-muted" />;
+export const SkeletonCell = <div className="w-10/12 h-6 rounded-sm animate-pulse bg-muted" />;
 
 export const Skeleton = (props: { className?: string; as?: ElementType; style?: CSSProperties }) => (
-  <Polymorph {...props} as={props.as || "span"} className={css("block rounded h-8 w-32 animate-pulse bg-muted", props.className)} />
+  <Polymorph {...props} as={props.as || "span"} className={css("block rounded-sm h-8 w-32 animate-pulse bg-muted", props.className)} />
 );
 
 export const SkeletonList = (props: { className?: string; rows: number }) => {

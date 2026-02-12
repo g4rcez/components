@@ -28,7 +28,7 @@ export const HeroDemo = () => {
       <Card>
         <div className="space-y-4">
           <div className="flex gap-4 items-center">
-            <div className="flex justify-center items-center w-16 h-16 bg-gradient-to-br from-blue-400 rounded-lg to-sky-600">
+            <div className="flex justify-center items-center w-16 h-16 bg-linear-to-br from-blue-400 rounded-lg to-sky-600">
               <span className="text-xl font-bold text-white">♪</span>
             </div>
             <div className="flex-1">
