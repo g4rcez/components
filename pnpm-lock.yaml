@@ -120,9 +120,6 @@ importers:
       sidekicker:
         specifier: 0.1.10
         version: 0.1.10
-      slot-jsx:
-        specifier: ^1.0.2
-        version: 1.0.2(@types/react@19.2.9)(react@19.2.3)
       storage-manager-js:
         specifier: 4.2.6-5
         version: 4.2.6-5
@@ -3999,15 +3996,6 @@ packages:
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
-
-  slot-jsx@1.0.2:
-    resolution: {integrity: sha512-FeWE85W/qu9zNgCH5a8ZzIUhz0Axnp4DGQCRVeFpSUdd09nsngtPjvqMhc8Hgz6y2V1J/8oV1zIF2OJNUx3NMQ==}
-    peerDependencies:
-      '@types/react': '*'
-      react: '>=17'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -8492,12 +8480,6 @@ snapshots:
     optional: true
 
   slash@3.0.0: {}
-
-  slot-jsx@1.0.2(@types/react@19.2.9)(react@19.2.3):
-    dependencies:
-      react: 19.2.3
-    optionalDependencies:
-      '@types/react': 19.2.9
 
   source-map-js@1.2.1: {}
 

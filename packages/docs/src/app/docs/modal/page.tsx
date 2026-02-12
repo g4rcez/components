@@ -70,14 +70,14 @@ const commands: CommandItemTypes[] = [
         enabled: (props) => props.text !== "" && !props.text.startsWith("@"),
         action: (e) => void (e.setOpen(false), alert("Hello google")),
       },
-      {
-        type: "shortcut",
-        shortcut: "Mod+A",
-        Icon: <BrainIcon size={18} />,
-        title: (props) => `Ask to AI: ${props.text}`,
-        enabled: (props) => props.text !== "",
-        action: (e) => void (e.setOpen(false), alert("A")),
-      },
+      // {
+      //   type: "shortcut",
+      //   shortcut: "Mod+A",
+      //   Icon: <BrainIcon size={18} />,
+      //   title: (props) => `Ask to AI: ${props.text}`,
+      //   enabled: (props) => props.text !== "",
+      //   action: (e) => void (e.setOpen(false), alert("A")),
+      // },
       {
         title: "Find",
         type: "shortcut",
@@ -203,6 +203,7 @@ export default function ModalExamplePage() {
           Preview={Preview}
           commands={commands}
           onChangeVisibility={setOpen}
+          footer={<span>v1.0.0</span>}
         />
         <TestingRouteChanges />
         <Card

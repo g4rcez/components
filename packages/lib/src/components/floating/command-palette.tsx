@@ -119,33 +119,51 @@ const getFuzzyData = (commands: CommandItemTypes[], value: string) => {
 
 const loadingSkeleton = [0, 0, 0, 0, 0];
 
+const findFirstClickable = (items: CommandItemTypes[]): CommandItemTypes | null => {
+  for (let index = 0; index < items.length; index++) {
+    const element = items[index];
+    if (element.type === "shortcut") return element;
+    const recursive = findFirstClickable(element.items);
+    if (recursive) return recursive;
+  }
+  return null
+}
+
 export const CommandPalette = (props: CommandPaletteProps) => {
-  const bindKey = props.bind ?? "Mod + k";
+  const id = useId();
+  const [value, setValue] = useState("");
   const listRef = useRef<Array<HTMLElement | null>>([]);
   const translations = useTranslations();
-  const [value, setValue] = useState("");
   const valueRef = useStableRef(value);
-  const id = useId();
-  const ref = useRef<any>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const bindKey = props.bind ?? "Mod + k";
   const root = useFloating<HTMLInputElement>({
     open: props.open,
     strategy: "absolute",
     whileElementsMounted: autoUpdate,
     onOpenChange: props.onChangeVisibility,
   });
+
+  const commands = props.commands.flatMap((x) => (x.type === "group" ? [x, ...x.items] : [x]));
+
+  const fuzzy = getFuzzyData(commands, value);
+
   const listNav = useListNavigation(root.context, {
-    cols: 0,
     listRef,
     loop: true,
     activeIndex,
     virtual: true,
     allowEscape: true,
-    focusItemOnHover: false,
-    focusItemOnOpen: "auto",
+    focusItemOnOpen: true,
+    focusItemOnHover: true,
     openOnArrowKeyDown: true,
     scrollItemIntoView: false,
     selectedIndex: activeIndex,
+    disabledIndices: n => {
+      const item = fuzzy[n]
+      if (item) return item.type === "group"
+      return false
+    },
     onNavigate: (n) => {
       if (Is.number(n)) {
         listRef.current[n]?.scrollIntoView({ block: "start", inline: "start" });
@@ -156,11 +174,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
       })
     }
   });
-  const { getItemProps, getReferenceProps } = useInteractions([listNav]);
-
-  const commands = props.commands.flatMap((x) => (x.type === "group" ? [x, ...x.items] : [x]));
-
-  const fuzzy = getFuzzyData(commands, value);
+  const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav]);
 
   const displayItems: CommandItemTypes[] =
     value === ""
@@ -197,7 +211,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
   return (
     <Fragment>
       <Modal
-        ref={ref}
+        {...getFloatingProps()}
         animated={false}
         closable={false}
         open={props.open}
@@ -218,10 +232,13 @@ export const CommandPalette = (props: CommandPaletteProps) => {
               ref: root.refs.setReference,
               onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
                 const item = Is.number(activeIndex) ? displayItems[activeIndex] : null;
-                if (item) {
-                  const key = e.key
-                  if (key === "Enter") {
+                const key = e.key
+                if (key === "Enter") {
+                  if (item) {
                     if (item.type === "shortcut") item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
+                  } else {
+                    const item = findFirstClickable(fuzzy)
+                    if (item?.type === "shortcut") item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
                   }
                 }
               }
@@ -288,7 +305,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={value} /> : null}
           </div>
         )}
-        {props.footer ? <footer className="flex items-center p-2 h-8 rounded-b-lg bg-background">{props.footer}</footer> : null}
+        {props.footer ? <footer className="flex items-center p-2 h-8 rounded-b-lg border-t border-floating-border">{props.footer}</footer> : null}
       </Modal>
     </Fragment>
   );

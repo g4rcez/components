@@ -31,12 +31,12 @@ export const Card = <T extends React.ElementType = "div">({
         {...props}
         as={as || "div"}
         data-component="card"
-        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background w-full py-4", container)}
+        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background w-full py-3", container)}
     >
         {title ? (
             <header
                 data-component="card-title"
-                className={css("mb-2 w-full border-b border-card-border px-6 pb-4 text-xl font-medium", titleClassName)}
+                className={css("mb-2 w-full border-b border-card-border px-6 pb-2 text-xl font-medium", titleClassName)}
             >
                 {title}
             </header>

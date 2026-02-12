@@ -12,6 +12,9 @@ export default function AlertPage() {
           Toggle
         </Button>
         <div className="space-y-4">
+          <Alert open={state} theme="info">
+            <p>Magna pars studiorum, prodita quaerimus.</p>
+          </Alert>
           <Alert open={state} title="Primary" theme="primary">
             <p>Magna pars studiorum, prodita quaerimus.</p>
           </Alert>
