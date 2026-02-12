@@ -13,7 +13,7 @@
         "noEmit": false,
         "forceConsistentCasingInFileNames": true,
         "lib": ["dom", "dom.iterable", "esnext"],
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "module": "ES2015",
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
@@ -26,6 +26,6 @@
         "strictPropertyInitialization": true,
         "target": "ES5"
     },
-    "include": ["./src/styles", "./preset.tailwind.ts", "./tailwindcssv4.ts"],
+    "include": ["./src/styles", "./tailwindcssv4.ts"],
     "exclude": ["node_modules", "docs"]
 }

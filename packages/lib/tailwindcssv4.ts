@@ -9,12 +9,8 @@ const shadows = createDesignTokens(theme.shadow, parsers.cssVariable);
 
 const css = String.raw;
 
-/**
- * Migrated Tailwind CSS v4 plugin.
- * This combines the custom variants and theme extensions from the v3 preset and plugin.
- */
-export default plugin(
-  ({ addVariant }) => {
+const config: any = plugin(
+  ({ addVariant }: { addVariant: (..._: any) => any }) => {
     addVariant("hocus", ["&:hover", "&:focus"]);
     addVariant("link", ["&:hover", "&:active"]);
     addVariant("group-assert", [
@@ -31,7 +27,7 @@ export default plugin(
     ]);
   },
   {
-    plugins: [forms({ strategy: "class" }) ],
+    plugins: [forms({ strategy: "class" })],
     theme: {
       extend: {
         transitionTimingFunction: {
@@ -65,3 +61,5 @@ export default plugin(
     },
   }
 );
+
+export default config;

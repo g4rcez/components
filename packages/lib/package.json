@@ -1,7 +1,7 @@
 {
   "name": "@g4rcez/components",
   "description": "Customizable react components.",
-  "version": "2.1.2",
+  "version": "3.0.0-0",
   "sideEffects": false,
   "private": false,
   "packageManager": "pnpm@10.12.3",
@@ -26,7 +26,7 @@
     "prepublishOnly": "npm run build",
     "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css",
     "format": "npx prettier --write .",
-    "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
+    "lib:css": "echo 0",
     "lib:tailwind": "tsc -p tsconfig.tailwind.json",
     "lib:types": "tsc -p tsconfig.lib.json",
     "preset": "tsc -p tsconfig.tailwind.json",
