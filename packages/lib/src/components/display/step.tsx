@@ -1,6 +1,6 @@
 "use client";
 import { motion, Transition } from "motion/react";
-import React, { ComponentProps, createContext, CSSProperties, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
+import React, { ComponentProps, createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
 import { useColorParser } from "../../hooks/use-color-parser";
 import { Label } from "../../types";
 

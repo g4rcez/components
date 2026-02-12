@@ -302,133 +302,131 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
           </Component>
         ) : null}
         <FloatingPortal preserveTabOrder root={root}>
-          <AnimatePresence root={root} custom presenceAffectsLayout propagate mode="popLayout" initial={false}>
-            {open ? (
-              <FloatingOverlay
-                lockScroll
-                className={css(
-                  "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh] !overflow-clip",
-                  type === "drawer" ? "" : "items-start justify-center lg:p-10 pt-10",
-                  overlayClassName
-                )}
-              >
-                <MotionConfig reducedMotion={animated ? "user" : "always"}>
-                  <FloatingFocusManager guards modal closeOnFocusOut={closeOnFocusOut} context={floating.context}>
-                    <motion.div
-                      {...props}
-                      {...(title
-                        ? {
-                          "aria-labelledby": headingId,
-                          "aria-describedby": descriptionId,
-                        }
-                        : { "aria-label": ariaTitle })}
-                      {...interactions.getFloatingProps({
-                        "aria-modal": open,
-                        ref: mergeRefs(floating.refs.setFloating, removeScrollRef) as any,
-                        className: css(variants({ position, type }), className, "isolate overscroll-contain"),
-                      })}
-                      exit="exit"
-                      layout={true}
-                      animate="enter"
-                      initial="initial"
-                      layoutId={layoutId}
-                      variants={animation}
-                      data-component="modal"
-                      style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
-                    >
-                      {useResizer && resizer ? (
-                        <Draggable
-                          onChange={onChange}
-                          value={floatingSize}
-                          sheet={type === "sheet"}
-                          position={position as DrawerPosition}
-                          parent={floating.refs.floating as any}
-                        />
-                      ) : null}
-                      {title ? (
-                        <motion.header {...draggableMotionProps} className="relative w-full isolate" >
-                          {title ? (
-                            <h2
-                              id={headingId}
-                              className="block px-8 pb-2 text-3xl font-medium leading-relaxed border-b select-text border-floating-border"
-                            >
-                              {title}
-                            </h2>
-                          ) : null}
-                        </motion.header>
-                      ) : null}
-                      <motion.section
-                        ref={innerContent}
-                        data-component="modal-body"
-                        className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
-                        onTouchEnd={async () => {
-                          scroll.set(undefined);
-                          scrollInitial.set(undefined);
-
-                          if (isDragging.current) {
-                            const currentY = sheetY.get() || 0;
-                            const threshold = window.innerHeight * 0.2;
-
-                            if (currentY > threshold) {
-                              await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" }).finished;
-                              onChange(false);
-                            } else {
-                              animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
-                            }
-                            isDragging.current = false;
-                          }
-                        }}
-                        onTouchStart={(e) => {
-                          const touch = e.changedTouches[0];
-                          scrollInitial.set(touch.pageY);
-                          scroll.set(touch.pageY);
-                          isDragging.current = false;
-                        }}
-                        onTouchMove={(e) => {
-                          const touch = e.changedTouches[0];
-                          const y = touch.pageY;
-                          const prevY = scroll.get() || y;
-                          const scrollTop = innerContent.current?.scrollTop || 0;
-
-                          if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
-                            isDragging.current = true;
-                            dragStart.current = y;
-                          }
-
-                          if (isDragging.current) {
-                            const delta = y - dragStart.current;
-                            if (delta < 0) {
-                              sheetY.set(delta * 0.2);
-                            } else {
-                              sheetY.set(delta);
-                            }
-                          }
-
-                          scroll.set(y);
-                        }}
-                      >
-                        {children}
-                      </motion.section>
-                      {footer ? (
-                        <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer>
-                      ) : null}
-                      {closable ? (
-                        <nav className="absolute top-1 right-4 z-floating">
-                          <button
-                            type="button"
-                            onClick={onClose}
-                            className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
+          {open ? (
+            <FloatingOverlay
+              lockScroll
+              className={css(
+                "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh] !overflow-clip",
+                type === "drawer" ? "" : "items-start justify-center lg:p-10 pt-10",
+                overlayClassName
+              )}
+            >
+              <MotionConfig reducedMotion={animated ? "user" : "always"}>
+                <FloatingFocusManager guards modal closeOnFocusOut={closeOnFocusOut} context={floating.context}>
+                  <motion.div
+                    {...props}
+                    {...(title
+                      ? {
+                        "aria-labelledby": headingId,
+                        "aria-describedby": descriptionId,
+                      }
+                      : { "aria-label": ariaTitle })}
+                    {...interactions.getFloatingProps({
+                      "aria-modal": open,
+                      ref: mergeRefs(floating.refs.setFloating, removeScrollRef) as any,
+                      className: css(variants({ position, type }), className, "isolate overscroll-contain"),
+                    })}
+                    exit="exit"
+                    layout={true}
+                    animate="enter"
+                    initial="initial"
+                    layoutId={layoutId}
+                    variants={animation}
+                    data-component="modal"
+                    style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
+                  >
+                    {useResizer && resizer ? (
+                      <Draggable
+                        onChange={onChange}
+                        value={floatingSize}
+                        sheet={type === "sheet"}
+                        position={position as DrawerPosition}
+                        parent={floating.refs.floating as any}
+                      />
+                    ) : null}
+                    {title ? (
+                      <motion.header {...draggableMotionProps} className="relative w-full isolate" >
+                        {title ? (
+                          <h2
+                            id={headingId}
+                            className="block px-8 pb-2 text-3xl font-medium leading-relaxed border-b select-text border-floating-border"
                           >
-                            <XIcon />
-                          </button>
-                        </nav>
-                      ) : null}
-                    </motion.div>
-                  </FloatingFocusManager>
-                </MotionConfig>
-              </FloatingOverlay>
-            ) : null}
-          </AnimatePresence>
+                            {title}
+                          </h2>
+                        ) : null}
+                      </motion.header>
+                    ) : null}
+                    <motion.section
+                      ref={innerContent}
+                      data-component="modal-body"
+                      className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
+                      onTouchEnd={async () => {
+                        scroll.set(undefined);
+                        scrollInitial.set(undefined);
+
+                        if (isDragging.current) {
+                          const currentY = sheetY.get() || 0;
+                          const threshold = window.innerHeight * 0.2;
+
+                          if (currentY > threshold) {
+                            await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" }).finished;
+                            onChange(false);
+                          } else {
+                            animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
+                          }
+                          isDragging.current = false;
+                        }
+                      }}
+                      onTouchStart={(e) => {
+                        const touch = e.changedTouches[0];
+                        scrollInitial.set(touch.pageY);
+                        scroll.set(touch.pageY);
+                        isDragging.current = false;
+                      }}
+                      onTouchMove={(e) => {
+                        const touch = e.changedTouches[0];
+                        const y = touch.pageY;
+                        const prevY = scroll.get() || y;
+                        const scrollTop = innerContent.current?.scrollTop || 0;
+
+                        if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
+                          isDragging.current = true;
+                          dragStart.current = y;
+                        }
+
+                        if (isDragging.current) {
+                          const delta = y - dragStart.current;
+                          if (delta < 0) {
+                            sheetY.set(delta * 0.2);
+                          } else {
+                            sheetY.set(delta);
+                          }
+                        }
+
+                        scroll.set(y);
+                      }}
+                    >
+                      {children}
+                    </motion.section>
+                    {footer ? (
+                      <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer>
+                    ) : null}
+                    {closable ? (
+                      <nav className="absolute top-1 right-4 z-floating">
+                        <button
+                          type="button"
+                          onClick={onClose}
+                          className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
+                        >
+                          <XIcon />
+                        </button>
+                      </nav>
+                    ) : null}
+                  </motion.div>
+                </FloatingFocusManager>
+              </MotionConfig>
+            </FloatingOverlay>
+          ) : null}
         </FloatingPortal>
       </Fragment>
     );

@@ -16,12 +16,12 @@ import { Modal } from "./modal";
 
 type ViewProps = { text: string };
 
-type CommandItem<T extends string, P extends object> = {
+type CommandItem<T extends string, P extends object> = P & {
   type: T;
   hint?: string | string[];
   Icon?: React.ReactElement;
   enabled?: ((props: ViewProps) => boolean) | boolean;
-} & P;
+};
 
 type View = string | ((props: ViewProps) => string);
 
@@ -216,6 +216,15 @@ export const CommandPalette = (props: CommandPaletteProps) => {
           <input
             {...getReferenceProps({
               ref: root.refs.setReference,
+              onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
+                const item = Is.number(activeIndex) ? displayItems[activeIndex] : null;
+                if (item) {
+                  const key = e.key
+                  if (key === "Enter") {
+                    if (item.type === "shortcut") item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
+                  }
+                }
+              }
             } as any) as any}
             autoFocus
             value={value}
@@ -260,13 +269,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                     onClick(e) {
                       e.preventDefault();
                       props.onChangeVisibility(false);
-                      root.refs.domReference.current?.focus();
                       if (item.type === "shortcut")
-                        item.action({
-                          event: e,
-                          setOpen: props.onChangeVisibility,
-                          text: value,
-                        });
+                        item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
                     },
                   })}
                   item={item}

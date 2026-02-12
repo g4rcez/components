@@ -61,13 +61,7 @@ export const RootLayout = (props: PropsWithChildren) => {
       <body>
         <div id="root" className="flex flex-col flex-1">
           <div id="root-floating" />
-          <ComponentsProvider
-            locale="pt-BR"
-            tweaks={tweaks}
-            rootFloating={
-              isSsr() ? undefined : document.getElementById("root-floating")
-            }
-          >
+          <ComponentsProvider locale="pt-BR" tweaks={tweaks}>
             <Notifications>
               <div
                 style={
