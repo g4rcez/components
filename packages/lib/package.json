@@ -48,7 +48,7 @@
     "lucide-react": "0.562.0",
     "motion": "12.28.1",
     "pretty-bytes": "7.1.0",
-    "qs": "6.14.1",
+    "qs": "6.14.2",
     "react-dropzone": "14.3.8",
     "react-use-measure": "2.1.7",
     "react-virtuoso": "4.18.1",
