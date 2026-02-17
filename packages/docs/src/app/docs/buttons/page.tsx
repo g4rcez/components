@@ -83,6 +83,9 @@ export default function Buttons() {
           <Button size="min" theme="ghost-warn">
             warn
           </Button>
+          <Button size="min" theme="ghost-muted">
+            muted
+          </Button>
         </Card>
       </div>
     </DocsLayout>

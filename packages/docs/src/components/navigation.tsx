@@ -96,8 +96,8 @@ export const Navigation = () => {
           return (
             <div key={`section-${section.title}`} className="space-y-3">
               <div className="flex gap-2 items-center px-2">
-                <SectionIcon className="w-4 h-4 text-muted-foreground" />
-                <h3 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground">
+                <SectionIcon className="size-4" />
+                <h3 className="text-sm font-semibold tracking-wider uppercase">
                   {section.title}
                 </h3>
               </div>
@@ -115,7 +115,7 @@ export const Navigation = () => {
                           ${
                             isActive
                               ? "bg-primary/10 text-primary border-l-2 border-primary shadow-sm"
-                              : "text-muted-foreground hover:text-foreground hover:bg-card-background/50"
+                              : "hover:text-primary hover:bg-card-background/40"
                           }
                         `}
                       >
@@ -124,7 +124,7 @@ export const Navigation = () => {
                             className={`w-4 h-4 transition-colors ${
                               isActive
                                 ? "text-primary"
-                                : "text-muted-foreground group-hover:text-foreground"
+                                : "group-hover:text-primary"
                             }`}
                           />
                         )}

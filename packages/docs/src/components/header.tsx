@@ -14,7 +14,7 @@ const Brand = () => (
     <span className="text-lg font-bold leading-none text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/80">
       Components
     </span>
-    <span className="mt-0.5 text-xs leading-none text-muted-foreground">
+    <span className="mt-0.5 text-xs leading-none">
       Modern React Library
     </span>
   </Link>
@@ -49,7 +49,7 @@ export const Header = () => {
           <nav className="hidden gap-1 items-center sm:flex">
             <Link
               href="/docs/get-started"
-              className="flex gap-2 items-center py-1.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-card-background/50"
+              className="flex gap-2 items-center py-1.5 px-3 text-sm font-medium rounded-lg transition-all duration-200 hover:text-primary hover:bg-card-background/50"
             >
               <BookOpenIcon className="size-5" />
               Get Started
@@ -71,7 +71,7 @@ export const Header = () => {
               <button
                 onClick={() => setOpen(true)}
                 aria-label="Open navigation menu"
-                className="p-2 rounded-lg transition-all duration-200 lg:hidden text-muted-foreground hover:text-foreground hover:bg-card-background/50"
+                className="p-2 rounded-lg transition-all duration-200 lg:hidden hover:text-foreground hover:bg-card-background/50"
               >
                 <MenuIcon className="size-5 text-foreground" />
               </button>

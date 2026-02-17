@@ -1,7 +1,13 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { useRef, useState } from "react";
-import { Button, Card, Modal, Wizard, WizardStep } from "../../../../../lib/src";
+import {
+  Button,
+  Card,
+  Modal,
+  Wizard,
+  WizardStep,
+} from "../../../../../lib/src";
 import { Tag } from "../../../../../lib/src/components/core/tag";
 
 export default function WizardPage() {
@@ -14,7 +20,8 @@ export default function WizardPage() {
     {
       element: "#modal-step-1",
       title: "Modal Content",
-      description: "The Wizard overlay appears above the Modal thanks to proper z-index layering.",
+      description:
+        "The Wizard overlay appears above the Modal thanks to proper z-index layering.",
       side: "bottom",
     },
     {
@@ -71,7 +78,7 @@ export default function WizardPage() {
             className="p-8 rounded-lg border border-card-border bg-card-background"
           >
             <h3 className="font-bold">Step 1 Target</h3>
-            <p className="text-muted-foreground">ID: #step-1</p>
+            <p className="">ID: #step-1</p>
           </div>
           <div className="p-8 rounded-lg border opacity-50 border-card-border bg-card-background">
             <h3 className="font-bold">Ignored Element</h3>
@@ -85,7 +92,7 @@ export default function WizardPage() {
             className="p-8 text-right rounded-lg border border-card-border bg-card-background"
           >
             <h3 className="font-bold">Step 3 Target</h3>
-            <p className="text-muted-foreground">ID: #step-3</p>
+            <p className="">ID: #step-3</p>
           </div>
         </div>
         <Wizard
@@ -93,14 +100,17 @@ export default function WizardPage() {
           active={active}
           onClose={() => setActive(false)}
           onFinish={() => alert("Tour finished!")}
-       />
+        />
       </Card>
 
       <Card title="Wizard + Modal Integration">
-        <p className="mb-4 text-muted-foreground">
-          Test the z-index integration: open the Modal, then start the Wizard tour inside it.
+        <p className="mb-4">
+          Test the z-index integration: open the Modal, then start the Wizard
+          tour inside it.
         </p>
-        <Button onClick={() => setModalOpen(true)}>Open Modal with Wizard</Button>
+        <Button onClick={() => setModalOpen(true)}>
+          Open Modal with Wizard
+        </Button>
         <Modal
           closable
           open={modalOpen}
@@ -110,8 +120,12 @@ export default function WizardPage() {
           onChange={setModalOpen}
         >
           <div className="flex flex-col gap-4">
-            <p id="modal-step-1" className="p-4 rounded-lg border border-card-border bg-card-muted">
-              This is the modal content. The Wizard should appear above this modal overlay.
+            <p
+              id="modal-step-1"
+              className="p-4 rounded-lg border border-card-border bg-card-muted"
+            >
+              This is the modal content. The Wizard should appear above this
+              modal overlay.
             </p>
             <div className="flex gap-2">
               <Button

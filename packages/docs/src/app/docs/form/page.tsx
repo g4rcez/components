@@ -110,7 +110,7 @@ export default function FormPage() {
           onSubmit={form.onSubmit(onSubmit)}
           onInvalid={form.onInvalid((e) => console.log(e))}
         />
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <Input
             {...form.input("name", { title: "Name", placeholder: "Fulano" })}
           />
@@ -163,7 +163,7 @@ export default function FormPage() {
               title: "Date",
               type: "datetime",
               datetimeTitle: "Localtime",
-              onChange: (d:any) => console.log(d),
+              onChange: (d: any) => console.log(d),
             })}
           />
           <DatePickerControlled />
@@ -184,7 +184,7 @@ export default function FormPage() {
           {items.map((item) => (
             <li
               key={item}
-              className="flex align-baseline items-baseline flex-nowrap gap-8"
+              className="flex flex-nowrap gap-8 items-baseline align-baseline"
             >
               <Input
                 {...form.input(`items[${item}].name`)}
@@ -208,9 +208,12 @@ export default function FormPage() {
             </Button>
           </li>
         </ul>
-        <Button form={form.name} type="submit">
-          Submit
-        </Button>
+        <div className="flex items-center">
+          <Button form={form.name} type="submit">
+            Submit
+          </Button>
+          <Input title="ok" hiddenLabel />
+        </div>
       </Card>
       <Card title={`Debug - User: ${form.get("name")}`} container="mt-6">
         <pre className="mt-10">

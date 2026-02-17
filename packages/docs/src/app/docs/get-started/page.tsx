@@ -19,7 +19,7 @@ export default function GetStartedPage() {
           <h2 className="mb-3 text-xl font-semibold text-primary">
             Welcome to UI Components
           </h2>
-          <p className="leading-relaxed text-muted-foreground">
+          <p className="leading-relaxed">
             A modern, accessible, and customizable React component library built
             with TypeScript and Tailwind CSS. Get started in minutes with our
             comprehensive set of components.
@@ -29,7 +29,7 @@ export default function GetStartedPage() {
           <div>
             <h2 className="mb-4 text-2xl font-semibold">Installation</h2>
             <div className="p-6 rounded-lg border bg-card-background border-card-border">
-              <p className="mb-4 text-muted-foreground">
+              <p className="mb-4">
                 Install the package using your preferred package manager:
               </p>
               <pre className="p-4 font-mono rounded-lg border border-card-border bg-card-background">
@@ -43,7 +43,7 @@ export default function GetStartedPage() {
                 <span className="text-2xl">🚀</span>
                 Quick Start
               </h3>
-              <p className="mb-4 text-sm text-muted-foreground">
+              <p className="mb-4 text-sm">
                 Import components and start building beautiful UIs immediately.
               </p>
               <Button
@@ -51,7 +51,10 @@ export default function GetStartedPage() {
                   const prev = count.current;
                   const c = prev + 1;
                   count.current = c;
-                  notification(`Notification ${c}. Lorem ipsum dolor sit amet, consectetur adipisici.`, { title: "Success", theme: "success" });
+                  notification(
+                    `Notification ${c}. Lorem ipsum dolor sit amet, consectetur adipisici.`,
+                    { title: "Success", theme: "success" },
+                  );
                 }}
                 className="w-full"
               >
@@ -63,7 +66,7 @@ export default function GetStartedPage() {
                 <span className="text-2xl">⚡</span>
                 Zero Config
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm">
                 No complex setup required. Components work out of the box with
                 sensible defaults and beautiful styling.
               </p>
@@ -113,9 +116,7 @@ export default function GetStartedPage() {
                     <span className="text-lg">{feature.icon}</span>
                     <h4 className="font-medium">{feature.title}</h4>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.desc}
-                  </p>
+                  <p className="text-sm">{feature.desc}</p>
                 </div>
               ))}
             </div>

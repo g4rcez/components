@@ -39,23 +39,23 @@ export type DesignTokens = {
     rounded: Record<"button" | "full" | "pill" | "card", string>;
     custom?: Record<string, string>;
     colors: {
-        disabled: string;
         border: string;
+        disabled: string;
         background: string;
-        muted: string;
         foreground: string;
+        muted: BasicTokens;
         primary: BasicTokens;
         emphasis: BasicTokens;
         tooltip: ComponentToken;
         floating: ComponentToken;
         info: BasicTokens & { notification: string };
         warn: BasicTokens & { notification: string };
-        card: { background: string; border: string; muted: string };
         danger: BasicTokens & { notification: string };
         secondary: BasicTokens & { background: string };
         success: BasicTokens & { notification: string };
         tag: Record<ThemeState, { text: string; bg: string }>;
         button: Record<ThemeState, { text: string; bg: string }>;
+        card: { background: string; border: string; muted: string };
         table: { border: string; header: string; background: string };
         alert: Record<ThemeState, { text: string; bg: string; border: string }>;
         input: {

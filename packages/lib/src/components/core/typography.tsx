@@ -24,7 +24,7 @@ export const Info = (props: React.PropsWithChildren<InfoProps>) => (
   <div className={css(`flex ${props.row ? "flex-row items-center" : "flex-col"} gap-1`, props.className)}>
     <Fragment>
       <span className="text-sm font-medium tracking-wide">{props.row ? `${props.label}:` : props.label}</span>
-      <span className={`w-fit ${props.disabled ? "text-disabled" : ""} ${props.row ? "text-base" : "text-lg"}`}>
+      <span className={css(props.disabled ? "text-disabled" : "", props.row ? "text-base w-fit" : "w-full text-lg")}>
         {props.children}
       </span>
     </Fragment>

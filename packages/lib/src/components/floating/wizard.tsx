@@ -212,10 +212,10 @@ export const Wizard = ({
                 exit={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 initial={{ opacity: 0, scale: 0.9 }}
-                className="flex flex-col gap-3 p-4 w-80 max-w-sm rounded-lg border shadow-lg bg-card-background border-card-border"
+                className="flex flex-col gap-3 p-4 w-80 max-w-sm rounded-lg border shadow-lg bg-floating-background border-floating-border"
               >
                 {element && (
-                  <FloatingArrow ref={arrowRef} context={context} className="fill-card-background stroke-card-border" />
+                  <FloatingArrow ref={arrowRef} context={context} className="fill-floating-background stroke-floating-border" />
                 )}
                 {currentStep.title && (
                   <h3>{currentStep.title}</h3>
@@ -234,7 +234,7 @@ export const Wizard = ({
                   </Button>
                   <div className="flex gap-2">
                     {hasPrevious && (
-                      <Button size="small" theme="neutral" onClick={handlePrevious}>
+                      <Button size="small" theme="ghost-muted" onClick={handlePrevious}>
                         {labels.previous}
                       </Button>
                     )}

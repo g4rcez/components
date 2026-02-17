@@ -7,7 +7,7 @@ import { useStableRef } from "../../hooks/use-stable-ref";
 import { useTranslations } from "../../hooks/use-translations";
 import { CombiKeys } from "../../lib/combi-keys";
 import { Dict } from "../../lib/dict";
-import { css, isReactFC } from "../../lib/dom";
+import { css, isChildVisible, isReactFC } from "../../lib/dom";
 import { fzf, MatchValue } from "../../lib/fzf";
 import { Label } from "../../types";
 import { Shortcut } from "../display/shortcut";
@@ -32,6 +32,7 @@ type CommandShortcutItem = CommandItem<
     shortcut?: string;
     action: (args: {
       text: string;
+      setText: (state: string) => void;
       setOpen: (state: boolean) => void;
       event: KeyboardEvent | React.MouseEvent | React.KeyboardEvent;
     }) => void | Promise<void>;
@@ -131,10 +132,11 @@ const findFirstClickable = (items: CommandItemTypes[]): CommandItemTypes | null 
 
 export const CommandPalette = (props: CommandPaletteProps) => {
   const id = useId();
-  const [value, setValue] = useState("");
+  const scrollContainerRef = useRef<HTMLUListElement | null>(null)
+  const [text, setText] = useState("");
   const listRef = useRef<Array<HTMLElement | null>>([]);
   const translations = useTranslations();
-  const valueRef = useStableRef(value);
+  const valueRef = useStableRef(text);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const bindKey = props.bind ?? "Mod + k";
   const root = useFloating<HTMLInputElement>({
@@ -146,7 +148,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
 
   const commands = props.commands.flatMap((x) => (x.type === "group" ? [x, ...x.items] : [x]));
 
-  const fuzzy = getFuzzyData(commands, value);
+  const fuzzy = getFuzzyData(commands, text);
 
   const listNav = useListNavigation(root.context, {
     listRef,
@@ -166,7 +168,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     },
     onNavigate: (n) => {
       if (Is.number(n)) {
-        listRef.current[n]?.scrollIntoView({ block: "start", inline: "start" });
+        if (!isChildVisible(scrollContainerRef.current!, listRef.current[n]!))
+          listRef.current[n]?.scrollIntoView({ block: "start", inline: "start" });
       }
       setActiveIndex((prev) => {
         if (Is.number(n)) return n;
@@ -177,7 +180,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
   const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav]);
 
   const displayItems: CommandItemTypes[] =
-    value === ""
+    text === ""
       ? commands
       : [
         {
@@ -197,6 +200,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         combi.add(cmd.shortcut, (event) =>
           cmd.action({
             event,
+            setText,
             text: valueRef.current,
             setOpen: props.onChangeVisibility,
           })
@@ -204,7 +208,6 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     });
     return combi.register();
   }, [bindKey, commands, props, valueRef]);
-
 
   const Icon = props.Icon ?? FilterIcon;
 
@@ -224,8 +227,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
       >
         <header className="flex sticky top-0 items-center w-full h-12 border-b overflow-clip isolate z-floating border-floating-border bg-floating-background">
           <div className="flex justify-center items-center size-10">
-            {props.Icon ? <Icon Default={FilterIcon} text={value} size={16} /> : <FilterIcon size={16} />}
-
+            {props.Icon ? <Icon Default={FilterIcon} text={text} size={16} /> : <FilterIcon size={16} />}
           </div>
           <input
             {...getReferenceProps({
@@ -235,19 +237,19 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 const key = e.key
                 if (key === "Enter") {
                   if (item) {
-                    if (item.type === "shortcut") item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
+                    if (item.type === "shortcut") item.action({ event: e, text: text, setOpen: props.onChangeVisibility, setText });
                   } else {
                     const item = findFirstClickable(fuzzy)
-                    if (item?.type === "shortcut") item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
+                    if (item?.type === "shortcut") item.action({ event: e, text: text, setOpen: props.onChangeVisibility, setText });
                   }
                 }
               }
             } as any) as any}
             autoFocus
-            value={value}
+            value={text}
             data-combikeysbypass="true"
             placeholder="Search for..."
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setText(e.target.value)}
             className="items-center py-2 px-2 pb-2 w-full h-12 text-lg text-left bg-transparent outline-none"
           />
         </header>
@@ -273,6 +275,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
           <div className="flex flex-row flex-nowrap min-w-full" data-component="command-palette-container">
             <ul
               role="listbox"
+              ref={scrollContainerRef}
               data-component="command-palette-list"
               className="flex overflow-y-auto flex-col gap-1 px-2 my-2 w-full max-h-96 h-fit origin-[top_center]"
             >
@@ -287,11 +290,11 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                       e.preventDefault();
                       props.onChangeVisibility(false);
                       if (item.type === "shortcut")
-                        item.action({ event: e, text: value, setOpen: props.onChangeVisibility, });
+                        item.action({ event: e, text: text, setOpen: props.onChangeVisibility, setText });
                     },
                   })}
                   item={item}
-                  text={value}
+                  text={text}
                   active={activeIndex === index}
                   key={`${id}-${item.type}-${index}`}
                 />
@@ -302,7 +305,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 </div>
               ) : null}
             </ul>
-            {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={value} /> : null}
+            {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}
           </div>
         )}
         {props.footer ? <footer className="flex items-center p-2 h-8 rounded-b-lg border-t border-floating-border">{props.footer}</footer> : null}
