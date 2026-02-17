@@ -97,7 +97,7 @@ function Notification(props: NotificationItemProps) {
             <div className={css("mt-0.5 shrink-0 opacity-80", loading && "animate-spin")}>
               <Icon className="size-4" />
             </div>
-            
+
             <div className="flex flex-1 flex-col gap-1 overflow-hidden">
               {props.toast.title ? (
                 <Base.Title className="truncate font-semibold leading-tight tracking-tight select-text" />
@@ -123,10 +123,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
   const ref = useRef<HTMLDivElement>(null!);
   const hover = useHover(ref);
   const toastManager = Base.useToastManager();
-  
-  // Show the most recent notifications at the top
-  const allToasts = [...toastManager.toasts].slice(0, max);
-  
+  const allToasts = max ? toastManager.toasts.slice(0, max) : toastManager.toasts;
   const visibleToasts = hover ? allToasts : allToasts.slice(0, 3);
   const hiddenCount = allToasts.length - visibleToasts.length;
 
@@ -143,7 +140,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
           />
         ))}
       </AnimatePresence>
-      
+
       {!hover && hiddenCount > 0 && (
         <motion.div
           layout
