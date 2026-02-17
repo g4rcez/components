@@ -189,7 +189,7 @@ export const DARK_THEME: DesignTokens = {
       success: {
         text: "hsla(144,79%,79%)",
         bg: "hsla(153,20%,9%)",
-        border: "hsla(144,70%,14%)",
+        border: "hsla(144,40%,10%)",
       },
       danger: {
         text: "hsla(350,100%,91%)",

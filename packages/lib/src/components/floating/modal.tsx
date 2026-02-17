@@ -14,13 +14,18 @@ import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import { AnimatePresence, HTMLMotionProps, motion, MotionConfig, MotionValue, PanInfo, TargetAndTransition, useMotionValue, animate } from "motion/react";
 import { Slot } from "../core/slot";
-import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useEffect, useId, useImperativeHandle, useRef } from "react";
+import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useEffect, useId, useImperativeHandle, useRef, useState, useCallback } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
 import { useFloatingRef } from "../../hooks/use-floating-ref";
+import { Button, ButtonProps } from "../core/button";
 
 type AnimationLabels = "initial" | "enter" | "exit";
+
+const ConfirmContext = React.createContext<(options: ConfirmOptions) => Promise<boolean>>(async () => false);
+
+export const useConfirm = () => React.useContext(ConfirmContext);
 
 export type ModalType = "dialog" | "drawer" | "sheet";
 
@@ -183,11 +188,11 @@ const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsTy
   return forceType ? positions[type] : positions.sheet;
 };
 
-type ModalRef = { context: any; floating: HTMLElement | null };
+export type ModalRef = { context: any; floating: HTMLElement | null };
 
 const noop: any[] = [];
 
-export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
+const InternalModal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
   (
     {
       open,
@@ -436,3 +441,86 @@ export const Modal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
     );
   }
 );
+
+type ButtonConfirmationAction = {
+  value?: any;
+  text?: Label;
+  theme?: ButtonProps["theme"]
+}
+
+export type ConfirmOptions = {
+  title?: Label;
+  description?: Label;
+  cancel?: ButtonConfirmationAction;
+  confirm?: ButtonConfirmationAction;
+};
+
+type ConfirmContextType = (options: ConfirmOptions) => Promise<boolean>;
+
+let confirmGlobal: ConfirmContextType = async () => {
+  if (typeof window !== "undefined") {
+    console.warn("ConfirmationProvider is not mounted");
+  }
+  return false;
+};
+
+export const Modal = Object.assign(InternalModal, {
+  confirm: (options: ConfirmOptions) => confirmGlobal(options),
+});
+
+export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }) => {
+  const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState<Partial<ConfirmOptions>>({});
+  const [resolve, setResolve] = useState<(value: boolean) => void>(() => { });
+
+  const confirmAction = useCallback((opts: ConfirmOptions): Promise<boolean> => {
+    setOptions(opts);
+    setOpen(true);
+    return new Promise((res) => {
+      setResolve(() => res);
+    });
+  }, []);
+
+  useEffect(() => {
+    confirmGlobal = confirmAction;
+  }, [confirmAction]);
+
+  const onConfirm = () => {
+    setOpen(false);
+    const value = options.confirm?.value ?? true;
+    resolve(value ?? true);
+  };
+
+  const onCancel = () => {
+    setOpen(false);
+    const value = options.cancel?.value ?? false;
+    resolve(value ?? false);
+  };
+
+  return (
+    <ConfirmContext.Provider value={confirmAction}>
+      {children}
+      <InternalModal
+        open={open}
+        type="dialog"
+        closable={false}
+        onChange={setOpen}
+        overlayClickClose={false}
+        title={options.title || "Confirmation"}
+        className="container max-w-dialog lg:max-w-96"
+        footer={
+          <div className="flex gap-2 justify-end">
+            <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
+              {options.cancel?.text || "Cancel"}
+            </Button>
+            <Button theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
+              {options.confirm?.text || "Confirm"}
+            </Button>
+          </div>
+        }
+      >
+        <div className="py-2 text-foreground">{options.description}</div>
+      </InternalModal>
+    </ConfirmContext.Provider>
+  );
+};

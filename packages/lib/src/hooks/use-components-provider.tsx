@@ -5,6 +5,7 @@ import { parsers } from "../styles/design-tokens";
 import { Context, ContextProps } from "../config/context";
 import { defaultTranslations, Translations } from "../config/default-translations";
 import { defaultTweaks, Tweaks } from "../config/default-tweaks";
+import { ModalConfirmProvider } from "../components/floating/modal";
 
 export type ContextType = Partial<{
   tweaks: Tweaks;
@@ -25,5 +26,9 @@ export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
     }),
     [props]
   );
-  return <Context.Provider value={memoMap}>{props.children}</Context.Provider>;
+  return (
+    <Context.Provider value={memoMap}>
+      <ModalConfirmProvider>{props.children}</ModalConfirmProvider>
+    </Context.Provider>
+  );
 };

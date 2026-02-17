@@ -184,6 +184,25 @@ const TestingRouteChanges = () => {
   );
 };
 
+const ConfirmationDialog = () => {
+  const [confirmed, setConfirmed] = useState<any>(false);
+  async function onClick() {
+    const result = await Modal.confirm({
+      title: "Are you sure?",
+      description:
+        "This action cannot be undone. Vivamus scelerisque eros volutpat.",
+      confirm: { text: "Delete", theme: "danger", value: "deleted" },
+      cancel: { text: "Cancel", value: "cancel" },
+    });
+    setConfirmed(result);
+  }
+  return (
+    <Button onClick={onClick}>
+      Start confirmed cycle: {confirmed.toString()}
+    </Button>
+  );
+};
+
 export default function ModalExamplePage() {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({
@@ -226,6 +245,7 @@ export default function ModalExamplePage() {
           <Switch name="closable" onChange={onChange} checked={state.closable}>
             Close on X
           </Switch>
+          <ConfirmationDialog />
         </Card>
         <Card className="flex flex-row flex-wrap gap-6" title="Dialog">
           <Element

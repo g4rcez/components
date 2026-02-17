@@ -53,7 +53,7 @@ export default function GetStartedPage() {
                   count.current = c;
                   notification(
                     `Notification ${c}. Lorem ipsum dolor sit amet, consectetur adipisici.`,
-                    { title: "Success", theme: "success" },
+                    { title: "Success", theme: "success", timeout: 2000000 },
                   );
                 }}
                 className="w-full"

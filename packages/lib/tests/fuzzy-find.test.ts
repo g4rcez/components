@@ -19,7 +19,7 @@ describe("Should fuzzy find values", () => {
                 {
                     value: "",
                     key: "document",
-                    ifNotMatch: (item) => {
+                    ifNotMatch: (_, item) => {
                         return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(item);
                     },
                 },
