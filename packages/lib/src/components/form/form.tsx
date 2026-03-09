@@ -5,7 +5,7 @@ export const Form = (props: React.ComponentProps<"form">) => {
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.persist();
         e.preventDefault();
-        props.onSubmit?.(e);
+        props.onSubmit?.(e as any);
     };
     return <form {...props} onSubmit={onSubmit} />;
 };

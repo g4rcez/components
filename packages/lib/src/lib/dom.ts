@@ -44,8 +44,11 @@ export const initializeInputDataset = (input: HTMLInputElement | HTMLTextAreaEle
 export const hasVerticalScroll = (htmlElement: HTMLElement) => htmlElement.scrollHeight > htmlElement.clientHeight;
 
 export const getRemainingSize = (element: HTMLElement, windowSize: number) => {
-  const rect = element.getBoundingClientRect();
-  return Math.abs(windowSize - rect.bottom);
+  if (element && element.getBoundingClientRect) { 
+    const rect = element.getBoundingClientRect();
+    return Math.abs(windowSize - rect.bottom);
+  }
+  return 320;
 };
 
 export const getCoords = (elem: HTMLElement, docEl: HTMLElement) => {

@@ -192,7 +192,11 @@ export type ModalRef = { context: any; floating: HTMLElement | null };
 
 const noop: any[] = [];
 
-const InternalModal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
+type ModalComponent = React.FC<ModalProps> & {
+  confirm: <T, >(options: ConfirmOptions) => Promise<T>
+}
+
+export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
   (
     {
       open,
@@ -440,7 +444,7 @@ const InternalModal = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
       </Fragment>
     );
   }
-);
+) as any;
 
 type ButtonConfirmationAction = {
   value?: any;
@@ -457,16 +461,14 @@ export type ConfirmOptions = {
 
 type ConfirmContextType = (options: ConfirmOptions) => Promise<boolean>;
 
-let confirmGlobal: ConfirmContextType = async () => {
+let confirmGlobal: ConfirmContextType = async <T extends any>(options: ConfirmOptions): Promise<T> => {
   if (typeof window !== "undefined") {
     console.warn("ConfirmationProvider is not mounted");
   }
-  return false;
+  return false as T;
 };
 
-export const Modal = Object.assign(InternalModal, {
-  confirm: (options: ConfirmOptions) => confirmGlobal(options),
-});
+Modal.confirm = <T extends any>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as any;
 
 export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -500,7 +502,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
   return (
     <ConfirmContext.Provider value={confirmAction}>
       {children}
-      <InternalModal
+      <Modal
         open={open}
         type="dialog"
         closable={false}
@@ -520,7 +522,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
         }
       >
         <div className="py-2 text-foreground">{options.description}</div>
-      </InternalModal>
+      </Modal>
     </ConfirmContext.Provider>
   );
 };

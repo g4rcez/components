@@ -42,9 +42,9 @@ const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>
 
 const transitionStyles = {
   duration: 200,
-  initial: { transform: "scaleY(0)", opacity: 0.2 },
   open: { transform: "scaleY(1)", opacity: 1 },
   close: { transform: "scaleY(0)", opacity: 0 },
+  initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
 const emptyRef: any[] = [];
