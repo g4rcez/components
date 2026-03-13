@@ -41,19 +41,19 @@ export type ColMatrix = `${number},${number}`;
 type ParsePath<path, output extends string[] = [], currentChunk extends string = ""> = path extends number
     ? [`${path}`]
     : path extends `${infer first}${infer rest}`
-    ? first extends "." | "[" | "]"
-    ? ParsePath<rest, [...output, ...(currentChunk extends "" ? [] : [currentChunk])], "">
-    : ParsePath<rest, output, `${currentChunk}${first}`>
-    : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
+      ? first extends "." | "[" | "]"
+          ? ParsePath<rest, [...output, ...(currentChunk extends "" ? [] : [currentChunk])], "">
+          : ParsePath<rest, output, `${currentChunk}${first}`>
+      : [...output, ...(currentChunk extends "" ? [] : [currentChunk])];
 
 type RecursiveGet<Obj, pathList> = Obj extends any
     ? pathList extends [infer first, ...infer rest]
-    ? first extends keyof Obj
-    ? RecursiveGet<Obj[first], rest>
-    : [first, Obj] extends [`${number}` | "number", readonly any[]]
-    ? RecursiveGet<Extract<Obj, any[]>[number], rest>
-    : undefined
-    : Obj
+        ? first extends keyof Obj
+            ? RecursiveGet<Obj[first], rest>
+            : [first, Obj] extends [`${number}` | "number", readonly any[]]
+              ? RecursiveGet<Extract<Obj, any[]>[number], rest>
+              : undefined
+        : Obj
     : never;
 
 type GetFromPath<Obj, path> = RecursiveGet<Obj, ParsePath<path>>;
@@ -87,11 +87,11 @@ export type ColConstructor<T extends POJO> = {
     remove: <K extends AllPaths<T>>(id: K) => void;
     filter: (c: (c: Col<T>) => boolean) => Col<T>[];
     add: <K extends AllPaths<T>>(id: K, thead: THead, props?: ColOptions<T, K>) => void;
-};;
+};
 
 const cols =
     <T extends POJO>() =>
-        <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
+    <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
 
 export type Col<T extends POJO> = ReturnType<ReturnType<typeof cols<T>>>;
 
@@ -126,12 +126,12 @@ type TableSetters<T extends POJO> = {
 export type TableOperationProps<T extends POJO> = TableConfiguration<
     T,
     TableSetters<T> &
-    TableGetters<T> & {
-        set?: (v: TableGetters<T>) => void;
-    } & {
-        inlineSorter: boolean;
-        inlineFilter: boolean;
-    }
+        TableGetters<T> & {
+            set?: (v: TableGetters<T>) => void;
+        } & {
+            inlineSorter: boolean;
+            inlineFilter: boolean;
+        }
 >;
 
 export const createColumns = <T extends POJO>(callback: (o: ColConstructor<T>) => void) => {
@@ -211,4 +211,4 @@ export const useWidthControl = <T extends object>(reorder: (c: Col<T>[]) => void
     return [ref, onChange] as const;
 };
 
-export const getModalScrollerRef = () => isSsr() ? undefined : document.querySelector(`[data-component="modal-body"]`) as HTMLElement;
+export const getModalScrollerRef = () => (isSsr() ? undefined : (document.querySelector(`[data-component="modal-body"]`) as HTMLElement));

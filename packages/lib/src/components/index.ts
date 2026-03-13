@@ -39,5 +39,6 @@ export * from "./form/transfer-list";
 export * from "./core/render-on-view";
 export * from "./display/notifications";
 export * from "./floating/command-palette";
+export * from "./page-calendar";
 export { formReset } from "./form/formReset";
 export { createColumns, createOptionCols, type ColType, useTablePreferences, type TablePagination } from "./table/table-lib";

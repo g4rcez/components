@@ -55,35 +55,39 @@ const buttonVariants = cva(
 type Variants = CvaVariants<typeof variants>;
 
 export type ButtonProps<T extends React.ElementType = "button"> = PropsWithChildren<
-    PolymorphicProps<Variants & Partial<{
-        /** Icon to display in the button */
-        icon: Label;
-        /** Whether the button is in a loading state */
-        loading: boolean
-    }>, T>
+    PolymorphicProps<
+        Variants &
+            Partial<{
+                /** Icon to display in the button */
+                icon: Label;
+                /** Whether the button is in a loading state */
+                loading: boolean;
+            }>,
+        T
+    >
 >;
 
 /**
  * A versatile button component with multiple variants, sizes, and states.
- * 
+ *
  * @example
  * ```tsx
  * // Basic usage
  * <Button>Click me</Button>
- * 
+ *
  * // With variants
  * <Button theme="primary" size="big">Primary Button</Button>
- * 
+ *
  * // Loading state
  * <Button loading>Saving...</Button>
- * 
+ *
  * // With icon
  * <Button icon={<Icon name="plus" />}>Add Item</Button>
- * 
+ *
  * // As different element
  * <Button as="a" href="/link">Link Button</Button>
  * ```
- * 
+ *
  * @template T - The HTML element type to render as
  * @param props - Button props including theme, size, loading state, etc.
  * @param ref - Forwarded ref to the button element

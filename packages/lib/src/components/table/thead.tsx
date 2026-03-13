@@ -78,12 +78,12 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`relative md:h-14 typography min-w-0 cursor-grab font-medium ${props.header.thProps?.className ?? ""}`}
+            className={`typography relative min-w-0 cursor-grab font-medium md:h-14 ${props.header.thProps?.className ?? ""}`}
         >
             <span
                 className={`flex h-full items-center justify-between bg-table-header p-[var(--table-cell-padding)] ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}
             >
-                <span className="flex gap-1 items-center">
+                <span className="flex items-center gap-1">
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
                             arrow
@@ -114,7 +114,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 <li>
                                     <button
                                         type="button"
-                                        className="flex gap-1 items-center text-primary"
+                                        className="flex items-center gap-1 text-primary"
                                         onClick={() =>
                                             props.setFilters((prev) =>
                                                 prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
@@ -127,7 +127,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                             </ul>
                         </Dropdown>
                     ) : null}
-                    <span className="text-base pointer-events-auto text-balance">{props.header.thead}</span>
+                    <span className="pointer-events-auto text-balance text-base">{props.header.thead}</span>
                     {props.inlineSorter && defaultAllowSort ? (
                         <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
                     ) : null}
@@ -149,7 +149,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="block absolute top-0 h-full hover:w-1.5 active:w-1.5 -right-[0.5px] z-calendar w-[1px] cursor-col-resize bg-transparent hover:bg-primary active:bg-primary"
+                    className="absolute -right-[0.5px] top-0 z-calendar block h-full w-[1px] cursor-col-resize bg-transparent hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
                     onClick={(e) => void e.currentTarget.focus()}
                     onKeyDown={(e) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
@@ -181,18 +181,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
 export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
     const [ref, onChange] = useWidthControl(props.setCols);
     return (
-        <Reorder.Group
-            layout
-            as="tr"
-            axis="x"
-            drag="x"
-            ref={ref}
-            layoutRoot
-            role="row"
-            layoutScroll
-            onReorder={onChange}
-            values={props.headers}
-        >
+        <Reorder.Group layout as="tr" axis="x" drag="x" ref={ref} layoutRoot role="row" layoutScroll onReorder={onChange} values={props.headers}>
             <AnimatePresence>
                 {props.headers.map((header, index) => (
                     <HeaderChild<T>

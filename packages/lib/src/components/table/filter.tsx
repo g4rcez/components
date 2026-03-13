@@ -124,9 +124,9 @@ export const Filter = <T extends object>(props: Props<T>) => {
             prev.map((x) =>
                 x.id === id
                     ? {
-                        ...x,
-                        operation: operators.operations[operator as OperatorTypes],
-                    }
+                          ...x,
+                          operation: operators.operations[operator as OperatorTypes],
+                      }
                     : x
             )
         );
@@ -149,7 +149,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="flex gap-1 items-center proportional-nums">
+                    <span className="flex items-center gap-1 proportional-nums">
                         <ListFilterIcon size={14} />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
@@ -185,7 +185,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     title={translation.tableFilterValueTitle}
                                     placeholder={translation.tableFilterValuePlaceholder}
                                 />
-                                <div className="flex justify-center items-center mt-5">
+                                <div className="mt-5 flex items-center justify-center">
                                     <button data-id={filter.id} type="button" onClick={onDelete}>
                                         <Trash2Icon className="text-danger" size={16} />
                                     </button>
@@ -194,7 +194,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="flex gap-1 items-center text-primary">
+                        <button type="button" onClick={onAddFilter} className="flex items-center gap-1 text-primary">
                             <PlusIcon size={14} /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
@@ -221,9 +221,9 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
             prev.map((x) =>
                 x.id === id
                     ? {
-                        ...x,
-                        operation: operators.operations[operator as OperatorTypes],
-                    }
+                          ...x,
+                          operation: operators.operations[operator as OperatorTypes],
+                      }
                     : x
             )
         );
@@ -236,7 +236,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="flex flex-nowrap gap-4 items-center py-2">
+        <div className="flex flex-nowrap items-center gap-4 py-2">
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}

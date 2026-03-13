@@ -12,7 +12,7 @@ const remap = (x: string) => {
 export const Shortcut = (props: { value: string }) => {
     const p = props.value.trim().split("+");
     return (
-        <span className="flex text-sm items-center gap-1">
+        <span className="flex items-center gap-1 text-sm">
             {p.map((x, i) => {
                 const isLast = p.length - 1 === i;
                 return (

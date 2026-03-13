@@ -27,9 +27,7 @@ const getNElement = (elements: HTMLElement[], currentIndex: number, direction: "
         const element = elements[i];
         if (!isElementDisabled(element)) return element;
     }
-    return direction === "backward"
-        ? getNElement(elements, elements.length - 1, "backward")
-        : getNElement(elements, -1, "forward");
+    return direction === "backward" ? getNElement(elements, elements.length - 1, "backward") : getNElement(elements, -1, "forward");
 };
 
 const moveOn = (ul: HTMLUListElement, direction: "backward" | "forward") => {
@@ -91,10 +89,10 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                 className={props.className}
                 container={css("pt-0 max-w-full w-full min-w-0", props.container)}
                 header={
-                    <header className="overflow-x-auto relative mb-2">
-                        <div className="absolute bottom-0 w-full h-[1px] bg-card-border" />
+                    <header className="relative mb-2 overflow-x-auto">
+                        <div className="absolute bottom-0 h-[1px] w-full bg-card-border" />
                         <nav className="min-w-0">
-                            <ul onKeyDown={onKeyDown} ref={ref} className="flex overflow-x-auto flex-1 justify-start w-0 min-w-full">
+                            <ul onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
                                 {items.map((x: any) => {
                                     const inner = x.props as TabProps;
                                     const current = active === inner.id;
@@ -117,7 +115,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                                 aria-current="page"
                                                 disabled={inner.disabled}
                                                 onClick={inner.disabled ? undefined : onClick}
-                                                className="block py-4 px-10 w-full whitespace-nowrap disabled:cursor-not-allowed"
+                                                className="block w-full whitespace-nowrap px-10 py-4 disabled:cursor-not-allowed"
                                             >
                                                 {inner.title as any}
                                             </Polymorph>
@@ -143,9 +141,9 @@ export type TabProps = CommonTabProps &
     (
         | { title: string; label?: undefined }
         | {
-            label: string;
-            title: Omit<Label, string>;
-        }
+              label: string;
+              title: Omit<Label, string>;
+          }
     );
 
 export const Tab = (props: PropsWithChildren<TabProps>) => {

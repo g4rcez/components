@@ -112,7 +112,7 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddSorter} className="text-primary flex items-center gap-1">
+                        <button type="button" onClick={onAddSorter} className="flex items-center gap-1 text-primary">
                             <PlusIcon size={14} /> {translation.tableSortAddButton}
                         </button>
                     </li>

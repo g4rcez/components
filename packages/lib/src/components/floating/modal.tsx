@@ -1,20 +1,41 @@
 "use client";
 import {
-  FloatingFocusManager,
-  FloatingOverlay,
-  FloatingPortal,
-  useClick,
-  useDismiss,
-  useFloating,
-  useInteractions,
-  useRole,
-  type ElementProps,
+    FloatingFocusManager,
+    FloatingOverlay,
+    FloatingPortal,
+    useClick,
+    useDismiss,
+    useFloating,
+    useInteractions,
+    useRole,
+    type ElementProps,
 } from "@floating-ui/react";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
-import { AnimatePresence, HTMLMotionProps, motion, MotionConfig, MotionValue, PanInfo, TargetAndTransition, useMotionValue, animate } from "motion/react";
+import {
+    AnimatePresence,
+    HTMLMotionProps,
+    motion,
+    MotionConfig,
+    MotionValue,
+    PanInfo,
+    TargetAndTransition,
+    useMotionValue,
+    animate,
+} from "motion/react";
 import { Slot } from "../core/slot";
-import React, { ForwardedRef, forwardRef, Fragment, PropsWithChildren, useEffect, useId, useImperativeHandle, useRef, useState, useCallback } from "react";
+import React, {
+    ForwardedRef,
+    forwardRef,
+    Fragment,
+    PropsWithChildren,
+    useEffect,
+    useId,
+    useImperativeHandle,
+    useRef,
+    useState,
+    useCallback,
+} from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
@@ -32,90 +53,90 @@ export type ModalType = "dialog" | "drawer" | "sheet";
 export type DrawerPosition = "left" | "right";
 
 type Animations = {
-  sheet: Record<AnimationLabels, TargetAndTransition>;
-  dialog: Record<AnimationLabels, TargetAndTransition>;
-  drawer: (type: DrawerPosition) => Record<AnimationLabels, TargetAndTransition>;
+    sheet: Record<AnimationLabels, TargetAndTransition>;
+    dialog: Record<AnimationLabels, TargetAndTransition>;
+    drawer: (type: DrawerPosition) => Record<AnimationLabels, TargetAndTransition>;
 };
 
 const animationDuration = "500ms";
 
 const drawerLeft: Record<string, TargetAndTransition> = {
-  exit: { x: ["0%", "-30%"], opacity: 0, animationDuration },
-  enter: { x: ["-30%", "0%"], opacity: 1, animationDuration },
-  initial: { x: ["-30%", "0%"], opacity: 0.8, animationDuration },
+    exit: { x: ["0%", "-30%"], opacity: 0, animationDuration },
+    enter: { x: ["-30%", "0%"], opacity: 1, animationDuration },
+    initial: { x: ["-30%", "0%"], opacity: 0.8, animationDuration },
 };
 
 const drawerRight: Record<string, TargetAndTransition> = {
-  enter: { x: "0%", opacity: 1, animationDuration },
-  exit: { x: ["0%", "30%"], opacity: 0, animationDuration },
-  initial: { x: ["30%", "0%"], opacity: 0.8, animationDuration },
+    enter: { x: "0%", opacity: 1, animationDuration },
+    exit: { x: ["0%", "30%"], opacity: 0, animationDuration },
+    initial: { x: ["30%", "0%"], opacity: 0.8, animationDuration },
 };
 
 const animations: Animations = {
-  drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
-  sheet: {
-    enter: { opacity: 1, y: "0%", animationDuration, transformOrigin: "bottom" },
-    exit: { opacity: 0.4, y: "10%", animationDuration, transformOrigin: "bottom" },
-    initial: { opacity: 0.7, y: "10%", animationDuration, transformOrigin: "bottom" },
-  },
-  dialog: {
-    exit: { opacity: 0, scale: 0.95, animationDuration },
-    enter: { opacity: 1, scale: [1.05, 1], animationDuration },
-    initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: "easeInOut" } },
-  },
+    drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
+    sheet: {
+        enter: { opacity: 1, y: "0%", animationDuration, transformOrigin: "bottom" },
+        exit: { opacity: 0.4, y: "10%", animationDuration, transformOrigin: "bottom" },
+        initial: { opacity: 0.7, y: "10%", animationDuration, transformOrigin: "bottom" },
+    },
+    dialog: {
+        exit: { opacity: 0, scale: 0.95, animationDuration },
+        enter: { opacity: 1, scale: [1.05, 1], animationDuration },
+        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: "easeInOut" } },
+    },
 };
 
 const variants = cva(
-  "z-floating border border-floating-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background",
-  {
-    variants: {
-      type: {
-        drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
-        dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
-        sheet: "w-screen absolute bottom-0 max-h-[calc(100vh-15%)] max-h-[calc(100svh-5%)] h-screen pt-6 pb-4 rounded-t-lg",
-      },
-      position: {
-        none: "",
-        right: "py-4 absolute right-0 top-0 rounded-l-lg",
-        left: "py-4 absolute left-0 top-0 rounded-r-lg",
-      },
-    },
-    defaultVariants: { position: "right", type: "dialog" },
-  }
+    "z-floating border border-floating-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background",
+    {
+        variants: {
+            type: {
+                drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
+                dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
+                sheet: "w-screen absolute bottom-0 max-h-[calc(100vh-15%)] max-h-[calc(100svh-5%)] h-screen pt-6 pb-4 rounded-t-lg",
+            },
+            position: {
+                none: "",
+                right: "py-4 absolute right-0 top-0 rounded-l-lg",
+                left: "py-4 absolute left-0 top-0 rounded-r-lg",
+            },
+        },
+        defaultVariants: { position: "right", type: "dialog" },
+    }
 );
 
 export type ModalProps = Override<
-  HTMLMotionProps<"div">,
-  ({ title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label }) & {
-    open: boolean;
-    onChange: (nextState: boolean) => void;
-  } & Partial<{
-    footer: Label;
-    type: ModalType;
-    animated: boolean;
-    asChild: boolean;
-    layoutId: string;
-    resizer: boolean;
-    className: string;
-    closable: boolean;
-    forceType: boolean;
-    bodyClassName: string;
-    overlayClassName: string;
-    position: DrawerPosition;
-    overlayClickClose: boolean;
-    closeOnFocusOut: boolean;
-    role: "dialog";
-    interactions: ElementProps[];
-    trigger: Label | React.FC<any>;
-  }>
+    HTMLMotionProps<"div">,
+    ({ title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label }) & {
+        open: boolean;
+        onChange: (nextState: boolean) => void;
+    } & Partial<{
+            footer: Label;
+            type: ModalType;
+            animated: boolean;
+            asChild: boolean;
+            layoutId: string;
+            resizer: boolean;
+            className: string;
+            closable: boolean;
+            forceType: boolean;
+            bodyClassName: string;
+            overlayClassName: string;
+            position: DrawerPosition;
+            overlayClickClose: boolean;
+            closeOnFocusOut: boolean;
+            role: "dialog";
+            interactions: ElementProps[];
+            trigger: Label | React.FC<any>;
+        }>
 >;
 
 type DraggableProps = {
-  sheet: boolean;
-  position: DrawerPosition;
-  parent: React.RefObject<HTMLElement>;
-  onChange: (nextState: boolean) => void;
-  value: MotionValue<number | undefined>;
+    sheet: boolean;
+    position: DrawerPosition;
+    parent: React.RefObject<HTMLElement>;
+    onChange: (nextState: boolean) => void;
+    value: MotionValue<number | undefined>;
 };
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
@@ -123,69 +144,69 @@ const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
 const calculateClose = (n: number) => n * 0.6;
 
 const Draggable = (props: DraggableProps) => {
-  const onDrag = (e: Event, info: PanInfo) => {
-    if (props.parent.current) {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      if (props.sheet) {
-        const div = props.parent.current as HTMLElement;
-        const rect = div.getBoundingClientRect();
-        const v = props.value.get() || rect.height;
-        const result = Math.abs(v - info.delta.y);
-        const max = window.outerHeight;
-        const screenHeightToClose = calculateClose(max);
-        if (result >= screenHeightToClose) return props.value.set(result);
-        if (document.activeElement instanceof HTMLElement) {
-          document.activeElement?.blur();
+    const onDrag = (e: Event, info: PanInfo) => {
+        if (props.parent.current) {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            if (props.sheet) {
+                const div = props.parent.current as HTMLElement;
+                const rect = div.getBoundingClientRect();
+                const v = props.value.get() || rect.height;
+                const result = Math.abs(v - info.delta.y);
+                const max = window.outerHeight;
+                const screenHeightToClose = calculateClose(max);
+                if (result >= screenHeightToClose) return props.value.set(result);
+                if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement?.blur();
+                }
+                props.onChange(false);
+                return setTimeout(() => props.value.set(undefined), 350);
+            }
+            const div = props.parent.current as HTMLElement;
+            const v = props.value.get() || div.getBoundingClientRect().width;
+            const delta = props.position === "right" ? -info.delta.x : info.delta.x;
+            const value = Math.abs(v + delta);
+            return props.value.set(value);
         }
-        props.onChange(false);
-        return setTimeout(() => props.value.set(undefined), 350);
-      }
-      const div = props.parent.current as HTMLElement;
-      const v = props.value.get() || div.getBoundingClientRect().width;
-      const delta = props.position === "right" ? -info.delta.x : info.delta.x;
-      const value = Math.abs(v + delta);
-      return props.value.set(value);
-    }
-  };
+    };
 
-  return (
-    <motion.button
-      draggable
-      dragListener
-      dragMomentum
-      type="button"
-      animate={false}
-      dragElastic={0}
-      dragPropagation
-      initial={false}
-      onDrag={onDrag}
-      dragSnapToOrigin
-      dragDirectionLock
-      drag={props.sheet ? "y" : "x"}
-      dragConstraints={dragConstraints}
-      whileDrag={{ cursor: "grabbing" }}
-      className={css(
-        "absolute rounded-lg isolate z-calendar",
-        props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
-        props.sheet
-          ? "top-1 flex h-3 w-full justify-center py-2"
-          : props.position === "left"
-            ? "right-5 top-1/2 h-10 w-2"
-            : "left-2 top-1/2 h-10 w-2"
-      )}
-    >
-      {props.sheet ? <div className="w-1/4 h-2 rounded-lg bg-floating-border" /> : null}
-    </motion.button>
-  );
+    return (
+        <motion.button
+            draggable
+            dragListener
+            dragMomentum
+            type="button"
+            animate={false}
+            dragElastic={0}
+            dragPropagation
+            initial={false}
+            onDrag={onDrag}
+            dragSnapToOrigin
+            dragDirectionLock
+            drag={props.sheet ? "y" : "x"}
+            dragConstraints={dragConstraints}
+            whileDrag={{ cursor: "grabbing" }}
+            className={css(
+                "absolute isolate z-calendar rounded-lg",
+                props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
+                props.sheet
+                    ? "top-1 flex h-3 w-full justify-center py-2"
+                    : props.position === "left"
+                      ? "right-5 top-1/2 h-10 w-2"
+                      : "left-2 top-1/2 h-10 w-2"
+            )}
+        >
+            {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
+        </motion.button>
+    );
 };
 
 const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
 const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsType: Nil<ModalType>, propsPosition: Nil<DrawerPosition>) => {
-  const type = propsType || "dialog";
-  if (isDesktop) return propsType === "drawer" ? (propsPosition ?? positions.drawer) : positions[type];
-  return forceType ? positions[type] : positions.sheet;
+    const type = propsType || "dialog";
+    if (isDesktop) return propsType === "drawer" ? (propsPosition ?? positions.drawer) : positions[type];
+    return forceType ? positions[type] : positions.sheet;
 };
 
 export type ModalRef = { context: any; floating: HTMLElement | null };
@@ -193,336 +214,342 @@ export type ModalRef = { context: any; floating: HTMLElement | null };
 const noop: any[] = [];
 
 type ModalComponent = React.FC<ModalProps> & {
-  confirm: <T, >(options: ConfirmOptions) => Promise<T>
-}
+    confirm: <T>(options: ConfirmOptions) => Promise<T>;
+};
 
 export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<ModalProps>>(
-  (
-    {
-      open,
-      title,
-      footer,
-      asChild,
-      trigger,
-      children,
-      onChange,
-      ariaTitle,
-      className,
-      bodyClassName,
-      resizer = true,
-      animated = true,
-      closable = true,
-      forceType = false,
-      layoutId = undefined,
-      overlayClassName = "",
-      type: _type = "dialog",
-      position: propsPosition,
-      overlayClickClose = false,
-      closeOnFocusOut = false,
-      interactions: outInteractions = noop,
-      ...props
-    }: PropsWithChildren<ModalProps>,
-    externalRef: ForwardedRef<ModalRef>
-  ) => {
-    const root = useFloatingRef();
-    const innerContent = useRef<HTMLDivElement>(null)
-    const removeScrollRef = useRef<HTMLDivElement>(null);
-    const headingId = useId();
-    const descriptionId = useId();
-    const isDesktop = useMediaQuery("(min-width: 64rem)");
-    const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
-    const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
-    const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
-    const type = isDesktop ? _type : forceType ? _type : "sheet";
-    const useResizer = type !== "dialog";
+    (
+        {
+            open,
+            title,
+            footer,
+            asChild,
+            trigger,
+            children,
+            onChange,
+            ariaTitle,
+            className,
+            bodyClassName,
+            resizer = true,
+            animated = true,
+            closable = true,
+            forceType = false,
+            layoutId = undefined,
+            overlayClassName = "",
+            type: _type = "dialog",
+            position: propsPosition,
+            overlayClickClose = false,
+            closeOnFocusOut = false,
+            interactions: outInteractions = noop,
+            ...props
+        }: PropsWithChildren<ModalProps>,
+        externalRef: ForwardedRef<ModalRef>
+    ) => {
+        const root = useFloatingRef();
+        const innerContent = useRef<HTMLDivElement>(null);
+        const removeScrollRef = useRef<HTMLDivElement>(null);
+        const headingId = useId();
+        const descriptionId = useId();
+        const isDesktop = useMediaQuery("(min-width: 64rem)");
+        const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
+        const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
+        const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
+        const type = isDesktop ? _type : forceType ? _type : "sheet";
+        const useResizer = type !== "dialog";
 
-    const floating = useFloating({ open, onOpenChange: onChange, strategy: "fixed" });
-    const click = useClick(floating.context, {});
-    const role = useRole(floating.context, { role: "dialog" });
-    const dismiss = useDismiss(floating.context, {
-      bubbles: true,
-      escapeKey: true,
-      outsidePress: (event) => {
-        const target = event.target as Node;
-        return overlayClickClose && !!target?.isConnected;
-      },
-    });
+        const floating = useFloating({ open, onOpenChange: onChange, strategy: "fixed" });
+        const click = useClick(floating.context, {});
+        const role = useRole(floating.context, { role: "dialog" });
+        const dismiss = useDismiss(floating.context, {
+            bubbles: true,
+            escapeKey: true,
+            outsidePress: (event) => {
+                const target = event.target as Node;
+                return overlayClickClose && !!target?.isConnected;
+            },
+        });
 
-    const interactions = useInteractions([click, dismiss, role].concat(outInteractions));
+        const interactions = useInteractions([click, dismiss, role].concat(outInteractions));
 
-    const Trigger = trigger as any;
+        const Trigger = trigger as any;
 
-    const floatingSize = useMotionValue<number | undefined>(undefined);
-    const sheetY = useMotionValue<number | undefined>(undefined);
-    const isDragging = useRef(false);
-    const dragStart = useRef(0);
+        const floatingSize = useMotionValue<number | undefined>(undefined);
+        const sheetY = useMotionValue<number | undefined>(undefined);
+        const isDragging = useRef(false);
+        const dragStart = useRef(0);
 
-    useEffect(() => {
-      floatingSize.set(undefined);
-      sheetY.set(undefined);
-    }, [type, floatingSize, sheetY]);
+        useEffect(() => {
+            floatingSize.set(undefined);
+            sheetY.set(undefined);
+        }, [type, floatingSize, sheetY]);
 
-    const onClose = () => onChange(false);
+        const onClose = () => onChange(false);
 
-    useImperativeHandle(externalRef, () => ({ context: floating.context, floating: removeScrollRef.current }), [floating.context, removeScrollRef]);
+        useImperativeHandle(externalRef, () => ({ context: floating.context, floating: removeScrollRef.current }), [
+            floating.context,
+            removeScrollRef,
+        ]);
 
-    const onDragHeader = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      const div = floating.refs.floating.current as HTMLElement;
-      const rect = div.getBoundingClientRect();
-      const v = floatingSize.get() || rect.height;
-      const result = Math.abs(v - info.delta.y);
-      const max = window.outerHeight;
-      const screenHeightToClose = calculateClose(max);
-      if (result >= screenHeightToClose) return floatingSize.set(result);
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement?.blur();
-      }
-      onChange?.(false);
-      return setTimeout(() => floatingSize.set(undefined), 350);
-    }
+        const onDragHeader = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+            const div = floating.refs.floating.current as HTMLElement;
+            const rect = div.getBoundingClientRect();
+            const v = floatingSize.get() || rect.height;
+            const result = Math.abs(v - info.delta.y);
+            const max = window.outerHeight;
+            const screenHeightToClose = calculateClose(max);
+            if (result >= screenHeightToClose) return floatingSize.set(result);
+            if (document.activeElement instanceof HTMLElement) {
+                document.activeElement?.blur();
+            }
+            onChange?.(false);
+            return setTimeout(() => floatingSize.set(undefined), 350);
+        };
 
+        const draggableMotionProps =
+            type === "sheet"
+                ? ({
+                      drag: "y",
+                      animate: false,
+                      dragElastic: 0,
+                      initial: false,
+                      dragConstraints,
+                      draggable: true,
+                      dragListener: true,
+                      dragMomentum: true,
+                      onDrag: onDragHeader,
+                      dragPropagation: true,
+                      dragSnapToOrigin: true,
+                      dragDirectionLock: true,
+                      whileDrag: { cursor: "grabbing" },
+                  } as const)
+                : { animate: animated, initial: false };
 
-    const draggableMotionProps = type === "sheet" ? {
-      drag: "y",
-      animate: false,
-      dragElastic: 0,
-      initial: false,
-      dragConstraints,
-      draggable: true,
-      dragListener: true,
-      dragMomentum: true,
-      onDrag: onDragHeader,
-      dragPropagation: true,
-      dragSnapToOrigin: true,
-      dragDirectionLock: true,
-      whileDrag: { cursor: "grabbing" },
-    } as const : { animate: animated, initial: false }
+        const scrollInitial = useMotionValue<number | undefined>(undefined);
+        const scroll = useMotionValue<number | undefined>(undefined);
 
-    const scrollInitial = useMotionValue<number | undefined>(undefined);
-    const scroll = useMotionValue<number | undefined>(undefined);
+        const Component = asChild ? Slot : motion.button;
 
-    const Component = asChild ? Slot : motion.button;
+        return (
+            <Fragment>
+                {trigger ? (
+                    <Component ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
+                        {Trigger}
+                    </Component>
+                ) : null}
+                <MotionConfig reducedMotion={animated ? "user" : "always"}>
+                    <FloatingPortal preserveTabOrder root={root}>
+                        <AnimatePresence mode="wait" propagate>
+                            {open ? (
+                                <FloatingOverlay
+                                    lockScroll
+                                    className={css(
+                                        "inset-0 isolate z-overlay flex h-[100dvh] !overflow-clip bg-floating-overlay/70",
+                                        type === "drawer" ? "" : "items-start justify-center pt-10 lg:p-10",
+                                        overlayClassName
+                                    )}
+                                >
+                                    <FloatingFocusManager guards modal closeOnFocusOut={closeOnFocusOut} context={floating.context}>
+                                        <AnimatePresence propagate>
+                                            <motion.div
+                                                {...props}
+                                                {...(title
+                                                    ? {
+                                                          "aria-labelledby": headingId,
+                                                          "aria-describedby": descriptionId,
+                                                      }
+                                                    : { "aria-label": ariaTitle })}
+                                                {...interactions.getFloatingProps({
+                                                    "aria-modal": open,
+                                                    ref: mergeRefs(floating.refs.setFloating, removeScrollRef) as any,
+                                                    className: css(variants({ position, type }), className, "isolate overscroll-contain"),
+                                                })}
+                                                exit="exit"
+                                                layout={true}
+                                                animate="enter"
+                                                initial="initial"
+                                                layoutId={layoutId}
+                                                variants={animation}
+                                                data-component="modal"
+                                                style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
+                                            >
+                                                {useResizer && resizer ? (
+                                                    <Draggable
+                                                        onChange={onChange}
+                                                        value={floatingSize}
+                                                        sheet={type === "sheet"}
+                                                        position={position as DrawerPosition}
+                                                        parent={floating.refs.floating as any}
+                                                    />
+                                                ) : null}
+                                                {title ? (
+                                                    <motion.header {...draggableMotionProps} className="relative isolate w-full">
+                                                        {title ? (
+                                                            <h2
+                                                                id={headingId}
+                                                                className="block select-text border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed"
+                                                            >
+                                                                {title}
+                                                            </h2>
+                                                        ) : null}
+                                                    </motion.header>
+                                                ) : null}
+                                                <motion.section
+                                                    ref={innerContent}
+                                                    data-component="modal-body"
+                                                    className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
+                                                    onTouchEnd={async () => {
+                                                        scroll.set(undefined);
+                                                        scrollInitial.set(undefined);
 
-    return (
-      <Fragment>
-        {trigger ? (
-          <Component ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
-            {Trigger}
-          </Component>
-        ) : null}
-        <MotionConfig reducedMotion={animated ? "user" : "always"}>
-          <FloatingPortal preserveTabOrder root={root}>
-            <AnimatePresence mode="wait" propagate>
-              {open ? (
-                <FloatingOverlay
-                  lockScroll
-                  className={css(
-                    "inset-0 flex isolate bg-floating-overlay/70 z-overlay h-[100dvh] !overflow-clip",
-                    type === "drawer" ? "" : "items-start justify-center lg:p-10 pt-10",
-                    overlayClassName
-                  )}
-                >
-                  <FloatingFocusManager guards modal closeOnFocusOut={closeOnFocusOut} context={floating.context}>
-                    <AnimatePresence propagate>
-                      <motion.div
-                        {...props}
-                        {...(title
-                          ? {
-                            "aria-labelledby": headingId,
-                            "aria-describedby": descriptionId,
-                          }
-                          : { "aria-label": ariaTitle })}
-                        {...interactions.getFloatingProps({
-                          "aria-modal": open,
-                          ref: mergeRefs(floating.refs.setFloating, removeScrollRef) as any,
-                          className: css(variants({ position, type }), className, "isolate overscroll-contain"),
-                        })}
-                        exit="exit"
-                        layout={true}
-                        animate="enter"
-                        initial="initial"
-                        layoutId={layoutId}
-                        variants={animation}
-                        data-component="modal"
-                        style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
-                      >
-                        {useResizer && resizer ? (
-                          <Draggable
-                            onChange={onChange}
-                            value={floatingSize}
-                            sheet={type === "sheet"}
-                            position={position as DrawerPosition}
-                            parent={floating.refs.floating as any}
-                          />
-                        ) : null}
-                        {title ? (
-                          <motion.header {...draggableMotionProps} className="relative w-full isolate" >
-                            {title ? (
-                              <h2
-                                id={headingId}
-                                className="block px-8 pb-2 text-3xl font-medium leading-relaxed border-b select-text border-floating-border"
-                              >
-                                {title}
-                              </h2>
+                                                        if (isDragging.current) {
+                                                            const currentY = sheetY.get() || 0;
+                                                            const threshold = window.innerHeight * 0.2;
+
+                                                            if (currentY > threshold) {
+                                                                await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" })
+                                                                    .finished;
+                                                                onChange(false);
+                                                            } else {
+                                                                animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
+                                                            }
+                                                            isDragging.current = false;
+                                                        }
+                                                    }}
+                                                    onTouchStart={(e) => {
+                                                        const touch = e.changedTouches[0];
+                                                        scrollInitial.set(touch.pageY);
+                                                        scroll.set(touch.pageY);
+                                                        isDragging.current = false;
+                                                    }}
+                                                    onTouchMove={(e) => {
+                                                        const touch = e.changedTouches[0];
+                                                        const y = touch.pageY;
+                                                        const prevY = scroll.get() || y;
+                                                        const scrollTop = innerContent.current?.scrollTop || 0;
+
+                                                        if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
+                                                            isDragging.current = true;
+                                                            dragStart.current = y;
+                                                        }
+
+                                                        if (isDragging.current) {
+                                                            const delta = y - dragStart.current;
+                                                            if (delta < 0) {
+                                                                sheetY.set(delta * 0.2);
+                                                            } else {
+                                                                sheetY.set(delta);
+                                                            }
+                                                        }
+
+                                                        scroll.set(y);
+                                                    }}
+                                                >
+                                                    {children}
+                                                </motion.section>
+                                                {footer ? (
+                                                    <footer className="w-full select-text border-t border-floating-border px-8 pt-4">{footer}</footer>
+                                                ) : null}
+                                                {closable ? (
+                                                    <nav className="absolute right-4 top-1 z-floating">
+                                                        <button
+                                                            type="button"
+                                                            onClick={onClose}
+                                                            className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                                        >
+                                                            <XIcon />
+                                                        </button>
+                                                    </nav>
+                                                ) : null}
+                                            </motion.div>
+                                        </AnimatePresence>
+                                    </FloatingFocusManager>
+                                </FloatingOverlay>
                             ) : null}
-                          </motion.header>
-                        ) : null}
-                        <motion.section
-                          ref={innerContent}
-                          data-component="modal-body"
-                          className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
-                          onTouchEnd={async () => {
-                            scroll.set(undefined);
-                            scrollInitial.set(undefined);
-
-                            if (isDragging.current) {
-                              const currentY = sheetY.get() || 0;
-                              const threshold = window.innerHeight * 0.2;
-
-                              if (currentY > threshold) {
-                                await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" }).finished;
-                                onChange(false);
-                              } else {
-                                animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
-                              }
-                              isDragging.current = false;
-                            }
-                          }}
-                          onTouchStart={(e) => {
-                            const touch = e.changedTouches[0];
-                            scrollInitial.set(touch.pageY);
-                            scroll.set(touch.pageY);
-                            isDragging.current = false;
-                          }}
-                          onTouchMove={(e) => {
-                            const touch = e.changedTouches[0];
-                            const y = touch.pageY;
-                            const prevY = scroll.get() || y;
-                            const scrollTop = innerContent.current?.scrollTop || 0;
-
-                            if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
-                              isDragging.current = true;
-                              dragStart.current = y;
-                            }
-
-                            if (isDragging.current) {
-                              const delta = y - dragStart.current;
-                              if (delta < 0) {
-                                sheetY.set(delta * 0.2);
-                              } else {
-                                sheetY.set(delta);
-                              }
-                            }
-
-                            scroll.set(y);
-                          }}
-                        >
-                          {children}
-                        </motion.section>
-                        {footer ? (
-                          <footer className="px-8 pt-4 w-full border-t select-text border-floating-border">{footer}</footer>
-                        ) : null}
-                        {closable ? (
-                          <nav className="absolute top-1 right-4 z-floating">
-                            <button
-                              type="button"
-                              onClick={onClose}
-                              className="p-1 opacity-70 transition-colors hover:opacity-100 hover:text-danger focus:text-danger"
-                            >
-                              <XIcon />
-                            </button>
-                          </nav>
-                        ) : null}
-                      </motion.div>
-                    </AnimatePresence>
-                  </FloatingFocusManager>
-                </FloatingOverlay>
-              ) : null}
-            </AnimatePresence>
-          </FloatingPortal>
-        </MotionConfig>
-      </Fragment>
-    );
-  }
+                        </AnimatePresence>
+                    </FloatingPortal>
+                </MotionConfig>
+            </Fragment>
+        );
+    }
 ) as any;
 
 type ButtonConfirmationAction = {
-  value?: any;
-  text?: Label;
-  theme?: ButtonProps["theme"]
-}
+    value?: any;
+    text?: Label;
+    theme?: ButtonProps["theme"];
+};
 
 export type ConfirmOptions = {
-  title?: Label;
-  description?: Label;
-  cancel?: ButtonConfirmationAction;
-  confirm?: ButtonConfirmationAction;
+    title?: Label;
+    description?: Label;
+    cancel?: ButtonConfirmationAction;
+    confirm?: ButtonConfirmationAction;
 };
 
 type ConfirmContextType = (options: ConfirmOptions) => Promise<boolean>;
 
 let confirmGlobal: ConfirmContextType = async <T extends any>(options: ConfirmOptions): Promise<T> => {
-  if (typeof window !== "undefined") {
-    console.warn("ConfirmationProvider is not mounted");
-  }
-  return false as T;
+    if (typeof window !== "undefined") {
+        console.warn("ConfirmationProvider is not mounted");
+    }
+    return false as T;
 };
 
 Modal.confirm = <T extends any>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as any;
 
 export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<Partial<ConfirmOptions>>({});
-  const [resolve, setResolve] = useState<(value: boolean) => void>(() => { });
+    const [open, setOpen] = useState(false);
+    const [options, setOptions] = useState<Partial<ConfirmOptions>>({});
+    const [resolve, setResolve] = useState<(value: boolean) => void>(() => {});
 
-  const confirmAction = useCallback((opts: ConfirmOptions): Promise<boolean> => {
-    setOptions(opts);
-    setOpen(true);
-    return new Promise((res) => {
-      setResolve(() => res);
-    });
-  }, []);
+    const confirmAction = useCallback((opts: ConfirmOptions): Promise<boolean> => {
+        setOptions(opts);
+        setOpen(true);
+        return new Promise((res) => {
+            setResolve(() => res);
+        });
+    }, []);
 
-  useEffect(() => {
-    confirmGlobal = confirmAction;
-  }, [confirmAction]);
+    useEffect(() => {
+        confirmGlobal = confirmAction;
+    }, [confirmAction]);
 
-  const onConfirm = () => {
-    setOpen(false);
-    const value = options.confirm?.value ?? true;
-    resolve(value ?? true);
-  };
+    const onConfirm = () => {
+        setOpen(false);
+        const value = options.confirm?.value ?? true;
+        resolve(value ?? true);
+    };
 
-  const onCancel = () => {
-    setOpen(false);
-    const value = options.cancel?.value ?? false;
-    resolve(value ?? false);
-  };
+    const onCancel = () => {
+        setOpen(false);
+        const value = options.cancel?.value ?? false;
+        resolve(value ?? false);
+    };
 
-  return (
-    <ConfirmContext.Provider value={confirmAction}>
-      {children}
-      <Modal
-        open={open}
-        type="dialog"
-        closable={false}
-        onChange={setOpen}
-        overlayClickClose={false}
-        title={options.title || "Confirmation"}
-        className="container max-w-dialog lg:max-w-96"
-        footer={
-          <div className="flex gap-2 justify-end">
-            <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
-              {options.cancel?.text || "Cancel"}
-            </Button>
-            <Button theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
-              {options.confirm?.text || "Confirm"}
-            </Button>
-          </div>
-        }
-      >
-        <div className="py-2 text-foreground">{options.description}</div>
-      </Modal>
-    </ConfirmContext.Provider>
-  );
+    return (
+        <ConfirmContext.Provider value={confirmAction}>
+            {children}
+            <Modal
+                open={open}
+                type="dialog"
+                closable={false}
+                onChange={setOpen}
+                overlayClickClose={false}
+                title={options.title || "Confirmation"}
+                className="container max-w-dialog lg:max-w-96"
+                footer={
+                    <div className="flex justify-end gap-2">
+                        <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
+                            {options.cancel?.text || "Cancel"}
+                        </Button>
+                        <Button theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
+                            {options.confirm?.text || "Confirm"}
+                        </Button>
+                    </div>
+                }
+            >
+                <div className="py-2 text-foreground">{options.description}</div>
+            </Modal>
+        </ConfirmContext.Provider>
+    );
 };

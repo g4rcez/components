@@ -23,7 +23,7 @@ export class CombiKeys<T extends Combi> {
         this.combinations = this.combinations.concat(combi);
         this.combinations.forEach((x) => {
             this.add(x.key, x.fn);
-        })
+        });
     }
 
     public add<S extends string, H extends Handler>(combi: S, fn: H) {

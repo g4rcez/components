@@ -10,10 +10,16 @@ import { Calendar, CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
 import { Input, InputProps } from "./input";
 
-export type DatePickerProps = Omit<Override<InputProps, CalendarProps & {
-    floating?: boolean;
-    clickToClose?: boolean
-}>, "currency">
+export type DatePickerProps = Omit<
+    Override<
+        InputProps,
+        CalendarProps & {
+            floating?: boolean;
+            clickToClose?: boolean;
+        }
+    >,
+    "currency"
+>;
 
 const fixedDate = new Date(1970, 11, 31);
 
@@ -42,15 +48,15 @@ const partValues = {
     hour: (date: Date) => date.getHours().toString().padStart(2, "0"),
     minute: (date: Date) => date.getMinutes().toString().padStart(2, "0"),
     month: (date: Date) => (date.getMonth() + 1).toString().padStart(2, "0"),
-} satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, ((date: Date, str: string) => string)>>
+} satisfies Partial<Record<keyof Intl.DateTimeFormatPartTypesRegistry, (date: Date, str: string) => string>>;
 
 const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
     try {
-        return datetimeFormat.formatToParts(date).map(x => {
-            if ((x.type === "literal" && x.value === ", ")) {
+        return datetimeFormat.formatToParts(date).map((x) => {
+            if (x.type === "literal" && x.value === ", ") {
                 return { type: x.type, value: " " };
             }
-            return x
+            return x;
         });
     } catch (e) {
         return [];
@@ -64,7 +70,10 @@ const DATE_TIME_FORMAT = { day: "numeric", month: "numeric", year: "numeric", ho
 const DATE_FORMAT = { day: "numeric", month: "numeric", year: "numeric" } as const;
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-    ({ date, locale: inputLocal, disabledDate, onChange, markToday, clickToClose, floating = true, type, ...props }: DatePickerProps, externalRef) => {
+    (
+        { date, locale: inputLocal, disabledDate, onChange, markToday, clickToClose, floating = true, type, ...props }: DatePickerProps,
+        externalRef
+    ) => {
         const locale = useLocale(inputLocal);
         const labelId = useId();
         const translation = useTranslations();
@@ -76,7 +85,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             return formatParts(datetimeFormat, fixedDate).reduce(
                 (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),
                 ""
-            )
+            );
         }, [datetimeFormat]);
 
         const isoDateEffect = date?.toISOString();
@@ -85,9 +94,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             !innerDate
                 ? ""
                 : formatParts(datetimeFormat, innerDate).reduce(
-                    (acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""),
-                    ""
-                )
+                      (acc, x) => acc + (Is.keyof(parts, x.type) ? partValues[x.type](innerDate, x.value) : ""),
+                      ""
+                  )
         );
 
         const onChangeDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +108,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     return typeof x === "string" ? c === x : x.test(c);
                 });
                 if (matches) {
-                    const parsed = parse(v, placeholder, new Date())
+                    const parsed = parse(v, placeholder, new Date());
                     const d = type === "datetime" ? parsed : startOfDay(parsed);
                     setInnerDate(d);
                     return onChange?.(d);
@@ -109,14 +118,12 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             return onChange?.(undefined);
         };
 
-
         useEffect(() => {
             if (isValid(date)) {
                 setInnerDate(date);
                 setValue(format(date!, placeholder));
             }
-        }, [isoDateEffect, placeholder])
-
+        }, [isoDateEffect, placeholder]);
 
         const onChangeDate = (d: Date | undefined) => {
             setInnerDate(d);
@@ -130,16 +137,18 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
         const htmlValue = validDate ? innerDate!.toISOString() : undefined;
 
-        const CalendarComponent = <Calendar
-            {...(props as any)}
-            type={type}
-            locale={locale}
-            changeOnlyOnClick
-            markToday={markToday}
-            onChange={onChangeDate}
-            disabledDate={disabledDate}
-            date={validDate ? innerDate : undefined}
-        />
+        const CalendarComponent = (
+            <Calendar
+                {...(props as any)}
+                type={type}
+                locale={locale}
+                changeOnlyOnClick
+                markToday={markToday}
+                onChange={onChangeDate}
+                disabledDate={disabledDate}
+                date={validDate ? innerDate : undefined}
+            />
+        );
 
         return (
             <Fragment>
@@ -158,33 +167,35 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     error={open ? undefined : props.error}
                     placeholder={props.placeholder || translation.datepickerPlaceholder(placeholder)}
                     right={
-                        floating ? <Fragment>
-                            <input
-                                data-origin={props.name}
-                                defaultValue={htmlValue}
-                                form={props.form}
-                                hidden
-                                id={props.name}
-                                name={props.name}
-                                ref={externalRef}
-                                type="date"
-                            />
-                            <Dropdown
-                                open={open}
-                                onChange={setOpen}
-                                buttonProps={{ "aria-describedby": labelId }}
-                                trigger={
-                                    <span aria-labelledby={labelId}>
-                                        <span id={labelId} className="sr-only">
-                                            {translation.datePickerCalendarButtonLabel}
+                        floating ? (
+                            <Fragment>
+                                <input
+                                    data-origin={props.name}
+                                    defaultValue={htmlValue}
+                                    form={props.form}
+                                    hidden
+                                    id={props.name}
+                                    name={props.name}
+                                    ref={externalRef}
+                                    type="date"
+                                />
+                                <Dropdown
+                                    open={open}
+                                    onChange={setOpen}
+                                    buttonProps={{ "aria-describedby": labelId }}
+                                    trigger={
+                                        <span aria-labelledby={labelId}>
+                                            <span id={labelId} className="sr-only">
+                                                {translation.datePickerCalendarButtonLabel}
+                                            </span>
+                                            <CalendarIcon />
                                         </span>
-                                        <CalendarIcon />
-                                    </span>
-                                }
-                            >
-                                {CalendarComponent}
-                            </Dropdown>
-                        </Fragment> : null
+                                    }
+                                >
+                                    {CalendarComponent}
+                                </Dropdown>
+                            </Fragment>
+                        ) : null
                     }
                 />
             </Fragment>

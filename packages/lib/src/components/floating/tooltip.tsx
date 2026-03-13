@@ -71,13 +71,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             open: innerOpen,
             whileElementsMounted: autoUpdate,
             onOpenChange: open ? undefined : toggleBoth,
-            middleware: [
-                shift(),
-                offset(5),
-                autoPlacement(),
-                arrow({ padding: 5, element: arrowRef }),
-                flip({ fallbackAxisSideDirection: "start" }),
-            ],
+            middleware: [shift(), offset(5), autoPlacement(), arrow({ padding: 5, element: arrowRef }), flip({ fallbackAxisSideDirection: "start" })],
         });
         const dismiss = useDismiss(context, { enabled });
         const role = useRole(context, { role: "tooltip", enabled });
@@ -115,7 +109,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                             {...getFloatingProps()}
                             ref={refs.setFloating}
                             style={floatingStyles}
-                            className="p-3 rounded-lg border isolate z-tooltip border-tooltip-border bg-tooltip-background text-tooltip-foreground shadow-shadow-floating"
+                            className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-shadow-floating"
                         >
                             <FloatingArrow
                                 ref={arrowRef}

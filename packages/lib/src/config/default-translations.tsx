@@ -9,6 +9,16 @@ export const defaultTranslations = {
     calendarDatetimeTitle: "Time",
     calendarToDate: "To",
     calendarToday: "Today",
+    pageCalendarMonthView: "Month view",
+    pageCalendarWeekView: "Week view",
+    pageCalendarDayView: "Day view",
+    pageCalendarPrevious: "Previous",
+    pageCalendarNext: "Next",
+    pageCalendarToday: "Today",
+    pageCalendarAddEvent: "Add event",
+    pageCalendarWeekLabel: (n: number) => `Week ${n}`,
+    pageCalendarFilter: "Filter:",
+    pageCalendarMoreEvents: (n: number) => `+${n} more...`,
     commandPaletteEmpty: "Nothing here...",
     commandPaletteLoading: "Loading...",
     datePickerCalendarButtonLabel: "Click to open a date picker",
@@ -67,7 +77,7 @@ export const defaultTranslations = {
     uploadDragging: (props: { n: number }) => `Dragging ${props.n} ${props.n > 0 ? "files" : "file"}`,
     uploadDialogTitle: "Details of your file",
 
-    datepickerPlaceholder: (_: string) => "day/month/year"
+    datepickerPlaceholder: (_: string) => "day/month/year",
 };
 
 export type Translations = typeof defaultTranslations;

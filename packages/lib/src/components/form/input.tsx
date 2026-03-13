@@ -38,31 +38,31 @@ export type InputProps = FreeTextProps<
 
 /**
  * A text input component with advanced masking capabilities.
- * 
+ *
  * Supports various input masks including:
  * - Currency formatting with locale support
  * - Percentage inputs
  * - Custom regex patterns
  * - Phone numbers, dates, and other formatted inputs
- * 
+ *
  * @example
  * ```tsx
  * // Basic input
  * <Input placeholder="Enter text..." />
- * 
+ *
  * // Phone number mask
  * <Input mask="(99) 99999-9999" placeholder="Phone" />
- * 
+ *
  * // Currency input
  * <Input mask="currency" currency="USD" locale="en-US" />
- * 
+ *
  * // Percentage input
  * <Input mask="percentage" />
- * 
+ *
  * // Custom mask
  * <Input mask={["999.999.999-99"]} placeholder="CPF" />
  * ```
- * 
+ *
  * @param props - Input props including mask, validation, and styling options
  * @returns A masked input component with form integration
  */

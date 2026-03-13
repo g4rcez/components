@@ -31,7 +31,7 @@ type Variants = CvaVariants<typeof variants>;
 
 type Themes = NonNullable<Variants["theme"]>;
 
-const indicatorVariant = cva("size-2.5 aspect-square rounded-full border-0", {
+const indicatorVariant = cva("size-2 aspect-square rounded-full border-0", {
     variants: {
         theme: {
             info: "bg-info",
@@ -58,7 +58,7 @@ export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
 
 export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => any = forwardRef(function Tag(
     { className, indicator = undefined, icon, loading, theme, size, ...props }: TagProps,
-    ref: React.Ref<any>,
+    ref: React.Ref<any>
 ) {
     return (
         <Polymorph

@@ -31,7 +31,7 @@ export const Card = <T extends React.ElementType = "div">({
         {...props}
         as={as || "div"}
         data-component="card"
-        className={css("flex shadow-shadow-card flex-col gap-4 rounded-card border border-card-border bg-card-background w-full py-3", container)}
+        className={css("flex w-full flex-col gap-4 rounded-card border border-card-border bg-card-background py-3 shadow-shadow-card", container)}
     >
         {title ? (
             <header
@@ -51,7 +51,9 @@ export const Card = <T extends React.ElementType = "div">({
                     <Skeleton className="w-10/12" />
                     <Skeleton className="w-1/2" />
                 </div>
-            ) : children}
+            ) : (
+                children
+            )}
         </div>
     </Polymorph>
 );
@@ -77,21 +79,25 @@ Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<Ca
         >
             <Title className="font-semibold">{props.title}</Title>
             {children ? (
-                <Nav className="flex flex-col justify-start items-start sm:flex-row sm:justify-end sm:items-center gap-kilo">{children}</Nav>
+                <Nav className="gap-kilo flex flex-col items-start justify-start sm:flex-row sm:items-center sm:justify-end">{children}</Nav>
             ) : null}
         </Component>
     );
 };
 
 export type StatsCardProps = CardProps<React.ElementType> & {
-    Icon?: LucideIcon; title: string; value: Label; mark?: string; interactive?: boolean
-}
+    Icon?: LucideIcon;
+    title: string;
+    value: Label;
+    mark?: string;
+    interactive?: boolean;
+};
 
 export const StatsCard = (props: StatsCardProps) => {
     const interactive = props.interactive ?? true;
-    const Icon = props.Icon ?? InfoIcon
+    const Icon = props.Icon ?? InfoIcon;
     return (
-        <Card {...props} title={null} loading={undefined} container="px-0 py-0" className="flex gap-4 items-center px-0">
+        <Card {...props} title={null} loading={undefined} container="px-0 py-0" className="flex items-center gap-4 px-0">
             <div
                 className={`flex w-full items-center gap-4 rounded-card px-0 lg:px-0 ${interactive ? "transition-colors duration-300 ease-linear hover:bg-primary-hover/10" : ""}`}
             >
@@ -103,7 +109,7 @@ export const StatsCard = (props: StatsCardProps) => {
                 >
                     {<Icon size={48} />}
                 </div>
-                <div className="flex flex-col gap-2 justify-center py-2">
+                <div className="flex flex-col justify-center gap-2 py-2">
                     <p className="text-lg">{props.title}</p>
                     {props.loading ? <Skeleton className="h-10" /> : <p className="text-4xl font-bold tracking-wide">{props.value}</p>}
                 </div>

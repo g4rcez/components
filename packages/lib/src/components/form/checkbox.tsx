@@ -42,9 +42,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 />
                 {children}
                 <span data-name="checkbox-label" className={css("min-w-full flex-1 text-xs text-danger empty:mt-0 empty:hidden", labelClassName)}>
-                {error}
-            </span>
+                    {error}
+                </span>
             </label>
-        )
+        );
     }
 );

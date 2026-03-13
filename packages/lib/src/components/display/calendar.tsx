@@ -29,13 +29,13 @@ import { css } from "../../lib/dom";
 import { splitInto, uuid } from "../../lib/fns";
 import { Input } from "../form/input";
 
-const timeRegex = /^(?<hour>\d\d):(?<min>\d\d)$/
+const timeRegex = /^(?<hour>\d\d):(?<min>\d\d)$/;
 
 const transition: Transition = { type: "spring", bounce: 0.3, duration: 0.6 };
 
 const dir =
     (mod: number) =>
-        (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
+    (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
 
 const variants: Variants = {
     enter: dir(1),
@@ -67,9 +67,9 @@ export type CalendarProps = Partial<{
     markRange: boolean;
     markToday: boolean;
     rangeMode: boolean;
-    datetimeTitle: string
+    datetimeTitle: string;
     styles: CalendarStyles;
-    type?: "date" | "datetime"
+    type?: "date" | "datetime";
     changeOnlyOnClick: boolean;
     locale: Locales | undefined;
     onChangeYear: (d: Date) => void;
@@ -158,7 +158,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
                             const key = day.toISOString();
                             const isSelected = props.rangeMode
                                 ? key === props.range?.to?.toISOString() || key === props.range?.from?.toISOString()
-                                : key === (props.date ? startOfDay(props.date).toISOString() : undefined)
+                                : key === (props.date ? startOfDay(props.date).toISOString() : undefined);
                             const today = isToday(day) && props.markToday;
                             const disabledByFn = props.disabledDate?.(day) || false;
                             const sameMonth = isSameMonth(day, props.stateDate);
@@ -169,7 +169,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                     key={key}
                                     align="center"
                                     className={css(
-                                        "relative",
+                                        "relative p-1",
                                         Is.function(props.styles?.dayFrame) ? props.styles?.dayFrame(day) : props.styles?.dayFrame
                                     )}
                                 >
@@ -182,11 +182,12 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                         onClick={props.dispatch.onSelectDate}
                                         data-view={props.stateDate.getMonth().toString()}
                                         className={css(
-                                            `flex size-10 items-center justify-center rounded-full proportional-nums disabled:cursor-not-allowed ${today ? "text-emphasis" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
-                                            isInRange && props.markRange ? "size-10 border border-dashed border-card-border" : "",
+                                            `relative flex size-9 items-center justify-center rounded-full proportional-nums disabled:cursor-not-allowed ${today ? "text-emphasis" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
+                                            isInRange && props.markRange ? "size-9 border border-dashed border-card-border" : "",
                                             Is.function(props.styles?.day) ? props.styles?.day(day) : props.styles?.day
                                         )}
                                     >
+                                        <div></div>
                                         {day.getDate()}
                                         {isSelected && props.stateRange.from?.toISOString() === key ? (
                                             <span className="absolute -top-2 left-0 h-full w-full">
@@ -289,9 +290,9 @@ export const Calendar = ({
                     range: !isRangeMode
                         ? state.range
                         : {
-                            from: state.selectMode === "from" ? date : state.range.from,
-                            to: state.selectMode === "to" ? date : state.range.to,
-                        },
+                              from: state.selectMode === "from" ? date : state.range.from,
+                              to: state.selectMode === "to" ? date : state.range.to,
+                          },
                 };
             },
             onChangeMonth: (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -442,13 +443,6 @@ export const Calendar = ({
                                 >
                                     <ChevronRightIcon className="h-4 w-4" />
                                 </motion.button>
-                                <div
-                                    className="absolute inset-0"
-                                    style={{
-                                        backgroundImage:
-                                            "linear-gradient(to right, hsla(var(--card-background)) 15%, transparent 30%, transparent 70%, hsla(var(--card-background)) 85%)",
-                                    }}
-                                />
                             </header>
                             <motion.table className="mt-2 table min-w-full table-auto border-0">
                                 <thead>
@@ -489,7 +483,7 @@ export const Calendar = ({
                     </AnimatePresence>
                 </div>
                 {type === "datetime" ? (
-                    <section className="grid items-center my-4">
+                    <section className="my-4 grid items-center">
                         <Input
                             info={null}
                             mask="time"
@@ -498,15 +492,15 @@ export const Calendar = ({
                             reportStatus={false}
                             defaultValue={date ? format(date, "HH:mm") : undefined}
                             title={datetimeTitle || translations.calendarDatetimeTitle}
-                            onChange={e => {
+                            onChange={(e) => {
                                 const value = e.target.value;
                                 const match = timeRegex.exec(value);
                                 if (!match) return;
                                 const hour = match.groups!.hour;
                                 const min = match.groups!.min;
-                                const d = set(state.date, { hours: Number(hour), minutes: Number(min), seconds: 0 })
+                                const d = set(state.date, { hours: Number(hour), minutes: Number(min), seconds: 0 });
                                 dispatch.date(() => d);
-                                onChange?.(d)
+                                onChange?.(d);
                             }}
                         />
                     </section>

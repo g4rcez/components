@@ -15,7 +15,7 @@ export default tseslint.config(
             globals: globals.browser,
         },
         plugins: {
-            'jsx-a11y': jsxA11y,
+            "jsx-a11y": jsxA11y,
             "react-hooks": reactHooks,
             "react-refresh": reactRefresh,
         },

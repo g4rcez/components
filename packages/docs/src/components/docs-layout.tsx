@@ -11,8 +11,7 @@ type Props = {
 
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
   return (
-    <div className="gap-8 w-full min-h-full">
-      <div className="flex flex-col gap-6 py-8 px-6 mx-auto lg:px-10 max-w-[var(--content-max-width)]">
+      <div className="flex flex-col min-h-full flex-1 gap-6 py-8 px-6 mx-auto lg:px-10 max-w-[var(--content-max-width)]">
         <header className="flex flex-col gap-2 pb-4 border-b border-card-border">
           <h1 className="mb-3 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/80">
             {props.title}
@@ -22,8 +21,8 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
             {props.section}
           </Tag>
         </header>
-        <div className="space-y-12">{props.children}</div>
-        <footer className="pt-8 mt-16 border-t border-card-border/30">
+        <div className="space-y-12 flex-grow flex flex-col flex-shrink min-h-full flex-1">{props.children}</div>
+        <footer className="pt-8 mt-auto border-t border-card-border/30">
           <div className="flex justify-between items-center text-sm text-muted-foreground">
             <p>Found an issue? Help us improve this page.</p>
             <a
@@ -36,7 +35,6 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
             </a>
           </div>
         </footer>
-      </div>
     </div>
   );
 };

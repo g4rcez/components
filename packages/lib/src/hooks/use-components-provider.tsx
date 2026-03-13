@@ -8,27 +8,27 @@ import { defaultTweaks, Tweaks } from "../config/default-tweaks";
 import { ModalConfirmProvider } from "../components/floating/modal";
 
 export type ContextType = Partial<{
-  tweaks: Tweaks;
-  map: Translations;
-  locale: Locales | undefined;
-  parser: typeof parsers.hsla;
-  floatingRef?: HTMLElement | null;
+    tweaks: Tweaks;
+    map: Translations;
+    locale: Locales | undefined;
+    parser: typeof parsers.hsla;
+    floatingRef?: HTMLElement | null;
 }>;
 
 export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
-  const memoMap = useMemo<ContextType>(
-    () => ({
-      locale: props.locale,
-      floatingRef: props.rootFloating,
-      tweaks: { ...defaultTweaks, ...props.tweaks },
-      parser: props.parser || parsers.hsla,
-      map: { ...defaultTranslations, ...props.map },
-    }),
-    [props]
-  );
-  return (
-    <Context.Provider value={memoMap}>
-      <ModalConfirmProvider>{props.children}</ModalConfirmProvider>
-    </Context.Provider>
-  );
+    const memoMap = useMemo<ContextType>(
+        () => ({
+            locale: props.locale,
+            floatingRef: props.rootFloating,
+            tweaks: { ...defaultTweaks, ...props.tweaks },
+            parser: props.parser || parsers.hsla,
+            map: { ...defaultTranslations, ...props.map },
+        }),
+        [props]
+    );
+    return (
+        <Context.Provider value={memoMap}>
+            <ModalConfirmProvider>{props.children}</ModalConfirmProvider>
+        </Context.Provider>
+    );
 };
