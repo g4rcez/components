@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { CSSProperties, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
 import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
