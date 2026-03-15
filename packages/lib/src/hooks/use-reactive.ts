@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 
 export const useReactive = <T>(t: T, initial?: T) => {
