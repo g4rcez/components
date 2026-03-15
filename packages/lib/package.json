@@ -92,7 +92,8 @@
     "module": "./dist/index.js",
     "files": [
         "dist",
-        "dist/index.css"
+        "dist/index.css",
+        "docs"
     ],
     "exports": {
         ".": {
@@ -295,6 +296,7 @@
             "import": "./dist/components/display/alert.js",
             "require": "./dist/components/display/alert.js",
             "default": "./dist/components/display/alert.js"
-        }
+        },
+        "./docs/*": "./docs/*.md"
     }
 }

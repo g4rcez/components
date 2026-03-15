@@ -1,5 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
+import { ComponentDemo } from "@/components/component-demo";
 import React, { useState } from "react";
 import {
   Autocomplete,
@@ -43,21 +44,67 @@ export default function AutocompleteWithHidden() {
     <DocsLayout
       title="Autocomplete"
       section="form"
-      description="Use autocomplete with hidden options"
+      description="Demonstrates how to use autocomplete with hidden options."
     >
-      <Card title="Test 1">
-        <Autocomplete
-          options={opts}
-          onChange={onChange}
-          placeholder="Test..."
-          title="Choose your language"
-        />
-        <ul>
-          {state.map((x) => (
-            <li key={x}>{x}</li>
-          ))}
-        </ul>
-      </Card>
+      <ComponentDemo
+        title="Autocomplete with Hidden Options"
+        description="Options can be dynamically hidden from the autocomplete list based on custom logic. Try selecting and deselecting to see options appear/disappear."
+        code={`"use client";
+import { useState } from "react";
+import { Autocomplete, AutocompleteItemProps } from "@g4rcez/components";
+
+const options: AutocompleteItemProps[] = [
+  { value: "1", label: "JavaScript" },
+  { value: "2", label: "Python" },
+  { value: "3", label: "Java" },
+  { value: "4", label: "C#" },
+];
+
+function AutocompleteHiddenDemo() {
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+  const toggleSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSelectedValues((prev) => {
+      if (prev.includes(value)) return prev.filter((x) => x !== value);
+      return [...prev, value];
+    });
+  };
+
+  const hiddenOptions = options
+    .slice(0, 4)
+    .map((x) => ({ ...x, hidden: selectedValues.includes(x.value) }));
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Autocomplete
+        options={hiddenOptions}
+        onChange={toggleSelection}
+        placeholder="Select a language to hide it"
+        title="Choose your language"
+      />
+      <ul className="list-disc list-inside">
+        {selectedValues.map((x) => (
+          <li key={x}>Selected: {options.find(opt => opt.value === x)?.label}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}`}
+      >
+        <Card title="Test 1">
+          <Autocomplete
+            options={opts}
+            onChange={onChange}
+            placeholder="Test..."
+            title="Choose your language"
+          />
+          <ul className="list-disc list-inside">
+            {state.map((x) => (
+              <li key={x}>Selected: {options.find(opt => opt.value === x)?.label}</li>
+            ))}
+          </ul>
+        </Card>
+      </ComponentDemo>
     </DocsLayout>
   );
 }

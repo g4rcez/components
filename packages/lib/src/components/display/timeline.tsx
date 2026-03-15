@@ -13,7 +13,7 @@ TimelineItem.Icon = function TimelineIcon(props: PropsWithChildren<ComponentProp
     return (
         <header
             {...props}
-            className={css("flex size-12 items-center justify-center rounded-full bg-primary p-2 text-primary-foreground", props.className)}
+            className={css("flex size-12 items-center justify-center rounded-full bg-primary p-2 text-warn-foreground", props.className)}
         >
             {props.children}
         </header>

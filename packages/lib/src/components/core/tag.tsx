@@ -9,8 +9,8 @@ const variants = {
         icon: "p-1",
         big: "h-12 px-6 py-4",
         default: "h-8 px-4 py-2",
+        tiny: "h-5 p-1 px-2 text-xs",
         small: "h-6 p-2 px-3 text-sm",
-        tiny: "h-6 p-2 px-3 text-xs",
     },
     theme: {
         custom: "",
@@ -46,10 +46,13 @@ const indicatorVariant = cva("size-2 aspect-square rounded-full border-0", {
     },
 });
 
-const tagVariants = cva("inline-flex rounded-pill gap-1.5 border-0 items-center justify-center align-middle whitespace-nowrap", {
-    variants,
-    defaultVariants: { theme: "primary", size: "default" },
-});
+const tagVariants = cva(
+    "inline-flex rounded-pill gap-1.5 border-0 items-center justify-center align-middle whitespace-nowrap ease-linear duration-300 transition-all",
+    {
+        variants,
+        defaultVariants: { theme: "primary", size: "default" },
+    }
+);
 
 export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
     CvaVariants<typeof variants> & Partial<{ icon: Label; loading: boolean; indicator: Themes }>,

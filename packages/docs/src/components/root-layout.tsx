@@ -1,17 +1,16 @@
 "use client";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CSSProperties, PropsWithChildren } from "react";
-import { isSsr, Tweaks } from "../../../lib/src";
+import { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
 import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
 import {
-  createTokenStyles,
-  type TokenRemap,
+    createTokenStyles,
+    type TokenRemap,
 } from "../../../lib/src/styles/design-tokens";
 import {
-  defaultDarkTheme,
-  defaultLightTheme,
+    defaultDarkTheme,
+    defaultLightTheme,
 } from "../../../lib/src/styles/theme";
 import { Header } from "./header";
 import { Navigation } from "./navigation";
@@ -28,14 +27,6 @@ const tweaks: Tweaks = {
   table: { filters: false, sorters: false, operations: false, sticky: 55 },
 };
 
-const layoutVariables = {
-  "--sidebar-width": "280px",
-  "--header-height": "64px",
-  "--sidebar-padding": "1.5rem",
-  "--sidebar-item-padding": "0.875rem",
-  "--content-max-width": "1200px",
-} as CSSProperties;
-
 export const RootLayout = (props: PropsWithChildren) => {
   const pathname = usePathname();
   const isLandingPage = pathname === "/";
@@ -49,58 +40,38 @@ export const RootLayout = (props: PropsWithChildren) => {
   return (
     <html
       lang="en"
-      className="antialiased proportional-nums bg-background text-foreground dark"
+      className="antialiased proportional-nums bg-background text-foreground dark scroll-smooth"
     >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Components</title>
+        <title>Components — Modern React UI Library</title>
         <style>{stylesLight}</style>
         <style>{stylesDark}</style>
       </head>
-      <body>
-        <div id="root" className="flex flex-col flex-1">
+      <body className="font-sans min-h-screen bg-background text-foreground bg-ambient overflow-x-hidden">
+        <div id="root" className="flex flex-col min-h-screen">
           <div id="root-floating" />
-          <ComponentsProvider locale="pt-BR" tweaks={tweaks}>
+          <ComponentsProvider locale="en-US" tweaks={tweaks}>
             <Notifications>
-              <div
-                style={
-                  {
-                    ...layoutVariables,
-                    "--sidebar-width": isLandingPage ? "0px" : "280px",
-                  } as CSSProperties
-                }
-                className="min-h-screen isolate bg-background text-foreground"
-              >
-                {isLandingPage ? (
-                  <div className="min-h-screen">
-                    <main className="bg-gradient-to-br from-background via-background to-card-background/20">
-                      {props.children}
-                    </main>
-                  </div>
-                ) : (
-                  <div className="grid min-h-screen grid-rows-[var(--header-height)_1fr] lg:grid-cols-[var(--sidebar-width)_1fr] lg:grid-rows-[var(--header-height)_1fr]">
-                    <nav className="hidden overflow-hidden fixed bottom-0 flex-col h-screen border-r lg:flex w-[var(--sidebar-width)] bg-card-background/95 backdrop-blur-sm border-card-border">
-                      <header className="flex items-center border-b h-[var(--header-height)] px-[var(--sidebar-padding)] border-card-border/50">
-                        <Link
-                          href="/"
-                          className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80"
-                        >
-                          Components
-                        </Link>
-                      </header>
-                      <div className="overflow-y-auto overscroll-contain flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-card-border hover:scrollbar-thumb-card-border/80">
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <div className="flex-1 flex flex-col relative">
+                  {isLandingPage ? (
+                    <main className="flex-1">{props.children}</main>
+                  ) : (
+                    <div className="max-w-8xl mx-auto w-full flex px-4 sm:px-6 lg:px-8">
+                      <aside className="hidden lg:block w-64 shrink-0 fixed top-[var(--header-height)] bottom-0 overflow-y-auto pt-10 pb-10 scrollbar-thin border-r border-border/40">
                         <Navigation />
-                      </div>
-                    </nav>
-                    <div className="flex flex-col min-h-screen lg:col-start-2">
-                      <Header />
-                      <main className="flex-1 mt-12 bg-gradient-to-br from-background via-background to-card-background/20">
-                        {props.children}
+                      </aside>
+                      <main className="flex-1 lg:pl-64 min-w-0">
+                        <div className="lg:pl-12 pt-10 pb-24">
+                          {props.children}
+                        </div>
                       </main>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </Notifications>
           </ComponentsProvider>

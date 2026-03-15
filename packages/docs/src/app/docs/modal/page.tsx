@@ -1,196 +1,28 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
-import { BrainIcon } from "lucide-react";
-import { motion } from "motion/react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, {
-  Fragment,
-  PropsWithChildren,
-  useCallback,
-  useState,
-} from "react";
-import {
-  Autocomplete,
-  Button,
-  Card,
-  CommandItemTypes,
-  DatePicker,
-  Modal,
-  ModalProps,
-  Switch,
-  Tooltip,
-  uuid,
-} from "../../../../../lib/src";
-import { CommandPalette } from "../../../../../lib/src/components/floating/command-palette";
+import { ComponentDemo } from "@/components/component-demo";
+import React, { Fragment, useState } from "react";
+import { Autocomplete, Button, DatePicker, Modal, Tooltip, uuid } from "../../../../../lib/src";
 
-const Element = (props: PropsWithChildren<Partial<ModalProps>>) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <Fragment>
-      <Modal {...(props as any)} open={open} onChange={setOpen}>
-        {props.children}
-        <Tooltip title={<b>Test</b>}>
-          <div className="flex flex-1 min-w-full">
-            Paullum deliquit, ponderibus modulisque suis ratio utitur.
-          </div>
-        </Tooltip>
-      </Modal>
-    </Fragment>
-  );
-};
-
-const Items = () => (
+const ItemContent = () => (
   <Fragment>
-    <Autocomplete title="Ok" options={[]} />
-    <DatePicker title="Ok" />
-    {Array.from({ length: 70 }).map((x) => (
+    <Autocomplete title="Example Autocomplete" options={[]} placeholder="Search..." />
+    <DatePicker title="Example DatePicker" placeholder="Select a date" />
+    {Array.from({ length: 10 }).map((_, i) => (
       <span key={uuid()}>
-        I'm a Dialog component
+        Content line {i + 1}
         <br />
       </span>
     ))}
   </Fragment>
 );
 
-const commands: CommandItemTypes[] = [
-  {
-    type: "group",
-    title: "Commands",
-    items: [
-      {
-        hint: ["#", "aleatório"],
-        type: "shortcut",
-        title: "Random item",
-        action: (e) => void (e.setOpen(false), alert(Math.random())),
-      },
-      {
-        type: "shortcut",
-        shortcut: "Mod+G",
-        title: "Google",
-        enabled: (props) => props.text !== "" && !props.text.startsWith("@"),
-        action: (e) => void (e.setOpen(false), alert("Hello google")),
-      },
-      {
-        type: "shortcut",
-        shortcut: "Mod+A",
-        Icon: <BrainIcon size={18} />,
-        title: (props) => `Ask to AI: ${props.text}`,
-        enabled: (props) => props.text !== "",
-        action: (e) => void (e.setOpen(false), alert("A")),
-      },
-      {
-        title: "Find",
-        type: "shortcut",
-        shortcut: "Mod+f",
-        action: (e) => void (e.setOpen(false), alert("f")),
-      },
-      {
-        title: "Logout",
-        type: "shortcut",
-        shortcut: "Mod+l",
-        action: () => alert("l"),
-      },
-      {
-        title: "Extra",
-        type: "shortcut",
-        shortcut: "Mod+E",
-        action: () => alert("e"),
-      },
-      {
-        title: "Go",
-        type: "shortcut",
-        shortcut: "Mod+E",
-        action: () => alert("e"),
-      },
-      {
-        title: "Just one more item",
-        type: "shortcut",
-        shortcut: "Alt+f",
-        action: () => alert("Alt + f"),
-      },
-    ],
-  },
-  {
-    type: "group",
-    title: "Pages",
-    items: [
-      {
-        title: "Menu",
-        type: "shortcut",
-        shortcut: "Mod + Alt + o",
-        action: () => alert("m"),
-      },
-      {
-        title: "Button",
-        type: "shortcut",
-        shortcut: "Mod+b",
-        action: () => alert("b"),
-      },
-      {
-        title: "useForm",
-        type: "shortcut",
-        shortcut: "Mod + U",
-        action: () => alert("U"),
-      },
-    ],
-  },
-];
-
-const Preview = (props: any) => {
-  if (!props.text) return null;
-  if (!props.command) return null;
-  return (
-    <div className="w-1/2 max-w-[50%] px-4">
-      <ul>
-        <li>{props.command.title}</li>
-        <li>{props.text}</li>
-      </ul>
-    </div>
-  );
-};
-
-export const useUpdateQueryString = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const updateQueryString = useCallback(
-    (name: string, value: any) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router, searchParams],
-  );
-  return updateQueryString;
-};
-
-const TestingRouteChanges = () => {
-  const write = useUpdateQueryString();
-  const qs = useSearchParams();
-  const open = qs.get("modal") === "true";
-  return (
-    <Card title="Change route" className="flex gap-6">
-      <Modal open={open} onChange={() => write("modal", false)} title="Modal">
-        ok
-      </Modal>
-      <Button onClick={() => write("modal", true)}>Set true</Button>
-      <Button onClick={() => write("modal", false)}>Set false</Button>
-    </Card>
-  );
-};
-
 const ConfirmationDialog = () => {
   const [confirmed, setConfirmed] = useState<any>(false);
   async function onClick() {
     const result = await Modal.confirm({
       title: "Are you sure?",
-      description:
-        "This action cannot be undone. Vivamus scelerisque eros volutpat.",
+      description: "This action cannot be undone. Vivamus scelerisque eros volutpat.",
       confirm: { text: "Delete", theme: "danger", value: "deleted" },
       cancel: { text: "Cancel", value: "cancel" },
     });
@@ -203,145 +35,319 @@ const ConfirmationDialog = () => {
   );
 };
 
-export default function ModalExamplePage() {
+const DialogDemo = () => {
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState({
-    closable: false,
-    overlayClickClose: true,
-  });
+  return (
+    <div className="flex flex-row flex-wrap gap-6">
+      <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+      <Modal
+        closable
+        overlayClickClose
+        type="dialog"
+        title="Dialog"
+        open={open}
+        onChange={setOpen}
+      >
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={uuid()}>
+            I&apos;m a Dialog component line {i + 1}
+            <br />
+          </span>
+        ))}
+        <Tooltip title={<b>Test</b>}>
+          <div className="flex flex-1 min-w-full">
+            Paullum deliquit, ponderibus modulisque suis ratio utitur.
+          </div>
+        </Tooltip>
+      </Modal>
+    </div>
+  );
+};
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.currentTarget.name;
-    const value = e.currentTarget.checked;
-    return setState((prev) => ({ ...prev, [name]: value }));
-  };
+const ModalConfirmDemo = () => <ConfirmationDialog />;
 
+const DrawerLeftDemo = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-row flex-wrap gap-6">
+      <Button onClick={() => setOpen(true)}>Open Left Drawer</Button>
+      <Modal
+        closable
+        overlayClickClose
+        type="drawer"
+        position="left"
+        title="Drawer from left"
+        open={open}
+        onChange={setOpen}
+      >
+        I&apos;m a Drawer component. From left to right
+        <ItemContent />
+      </Modal>
+    </div>
+  );
+};
+
+const DrawerRightDemo = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-row flex-wrap gap-6">
+      <Button onClick={() => setOpen(true)}>Open Right Drawer</Button>
+      <Modal
+        closable
+        overlayClickClose
+        type="drawer"
+        position="right"
+        title="Drawer from right"
+        open={open}
+        onChange={setOpen}
+      >
+        I&apos;m a Drawer component. From right to left
+        <ItemContent />
+      </Modal>
+    </div>
+  );
+};
+
+const SheetDemo = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col gap-6">
+      <p>
+        Bottom Sheet or just Sheet it&apos;s a component that opens from bottom to top. It&apos;s
+        very useful for mobile apps. That&apos;s why dialog and drawer are changed to sheet on
+        mobile.
+      </p>
+      <Button className="w-fit" onClick={() => setOpen(true)}>
+        Open Sheet
+      </Button>
+      <Modal
+        closable
+        overlayClickClose
+        resizer
+        type="sheet"
+        title="Sheet"
+        open={open}
+        onChange={setOpen}
+      >
+        I&apos;m a sheet component
+        <ItemContent />
+      </Modal>
+    </div>
+  );
+};
+
+export default function ModalExamplePage() {
   return (
     <DocsLayout
       title="Modal"
       section="floating"
       description="Dialog, Drawer or BottomSheet. This component can do with all these options. For responsive websites, BottomSheet will be used for mobile, while desktop preserve the dialog/drawer."
     >
-      <div className="flex flex-col gap-6">
-        <CommandPalette
-          open={open}
-          Preview={Preview}
-          commands={commands}
-          onChangeVisibility={setOpen}
-          footer={<span>v1.0.0</span>}
-        />
-        <TestingRouteChanges />
-        <Card
-          title="Global configuration"
-          className="flex flex-wrap gap-8 items-center"
-        >
-          <Switch
-            name="overlayClickClose"
-            onChange={onChange}
-            checked={state.overlayClickClose}
-          >
-            Close on overlay
-          </Switch>
-          <Switch name="closable" onChange={onChange} checked={state.closable}>
-            Close on X
-          </Switch>
-          <ConfirmationDialog />
-        </Card>
-        <Card className="flex flex-row flex-wrap gap-6" title="Dialog">
-          <Element
-            {...state}
-            asChild
-            type="dialog"
-            title="Dialog"
-            trigger={<Button as={motion.button}>Dialog</Button>}
-          >
-            {Array.from({ length: 10 }).map((x) => (
-              <span>
-                I'm a Dialog component
-                <br />
-              </span>
-            ))}
-          </Element>
-          <Element
-            {...state}
-            asChild
-            type="dialog"
-            trigger={<Button>Dialog controlled width</Button>}
-            className="flex justify-center items-center lg:max-w-xs"
-            overlayClassName="items-center justify-center testing"
-          >
-            class=max-w-x
-          </Element>
-          <Element
-            {...state}
-            asChild
-            type="dialog"
-            trigger={<Button>Dialog without title</Button>}
-          >
-            <Items />
-          </Element>
-        </Card>
-        <Card title="Drawer">
-          <p>
-            Drawer element is resized by default. You can omit this behaviour
-            using the property resizer=false
-          </p>
-          <div className="flex flex-col gap-6 mt-4 lg:flex-row">
-            <Element
-              {...state}
-              asChild
-              type="drawer"
-              title="Drawer from left"
-              trigger={<Button>Drawer Left</Button>}
-              position="left"
-            >
-              I'm a Drawer component. From left to right
-              <Items />
-            </Element>
-            <Element
-              {...state}
-              asChild
-              type="drawer"
-              title="Drawer from right"
-              position="right"
-              trigger={<Button>Drawer Right</Button>}
-            >
-              I'm a Drawer component. From right to left
-              <Items />
-            </Element>
-            <Element
-              {...state}
-              open
-              asChild
-              type="drawer"
-              ariaTitle="Title"
-              trigger={<Button>Drawer right without title</Button>}
-              position="right"
-            >
-              I'm a Drawer component. From left to right
-              <Items />
-            </Element>
+      <ComponentDemo
+        title="Dialog"
+        description="A standard dialog modal with title, closable button, and overlay-click-to-close."
+        code={`"use client";
+import { useState } from "react";
+import { Button, Modal, Tooltip, uuid } from "@g4rcez/components";
+
+function DialogDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-row flex-wrap gap-6">
+      <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+      <Modal
+        closable
+        overlayClickClose
+        type="dialog"
+        title="Dialog"
+        open={open}
+        onChange={setOpen}
+      >
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={uuid()}>
+            I'm a Dialog component line {i + 1}
+            <br />
+          </span>
+        ))}
+        <Tooltip title={<b>Test</b>}>
+          <div className="flex flex-1 min-w-full">
+            Paullum deliquit, ponderibus modulisque suis ratio utitur.
           </div>
-        </Card>
-        <Card className="flex flex-col gap-6" title="Sheet">
-          <p>
-            Bottom Sheet or just Sheet it's a component that open from bottom to
-            top. It's very useful for mobile apps. That's why dialog and drawer
-            are changed to sheet in mobile.
-          </p>
-          <Element
-            {...state}
-            asChild
-            resizer
-            type="sheet"
-            title="Sheet"
-            trigger={<Button className="w-fit">Open sheet</Button>}
-          >
-            I'm a sheet component
-            <Items />
-          </Element>
-        </Card>
-      </div>
+        </Tooltip>
+      </Modal>
+    </div>
+  );
+}`}
+      >
+        <DialogDemo />
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Modal Confirm"
+        description="Use Modal.confirm() to show a promise-based confirmation dialog and handle the result."
+        code={`"use client";
+import { useState } from "react";
+import { Button, Modal } from "@g4rcez/components";
+
+function ModalConfirmDemo() {
+  const [confirmed, setConfirmed] = useState(false);
+  async function onClick() {
+    const result = await Modal.confirm({
+      title: "Are you sure?",
+      description: "This action cannot be undone. Vivamus scelerisque eros volutpat.",
+      confirm: { text: "Delete", theme: "danger", value: "deleted" },
+      cancel: { text: "Cancel", value: "cancel" },
+    });
+    setConfirmed(result);
+  }
+  return (
+    <Button onClick={onClick}>
+      Start confirmed cycle: {confirmed.toString()}
+    </Button>
+  );
+}`}
+      >
+        <ModalConfirmDemo />
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Drawer Left"
+        description="A drawer that slides in from the left side of the screen."
+        code={`"use client";
+import { useState, Fragment } from "react";
+import { Autocomplete, Button, DatePicker, Modal, uuid } from "@g4rcez/components";
+
+const ItemContent = () => (
+  <Fragment>
+    <Autocomplete title="Example Autocomplete" options={[]} placeholder="Search..." />
+    <DatePicker title="Example DatePicker" placeholder="Select a date" />
+    {Array.from({ length: 10 }).map((_, i) => (
+      <span key={uuid()}>
+        Content line {i + 1}
+        <br />
+      </span>
+    ))}
+  </Fragment>
+);
+
+function DrawerLeftDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-row flex-wrap gap-6">
+      <Button onClick={() => setOpen(true)}>Open Left Drawer</Button>
+      <Modal
+        closable
+        overlayClickClose
+        type="drawer"
+        position="left"
+        title="Drawer from left"
+        open={open}
+        onChange={setOpen}
+      >
+        I'm a Drawer component. From left to right
+        <ItemContent />
+      </Modal>
+    </div>
+  );
+}`}
+      >
+        <DrawerLeftDemo />
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Drawer Right"
+        description="A drawer that slides in from the right side of the screen."
+        code={`"use client";
+import { useState, Fragment } from "react";
+import { Autocomplete, Button, DatePicker, Modal, uuid } from "@g4rcez/components";
+
+const ItemContent = () => (
+  <Fragment>
+    <Autocomplete title="Example Autocomplete" options={[]} placeholder="Search..." />
+    <DatePicker title="Example DatePicker" placeholder="Select a date" />
+    {Array.from({ length: 10 }).map((_, i) => (
+      <span key={uuid()}>
+        Content line {i + 1}
+        <br />
+      </span>
+    ))}
+  </Fragment>
+);
+
+function DrawerRightDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-row flex-wrap gap-6">
+      <Button onClick={() => setOpen(true)}>Open Right Drawer</Button>
+      <Modal
+        closable
+        overlayClickClose
+        type="drawer"
+        position="right"
+        title="Drawer from right"
+        open={open}
+        onChange={setOpen}
+      >
+        I'm a Drawer component. From right to left
+        <ItemContent />
+      </Modal>
+    </div>
+  );
+}`}
+      >
+        <DrawerRightDemo />
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Sheet"
+        description="A bottom sheet that slides up from the bottom, ideal for mobile. Dialogs and drawers become sheets on mobile."
+        code={`"use client";
+import { useState, Fragment } from "react";
+import { Autocomplete, Button, DatePicker, Modal, uuid } from "@g4rcez/components";
+
+const ItemContent = () => (
+  <Fragment>
+    <Autocomplete title="Example Autocomplete" options={[]} placeholder="Search..." />
+    <DatePicker title="Example DatePicker" placeholder="Select a date" />
+    {Array.from({ length: 10 }).map((_, i) => (
+      <span key={uuid()}>
+        Content line {i + 1}
+        <br />
+      </span>
+    ))}
+  </Fragment>
+);
+
+function SheetDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col gap-6">
+      <p>
+        Bottom Sheet or just Sheet it's a component that opens from bottom to top. It's
+        very useful for mobile apps. That's why dialog and drawer are changed to sheet on
+        mobile.
+      </p>
+      <Button className="w-fit" onClick={() => setOpen(true)}>
+        Open Sheet
+      </Button>
+      <Modal
+        closable
+        overlayClickClose
+        resizer
+        type="sheet"
+        title="Sheet"
+        open={open}
+        onChange={setOpen}
+      >
+        I'm a sheet component
+        <ItemContent />
+      </Modal>
+    </div>
+  );
+}`}
+      >
+        <SheetDemo />
+      </ComponentDemo>
     </DocsLayout>
   );
 }

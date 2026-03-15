@@ -45,7 +45,7 @@ const variants = {
 };
 
 const buttonVariants = cva(
-    "relative overflow-hidden inline-flex duration-500 enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-in disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
+    "relative overflow-hidden inline-flex duration-300 enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 data-[loading=true]:opacity-30 data-[loading=true]:animate-pulse gap-1.5 items-center justify-center align-middle cursor-pointer whitespace-nowrap font-medium transition-colors ease-linear disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
     {
         variants,
         defaultVariants: { theme: "main", size: "default", rounded: "default" },

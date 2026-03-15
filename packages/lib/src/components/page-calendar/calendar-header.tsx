@@ -59,32 +59,35 @@ export function CalendarHeader({
     const weekNum = getWeekNumber(currentDate);
 
     return (
-        <div className="flex flex-col gap-4">
+        <header className="flex flex-col gap-4">
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <div
+                        aria-hidden="true"
                         className={`flex size-12 flex-col items-center justify-center overflow-hidden rounded-lg text-xs ${isDateToday ? "bg-primary text-primary-foreground" : "bg-card text-foreground"}`}
                     >
                         <span className="font-light uppercase leading-none">{formatMonthShort(currentDate, locale)}</span>
                         <span className="text-xl font-medium leading-none">{formatDay(currentDate, locale)}</span>
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold leading-tight">{formatMonthYear(currentDate, locale)}</h1>
+                        <h1 aria-live="polite" aria-atomic="true" className="text-xl font-bold leading-tight">{formatMonthYear(currentDate, locale)}</h1>
                         <span className="text-xs text-muted-foreground">{t.pageCalendarWeekLabel(weekNum)}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <nav aria-label={t.pageCalendarNavigation} className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
-                        <Button size="small" title={t.pageCalendarPrevious} theme="ghost-muted" onClick={handlePrev}>
+                        <Button size="small" title={t.pageCalendarPrevious} aria-label={t.pageCalendarPrevious} theme="ghost-muted" onClick={handlePrev}>
                             <ChevronLeft size={16} />
                         </Button>
                         <button
+                            type="button"
+                            aria-label={t.pageCalendarToday}
                             onClick={() => setCurrentDate(new Date())}
                             className="rounded-md px-3 py-1.5 text-sm transition-colors hover:bg-muted/50"
                         >
                             {t.pageCalendarToday}
                         </button>
-                        <Button size="small" title={t.pageCalendarNext} theme="ghost-muted" onClick={handleNext}>
+                        <Button size="small" title={t.pageCalendarNext} aria-label={t.pageCalendarNext} theme="ghost-muted" onClick={handleNext}>
                             <ChevronRight size={16} />
                         </Button>
                     </div>
@@ -95,6 +98,7 @@ export function CalendarHeader({
                                 key={v.value}
                                 onClick={() => setCurrentView(v.value)}
                                 theme={currentView === v.value ? "primary" : "muted"}
+                                aria-pressed={currentView === v.value}
                                 className="rounded-none first:rounded-l-button last:rounded-r-button"
                             >
                                 {v.label}
@@ -107,12 +111,12 @@ export function CalendarHeader({
                             {t.pageCalendarAddEvent}
                         </Button>
                     )}
-                </div>
+                </nav>
             </div>
             {filterArea ??
                 (filters.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5">
-                        <Calendar size={14} className="text-muted-foreground" />
+                    <div role="group" aria-label={t.pageCalendarFilter} className="flex flex-wrap items-center gap-1.5">
+                        <Calendar size={14} className="text-muted-foreground" aria-hidden="true" />
                         <span className="mr-1 text-xs text-muted-foreground">{t.pageCalendarFilter}</span>
                         {filters.map((filter) => (
                             <Tag
@@ -122,6 +126,8 @@ export function CalendarHeader({
                                 key={filter.id}
                                 theme={filter.theme}
                                 indicator={filter.enabled ? filter.theme : undefined}
+                                aria-pressed={filter.enabled}
+                                aria-label={`${filter.label}, ${filter.enabled ? t.pageCalendarFilterEnabled : t.pageCalendarFilterDisabled}`}
                                 onClick={() => onToggleFilter(filter.id)}
                             >
                                 {filter.label}
@@ -129,6 +135,6 @@ export function CalendarHeader({
                         ))}
                     </div>
                 ))}
-        </div>
+        </header>
     );
 }

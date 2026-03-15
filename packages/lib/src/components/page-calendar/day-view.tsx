@@ -73,7 +73,7 @@ export function DayView<T extends CalendarEventBase>({
     return (
         <div className="flex flex-1 overflow-hidden">
             <div className="flex flex-1 flex-col overflow-hidden">
-                <div className="flex flex-shrink-0 items-center gap-3 border-b border-border px-4 py-2">
+                <div aria-label={formatFullDate(currentDate, locale)} className="flex flex-shrink-0 items-center gap-3 border-b border-border px-4 py-2">
                     <span
                         className={`inline-flex h-8 w-8 items-center justify-center rounded-full font-bold ${isToday(currentDate) ? "bg-primary text-primary-foreground" : "text-foreground"}`}
                     >
@@ -102,9 +102,13 @@ export function DayView<T extends CalendarEventBase>({
                             return (
                                 <div
                                     key={hour}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label={formatHourLabel(hour, locale)}
                                     className="cursor-pointer border-b border-border/50 hover:bg-muted/20"
                                     style={{ height: HOUR_HEIGHT }}
                                     onClick={() => onSlotClick?.(slotDate)}
+                                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSlotClick?.(slotDate); } }}
                                 />
                             );
                         })}

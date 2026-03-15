@@ -78,7 +78,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`typography relative min-w-0 cursor-grab font-medium md:h-14 ${props.header.thProps?.className ?? ""}`}
+            className={`typography bg-table-header first:rounded-tl-lg last:rounded-tr-lg overflow-clip last:border-r-transparent border-table-border border-r-[1px] relative min-w-0 cursor-grab font-medium md:h-14 ${props.header.thProps?.className ?? ""}`}
         >
             <span
                 className={`flex h-full items-center justify-between bg-table-header p-[var(--table-cell-padding)] ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}

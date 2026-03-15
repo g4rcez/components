@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useLocale } from "../../hooks/use-locale";
 import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
-import { getHourSlots, toDateKey, formatWeekdayShort, formatDay, formatHourLabel } from "./page-calendar.utils";
+import { getHourSlots, toDateKey, formatWeekdayShort, formatDay, formatHourLabel, formatFullDate } from "./page-calendar.utils";
 
 const HOUR_HEIGHT = 48;
 
@@ -41,7 +41,7 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                 {days.map((day, idx) => {
                     const isCurrentDay = isToday(day);
                     return (
-                        <div key={idx} className="flex-1 py-2 text-center text-xs font-medium text-muted-foreground">
+                        <div key={idx} aria-label={formatFullDate(day, locale)} className="flex-1 py-2 text-center text-xs font-medium text-muted-foreground">
                             <span className="block">{formatWeekdayShort(day, locale)}</span>
                             <span
                                 className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
@@ -74,9 +74,13 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                 return (
                                     <div
                                         key={hour}
+                                        role="button"
+                                        tabIndex={0}
+                                        aria-label={formatHourLabel(hour, locale)}
                                         className="cursor-pointer border-b border-border/50 hover:bg-muted/20"
                                         style={{ height: HOUR_HEIGHT }}
                                         onClick={() => onSlotClick?.(slotDate)}
+                                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSlotClick?.(slotDate); } }}
                                     />
                                 );
                             })}

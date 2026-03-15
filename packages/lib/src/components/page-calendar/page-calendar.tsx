@@ -1,4 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
+import { useTranslations } from "../../hooks/use-translations";
 import type { CalendarEvent, CalendarEventBase, CalendarFilter, ViewMode } from "./page-calendar.types";
 import { groupEventsByDate, getMonthDays, getWeekDays } from "./page-calendar.utils";
 import { CalendarHeader } from "./calendar-header";
@@ -35,6 +36,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     defaultView = "month",
     onChangeFilters: onActiveFiltersChange,
 }: PageCalendarProps<T>) {
+    const t = useTranslations();
     const [currentView, setCurrentView] = useState<ViewMode>(defaultView);
     const [currentDate, setCurrentDate] = useState<Date>(() => defaultDate ?? new Date());
     const [internalFilters, setInternalFilters] = useState<CalendarFilter[]>(filters);
@@ -65,7 +67,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="flex h-full flex-grow flex-col gap-4">
+        <div role="application" aria-label={t.pageCalendarLabel} className="flex h-full flex-grow flex-col gap-4">
             <CalendarHeader
                 filters={internalFilters}
                 filterArea={filterArea}

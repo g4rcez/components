@@ -1,18 +1,16 @@
 "use client";
+import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import {
-  Button,
-  Card,
-  Checkbox,
-  ColType,
-  createColumns,
-  Modal,
-  Table,
-  useTablePreferences,
-  uuid,
-  getModalScrollerRef,
-  useStableRef,
+    Button,
+    ColType,
+    createColumns,
+    getModalScrollerRef,
+    Modal,
+    Table,
+    useTablePreferences,
+    uuid
 } from "../../../../../lib/src";
 
 type User = { id: string; name: string; type: string; document: string };
@@ -53,74 +51,49 @@ const clients = Array.from({ length: 500 }).map(
   }),
 );
 
-const TableInModal = () => {
-  const [open, setOpen] = useState(false);
-  return (
-    <Fragment>
-      <div className="py-8 px-4">
-        <Button onClick={() => setOpen(true)}>Open Modal</Button>
-      </div>
-      <Modal title="Table in <Dialog/>" open={open} onChange={setOpen}>
-        <Table<User>
-          name="table"
-          cols={cols}
-          rows={clients}
-          sticky={-5}
-          operations={false}
-          loading={clients.length === 0}
-          getScrollRef={getModalScrollerRef}
-        />
-        <Button onClick={() => alert(1)}>Click here</Button>
-      </Modal>
-    </Fragment>
-  );
-};
-
 export default function TablePage() {
-  const preferences = useTablePreferences("@test", cols);
-  const [map, setMap] = useState(new Map<string, any>());
-  const mapRef = useStableRef(map);
-
-  const Aside = useCallback(
-    (props: any) => (
-      <div className="flex items-center px-1 h-full">
-        <Checkbox
-          checked={mapRef.current.has(props.row.id)}
-          onChange={(e) => {
-            const checked = e.target.checked;
-            setMap((prev) => {
-              const clone = new Map(prev);
-              if (checked) clone.set(props.row.id, props.row);
-              else clone.delete(props.row.id);
-              return clone;
-            });
-          }}
-        />
-      </div>
-    ),
-    [map],
-  );
-
+  const preferences = useTablePreferences("@test-table", cols);
   return (
     <DocsLayout
       title="Table"
-      section="display"
-      description="The tradicional tabular way to visualize your data."
+      section="Display"
+      description="A high-performance, feature-rich tabular data component designed for large datasets and complex interactions."
     >
-      <Card container="px-0 py-0 pb-0" className="py-0 px-0 pb-0 lg:px-0">
-        <TableInModal />
-      </Card>
-      <Card container="px-0 py-0 pb-0" className="py-0 px-0 pb-0 lg:px-0">
+      <ComponentDemo
+        title="Virtual and fast by default"
+        description="The table component uses the react-virtuoso to guarantee a fast and virtualized table, avoiding problems with large datasets"
+        code={`import { Table, Checkbox } from "@g4rcez/components";
+function SelectionTable() {
+  return (
+    <Table
+      cols={cols}
+      rows={data}
+      Aside={({ row }) => (
+        <Checkbox 
+          checked={isSelected(row.id)} 
+          onChange={handleSelect} 
+        />
+      )}
+      getRowProps={(item) => 
+        item.type === "pf" ? { 
+          style: { background: "hsla(0, 0%, 14%, 0.5)" } 
+        } : {}
+      }
+    />
+  );
+}`}
+      >
         <Table<User>
           {...preferences}
-          name="table"
-          Aside={Aside}
-          rows={clients}
+          name="table-selection"
+          rows={clients.slice(0, 100)}
           operations={false}
           loading={clients.length === 0}
-          getRowProps={(item: User) => item.type === "pf" ? ({ style: { background: "#232323" } }) : {}}
+          getRowProps={(item: User) =>
+            item.type === "pf" ? { className: "bg-muted" } : {}
+          }
         />
-      </Card>
+      </ComponentDemo>
     </DocsLayout>
   );
 }

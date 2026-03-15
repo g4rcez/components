@@ -1,5 +1,8 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
+import { ComponentDemo } from "@/components/component-demo";
+import { CodeBlock } from "@/components/code-block";
+import { SparklesIcon } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "../../../../../lib/src";
 import { useNotification } from "../../../../../lib/src/components/display/notifications";
@@ -12,117 +15,116 @@ export default function GetStartedPage() {
     <DocsLayout
       title="Getting Started"
       section="Introduction"
-      description="Learn how to install and use our modern React component library in your projects."
+      description="Modern React components for building high-performance web interfaces. Accessible, customizable, and developer-friendly."
     >
-      <section className="space-y-8">
-        <div className="p-6 bg-gradient-to-r rounded-xl border from-primary/5 to-primary/10 border-primary/20">
-          <h2 className="mb-3 text-xl font-semibold text-primary">
-            Welcome to UI Components
+      <div className="space-y-12">
+        <section id="overview">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground mb-4">
+            Overview
           </h2>
-          <p className="leading-relaxed">
-            A modern, accessible, and customizable React component library built
-            with TypeScript and Tailwind CSS. Get started in minutes with our
-            comprehensive set of components.
+          <p className="text-muted-foreground mb-6">
+            Welcome to the documentation! `@g4rcez/components` is a library of
+            high-quality React components designed to help you build beautiful,
+            accessible web applications faster than ever.
           </p>
-        </div>
-        <div className="space-y-6">
-          <div>
-            <h2 className="mb-4 text-2xl font-semibold">Installation</h2>
-            <div className="p-6 rounded-lg border bg-card-background border-card-border">
-              <p className="mb-4">
-                Install the package using your preferred package manager:
-              </p>
-              <pre className="p-4 font-mono rounded-lg border border-card-border bg-card-background">
-                <code>pnpm install @g4rcez/components</code>
-              </pre>
-            </div>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="p-6 rounded-lg border bg-card-background border-card-border">
-              <h3 className="flex gap-2 items-center mb-3 font-semibold">
-                <span className="text-2xl">🚀</span>
-                Quick Start
-              </h3>
-              <p className="mb-4 text-sm">
-                Import components and start building beautiful UIs immediately.
-              </p>
-              <Button
-                onClick={() => {
-                  const prev = count.current;
-                  const c = prev + 1;
-                  count.current = c;
-                  notification(
-                    `Notification ${c}. Lorem ipsum dolor sit amet, consectetur adipisici.`,
-                    { title: "Success", theme: "success", timeout: 2000000 },
-                  );
-                }}
-                className="w-full"
-              >
-                Try Notification
-              </Button>
-            </div>
-            <div className="p-6 rounded-lg border bg-card-background border-card-border">
-              <h3 className="flex gap-2 items-center mb-3 font-semibold">
-                <span className="text-2xl">⚡</span>
-                Zero Config
-              </h3>
-              <p className="text-sm">
-                No complex setup required. Components work out of the box with
-                sensible defaults and beautiful styling.
-              </p>
-            </div>
-          </div>
+        </section>
 
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Key Features</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                {
-                  title: "TypeScript First",
-                  desc: "Built with TypeScript for better developer experience",
-                  icon: "📝",
-                },
-                {
-                  title: "Accessible",
-                  desc: "WCAG compliant components with keyboard navigation",
-                  icon: "♿",
-                },
-                {
-                  title: "Customizable",
-                  desc: "Easy theming with CSS variables and Tailwind",
-                  icon: "🎨",
-                },
-                {
-                  title: "Modern Design",
-                  desc: "Beautiful default styling that works everywhere",
-                  icon: "✨",
-                },
-                {
-                  title: "Tree Shakable",
-                  desc: "Import only what you need for optimal bundle size",
-                  icon: "🌳",
-                },
-                {
-                  title: "Well Documented",
-                  desc: "Comprehensive docs with examples and API reference",
-                  icon: "📚",
-                },
-              ].map((feature) => (
-                <div
-                  key={feature.title}
-                  className="p-4 rounded-lg border transition-shadow hover:shadow-sm bg-card-background border-card-border"
-                >
-                  <div className="flex gap-2 items-center mb-2">
-                    <span className="text-lg">{feature.icon}</span>
-                    <h4 className="font-medium">{feature.title}</h4>
-                  </div>
-                  <p className="text-sm">{feature.desc}</p>
-                </div>
-              ))}
+        <section id="installation">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground mb-4">
+            Installation
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Install the library and its peer dependencies using your preferred
+            package manager. We recommend `pnpm` for its speed and efficiency.
+          </p>
+          <div className="rounded-xl overflow-hidden bg-background shadow-sm border border-border/40">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-muted/30">
+              <span className="text-xs font-medium text-muted-foreground tracking-wide">
+                Terminal
+              </span>
             </div>
+            <CodeBlock
+              code="pnpm install @g4rcez/components lucide-react motion"
+              lang="bash"
+            />
           </div>
-        </div>
-      </section>
+        </section>
+
+        <section id="examples">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground mb-4">
+            Quick Example
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Here's a simple example of how to use our components. We'll trigger
+            a notification using the `useNotification` hook.
+          </p>
+          <ComponentDemo
+            title="Interactive Demo"
+            description="Our components use Framer Motion for physically-accurate animations. Try triggering a system notification."
+            code={`import { Button, useNotification } from "@g4rcez/components";
+
+function App() {
+  const notification = useNotification();
+
+  return (
+    <Button 
+      theme="primary" 
+      onClick={() => notification("Action successful!", { theme: "success" })}
+    >
+      Trigger Alert
+    </Button>
+  );
+}`}
+          >
+            <Button
+              size="big"
+              theme="primary"
+              onClick={() => {
+                const c = count.current + 1;
+                count.current = c;
+                notification(
+                  `System Check #${c}: All components are performing within optimal parameters.`,
+                  { title: "Status: Active", theme: "success", timeout: 5000 },
+                );
+              }}
+            >
+              Verify System Status
+            </Button>
+          </ComponentDemo>
+        </section>
+        <section id="accessibility" className="pt-12 border-t border-border">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground mb-8">
+            Why this library?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+            {[
+              {
+                title: "TypeScript Native",
+                desc: "Every component is strictly typed with full IntelliSense support and zero 'any' patterns.",
+              },
+              {
+                title: "A11y Compliant",
+                desc: "Strictly adheres to WAI-ARIA patterns using Radix UI and Base UI foundations.",
+              },
+              {
+                title: "Theming System",
+                desc: "Powered by CSS variables and design tokens. Effortless dark mode and customization.",
+              },
+              {
+                title: "Tree Shakable",
+                desc: "Import only what you use. Minimal impact on your bundle size and lighthouse scores.",
+              },
+            ].map((item, i) => (
+              <div key={i} className="flex flex-col gap-2">
+                <h4 className="font-semibold text-foreground">{item.title}</h4>
+                <p className="text-[14px] text-muted-foreground leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </DocsLayout>
   );
 }

@@ -147,6 +147,7 @@ MyComponent.displayName = "MyComponent";
 - Add concise JSDoc comments for complex logic or public APIs.
 - Update `packages/docs` when adding new components or features.
 - Do not leave commented-out code.
+- **Component documentation lives exclusively in `packages/lib/docs/`** (YAML frontmatter, design tokens, usage examples). Do NOT create or edit docs in `docs/components/` — that directory is removed and must not be recreated.
 
 ## 5. Error Handling & Safety
 

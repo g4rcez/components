@@ -1,5 +1,6 @@
 import { Button } from "../core/button";
 import { css } from "../../lib/dom";
+import { useTranslations } from "../../hooks/use-translations";
 import type { CalendarEvent } from "./page-calendar.types";
 import { formatEventTime } from "./page-calendar.utils";
 import type { CSSProperties } from "react";
@@ -11,6 +12,7 @@ type EventPillProps = {
 };
 
 export function EventPill({ event, onClick, compact = false }: EventPillProps) {
+    const t = useTranslations();
     const props = {
         style: {
             border: "0",
@@ -22,14 +24,14 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
     };
     if (compact) {
         return (
-            <Button {...props} size="small" onClick={onClick} title={event.title} theme={event.className ? "raw" : "primary"}>
+            <Button {...props} size="small" onClick={onClick} title={event.title} aria-label={t.pageCalendarEventAt(event.title, formatEventTime(event.date))} theme={event.className ? "raw" : "primary"}>
                 {event.title}
             </Button>
         );
     }
 
     return (
-        <Button {...props} size="small" onClick={onClick} title={event.title} theme={event.className ? "raw" : "primary"}>
+        <Button {...props} size="small" onClick={onClick} title={event.title} aria-label={t.pageCalendarEventAt(event.title, formatEventTime(event.date))} theme={event.className ? "raw" : "primary"}>
             <div className="truncate font-medium">{event.title}</div>
             <div className="text-xs opacity-60">{formatEventTime(event.date)}</div>
         </Button>

@@ -55,7 +55,7 @@ export const Footer = () => {
           {/* Links */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h3 className="mb-4 text-sm font-semibold tracking-wider text-white uppercase">
+              <h3 className="mb-4 text-base font-medium tracking-wide text-foreground">
                 {category}
               </h3>
               <ul className="space-y-3">
@@ -66,14 +66,14 @@ export const Footer = () => {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-gray-400 transition-colors hover:text-white"
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.name}
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-sm text-gray-400 transition-colors hover:text-white"
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.name}
                       </Link>

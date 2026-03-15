@@ -3,26 +3,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom scrollbar styles */
-.scrollbar-thin {
-  scrollbar-width: thin;
+:root {
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --header-height: 64px;
+  --sidebar-width: 280px;
+  --content-max-width: 800px;
 }
 
-.scrollbar-track-transparent {
-  scrollbar-color: transparent transparent;
+@layer base {
+  body {
+    @apply antialiased bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
 }
 
-.scrollbar-thumb-card-border {
-  scrollbar-color: hsl(var(--card-border)) transparent;
+.bg-radial-hero {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(37, 99, 235, 0.14) 0%,
+    transparent 60%
+  );
 }
 
-.scrollbar-thumb-card-border\/80 {
-  scrollbar-color: hsl(var(--card-border) / 0.8) transparent;
+.bg-ambient {
+  background-image:
+    radial-gradient(at 0% 0%, hsla(var(--primary), 0.05) 0px, transparent 50%),
+    radial-gradient(
+      at 100% 0%,
+      hsla(var(--emphasis), 0.03) 0px,
+      transparent 50%
+    );
 }
 
-/* Webkit scrollbar styles */
+.dark .bg-ambient {
+  background-image:
+    radial-gradient(at 0% 0%, hsla(var(--primary), 0.03) 0px, transparent 50%),
+    radial-gradient(
+      at 100% 0%,
+      hsla(var(--emphasis), 0.02) 0px,
+      transparent 50%
+    );
+}
+
+.glass {
+  @apply bg-background/80 backdrop-blur-md;
+}
+
+.nav-link {
+  @apply block px-3 py-1.5 text-sm font-medium transition-colors rounded-md;
+}
+
+.nav-link-active {
+  @apply text-primary bg-primary/5 font-semibold;
+}
+
+.nav-link-inactive {
+  @apply text-muted-foreground hover:text-foreground hover:bg-muted/50;
+}
+
+/* Custom scrollbar */
 .scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-track {
@@ -30,27 +73,31 @@
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: hsl(var(--card-border));
-  border-radius: 3px;
+  @apply bg-border rounded-full;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--card-border) / 0.8);
+/* Shiki styling refinement */
+.shiki-container {
+  @apply bg-transparent rounded-xl overflow-hidden;
 }
 
-/* Smooth transitions for layout changes */
-@media (prefers-reduced-motion: no-preference) {
-  .transition-layout {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+.shiki-container pre {
+  @apply !p-6 !m-0 !overflow-x-auto;
 }
 
-/* Focus styles for better accessibility */
-.focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background;
+.shiki-container code {
+  @apply block leading-relaxed font-mono text-[13.5px] bg-transparent p-0;
 }
 
-[data-component="cell-aside"]:has(input[checked]),
-[data-component="cell-aside"]:has(input:focus) {
-  opacity: 100%;
+/* Shiki dual themes support */
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+}
+
+html:not(.dark) .shiki,
+html:not(.dark) .shiki span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
 }

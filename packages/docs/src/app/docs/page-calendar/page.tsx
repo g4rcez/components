@@ -1,5 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
+import { ComponentDemo } from "@/components/component-demo";
 import {
   PageCalendar,
   type CalendarEvent,
@@ -87,16 +88,60 @@ export default function PageCalendarDocsPage() {
       section="display"
       title="Page Calendar"
       className="flex flex-col gap-0 h-[700px]"
-      description="A full-page calendar with month, week, and day views."
+      description="A full-page calendar with month, week, and day views, event filtering, and custom event rendering."
     >
-      <PageCalendar
-        filters={filters}
-        events={mockEvents}
-        onChangeFilters={setFilters}
-        onAddEvent={() => console.log("Add event")}
-        onSlotClick={(d) => console.log("Slot clicked:", d)}
-        onEventClick={(e) => console.log("Event clicked:", e)}
-      />
+      <ComponentDemo
+        title="Page Calendar Demo"
+        description="A full-page calendar showcasing month, week, and day views with events, filters, and interactive callbacks."
+        code={`"use client";
+import { useState } from "react";
+import { PageCalendar, type CalendarEvent, type CalendarFilter } from "@g4rcez/components";
+
+const d = (daysOffset: number, hour = 10): Date => {
+  const today = new Date();
+  const date = new Date(today);
+  date.setDate(date.getDate() + daysOffset);
+  date.setHours(hour, 0, 0, 0);
+  return date;
+};
+
+const mockEvents: CalendarEvent[] = [
+  { id: "1", title: "Team standup", date: d(0, 9), filterId: "meeting" },
+  { id: "2", title: "Design review", date: d(0, 14), filterId: "review" },
+  { id: "3", title: "Sprint planning", date: d(1, 10), filterId: "meeting" },
+  { id: "4", title: "1:1 with manager", date: d(2, 11), filterId: "meeting" },
+  { id: "5", title: "Deploy to production", date: d(3, 15), filterId: "deploy" },
+];
+
+const mockFilters: CalendarFilter[] = [
+  { id: "meeting", label: "Meetings", theme: "info", enabled: true },
+  { id: "review", label: "Reviews", theme: "secondary", enabled: true },
+  { id: "deploy", label: "Deploys", theme: "warn", enabled: true },
+];
+
+function PageCalendarDemo() {
+  const [filters, setFilters] = useState(mockFilters);
+  return (
+    <PageCalendar
+      filters={filters}
+      events={mockEvents}
+      onChangeFilters={setFilters}
+      onAddEvent={() => console.log("Add event")}
+      onSlotClick={(d) => console.log("Slot clicked:", d)}
+      onEventClick={(e) => console.log("Event clicked:", e)}
+    />
+  );
+}`}
+      >
+        <PageCalendar
+          filters={filters}
+          events={mockEvents}
+          onChangeFilters={setFilters}
+          onAddEvent={() => console.log("Add event")}
+          onSlotClick={(d) => console.log("Slot clicked:", d)}
+          onEventClick={(e) => console.log("Event clicked:", e)}
+        />
+      </ComponentDemo>
     </DocsLayout>
   );
 }

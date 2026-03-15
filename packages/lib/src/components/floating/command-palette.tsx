@@ -150,19 +150,31 @@ export const CommandPalette = (props: CommandPaletteProps) => {
 
     const fuzzy = getFuzzyData(commands, text);
 
+    const displayItems: CommandItemTypes[] =
+        text === ""
+            ? commands
+            : [
+                  {
+                      type: "group",
+                      title: "Results",
+                      items: [],
+                  },
+                  ...fuzzy.filter((x) => x.type !== "group"),
+              ];
+
     const listNav = useListNavigation(root.context, {
         listRef,
         loop: true,
         activeIndex,
         virtual: true,
-        allowEscape: true,
+        allowEscape: false,
         focusItemOnOpen: true,
         focusItemOnHover: true,
         openOnArrowKeyDown: true,
         scrollItemIntoView: false,
         selectedIndex: activeIndex,
         disabledIndices: (n) => {
-            const item = fuzzy[n];
+            const item = displayItems[n];
             if (item) return item.type === "group";
             return false;
         },
@@ -178,18 +190,6 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         },
     });
     const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav]);
-
-    const displayItems: CommandItemTypes[] =
-        text === ""
-            ? commands
-            : [
-                  {
-                      type: "group",
-                      title: "Results",
-                      items: [],
-                  },
-                  ...fuzzy.filter((x) => x.type !== "group"),
-              ];
 
     useEffect(() => {
         const combi = new CombiKeys();

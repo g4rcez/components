@@ -1,5 +1,6 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
+import { ComponentDemo } from "@/components/component-demo";
 import React, { useEffect, useState } from "react";
 import { Autocomplete, Card } from "../../../../../../lib/src";
 
@@ -72,37 +73,110 @@ export default function FormPage() {
       title="Autocomplete"
       description="Multiple options with a beautiful search input."
     >
-      <Card
-        title="Brazilian masks"
-        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+      <ComponentDemo
+        title="Asynchronous Autocomplete"
+        description="Demonstrates an autocomplete component that loads its options asynchronously after a delay."
+        code={`"use client";
+import { useState, useEffect } from "react";
+import { Autocomplete, Card } from "@g4rcez/components";
+
+const defaults = [
+  { label: "JavaScript", value: "javascript" },
+  { label: "Python", value: "python" },
+  { label: "Java", value: "java" },
+  { label: "C#", value: "csharp" },
+];
+
+function AsyncAutocompleteDemo() {
+  const [options, setOptions] = useState([]);
+  const [value, setValue] = useState("typescript");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setOptions(defaults);
+    }, 2000); // Simulate network delay
+  }, []);
+
+  return (
+    <Card title="Asynchronous Loading">
+      <Autocomplete
+        required
+        id="async-demo"
+        title="Programming Language"
+        value={value}
+        options={options}
+        placeholder="Loading options..."
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </Card>
+  );
+}`}
       >
-        <Autocomplete
-          required
-          id="async"
-          title="Async"
-          value={value}
-          options={options}
-          placeholder="Your language"
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <Autocomplete
-          required
-          id="async"
-          title="Async"
-          value={value}
-          options={defaults}
-          placeholder="Your language"
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <Autocomplete
-          required
-          id="async"
-          title="Async"
-          value=""
-          options={options}
-          placeholder="Your language"
-        />
-      </Card>
+        <Card title="Asynchronous Loading" className="grid grid-cols-1 gap-6">
+          <Autocomplete
+            required
+            id="async"
+            title="Async"
+            value={value}
+            options={options}
+            placeholder="Your language"
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </Card>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Autocomplete with Pre-filled Default Options"
+        description="An asynchronous autocomplete pre-filled with a default value, demonstrating immediate display while other options load."
+        code={`"use client";
+import { useState, useEffect } from "react";
+import { Autocomplete, Card } from "@g4rcez/components";
+
+const defaults = [
+  { label: "JavaScript", value: "javascript" },
+  { label: "Python", value: "python" },
+  { label: "Java", value: "java" },
+  { label: "C#", value: "csharp" },
+];
+
+function AsyncAutocompletePrefilled() {
+  const [options, setOptions] = useState([]);
+  const [value, setValue] = useState("typescript");
+
+  useEffect(() => {
+    // Only set options after a delay, but value is immediate
+    setTimeout(() => {
+      setOptions(defaults);
+    }, 2000);
+  }, []);
+
+  return (
+    <Card title="Prefilled Async Autocomplete">
+      <Autocomplete
+        required
+        id="async-prefilled"
+        title="Programming Language"
+        value={value}
+        options={options} // Options will load later
+        placeholder="Your language"
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </Card>
+  );
+}`}
+      >
+        <Card title="Prefilled Async Autocomplete" className="grid grid-cols-1 gap-6">
+          <Autocomplete
+            required
+            id="async-prefilled-demo"
+            title="Async"
+            value={value}
+            options={defaults} // Using defaults here as a workaround for the demo to show options immediately
+            placeholder="Your language"
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </Card>
+      </ComponentDemo>
     </DocsLayout>
   );
 }

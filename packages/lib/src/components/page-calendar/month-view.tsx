@@ -3,7 +3,7 @@ import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
 import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
-import { toDateKey, formatDay, getWeekDays, formatWeekDay } from "./page-calendar.utils";
+import { toDateKey, formatDay, getWeekDays, formatWeekDay, formatFullDate } from "./page-calendar.utils";
 import { useMemo } from "react";
 
 type MonthViewProps = {
@@ -20,7 +20,7 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
     const WEEKDAY_LABELS = useMemo(() => getWeekDays(new Date()), []);
     return (
         <div className="flex h-full flex-1 flex-col">
-            <ul className="grid grid-cols-7 border-b border-border">
+            <ul role="row" aria-hidden="true" className="grid grid-cols-7 border-b border-border">
                 {WEEKDAY_LABELS.map((date) => {
                     const day = formatWeekDay(date, locale);
                     return (
@@ -30,7 +30,7 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                     );
                 })}
             </ul>
-            <div className="grid flex-1 auto-rows-fr grid-cols-7">
+            <div role="grid" aria-label={t.pageCalendarMonthGrid} className="grid flex-1 auto-rows-fr grid-cols-7">
                 {days.map((day, idx) => {
                     const key = toDateKey(day);
                     const events = eventsByDate.get(key) || [];
@@ -43,6 +43,7 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                             key={idx}
                             type="button"
                             onClick={() => onDayClick(day)}
+                            aria-label={`${formatFullDate(day, locale)}${events.length > 0 ? `, ${t.pageCalendarEventCount(events.length)}` : ""}`}
                             className={`group flex min-h-32 cursor-pointer flex-col gap-1 border-b border-r border-border p-2 transition-colors hover:bg-muted hover:bg-opacity-20 ${!isCurrentMonth ? "opacity-50" : ""}`}
                         >
                             <div className="flex items-center justify-between">
@@ -51,7 +52,7 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                 >
                                     {formatDay(day, locale)}
                                 </span>
-                                <span className="text-lg leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40">
+                                <span aria-hidden="true" className="text-lg leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40">
                                     +
                                 </span>
                             </div>

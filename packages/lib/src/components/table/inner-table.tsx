@@ -85,7 +85,7 @@ const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
             {...innerProps}
             role="row"
             ref={ref}
-            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-1 pb-4 md:table-row ${(props as any)?.className ?? ""}`}
+            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-1 pb-4 md:table-row ${[props?.className, contextProps?.className].filter(Boolean).join(" ")}`}
         />
     );
 });
@@ -181,7 +181,7 @@ export const InnerTable = <T extends Any>({
     };
 
     return (
-        <div className="group relative flex w-full flex-col whitespace-nowrap rounded-lg">
+        <div className="group bg-table-background relative flex w-full flex-col whitespace-nowrap rounded-lg">
             <TableVirtuoso
                 components={components}
                 context={context as any}

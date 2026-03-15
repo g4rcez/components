@@ -343,7 +343,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                 <FloatingOverlay
                                     lockScroll
                                     className={css(
-                                        "inset-0 isolate z-overlay flex h-[100dvh] !overflow-clip bg-floating-overlay/70",
+                                        "inset-0 isolate z-overlay flex h-[100dvh] !overflow-clip bg-floating-overlay/80",
                                         type === "drawer" ? "" : "items-start justify-center pt-10 lg:p-10",
                                         overlayClassName
                                     )}

@@ -87,7 +87,7 @@ export const Table = <T extends Any>(props: TableProps<T>) => {
 
     return (
         <TableProvider value={contextState}>
-            <AnimatePresence initial={false}>
+            <AnimatePresence propagate initial={false}>
                 {operations ? (
                     <Metadata
                         cols={state.cols}

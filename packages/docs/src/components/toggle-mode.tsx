@@ -20,8 +20,13 @@ export const ToggleMode = () => {
   };
 
   return (
-    <button type="button" onClick={onClick}>
-      {mode === "light" ? <MoonIcon /> : <SunIcon />}
+    <button 
+      type="button" 
+      onClick={onClick}
+      className="p-2 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-card-background/50 flex items-center justify-center"
+      aria-label={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+    >
+      {mode === "light" ? <MoonIcon className="size-5" /> : <SunIcon className="size-5" />}
     </button>
   );
 };
