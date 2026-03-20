@@ -6,6 +6,7 @@ import {
   Table,
   MessageSquare,
   ChevronDown,
+  Wand2Icon,
   Menu,
   Square,
   Search,
@@ -48,10 +49,12 @@ export const sections: Section[] = [
     icon: MousePointer,
     items: [
       { title: "Button", href: "/docs/buttons", icon: MousePointer },
+      { title: "Calendar", href: "/docs/calendar", icon: Calendar },
       { title: "Tag", href: "/docs/tags", icon: Tag },
       { title: "Tabs", href: "/docs/tabs", icon: Layout },
       { title: "Timeline", href: "/docs/timeline", icon: Clock },
       { title: "Table", href: "/docs/table", icon: Table },
+      { title: "Page Calendar", href: "/docs/page-calendar", icon: Calendar },
     ],
   },
   {
@@ -63,6 +66,7 @@ export const sections: Section[] = [
       { title: "Menu", href: "/docs/menu", icon: Menu },
       { title: "Drawer/Dialog", href: "/docs/modal", icon: Square },
       { title: "Commander", href: "/docs/commander", icon: Terminal },
+      { title: "Wizard", href: "/docs/wizard", icon: Wand2Icon },
     ],
   },
   {
@@ -70,7 +74,6 @@ export const sections: Section[] = [
     icon: Type,
     items: [
       { title: "Autocomplete", href: "/docs/autocomplete", icon: Search },
-      { title: "Calendar", href: "/docs/calendar", icon: Calendar },
       { title: "Checkbox", href: "/docs/checkbox", icon: CheckSquare },
       { title: "Input", href: "/docs/input", icon: Type },
       { title: "MultiSelect", href: "/docs/multiselect", icon: List },

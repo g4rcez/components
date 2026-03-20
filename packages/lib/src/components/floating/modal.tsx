@@ -542,7 +542,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                         <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
                             {options.cancel?.text || "Cancel"}
                         </Button>
-                        <Button theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
+                        <Button autoFocus theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
                             {options.confirm?.text || "Confirm"}
                         </Button>
                     </div>

@@ -124,7 +124,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                     initial={false}
                     animate={innerStatus}
                     transition={transition}
-                    className="relative flex aspect-square size-10 items-center justify-center rounded-full font-semibold"
+                    className="relative flex aspect-square size-10 items-center justify-center rounded-full font-medium"
                     variants={{
                         error: {
                             color: parser("var(--danger-foreground)"),
@@ -164,7 +164,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                     </div>
                 </motion.div>
                 <header className="flex flex-col items-start justify-start px-2">
-                    <h3 className={`flex h-full items-center whitespace-nowrap ${titleClassName}`}>{title}</h3>
+                    <h3 className={`flex h-full items-center whitespace-nowrap font-normal ${titleClassName}`}>{title}</h3>
                 </header>
             </motion.button>
         </Fragment>

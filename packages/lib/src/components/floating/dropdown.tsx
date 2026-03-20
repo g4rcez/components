@@ -11,6 +11,7 @@ import {
     useClick,
     useDismiss,
     useFloating,
+    useHover,
     useInteractions,
     useRole,
 } from "@floating-ui/react";
@@ -19,6 +20,7 @@ import React, { Fragment, PropsWithChildren, useEffect, useId, useMemo, useRef, 
 type DropdownProps = {
     open?: boolean;
     arrow?: boolean;
+    hover?: boolean;
     returnFocus?: boolean;
     restoreFocus?: boolean;
     buttonProps?: React.HTMLProps<"button">;
@@ -60,10 +62,11 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     });
 
     const click = useClick(context);
+    const hover = useHover(context, { enabled: props.hover ?? false });
     const dismiss = useDismiss(context);
     const role = useRole(context, { role: "tooltip" });
 
-    const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
+    const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role, hover]);
 
     return (
         <Fragment>
@@ -74,7 +77,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="relative isolate z-floating min-w-96 rounded-lg border border-floating-border bg-floating-background p-4 shadow-shadow-floating"
+                            className="relative isolate z-floating rounded-lg border border-floating-border bg-floating-background p-4 shadow-shadow-floating"
                             ref={refs.setFloating}
                             aria-labelledby={headingId}
                             style={floatingStyles as unknown as React.CSSProperties}

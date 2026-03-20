@@ -1,7 +1,7 @@
 {
     "name": "@g4rcez/components",
     "description": "Customizable react components.",
-    "version": "2.3.0",
+    "version": "3.0.0",
     "sideEffects": false,
     "private": false,
     "packageManager": "pnpm@10.12.3",
@@ -24,7 +24,7 @@
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css",
+        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css; cp -r ai dist",
         "format": "npx prettier --write .",
         "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
@@ -93,7 +93,7 @@
     "files": [
         "dist",
         "dist/index.css",
-        "docs"
+        "dist/ai"
     ],
     "exports": {
         ".": {
@@ -297,6 +297,6 @@
             "require": "./dist/components/display/alert.js",
             "default": "./dist/components/display/alert.js"
         },
-        "./docs/*": "./docs/*.md"
+        "./ai/*": "./**"
     }
 }

@@ -39,7 +39,7 @@ type PageHeaderProps = {
 
 export const PageHeader = (props: PropsWithChildren<PageHeaderProps>) => {
     return (
-        <header className="gap-mega flex flex-row flex-wrap items-center justify-between">
+        <header className="gap-mega min-w-full flex flex-row flex-wrap items-center justify-between">
             <div>
                 <PageTitle title={props.title}>{props.description}</PageTitle>
             </div>

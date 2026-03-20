@@ -65,10 +65,10 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
     const { width, height } = useWindowSize();
 
     const labels = {
-        next: labelsProp?.next ?? translation.driverNext,
-        previous: labelsProp?.previous ?? translation.driverPrevious,
-        finish: labelsProp?.finish ?? translation.driverFinish,
-        skip: labelsProp?.skip ?? translation.driverSkip,
+        next: labelsProp?.next ?? translation.wizardNext,
+        previous: labelsProp?.previous ?? translation.wizardPrev,
+        finish: labelsProp?.finish ?? translation.wizardFinish,
+        skip: labelsProp?.skip ?? translation.wizardSkip,
     };
 
     const { refs, floatingStyles, context } = useFloating({

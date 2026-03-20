@@ -37,22 +37,27 @@ type FloatItemProps = {
 
 const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
     <FloatingPortal>
-        <MotionConfig reducedMotion="user" transition={{ type: "tween", stiffness: 25, duration: 0.3 }}>
-            <AnimatePresence presenceAffectsLayout>
+        <MotionConfig reducedMotion="user" transition={{ type: "spring", damping: 30, stiffness: 350 }}>
+            <AnimatePresence mode="wait" presenceAffectsLayout>
                 {item ? (
                     <motion.div
+                        key="overlay"
                         exit={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         initial={{ opacity: 0 }}
+                        transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
                         className="pointer-events-none fixed inset-0 top-0 z-overlay h-screen w-screen bg-floating-overlay/70"
                     />
                 ) : null}
                 {item ? (
-                    <FloatingOverlay lockScroll className="absolute inset-0 z-floating flex items-center justify-center">
+                    <FloatingOverlay key="card" lockScroll className="absolute inset-0 z-floating flex items-center justify-center">
                         <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                             <motion.div
                                 layout
                                 layoutId={`item-${item.id}`}
+                                initial={{ opacity: 0.6, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.98 }}
                                 className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow-shadow-card"
                                 ref={refs.setFloating}
                                 {...get()}
@@ -66,11 +71,11 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
                                         <XIcon />
                                     </button>
                                 </nav>
-                                <header className="flex w-full flex-wrap items-center justify-between gap-2">
+                                <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-2">
                                     <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
                                     <p className="text-sm leading-snug text-secondary">{item.description}</p>
-                                </header>
-                                {item.children}
+                                </motion.header>
+                                <motion.div layout>{item.children}</motion.div>
                             </motion.div>
                         </FloatingFocusManager>
                     </FloatingOverlay>

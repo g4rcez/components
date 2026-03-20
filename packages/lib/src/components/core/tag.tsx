@@ -55,7 +55,7 @@ const tagVariants = cva(
 );
 
 export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
-    CvaVariants<typeof variants> & Partial<{ icon: Label; loading: boolean; indicator: Themes }>,
+    CvaVariants<typeof variants> & Partial<{ icon: Label; loading: boolean; indicator: Themes | true }>,
     T
 >;
 
@@ -72,7 +72,7 @@ export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => any 
             as={props.as ?? "span"}
             className={css(tagVariants({ size, theme: loading ? "loading" : theme }), className)}
         >
-            {indicator ? <span aria-hidden="true" className={indicatorVariant({ theme: indicator })} /> : null}
+            {indicator ? <span aria-hidden="true" className={indicatorVariant({ theme: indicator === true ? theme : indicator })} /> : null}
             {icon}
             {props.children}
         </Polymorph>

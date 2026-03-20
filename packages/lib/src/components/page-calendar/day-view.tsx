@@ -71,8 +71,8 @@ export function DayView<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="flex flex-1 overflow-hidden">
-            <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 min-w-full">
+            <div className="flex w-full flex-1 flex-col">
                 <div aria-label={formatFullDate(currentDate, locale)} className="flex flex-shrink-0 items-center gap-3 border-b border-border px-4 py-2">
                     <span
                         className={`inline-flex h-8 w-8 items-center justify-center rounded-full font-bold ${isToday(currentDate) ? "bg-primary text-primary-foreground" : "text-foreground"}`}

@@ -244,7 +244,6 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
         const item = useListItem({ label: disabled ? null : title });
         const tree = useFloatingTree();
         const isActive = item.index === menu.activeIndex;
-
         return (
             <button
                 {...props}
