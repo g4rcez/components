@@ -24,7 +24,7 @@ import {
     useTypeahead,
 } from "@floating-ui/react";
 import { Slot } from "../core/slot";
-import { ChevronRightIcon, LucideProps } from "lucide-react";
+import { CaretRightIcon, type Icon } from "@phosphor-icons/react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../constants";
 import { css, mergeRefs } from "../../lib/dom";
@@ -199,7 +199,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                             {isNested && (
                                 <span style={{ marginLeft: 10, fontSize: 10 }}>
                                     <span className="sr-only">Next menu</span>
-                                    <ChevronRightIcon size={14} />
+                                    <CaretRightIcon size={14} />
                                 </span>
                             )}
                         </button>
@@ -236,7 +236,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
     }
 );
 
-type MenuItemProps = { title: string; disabled?: boolean; Right?: React.FC<LucideProps> };
+type MenuItemProps = { title: string; disabled?: boolean; Right?: Icon };
 
 export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.ButtonHTMLAttributes<HTMLButtonElement>, MenuItemProps>>(
     ({ title, Right, disabled, children, ...props }, forwardedRef) => {

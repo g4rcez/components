@@ -5,14 +5,14 @@ import {
   CodeIcon,
   FileTextIcon,
   FolderIcon,
-  HomeIcon,
-  LayoutDashboardIcon,
-  LogOutIcon,
+  HouseIcon,
+  SquaresFourIcon,
+  SignOutIcon,
   PlayIcon,
-  SearchIcon,
-  SettingsIcon,
+  MagnifyingGlassIcon,
+  GearIcon,
   TerminalIcon,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import { Button, CommandPalette } from "../../../../../lib/src";
 import type { CommandItemTypes } from "../../../../../lib/src/components/floating/command-palette";
@@ -74,7 +74,7 @@ export default function CommanderPage() {
           type: "shortcut" as const,
           title: "Dashboard",
           shortcut: "Alt+d",
-          Icon: <LayoutDashboardIcon size={16} />,
+          Icon: <SquaresFourIcon size={16} />,
           action: () => {
             notification("Navigating to Dashboard...", { theme: "info" });
             setOpen1(false);
@@ -94,7 +94,7 @@ export default function CommanderPage() {
           type: "shortcut" as const,
           title: "Settings",
           shortcut: "Alt+s",
-          Icon: <SettingsIcon size={16} />,
+          Icon: <GearIcon size={16} />,
           action: () => {
             notification("Opening Settings...", { theme: "info" });
             setOpen1(false);
@@ -146,7 +146,7 @@ export default function CommanderPage() {
           type: "shortcut" as const,
           title: "Go to Home",
           shortcut: "Alt+h",
-          Icon: <HomeIcon size={16} />,
+          Icon: <HouseIcon size={16} />,
           action: () => {
             notification("Navigating to Home...", { theme: "info" });
             setOpen1(false);
@@ -156,7 +156,7 @@ export default function CommanderPage() {
           type: "shortcut" as const,
           title: "Quick Search",
           shortcut: "Alt+f",
-          Icon: <SearchIcon size={16} />,
+          Icon: <MagnifyingGlassIcon size={16} />,
           action: () => {
             notification("Opening global search...", { theme: "info" });
             setOpen1(false);
@@ -198,7 +198,7 @@ export default function CommanderPage() {
           type: "shortcut" as const,
           title: "Logout",
           shortcut: "Alt+l",
-          Icon: <LogOutIcon size={16} className="text-danger" />,
+          Icon: <SignOutIcon size={16} className="text-danger" />,
           action: () => {
             notification("Logging out...", { theme: "warn" });
             setOpen1(false);
@@ -217,14 +217,14 @@ export default function CommanderPage() {
           type: "shortcut" as const,
           title: "Go to Home",
           shortcut: "Alt+h",
-          Icon: <HomeIcon size={16} />,
+          Icon: <HouseIcon size={16} />,
           action: () => setOpen2(false),
         },
         {
           type: "shortcut" as const,
           title: "Quick Search",
           shortcut: "Alt+f",
-          Icon: <SearchIcon size={16} />,
+          Icon: <MagnifyingGlassIcon size={16} />,
           action: () => setOpen2(false),
         },
       ],
@@ -236,7 +236,7 @@ export default function CommanderPage() {
       type: "shortcut" as const,
       title: "Dashboard",
       shortcut: "Alt+d",
-      Icon: <LayoutDashboardIcon size={20} />,
+      Icon: <SquaresFourIcon size={20} />,
       hint: "Navigate to your personal dashboard with widgets and activity feeds.",
       action: () => setOpen3(false),
     },
@@ -252,7 +252,7 @@ export default function CommanderPage() {
       type: "shortcut" as const,
       title: "Settings",
       shortcut: "Alt+s",
-      Icon: <SettingsIcon size={20} />,
+      Icon: <GearIcon size={20} />,
       hint: "Configure your account preferences, integrations, and notifications.",
       action: () => setOpen3(false),
     },
@@ -260,7 +260,7 @@ export default function CommanderPage() {
       type: "shortcut" as const,
       title: "Quick Search",
       shortcut: "Alt+f",
-      Icon: <SearchIcon size={20} />,
+      Icon: <MagnifyingGlassIcon size={20} />,
       hint: "Instantly search across files, people, and recent activity.",
       action: () => setOpen3(false),
     },
@@ -268,7 +268,7 @@ export default function CommanderPage() {
       type: "shortcut" as const,
       title: "Logout",
       shortcut: "Alt+l",
-      Icon: <LogOutIcon size={20} className="text-danger" />,
+      Icon: <SignOutIcon size={20} className="text-danger" />,
       hint: "Sign out of your account and end the current session.",
       action: () => setOpen3(false),
     },
@@ -285,10 +285,10 @@ export default function CommanderPage() {
         description="Fuzzy search across multiple command groups. Try searching for 'log', 'play', or 'term' — or press Alt+K anywhere on this page."
         code={`import { CommandPalette, Button } from "@g4rcez/components";
 import {
-  LayoutDashboardIcon, FolderIcon, SettingsIcon,
+  SquaresFourIcon, FolderIcon, GearIcon,
   TerminalIcon, FileTextIcon, PlayIcon,
-  HomeIcon, SearchIcon, LogOutIcon,
-} from "lucide-react";
+  HouseIcon, MagnifyingGlassIcon, SignOutIcon,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 
 function CommanderExample() {
@@ -299,9 +299,9 @@ function CommanderExample() {
       type: "group",
       title: "Navigation",
       items: [
-        { type: "shortcut", title: "Dashboard", shortcut: "Alt+d", Icon: <LayoutDashboardIcon size={16} />, action: () => setOpen(false) },
+        { type: "shortcut", title: "Dashboard", shortcut: "Alt+d", Icon: <SquaresFourIcon size={16} />, action: () => setOpen(false) },
         { type: "shortcut", title: "Projects",  shortcut: "Alt+p", Icon: <FolderIcon size={16} />,           action: () => setOpen(false) },
-        { type: "shortcut", title: "Settings",  shortcut: "Alt+s", Icon: <SettingsIcon size={16} />,         action: () => setOpen(false) },
+        { type: "shortcut", title: "Settings",  shortcut: "Alt+s", Icon: <GearIcon size={16} />,         action: () => setOpen(false) },
       ],
     },
     {
@@ -317,7 +317,7 @@ function CommanderExample() {
       type: "group",
       title: "Account",
       items: [
-        { type: "shortcut", title: "Logout", shortcut: "Alt+l", Icon: <LogOutIcon size={16} />, action: () => setOpen(false) },
+        { type: "shortcut", title: "Logout", shortcut: "Alt+l", Icon: <SignOutIcon size={16} />, action: () => setOpen(false) },
       ],
     },
   ];
@@ -349,7 +349,7 @@ function CommanderExample() {
         title="With Empty State"
         description="When a search query matches nothing, a custom empty message is displayed. Try opening the palette and typing something like 'xyz'."
         code={`import { CommandPalette, Button } from "@g4rcez/components";
-import { HomeIcon, SearchIcon } from "lucide-react";
+import { HouseIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 function EmptyStateExample() {
@@ -360,8 +360,8 @@ function EmptyStateExample() {
       type: "group",
       title: "General",
       items: [
-        { type: "shortcut", title: "Go to Home",   shortcut: "Alt+h", Icon: <HomeIcon size={16} />,   action: () => setOpen(false) },
-        { type: "shortcut", title: "Quick Search", shortcut: "Alt+f", Icon: <SearchIcon size={16} />, action: () => setOpen(false) },
+        { type: "shortcut", title: "Go to Home",   shortcut: "Alt+h", Icon: <HouseIcon size={16} />,   action: () => setOpen(false) },
+        { type: "shortcut", title: "Quick Search", shortcut: "Alt+f", Icon: <MagnifyingGlassIcon size={16} />, action: () => setOpen(false) },
       ],
     },
   ];
@@ -393,7 +393,7 @@ function EmptyStateExample() {
         description="Navigate commands with arrow keys to see a contextual preview panel on the right."
         code={`import { CommandPalette, Button } from "@g4rcez/components";
 import type { CommandItemTypes } from "@g4rcez/components";
-import { LayoutDashboardIcon, FolderIcon, SettingsIcon, SearchIcon, LogOutIcon } from "lucide-react";
+import { SquaresFourIcon, FolderIcon, GearIcon, MagnifyingGlassIcon, SignOutIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({ command }) => {
@@ -420,9 +420,9 @@ function PreviewExample() {
   const [open, setOpen] = useState(false);
 
   const commands = [
-    { type: "shortcut", title: "Dashboard", shortcut: "Alt+d", Icon: <LayoutDashboardIcon size={20} />, hint: "Navigate to your personal dashboard.", action: () => setOpen(false) },
+    { type: "shortcut", title: "Dashboard", shortcut: "Alt+d", Icon: <SquaresFourIcon size={20} />, hint: "Navigate to your personal dashboard.", action: () => setOpen(false) },
     { type: "shortcut", title: "Projects",  shortcut: "Alt+p", Icon: <FolderIcon size={20} />,           hint: "Browse and manage all your projects.",  action: () => setOpen(false) },
-    { type: "shortcut", title: "Settings",  shortcut: "Alt+s", Icon: <SettingsIcon size={20} />,         hint: "Configure your account preferences.",    action: () => setOpen(false) },
+    { type: "shortcut", title: "Settings",  shortcut: "Alt+s", Icon: <GearIcon size={20} />,         hint: "Configure your account preferences.",    action: () => setOpen(false) },
   ];
 
   return (

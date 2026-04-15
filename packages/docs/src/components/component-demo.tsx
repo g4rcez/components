@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { CodeBlock } from "./code-block";
-import { LinkIcon } from "lucide-react";
+import { LinkIcon } from "@phosphor-icons/react";
 
 type ComponentDemoProps = {
   title: string;

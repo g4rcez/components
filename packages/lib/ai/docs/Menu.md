@@ -39,7 +39,7 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 | `title` | `string` | — | Item text; used for typeahead matching and the `title` attribute |
 | `children` | `React.ReactNode` | — | Visual content of the item |
 | `disabled` | `boolean` | `false` | Removes item from keyboard navigation and typeahead |
-| `Right` | `React.FC<LucideProps>` | — | Icon rendered on the right side |
+| `Right` | `React.FC<IconProps>` | — | Icon rendered on the right side |
 | `onClick` | `function` | — | Click handler |
 
 ## Design Tokens
@@ -71,11 +71,11 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 ### With Icons and Shortcuts
 
 ```tsx
-import { EditIcon, TrashIcon } from "lucide-react";
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 <Menu label="Settings">
-  <MenuItem title="Edit" Right={EditIcon}>Edit</MenuItem>
+  <MenuItem title="Edit" Right={PencilSimpleIcon}>Edit</MenuItem>
   <MenuItem title="Delete" Right={TrashIcon} className="text-danger">
     Delete
   </MenuItem>

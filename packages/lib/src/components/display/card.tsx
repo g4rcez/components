@@ -1,4 +1,4 @@
-import { InfoIcon, LucideIcon } from "lucide-react";
+import { InfoIcon, type Icon } from "@phosphor-icons/react";
 import React, { type PropsWithChildren } from "react";
 import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
@@ -86,7 +86,7 @@ Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<Ca
 };
 
 export type StatsCardProps = CardProps<React.ElementType> & {
-    Icon?: LucideIcon;
+    Icon?: Icon;
     title: string;
     value: Label;
     mark?: string;

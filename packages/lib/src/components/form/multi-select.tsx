@@ -13,7 +13,7 @@ import {
     useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
-import { ChevronDown, XIcon } from "lucide-react";
+import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
@@ -331,7 +331,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     <span className="flex items-center gap-0.5">
                         {right}
                         <button type="button" className="transition-colors link:text-primary" onClick={onCaretDownClick}>
-                            <ChevronDown size={20} />
+                            <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
                         {value ? (

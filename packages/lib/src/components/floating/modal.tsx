@@ -11,7 +11,7 @@ import {
     type ElementProps,
 } from "@floating-ui/react";
 import { cva } from "class-variance-authority";
-import { XIcon } from "lucide-react";
+import { XIcon } from "@phosphor-icons/react";
 import {
     AnimatePresence,
     HTMLMotionProps,

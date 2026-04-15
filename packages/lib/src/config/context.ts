@@ -1,5 +1,6 @@
 "use client";
 import { createContext } from "react";
+import type { IconProps } from "@phosphor-icons/react";
 import type { Locales } from "the-mask-input";
 import type { ContextType } from "../hooks/use-components-provider";
 import { parsers } from "../styles/design-tokens";
@@ -12,6 +13,7 @@ export type ContextProps = Partial<{
     locale: Locales | undefined;
     parser: typeof parsers.hsla;
     rootFloating?: HTMLElement | null;
+    iconWeight: IconProps["weight"];
 }>;
 
 export const Context = createContext<ContextType>({

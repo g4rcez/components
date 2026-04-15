@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRightIcon } from "lucide-react";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useRef } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { useParentHeight } from "../../hooks/use-parent";
@@ -52,7 +52,7 @@ export const TransferList = <T extends POJO, K extends keyof T>(props: TransferL
             </div>
             <div>
                 <Button>
-                    <ChevronRightIcon />
+                    <CaretRightIcon />
                 </Button>
             </div>
             <div></div>

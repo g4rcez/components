@@ -5,12 +5,12 @@ import { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
 import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
 import {
-    createTokenStyles,
-    type TokenRemap,
+  createTokenStyles,
+  type TokenRemap,
 } from "../../../lib/src/styles/design-tokens";
 import {
-    defaultDarkTheme,
-    defaultLightTheme,
+  defaultDarkTheme,
+  defaultLightTheme,
 } from "../../../lib/src/styles/theme";
 import { Header } from "./header";
 import { Navigation } from "./navigation";
@@ -52,7 +52,11 @@ export const RootLayout = (props: PropsWithChildren) => {
       <body className="font-sans min-h-screen bg-background text-foreground bg-ambient overflow-x-hidden">
         <div id="root" className="flex flex-col min-h-screen">
           <div id="root-floating" />
-          <ComponentsProvider locale="en-US" tweaks={tweaks}>
+          <ComponentsProvider
+            locale="en-US"
+            tweaks={tweaks}
+            iconWeight="duotone"
+          >
             <Notifications>
               <div className="flex flex-col min-h-screen">
                 <Header />

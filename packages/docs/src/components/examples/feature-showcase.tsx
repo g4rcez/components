@@ -6,7 +6,7 @@ import { Input } from "../../../../lib/src/components/form/input";
 import { Checkbox } from "../../../../lib/src/components/form/checkbox";
 import { Tag } from "../../../../lib/src/components/core/tag";
 import { Alert } from "../../../../lib/src/components/display/alert";
-import { CheckIcon, StarIcon } from "lucide-react";
+import { CheckIcon, StarIcon } from "@phosphor-icons/react";
 import { TaskList } from "../../../../lib/src";
 
 export const FeatureShowcase = () => {

@@ -266,7 +266,7 @@ export default function CascadingSelect() {
 
 - Uses a native `<select>` element for full keyboard support and screen-reader compatibility.
 - The `placeholder` renders as a `disabled hidden` option so it is never submitted.
-- A `ChevronDownIcon` caret is rendered inside a `<label>` pointing to the select id, giving it a larger click target.
+- A `CaretDownIcon` caret is rendered inside a `<label>` pointing to the select id, giving it a larger click target.
 - `data-selected` is set to `"false"` until the user selects an option, which toggles the placeholder color class.
 
 ## Data Attributes

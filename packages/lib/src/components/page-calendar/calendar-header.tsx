@@ -2,7 +2,7 @@ import { Button } from "../core/button";
 import { Tag } from "../core/tag";
 import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
-import { ChevronLeft, ChevronRight, PlusCircle, Calendar } from "lucide-react";
+import { CaretLeftIcon, CaretRightIcon, PlusCircleIcon, CalendarIcon } from "@phosphor-icons/react";
 import { addDays, addMonths, addWeeks, isToday, subDays, subMonths, subWeeks } from "date-fns";
 import type { CalendarFilter, ViewMode } from "./page-calendar.types";
 import { formatDay, formatMonthShort, formatMonthYear, getWeekNumber } from "./page-calendar.utils";
@@ -34,11 +34,14 @@ export function CalendarHeader({
     const t = useTranslations();
     const isDateToday = isToday(currentDate);
 
-    const VIEWS = useMemo(() => [
-        { value: "month" as ViewMode, label: t.pageCalendarMonthView },
-        { value: "week" as ViewMode, label: t.pageCalendarWeekView },
-        { value: "day" as ViewMode, label: t.pageCalendarDayView },
-    ], [t]);
+    const VIEWS = useMemo(
+        () => [
+            { value: "month" as ViewMode, label: t.pageCalendarMonthView },
+            { value: "week" as ViewMode, label: t.pageCalendarWeekView },
+            { value: "day" as ViewMode, label: t.pageCalendarDayView },
+        ],
+        [t]
+    );
 
     const handlePrev = () => {
         setCurrentDate((currentDate) => {
@@ -70,14 +73,22 @@ export function CalendarHeader({
                         <span className="text-xl font-medium leading-none">{formatDay(currentDate, locale)}</span>
                     </div>
                     <div>
-                        <h1 aria-live="polite" aria-atomic="true" className="text-xl font-bold leading-tight">{formatMonthYear(currentDate, locale)}</h1>
+                        <h1 aria-live="polite" aria-atomic="true" className="text-xl font-bold leading-tight">
+                            {formatMonthYear(currentDate, locale)}
+                        </h1>
                         <span className="text-xs text-muted-foreground">{t.pageCalendarWeekLabel(weekNum)}</span>
                     </div>
                 </div>
                 <nav aria-label={t.pageCalendarNavigation} className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
-                        <Button size="small" title={t.pageCalendarPrevious} aria-label={t.pageCalendarPrevious} theme="ghost-muted" onClick={handlePrev}>
-                            <ChevronLeft size={16} />
+                        <Button
+                            size="small"
+                            title={t.pageCalendarPrevious}
+                            aria-label={t.pageCalendarPrevious}
+                            theme="ghost-muted"
+                            onClick={handlePrev}
+                        >
+                            <CaretLeftIcon size={16} />
                         </Button>
                         <button
                             type="button"
@@ -88,7 +99,7 @@ export function CalendarHeader({
                             {t.pageCalendarToday}
                         </button>
                         <Button size="small" title={t.pageCalendarNext} aria-label={t.pageCalendarNext} theme="ghost-muted" onClick={handleNext}>
-                            <ChevronRight size={16} />
+                            <CaretRightIcon size={16} />
                         </Button>
                     </div>
                     <div className="flex rounded-md">
@@ -107,7 +118,7 @@ export function CalendarHeader({
                     </div>
                     {onAddEvent && (
                         <Button theme="primary" size="small" onClick={onAddEvent}>
-                            <PlusCircle size={14} />
+                            <PlusCircleIcon size={14} />
                             {t.pageCalendarAddEvent}
                         </Button>
                     )}
@@ -116,7 +127,7 @@ export function CalendarHeader({
             {filterArea ??
                 (filters.length > 0 && (
                     <div role="group" aria-label={t.pageCalendarFilter} className="flex flex-wrap items-center gap-1.5">
-                        <Calendar size={14} className="text-muted-foreground" aria-hidden="true" />
+                        <CalendarIcon size={14} className="text-muted-foreground" aria-hidden="true" />
                         <span className="mr-1 text-xs text-muted-foreground">{t.pageCalendarFilter}</span>
                         {filters.map((filter) => (
                             <Tag

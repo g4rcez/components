@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRightIcon } from "lucide-react";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
 import { Alert, Button, Modal } from "../../../lib/src";
@@ -20,12 +20,8 @@ export const Showcase = () => {
         Our components
       </h2>
       <div className="flex justify-center w-full gap-4">
-        <Button onClick={() => setState({ type: "dialog" })}>
-          Dialog
-        </Button>
-        <Button onClick={() => setState({ type: "drawer" })}>
-          Drawer
-        </Button>
+        <Button onClick={() => setState({ type: "dialog" })}>Dialog</Button>
+        <Button onClick={() => setState({ type: "drawer" })}>Drawer</Button>
       </div>
       <Modal
         type={state?.type}
@@ -45,7 +41,7 @@ export const Showcase = () => {
           description="Click here and open a modal"
           leading={({ open }) => (
             <Button onClick={open} theme="raw">
-              <ChevronRightIcon aria-hidden />
+              <CaretRightIcon aria-hidden />
             </Button>
           )}
         >
@@ -59,7 +55,7 @@ export const Showcase = () => {
           description="All elements that you need"
           leading={({ open }) => (
             <Button onClick={open} theme="raw">
-              <ChevronRightIcon aria-hidden />
+              <CaretRightIcon aria-hidden />
             </Button>
           )}
         >
@@ -83,7 +79,7 @@ export const Showcase = () => {
           description="Click here and open a modal"
           leading={({ open }) => (
             <Button onClick={open} theme="raw">
-              <ChevronRightIcon aria-hidden />
+              <CaretRightIcon aria-hidden />
             </Button>
           )}
         >

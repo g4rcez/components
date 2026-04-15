@@ -1,7 +1,7 @@
 "use client";
 import { AnimatePresence, motion, PanInfo, Reorder } from "motion/react";
 import { Order } from "linq-arrays";
-import { PlusIcon, SearchCheckIcon, SearchXIcon } from "lucide-react";
+import { PlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
 import React, { Fragment, useCallback, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
@@ -32,7 +32,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
     const defaultAllowSort = props.header.allowSort ?? tweaks.table.sorters ?? true;
     const defaultAllowFilter = props.header.allowFilter ?? tweaks.table.filters ?? true;
     const operators = useOperators();
-    const FilterIcon = hasFilters ? SearchCheckIcon : SearchXIcon;
+    const FilterIcon = hasFilters ? MagnifyingGlassIcon : MagnifyingGlassMinusIcon;
     const th = useRef<HTMLTableCellElement | null>(null);
 
     const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -78,7 +78,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`typography bg-table-header first:rounded-tl-lg last:rounded-tr-lg overflow-clip last:border-r-transparent border-table-border border-r-[1px] relative min-w-0 cursor-grab font-medium md:h-14 ${props.header.thProps?.className ?? ""}`}
+            className={`typography relative min-w-0 cursor-grab overflow-clip border-r-[1px] border-table-border bg-table-header font-medium first:rounded-tl-lg last:rounded-tr-lg last:border-r-transparent md:h-14 ${props.header.thProps?.className ?? ""}`}
         >
             <span
                 className={`flex h-full items-center justify-between bg-table-header p-[var(--table-cell-padding)] ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}

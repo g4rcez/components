@@ -22,7 +22,7 @@ import { Stats } from "@g4rcez/components/stats";
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `Label` | — | Metric label displayed above the value |
-| `Icon` | `React.FC<{ className: string }>` | — | Icon component to display (Lucide recommended) |
+| `Icon` | `React.FC<{ className: string }>` | — | Icon component to display (Phosphor recommended) |
 | `iconContainer` | `string` | — | Additional classes for the icon background container |
 | `footer` | `React.ReactElement` | — | Optional footer area for trend data or context |
 | `children` | `React.ReactNode` | — | The metric value (e.g. a number, formatted string) |
@@ -46,7 +46,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ### Basic Metric
 
 ```tsx
-import { UsersIcon } from "lucide-react";
+import { UsersIcon } from "@phosphor-icons/react";
 
 <Stats title="Active Users" Icon={UsersIcon}>
   1,234
@@ -56,15 +56,15 @@ import { UsersIcon } from "lucide-react";
 ### With Footer Trend
 
 ```tsx
-import { TrendingUpIcon, DollarSignIcon } from "lucide-react";
+import { TrendUpIcon, CurrencyDollarIcon } from "@phosphor-icons/react";
 
 <Stats
   title="Revenue"
-  Icon={DollarSignIcon}
+  Icon={CurrencyDollarIcon}
   iconContainer="bg-success"
   footer={
     <div className="flex items-center gap-1 text-success text-sm font-medium">
-      <TrendingUpIcon size={14} />
+      <TrendUpIcon size={14} />
       <span>+12% from last month</span>
     </div>
   }
@@ -76,11 +76,11 @@ import { TrendingUpIcon, DollarSignIcon } from "lucide-react";
 ### Custom Icon Container Theme
 
 ```tsx
-import { AlertCircleIcon } from "lucide-react";
+import { WarningCircleIcon } from "@phosphor-icons/react";
 
 <Stats
   title="Error Rate"
-  Icon={AlertCircleIcon}
+  Icon={WarningCircleIcon}
   iconContainer="bg-danger"
 >
   0.3%
@@ -90,7 +90,7 @@ import { AlertCircleIcon } from "lucide-react";
 ### Dashboard Grid
 
 ```tsx
-import { UsersIcon, ClockIcon, TargetIcon } from "lucide-react";
+import { UsersIcon, ClockIcon, TargetIcon } from "@phosphor-icons/react";
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
   <Stats title="Users" Icon={UsersIcon}>1.2k</Stats>
@@ -102,10 +102,10 @@ import { UsersIcon, ClockIcon, TargetIcon } from "lucide-react";
 ### With Skeleton Loading
 
 ```tsx
-import { BarChartIcon } from "lucide-react";
+import { ChartBarIcon } from "@phosphor-icons/react";
 import { Skeleton } from "@g4rcez/components";
 
-<Stats title="Page Views" Icon={BarChartIcon}>
+<Stats title="Page Views" Icon={ChartBarIcon}>
   {isLoading ? <Skeleton className="h-9 w-24" /> : "48,301"}
 </Stats>
 ```
@@ -127,7 +127,7 @@ import { Skeleton } from "@g4rcez/components";
 ## Accessibility
 
 - The metric label uses an `<h3>` element for proper heading hierarchy within a dashboard context.
-- The icon renders via `props.Icon` with a `className` prop applied; Lucide icons include accessible SVG structure.
+- The icon renders via `props.Icon` with a `className` prop applied; Phosphor icons include accessible SVG structure.
 - Consider adding `aria-label` to the icon container if the icon carries essential meaning not conveyed by the title.
 
 ## Notes

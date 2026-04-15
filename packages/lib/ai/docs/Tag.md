@@ -101,7 +101,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ### With Icons
 
 ```tsx
-import { StarIcon, CheckIcon } from "lucide-react";
+import { StarIcon, CheckIcon } from "@phosphor-icons/react";
 
 <Tag icon={<StarIcon size={14} />} theme="warn">Featured</Tag>
 <Tag icon={<CheckIcon size={14} />} theme="success">Completed</Tag>
@@ -174,7 +174,7 @@ const categories = [
 ### Notification Badge
 
 ```tsx
-import { BellIcon } from "lucide-react";
+import { BellIcon } from "@phosphor-icons/react";
 
 <div className="relative">
   <BellIcon size={24} />

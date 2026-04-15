@@ -9,7 +9,7 @@ import {
   Tooltip,
   Tag,
 } from "../../../../../lib/src";
-import { FilterIcon } from "lucide-react";
+import { FunnelIcon } from "@phosphor-icons/react";
 
 export default function FilterBarPage() {
   return (
@@ -23,7 +23,7 @@ export default function FilterBarPage() {
         description="Demonstrates a filter bar with an input search, a date picker, and a text input, each with tooltips for enhanced usability."
         code={`"use client";
 import { Button, DatePicker, Input, Tooltip, Tag } from "@g4rcez/components";
-import { FilterIcon } from "lucide-react";
+import { FunnelIcon } from "@phosphor-icons/react";
 
 function InteractiveFilterBar() {
   return (
@@ -68,7 +68,7 @@ function InteractiveFilterBar() {
         />
       </Tooltip>
       <Button size="small">
-        <FilterIcon />
+        <FunnelIcon />
       </Button>
     </div>
   );
@@ -116,7 +116,7 @@ function InteractiveFilterBar() {
               />
             </Tooltip>
             <Button size="small">
-              <FilterIcon />
+              <FunnelIcon />
             </Button>
           </div>
         </Card>

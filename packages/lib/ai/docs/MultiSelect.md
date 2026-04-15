@@ -113,7 +113,7 @@ export default function ControlledMultiSelect() {
 ### Custom option rendering
 
 ```tsx
-import { ShieldIcon } from "lucide-react";
+import { ShieldIcon } from "@phosphor-icons/react";
 import { MultiSelect } from "@g4rcez/components";
 
 const roleOptions = roles.map((r) => ({

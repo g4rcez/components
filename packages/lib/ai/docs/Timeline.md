@@ -70,7 +70,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ### Order Tracking Timeline
 
 ```tsx
-import { CheckIcon, PackageIcon, TruckIcon } from "lucide-react";
+import { CheckIcon, PackageIcon, TruckIcon } from "@phosphor-icons/react";
 
 <Timeline>
   <TimelineItem>
@@ -128,12 +128,12 @@ import { CheckIcon, PackageIcon, TruckIcon } from "lucide-react";
 ### Activity Feed
 
 ```tsx
-import { UserIcon, EditIcon, TrashIcon } from "lucide-react";
+import { UserIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 
 function ActivityFeed({ events }: { events: ActivityEvent[] }) {
   const iconMap = {
     create: UserIcon,
-    update: EditIcon,
+    update: PencilSimpleIcon,
     delete: TrashIcon,
   };
 
@@ -164,11 +164,11 @@ function ActivityFeed({ events }: { events: ActivityEvent[] }) {
 ### Custom Icon Background
 
 ```tsx
-import { AlertCircleIcon } from "lucide-react";
+import { WarningCircleIcon } from "@phosphor-icons/react";
 
 <TimelineItem>
   <TimelineItem.Icon className="bg-danger text-danger-foreground">
-    <AlertCircleIcon size={20} />
+    <WarningCircleIcon size={20} />
   </TimelineItem.Icon>
   <TimelineItem.Body>
     <h4 className="font-bold text-danger-foreground">Deployment Failed</h4>

@@ -226,7 +226,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
 ### Row-level actions with Aside
 
 ```tsx
-import { TrashIcon, PencilIcon } from "lucide-react";
+import { TrashIcon, PencilIcon } from "@phosphor-icons/react";
 
 <Table
   name="contacts"

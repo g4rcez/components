@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { codeToHtml } from "shiki";
-import { CheckIcon, CopyIcon } from "lucide-react";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 import { Button, Tag } from "../../../lib/src";
 
 type CodeBlockProps = {

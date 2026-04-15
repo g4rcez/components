@@ -80,7 +80,7 @@ export default function RoleAssignment() {
 ### With custom item rendering
 
 ```tsx
-import { ShieldIcon } from "lucide-react";
+import { ShieldIcon } from "@phosphor-icons/react";
 import { TransferList } from "@g4rcez/components/transfer-list";
 
 type Permission = { id: string; label: string; scope: string };
@@ -128,7 +128,7 @@ export default function PermissionManager() {
 
 - Each item is rendered with a `Checkbox` for selection, giving it full keyboard and screen-reader support.
 - Lists are virtualized using `react-virtuoso` for performance with large datasets.
-- Transfer buttons use `ChevronRightIcon` from `lucide-react` and should have descriptive `aria-label` attributes when used.
+- Transfer buttons use `CaretRightIcon` from `@phosphor-icons/react` and should have descriptive `aria-label` attributes when used.
 
 ## Data Attributes
 

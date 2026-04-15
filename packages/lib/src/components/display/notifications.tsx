@@ -1,7 +1,7 @@
 "use client";
 import { Toast as Base } from "@base-ui/react/toast";
 import { cva, type VariantProps } from "class-variance-authority";
-import { XIcon, CheckCircleIcon, TriangleAlertIcon, InfoIcon, Loader2Icon } from "lucide-react";
+import { XIcon, CheckCircleIcon, WarningIcon, InfoIcon, CircleNotchIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { createContext, type PropsWithChildren, useCallback, useContext, useRef } from "react";
 import { useHover } from "../../hooks/use-hover";
@@ -29,9 +29,9 @@ const variants = cva(
 const themeIcons = {
     default: InfoIcon,
     info: InfoIcon,
-    warn: TriangleAlertIcon,
+    warn: WarningIcon,
     muted: InfoIcon,
-    danger: TriangleAlertIcon,
+    danger: WarningIcon,
     success: CheckCircleIcon,
     secondary: InfoIcon,
 };
@@ -70,7 +70,7 @@ function Notification(props: NotificationItemProps) {
     const loading = props.toast.data?.loading ?? false;
     const theme = props.toast.data?.theme || "default";
     const className = variants({ theme });
-    const Icon = loading ? Loader2Icon : themeIcons[theme] || InfoIcon;
+    const Icon = loading ? CircleNotchIcon : themeIcons[theme] || InfoIcon;
 
     return (
         <Base.Root toast={props.toast} swipeDirection="right">

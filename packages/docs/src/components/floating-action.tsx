@@ -7,9 +7,9 @@ import {
   BookOpenIcon,
   CodeIcon,
   RocketIcon,
-  HelpCircleIcon,
-  ExternalLinkIcon,
-} from "lucide-react";
+  QuestionIcon,
+  ArrowSquareOutIcon,
+} from "@phosphor-icons/react";
 
 const quickLinks = [
   {
@@ -37,7 +37,7 @@ const quickLinks = [
     title: "GitHub",
     description: "View source code and contribute",
     href: "https://github.com/g4rcez/components",
-    icon: <ExternalLinkIcon className="w-5 h-5" />,
+    icon: <ArrowSquareOutIcon className="w-5 h-5" />,
     color: "bg-gray-700",
     external: true,
   },
@@ -56,7 +56,7 @@ export const FloatingAction = () => {
           onClick={() => setIsOpen(true)}
           className="w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
         >
-          <HelpCircleIcon className="w-6 h-6" />
+          <QuestionIcon className="w-6 h-6" />
         </Button>
       </div>
 
@@ -96,7 +96,7 @@ export const FloatingAction = () => {
                         {link.description}
                       </p>
                     </div>
-                    <ExternalLinkIcon className="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                    <ArrowSquareOutIcon className="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                   </a>
                 ) : (
                   <Link

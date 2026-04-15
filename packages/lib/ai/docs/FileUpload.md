@@ -116,11 +116,11 @@ function AvatarUpload() {
 ### Custom idle state
 
 ```tsx
-import { UploadCloudIcon } from "lucide-react";
+import { UploadSimpleIcon } from "@phosphor-icons/react";
 
 const CustomIdle = () => (
   <div className="flex flex-col items-center gap-2 py-10">
-    <UploadCloudIcon size={48} className="text-primary" />
+    <UploadSimpleIcon size={48} className="text-primary" />
     <p className="text-foreground font-medium">Drop files here</p>
     <p className="text-muted-foreground text-sm">PDF, DOCX, up to 10 MB each</p>
   </div>

@@ -1,8 +1,8 @@
-import { type LucideProps, FileIcon } from "lucide-react";
+import { FileIcon, type Icon } from "@phosphor-icons/react";
 import React from "react";
 import { useTranslations } from "../../hooks/use-translations";
 
-export type EmptyProps = { Icon?: React.FC<LucideProps>; message?: string };
+export type EmptyProps = { Icon?: Icon; message?: string };
 
 export const Empty = (props: EmptyProps) => {
     const Icon = props.Icon ?? FileIcon;

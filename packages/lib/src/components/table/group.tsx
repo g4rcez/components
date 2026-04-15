@@ -1,7 +1,7 @@
 "use client";
 import { LayoutGroup, Reorder, useDragControls, useMotionValue } from "motion/react";
 import Linq from "linq-arrays";
-import { GripVerticalIcon, Trash2Icon, UngroupIcon } from "lucide-react";
+import { DotsSixVerticalIcon, TrashIcon, StackMinusIcon } from "@phosphor-icons/react";
 import React, { Fragment, useState } from "react";
 import { keys } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
@@ -40,7 +40,7 @@ const Item = ({ item, onPointerDown }: { item: GroupItem<any>; onPointerDown: an
             style={{ y }}
         >
             <button type="button" className="cursor-grab">
-                <GripVerticalIcon size={14} />
+                <DotsSixVerticalIcon size={14} />
             </button>
             <span>{item.groupName}</span>
         </Reorder.Item>
@@ -78,7 +78,7 @@ export const Group = <T extends object>(props: Props<T>) => {
                 title={translations.tableGroupLabel}
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
-                        <UngroupIcon size={14} />
+                        <StackMinusIcon size={14} />
                         {translations.tableGroupLabelWithCount}
                         {props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
                     </span>
@@ -87,7 +87,7 @@ export const Group = <T extends object>(props: Props<T>) => {
                 <div className="flex flex-nowrap items-center">
                     <Select value={group} title="Tipo de agrupamento" onChange={onChange} options={options} placeholder="Agrupar por..." />
                     <Button className="mt-4" onClick={onDelete} theme="raw" data-id={group}>
-                        <Trash2Icon size={16} className="text-danger" />
+                        <TrashIcon size={16} className="text-danger" />
                     </Button>
                 </div>
                 {props.groups.length > 0 ? (

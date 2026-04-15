@@ -1,5 +1,5 @@
 "use client";
-import { ArrowDown01Icon, ArrowUp01Icon, ArrowUpDownIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { SortAscendingIcon, SortDescendingIcon, CaretUpDownIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
@@ -82,7 +82,7 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                 title={translation.tableSortDropdownTitle}
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
-                        <ArrowUpDownIcon size={14} />
+                        <CaretUpDownIcon size={14} />
                         {translation.tableSortOrderByLabel} {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
                     </span>
                 }
@@ -106,7 +106,7 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                                     placeholder={translation.tableSortTypeInputPlaceholder}
                                 />
                                 <button className="mt-4" data-id={sorter.id} onClick={onDelete}>
-                                    <Trash2Icon className="text-danger" size={14} />
+                                    <TrashIcon className="text-danger" size={14} />
                                 </button>
                             </li>
                         );
@@ -153,9 +153,9 @@ export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
             <span id={labelId} className="sr-only">
                 {translations.tableSortDropdownTitle} {label}
             </span>
-            {status === Order.Asc ? <ArrowUp01Icon size={14} /> : null}
-            {status === Order.Desc ? <ArrowDown01Icon size={14} /> : null}
-            {status === Order.Undefined ? <ArrowUpDownIcon size={14} /> : null}
+            {status === Order.Asc ? <SortAscendingIcon size={14} /> : null}
+            {status === Order.Desc ? <SortDescendingIcon size={14} /> : null}
+            {status === Order.Undefined ? <CaretUpDownIcon size={14} /> : null}
         </button>
     );
 };

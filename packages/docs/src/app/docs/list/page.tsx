@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { ChevronRightIcon } from "lucide-react";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import {
   Button,
   Card,
@@ -11,12 +11,16 @@ import {
 
 export default function ListPage() {
   return (
-    <DocsLayout title="AnimatedList" section="display" description="A list component with smooth item animations and detail modals.">
+    <DocsLayout
+      title="AnimatedList"
+      section="display"
+      description="A list component with smooth item animations and detail modals."
+    >
       <ComponentDemo
         title="Basic AnimatedList Usage"
         description="Demonstrates a list of animated items that reveal additional content in a modal when clicked."
         code={`"use client";
-import { ChevronRightIcon } from "lucide-react";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import { Button, AnimatedList, AnimatedListItem } from "@g4rcez/components";
 import Link from "next/link"; // Assuming Link is available or adjust based on project context
 
@@ -28,7 +32,7 @@ function BasicAnimatedList() {
         description="Click here and open a modal"
         leading={({ open }) => (
           <Button onClick={open} theme="raw">
-            <ChevronRightIcon aria-hidden />
+            <CaretRightIcon aria-hidden />
           </Button>
         )}
       >
@@ -40,7 +44,7 @@ function BasicAnimatedList() {
         description="All elements that you need"
         leading={({ open }) => (
           <Button onClick={open} theme="raw">
-            <ChevronRightIcon aria-hidden />
+            <CaretRightIcon aria-hidden />
           </Button>
         )}
       >
@@ -64,7 +68,7 @@ function BasicAnimatedList() {
         description="Click here and open a modal"
         leading={({ open }) => (
           <Button onClick={open} theme="raw">
-            <ChevronRightIcon aria-hidden />
+            <CaretRightIcon aria-hidden />
           </Button>
         )}
       >
@@ -82,21 +86,21 @@ function BasicAnimatedList() {
               description="Click here and open a modal"
               leading={({ open }) => (
                 <Button onClick={open} theme="raw">
-                  <ChevronRightIcon aria-hidden />
+                  <CaretRightIcon aria-hidden />
                 </Button>
               )}
             >
-              Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
-              tempor incidunt ut labore et dolore magna aliqua. Lorem ipsum dolor
-              sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut
-              labore et dolore magna aliqua.
+              Lorem ipsum dolor sit amet, consectetur adipisici elit, sed
+              eiusmod tempor incidunt ut labore et dolore magna aliqua. Lorem
+              ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+              tempor incidunt ut labore et dolore magna aliqua.
             </AnimatedListItem>
             <AnimatedListItem
               title="Form"
               description="All elements that you need"
               leading={({ open }) => (
                 <Button onClick={open} theme="raw">
-                  <ChevronRightIcon aria-hidden />
+                  <CaretRightIcon aria-hidden />
                 </Button>
               )}
             >
@@ -113,14 +117,14 @@ function BasicAnimatedList() {
               description="Click here and open a modal"
               leading={({ open }) => (
                 <Button onClick={open} theme="raw">
-                  <ChevronRightIcon aria-hidden />
+                  <CaretRightIcon aria-hidden />
                 </Button>
               )}
             >
-              Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
-              tempor incidunt ut labore et dolore magna aliqua. Lorem ipsum dolor
-              sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut
-              labore et dolore magna aliqua.
+              Lorem ipsum dolor sit amet, consectetur adipisici elit, sed
+              eiusmod tempor incidunt ut labore et dolore magna aliqua. Lorem
+              ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+              tempor incidunt ut labore et dolore magna aliqua.
             </AnimatedListItem>
           </AnimatedList>
         </Card>

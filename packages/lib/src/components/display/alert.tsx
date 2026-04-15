@@ -1,7 +1,7 @@
 "use client";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
-import { CheckCircleIcon, InfoIcon, TriangleAlertIcon, XIcon } from "lucide-react";
+import { CheckCircleIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
 import React, { forwardRef, PropsWithChildren } from "react";
 import { css } from "../../lib/dom";
 import { CvaVariants } from "../../types";
@@ -104,7 +104,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                                 <div className={css("flex items-center gap-2", props.title ? "" : "w-fit")}>
                                     {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" size={20} /> : null}
                                     {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" size={20} /> : null}
-                                    {!Icon && theme === "danger" ? <TriangleAlertIcon aria-hidden="true" size={20} /> : null}
+                                    {!Icon && theme === "danger" ? <WarningIcon aria-hidden="true" size={20} /> : null}
                                     {Icon}
                                 </div>
                                 {props.title ? <h4 className="tracking-3 col-start-2 text-balance text-lg font-semibold">{props.title}</h4> : null}

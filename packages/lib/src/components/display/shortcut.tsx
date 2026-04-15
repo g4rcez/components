@@ -1,4 +1,4 @@
-import { CommandIcon, OptionIcon } from "lucide-react";
+import { CommandIcon, OptionIcon } from "@phosphor-icons/react";
 import { Fragment } from "react";
 import { isMac } from "../../lib/combi-keys";
 

@@ -1,6 +1,6 @@
 "use client";
 import { format, isValid, Locale, parse, startOfDay } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
 import { useLocale } from "../../hooks/use-locale";

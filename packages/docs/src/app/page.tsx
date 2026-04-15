@@ -6,8 +6,8 @@ import {
   ArrowRightIcon,
   PaletteIcon,
   ShieldCheckIcon,
-  ZapIcon,
-} from "lucide-react";
+  LightningIcon,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 import { Button } from "../../../lib/src/components/core/button";
 import { Tag } from "../../../lib/src/components/core/tag";
@@ -81,7 +81,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: <ZapIcon className="size-6 text-primary" />,
+                icon: <LightningIcon className="size-6 text-primary" />,
                 title: "Optimized Performance",
                 description:
                   "Zero unnecessary dependencies. Tree-shakeable by default for minimal bundle impact.",

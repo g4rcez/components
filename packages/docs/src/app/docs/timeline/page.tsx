@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { ChevronRightIcon, Clock7Icon } from "lucide-react";
+import { CaretRightIcon, ClockIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
   Button,
@@ -37,7 +37,7 @@ export default function TimelinePage() {
         title="Basic Timeline with Details"
         description="A timeline displaying a list of events. Clicking 'See details' opens a modal with more information for that event."
         code={`"use client";
-import { ChevronRightIcon, Clock7Icon } from "lucide-react";
+import { CaretRightIcon, ClockIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
   Button,
@@ -75,7 +75,7 @@ function BasicTimeline() {
                     i % 2 === 0 ? "bg-warn" : i % 3 === 0 ? "bg-info" : ""
                   }
                 >
-                  <Clock7Icon />
+                  <ClockIcon />
                 </TimelineItem.Icon>
                 <TimelineItem.Body className="flex flex-col gap-2">
                   <span className="flex flex-col gap-1">
@@ -111,7 +111,7 @@ function BasicTimeline() {
                     className="text-sm text-secondary"
                     onClick={() => setState({ name: \`Name \${i + 1}\` })}
                   >
-                    See details <ChevronRightIcon size={18} />
+                    See details <CaretRightIcon size={18} />
                   </Button>
                 </TimelineItem.Right>
               </TimelineItem>
@@ -134,7 +134,7 @@ function BasicTimeline() {
                       i % 2 === 0 ? "bg-warn" : i % 3 === 0 ? "bg-info" : ""
                     }
                   >
-                    <Clock7Icon />
+                    <ClockIcon />
                   </TimelineItem.Icon>
                   <TimelineItem.Body className="flex flex-col gap-2">
                     <span className="flex flex-col gap-1">
@@ -170,7 +170,7 @@ function BasicTimeline() {
                       className="text-sm text-secondary"
                       onClick={() => setState({ name: `Name ${i + 1}` })}
                     >
-                      See details <ChevronRightIcon size={18} />
+                      See details <CaretRightIcon size={18} />
                     </Button>
                   </TimelineItem.Right>
                 </TimelineItem>

@@ -1,5 +1,5 @@
 "use client";
-import { CheckCircle, InfoIcon, XCircle } from "lucide-react";
+import { CheckCircleIcon, InfoIcon, XCircleIcon } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
@@ -36,7 +36,7 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                                 aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}` : undefined}
                                 title={
                                     <span className="cursor-help">
-                                        <InfoIcon className="aspect-square size-3" aria-hidden="true" size={16} strokeWidth={1} absoluteStrokeWidth />
+                                        <InfoIcon className="aspect-square size-3" aria-hidden="true" size={16} />
                                     </span>
                                 }
                             >
@@ -50,19 +50,15 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                         ) : null}
                         {reportStatus ? (
                             <span className="flex h-3 min-w-6 items-center">
-                                <CheckCircle
+                                <CheckCircleIcon
                                     className="hidden aspect-square size-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100"
                                     aria-hidden="true"
                                     size={16}
-                                    strokeWidth={1}
-                                    absoluteStrokeWidth
                                 />
-                                <XCircle
+                                <XCircleIcon
                                     className="hidden aspect-square size-3 opacity-0 transition-opacity group-error:block group-error:opacity-100"
                                     aria-hidden="true"
                                     size={16}
-                                    strokeWidth={1}
-                                    absoluteStrokeWidth
                                 />
                             </span>
                         ) : null}

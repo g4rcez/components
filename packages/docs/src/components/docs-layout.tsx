@@ -1,7 +1,7 @@
 "use client";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { Tag, type Label } from "../../../lib/src";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { sections } from "../config/navigation";
 import Link from "next/link";

@@ -46,7 +46,7 @@ The `Expand` component itself only renders the trigger button and an animated wr
 ### Action FAB
 
 ```tsx
-import { PlusIcon } from "lucide-react";
+import { PlusIcon } from "@phosphor-icons/react";
 import { Expand } from "@g4rcez/components/expand";
 
 <Expand

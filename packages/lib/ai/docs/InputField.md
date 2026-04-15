@@ -73,14 +73,14 @@ import { InputField } from "@g4rcez/components";
 ### With info tooltip and error
 
 ```tsx
-import { SearchIcon, CheckIcon } from "lucide-react";
+import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 <InputField
   title="API Key"
   name="api_key"
   info="Your secret API key from the developer portal."
   error={apiKeyError}
-  left={<SearchIcon size={16} className="text-muted-foreground" />}
+  left={<MagnifyingGlassIcon size={16} className="text-muted-foreground" />}
   right={isValid ? <CheckIcon size={16} className="text-success" /> : null}
   required
 >

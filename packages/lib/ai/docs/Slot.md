@@ -92,7 +92,7 @@ const StyledButton = ({ asChild, children, ...props }: ButtonProps) => {
 When your component wraps children with additional internal elements, use `Slottable` to mark which child is the slot target.
 
 ```tsx
-import { CheckIcon } from "lucide-react";
+import { CheckIcon } from "@phosphor-icons/react";
 
 const IconButton = ({ asChild, children, ...props }: { asChild?: boolean; children: React.ReactNode }) => {
   const Component = asChild ? Slot : "button";

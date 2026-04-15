@@ -13,7 +13,7 @@ import {
     useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
-import { ChevronDown } from "lucide-react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
@@ -275,7 +275,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     <span className="flex items-center gap-0.5">
                         {right}
                         <button type="button" className="p-2 transition-colors link:text-primary md:p-1" onClick={onCaretDownClick}>
-                            <ChevronDown size={20} />
+                            <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
                         {value ? (

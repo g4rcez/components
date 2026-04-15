@@ -1,5 +1,6 @@
 "use client";
 import React, { PropsWithChildren, useMemo } from "react";
+import { IconContext } from "@phosphor-icons/react";
 import { Locales } from "the-mask-input";
 import { parsers } from "../styles/design-tokens";
 import { Context, ContextProps } from "../config/context";
@@ -27,8 +28,10 @@ export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
         [props]
     );
     return (
-        <Context.Provider value={memoMap}>
-            <ModalConfirmProvider>{props.children}</ModalConfirmProvider>
-        </Context.Provider>
+        <IconContext.Provider value={{ weight: props.iconWeight ?? "regular" }}>
+            <Context.Provider value={memoMap}>
+                <ModalConfirmProvider>{props.children}</ModalConfirmProvider>
+            </Context.Provider>
+        </IconContext.Provider>
     );
 };

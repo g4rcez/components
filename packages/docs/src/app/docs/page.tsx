@@ -3,7 +3,7 @@ import { ComponentDemo } from "@/components/component-demo";
 import { CodeBlock } from "@/components/code-block";
 import { Button } from "../../../../lib/src";
 import Link from "next/link";
-import { SparklesIcon } from "lucide-react";
+import { SparkleIcon } from "@phosphor-icons/react";
 
 export default function DocsPage() {
   return (
@@ -18,8 +18,10 @@ export default function DocsPage() {
             Welcome to the Documentation
           </h2>
           <p className="leading-relaxed">
-            This library provides a comprehensive set of accessible, customizable, and performant React components built with TypeScript and Tailwind CSS.
-            Explore the examples to see how you can build stunning user interfaces.
+            This library provides a comprehensive set of accessible,
+            customizable, and performant React components built with TypeScript
+            and Tailwind CSS. Explore the examples to see how you can build
+            stunning user interfaces.
           </p>
         </div>
         <ComponentDemo
@@ -38,12 +40,12 @@ export default function DocsPage() {
           description="See a simple component in action."
           code={`"use client";
 import { Button } from "@g4rcez/components";
-import { SparklesIcon } from "lucide-react";
+import { SparkleIcon } from "@phosphor-icons/react";
 
 function BasicUsage() {
   return (
     <Button theme="primary">
-      <SparklesIcon className="w-4 h-4 mr-2" />
+      <SparkleIcon className="w-4 h-4 mr-2" />
       Hello, Component!
     </Button>
   );
@@ -51,7 +53,7 @@ function BasicUsage() {
 `}
         >
           <Button theme="primary">
-            <SparklesIcon className="size-4 mr-2" />
+            <SparkleIcon className="size-4 mr-2" />
             Hello, Component!
           </Button>
         </ComponentDemo>

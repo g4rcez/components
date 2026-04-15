@@ -90,7 +90,7 @@ export function TeamList() {
 
 ```tsx
 import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
-import { UserCircleIcon } from "lucide-react";
+import { UserCircleIcon } from "@phosphor-icons/react";
 
 export function UserDirectory() {
   return (
@@ -142,11 +142,11 @@ export function OrderList({ orders }: { orders: Order[] }) {
 
 ```tsx
 import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
-import { BellIcon, CheckCircleIcon, AlertTriangleIcon } from "lucide-react";
+import { BellIcon, CheckCircleIcon, WarningIcon } from "@phosphor-icons/react";
 
 const activities = [
   { id: "a1", icon: <CheckCircleIcon size={20} className="text-success" />, title: "Deployment succeeded", description: "2 minutes ago", detail: "All 3 services started." },
-  { id: "a2", icon: <AlertTriangleIcon size={20} className="text-warn" />, title: "High memory usage", description: "15 minutes ago", detail: "Instance i-0ab2c was at 91%." },
+  { id: "a2", icon: <WarningIcon size={20} className="text-warn" />, title: "High memory usage", description: "15 minutes ago", detail: "Instance i-0ab2c was at 91%." },
 ];
 
 export function ActivityFeed() {

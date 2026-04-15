@@ -1,5 +1,5 @@
 import { Symbols } from "linq-arrays";
-import { ListFilterIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { FunnelIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import React, { Fragment, useMemo } from "react";
 import { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
@@ -150,7 +150,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 title={translation.tableFilterDropdownTitle}
                 trigger={
                     <span className="flex items-center gap-1 proportional-nums">
-                        <ListFilterIcon size={14} />
+                        <FunnelIcon size={14} />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
@@ -187,7 +187,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                 />
                                 <div className="mt-5 flex items-center justify-center">
                                     <button data-id={filter.id} type="button" onClick={onDelete}>
-                                        <Trash2Icon className="text-danger" size={16} />
+                                        <TrashIcon className="text-danger" size={16} />
                                     </button>
                                 </div>
                             </li>
@@ -255,7 +255,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 placeholder={translation.tableFilterValueTitle}
             />
             <button onClick={onDelete} data-id={filter.id} type="button" className="mt-4">
-                <Trash2Icon className="text-danger" size={14} />
+                <TrashIcon className="text-danger" size={14} />
             </button>
         </div>
     );

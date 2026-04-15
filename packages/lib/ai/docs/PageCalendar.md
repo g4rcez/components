@@ -158,7 +158,7 @@ export function FilteredCalendar() {
 
 ```tsx
 import { PageCalendar } from "@g4rcez/components";
-import { MapPinIcon } from "lucide-react";
+import { MapPinIcon } from "@phosphor-icons/react";
 
 export function DetailCalendar() {
   return (

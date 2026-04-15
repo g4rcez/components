@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@g4rcez/components": "workspace:*",
+    "@phosphor-icons/react": "2.1.10",
     "date-fns": "4.1.0",
-    "lucide-react": "0.562.0",
     "motion": "12.23.26",
     "next": "16.1.1",
     "react": "19.2.3",

@@ -129,12 +129,12 @@ const docMask = (value: string) =>
 ### Input with inline left/right slots
 
 ```tsx
-import { SearchIcon } from "lucide-react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 <Input
   name="search"
   title="Search"
-  left={<SearchIcon size={16} className="text-muted-foreground" />}
+  left={<MagnifyingGlassIcon size={16} className="text-muted-foreground" />}
   placeholder="Type to search..."
 />
 ```

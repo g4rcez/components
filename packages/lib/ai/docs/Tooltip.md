@@ -67,11 +67,11 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 ### Icon Button with Label
 
 ```tsx
-import { SaveIcon } from "lucide-react";
+import { FloppyDiskIcon } from "@phosphor-icons/react";
 import { Tooltip } from "@g4rcez/components/tooltip";
 import { Button } from "@g4rcez/components/button";
 
-<Tooltip title={<Button size="icon" theme="ghost-neutral"><SaveIcon size={16} /></Button>}>
+<Tooltip title={<Button size="icon" theme="ghost-neutral"><FloppyDiskIcon size={16} /></Button>}>
   Save (Ctrl+S)
 </Tooltip>
 ```
@@ -187,7 +187,7 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 ### Form Field Help Tooltip
 
 ```tsx
-import { InfoIcon } from "lucide-react";
+import { InfoIcon } from "@phosphor-icons/react";
 import { Tooltip } from "@g4rcez/components/tooltip";
 
 <label className="block text-sm font-medium text-foreground mb-1">

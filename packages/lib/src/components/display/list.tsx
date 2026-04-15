@@ -11,7 +11,7 @@ import {
     useRole,
 } from "@floating-ui/react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
-import { XIcon } from "lucide-react";
+import { XIcon } from "@phosphor-icons/react";
 import React, { Fragment, PropsWithChildren, useCallback, useId, useState } from "react";
 import { Label } from "../../types";
 

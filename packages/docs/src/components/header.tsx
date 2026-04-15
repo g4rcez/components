@@ -1,7 +1,7 @@
 "use client";
 import { GithubIcon } from "@/components/icons/github";
 import { ToggleMode } from "@/components/toggle-mode";
-import { MenuIcon } from "lucide-react";
+import { ListIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ export const Header = () => {
             onClick={() => setOpen(true)}
             className="p-2 -ml-2 lg:hidden text-muted-foreground hover:text-foreground"
           >
-            <MenuIcon className="size-6" />
+            <ListIcon className="size-6" />
           </button>
           <Link href="/" className="flex items-center gap-2.5">
             <div className="size-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold">

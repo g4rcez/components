@@ -21,7 +21,7 @@ import { Empty } from "@g4rcez/components";
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `Icon` | `React.FC<LucideProps>` | `FileIcon` | Lucide icon component to display |
+| `Icon` | `Icon` | `FileIcon` | Phosphor icon component to display |
 | `message` | `string` | Localized "No data available" | Descriptive empty state message |
 
 ## Design Tokens
@@ -43,15 +43,15 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ### Custom Message and Icon
 
 ```tsx
-import { SearchXIcon } from "lucide-react";
+import { MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
 
-<Empty Icon={SearchXIcon} message="No results found" />
+<Empty Icon={MagnifyingGlassMinusIcon} message="No results found" />
 ```
 
 ### In a Data Table
 
 ```tsx
-import { DatabaseIcon } from "lucide-react";
+import { DatabaseIcon } from "@phosphor-icons/react";
 
 function DataTable({ data }: { data: Item[] }) {
   if (data.length === 0) {
@@ -69,7 +69,7 @@ function DataTable({ data }: { data: Item[] }) {
 ### In a List
 
 ```tsx
-import { InboxIcon } from "lucide-react";
+import { TrayIcon } from "@phosphor-icons/react";
 
 function TaskList({ tasks }: { tasks: Task[] }) {
   return (
@@ -77,7 +77,7 @@ function TaskList({ tasks }: { tasks: Task[] }) {
       <h2>My Tasks</h2>
 
       {tasks.length === 0 ? (
-        <Empty Icon={InboxIcon} message="No tasks yet" />
+        <Empty Icon={TrayIcon} message="No tasks yet" />
       ) : (
         <ul>
           {tasks.map((task) => (
@@ -94,7 +94,7 @@ function TaskList({ tasks }: { tasks: Task[] }) {
 
 ```tsx
 import { Button } from "@g4rcez/components/button";
-import { FolderPlusIcon } from "lucide-react";
+import { FolderPlusIcon } from "@phosphor-icons/react";
 
 function EmptyProjectsList() {
   return (
@@ -121,7 +121,7 @@ import {
   HeartIcon,
   BellIcon,
   MailIcon,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 
 // Cart
 <Empty Icon={ShoppingCartIcon} message="Your cart is empty" />
@@ -153,7 +153,7 @@ import {
 
 ## Accessibility
 
-- The icon renders at `size={64}` using a Lucide component which includes accessible SVG markup.
+- The icon renders at `size={64}` using a Phosphor component which includes accessible SVG markup.
 - The message uses a `<p>` element for semantic text.
 - Both icon and text use `text-disabled` ensuring sufficient contrast against the background.
 

@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDownIcon } from "lucide-react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
@@ -92,7 +92,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     <label htmlFor={id}>
                         {right}
                         <button onClick={onClickLabel} type="button" className="mt-2 transition-colors hover:text-primary">
-                            <ChevronDownIcon size={20} />
+                            <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
                     </label>

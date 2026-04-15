@@ -83,7 +83,7 @@ Each theme maps to a set of `bg-alert-{theme}-*` tokens and provides default ico
 ### With Custom Icon
 
 ```tsx
-import { BellIcon } from "lucide-react";
+import { BellIcon } from "@phosphor-icons/react";
 
 <Alert theme="info" title="Notification" Icon={<BellIcon size={20} />}>
   You have new messages.

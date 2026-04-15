@@ -1,16 +1,16 @@
 "use client";
 import {
-    AudioLinesIcon,
+    WaveformIcon,
     FileIcon,
-    FileJsonIcon,
+    FileCodeIcon,
     FileTextIcon,
-    FileVideo2,
+    FileVideoIcon,
     FolderIcon,
     FolderOpenIcon,
-    LucideProps,
-    SheetIcon,
+    type Icon,
+    TableIcon,
     XIcon,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import prettyBytes from "pretty-bytes";
 import React, { createContext, Fragment, useContext, useEffect, useState } from "react";
 import { DropzoneProps, useDropzone } from "react-dropzone";
@@ -42,16 +42,16 @@ const getMimeType = (file: File) => {
     return file.type;
 };
 
-const extensionMap: Record<string, React.FC<LucideProps>> = {
-    csv: SheetIcon,
-    xls: SheetIcon,
-    mov: FileVideo2,
-    mp4: FileVideo2,
-    xlsx: SheetIcon,
+const extensionMap: Record<string, Icon> = {
+    csv: TableIcon,
+    xls: TableIcon,
+    mov: FileVideoIcon,
+    mp4: FileVideoIcon,
+    xlsx: TableIcon,
     pdf: FileTextIcon,
     txt: FileTextIcon,
-    json: FileJsonIcon,
-    mp3: AudioLinesIcon,
+    json: FileCodeIcon,
+    mp3: WaveformIcon,
 };
 
 const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => {
@@ -79,12 +79,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 
     const Icon = extensionMap[props.file.name.split(".").at(-1)!] ?? FileIcon;
 
-    const Element =
-        info.type === "img" ? (
-            <img src={info.url} className="w-full object-contain" alt={props.file.name} />
-        ) : (
-            <Icon strokeWidth={2} absoluteStrokeWidth size={48} />
-        );
+    const Element = info.type === "img" ? <img src={info.url} className="w-full object-contain" alt={props.file.name} /> : <Icon size={48} />;
 
     return (
         <li className="flex w-full flex-row justify-between gap-4 border-b border-card-border last:border-b-transparent">

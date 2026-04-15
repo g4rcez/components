@@ -1,7 +1,7 @@
 {
     "name": "@g4rcez/components",
     "description": "Customizable react components.",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "sideEffects": false,
     "private": false,
     "packageManager": "pnpm@10.12.3",
@@ -29,7 +29,7 @@
         "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
         "lib:types": "tsc -p tsconfig.lib.json",
-        "preset": "tsc -p tsconfig.tailwind.json",
+        "preset": "tsc -p tsconfig.styles.json && tsc -p tsconfig.tailwind.json",
         "test": "vitest run",
         "test:watch": "vitest watch"
     },
@@ -40,11 +40,11 @@
     "dependencies": {
         "@base-ui/react": "1.2.0",
         "@floating-ui/react": "0.27.18",
+        "@phosphor-icons/react": "2.1.10",
         "class-variance-authority": "0.7.1",
         "clsx": "2.1.1",
         "date-fns": "4.1.0",
         "linq-arrays": "3.2.5",
-        "lucide-react": "0.575.0",
         "motion": "12.34.3",
         "pretty-bytes": "7.1.0",
         "qs": "6.15.0",
@@ -87,8 +87,7 @@
     },
     "source": "./src/index.ts",
     "types": "./dist/index.d.ts",
-    "main": "./dist/index.mjs",
-    "browser": "./dist/index.umd.js",
+    "main": "./dist/index.js",
     "module": "./dist/index.js",
     "files": [
         "dist",

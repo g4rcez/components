@@ -1,6 +1,6 @@
 "use client";
 import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
-import { FilterIcon, LucideProps } from "lucide-react";
+import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
@@ -97,7 +97,7 @@ export type CommandPaletteProps = {
     onChangeText?: (text: string) => void;
     onChangeVisibility: (next: boolean) => void;
     Preview?: React.FC<{ command: CommandItemTypes; text: string }>;
-    Icon?: React.FC<LucideProps & { text: string; Default: React.FC<LucideProps> }>;
+    Icon?: React.FC<IconProps & { text: string; Default: Icon }>;
 };
 
 const getFuzzyData = (commands: CommandItemTypes[], value: string) => {
@@ -209,7 +209,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         return combi.register();
     }, [bindKey, commands, props, valueRef]);
 
-    const Icon = props.Icon ?? FilterIcon;
+    const Icon = props.Icon ?? FunnelIcon;
 
     return (
         <Fragment>
@@ -227,7 +227,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             >
                 <header className="sticky top-0 isolate z-floating flex h-12 w-full items-center overflow-clip border-b border-floating-border bg-floating-background">
                     <div className="flex size-10 items-center justify-center">
-                        {props.Icon ? <Icon Default={FilterIcon} text={text} size={16} /> : <FilterIcon size={16} />}
+                        {props.Icon ? <Icon Default={FunnelIcon} text={text} size={16} /> : <FunnelIcon size={16} />}
                     </div>
                     <input
                         {...(getReferenceProps({

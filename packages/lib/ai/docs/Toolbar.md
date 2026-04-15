@@ -51,7 +51,7 @@ import { Button } from "@g4rcez/components/button";
 ### Rich Text Editor Toolbar
 
 ```tsx
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon } from "@phosphor-icons/react";
 import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 import { Tooltip } from "@g4rcez/components/tooltip";
@@ -80,7 +80,7 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 ### Batch Action Toolbar
 
 ```tsx
-import { TrashIcon, DownloadIcon } from "lucide-react";
+import { TrashIcon, DownloadIcon } from "@phosphor-icons/react";
 import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 

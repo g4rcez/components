@@ -7,17 +7,15 @@
         "allowUnusedLabels": false,
         "alwaysStrict": true,
         "declaration": true,
-        "emitDeclarationOnly": true,
-        "declarationDir": "./dist",
-        "outDir": "./dist",
         "declarationMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
         "esModuleInterop": true,
+        "noEmit": false,
         "forceConsistentCasingInFileNames": true,
-        "importHelpers": true,
-        "isolatedModules": true,
-        "jsx": "preserve",
-        "module": "esnext",
+        "lib": ["dom", "dom.iterable", "esnext"],
         "moduleResolution": "node",
+        "module": "ES2015",
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
         "resolveJsonModule": true,
@@ -27,8 +25,8 @@
         "strictFunctionTypes": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
-        "target": "ESNext",
-        "lib": ["ESNext", "DOM"]
+        "target": "ES5"
     },
-    "include": ["./src"]
+    "include": ["./src/styles"],
+    "exclude": ["node_modules", "docs"]
 }

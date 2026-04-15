@@ -77,7 +77,7 @@ function SimpleDropdown() {
 ### Dropdown with Title and Arrow
 
 ```tsx
-import { UserIcon, ChevronDownIcon } from "lucide-react";
+import { UserIcon, CaretDownIcon } from "@phosphor-icons/react";
 import { Dropdown } from "@g4rcez/components/dropdown";
 
 function AccountDropdown() {
@@ -87,7 +87,7 @@ function AccountDropdown() {
         <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
           <UserIcon size={16} />
           Account
-          <ChevronDownIcon size={16} />
+          <CaretDownIcon size={16} />
         </button>
       }
       title="Account Options"
@@ -145,7 +145,7 @@ function ControlledDropdown() {
 ### Filter Dropdown with Form Content
 
 ```tsx
-import { FilterIcon } from "lucide-react";
+import { FunnelIcon } from "@phosphor-icons/react";
 import { Dropdown } from "@g4rcez/components/dropdown";
 
 function FilterDropdown() {
@@ -155,7 +155,7 @@ function FilterDropdown() {
     <Dropdown
       trigger={
         <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
-          <FilterIcon size={16} />
+          <FunnelIcon size={16} />
           Filters
           {status && <span className="h-2 w-2 rounded-full bg-primary" />}
         </button>

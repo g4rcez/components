@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { CodeBlock } from "@/components/code-block";
-import { SparklesIcon } from "lucide-react";
+import { SparkleIcon } from "@phosphor-icons/react";
 import { useRef } from "react";
 import { Button } from "../../../../../lib/src";
 import { useNotification } from "../../../../../lib/src/components/display/notifications";
@@ -44,7 +44,7 @@ export default function GetStartedPage() {
               </span>
             </div>
             <CodeBlock
-              code="pnpm install @g4rcez/components lucide-react motion"
+              code="pnpm install @g4rcez/components @phosphor-icons/react motion"
               lang="bash"
             />
           </div>

@@ -105,7 +105,7 @@ Transparent background with colored text; shows a tinted background on hover.
 ### With Icons
 
 ```tsx
-import { PlusIcon } from "lucide-react";
+import { PlusIcon } from "@phosphor-icons/react";
 
 <Button icon={<PlusIcon size={16} />}>Add Item</Button>
 

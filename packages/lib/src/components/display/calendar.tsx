@@ -15,7 +15,7 @@ import {
     format,
     set,
 } from "date-fns";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion, MotionConfig, type Transition, type Variants } from "motion/react";
 import React, { type RefObject, useEffect, useRef } from "react";
 import { Is } from "sidekicker";
@@ -403,7 +403,7 @@ export const Calendar = ({
                                     title={translations.calendarBackMonth}
                                     className="z-calendar rounded-full p-1.5 hover:bg-primary hover:text-primary-foreground"
                                 >
-                                    <ChevronLeftIcon className="h-4 w-4" />
+                                    <CaretLeftIcon className="h-4 w-4" />
                                 </motion.button>
                                 <motion.span
                                     layout
@@ -441,7 +441,7 @@ export const Calendar = ({
                                     title={translations.calendarNextMonth}
                                     className="z-calendar rounded-full p-1.5 hover:bg-primary hover:text-primary-foreground"
                                 >
-                                    <ChevronRightIcon className="h-4 w-4" />
+                                    <CaretRightIcon className="h-4 w-4" />
                                 </motion.button>
                             </header>
                             <motion.table className="mt-2 table min-w-full table-auto border-0">

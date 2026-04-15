@@ -30,7 +30,7 @@ import { CommandPalette } from "@g4rcez/components";
 | `footer` | `React.ReactElement` | — | Custom footer content |
 | `onChangeText` | `(text: string) => void` | — | Search text change handler |
 | `Preview` | `React.FC<{ command: CommandItemTypes; text: string }>` | — | Preview panel component for the active command |
-| `Icon` | `React.FC<LucideProps & { text: string; Default: React.FC<LucideProps> }>` | — | Custom search icon |
+| `Icon` | `React.FC<IconProps & { text: string; Default: React.FC<IconProps> }>` | — | Custom search icon |
 
 ## Command Types
 
@@ -81,7 +81,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 import { useState } from "react";
-import { FileTextIcon, SaveIcon, FolderOpenIcon } from "lucide-react";
+import { FileTextIcon, FloppyDiskIcon, FolderOpenIcon } from "@phosphor-icons/react";
 import { CommandPalette } from "@g4rcez/components";
 
 function BasicCommandPalette() {
@@ -102,7 +102,7 @@ function BasicCommandPalette() {
       type: "shortcut" as const,
       title: "Save Document",
       shortcut: "Ctrl+S",
-      Icon: <SaveIcon size={16} />,
+      Icon: <FloppyDiskIcon size={16} />,
       action: ({ setOpen }) => {
         console.log("Saving document");
         setOpen(false);
@@ -133,7 +133,7 @@ function BasicCommandPalette() {
 ### Grouped Commands
 
 ```tsx
-import { FileIcon, FolderOpenIcon, HomeIcon, SettingsIcon, MoonIcon } from "lucide-react";
+import { FileIcon, FolderOpenIcon, HouseIcon, GearIcon, MoonIcon } from "@phosphor-icons/react";
 import { CommandPalette } from "@g4rcez/components";
 
 function GroupedCommandPalette() {
@@ -170,7 +170,7 @@ function GroupedCommandPalette() {
           type: "shortcut" as const,
           title: "Go to Dashboard",
           hint: ["dashboard", "home", "main"],
-          Icon: <HomeIcon size={16} />,
+          Icon: <HouseIcon size={16} />,
           action: ({ setOpen }) => {
             window.location.href = "/dashboard";
             setOpen(false);
@@ -180,7 +180,7 @@ function GroupedCommandPalette() {
           type: "shortcut" as const,
           title: "Go to Settings",
           hint: ["settings", "preferences", "config"],
-          Icon: <SettingsIcon size={16} />,
+          Icon: <GearIcon size={16} />,
           action: ({ setOpen }) => {
             window.location.href = "/settings";
             setOpen(false);
@@ -231,7 +231,7 @@ function GroupedCommandPalette() {
 ### Conditional Commands
 
 ```tsx
-import { UserIcon, ShieldIcon } from "lucide-react";
+import { UserIcon, ShieldIcon } from "@phosphor-icons/react";
 
 const commands = [
   {
