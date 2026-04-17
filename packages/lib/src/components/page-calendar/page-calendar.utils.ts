@@ -85,3 +85,31 @@ export function formatTime(date: Date, locale?: string): string {
 export function getWeekNumber(date: Date): number {
     return getISOWeek(date);
 }
+
+export type EventColumn<T extends CalendarEventBase> = {
+    event: CalendarEvent<T>;
+    columnIndex: number;
+    columnCount: number;
+};
+
+export function computeEventColumns<T extends CalendarEventBase>(events: CalendarEvent<T>[]): EventColumn<T>[] {
+    const sorted = [...events].sort((a, b) => a.date.getTime() - b.date.getTime());
+    const hourGroups = new Map<number, CalendarEvent<T>[]>();
+    for (const event of sorted) {
+        const hour = event.date.getHours();
+        const group = hourGroups.get(hour);
+        if (group) {
+            group.push(event);
+        } else {
+            hourGroups.set(hour, [event]);
+        }
+    }
+    const result: EventColumn<T>[] = [];
+    for (const group of hourGroups.values()) {
+        const columnCount = group.length;
+        group.forEach((event, columnIndex) => {
+            result.push({ event, columnIndex, columnCount });
+        });
+    }
+    return result;
+}

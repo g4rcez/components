@@ -36,8 +36,6 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                     const events = eventsByDate.get(key) || [];
                     const isCurrentMonth = isSameMonth(day, currentDate);
                     const isCurrentDay = isToday(day);
-                    const visible = events.slice(0, 2);
-                    const overflow = events.length - 2;
                     return (
                         <button
                             key={idx}
@@ -52,17 +50,21 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                 >
                                     {formatDay(day, locale)}
                                 </span>
-                                <span aria-hidden="true" className="text-lg leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40">
+                                <span
+                                    aria-hidden="true"
+                                    className="text-lg leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40"
+                                >
                                     +
                                 </span>
                             </div>
-                            <div className="flex flex-col gap-0.5">
-                                {visible.map((event) => (
-                                    <div key={event.id} onClick={(e) => e.stopPropagation()}>
-                                        <EventPill compact event={event} onClick={() => onEventClick(event)} />
-                                    </div>
-                                ))}
-                                {overflow > 0 && <span className="pl-1 text-xs text-muted-foreground">{t.pageCalendarMoreEvents(overflow)}</span>}
+                            <div className="min-h-0 flex-1 overflow-y-auto">
+                                <div className="flex flex-col gap-0.5">
+                                    {events.map((event) => (
+                                        <div key={event.id} onClick={(e) => e.stopPropagation()}>
+                                            <EventPill compact event={event} onClick={() => onEventClick(event)} />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </button>
                     );

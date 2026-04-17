@@ -14,6 +14,7 @@ import {
     formatHourLabel,
     formatFullDate,
     formatTime,
+    computeEventColumns,
 } from "./page-calendar.utils";
 
 const HOUR_HEIGHT = 48;
@@ -71,9 +72,12 @@ export function DayView<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="flex flex-1 min-w-full">
+        <div className="flex min-w-full flex-1">
             <div className="flex w-full flex-1 flex-col">
-                <div aria-label={formatFullDate(currentDate, locale)} className="flex flex-shrink-0 items-center gap-3 border-b border-border px-4 py-2">
+                <div
+                    aria-label={formatFullDate(currentDate, locale)}
+                    className="flex flex-shrink-0 items-center gap-3 border-b border-border px-4 py-2"
+                >
                     <span
                         className={`inline-flex h-8 w-8 items-center justify-center rounded-full font-bold ${isToday(currentDate) ? "bg-primary text-primary-foreground" : "text-foreground"}`}
                     >
@@ -108,15 +112,25 @@ export function DayView<T extends CalendarEventBase>({
                                     className="cursor-pointer border-b border-border/50 hover:bg-muted/20"
                                     style={{ height: HOUR_HEIGHT }}
                                     onClick={() => onSlotClick?.(slotDate)}
-                                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSlotClick?.(slotDate); } }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" || e.key === " ") {
+                                            e.preventDefault();
+                                            onSlotClick?.(slotDate);
+                                        }
+                                    }}
                                 />
                             );
                         })}
-                        {events.map((event) => (
+                        {computeEventColumns(events).map(({ event, columnIndex, columnCount }) => (
                             <div
                                 key={event.id}
-                                className="absolute left-1 right-1"
-                                style={{ top: getTopOffset(event), height: HOUR_HEIGHT }}
+                                className="absolute"
+                                style={{
+                                    top: getTopOffset(event),
+                                    height: HOUR_HEIGHT,
+                                    left: `calc(${(columnIndex / columnCount) * 100}% + 2px)`,
+                                    width: `calc(${100 / columnCount}% - 4px)`,
+                                }}
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <EventPill event={event} onClick={() => handleEventClick(event)} />
