@@ -24,7 +24,7 @@
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css; cp -r ai dist",
+        "build": "cp ../../skills/g4rcez-components/SKILL.md ./ai/SKILL.md; rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css",
         "format": "npx prettier --write .",
         "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
@@ -92,7 +92,7 @@
     "files": [
         "dist",
         "dist/index.css",
-        "dist/ai"
+        "ai"
     ],
     "exports": {
         ".": {
@@ -296,6 +296,6 @@
             "require": "./dist/components/display/alert.js",
             "default": "./dist/components/display/alert.js"
         },
-        "./ai/*": "./**"
+        "./ai/*": "./ai/*"
     }
 }
