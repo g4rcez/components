@@ -296,7 +296,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             </Tag>
         ));
 
-        const scrollableContainerStyle = { height: isEmpty ? "0" : value.size === 0 ? h - 49 : h - 86 };
+        const scrollableContainerStyle = { height: isEmpty ? "0" : h };
 
         return (
             <InputField
@@ -396,7 +396,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             top: y ?? 0,
                                             position: strategy,
                                             left: x,
-                                            height: h - (values.length === 0 ? 65 : 30),
                                         },
                                     })}
                                     data-floating="true"
