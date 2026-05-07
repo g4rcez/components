@@ -1,13 +1,4 @@
 export class Dict<K, V> extends Map<K, V> {
-    public constructor(init?: [K, V][] | Dict<K, V>) {
-        super(init);
-    }
-
-    public set(key: K, value: V): this {
-        super.set(key, value);
-        return this;
-    }
-
     public remove(key: K) {
         super.delete(key);
         return this;
