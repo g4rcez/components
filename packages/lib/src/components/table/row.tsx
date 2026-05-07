@@ -1,4 +1,4 @@
-import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from "react";
+import React, { Fragment, PropsWithChildren, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { path } from "../../lib/fns";
 import { Any } from "../../types";
@@ -20,23 +20,14 @@ const RowAside = (props: PropsWithChildren) => {
 
     const onLeave = () => setClassName("opacity-0");
 
-    const callback = () => {
+    const onEnter = () => {
         const child = ref.current;
         const parent = parentRef.current;
-        if (child === null || parent === null) return;
-        parent.style.left = `-${child.getBoundingClientRect().width + 4}px`;
+        if (child !== null && parent !== null) {
+            parent.style.left = `-${child.getBoundingClientRect().width + 4}px`;
+        }
+        setClassName("opacity-100");
     };
-
-    const onEnter = () => setClassName("opacity-100");
-
-    useEffect(() => {
-        const child = ref.current;
-        if (child === null || parent === null) return;
-        callback();
-        const observer = new IntersectionObserver((entries) => entries.forEach(callback), { root: document.documentElement });
-        observer.observe(child);
-        return () => observer.disconnect();
-    }, []);
 
     return (
         <div

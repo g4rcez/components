@@ -4,49 +4,37 @@ import { Any, Walk } from "../types";
 export const fuzzyMatch = (text: string, search: string): number | null => {
     text = String(text).toLocaleLowerCase();
     search = String(search).toLocaleLowerCase();
+    if (text === search) return 1;
     const firstChar = search[0];
-    const firstCharIndexes = text
-        .split("")
-        .map((char, index) => (char === firstChar ? index : false))
-        .filter((index): index is number => index !== false);
+    if (!firstChar) return null;
 
-    if (firstCharIndexes.length === 0) {
-        return null;
-    }
     const matchedIndexes: number[][] = [];
-    firstCharIndexes.forEach((startingIndex) => {
-        let index = startingIndex + 1;
-        const indexes = [startingIndex];
+    let cursor = 0;
+    while (cursor < text.length) {
+        const startIdx = text.indexOf(firstChar, cursor);
+        if (startIdx === -1) break;
+        let pos = startIdx + 1;
+        const indexes = [startIdx];
+        let matched = true;
         for (let i = 1; i < search.length; i++) {
-            const letter = search[i]!;
-            index = text.indexOf(letter, index);
-
-            if (index === -1) {
-                return;
+            const foundAt = text.indexOf(search[i]!, pos);
+            if (foundAt === -1) {
+                matched = false;
+                break;
             }
-            indexes.push(index);
-            index++;
+            indexes.push(foundAt);
+            pos = foundAt + 1;
         }
-        matchedIndexes.push(indexes);
-    });
-
-    if (matchedIndexes.length === 0) {
-        return null;
+        if (matched) matchedIndexes.push(indexes);
+        cursor = startIdx + 1;
     }
+
+    if (matchedIndexes.length === 0) return null;
     const bestMatch = matchedIndexes.sort((a, b) => {
-        if (a.length === 1) {
-            return a[0]! - b[0]!;
-        }
-        const aSpread = a[a.length - 1]! - a[0]!;
-        const bSpread = b[b.length - 1]! - b[0]!;
-
-        return aSpread - bSpread;
+        if (a.length === 1) return a[0]! - b[0]!;
+        return a[a.length - 1]! - a[0]! - (b[b.length - 1]! - b[0]!);
     })[0]!;
-    if (text === search) {
-        return 1;
-    } else if (bestMatch.length > 1) {
-        return 2 + (bestMatch[bestMatch.length - 1]! - bestMatch[0]!);
-    }
+    if (bestMatch.length > 1) return 2 + (bestMatch[bestMatch.length - 1]! - bestMatch[0]!);
     return 2 + bestMatch[0]!;
 };
 
@@ -118,20 +106,22 @@ export const fzf = <T extends Any, ID extends Walk<T>>(items: T[], id: ID, keys:
     }
     const map = new Map<ID, T>();
     const remap = keys.map((x) => {
-        return { ...x, value: Is.array(x.value) ? x.value.map(diacritics) : diacritics(`${x.value}`) };
+        const target = Is.array(x.value)
+            ? x.value.map((v) => diacritics(`${v}`.toLocaleLowerCase()).trim())
+            : diacritics(`${x.value}`.toLocaleLowerCase()).trim();
+        return { ...x, target };
     });
     items.forEach((item) => {
         const idVal = path<T, ID>(item, id);
         remap.forEach((filter) => {
             const searchValue = path(item, filter.key);
             if (!searchValue) return;
-            const target = diacritics(`${filter.value}`.toLocaleLowerCase()).trim();
             const search = diacritics(`${searchValue}`.toLocaleLowerCase()).trim();
-            if (compare(search, target, filter.score, filter.match)) {
+            if (compare(search, filter.target, filter.score, filter.match)) {
                 return void map.set(idVal, item);
             }
             if (Is.function(filter.ifNotMatch)) {
-                const result = filter.ifNotMatch(target, search);
+                const result = filter.ifNotMatch(filter.target as string, search);
                 if (result) map.set(idVal, item);
             }
         });

@@ -16,7 +16,6 @@ import {
 import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { flushSync } from "react-dom";
 import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
@@ -130,7 +129,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? (emptyRef as string[]);
         const translation = useTranslations();
-        const [h, setH] = useState(0);
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState<Dict<string, MultiSelectItemProps>>(() => {
@@ -148,28 +146,28 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         });
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
-        const innerOptions: MultiSelectItemProps[] =
-            dynamicOption && shadow !== ""
-                ? [
-                      {
-                          value: shadow,
-                          label: shadow,
-                          "data-dynamic": "true",
-                      },
-                      ...options,
-                  ]
-                : options;
-        const list =
-            shadow.length === 0
-                ? innerOptions
-                : fzf(innerOptions, "value", [
-                      { key: "value", value: shadow },
-                      { key: "label", value: shadow },
-                  ]);
+
+        const innerOptions = useMemo<MultiSelectItemProps[]>(
+            () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
+            [dynamicOption, shadow, options]
+        );
+
+        const list = useMemo(
+            () =>
+                shadow.length === 0
+                    ? innerOptions
+                    : fzf(innerOptions, "value", [
+                          { key: "value", value: shadow },
+                          { key: "label", value: shadow },
+                      ]),
+            [innerOptions, shadow]
+        );
 
         const removeScrollRef = useRemoveScroll<HTMLDivElement>(open, "block-only");
 
-        const displayList = list.filter((x) => x.hidden !== true);
+        const displayList = useMemo(() => list.filter((x) => x.hidden !== true), [list]);
+
+        const h = Math.min(320, (displayList.length || 1) * MIN_SIZE);
 
         const isEmpty = displayList.length === 0;
 
@@ -217,14 +215,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 onNavigate: (n) => setIndex((prev) => n ?? prev),
             }),
         ]);
-
-        useEffect(() => {
-            if (!open) return setH(0);
-            const inputRef = refs.reference;
-            if (inputRef.current === null) return;
-            const s = getRemainingSize(inputRef.current as HTMLElement, window.innerHeight);
-            setTimeout(() => setH(Math.min(s, displayList.length * 40)), 100);
-        }, [shadow, open, refs.reference]);
 
         useEffect(() => {
             if (props.value) {
@@ -306,7 +296,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             </Tag>
         ));
 
-        const scrollableContainerStyle = { height: isEmpty ? "0" : value.size === 0 ? h - 49 : h - 86 };
+        const scrollableContainerStyle = { height: isEmpty ? "0" : h };
 
         return (
             <InputField
@@ -336,7 +326,12 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
                         {value ? (
-                            <button type="button" onClick={onClose} aria-label={translation.inputCloseValue} className="transition-colors link:text-danger">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                aria-label={translation.inputCloseValue}
+                                className="transition-colors link:text-danger"
+                            >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
@@ -401,7 +396,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             top: y ?? 0,
                                             position: strategy,
                                             left: x,
-                                            height: h - (values.length === 0 ? 65 : 30),
                                         },
                                     })}
                                     data-floating="true"
@@ -458,13 +452,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             animate={{ height: isEmpty ? "auto" : h }}
                                             style={scrollableContainerStyle}
                                             className="max-h-72 w-full overscroll-contain"
-                                            onAnimationComplete={() => {
-                                                if (!open) return setH(0);
-                                                const ul = refs.floating.current as HTMLElement;
-                                                const li = ul.querySelectorAll("li").item(0);
-                                                const sum = (li ? li.getBoundingClientRect().height : 40) * displayList.length;
-                                                return flushSync(() => setH(sum + 2));
-                                            }}
                                         >
                                             <Virtuoso
                                                 ref={virtuoso}
