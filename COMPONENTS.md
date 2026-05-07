@@ -2,6 +2,10 @@
 
 This document provides detailed API documentation for all components in the @g4rcez/components library.
 
+## Agent skill
+
+This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. Tools that follow the Anthropic Agent Skills convention will load it automatically; agents without auto-loading should `Read` that file before writing any UI in a codebase that depends on this package.
+
 ## Table of Contents
 
 - [Core Components](#core-components)

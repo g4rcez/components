@@ -2,6 +2,10 @@
 
 A comprehensive React component library built with TypeScript, Tailwind CSS, and modern web technologies. This library provides a complete set of customizable, accessible, and performant UI components for building modern web applications.
 
+## Agent skill
+
+This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. Tools that follow the Anthropic Agent Skills convention will load it automatically; agents without auto-loading should `Read` that file before writing any UI in a codebase that depends on this package.
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
