@@ -74,7 +74,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             middleware: [shift(), offset(5), autoPlacement(), arrow({ padding: 5, element: arrowRef }), flip({ fallbackAxisSideDirection: "start" })],
         });
         const dismiss = useDismiss(context, { enabled });
-        const role = useRole(context, { role: "tooltip", enabled });
+        const role = useRole(context, { role: popover ? "dialog" : "tooltip", enabled });
         const focusController = useFocus(context, { enabled: enabled ? focus : false });
         const clickController = useClick(context, { enabled: enabled ? popover : false });
         const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });

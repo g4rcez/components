@@ -31,8 +31,8 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
         onOpenChange: setOpen,
         strategy: "absolute",
     });
-    const click = useClick(context, { enabled: props.disabled ?? true });
-    const role = useRole(context, { role: "tooltip" });
+    const click = useClick(context, { enabled: !(props.disabled ?? false) });
+    const role = useRole(context, { role: "dialog" });
     const dismiss = useDismiss(context, {
         escapeKey: true,
         referencePress: true,

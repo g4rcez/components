@@ -67,6 +67,7 @@ export type DesignTokens = {
         card: { background: string; border: string; muted: string };
         table: { border: string; header: string; background: string };
         alert: Record<ThemeState, { text: string; bg: string; border: string }>;
+        ring?: string;
         input: {
             border: string;
             placeholder: string;

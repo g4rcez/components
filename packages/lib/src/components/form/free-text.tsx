@@ -102,9 +102,11 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         name={id}
                         type={type}
                         data-next={next}
-                        aria-busy={props.disabled}
+                        aria-busy={loading}
+                        aria-invalid={!!error}
                         aria-disabled={props.disabled}
                         aria-readonly={props.readOnly}
+                        aria-describedby={error ? `${id}-error` : undefined}
                         ref={mergeRefs(ref, inputRef) as any}
                         className={css(
                             "input placeholder-input-mask group h-input-height w-full flex-1",

@@ -70,6 +70,7 @@ export const DARK_THEME: DesignTokens = {
             foreground: "hsla(240, 10%, 4%)",
             notification: "hsla(142, 71%, 45%)",
         },
+        ring: "hsla(201,49%,65%)",
         input: {
             border: "hsla(240, 4%, 16%)",
             placeholder: "hsla(240, 5%, 65%)",
