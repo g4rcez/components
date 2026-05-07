@@ -327,6 +327,8 @@ describe("MyComponent", () => {
 
 ## Documentation
 
+The shipped agent skill lives at `packages/lib/ai/SKILL.md`. Edit it there — do not create copies elsewhere.
+
 ### Adding Component Documentation
 
 1. **Create Documentation Page**
