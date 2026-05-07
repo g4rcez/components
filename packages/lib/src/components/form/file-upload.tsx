@@ -77,6 +77,8 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
         props.onDeleteFile?.(props.file);
     };
 
+    const fileName = props.file.name;
+
     const Icon = extensionMap[props.file.name.split(".").at(-1)!] ?? FileIcon;
 
     const Element = info.type === "img" ? <img src={info.url} className="w-full object-contain" alt={props.file.name} /> : <Icon size={48} />;
@@ -85,7 +87,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
         <li className="flex w-full flex-row justify-between gap-4 border-b border-card-border last:border-b-transparent">
             <div className="flex flex-col gap-4">
                 <div className="flex flex-row items-center gap-4">
-                    <button type="button" onClick={onViewFile} className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden">
+                    <button type="button" onClick={onViewFile} aria-label={`View ${fileName}`} className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden">
                         {Element}
                     </button>
                     <div className="flex flex-col items-start justify-start text-left">
@@ -100,8 +102,8 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
                 ) : null}
             </div>
             <div className="align-start flex justify-start py-4 transition-colors duration-300 ease-linear hover:text-danger-hover">
-                <button onClick={onDeleteFile} type="button" className="flex size-6 items-center justify-center">
-                    <XIcon size={16} />
+                <button onClick={onDeleteFile} type="button" aria-label={`Remove ${fileName}`} className="flex size-6 items-center justify-center">
+                    <XIcon size={16} aria-hidden="true" />
                 </button>
             </div>
         </li>
@@ -194,6 +196,7 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
             </Modal>
             <div
                 {...(getRootProps() as any)}
+                aria-label={t.fileUploadZoneLabel}
                 data-active={items ? items.length > 0 : false}
                 className="flex flex-col items-center justify-center rounded-lg border border-card-border p-6 text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
             >

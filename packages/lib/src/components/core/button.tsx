@@ -109,7 +109,7 @@ export const Button: <T extends React.ElementType = "button">(_: ButtonProps<T>)
             data-component="button"
             aria-disabled={disabled}
             as={props.as ?? "button"}
-            aria-busy={disabled || loading}
+            aria-busy={loading}
             onClick={disabled ? undefined : props.onClick}
             className={css(buttonVariants({ size, rounded, theme }), className)}
         >

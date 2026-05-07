@@ -40,6 +40,18 @@ const moveOn = (ul: HTMLUListElement, direction: "backward" | "forward") => {
     return item.getAttribute("data-id") || "";
 };
 
+const moveToEdge = (ul: HTMLUListElement, edge: "first" | "last") => {
+    const items = Array.from(ul.querySelectorAll("li"));
+    const ordered = edge === "first" ? items : [...items].reverse();
+    for (const item of ordered) {
+        if (!isElementDisabled(item)) {
+            item.querySelector("button")?.focus({ preventScroll: false });
+            return item.getAttribute("data-id") || "";
+        }
+    }
+    return null;
+};
+
 const actionKeys = {
     [keyboardKeys.ArrowLeft]: (_: unknown, ul: HTMLUListElement): Nullable<string> => moveOn(ul, "backward"),
     [keyboardKeys.ArrowRight]: (_: unknown, ul: HTMLUListElement): Nullable<string> => moveOn(ul, "forward"),
@@ -80,6 +92,14 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
             const result = fn(e, ref.current);
             if (result === null) return;
             setActive(result);
+        } else if (k === "Home") {
+            e.preventDefault();
+            const result = moveToEdge(ref.current, "first");
+            if (result) setActive(result);
+        } else if (k === "End") {
+            e.preventDefault();
+            const result = moveToEdge(ref.current, "last");
+            if (result) setActive(result);
         }
     };
 
@@ -92,7 +112,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                     <header className="relative mb-2 overflow-x-auto">
                         <div className="absolute bottom-0 h-[1px] w-full bg-card-border" />
                         <nav className="min-w-0">
-                            <ul onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
+                            <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
                                 {items.map((x: any) => {
                                     const inner = x.props as TabProps;
                                     const current = active === inner.id;
@@ -111,8 +131,12 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             <Polymorph
                                                 as="button"
                                                 type="button"
+                                                role="tab"
                                                 data-id={inner.id}
-                                                aria-current="page"
+                                                id={`${inner.id}-tab`}
+                                                aria-selected={current}
+                                                aria-controls={`${inner.id}-panel`}
+                                                tabIndex={current ? 0 : -1}
                                                 disabled={inner.disabled}
                                                 onClick={inner.disabled ? undefined : onClick}
                                                 className="block w-full whitespace-nowrap px-10 py-4 disabled:cursor-not-allowed"
@@ -148,5 +172,15 @@ export type TabProps = CommonTabProps &
 
 export const Tab = (props: PropsWithChildren<TabProps>) => {
     const active = useTabs();
-    return <Fragment>{props.id === active ? props.children : null}</Fragment>;
+    if (props.id !== active) return null;
+    return (
+        <div
+            role="tabpanel"
+            tabIndex={0}
+            id={`${props.id}-panel`}
+            aria-labelledby={`${props.id}-tab`}
+        >
+            {props.children}
+        </div>
+    );
 };

@@ -85,6 +85,10 @@ export const defaultTranslations = {
     uploadDialogTitle: "Details of your file",
 
     datepickerPlaceholder: (_: string) => "day/month/year",
+    spinnerLoading: "Loading",
+    skeletonLoading: "Loading content",
+    closeButton: "Close",
+    fileUploadZoneLabel: "File upload area. Drag files here or press Enter to browse.",
 };
 
 export type Translations = typeof defaultTranslations;

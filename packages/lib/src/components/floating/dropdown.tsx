@@ -64,7 +64,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const click = useClick(context);
     const hover = useHover(context, { enabled: props.hover ?? false });
     const dismiss = useDismiss(context);
-    const role = useRole(context, { role: "tooltip" });
+    const role = useRole(context, { role: "dialog" });
 
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role, hover]);
 
@@ -90,7 +90,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                                 className="fill-floating-background stroke-floating-border"
                             />
                             <header className="mb-2">
-                                <h3 className="text-left text-2xl font-medium leading-snug tracking-wide">{props.title}</h3>
+                                <h3 id={headingId} className="text-left text-2xl font-medium leading-snug tracking-wide">{props.title}</h3>
                             </header>
                             {props.children}
                         </div>

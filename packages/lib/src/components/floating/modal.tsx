@@ -40,6 +40,7 @@ import { useMediaQuery } from "../../hooks/use-media-query";
 import { css, mergeRefs } from "../../lib/dom";
 import { Label, Nil, Override } from "../../types";
 import { useFloatingRef } from "../../hooks/use-floating-ref";
+import { useTranslations } from "../../hooks/use-translations";
 import { Button, ButtonProps } from "../core/button";
 
 type AnimationLabels = "initial" | "enter" | "exit";
@@ -175,6 +176,7 @@ const Draggable = (props: DraggableProps) => {
             draggable
             dragListener
             dragMomentum
+            tabIndex={-1}
             type="button"
             animate={false}
             dragElastic={0}
@@ -183,6 +185,7 @@ const Draggable = (props: DraggableProps) => {
             onDrag={onDrag}
             dragSnapToOrigin
             dragDirectionLock
+            aria-hidden="true"
             drag={props.sheet ? "y" : "x"}
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
@@ -245,6 +248,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         }: PropsWithChildren<ModalProps>,
         externalRef: ForwardedRef<ModalRef>
     ) => {
+        const t = useTranslations();
         const root = useFloatingRef();
         const innerContent = useRef<HTMLDivElement>(null);
         const removeScrollRef = useRef<HTMLDivElement>(null);
@@ -395,6 +399,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 ) : null}
                                                 <motion.section
                                                     ref={innerContent}
+                                                    id={title ? descriptionId : undefined}
                                                     data-component="modal-body"
                                                     className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
                                                     onTouchEnd={async () => {
@@ -450,15 +455,16 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     <footer className="w-full select-text border-t border-floating-border px-8 pt-4">{footer}</footer>
                                                 ) : null}
                                                 {closable ? (
-                                                    <nav className="absolute right-4 top-1 z-floating">
+                                                    <div className="absolute right-4 top-1 z-floating">
                                                         <button
                                                             type="button"
                                                             onClick={onClose}
+                                                            aria-label={t.closeButton}
                                                             className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                                         >
-                                                            <XIcon />
+                                                            <XIcon aria-hidden="true" />
                                                         </button>
-                                                    </nav>
+                                                    </div>
                                                 ) : null}
                                             </motion.div>
                                         </AnimatePresence>

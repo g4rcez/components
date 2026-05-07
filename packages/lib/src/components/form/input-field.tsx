@@ -146,7 +146,11 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     htmlFor={ID}
                     className="relative inline-flex w-full max-w-full cursor-text flex-row flex-wrap justify-between gap-1 text-field-label text-sm transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
                 >
-                    {hiddenLabel ? null : (
+                    {hiddenLabel ? (
+                        <span className="sr-only">
+                            <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder} />
+                        </span>
+                    ) : (
                         <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder}>
                             {optionalText || rightLabel ? (
                                 <Fragment>
@@ -171,7 +175,11 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                         {right ? <span className="flex flex-nowrap gap-2 whitespace-nowrap pr-2">{right}</span> : null}
                     </div>
                 </label>
-                <p className="mt-input-gap hidden whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger">
+                <p
+                    id={`${ID}-error`}
+                    role="alert"
+                    className="mt-input-gap hidden whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger"
+                >
                     {error}
                 </p>
                 <p className="mt-input-gap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">

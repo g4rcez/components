@@ -3,6 +3,7 @@ import { cva } from "class-variance-authority";
 import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { CheckCircleIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
 import React, { forwardRef, PropsWithChildren } from "react";
+import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import { CvaVariants } from "../../types";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
@@ -71,7 +72,9 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
     { className, theme, Icon, onClose, open = true, ...props }: AlertProps,
     ref: React.ForwardedRef<HTMLDivElement>
 ) {
+    const t = useTranslations();
     const close = () => onClose?.(false);
+    const liveRole = theme === "danger" || theme === "warn" ? "alert" : "status";
 
     return (
         <AnimatePresence presenceAffectsLayout propagate mode="sync">
@@ -86,7 +89,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                         <Polymorph
                             {...props}
                             ref={ref}
-                            role="alert"
+                            role={liveRole}
                             data-theme={theme}
                             as={props.as ?? "div"}
                             className={css(alertVariants({ theme }), className)}
@@ -96,9 +99,10 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                                     <button
                                         type="button"
                                         onClick={close}
+                                        aria-label={t.closeButton}
                                         className="absolute right-3 top-3 text-foreground transition-colors duration-300 ease-in-out hover:text-danger"
                                     >
-                                        <XIcon size={20} />
+                                        <XIcon size={20} aria-hidden="true" />
                                     </button>
                                 ) : null}
                                 <div className={css("flex items-center gap-2", props.title ? "" : "w-fit")}>
