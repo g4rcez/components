@@ -29,31 +29,18 @@ export const useRemoveScroll = <T extends HTMLElement>(remove: boolean, removeSt
 
     useEffect(() => {
         if (!remove) return;
+        const el = ref.current;
+        if (!el) return;
         const controller = new AbortController();
-        const html = document.documentElement;
-        const removeScroll = (e: Event) => {
-            const el = ref.current;
-            if (el) {
-                if (el.contains(e.target as HTMLElement)) {
-                    const rect = el.getBoundingClientRect();
-                    const realHeight = el.style.height ? Number(onlyNumbers(el.style.height)) : null;
-                    const scrollable = Is.number(realHeight) ? realHeight : rect.height;
-                    const hasScroll = el.scrollHeight <= scrollable;
-                    if (scrollable === el.scrollHeight) return remove ? e.preventDefault() : undefined;
-                    if (hasScroll) return;
-                    return remove ? e.preventDefault() : undefined;
-                }
-            }
-            if (e.currentTarget === document.documentElement) {
-                return remove ? e.preventDefault() : undefined;
-            }
-            return remove ? e.preventDefault() : undefined;
+        const onWheel = (e: WheelEvent) => {
+            const rect = el.getBoundingClientRect();
+            const realHeight = el.style.height ? Number(onlyNumbers(el.style.height)) : null;
+            const scrollable = Is.number(realHeight) ? realHeight : rect.height;
+            const atLimit = el.scrollHeight <= scrollable;
+            if (atLimit) e.preventDefault();
         };
-        html.addEventListener("wheel", removeScroll, { signal: controller.signal, passive: false });
-        html.addEventListener("scroll", removeScroll, { signal: controller.signal, passive: false });
-        return () => {
-            controller.abort();
-        };
+        el.addEventListener("wheel", onWheel, { signal: controller.signal, passive: false });
+        return () => controller.abort();
     }, [remove]);
 
     return ref;

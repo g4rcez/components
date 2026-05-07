@@ -1,6 +1,6 @@
 "use client";
 import { SortAscendingIcon, SortDescendingIcon, CaretUpDownIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
 import { Any, Label } from "../../types";
@@ -28,7 +28,10 @@ const createSorterFn =
             return acc !== 0 ? acc : p;
         }, 0);
 
-export const multiSort = <T extends Any>(array: T[], fields: Sorter<T>[]) => array.toSorted(createSorterFn(fields));
+export const multiSort = <T extends Any>(array: T[], fields: Sorter<T>[]) => {
+    array.sort(createSorterFn(fields));
+    return array;
+};
 
 type Props<T extends Any> = TableConfiguration<
     T,
@@ -131,18 +134,18 @@ export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
         return sorter ? sorter.type : Order.Undefined;
     });
 
-    const onClick = () => setStatus((prev) => (prev === Order.Undefined ? Order.Asc : prev === Order.Asc ? Order.Desc : Order.Undefined));
-
-    useEffect(() => {
+    const onClick = () => {
+        const next = status === Order.Undefined ? Order.Asc : status === Order.Asc ? Order.Desc : Order.Undefined;
+        setStatus(next);
         props.setSorters((prev) => {
-            if (status === Order.Undefined) return prev.filter((x) => x.value !== props.col.id);
+            if (next === Order.Undefined) return prev.filter((x) => x.value !== props.col.id);
             const findIndex = prev.findIndex((p) => (p.value as string) === props.col.id);
-            const sorter = createSorter(props.col, status, status);
+            const sorter = createSorter(props.col, next, next);
             if (findIndex === -1) return [...prev, sorter];
             prev[findIndex] = sorter;
             return [...prev];
         });
-    }, [status, props.col]);
+    };
 
     const labelId = `${props.col.id}-sorter-id`;
 

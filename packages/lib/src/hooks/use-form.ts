@@ -41,29 +41,26 @@ const isValidJSON = (value: any): boolean => {
     }
 };
 
-const setHelper = (obj: any, path: string[], value: any): void => {
-    const lastIndex = path.length - 1;
-    for (let i = 0; i < path.length; i++) {
-        const key: any = path[i];
-        if (i === lastIndex) {
-            obj[key] = value;
-        } else {
-            if (!(key in obj) || typeof obj[key] !== "object") {
-                const nextKey = path[i + 1];
-                obj[key] = isNaN(Number(nextKey)) ? {} : [];
-            }
-            obj = obj[key];
-        }
-    }
-};
-
 const convertPath = (path: string): string[] => path.replace(/\[(\d+)]/g, ".$1").split(".");
+
+const shallowSetPath = (obj: any, keys: string[], value: any): any => {
+    if (keys.length === 0) return value;
+    const [key, ...rest] = keys;
+    const current = obj != null ? obj[key!] : undefined;
+    const nextKey = rest[0];
+    const fallback = nextKey !== undefined && !Number.isNaN(Number(nextKey)) ? [] : {};
+    const updated = shallowSetPath(current ?? fallback, rest, value);
+    if (Array.isArray(obj)) {
+        const clone = obj.slice();
+        clone[Number(key)] = updated;
+        return clone;
+    }
+    return { ...(obj ?? {}), [key!]: updated };
+};
 
 const setPath = <O extends object>(o: O, path: string | Array<string | number>, value: any): O => {
     const pathArr = Array.isArray(path) ? path.map(String) : convertPath(path);
-    const obj = structuredClone(o);
-    setHelper(obj, pathArr, value);
-    return obj;
+    return shallowSetPath(o, pathArr, value) as O;
 };
 
 const sort = (a: string, b: string) => a.localeCompare(b);
@@ -137,12 +134,23 @@ export const formToJson = (form: HTMLFormElement): any => {
     return parse(urlSearchParams.toString(), options) as never;
 };
 
+const schemaShapeCache = new WeakMap<z.ZodObject<any>, Map<string, z.ZodTypeAny>>();
+
 export const getSchemaShape = <T extends z.ZodObject<any>>(name: string, schema: T) => {
-    return convertPath(name).reduce((acc, el) => {
+    let nameMap = schemaShapeCache.get(schema);
+    if (!nameMap) {
+        nameMap = new Map();
+        schemaShapeCache.set(schema, nameMap);
+    }
+    const cached = nameMap.get(name);
+    if (cached !== undefined) return cached;
+    const result = convertPath(name).reduce((acc, el) => {
         if (el === "") return acc;
         const shape = acc.shape?.[el] || acc;
         return shape._def.typeName === "ZodArray" ? shape.element : shape;
     }, schema);
+    nameMap.set(name, result);
+    return result;
 };
 
 type HTMLEntryElements = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

@@ -15,7 +15,7 @@ import {
 } from "@floating-ui/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useRef, useState } from "react";
+import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
@@ -92,7 +92,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
-        const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
@@ -100,37 +99,36 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
         const removeScrollRef = useRemoveScroll(open, "block-only");
-        const innerOptions: AutocompleteItemProps[] =
-            dynamicOption && shadow !== ""
-                ? [
-                      {
-                          value: shadow,
-                          label: shadow,
-                          "data-dynamic": "true",
-                      },
-                      ...options,
-                  ]
-                : options;
+
+        const innerOptions = useMemo<AutocompleteItemProps[]>(
+            () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
+            [dynamicOption, shadow, options]
+        );
 
         const openDropdown = () => flushSync(() => setOpen(true));
 
-        const list = shadow
-            ? fzf(innerOptions, "value", [
-                  { key: "value", value: shadow },
-                  { key: "label", value: shadow },
-              ])
-            : innerOptions;
+        const list = useMemo(
+            () =>
+                shadow
+                    ? fzf(innerOptions, "value", [
+                          { key: "value", value: shadow },
+                          { key: "label", value: shadow },
+                      ])
+                    : innerOptions,
+            [innerOptions, shadow]
+        );
 
-        const setClosed = () => {
-            setOpen(false);
-            setH(0);
-        };
+        const setClosed = () => setOpen(false);
 
-        const displayList = list.filter((x) => x.hidden !== true);
+        const displayList = useMemo(() => list.filter((x) => x.hidden !== true), [list]);
 
-        const pattern = dynamicOption
-            ? undefined
-            : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`;
+        const h = Math.min(320, (displayList.length || 1) * MIN_SIZE);
+
+        const pattern = useMemo(
+            () =>
+                dynamicOption ? undefined : `^(${options.map((x) => `${safeRegex(x.value)}${x.label ? "|" + safeRegex(x.label) : ""}`).join("|")})$`,
+            [dynamicOption, options]
+        );
 
         const { x, y, strategy, refs, context, placement } = useFloating<HTMLInputElement>({
             open,
@@ -183,14 +181,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 }
             }
         }, [props.value, options.length]);
-
-        useEffect(() => {
-            if (!open) return setH(0);
-            const inputRef = refs.reference;
-            if (inputRef.current === null) return;
-            const s = getRemainingSize(inputRef.current as HTMLElement, window.innerHeight);
-            setTimeout(() => setH(Math.min(s, displayList.length * MIN_SIZE)), 100);
-        }, [shadow, open, refs.reference, displayList.length]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -279,7 +269,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
                         {value ? (
-                            <button type="button" onClick={onClose} aria-label={translation.inputCloseValue} className="p-2 transition-colors link:text-danger md:p-1">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                aria-label={translation.inputCloseValue}
+                                className="p-2 transition-colors link:text-danger md:p-1"
+                            >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
@@ -375,13 +370,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     "shadow-floating isolate z-floating m-0 max-h-80 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
                                     isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
                                 )}
-                                onAnimationComplete={() => {
-                                    if (!open) return setH(0);
-                                    const ul = refs.floating.current as HTMLElement;
-                                    const li = ul.querySelectorAll("li").item(0);
-                                    const sum = (li ? li.getBoundingClientRect().height : MIN_SIZE) * displayList.length;
-                                    return flushSync(() => setH(sum + 2));
-                                }}
                             >
                                 {isEmpty ? (
                                     <div className="w-full border-b border-tooltip-border">
