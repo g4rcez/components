@@ -9,6 +9,7 @@ import {
     useInteractions,
     useRole,
     type ElementProps,
+    type FloatingContext,
 } from "@floating-ui/react";
 import { cva } from "class-variance-authority";
 import { XIcon } from "@phosphor-icons/react";
@@ -128,14 +129,14 @@ export type ModalProps = Override<
             closeOnFocusOut: boolean;
             role: "dialog";
             interactions: ElementProps[];
-            trigger: Label | React.FC<any>;
+            trigger: Label;
         }>
 >;
 
 type DraggableProps = {
     sheet: boolean;
     position: DrawerPosition;
-    parent: React.RefObject<HTMLElement>;
+    parent: React.MutableRefObject<HTMLElement | null>;
     onChange: (nextState: boolean) => void;
     value: MotionValue<number | undefined>;
 };
@@ -212,9 +213,9 @@ const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsTy
     return forceType ? positions[type] : positions.sheet;
 };
 
-export type ModalRef = { context: any; floating: HTMLElement | null };
+export type ModalRef = { context: FloatingContext; floating: HTMLElement | null };
 
-const noop: any[] = [];
+const noop: ElementProps[] = [];
 
 type ModalComponent = React.FC<ModalProps> & {
     confirm: <T>(options: ConfirmOptions) => Promise<T>;
@@ -274,8 +275,6 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         });
 
         const interactions = useInteractions([click, dismiss, role].concat(outInteractions));
-
-        const Trigger = trigger as any;
 
         const floatingSize = useMotionValue<number | undefined>(undefined);
         const sheetY = useMotionValue<number | undefined>(undefined);
@@ -337,7 +336,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             <Fragment>
                 {trigger ? (
                     <Component ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
-                        {Trigger}
+                        {trigger}
                     </Component>
                 ) : null}
                 <MotionConfig reducedMotion={animated ? "user" : "always"}>
@@ -364,7 +363,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     : { "aria-label": ariaTitle })}
                                                 {...interactions.getFloatingProps({
                                                     "aria-modal": open,
-                                                    ref: mergeRefs(floating.refs.setFloating, removeScrollRef) as any,
+                                                    ref: mergeRefs<HTMLDivElement>(floating.refs.setFloating, removeScrollRef),
                                                     className: css(variants({ position, type }), className, "isolate overscroll-contain"),
                                                 })}
                                                 exit="exit"
@@ -382,7 +381,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         value={floatingSize}
                                                         sheet={type === "sheet"}
                                                         position={position as DrawerPosition}
-                                                        parent={floating.refs.floating as any}
+                                                        parent={floating.refs.floating}
                                                     />
                                                 ) : null}
                                                 {title ? (
@@ -409,13 +408,14 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         if (isDragging.current) {
                                                             const currentY = sheetY.get() || 0;
                                                             const threshold = window.innerHeight * 0.2;
-
+                                                            // reason: sheetY holds undefined as initial sentinel; animate only fires with numeric targets
+                                                            const sheetYNumeric = sheetY as MotionValue<number>;
                                                             if (currentY > threshold) {
-                                                                await animate(sheetY as any, window.innerHeight, { duration: 0.2, ease: "easeIn" })
+                                                                await animate(sheetYNumeric, window.innerHeight, { duration: 0.2, ease: "easeIn" })
                                                                     .finished;
                                                                 onChange(false);
                                                             } else {
-                                                                animate(sheetY as any, 0, { type: "spring", bounce: 0, duration: 0.3 });
+                                                                animate(sheetYNumeric, 0, { type: "spring", bounce: 0, duration: 0.3 });
                                                             }
                                                             isDragging.current = false;
                                                         }
@@ -477,10 +477,10 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             </Fragment>
         );
     }
-) as any;
+) as unknown as ModalComponent;
 
 type ButtonConfirmationAction = {
-    value?: any;
+    value?: unknown;
     text?: Label;
     theme?: ButtonProps["theme"];
 };
@@ -494,14 +494,14 @@ export type ConfirmOptions = {
 
 type ConfirmContextType = (options: ConfirmOptions) => Promise<boolean>;
 
-let confirmGlobal: ConfirmContextType = async <T extends any>(options: ConfirmOptions): Promise<T> => {
+let confirmGlobal: ConfirmContextType = async <T,>(options: ConfirmOptions): Promise<T> => {
     if (typeof window !== "undefined") {
         console.warn("ConfirmationProvider is not mounted");
     }
-    return false as T;
+    return false as unknown as T;
 };
 
-Modal.confirm = <T extends any>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as any;
+Modal.confirm = <T,>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as unknown as Promise<T>;
 
 export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }) => {
     const [open, setOpen] = useState(false);
