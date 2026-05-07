@@ -8,8 +8,8 @@ type ProgressProps = {
     max?: number;
     label?: Label;
     percent?: number;
-    container?: string;
     className?: string;
+    container?: string;
     textClassName?: string;
 };
 

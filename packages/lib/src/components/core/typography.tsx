@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import React, { type ComponentProps, Fragment } from "react";
+import React, { type ComponentProps } from "react";
 import { css } from "../../lib/dom";
 import { Label } from "../../types";
 
@@ -18,10 +18,8 @@ export type InfoProps = {
 
 export const Info = (props: React.PropsWithChildren<InfoProps>) => (
     <div className={css(`flex ${props.row ? "flex-row items-center" : "flex-col"} gap-1`, props.className)}>
-        <Fragment>
-            <span className="text-sm font-medium tracking-wide">{props.row ? `${props.label}:` : props.label}</span>
-            <span className={css(props.disabled ? "text-disabled" : "", props.row ? "w-fit text-base" : "w-full text-lg")}>{props.children}</span>
-        </Fragment>
+        <span className="text-sm font-medium tracking-wide">{props.row ? `${props.label}:` : props.label}</span>
+        <span className={css(props.disabled ? "text-disabled" : "", props.row ? "w-fit text-base" : "w-full text-lg")}>{props.children}</span>
     </div>
 );
 
@@ -35,14 +33,16 @@ export const PageTitle = (props: PropsWithChildren<{ title: string }>) => (
 type PageHeaderProps = {
     title: string;
     description: Label;
+    containerProps?: React.ComponentProps<"header">;
 };
 
 export const PageHeader = (props: PropsWithChildren<PageHeaderProps>) => {
     return (
-        <header className="gap-mega min-w-full flex flex-row flex-wrap items-center justify-between">
-            <div>
-                <PageTitle title={props.title}>{props.description}</PageTitle>
-            </div>
+        <header
+            {...props.containerProps}
+            className={css("gap-mega flex min-w-full flex-row flex-wrap items-center justify-between", props.containerProps?.className)}
+        >
+            <PageTitle title={props.title}>{props.description}</PageTitle>
             <div className="gap-kilo flex flex-wrap items-center">{props.children}</div>
         </header>
     );
