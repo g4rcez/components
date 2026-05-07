@@ -176,6 +176,7 @@ const Draggable = (props: DraggableProps) => {
             draggable
             dragListener
             dragMomentum
+            tabIndex={-1}
             type="button"
             animate={false}
             dragElastic={0}
@@ -184,7 +185,6 @@ const Draggable = (props: DraggableProps) => {
             onDrag={onDrag}
             dragSnapToOrigin
             dragDirectionLock
-            tabIndex={-1}
             aria-hidden="true"
             drag={props.sheet ? "y" : "x"}
             dragConstraints={dragConstraints}
