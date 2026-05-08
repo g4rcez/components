@@ -242,7 +242,7 @@ pnpm build
 - `pnpm dev` - Start docs development server
 - `pnpm build` - Build both library and docs
 - `pnpm test` - Run tests
-- `pnpm format` - Format code with Prettier
+- `pnpm format` - Format code with oxfmt
 
 ### Testing
 
