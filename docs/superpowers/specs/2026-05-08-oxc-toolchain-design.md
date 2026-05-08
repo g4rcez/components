@@ -8,7 +8,7 @@ Both packages: `packages/lib` and `packages/docs`.
 
 ## Files Created
 
-- `/oxlint.json` — workspace-wide lint config
+- `/.oxlintrc.json` — workspace-wide lint config
 - `/.oxfmtrc.json` — oxfmt formatting config
 - `/lefthook.yml` — pre-commit hook config
 

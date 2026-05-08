@@ -66,7 +66,8 @@ pnpm --filter ./packages/lib test        # Run tests
 pnpm --filter ./packages/lib test:watch  # Run tests in watch mode
 
 # Code Quality
-pnpm format           # Format code with Prettier
+pnpm format           # Format code with oxfmt
+pnpm lint             # Lint with oxlint
 ```
 
 ## Project Structure
@@ -377,8 +378,8 @@ Add to the docs navigation in `packages/docs/src/components/navigation.tsx`.
 
 ### Formatting
 
-- **Prettier**: Automatic code formatting
-- **ESLint**: Code quality and consistency
+- **oxfmt**: Automatic code formatting (with Tailwind class sorting)
+- **oxlint**: Code quality and consistency
 - **TypeScript**: Type checking
 
 ### Style Guidelines
@@ -418,7 +419,7 @@ Add to the docs navigation in `packages/docs/src/components/navigation.tsx`.
 1. **Code Quality**
 
    - [ ] All tests pass
-   - [ ] Code is formatted with Prettier
+   - [ ] Code is formatted with oxfmt (`pnpm format`)
    - [ ] No TypeScript errors
    - [ ] No console warnings
 
