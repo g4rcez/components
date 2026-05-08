@@ -19,7 +19,7 @@
     "build": "pnpm run --filter ./packages/lib lib:css; pnpm run -r build",
     "dev": "pnpm run --filter ./packages/docs dev",
     "format": "pnpm run -r format",
-    "lint": "pnpm run -r lint",
+    "lint": "pnpm run -r --sequential lint",
     "prepare": "lefthook install",
     "start": "pnpm run --filter ./packages/docs start"
   }
