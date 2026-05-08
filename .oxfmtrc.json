@@ -7,6 +7,7 @@
     "singleQuote": false,
     "trailingComma": "es5",
     "sortTailwindcss": {
-        "config": "./packages/lib/tailwind.config.ts"
+        "config": "./packages/lib/tailwind.config.ts",
+        "functions": ["cn", "cva", "clsx"]
     }
 }
