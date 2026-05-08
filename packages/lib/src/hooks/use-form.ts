@@ -16,8 +16,7 @@ import {
     SwitchProps,
     TextareaProps,
 } from "../components";
-import { path } from "../lib/fns";
-import { Any, SetState, Walk } from "../types";
+import { SetState, Walk } from "../types";
 
 /**
  * Validates if a value is valid JSON
@@ -35,6 +34,8 @@ const isValidJSON = (value: unknown): boolean => {
         } catch {
             return false;
         }
+    } else {
+        str = value;
     }
     try {
         JSON.parse(str);
@@ -49,16 +50,16 @@ const convertPath = (path: string): string[] => path.replace(/\[(\d+)]/g, ".$1")
 const shallowSetPath = (obj: unknown, keys: string[], value: unknown): unknown => {
     if (keys.length === 0) return value;
     const [key, ...rest] = keys;
-    const current = obj != null ? (obj as Record<string, unknown>)[key!] : undefined;
+    const current = obj != null ? obj[key!] : undefined;
     const nextKey = rest[0];
-    const fallback: unknown[] | Record<string, unknown> = nextKey !== undefined && !Number.isNaN(Number(nextKey)) ? [] : {};
+    const fallback = nextKey !== undefined && !Number.isNaN(Number(nextKey)) ? [] : {};
     const updated = shallowSetPath(current ?? fallback, rest, value);
     if (Array.isArray(obj)) {
-        const clone = (obj as unknown[]).slice();
+        const clone = obj.slice();
         clone[Number(key)] = updated;
         return clone;
     }
-    return { ...((obj as Record<string, unknown>) ?? {}), [key!]: updated };
+    return { ...(obj ?? {}), [key!]: updated };
 };
 
 const setPath = <O extends object>(o: O, path: string | Array<string | number>, value: unknown): O => {
@@ -68,12 +69,12 @@ const setPath = <O extends object>(o: O, path: string | Array<string | number>, 
 
 const sort = (a: string, b: string) => a.localeCompare(b);
 
-const noop = {} as never;
+const noop: any = {};
 
 const getDefaultValue = (inner: z.ZodTypeAny): unknown => {
     const instanceName = inner._def.typeName;
     if (instanceName === "ZodDefault") return inner._def.defaultValue();
-    if (instanceName === "ZodObject") return getDefaults(inner as z.AnyZodObject);
+    if (instanceName === "ZodObject") return getDefaults(inner as any);
     if (instanceName === "ZodArray") return [];
     if ("innerType" in inner._def) {
         const defaults = getDefaultValue(inner._def.innerType);
@@ -91,10 +92,10 @@ const getDefaults = <TSchema extends z.AnyZodObject>(schema: TSchema) =>
     );
 
 const deepMerge = <T extends object, U extends object>(a: T, b: U): T & U => {
-    const result = structuredClone(a) as T & U;
+    const result: any = structuredClone(a);
     for (const key in b) {
         const bValue = b[key];
-        const aValue = (a as Record<string, unknown>)[key];
+        const aValue = (a as any)[key];
         if (bValue !== undefined) {
             if (
                 typeof bValue === "object" &&
@@ -133,8 +134,8 @@ const options = {
  */
 export const formToJson = (form: HTMLFormElement): Record<string, unknown> => {
     const formData = new FormData(form);
-    const urlSearchParams = new URLSearchParams(Array.from(formData) as [string, string][]);
-    return parse(urlSearchParams.toString(), options) as Record<string, unknown>;
+    const urlSearchParams = new URLSearchParams(formData as any);
+    return parse(urlSearchParams.toString(), options) as never;
 };
 
 const schemaShapeCache = new WeakMap<z.ZodObject<z.ZodRawShape>, Map<string, z.ZodTypeAny>>();
@@ -147,11 +148,12 @@ export const getSchemaShape = <T extends z.ZodObject<z.ZodRawShape>>(name: strin
     }
     const cached = nameMap.get(name);
     if (cached !== undefined) return cached;
-    const result = convertPath(name).reduce((acc, el) => {
+    const result = convertPath(name).reduce<z.ZodTypeAny>((acc, el) => {
         if (el === "") return acc;
-        const shape = acc.shape?.[el] || acc;
+        const zodObj = acc as z.ZodObject<z.ZodRawShape>;
+        const shape = zodObj.shape?.[el] || acc;
         return shape._def.typeName === "ZodArray" ? shape.element : shape;
-    }, schema);
+    }, schema as z.ZodTypeAny);
     nameMap.set(name, result);
     return result;
 };
@@ -173,7 +175,7 @@ const getDataTarget = (e: HTMLEntryElements) => {
     return getValueByType(element as HTMLInputElement);
 };
 
-type CustomOnInvalid = (args: { form: HTMLFormElement; errors: Record<string, string> }) => void;
+type CustomOnInvalid = (args: { form: HTMLFormElement; errors: Record<string, string> }) => any;
 
 export type UseOnSubmitArgs<T> = {
     data: T;
@@ -181,12 +183,12 @@ export type UseOnSubmitArgs<T> = {
     success: boolean;
     reset: () => void;
     form: HTMLFormElement;
-    setErrors: SetState<Any>;
+    setErrors: SetState<Record<string, unknown> | null>;
     event: React.FormEvent<HTMLFormElement>;
     errors: Array<{ message: string; path: string[] }>;
 };
 
-export type UseFormSubmit<T> = (event: React.FormEvent<HTMLFormElement>, args: UseOnSubmitArgs<T>) => void;
+export type UseFormSubmit<T> = (event: React.FormEvent<HTMLFormElement>, args: UseOnSubmitArgs<T>) => any;
 
 type Interceptor<T> = {
     get: () => T;
@@ -201,7 +203,7 @@ export type UseFormOptions<T> = Partial<{
     state: T | Partial<T> | (() => T | Partial<T>);
 }>;
 
-const defaultOptions: UseFormOptions<Record<string, unknown>> = {
+const defaultOptions: UseFormOptions<any> = {
     state: {},
     loading: false,
     useOnChange: false,
@@ -262,10 +264,10 @@ export const createFormStorage = (name: string): Interceptor<Record<string, unkn
  * @param opts - Optional configuration including initial state and interceptors
  * @returns Form management object with input helpers and handlers
  */
-export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formName: string, opts: UseFormOptions<z.infer<T>> = defaultOptions) => {
+export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string, opts: UseFormOptions<z.infer<T>> = defaultOptions) => {
     type Fields = AllPaths<z.infer<T>>;
 
-    const [errors, setErrors] = useState<Record<string, string> | null>(null);
+    const [errors, setErrors] = useState<Record<string, any> | null>(null);
     const ref = useRef<Record<string, { element: HTMLInputElement | HTMLSelectElement; schema: z.ZodType }>>({});
     const [state, setState] = useState<z.infer<T>>(() => {
         if (Is.function(opts?.state)) return opts.state();
@@ -350,7 +352,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
         const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
             const value = e.target.value;
             setState((prev) => setPath(prev!, name, value));
-            props?.onChange?.(e);
+            props?.onChange?.(e as any);
         };
         return {
             ...props,
@@ -493,11 +495,13 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
                 ? (document.querySelector(`[data-target="${input.element.name}"]`) as HTMLEntryElements)
                 : (input.element as HTMLEntryElements);
             const validation = input.schema.safeParse(getValueByType(element));
-            const onBlurField = (e: Event & { target: HTMLEntryElements; relatedTarget?: HTMLEntryElements }) => {
+            const onBlurField = (e: any) => {
                 const name = getName(e.target);
                 if (!name) return false;
-                const current = e.target;
-                const value = getDataTarget(e.target) || (e.relatedTarget ? getValueByType(e.relatedTarget) : "");
+                const current = target;
+                // reason: FocusEvent.relatedTarget needed for blur; addEventListener signature uses base Event
+                const relatedTarget = (e as FocusEvent).relatedTarget as HTMLEntryElements | null;
+                const value = getDataTarget(target) || (relatedTarget ? getValueByType(relatedTarget) : "");
                 const validation = input.schema.safeParse(value);
                 current.setAttribute("value", value as string);
                 if (validation.success) {
@@ -585,13 +589,13 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             event,
             reset,
             setErrors,
-            data: json as unknown as z.infer<T>, // raw invalid form data; T is unverified in the failure path
+            data: json,
             success: false,
             errors: result.error.issues.map((x) => ({ message: x.message, path: x.path.map((x) => String(x)) })),
         });
     };
 
-    const get = (p: Fields) => path(state, p as unknown as Walk<z.infer<T>>) || ""; // AllPaths (sidekicker) and Walk (local) are structurally equivalent path unions
+    const get = (p: Fields) => path(state, p as any) || "";
 
     const controller = (props?: ComponentProps<"form">) => ({
         ...props,
