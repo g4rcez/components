@@ -87,7 +87,7 @@ export type DesignTokensParser =
 
 export type DesignTokensBuilder = (value: string, key: string, combine: string) => Token;
 
-type Fn = (...a: any[]) => any;
+type Fn = (...a: never[]) => unknown;
 
 export type DeepParse<T extends GeneralTokens, F extends Fn> = {
     [K in keyof T]: T[K] extends GeneralTokens ? DeepParse<T[K], F> : ReturnType<Fn>;

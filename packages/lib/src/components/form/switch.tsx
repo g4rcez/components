@@ -21,8 +21,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, loa
     useEffect(() => {
         if (innerRef.current !== null) {
             if (stableOnChange.current) {
-                const onChange = (e: any) => {
-                    if (stableOnChange.current) stableOnChange.current(e);
+                const onChange = (e: Event) => {
+                    if (stableOnChange.current) stableOnChange.current(e as unknown as React.ChangeEvent<HTMLInputElement>);
                 };
                 const ref = innerRef.current;
                 ref.addEventListener("change", onChange);
@@ -57,8 +57,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, loa
                     onChange={(e) => setInnerChecked(e.target.checked)}
                 />
                 <button
-                    type="button"
                     role="switch"
+                    type="button"
                     onClick={onCheck}
                     aria-checked={checked}
                     data-checked={checked}

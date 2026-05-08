@@ -16,7 +16,7 @@ import {
 import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type Components, type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
@@ -56,21 +56,25 @@ const transitionStyles = {
     close: { transform: "scaleY(0)", opacity: 0 },
 } as const;
 
-const emptyRef: any[] = [];
+const EMPTY_NODES: Array<HTMLElement | null> = [];
+const EMPTY_VALUES: string[] = [];
 
-const List = forwardRef(function VirtualList(props: any, ref: any) {
+const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.ul {...props} role="listbox" ref={ref as any} className="w-full rounded-b-lg border-b border-tooltip-border last:border-transparent">
+        <motion.ul {...props} role="listbox" ref={ref} className="w-full rounded-b-lg border-b border-tooltip-border last:border-transparent">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
     );
 });
 
-const Item = forwardRef(function VirtualItem({ item, context, ...props }: any, ref: any) {
-    return <motion.li {...props} ref={ref as any} className="last:rounded-t-lg" />;
+const Item = forwardRef<HTMLLIElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualItem(
+    { item, context, ...props },
+    ref
+) {
+    return <motion.li {...props} ref={ref} className="last:rounded-t-lg" />;
 });
 
-const components = { List, Item };
+const components: Components<MultiSelectItemProps> = { List, Item };
 
 const OverflowControl = (props: PropsWithChildren<{ label?: string }>) => {
     const translate = useTranslations();
@@ -127,7 +131,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const map = useMemo(() => new Dict(options.map((x) => [x.value, x])), [options]);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
-        const defaults = props.value ?? props.defaultValue ?? (emptyRef as string[]);
+        const defaults = props.value ?? props.defaultValue ?? EMPTY_VALUES;
         const translation = useTranslations();
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
@@ -145,7 +149,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
         });
         const [index, setIndex] = useState<number | null>(null);
-        const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
+        const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
 
         const innerOptions = useMemo<MultiSelectItemProps[]>(
             () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
@@ -300,7 +304,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
 
         return (
             <InputField
-                {...(props as any)}
+                {...props}
                 left={left}
                 error={error}
                 ref={fieldset}
@@ -346,13 +350,13 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 }
             >
                 <ul
-                    {...(getReferenceProps({
+                    {...getReferenceProps({
                         ...props,
                         onFocus,
                         id: `${id}-shadow`,
                         name: `${id}-shadow`,
                         ref: refs.setReference,
-                    } as any) as any)}
+                    } as React.HTMLProps<HTMLElement>)}
                     tabIndex={0}
                     role="button"
                     data-name={id}
@@ -457,11 +461,11 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                 ref={virtuoso}
                                                 hidden={isEmpty}
                                                 data={displayList}
-                                                components={components as any}
+                                                components={components}
                                                 style={scrollableContainerStyle}
                                                 className="max-h-72 border-floating-border bg-floating-background p-0 text-foreground"
                                                 itemContent={(i, option) => {
-                                                    const Label = (option.Render as React.FC<any>) ?? Frag;
+                                                    const Label = option.Render ?? Frag;
                                                     const active = value.has(option.value) || value.has(option.label ?? "");
                                                     const selected = index === i;
                                                     const children = option.label ?? option.value;
@@ -469,7 +473,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                         <button
                                                             data-value={option.value}
                                                             {...getItemProps({
-                                                                ref: (node) => void (listRef.current[i] = node) as any,
+                                                                ref: (node) => {
+                                                                    listRef.current[i] = node;
+                                                                },
                                                                 role: "option",
                                                                 type: "button",
                                                                 "aria-checked": active,

@@ -1,5 +1,5 @@
 "use client";
-import { motion, Transition } from "motion/react";
+import { HTMLMotionProps, motion, Transition } from "motion/react";
 import React, { ComponentProps, createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
 import { useColorParser } from "../../hooks/use-color-parser";
 import { Label } from "../../types";
@@ -109,7 +109,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                 className={`hidden h-[2px] w-full bg-card-border first:hidden xl:block ${innerStatus === "active" || innerStatus === "complete" ? "bg-success" : ""}`}
             />
             <motion.button
-                {...(props as any)}
+                {...(props as unknown as HTMLMotionProps<"button">)}
                 type="button"
                 data-step={step}
                 animate={innerStatus}

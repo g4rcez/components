@@ -113,8 +113,8 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                         <div className="absolute bottom-0 h-[1px] w-full bg-card-border" />
                         <nav className="min-w-0">
                             <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
-                                {items.map((x: any) => {
-                                    const inner = x.props as TabProps;
+                                {items.map((x: React.ReactElement<TabProps>) => {
+                                    const inner = x.props;
                                     const current = active === inner.id;
                                     return (
                                         <li
@@ -141,7 +141,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                                 onClick={inner.disabled ? undefined : onClick}
                                                 className="block w-full whitespace-nowrap px-10 py-4 disabled:cursor-not-allowed"
                                             >
-                                                {inner.title as any}
+                                                {inner.title as React.ReactNode}
                                             </Polymorph>
                                         </li>
                                     );

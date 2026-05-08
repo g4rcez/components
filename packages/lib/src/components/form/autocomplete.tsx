@@ -17,11 +17,11 @@ import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type Components, type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
-import { css, dispatchInput, getRemainingSize, initializeInputDataset, mergeRefs } from "../../lib/dom";
+import { css, dispatchInput, getRemainingSize, initializeInputDataset, mergeRefs, synthesizeChangeEvent } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { fzf } from "../../lib/fzf";
 import { Label } from "../../types";
@@ -47,21 +47,24 @@ const transitionStyles = {
     initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
-const emptyRef: any[] = [];
+const EMPTY_NODES: Array<HTMLElement | null> = [];
 
-const List = forwardRef(function VirtualList(props: any, ref: any) {
+const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.ul {...props} ref={ref as any} className="max-h-96 w-full overscroll-contain rounded-lg">
+        <motion.ul {...props} ref={ref} className="max-h-96 w-full overscroll-contain rounded-lg">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
     );
 });
 
-const Item = forwardRef(function VirtualItem({ item, context, ...props }: any, ref: any) {
-    return <motion.li {...props} ref={ref as any} className="first:rounded-t-lg last:rounded-t-lg" />;
+const Item = forwardRef<HTMLLIElement, ItemProps<AutocompleteItemProps> & ContextProp<unknown>>(function VirtualItem(
+    { item, context, ...props },
+    ref
+) {
+    return <motion.li {...props} ref={ref} className="first:rounded-t-lg last:rounded-t-lg" />;
 });
 
-const components = { List, Item };
+const components: Components<AutocompleteItemProps> = { List, Item };
 
 const MIN_SIZE = 40;
 
@@ -97,7 +100,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [value, setValue] = useState(defaults);
         const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
         const [index, setIndex] = useState<number | null>(null);
-        const listRef = useRef<Array<HTMLElement | null>>(emptyRef);
+        const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
         const removeScrollRef = useRemoveScroll(open, "block-only");
 
         const innerOptions = useMemo<AutocompleteItemProps[]>(
@@ -196,7 +199,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             input.value = opt.value;
             const event = new Event("change", { bubbles: false, cancelable: true });
             input.dispatchEvent(event);
-            if (props.onChange) props.onChange(event as any);
+            if (props.onChange) props.onChange(synthesizeChangeEvent(input));
             setLabel(opt.label ?? "");
             setClosed();
             setShadow("");
@@ -242,7 +245,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         return (
             <InputField
-                {...(props as any)}
+                {...props}
                 left={left}
                 error={error}
                 ref={fieldset}
@@ -290,7 +293,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             >
                 <input
                     data-shadow="true"
-                    {...(getReferenceProps({
+                    {...getReferenceProps({
                         ...props,
                         onFocus,
                         pattern,
@@ -328,7 +331,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 }
                             }
                         },
-                    } as any) as any)}
+                    } as React.HTMLProps<HTMLInputElement>)}
                     data-value={value}
                     data-error={!!error}
                     data-name={id}
@@ -360,7 +363,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
                             <motion.div
                                 {...getFloatingProps({
-                                    ref: mergeRefs(removeScrollRef as any, refs.setFloating as any) as any,
+                                    ref: mergeRefs(removeScrollRef, refs.setFloating),
                                     style: { ...transitions.styles, left: x, top: y ?? 0, position: strategy, height: "auto" },
                                 })}
                                 initial={false}
@@ -385,11 +388,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     data={displayList}
                                     style={{ height: h }}
                                     defaultItemHeight={MIN_SIZE}
-                                    components={components as any}
+                                    components={components}
                                     scrollerRef={(e) => void (scroller.current = e as HTMLElement)}
                                     className="border-floating max-h-full overscroll-contain rounded-lg bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
-                                        const Label = (option.Render as React.FC<any>) ?? Frag;
+                                        const Label = option.Render ?? Frag;
                                         const active = value === option.value || value === option.label;
                                         const selected = index === i;
                                         const children = option.label ?? option.value;
@@ -397,7 +400,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                             <button
                                                 data-value={option.value}
                                                 {...getItemProps({
-                                                    ref: (node) => void (listRef.current[i] = node) as any,
+                                                    ref: (node) => {
+                                                        listRef.current[i] = node;
+                                                    },
                                                     role: "option",
                                                     type: "button",
                                                     "aria-checked": active,

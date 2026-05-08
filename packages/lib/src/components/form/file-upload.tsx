@@ -195,12 +195,12 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {state[0] ? <FileViewer item={state[0]!} /> : null}
             </Modal>
             <div
-                {...(getRootProps() as any)}
+                {...(getRootProps() as unknown as React.HTMLAttributes<HTMLDivElement>)}
                 aria-label={t.fileUploadZoneLabel}
                 data-active={items ? items.length > 0 : false}
                 className="flex flex-col items-center justify-center rounded-lg border border-card-border p-6 text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
             >
-                <input {...getInputProps(props as any)} name={props.name} id={props.name} />
+                <input {...getInputProps(props as unknown as React.InputHTMLAttributes<HTMLInputElement>)} name={props.name} id={props.name} />
                 <InteractiveArea File={File} onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={items} />
             </div>
         </Context.Provider>
