@@ -408,7 +408,6 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         if (isDragging.current) {
                                                             const currentY = sheetY.get() || 0;
                                                             const threshold = window.innerHeight * 0.2;
-                                                            // reason: sheetY holds undefined as initial sentinel; animate only fires with numeric targets
                                                             const sheetYNumeric = sheetY as MotionValue<number>;
                                                             if (currentY > threshold) {
                                                                 await animate(sheetYNumeric, window.innerHeight, { duration: 0.2, ease: "easeIn" })
