@@ -19,17 +19,17 @@ import { Empty } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `Icon` | `Icon` | `FileIcon` | Phosphor icon component to display |
-| `message` | `string` | Localized "No data available" | Descriptive empty state message |
+| Prop      | Type     | Default                       | Description                        |
+| --------- | -------- | ----------------------------- | ---------------------------------- |
+| `Icon`    | `Icon`   | `FileIcon`                    | Phosphor icon component to display |
+| `message` | `string` | Localized "No data available" | Descriptive empty state message    |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
+| Token           | CSS Variable | Purpose                     |
+| --------------- | ------------ | --------------------------- |
 | `text-disabled` | `--disabled` | Icon and message text color |
 
 ## Examples
@@ -45,7 +45,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ```tsx
 import { MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
 
-<Empty Icon={MagnifyingGlassMinusIcon} message="No results found" />
+<Empty Icon={MagnifyingGlassMinusIcon} message="No results found" />;
 ```
 
 ### In a Data Table
@@ -54,15 +54,15 @@ import { MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
 import { DatabaseIcon } from "@phosphor-icons/react";
 
 function DataTable({ data }: { data: Item[] }) {
-  if (data.length === 0) {
-    return (
-      <div className="py-12">
-        <Empty Icon={DatabaseIcon} message="No records found" />
-      </div>
-    );
-  }
+    if (data.length === 0) {
+        return (
+            <div className="py-12">
+                <Empty Icon={DatabaseIcon} message="No records found" />
+            </div>
+        );
+    }
 
-  return <table>{/* table content */}</table>;
+    return <table>{/* table content */}</table>;
 }
 ```
 
@@ -72,21 +72,21 @@ function DataTable({ data }: { data: Item[] }) {
 import { TrayIcon } from "@phosphor-icons/react";
 
 function TaskList({ tasks }: { tasks: Task[] }) {
-  return (
-    <div className="space-y-4">
-      <h2>My Tasks</h2>
+    return (
+        <div className="space-y-4">
+            <h2>My Tasks</h2>
 
-      {tasks.length === 0 ? (
-        <Empty Icon={TrayIcon} message="No tasks yet" />
-      ) : (
-        <ul>
-          {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+            {tasks.length === 0 ? (
+                <Empty Icon={TrayIcon} message="No tasks yet" />
+            ) : (
+                <ul>
+                    {tasks.map((task) => (
+                        <TaskItem key={task.id} task={task} />
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
 }
 ```
 
@@ -97,19 +97,16 @@ import { Button } from "@g4rcez/components/button";
 import { FolderPlusIcon } from "@phosphor-icons/react";
 
 function EmptyProjectsList() {
-  return (
-    <div className="text-center py-12">
-      <Empty
-        Icon={FolderPlusIcon}
-        message="You haven't created any projects yet"
-      />
-      <div className="mt-6">
-        <Button theme="primary" onClick={handleCreate}>
-          Create Your First Project
-        </Button>
-      </div>
-    </div>
-  );
+    return (
+        <div className="text-center py-12">
+            <Empty Icon={FolderPlusIcon} message="You haven't created any projects yet" />
+            <div className="mt-6">
+                <Button theme="primary" onClick={handleCreate}>
+                    Create Your First Project
+                </Button>
+            </div>
+        </div>
+    );
 }
 ```
 

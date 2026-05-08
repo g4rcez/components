@@ -21,37 +21,37 @@ import { DatePicker } from "@g4rcez/components/date-picker";
 
 `DatePicker` inherits all `Input` and `Calendar` props. Notable additions:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `date` | `Date` | - | Controlled selected date |
-| `type` | `"date" \| "datetime"` | `"date"` | Whether to include time (hour + minute) selection |
-| `floating` | `boolean` | `true` | Show the calendar in a floating `Dropdown`; set to `false` to embed it inline |
-| `clickToClose` | `boolean` | `false` | Close the calendar immediately after a date is picked |
-| `locale` | `Locales` | system locale | Locale for mask generation and calendar display |
-| `markToday` | `boolean` | `true` | Highlight today in the calendar |
-| `disabledDate` | `(date: Date) => boolean` | - | Callback that returns `true` for dates that should be unselectable |
-| `onChange` | `(date: Date \| undefined) => void` | - | Called with the new `Date` when input is valid, or `undefined` when cleared |
-| `title` | `string` | - | Field label |
-| `error` | `string` | - | Error message shown below the field |
-| `required` | `boolean` | `true` | Marks field as required (default is `true` for DatePicker) |
-| `name` | `string` | - | Form field name — also the `id` of the hidden `<input type="date">` |
+| Prop           | Type                                | Default       | Description                                                                   |
+| -------------- | ----------------------------------- | ------------- | ----------------------------------------------------------------------------- |
+| `date`         | `Date`                              | -             | Controlled selected date                                                      |
+| `type`         | `"date" \| "datetime"`              | `"date"`      | Whether to include time (hour + minute) selection                             |
+| `floating`     | `boolean`                           | `true`        | Show the calendar in a floating `Dropdown`; set to `false` to embed it inline |
+| `clickToClose` | `boolean`                           | `false`       | Close the calendar immediately after a date is picked                         |
+| `locale`       | `Locales`                           | system locale | Locale for mask generation and calendar display                               |
+| `markToday`    | `boolean`                           | `true`        | Highlight today in the calendar                                               |
+| `disabledDate` | `(date: Date) => boolean`           | -             | Callback that returns `true` for dates that should be unselectable            |
+| `onChange`     | `(date: Date \| undefined) => void` | -             | Called with the new `Date` when input is valid, or `undefined` when cleared   |
+| `title`        | `string`                            | -             | Field label                                                                   |
+| `error`        | `string`                            | -             | Error message shown below the field                                           |
+| `required`     | `boolean`                           | `true`        | Marks field as required (default is `true` for DatePicker)                    |
+| `name`         | `string`                            | -             | Form field name — also the `id` of the hidden `<input type="date">`           |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `h-input-height` | `--input-height` | Input height |
-| `px-input-x` | `--input-x` | Horizontal input padding |
-| `py-input-y` | `--input-y` | Vertical input padding |
-| `border-input-border` | `--input-border` | Default border color |
-| `text-foreground` | `--foreground` | Input text color |
-| `text-primary` | `--primary` | Focus ring and border on focus/hover |
-| `text-danger` | `--danger` | Error state text and border |
-| `placeholder-input-mask` | `--input-mask` | Placeholder text color |
-| `bg-floating-background` | `--floating-background` | Calendar dropdown background |
-| `border-floating-border` | `--floating-border` | Calendar dropdown border |
+| Token                    | CSS Variable            | Purpose                              |
+| ------------------------ | ----------------------- | ------------------------------------ |
+| `h-input-height`         | `--input-height`        | Input height                         |
+| `px-input-x`             | `--input-x`             | Horizontal input padding             |
+| `py-input-y`             | `--input-y`             | Vertical input padding               |
+| `border-input-border`    | `--input-border`        | Default border color                 |
+| `text-foreground`        | `--foreground`          | Input text color                     |
+| `text-primary`           | `--primary`             | Focus ring and border on focus/hover |
+| `text-danger`            | `--danger`              | Error state text and border          |
+| `placeholder-input-mask` | `--input-mask`          | Placeholder text color               |
+| `bg-floating-background` | `--floating-background` | Calendar dropdown background         |
+| `border-floating-border` | `--floating-border`     | Calendar dropdown border             |
 
 ## Examples
 
@@ -60,21 +60,13 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ```tsx
 import { DatePicker } from "@g4rcez/components/date-picker";
 
-<DatePicker
-  name="birthdate"
-  title="Date of birth"
-/>
+<DatePicker name="birthdate" title="Date of birth" />;
 ```
 
 ### Date and time
 
 ```tsx
-<DatePicker
-  name="appointment"
-  title="Appointment time"
-  type="datetime"
-  clickToClose
-/>
+<DatePicker name="appointment" title="Appointment time" type="datetime" clickToClose />
 ```
 
 ### Disabling past dates
@@ -82,11 +74,7 @@ import { DatePicker } from "@g4rcez/components/date-picker";
 ```tsx
 import { isBefore, startOfDay } from "date-fns";
 
-<DatePicker
-  name="event_date"
-  title="Event date"
-  disabledDate={(date) => isBefore(date, startOfDay(new Date()))}
-/>
+<DatePicker name="event_date" title="Event date" disabledDate={(date) => isBefore(date, startOfDay(new Date()))} />;
 ```
 
 ### Controlled value
@@ -94,22 +82,13 @@ import { isBefore, startOfDay } from "date-fns";
 ```tsx
 const [date, setDate] = useState<Date | undefined>();
 
-<DatePicker
-  name="due_date"
-  title="Due date"
-  date={date}
-  onChange={setDate}
-/>
+<DatePicker name="due_date" title="Due date" date={date} onChange={setDate} />;
 ```
 
 ### Inline calendar (no dropdown)
 
 ```tsx
-<DatePicker
-  name="check_in"
-  title="Check-in"
-  floating={false}
-/>
+<DatePicker name="check_in" title="Check-in" floating={false} />
 ```
 
 ### Inside a form
@@ -119,18 +98,20 @@ import { Form } from "@g4rcez/components/form";
 import { Button } from "@g4rcez/components/button";
 
 function BookingForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget);
-    console.log(data.get("check_in"), data.get("check_out"));
-  };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const data = new FormData(e.currentTarget);
+        console.log(data.get("check_in"), data.get("check_out"));
+    };
 
-  return (
-    <Form onSubmit={handleSubmit} className="flex flex-col gap-base">
-      <DatePicker name="check_in" title="Check-in" />
-      <DatePicker name="check_out" title="Check-out" />
-      <Button theme="primary" type="submit">Book</Button>
-    </Form>
-  );
+    return (
+        <Form onSubmit={handleSubmit} className="flex flex-col gap-base">
+            <DatePicker name="check_in" title="Check-in" />
+            <DatePicker name="check_out" title="Check-out" />
+            <Button theme="primary" type="submit">
+                Book
+            </Button>
+        </Form>
+    );
 }
 ```
 

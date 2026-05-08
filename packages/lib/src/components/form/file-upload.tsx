@@ -87,7 +87,12 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
         <li className="flex w-full flex-row justify-between gap-4 border-b border-card-border last:border-b-transparent">
             <div className="flex flex-col gap-4">
                 <div className="flex flex-row items-center gap-4">
-                    <button type="button" onClick={onViewFile} aria-label={`View ${fileName}`} className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden">
+                    <button
+                        type="button"
+                        onClick={onViewFile}
+                        aria-label={`View ${fileName}`}
+                        className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden"
+                    >
                         {Element}
                     </button>
                     <div className="flex flex-col items-start justify-start text-left">

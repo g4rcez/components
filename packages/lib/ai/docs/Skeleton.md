@@ -27,11 +27,11 @@ A pre-built table-cell skeleton with `h-6 w-10/12 animate-pulse rounded bg-muted
 
 A configurable block skeleton.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `className` | `string` | — | Override or extend dimensions and shape |
-| `as` | `React.ElementType` | `"span"` | Polymorphic root element |
-| `style` | `CSSProperties` | — | Inline styles (e.g. dynamic `width`) |
+| Prop        | Type                | Default  | Description                             |
+| ----------- | ------------------- | -------- | --------------------------------------- |
+| `className` | `string`            | —        | Override or extend dimensions and shape |
+| `as`        | `React.ElementType` | `"span"` | Polymorphic root element                |
+| `style`     | `CSSProperties`     | —        | Inline styles (e.g. dynamic `width`)    |
 
 Default appearance: `block h-8 w-32 animate-pulse rounded bg-muted`.
 
@@ -39,18 +39,18 @@ Default appearance: `block h-8 w-32 animate-pulse rounded bg-muted`.
 
 A vertical list of randomized-width `Skeleton` lines.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `rows` | `number` | — | Number of skeleton lines to render |
-| `className` | `string` | — | Additional classes for the `<ul>` container |
+| Prop        | Type     | Default | Description                                 |
+| ----------- | -------- | ------- | ------------------------------------------- |
+| `rows`      | `number` | —       | Number of skeleton lines to render          |
+| `className` | `string` | —       | Additional classes for the `<ul>` container |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-muted` | `--muted` | Pulse animation background for all skeleton variants |
+| Token      | CSS Variable | Purpose                                              |
+| ---------- | ------------ | ---------------------------------------------------- |
+| `bg-muted` | `--muted`    | Pulse animation background for all skeleton variants |
 
 ## Examples
 
@@ -58,19 +58,25 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 function TableSkeleton() {
-  return (
-    <table className="w-full">
-      <tbody>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <tr key={index} className="border-b border-border">
-            <td className="py-3 px-4"><SkeletonCell /></td>
-            <td className="py-3 px-4"><SkeletonCell /></td>
-            <td className="py-3 px-4"><SkeletonCell /></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+    return (
+        <table className="w-full">
+            <tbody>
+                {Array.from({ length: 5 }).map((_, index) => (
+                    <tr key={index} className="border-b border-border">
+                        <td className="py-3 px-4">
+                            <SkeletonCell />
+                        </td>
+                        <td className="py-3 px-4">
+                            <SkeletonCell />
+                        </td>
+                        <td className="py-3 px-4">
+                            <SkeletonCell />
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
 }
 ```
 
@@ -78,20 +84,20 @@ function TableSkeleton() {
 
 ```tsx
 function CardSkeleton() {
-  return (
-    <div className="rounded-card border border-card-border bg-card-background p-6 space-y-4">
-      <Skeleton className="h-4 w-3/4" />
-      <div className="space-y-2">
-        <SkeletonCell />
-        <SkeletonCell />
-        <Skeleton className="h-2 w-1/2" />
-      </div>
-      <div className="flex gap-2">
-        <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-16" />
-      </div>
-    </div>
-  );
+    return (
+        <div className="rounded-card border border-card-border bg-card-background p-6 space-y-4">
+            <Skeleton className="h-4 w-3/4" />
+            <div className="space-y-2">
+                <SkeletonCell />
+                <SkeletonCell />
+                <Skeleton className="h-2 w-1/2" />
+            </div>
+            <div className="flex gap-2">
+                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-8 w-16" />
+            </div>
+        </div>
+    );
 }
 ```
 
@@ -105,15 +111,7 @@ function CardSkeleton() {
 
 ```tsx
 function DataSection({ data, loading }: { data?: Item; loading: boolean }) {
-  return (
-    <div>
-      {loading ? (
-        <Skeleton className="h-6 w-full" />
-      ) : (
-        <p>{data?.name}</p>
-      )}
-    </div>
-  );
+    return <div>{loading ? <Skeleton className="h-6 w-full" /> : <p>{data?.name}</p>}</div>;
 }
 ```
 
@@ -121,15 +119,15 @@ function DataSection({ data, loading }: { data?: Item; loading: boolean }) {
 
 ```tsx
 function UserRowSkeleton() {
-  return (
-    <div className="flex items-center gap-3">
-      <Skeleton className="size-10 rounded-full" />
-      <div className="flex-1 space-y-1">
-        <SkeletonCell />
-        <Skeleton className="h-2 w-1/3" />
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex items-center gap-3">
+            <Skeleton className="size-10 rounded-full" />
+            <div className="flex-1 space-y-1">
+                <SkeletonCell />
+                <Skeleton className="h-2 w-1/3" />
+            </div>
+        </div>
+    );
 }
 ```
 
@@ -155,9 +153,7 @@ function UserRowSkeleton() {
 - Consider `aria-label="Loading content"` on the skeleton container for additional context.
 
 ```tsx
-<div aria-live="polite">
-  {loading ? <SkeletonCell /> : <ActualContent />}
-</div>
+<div aria-live="polite">{loading ? <SkeletonCell /> : <ActualContent />}</div>
 ```
 
 ## Notes

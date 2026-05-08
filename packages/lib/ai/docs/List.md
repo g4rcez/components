@@ -23,19 +23,19 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 
 ### AnimatedList
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | — | One or more `AnimatedListItem` elements. |
+| Prop       | Type              | Default | Description                              |
+| ---------- | ----------------- | ------- | ---------------------------------------- |
+| `children` | `React.ReactNode` | —       | One or more `AnimatedListItem` elements. |
 
 ### AnimatedListItem
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `Label` | — | Primary heading shown in the list row and in the overlay header. |
-| `description` | `Label` | — | Secondary text rendered below the title in both the row and the overlay. |
-| `children` | `Label` | — | Content rendered inside the expanded overlay below the header section. |
-| `avatar` | `Label` | — | Optional leading node (image, icon, or element) displayed before the title in the row. |
-| `leading` | `React.FC<{ open: () => void }>` | — | Optional render-prop component at the trailing end of the row. Receives an `open` callback to open the overlay programmatically. |
+| Prop          | Type                             | Default | Description                                                                                                                      |
+| ------------- | -------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `Label`                          | —       | Primary heading shown in the list row and in the overlay header.                                                                 |
+| `description` | `Label`                          | —       | Secondary text rendered below the title in both the row and the overlay.                                                         |
+| `children`    | `Label`                          | —       | Content rendered inside the expanded overlay below the header section.                                                           |
+| `avatar`      | `Label`                          | —       | Optional leading node (image, icon, or element) displayed before the title in the row.                                           |
+| `leading`     | `React.FC<{ open: () => void }>` | —       | Optional render-prop component at the trailing end of the row. Receives an `open` callback to open the overlay programmatically. |
 
 `Label` is `string | number | ReactNode`.
 
@@ -43,19 +43,19 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `border-card-border` | `--card-border` | Row separator and overlay card border |
-| `bg-card-background` | `--card-background` | Overlay card background color |
-| `rounded-card` | `--radius-card` | Overlay card corner radius |
-| `shadow-shadow-card` | `--shadow-card` | Overlay card drop shadow |
-| `text-foreground` | `--foreground` | Default text color for row and overlay content |
-| `text-secondary` | `--secondary` | Description text color |
-| `text-primary` | `--primary` | Row title hover color and avatar focus ring |
-| `text-danger` | `--danger` | Close button hover color in the overlay |
+| Token                 | CSS Variable         | Purpose                                                             |
+| --------------------- | -------------------- | ------------------------------------------------------------------- |
+| `border-card-border`  | `--card-border`      | Row separator and overlay card border                               |
+| `bg-card-background`  | `--card-background`  | Overlay card background color                                       |
+| `rounded-card`        | `--radius-card`      | Overlay card corner radius                                          |
+| `shadow-shadow-card`  | `--shadow-card`      | Overlay card drop shadow                                            |
+| `text-foreground`     | `--foreground`       | Default text color for row and overlay content                      |
+| `text-secondary`      | `--secondary`        | Description text color                                              |
+| `text-primary`        | `--primary`          | Row title hover color and avatar focus ring                         |
+| `text-danger`         | `--danger`           | Close button hover color in the overlay                             |
 | `bg-floating-overlay` | `--floating-overlay` | Semi-transparent backdrop behind the overlay (used at 70 % opacity) |
-| `z-floating` | `--z-floating` | `z-index` for the overlay card (value: 22) |
-| `z-overlay` | `--z-overlay` | `z-index` for the backdrop scrim |
+| `z-floating`          | `--z-floating`       | `z-index` for the overlay card (value: 22)                          |
+| `z-overlay`           | `--z-overlay`        | `z-index` for the backdrop scrim                                    |
 
 ## Examples
 
@@ -65,24 +65,20 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 
 const members = [
-  { id: "1", name: "Alice Johnson", role: "Engineering" },
-  { id: "2", name: "Bob Smith", role: "Design" },
+    { id: "1", name: "Alice Johnson", role: "Engineering" },
+    { id: "2", name: "Bob Smith", role: "Design" },
 ];
 
 export function TeamList() {
-  return (
-    <AnimatedList>
-      {members.map((m) => (
-        <AnimatedListItem
-          key={m.id}
-          title={m.name}
-          description={m.role}
-        >
-          <p className="text-foreground">Full profile for {m.name}.</p>
-        </AnimatedListItem>
-      ))}
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            {members.map((m) => (
+                <AnimatedListItem key={m.id} title={m.name} description={m.role}>
+                    <p className="text-foreground">Full profile for {m.name}.</p>
+                </AnimatedListItem>
+            ))}
+        </AnimatedList>
+    );
 }
 ```
 
@@ -93,20 +89,20 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 import { UserCircleIcon } from "@phosphor-icons/react";
 
 export function UserDirectory() {
-  return (
-    <AnimatedList>
-      <AnimatedListItem
-        title="Carol White"
-        description="Product Manager"
-        avatar={<UserCircleIcon size={40} className="text-muted-foreground" />}
-      >
-        <div className="flex flex-col gap-2 text-foreground">
-          <span>Department: Product</span>
-          <span>Location: San Francisco</span>
-        </div>
-      </AnimatedListItem>
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            <AnimatedListItem
+                title="Carol White"
+                description="Product Manager"
+                avatar={<UserCircleIcon size={40} className="text-muted-foreground" />}
+            >
+                <div className="flex flex-col gap-2 text-foreground">
+                    <span>Department: Product</span>
+                    <span>Location: San Francisco</span>
+                </div>
+            </AnimatedListItem>
+        </AnimatedList>
+    );
 }
 ```
 
@@ -117,24 +113,24 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 import { Button } from "@g4rcez/components/button";
 
 export function OrderList({ orders }: { orders: Order[] }) {
-  return (
-    <AnimatedList>
-      {orders.map((order) => (
-        <AnimatedListItem
-          key={order.id}
-          title={`Order #${order.id}`}
-          description={`Total: ${order.total}`}
-          leading={({ open }) => (
-            <Button size="small" theme="ghost-muted" onClick={open}>
-              View details
-            </Button>
-          )}
-        >
-          <OrderDetailContent order={order} />
-        </AnimatedListItem>
-      ))}
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            {orders.map((order) => (
+                <AnimatedListItem
+                    key={order.id}
+                    title={`Order #${order.id}`}
+                    description={`Total: ${order.total}`}
+                    leading={({ open }) => (
+                        <Button size="small" theme="ghost-muted" onClick={open}>
+                            View details
+                        </Button>
+                    )}
+                >
+                    <OrderDetailContent order={order} />
+                </AnimatedListItem>
+            ))}
+        </AnimatedList>
+    );
 }
 ```
 
@@ -145,25 +141,32 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 import { CheckCircleIcon, WarningIcon } from "@phosphor-icons/react";
 
 const feed = [
-  { id: "n1", icon: <CheckCircleIcon size={20} className="text-success" />, title: "Deployment succeeded", time: "2 min ago", detail: "All 3 services are healthy." },
-  { id: "n2", icon: <WarningIcon size={20} className="text-warn" />, title: "High CPU usage", time: "10 min ago", detail: "Instance i-0ab2 is at 94 %." },
+    {
+        id: "n1",
+        icon: <CheckCircleIcon size={20} className="text-success" />,
+        title: "Deployment succeeded",
+        time: "2 min ago",
+        detail: "All 3 services are healthy.",
+    },
+    {
+        id: "n2",
+        icon: <WarningIcon size={20} className="text-warn" />,
+        title: "High CPU usage",
+        time: "10 min ago",
+        detail: "Instance i-0ab2 is at 94 %.",
+    },
 ];
 
 export function NotificationFeed() {
-  return (
-    <AnimatedList>
-      {feed.map((n) => (
-        <AnimatedListItem
-          key={n.id}
-          title={n.title}
-          description={n.time}
-          avatar={n.icon}
-        >
-          <p className="text-sm text-muted-foreground">{n.detail}</p>
-        </AnimatedListItem>
-      ))}
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            {feed.map((n) => (
+                <AnimatedListItem key={n.id} title={n.title} description={n.time} avatar={n.icon}>
+                    <p className="text-sm text-muted-foreground">{n.detail}</p>
+                </AnimatedListItem>
+            ))}
+        </AnimatedList>
+    );
 }
 ```
 

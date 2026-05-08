@@ -19,9 +19,9 @@ import { Heading } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | - | The content of the heading |
+| Prop       | Type              | Default | Description                |
+| ---------- | ----------------- | ------- | -------------------------- |
+| `children` | `React.ReactNode` | -       | The content of the heading |
 
 ## Design Tokens
 
@@ -54,9 +54,7 @@ import { Polymorph } from "@g4rcez/components";
 ### Applying Typography Styles
 
 ```tsx
-<Heading className="text-2xl font-bold text-foreground">
-  Dashboard Overview
-</Heading>
+<Heading className="text-2xl font-bold text-foreground">Dashboard Overview</Heading>
 ```
 
 ## Do

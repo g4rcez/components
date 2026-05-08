@@ -181,7 +181,7 @@ export const InnerTable = <T extends Any>({
     };
 
     return (
-        <div className="group bg-table-background relative flex w-full flex-col whitespace-nowrap rounded-lg">
+        <div className="group relative flex w-full flex-col whitespace-nowrap rounded-lg bg-table-background">
             <TableVirtuoso
                 components={components}
                 context={context as any}

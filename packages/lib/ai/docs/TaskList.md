@@ -22,20 +22,20 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 
 Accepts all standard HTML `<fieldset>` attributes.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | — | `Checkbox` components with the `asTask` prop. |
-| `className` | `string` | — | Additional CSS classes for the `<fieldset>`. |
+| Prop        | Type              | Default | Description                                   |
+| ----------- | ----------------- | ------- | --------------------------------------------- |
+| `children`  | `React.ReactNode` | —       | `Checkbox` components with the `asTask` prop. |
+| `className` | `string`          | —       | Additional CSS classes for the `<fieldset>`.  |
 
 ## Design Tokens
 
 `TaskList` itself is a plain `<fieldset>` and inherits ambient tokens from its children. No component-scoped tokens are consumed directly. Style the container using semantic tokens:
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `border-border` | `--border` | Optional border around the task group |
-| `bg-background` | `--background` | Container background |
-| `text-foreground` | `--foreground` | Task label text |
+| Token             | CSS Variable   | Purpose                               |
+| ----------------- | -------------- | ------------------------------------- |
+| `border-border`   | `--border`     | Optional border around the task group |
+| `bg-background`   | `--background` | Container background                  |
+| `text-foreground` | `--foreground` | Task label text                       |
 
 ## Examples
 
@@ -46,13 +46,13 @@ import { TaskList } from "@g4rcez/components/task-list";
 import { Checkbox } from "@g4rcez/components/checkbox";
 
 export default function OnboardingChecklist() {
-  return (
-    <TaskList className="flex flex-col gap-sm border border-border rounded-card p-4">
-      <Checkbox asTask>Complete initial setup</Checkbox>
-      <Checkbox asTask>Upload profile picture</Checkbox>
-      <Checkbox asTask>Verify email address</Checkbox>
-    </TaskList>
-  );
+    return (
+        <TaskList className="flex flex-col gap-sm border border-border rounded-card p-4">
+            <Checkbox asTask>Complete initial setup</Checkbox>
+            <Checkbox asTask>Upload profile picture</Checkbox>
+            <Checkbox asTask>Verify email address</Checkbox>
+        </TaskList>
+    );
 }
 ```
 
@@ -66,27 +66,19 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 type Task = { id: string; text: string; done: boolean };
 
 export default function DynamicTaskList({ tasks }: { tasks: Task[] }) {
-  const [items, setItems] = useState(tasks);
+    const [items, setItems] = useState(tasks);
 
-  const toggle = (id: string) =>
-    setItems((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
+    const toggle = (id: string) => setItems((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+
+    return (
+        <TaskList className="flex flex-col gap-sm">
+            {items.map((task) => (
+                <Checkbox key={task.id} asTask checked={task.done} onChange={() => toggle(task.id)}>
+                    {task.text}
+                </Checkbox>
+            ))}
+        </TaskList>
     );
-
-  return (
-    <TaskList className="flex flex-col gap-sm">
-      {items.map((task) => (
-        <Checkbox
-          key={task.id}
-          asTask
-          checked={task.done}
-          onChange={() => toggle(task.id)}
-        >
-          {task.text}
-        </Checkbox>
-      ))}
-    </TaskList>
-  );
 }
 ```
 
@@ -97,16 +89,14 @@ import { TaskList } from "@g4rcez/components/task-list";
 import { Checkbox } from "@g4rcez/components/checkbox";
 
 export default function ProjectSubtasks() {
-  return (
-    <TaskList className="flex flex-col gap-sm rounded-card border border-border p-4">
-      <legend className="px-1 text-sm font-medium text-foreground">
-        Phase 1 — Design
-      </legend>
-      <Checkbox asTask>Create wireframes</Checkbox>
-      <Checkbox asTask>Review with stakeholders</Checkbox>
-      <Checkbox asTask>Export design tokens</Checkbox>
-    </TaskList>
-  );
+    return (
+        <TaskList className="flex flex-col gap-sm rounded-card border border-border p-4">
+            <legend className="px-1 text-sm font-medium text-foreground">Phase 1 — Design</legend>
+            <Checkbox asTask>Create wireframes</Checkbox>
+            <Checkbox asTask>Review with stakeholders</Checkbox>
+            <Checkbox asTask>Export design tokens</Checkbox>
+        </TaskList>
+    );
 }
 ```
 
@@ -132,10 +122,10 @@ export default function ProjectSubtasks() {
 
 ## Data Attributes
 
-| Attribute | Element | Value | Description |
-|-----------|---------|-------|-------------|
-| `data-component` | `fieldset` | `"task-list"` | Identifies the component. |
-| `data-task` | child `input` | `"true"` | Must be present on child checkbox inputs for them to be counted in the completion check. Set automatically via `asTask`. |
+| Attribute        | Element       | Value         | Description                                                                                                              |
+| ---------------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `data-component` | `fieldset`    | `"task-list"` | Identifies the component.                                                                                                |
+| `data-task`      | child `input` | `"true"`      | Must be present on child checkbox inputs for them to be counted in the completion check. Set automatically via `asTask`. |
 
 ## Notes
 

@@ -19,41 +19,41 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `checked` | `boolean` | - | Controlled checked state |
-| `onChange` | `(e: React.ChangeEvent<HTMLInputElement>) => void` | - | Change handler |
-| `disabled` | `boolean` | `false` | Disabled state |
-| `loading` | `boolean` | `false` | Loading state — disables the checkbox while loading |
-| `error` | `string` | - | Error message rendered below the label |
-| `asTask` | `boolean` | `false` | Task mode: applies strikethrough to the label when checked |
-| `size` | `"medium" \| "large"` | `"medium"` | Checkbox size |
-| `container` | `string` | - | Extra CSS classes for the outer `<label>` wrapper |
-| `labelClassName` | `string` | - | Extra CSS classes for the error text element |
-| `className` | `string` | - | Extra CSS classes for the `<input>` element |
-| `children` | `React.ReactNode` | - | Label content |
-| `...props` | `React.InputHTMLAttributes<HTMLInputElement>` | - | All standard input attributes |
+| Prop             | Type                                               | Default    | Description                                                |
+| ---------------- | -------------------------------------------------- | ---------- | ---------------------------------------------------------- |
+| `checked`        | `boolean`                                          | -          | Controlled checked state                                   |
+| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void` | -          | Change handler                                             |
+| `disabled`       | `boolean`                                          | `false`    | Disabled state                                             |
+| `loading`        | `boolean`                                          | `false`    | Loading state — disables the checkbox while loading        |
+| `error`          | `string`                                           | -          | Error message rendered below the label                     |
+| `asTask`         | `boolean`                                          | `false`    | Task mode: applies strikethrough to the label when checked |
+| `size`           | `"medium" \| "large"`                              | `"medium"` | Checkbox size                                              |
+| `container`      | `string`                                           | -          | Extra CSS classes for the outer `<label>` wrapper          |
+| `labelClassName` | `string`                                           | -          | Extra CSS classes for the error text element               |
+| `className`      | `string`                                           | -          | Extra CSS classes for the `<input>` element                |
+| `children`       | `React.ReactNode`                                  | -          | Label content                                              |
+| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`      | -          | All standard input attributes                              |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `text-primary` | `--primary` | Checkbox accent / checked color |
-| `border-card-border` | `--card-border` | Unchecked border color |
-| `text-danger` | `--danger` | Error message text color |
-| `text-disabled` | `--disabled` | Opacity and cursor on disabled state |
-| `focus:ring-primary` | `--primary` | Focus ring color |
+| Token                | CSS Variable    | Purpose                              |
+| -------------------- | --------------- | ------------------------------------ |
+| `text-primary`       | `--primary`     | Checkbox accent / checked color      |
+| `border-card-border` | `--card-border` | Unchecked border color               |
+| `text-danger`        | `--danger`      | Error message text color             |
+| `text-disabled`      | `--disabled`    | Opacity and cursor on disabled state |
+| `focus:ring-primary` | `--primary`     | Focus ring color                     |
 
 ## Variants
 
 ### Size
 
-| Value | Description |
-|-------|-------------|
+| Value      | Description                           |
+| ---------- | ------------------------------------- |
 | `"medium"` | Default size — 1rem × 1rem (`size-4`) |
-| `"large"` | Larger touch target |
+| `"large"`  | Larger touch target                   |
 
 ### Task mode
 
@@ -66,12 +66,9 @@ When `asTask={true}`, the label text receives a strikethrough style when the che
 ```tsx
 const [accepted, setAccepted] = useState(false);
 
-<Checkbox
-  checked={accepted}
-  onChange={(e) => setAccepted(e.target.checked)}
->
-  I accept the terms and conditions
-</Checkbox>
+<Checkbox checked={accepted} onChange={(e) => setAccepted(e.target.checked)}>
+    I accept the terms and conditions
+</Checkbox>;
 ```
 
 ### Checkbox with error
@@ -81,41 +78,37 @@ const [agreed, setAgreed] = useState(false);
 const [error, setError] = useState("");
 
 <Checkbox
-  checked={agreed}
-  onChange={(e) => {
-    setAgreed(e.target.checked);
-    if (e.target.checked) setError("");
-  }}
-  error={error}
+    checked={agreed}
+    onChange={(e) => {
+        setAgreed(e.target.checked);
+        if (e.target.checked) setError("");
+    }}
+    error={error}
 >
-  I agree to the privacy policy
-</Checkbox>
+    I agree to the privacy policy
+</Checkbox>;
 ```
 
 ### Task list
 
 ```tsx
 const [tasks, setTasks] = useState([
-  { id: 1, text: "Write release notes", done: false },
-  { id: 2, text: "Merge pull request", done: true },
+    { id: 1, text: "Write release notes", done: false },
+    { id: 2, text: "Merge pull request", done: true },
 ]);
 
 <div className="flex flex-col gap-sm">
-  {tasks.map((task) => (
-    <Checkbox
-      key={task.id}
-      checked={task.done}
-      onChange={() =>
-        setTasks((prev) =>
-          prev.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t))
-        )
-      }
-      asTask
-    >
-      {task.text}
-    </Checkbox>
-  ))}
-</div>
+    {tasks.map((task) => (
+        <Checkbox
+            key={task.id}
+            checked={task.done}
+            onChange={() => setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t)))}
+            asTask
+        >
+            {task.text}
+        </Checkbox>
+    ))}
+</div>;
 ```
 
 ### Loading state
@@ -125,41 +118,43 @@ const [loading, setLoading] = useState(false);
 const [subscribed, setSubscribed] = useState(false);
 
 const handleChange = async (checked: boolean) => {
-  setLoading(true);
-  await updateSubscription(checked);
-  setSubscribed(checked);
-  setLoading(false);
+    setLoading(true);
+    await updateSubscription(checked);
+    setSubscribed(checked);
+    setLoading(false);
 };
 
-<Checkbox
-  checked={subscribed}
-  onChange={(e) => handleChange(e.target.checked)}
-  loading={loading}
->
-  Subscribe to newsletter
-</Checkbox>
+<Checkbox checked={subscribed} onChange={(e) => handleChange(e.target.checked)} loading={loading}>
+    Subscribe to newsletter
+</Checkbox>;
 ```
 
 ### Notification preferences form
 
 ```tsx
 function PreferencesForm() {
-  const [prefs, setPrefs] = useState({
-    email: false,
-    push: true,
-    sms: false,
-  });
+    const [prefs, setPrefs] = useState({
+        email: false,
+        push: true,
+        sms: false,
+    });
 
-  const toggle = (key: keyof typeof prefs) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setPrefs((prev) => ({ ...prev, [key]: e.target.checked }));
+    const toggle = (key: keyof typeof prefs) => (e: React.ChangeEvent<HTMLInputElement>) =>
+        setPrefs((prev) => ({ ...prev, [key]: e.target.checked }));
 
-  return (
-    <form className="flex flex-col gap-sm">
-      <Checkbox checked={prefs.email} onChange={toggle("email")}>Email notifications</Checkbox>
-      <Checkbox checked={prefs.push} onChange={toggle("push")}>Push notifications</Checkbox>
-      <Checkbox checked={prefs.sms} onChange={toggle("sms")}>SMS notifications</Checkbox>
-    </form>
-  );
+    return (
+        <form className="flex flex-col gap-sm">
+            <Checkbox checked={prefs.email} onChange={toggle("email")}>
+                Email notifications
+            </Checkbox>
+            <Checkbox checked={prefs.push} onChange={toggle("push")}>
+                Push notifications
+            </Checkbox>
+            <Checkbox checked={prefs.sms} onChange={toggle("sms")}>
+                SMS notifications
+            </Checkbox>
+        </form>
+    );
 }
 ```
 

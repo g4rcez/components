@@ -6,19 +6,19 @@ import { Card } from "../../../../../lib/src";
 import { Resizable } from "../../../../../lib/src/components/core/resizable";
 
 export default function ResizablePage() {
-  const [showExtra, setShowExtra] = useState(false);
-  const [items, setItems] = useState(["Item 1", "Item 2"]);
+    const [showExtra, setShowExtra] = useState(false);
+    const [items, setItems] = useState(["Item 1", "Item 2"]);
 
-  return (
-    <DocsLayout
-      title="Resizable"
-      section="primitives"
-      description="Wraps content with a motion-animated height container that smoothly transitions when content height changes."
-    >
-      <ComponentDemo
-        title="Toggle Content"
-        description="The container animates its height when content is shown or hidden."
-        code={`"use client";
+    return (
+        <DocsLayout
+            title="Resizable"
+            section="primitives"
+            description="Wraps content with a motion-animated height container that smoothly transitions when content height changes."
+        >
+            <ComponentDemo
+                title="Toggle Content"
+                description="The container animates its height when content is shown or hidden."
+                code={`"use client";
 import { useState } from "react";
 import { Resizable } from "@g4rcez/components/core/resizable";
 
@@ -46,34 +46,30 @@ function ToggleContent() {
     </div>
   );
 }`}
-      >
-        <Card title="Toggle">
-          <div className="flex flex-col gap-4">
-            <button
-              type="button"
-              onClick={() => setShowExtra((v) => !v)}
-              className="rounded px-4 py-2 bg-primary text-primary-foreground w-fit"
             >
-              {showExtra ? "Hide" : "Show"} extra content
-            </button>
-            <Resizable>
-              <div className="border border-card-border rounded p-4">
-                <p>Always visible content</p>
-                {showExtra && (
-                  <p className="mt-4 text-secondary">
-                    This extra content causes the container to grow smoothly.
-                  </p>
-                )}
-              </div>
-            </Resizable>
-          </div>
-        </Card>
-      </ComponentDemo>
+                <Card title="Toggle">
+                    <div className="flex flex-col gap-4">
+                        <button
+                            type="button"
+                            onClick={() => setShowExtra((v) => !v)}
+                            className="w-fit rounded bg-primary px-4 py-2 text-primary-foreground"
+                        >
+                            {showExtra ? "Hide" : "Show"} extra content
+                        </button>
+                        <Resizable>
+                            <div className="rounded border border-card-border p-4">
+                                <p>Always visible content</p>
+                                {showExtra && <p className="mt-4 text-secondary">This extra content causes the container to grow smoothly.</p>}
+                            </div>
+                        </Resizable>
+                    </div>
+                </Card>
+            </ComponentDemo>
 
-      <ComponentDemo
-        title="Growing List"
-        description="Add items to a list and watch the container animate its height."
-        code={`"use client";
+            <ComponentDemo
+                title="Growing List"
+                description="Add items to a list and watch the container animate its height."
+                code={`"use client";
 import { useState } from "react";
 import { Resizable } from "@g4rcez/components/core/resizable";
 
@@ -98,33 +94,33 @@ function GrowingList() {
     </div>
   );
 }`}
-      >
-        <Card title="Growing list">
-          <div className="flex flex-col gap-4">
-            <button
-              type="button"
-              onClick={() => setItems((v) => [...v, `Item ${v.length + 1}`])}
-              className="rounded px-4 py-2 bg-primary text-primary-foreground w-fit"
             >
-              Add item
-            </button>
-            <Resizable>
-              <ul className="border border-card-border rounded divide-y divide-card-border">
-                {items.map((item) => (
-                  <li key={item} className="px-4 py-2">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Resizable>
-          </div>
-        </Card>
-      </ComponentDemo>
+                <Card title="Growing list">
+                    <div className="flex flex-col gap-4">
+                        <button
+                            type="button"
+                            onClick={() => setItems((v) => [...v, `Item ${v.length + 1}`])}
+                            className="w-fit rounded bg-primary px-4 py-2 text-primary-foreground"
+                        >
+                            Add item
+                        </button>
+                        <Resizable>
+                            <ul className="divide-y divide-card-border rounded border border-card-border">
+                                {items.map((item) => (
+                                    <li key={item} className="px-4 py-2">
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </Resizable>
+                    </div>
+                </Card>
+            </ComponentDemo>
 
-      <ComponentDemo
-        title="Swap Content"
-        description="Switching between content blocks of different heights animates smoothly."
-        code={`"use client";
+            <ComponentDemo
+                title="Swap Content"
+                description="Switching between content blocks of different heights animates smoothly."
+                code={`"use client";
 import { useState } from "react";
 import { Resizable } from "@g4rcez/components/core/resizable";
 
@@ -164,33 +160,25 @@ function SwapContent() {
     </div>
   );
 }`}
-      >
-        <Card title="Swap content">
-          <div className="flex flex-col gap-4">
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => {}}
-                className="rounded px-4 py-2 bg-primary text-primary-foreground"
-              >
-                Tab A
-              </button>
-              <button
-                type="button"
-                onClick={() => {}}
-                className="rounded px-4 py-2 bg-secondary text-secondary-foreground"
-              >
-                Tab B
-              </button>
-            </div>
-            <Resizable>
-              <div className="border border-card-border rounded p-4">
-                <p>Content adapts with animated height transitions.</p>
-              </div>
-            </Resizable>
-          </div>
-        </Card>
-      </ComponentDemo>
-    </DocsLayout>
-  );
+            >
+                <Card title="Swap content">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex gap-2">
+                            <button type="button" onClick={() => {}} className="rounded bg-primary px-4 py-2 text-primary-foreground">
+                                Tab A
+                            </button>
+                            <button type="button" onClick={() => {}} className="rounded bg-secondary px-4 py-2 text-secondary-foreground">
+                                Tab B
+                            </button>
+                        </div>
+                        <Resizable>
+                            <div className="rounded border border-card-border p-4">
+                                <p>Content adapts with animated height transitions.</p>
+                            </div>
+                        </Resizable>
+                    </div>
+                </Card>
+            </ComponentDemo>
+        </DocsLayout>
+    );
 }

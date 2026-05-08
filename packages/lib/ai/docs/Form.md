@@ -21,12 +21,12 @@ import { Form } from "@g4rcez/components/form";
 
 `Form` accepts all standard HTML `<form>` attributes.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `onSubmit` | `(event: React.FormEvent<HTMLFormElement>) => void` | - | Submit handler. `preventDefault()` is called before this. |
-| `children` | `React.ReactNode` | - | Form fields and other content. |
-| `className` | `string` | - | CSS classes for the `<form>` element. |
-| `...props` | `React.ComponentProps<"form">` | - | All standard form attributes (`action`, `method`, `noValidate`, etc.). |
+| Prop        | Type                                                | Default | Description                                                            |
+| ----------- | --------------------------------------------------- | ------- | ---------------------------------------------------------------------- |
+| `onSubmit`  | `(event: React.FormEvent<HTMLFormElement>) => void` | -       | Submit handler. `preventDefault()` is called before this.              |
+| `children`  | `React.ReactNode`                                   | -       | Form fields and other content.                                         |
+| `className` | `string`                                            | -       | CSS classes for the `<form>` element.                                  |
+| `...props`  | `React.ComponentProps<"form">`                      | -       | All standard form attributes (`action`, `method`, `noValidate`, etc.). |
 
 ## Design Tokens
 
@@ -42,18 +42,20 @@ import { Input } from "@g4rcez/components/input";
 import { Button } from "@g4rcez/components/button";
 
 function LoginForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget);
-    console.log(Object.fromEntries(data));
-  };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const data = new FormData(e.currentTarget);
+        console.log(Object.fromEntries(data));
+    };
 
-  return (
-    <Form onSubmit={handleSubmit} className="flex flex-col gap-base max-w-sm">
-      <Input name="email" type="email" title="Email" required />
-      <Input name="password" type="password" title="Password" required />
-      <Button theme="primary" type="submit">Log in</Button>
-    </Form>
-  );
+    return (
+        <Form onSubmit={handleSubmit} className="flex flex-col gap-base max-w-sm">
+            <Input name="email" type="email" title="Email" required />
+            <Input name="password" type="password" title="Password" required />
+            <Button theme="primary" type="submit">
+                Log in
+            </Button>
+        </Form>
+    );
 }
 ```
 
@@ -61,26 +63,30 @@ function LoginForm() {
 
 ```tsx
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  const formData = new FormData(e.currentTarget);
-  const payload = Object.fromEntries(formData);
-  await fetch("/api/contact", { method: "POST", body: JSON.stringify(payload) });
+    const formData = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(formData);
+    await fetch("/api/contact", { method: "POST", body: JSON.stringify(payload) });
 };
 
 <Form onSubmit={handleSubmit} className="flex flex-col gap-base">
-  <Input name="name" title="Name" required />
-  <Input name="message" title="Message" />
-  <Button theme="primary" type="submit">Send</Button>
-</Form>
+    <Input name="name" title="Name" required />
+    <Input name="message" title="Message" />
+    <Button theme="primary" type="submit">
+        Send
+    </Button>
+</Form>;
 ```
 
 ### Multi-column layout
 
 ```tsx
 <Form className="grid grid-cols-2 gap-base max-w-2xl">
-  <Input name="firstName" title="First name" required />
-  <Input name="lastName" title="Last name" required />
-  <Input name="email" type="email" title="Email" container="col-span-2" required />
-  <Button type="submit" theme="primary" container="col-start-2">Save</Button>
+    <Input name="firstName" title="First name" required />
+    <Input name="lastName" title="Last name" required />
+    <Input name="email" type="email" title="Email" container="col-span-2" required />
+    <Button type="submit" theme="primary" container="col-start-2">
+        Save
+    </Button>
 </Form>
 ```
 

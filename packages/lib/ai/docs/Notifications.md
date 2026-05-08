@@ -25,11 +25,11 @@ Wrap your app (or the subtree that needs toasts) with `Notifications`:
 import { Notifications } from "@g4rcez/components/notifications";
 
 function App() {
-  return (
-    <Notifications max={5} timeout={5000}>
-      <YourApp />
-    </Notifications>
-  );
+    return (
+        <Notifications max={5} timeout={5000}>
+            <YourApp />
+        </Notifications>
+    );
 }
 ```
 
@@ -37,11 +37,11 @@ function App() {
 
 ### Notifications (Provider)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | `5` | Maximum notifications displayed at once |
-| `timeout` | `number` | `5000` | Default auto-dismiss duration in milliseconds |
-| `children` | `React.ReactNode` | — | Subtree that can use `useNotification` |
+| Prop       | Type              | Default | Description                                   |
+| ---------- | ----------------- | ------- | --------------------------------------------- |
+| `max`      | `number`          | `5`     | Maximum notifications displayed at once       |
+| `timeout`  | `number`          | `5000`  | Default auto-dismiss duration in milliseconds |
+| `children` | `React.ReactNode` | —       | Subtree that can use `useNotification`        |
 
 ### useNotification — notify function
 
@@ -52,53 +52,53 @@ const subscription = notify(message, options);
 
 **Parameters**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | `Label` | Notification body text (string or React node) |
-| `options` | `NotificationOptions` | Optional configuration (see below) |
+| Parameter | Type                  | Description                                   |
+| --------- | --------------------- | --------------------------------------------- |
+| `message` | `Label`               | Notification body text (string or React node) |
+| `options` | `NotificationOptions` | Optional configuration (see below)            |
 
 **NotificationOptions**
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `id` | `string` | — | Stable ID; if provided and a toast with this ID exists, it will be updated instead of duplicated |
-| `title` | `Label` | — | Optional notification title |
-| `theme` | `NotificationTheme` | `"default"` | Visual theme variant |
-| `timeout` | `number` | Provider default | Override auto-dismiss duration in ms |
-| `closable` | `boolean` | `true` | Show close button |
-| `loading` | `boolean` | `false` | Replaces icon with spinning `Loader2Icon` |
+| Option     | Type                | Default          | Description                                                                                      |
+| ---------- | ------------------- | ---------------- | ------------------------------------------------------------------------------------------------ |
+| `id`       | `string`            | —                | Stable ID; if provided and a toast with this ID exists, it will be updated instead of duplicated |
+| `title`    | `Label`             | —                | Optional notification title                                                                      |
+| `theme`    | `NotificationTheme` | `"default"`      | Visual theme variant                                                                             |
+| `timeout`  | `number`            | Provider default | Override auto-dismiss duration in ms                                                             |
+| `closable` | `boolean`           | `true`           | Show close button                                                                                |
+| `loading`  | `boolean`           | `false`          | Replaces icon with spinning `Loader2Icon`                                                        |
 
 **Return value — NotificationSubscriber**
 
-| Method | Description |
-|--------|-------------|
+| Method    | Description                        |
+| --------- | ---------------------------------- |
 | `close()` | Dismiss this specific notification |
-| `clear()` | Dismiss all visible notifications |
+| `clear()` | Dismiss all visible notifications  |
 
 ## Themes
 
-| Value | Appearance |
-|-------|-----------|
-| `"default"` | Card background with foreground text |
-| `"info"` | `bg-alert-info-bg` / `text-alert-info-text` / `border-alert-info-border` |
-| `"success"` | `bg-alert-success-bg` / `text-alert-success-text` / `border-alert-success-border` |
-| `"warn"` | `bg-alert-warn-bg` / `text-alert-warn-text` / `border-alert-warn-border` |
-| `"danger"` | `bg-alert-danger-bg` / `text-alert-danger-text` / `border-alert-danger-border` |
+| Value         | Appearance                                                                              |
+| ------------- | --------------------------------------------------------------------------------------- |
+| `"default"`   | Card background with foreground text                                                    |
+| `"info"`      | `bg-alert-info-bg` / `text-alert-info-text` / `border-alert-info-border`                |
+| `"success"`   | `bg-alert-success-bg` / `text-alert-success-text` / `border-alert-success-border`       |
+| `"warn"`      | `bg-alert-warn-bg` / `text-alert-warn-text` / `border-alert-warn-border`                |
+| `"danger"`    | `bg-alert-danger-bg` / `text-alert-danger-text` / `border-alert-danger-border`          |
 | `"secondary"` | `bg-alert-secondary-bg` / `text-alert-secondary-text` / `border-alert-secondary-border` |
-| `"muted"` | `bg-alert-muted-bg` / `text-alert-muted-text` / `border-alert-muted-border` |
+| `"muted"`     | `bg-alert-muted-bg` / `text-alert-muted-text` / `border-alert-muted-border`             |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-card-background` | `--card-background` | Default notification background |
-| `border-card-border` | `--card-border` | Default notification border |
-| `text-foreground` | `--foreground` | Default notification text |
-| `bg-alert-{theme}-bg` | `--alert-{theme}-bg` | Themed background |
-| `text-alert-{theme}-text` | `--alert-{theme}-text` | Themed text |
-| `border-alert-{theme}-border` | `--alert-{theme}-border` | Themed border |
+| Token                         | CSS Variable             | Purpose                         |
+| ----------------------------- | ------------------------ | ------------------------------- |
+| `bg-card-background`          | `--card-background`      | Default notification background |
+| `border-card-border`          | `--card-border`          | Default notification border     |
+| `text-foreground`             | `--foreground`           | Default notification text       |
+| `bg-alert-{theme}-bg`         | `--alert-{theme}-bg`     | Themed background               |
+| `text-alert-{theme}-text`     | `--alert-{theme}-text`   | Themed text                     |
+| `border-alert-{theme}-border` | `--alert-{theme}-border` | Themed border                   |
 
 ## Examples
 
@@ -106,17 +106,17 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 function NotificationExamples() {
-  const notify = useNotification();
+    const notify = useNotification();
 
-  return (
-    <div className="space-y-2">
-      <button onClick={() => notify("Default notification")}>Default</button>
-      <button onClick={() => notify("Info message", { theme: "info" })}>Info</button>
-      <button onClick={() => notify("Success!", { theme: "success" })}>Success</button>
-      <button onClick={() => notify("Warning", { theme: "warn" })}>Warning</button>
-      <button onClick={() => notify("Error occurred", { theme: "danger" })}>Error</button>
-    </div>
-  );
+    return (
+        <div className="space-y-2">
+            <button onClick={() => notify("Default notification")}>Default</button>
+            <button onClick={() => notify("Info message", { theme: "info" })}>Info</button>
+            <button onClick={() => notify("Success!", { theme: "success" })}>Success</button>
+            <button onClick={() => notify("Warning", { theme: "warn" })}>Warning</button>
+            <button onClick={() => notify("Error occurred", { theme: "danger" })}>Error</button>
+        </div>
+    );
 }
 ```
 
@@ -124,17 +124,17 @@ function NotificationExamples() {
 
 ```tsx
 function SaveButton() {
-  const notify = useNotification();
+    const notify = useNotification();
 
-  const handleSave = () => {
-    notify("Your changes have been saved to the server.", {
-      title: "Changes Saved",
-      theme: "success",
-      timeout: 3000,
-    });
-  };
+    const handleSave = () => {
+        notify("Your changes have been saved to the server.", {
+            title: "Changes Saved",
+            theme: "success",
+            timeout: 3000,
+        });
+    };
 
-  return <button onClick={handleSave}>Save</button>;
+    return <button onClick={handleSave}>Save</button>;
 }
 ```
 
@@ -142,24 +142,24 @@ function SaveButton() {
 
 ```tsx
 function ProcessButton() {
-  const notify = useNotification();
+    const notify = useNotification();
 
-  const startProcess = () => {
-    const subscription = notify("Processing your request…", {
-      title: "In Progress",
-      theme: "info",
-      timeout: Infinity,
-      closable: false,
-      loading: true,
-    });
+    const startProcess = () => {
+        const subscription = notify("Processing your request…", {
+            title: "In Progress",
+            theme: "info",
+            timeout: Infinity,
+            closable: false,
+            loading: true,
+        });
 
-    doWork().then(() => {
-      subscription.close();
-      notify("Process completed successfully!", { theme: "success" });
-    });
-  };
+        doWork().then(() => {
+            subscription.close();
+            notify("Process completed successfully!", { theme: "success" });
+        });
+    };
 
-  return <button onClick={startProcess}>Start</button>;
+    return <button onClick={startProcess}>Start</button>;
 }
 ```
 
@@ -167,23 +167,23 @@ function ProcessButton() {
 
 ```tsx
 function ContactForm() {
-  const notify = useNotification();
+    const notify = useNotification();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await submitForm();
-      notify("Message sent successfully.", { title: "Done", theme: "success" });
-    } catch {
-      notify("Failed to send. Please try again.", {
-        title: "Error",
-        theme: "danger",
-        timeout: 7000,
-      });
-    }
-  };
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            await submitForm();
+            notify("Message sent successfully.", { title: "Done", theme: "success" });
+        } catch {
+            notify("Failed to send. Please try again.", {
+                title: "Error",
+                theme: "danger",
+                timeout: 7000,
+            });
+        }
+    };
 
-  return <form onSubmit={handleSubmit}>{/* fields */}</form>;
+    return <form onSubmit={handleSubmit}>{/* fields */}</form>;
 }
 ```
 
