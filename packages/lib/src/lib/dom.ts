@@ -30,9 +30,6 @@ export const isReactFC = (a: any) => Is.function(a);
 export const css = (...styles: ClassValue[]) => twMerge(clsx(styles));
 
 export const synthesizeChangeEvent = (input: HTMLInputElement): React.ChangeEvent<HTMLInputElement> => {
-    // reason: constructing a React.ChangeEvent shape for programmatic autocomplete selection;
-    // Event.target is a read-only getter so a plain object with target/currentTarget is the
-    // only way to satisfy React.ChangeEvent without a real SyntheticEvent dispatch
     return { target: input, currentTarget: input } as unknown as React.ChangeEvent<HTMLInputElement>;
 };
 
