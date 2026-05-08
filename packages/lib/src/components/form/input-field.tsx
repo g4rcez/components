@@ -123,7 +123,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
             reportStatus,
             hiddenLabel,
         }: PropsWithChildren<InputFieldProps<T>>,
-        ref: any
+        ref: React.ForwardedRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
         const tweaks = useTweaks();
         const reportStatusDefault = reportStatus !== undefined ? reportStatus : tweaks.input.iconFeedback;
@@ -188,4 +188,4 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
             </fieldset>
         );
     }
-) as any;
+) as unknown as <T extends "input" | "select" | "textarea">(props: PropsWithChildren<InputFieldProps<T>>) => React.ReactElement; // forwardRef return is non-generic; cast restores the polymorphic signature

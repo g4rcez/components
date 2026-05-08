@@ -129,10 +129,10 @@ const inRange = (start: Date | undefined, middle: Date, end: Date | undefined) =
 };
 
 type CalendarBodyProps = {
-    dispatch: any;
+    dispatch: { onSelectDate: React.MouseEventHandler<HTMLButtonElement> };
     range?: Range;
     zip: Date[][];
-    onKeyDown: any;
+    onKeyDown: React.KeyboardEventHandler<HTMLTableSectionElement>;
     stateDate: Date;
     date: Date | null;
     stateRange: Range;
@@ -339,7 +339,7 @@ export const Calendar = ({
                 (state, _, args) => {
                     const isValidMethod = args.method === "onSelectDate" || args.method === "setToday" || args.method === "onKeyDown";
                     if (rangeMode && isValidMethod && changeOnlyOnClick) {
-                        onChange?.(state.range as any);
+                        (onChange as OnChangeRange)?.(state.range); // rangeMode implies onChange is OnChangeRange
                         return state;
                     }
                     if (isValidMethod && changeOnlyOnClick) onChange?.(state.date);

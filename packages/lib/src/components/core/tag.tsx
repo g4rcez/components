@@ -59,9 +59,9 @@ export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
     T
 >;
 
-export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => any = forwardRef(function Tag(
+export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => React.ReactNode = forwardRef(function Tag(
     { className, indicator = undefined, icon, loading, theme, size, ...props }: TagProps,
-    ref: React.Ref<any>
+    ref: React.Ref<HTMLElement>
 ) {
     return (
         <Polymorph
@@ -77,4 +77,4 @@ export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => any 
             {props.children}
         </Polymorph>
     );
-}) as any;
+}) as unknown as <T extends React.ElementType = "span">(_: TagProps<T>) => React.ReactNode; // forwardRef return is non-generic; cast to restore the polymorphic signature

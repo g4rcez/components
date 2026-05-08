@@ -1,12 +1,13 @@
 import { useRef } from "react";
 
-type Fn = (...a: any[]) => any;
+type Fn = (...a: never[]) => unknown;
 
-export const debounce = <T extends Fn>(fn: Fn, ms = 0) => {
-    let timeoutId: NodeJS.Timeout | undefined = undefined;
+export const debounce = <T extends Fn>(fn: T, ms = 0): ((...args: Parameters<T>) => void) => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
     return function debounced(...args: Parameters<T>) {
         clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => fn(...args), ms);
+        // TypeScript cannot spread Parameters<T> into T at a generic constraint boundary
+        timeoutId = setTimeout(() => (fn as unknown as (...a: Parameters<T>) => unknown)(...args), ms);
     };
 };
 

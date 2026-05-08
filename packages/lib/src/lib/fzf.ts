@@ -50,14 +50,14 @@ export type MatchValue<T> = {
 
 export type Matcher<T> = { match?: Match; key: Walk<T> };
 
-const travel = (path: string, regexp: RegExp, obj: any): any => {
+const travel = (path: string, regexp: RegExp, obj: unknown): unknown => {
     const keys = path.split(regexp).filter(Boolean);
-    let res = obj;
+    let res: unknown = obj;
     for (const key of keys) {
         if (res === null || res === undefined) {
             return res;
         }
-        res = res[key];
+        res = (res as Record<string, unknown>)[key]; // key traversal — res is an object at this point due to null/undefined guard above
     }
     return res;
 };
@@ -66,8 +66,9 @@ const regexPaths = { basic: /[,[\]]+?/, extend: /[,[\].]+?/ };
 
 const path = <T extends Any, V>(obj: T, path: Walk<T>): V => {
     const result = travel(path as string, regexPaths.basic, obj);
-    if (result !== undefined && result !== obj) return result;
-    return travel(path as string, regexPaths.extend, obj);
+    // travel returns unknown; V is the expected value type at a given path — caller is responsible for matching
+    if (result !== undefined && result !== obj) return result as unknown as V;
+    return travel(path as string, regexPaths.extend, obj) as unknown as V;
 };
 
 const onlyNumbers = (str: string) => str.replace(/[^0-9]/g, "");

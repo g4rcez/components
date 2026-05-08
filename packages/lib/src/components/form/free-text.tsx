@@ -39,8 +39,8 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                 ...props
             },
             ref
-        ): any => {
-            const Render = Element as any;
+        ): React.ReactElement => {
+            const Render: React.ElementType = Element;
             const id = props.id ?? props.name;
             const inputRef = useRef<Html>(null);
 
@@ -72,7 +72,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
 
             return (
                 <InputField
-                    {...(defaultProps as any)}
+                    {...(defaultProps as InputFieldProps<T>)}
                     info={info}
                     left={left}
                     error={error}
@@ -107,7 +107,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         aria-disabled={props.disabled}
                         aria-readonly={props.readOnly}
                         aria-describedby={error ? `${id}-error` : undefined}
-                        ref={mergeRefs(ref, inputRef) as any}
+                        ref={mergeRefs(ref, inputRef) as unknown as React.Ref<Html>}
                         className={css(
                             "input placeholder-input-mask group h-input-height w-full flex-1",
                             "rounded-md bg-transparent px-input-x py-input-y text-base text-foreground",
@@ -121,6 +121,6 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                 </InputField>
             );
         }
-    ) as any;
+    ) as unknown as ReactComponent<FreeTextProps<T, Extra>>; // forwardRef return is non-generic; cast restores the typed component signature
     return FreeText;
 };

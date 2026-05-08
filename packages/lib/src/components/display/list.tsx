@@ -31,7 +31,7 @@ type FloatItemProps = {
     setter: () => void;
     context: FloatingContext;
     item: IdAnimatedItem | null;
-    refs: { setFloating: any };
+    refs: { setFloating: (node: HTMLElement | null) => void };
     get: ReturnType<typeof useInteractions>["getFloatingProps"];
 };
 
@@ -109,7 +109,7 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
             <FloatItem refs={refs} context={context} get={getFloatingProps} item={selected} setter={clear} />
             <ul role="list">
                 {items.map((x, index) => {
-                    const item: AnimatedItemProps = (x as any).props;
+                    const item = (x as React.ReactElement<AnimatedItemProps>).props;
                     const innerId = `${id}-${index}`;
                     const setter = () => setSelected({ ...item, id: innerId });
                     const Leading = item.leading;

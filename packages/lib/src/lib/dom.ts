@@ -15,17 +15,15 @@ export const mergeRefs =
         });
     };
 
-export const isReactComponent = (a: any): a is React.ReactElement => {
-    if (a.$$typeof === Symbol.for("react.forward_ref")) {
-        return true;
-    }
-    if (a.$$typeof === Symbol.for("react.fragment")) {
-        return true;
-    }
-    return a.$$typeof === Symbol.for("react.element");
+export const isReactComponent = (a: unknown): a is React.ReactElement => {
+    if (typeof a !== "object" || a === null) return false;
+    const elem = a as { $$typeof?: unknown };
+    if (elem.$$typeof === Symbol.for("react.forward_ref")) return true;
+    if (elem.$$typeof === Symbol.for("react.fragment")) return true;
+    return elem.$$typeof === Symbol.for("react.element");
 };
 
-export const isReactFC = (a: any) => Is.function(a);
+export const isReactFC = (a: unknown) => Is.function(a);
 
 export const css = (...styles: ClassValue[]) => twMerge(clsx(styles));
 

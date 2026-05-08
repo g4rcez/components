@@ -171,7 +171,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                             data-nested={isNested ? "" : undefined}
                             role={isNested ? "menuitem" : undefined}
                             data-focus-inside={hasFocusInside ? "" : undefined}
-                            ref={mergeRefs(refs.setReference, item.ref, forwardedRef) as any}
+                            ref={mergeRefs(refs.setReference, item.ref, forwardedRef) as unknown as React.Ref<HTMLElement>}
                             tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
                         />
                     ) : (
@@ -205,7 +205,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                         </button>
                     )}
                 </Fragment>
-                <MenuContext.Provider value={{ activeIndex, setActiveIndex, getItemProps, setHasFocusInside, isOpen } as any}>
+                <MenuContext.Provider value={{ activeIndex, setActiveIndex, getItemProps, setHasFocusInside, isOpen }}>
                     <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
                         {isOpen && (
                             <FloatingPortal>

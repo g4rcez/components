@@ -39,7 +39,7 @@ function composeRefs<T>(...refs: PossibleRef<T>[]): React.RefCallback<T> {
 
 interface LazyReactElement extends React.ReactElement {
     $$typeof: typeof REACT_LAZY_TYPE;
-    _payload: PromiseLike<Exclude<React.ReactNode, PromiseLike<any>>>;
+    _payload: PromiseLike<Exclude<React.ReactNode, PromiseLike<unknown>>>;
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ interface LazyReactElement extends React.ReactElement {
 
 export type Usable<T> = PromiseLike<T> | React.Context<T>;
 
-const use: typeof React.use | undefined = (React as any)[" use ".trim().toString()];
+const use: typeof React.use | undefined = (React as unknown as Record<string, unknown>)[" use ".trim().toString()] as typeof React.use | undefined; // React.use may not exist in all versions — access dynamically for compatibility
 
 interface SlotProps extends React.HTMLAttributes<HTMLElement> {
     children?: React.ReactNode;
@@ -119,7 +119,7 @@ interface SlotCloneProps {
 }
 
 function createSlotClone(ownerName: string) {
-    const SlotClone = React.forwardRef<any, SlotCloneProps>((props, forwardedRef) => {
+    const SlotClone = React.forwardRef<HTMLElement, SlotCloneProps>((props, forwardedRef) => {
         let { children, ...slotProps } = props;
         if (isLazyComponent(children) && typeof use === "function") {
             children = use(children._payload);
@@ -202,12 +202,12 @@ function getElementRef(element: React.ReactElement) {
     let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
     let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
     if (mayWarn) {
-        return (element as any).ref;
+        return (element as unknown as { ref?: React.Ref<unknown> }).ref; // React <19: ref lives on the element object, not in props
     }
     getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
     mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
     if (mayWarn) {
         return (element.props as { ref?: React.Ref<unknown> }).ref;
     }
-    return (element.props as { ref?: React.Ref<unknown> }).ref || (element as any).ref;
+    return (element.props as { ref?: React.Ref<unknown> }).ref || (element as unknown as { ref?: React.Ref<unknown> }).ref; // React <19: ref lives on the element object, not in props
 }

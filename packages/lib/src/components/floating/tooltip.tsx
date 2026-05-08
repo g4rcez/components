@@ -57,11 +57,11 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             followCursor = false,
             ...props
         }: TooltipProps<T>,
-        outerRef: any
+        outerRef: React.ForwardedRef<HTMLSpanElement>
     ) {
         const [innerOpen, setInnerOpen] = useState<boolean>(open ?? false);
         const arrowRef = useRef(null);
-        const Component: any = as || "span";
+        const Component: React.ElementType = as || "span";
         const toggleBoth = (b: boolean) => {
             setInnerOpen(b);
             onChange?.(b);
@@ -124,4 +124,4 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             </Fragment>
         );
     }
-) as any;
+) as unknown as <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement; // forwardRef return is non-generic; cast restores the polymorphic signature

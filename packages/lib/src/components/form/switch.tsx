@@ -21,8 +21,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, loa
     useEffect(() => {
         if (innerRef.current !== null) {
             if (stableOnChange.current) {
-                const onChange = (e: any) => {
-                    if (stableOnChange.current) stableOnChange.current(e);
+                const onChange = (e: Event) => {
+                    if (stableOnChange.current) stableOnChange.current(e as unknown as React.ChangeEvent<HTMLInputElement>); // native DOM event bridged to React's synthetic ChangeEventHandler
                 };
                 const ref = innerRef.current;
                 ref.addEventListener("change", onChange);

@@ -23,7 +23,7 @@ type CollapseProps = HTMLMotionProps<"section"> & { open: boolean };
 
 export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
     <motion.div
-        {...(props as any)}
+        {...(props as unknown as HTMLMotionProps<"div">)} // CollapseProps uses "section"; motion.div is structurally identical
         layout
         layoutRoot
         layoutScroll
@@ -68,7 +68,7 @@ export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
     T
 >;
 
-export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) => any = forwardRef(function Alert(
+export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) => React.ReactNode = forwardRef(function Alert(
     { className, theme, Icon, onClose, open = true, ...props }: AlertProps,
     ref: React.ForwardedRef<HTMLDivElement>
 ) {
