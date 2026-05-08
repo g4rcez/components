@@ -3,16 +3,15 @@ import { AnimatePresence } from "motion/react";
 import { ComponentProps, useEffect, useMemo } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
-import { Any } from "../../types";
 import { FilterConfig } from "./filter";
 import { GroupItem } from "./group";
 import { InnerTable, InnerTableProps } from "./inner-table";
 import { Metadata } from "./metadata";
 import { Sorter } from "./sort";
-import { Col, createOptionCols, TableOperationProps } from "./table-lib";
+import { Col, createOptionCols, TableGetters, TableOperationProps } from "./table-lib";
 import { TableContextProps, TableProvider } from "./table.context";
 
-export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
+export type TableProps<T extends Record<string, unknown>> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
 } & Partial<
         TableOperationProps<T> & {
@@ -29,14 +28,14 @@ export type TableProps<T extends Any> = Pick<InnerTableProps<T>, "cols" | "rows"
         }
     >;
 
-const dispatcherFun = <Prev extends Any, T extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: T) =>
+const dispatcherFun = <Prev extends object, S extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: S) =>
     typeof setter === "function" ? setter(prev) : setter;
 
-type DispatcherFun<T extends Any> = T | ((prev: T) => T);
+type DispatcherFun<T extends object> = T | ((prev: T) => T);
 
-const compareAndExec = <T extends any[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
+const compareAndExec = <T extends unknown[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
 
-export const Table = <T extends Any>(props: TableProps<T>) => {
+export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) => {
     const tweaks = useTweaks();
     const contextState = useMemo(
         (): TableContextProps => ({
@@ -55,10 +54,11 @@ export const Table = <T extends Any>(props: TableProps<T>) => {
         },
         (get) => {
             const create =
-                <T extends Any>(key: string) =>
-                (arg: T) => {
+                <V extends object>(key: string) =>
+                (arg: V) => {
                     const state = get.state();
-                    return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as any) };
+                    type StateValue = (typeof state)[keyof typeof state];
+                    return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as StateValue) };
                 };
             return {
                 cols: create<DispatcherFun<Col<T>[]>>("cols"),
@@ -70,7 +70,7 @@ export const Table = <T extends Any>(props: TableProps<T>) => {
         {
             postMiddleware: [
                 (state, prev) => {
-                    props.set?.(state as any);
+                    props.set?.(state as unknown as TableGetters<T>);
                     compareAndExec(prev?.filters ?? [], state.filters ?? [], props.setFilters);
                     compareAndExec(prev?.sorters ?? [], state.sorters ?? [], props.setSorters);
                     compareAndExec(prev?.groups ?? [], state.groups ?? [], props.setGroups);

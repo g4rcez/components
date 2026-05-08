@@ -28,7 +28,7 @@ type Props<T extends object> = TableConfiguration<
     }
 >;
 
-const Item = ({ item, onPointerDown }: { item: GroupItem<any>; onPointerDown: any }) => {
+const Item = <T extends object>({ item, onPointerDown }: { item: GroupItem<T>; onPointerDown: (e: React.PointerEvent) => void }) => {
     const y = useMotionValue(0);
     return (
         <Reorder.Item
@@ -109,8 +109,8 @@ export const Group = <T extends object>(props: Props<T>) => {
                                 {props.groups.map((item) => (
                                     <Item
                                         key={item.groupId}
-                                        item={item as any}
-                                        onPointerDown={(e: any) => {
+                                        item={item}
+                                        onPointerDown={(e) => {
                                             controls.start(e);
                                             props.setGroups([...props.groups]);
                                         }}

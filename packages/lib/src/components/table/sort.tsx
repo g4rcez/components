@@ -20,7 +20,7 @@ export type Sorter<T extends Any> = { value: Keyof<T>; type: Order; label: Label
 
 const createSorterFn =
     <T extends Any>(fields: Sorter<T>[]) =>
-    (a: any, b: any) =>
+    (a: T, b: T) =>
         fields.reduce<number>((acc, x) => {
             const reverse = x.type === "desc" ? -1 : 1;
             const property = x.value;
@@ -46,7 +46,7 @@ const createSorter = <T extends Any>(col: Col<T>, label: string, order: Order): 
     label,
     id: uuid(),
     type: order,
-    value: col.id as any,
+    value: col.id as Keyof<T>,
 });
 
 export const Sort = <T extends Any>(props: Props<T>) => {

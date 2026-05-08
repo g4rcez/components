@@ -1,15 +1,14 @@
 import React, { Fragment, PropsWithChildren, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { path } from "../../lib/fns";
-import { Any } from "../../types";
 import { SkeletonCell } from "../display/skeleton";
 import { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
 
-type ItemContentContext = {
-    cols: Col<Any>[];
+type ItemContentContext<T extends Record<string, unknown>> = {
+    cols: Col<T>[];
     loading?: boolean;
     loadingMore?: boolean;
-    Aside?: React.FC<CellAsideElement<any>>;
+    Aside?: React.FC<CellAsideElement<T>>;
 };
 
 const RowAside = (props: PropsWithChildren) => {
@@ -46,15 +45,15 @@ const RowAside = (props: PropsWithChildren) => {
     );
 };
 
-export const Row = (index: number, row: any, context: ItemContentContext) => {
+export const Row = <T extends Record<string, unknown>>(index: number, row: T, context: ItemContentContext<T>) => {
     const cols = context.cols;
     const loading = context.loading;
     return (
         <Fragment>
             {cols.map((col, colIndex) => {
                 const matrix: ColMatrix = `${colIndex},${index}`;
-                const value: any = path(row, col.id as any);
-                const Component: React.FC<CellPropsElement<any, any>> = col.Element as any;
+                const value = path(row, col.id);
+                const Component = col.Element as React.FC<CellPropsElement<T, typeof col.id>> | undefined;
                 const className = col.cellProps?.className || "";
                 const exposeAside = colIndex === 0 && context.Aside && loading === false;
                 const Aside = context.Aside!;
@@ -77,10 +76,16 @@ export const Row = (index: number, row: any, context: ItemContentContext) => {
                                 SkeletonCell
                             ) : Component ? (
                                 <Fragment>
-                                    <Component row={row} matrix={matrix} col={col} rowIndex={index} value={value} />
+                                    <Component
+                                        row={row}
+                                        matrix={matrix}
+                                        col={col}
+                                        rowIndex={index}
+                                        value={value as CellPropsElement<T, typeof col.id>["value"]}
+                                    />
                                 </Fragment>
                             ) : (
-                                <Fragment>{Is.nil(value) ? "" : value}</Fragment>
+                                <Fragment>{Is.nil(value) ? "" : (value as React.ReactNode)}</Fragment>
                             )}
                         </span>
                     </td>
