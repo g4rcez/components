@@ -4,9 +4,9 @@ export class Dict<K, V> extends Map<K, V> {
         return this;
     }
 
-    public map(callback: (v: V, i: number) => any) {
+    public map<R>(callback: (v: V, i: number) => R): R[] {
         let i = 0;
-        const out: any[] = [];
+        const out: R[] = [];
         for (const v of this.values()) out.push(callback(v, i++));
         return out;
     }

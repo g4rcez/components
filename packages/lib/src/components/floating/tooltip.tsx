@@ -57,11 +57,11 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             followCursor = false,
             ...props
         }: TooltipProps<T>,
-        outerRef: any
+        outerRef: React.ForwardedRef<HTMLSpanElement>
     ) {
         const [innerOpen, setInnerOpen] = useState<boolean>(open ?? false);
         const arrowRef = useRef(null);
-        const Component: any = as || "span";
+        const Component: React.ElementType = as || "span";
         const toggleBoth = (b: boolean) => {
             setInnerOpen(b);
             onChange?.(b);
@@ -107,8 +107,8 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                     <FloatingPortal>
                         <Polymorph
                             {...getFloatingProps()}
-                            ref={refs.setFloating}
                             style={floatingStyles}
+                            ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
                             className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-shadow-floating"
                         >
                             <FloatingArrow
@@ -124,4 +124,4 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             </Fragment>
         );
     }
-) as any;
+) as unknown as <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement;

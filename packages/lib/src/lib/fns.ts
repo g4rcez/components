@@ -25,7 +25,7 @@ const travel = (path: string, regexp: RegExp, obj: Any) =>
     path
         .split(regexp)
         .filter(Boolean)
-        .reduce((res, key) => (res !== null && res !== undefined ? (res as any)[key] : res), obj);
+        .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
 
 const regexPaths = { basic: /[,[\]]+?/, extend: /[,[\].]+?/ };
 
@@ -53,6 +53,6 @@ export const negate = (b: boolean) => !b;
 export const noop = () => {};
 
 export const isMobile = () => {
-    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
-    return /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent);
+    const userAgent = navigator.userAgent || navigator.vendor || (window as Window & { opera?: string }).opera;
+    return /android|iphone|ipad|ipod|opera mini|iemobile|wpdesktop/i.test(userAgent ?? "");
 };

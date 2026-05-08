@@ -68,9 +68,9 @@ export type CardHeaderTitleProps<T extends React.ElementType = "div"> = Polymorp
 >;
 
 Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<CardHeaderTitleProps>) => {
-    const Component = (as || "div") as any;
-    const Title = (titleTag || "h2") as any;
-    const Nav = (navTag || "nav") as any;
+    const Component = (as || "div") as React.ElementType;
+    const Title = (titleTag || "h2") as React.ElementType;
+    const Nav = (navTag || "nav") as React.ElementType;
     return (
         <Component
             {...props}
