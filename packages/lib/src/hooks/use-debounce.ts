@@ -6,7 +6,6 @@ export const debounce = <T extends Fn>(fn: T, ms = 0): ((...args: Parameters<T>)
     let timeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
     return function debounced(...args: Parameters<T>) {
         clearTimeout(timeoutId);
-        // TypeScript cannot spread Parameters<T> into T at a generic constraint boundary
         timeoutId = setTimeout(() => (fn as unknown as (...a: Parameters<T>) => unknown)(...args), ms);
     };
 };

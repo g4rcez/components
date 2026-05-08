@@ -57,7 +57,7 @@ const travel = (path: string, regexp: RegExp, obj: unknown): unknown => {
         if (res === null || res === undefined) {
             return res;
         }
-        res = (res as Record<string, unknown>)[key]; // key traversal — res is an object at this point due to null/undefined guard above
+        res = (res as Record<string, unknown>)[key];
     }
     return res;
 };
@@ -66,7 +66,6 @@ const regexPaths = { basic: /[,[\]]+?/, extend: /[,[\].]+?/ };
 
 const path = <T extends Any, V>(obj: T, path: Walk<T>): V => {
     const result = travel(path as string, regexPaths.basic, obj);
-    // travel returns unknown; V is the expected value type at a given path — caller is responsible for matching
     if (result !== undefined && result !== obj) return result as unknown as V;
     return travel(path as string, regexPaths.extend, obj) as unknown as V;
 };

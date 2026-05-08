@@ -21,7 +21,7 @@ type PageCalendarProps<T extends CalendarEventBase> = {
     onChangeFilters?: (filters: CalendarFilter[]) => void;
 };
 
-const noop: never[] = [];
+const noop: CalendarFilter[] = [];
 
 export function PageCalendar<T extends CalendarEventBase>({
     events,

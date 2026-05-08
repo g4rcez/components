@@ -339,7 +339,7 @@ export const Calendar = ({
                 (state, _, args) => {
                     const isValidMethod = args.method === "onSelectDate" || args.method === "setToday" || args.method === "onKeyDown";
                     if (rangeMode && isValidMethod && changeOnlyOnClick) {
-                        (onChange as OnChangeRange)?.(state.range); // rangeMode implies onChange is OnChangeRange
+                        (onChange as OnChangeRange)?.(state.range);
                         return state;
                     }
                     if (isValidMethod && changeOnlyOnClick) onChange?.(state.date);

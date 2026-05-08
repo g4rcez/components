@@ -42,13 +42,9 @@ interface LazyReactElement extends React.ReactElement {
     _payload: PromiseLike<Exclude<React.ReactNode, PromiseLike<unknown>>>;
 }
 
-/* -------------------------------------------------------------------------------------------------
- * Slot
- * -----------------------------------------------------------------------------------------------*/
-
 export type Usable<T> = PromiseLike<T> | React.Context<T>;
 
-const use: typeof React.use | undefined = (React as unknown as Record<string, unknown>)[" use ".trim().toString()] as typeof React.use | undefined; // React.use may not exist in all versions — access dynamically for compatibility
+const use: typeof React.use | undefined = (React as unknown as Record<string, unknown>)[" use ".trim().toString()] as typeof React.use | undefined;
 
 interface SlotProps extends React.HTMLAttributes<HTMLElement> {
     children?: React.ReactNode;
@@ -202,12 +198,12 @@ function getElementRef(element: React.ReactElement) {
     let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
     let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
     if (mayWarn) {
-        return (element as unknown as { ref?: React.Ref<unknown> }).ref; // React <19: ref lives on the element object, not in props
+        return (element as unknown as { ref?: React.Ref<unknown> }).ref;
     }
     getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
     mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
     if (mayWarn) {
         return (element.props as { ref?: React.Ref<unknown> }).ref;
     }
-    return (element.props as { ref?: React.Ref<unknown> }).ref || (element as unknown as { ref?: React.Ref<unknown> }).ref; // React <19: ref lives on the element object, not in props
+    return (element.props as { ref?: React.Ref<unknown> }).ref || (element as unknown as { ref?: React.Ref<unknown> }).ref;
 }

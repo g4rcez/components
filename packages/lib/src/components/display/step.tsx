@@ -109,7 +109,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                 className={`hidden h-[2px] w-full bg-card-border first:hidden xl:block ${innerStatus === "active" || innerStatus === "complete" ? "bg-success" : ""}`}
             />
             <motion.button
-                {...(props as unknown as HTMLMotionProps<"button">)} // StepProps extends ComponentProps<"button">; motion.button is structurally compatible
+                {...(props as unknown as HTMLMotionProps<"button">)}
                 type="button"
                 data-step={step}
                 animate={innerStatus}

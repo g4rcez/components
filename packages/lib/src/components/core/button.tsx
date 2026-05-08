@@ -117,4 +117,4 @@ export const Button: <T extends React.ElementType = "button">(_: ButtonProps<T>)
             {props.children}
         </Polymorph>
     );
-}) as unknown as <T extends React.ElementType = "button">(_: ButtonProps<T>) => React.ReactNode; // forwardRef return is non-generic; cast to restore the polymorphic signature
+}) as unknown as <T extends React.ElementType = "button">(_: ButtonProps<T>) => React.ReactNode;

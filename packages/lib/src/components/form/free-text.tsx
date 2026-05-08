@@ -72,7 +72,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
 
             return (
                 <InputField
-                    {...(defaultProps as InputFieldProps<T>)}
+                    {...(defaultProps as unknown as InputFieldProps<T>)}
                     info={info}
                     left={left}
                     error={error}
@@ -121,6 +121,6 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                 </InputField>
             );
         }
-    ) as unknown as ReactComponent<FreeTextProps<T, Extra>>; // forwardRef return is non-generic; cast restores the typed component signature
+    ) as unknown as ReactComponent<FreeTextProps<T, Extra>>;
     return FreeText;
 };

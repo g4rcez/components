@@ -107,8 +107,8 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                     <FloatingPortal>
                         <Polymorph
                             {...getFloatingProps()}
-                            ref={refs.setFloating}
                             style={floatingStyles}
+                            ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
                             className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-shadow-floating"
                         >
                             <FloatingArrow
@@ -124,4 +124,4 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             </Fragment>
         );
     }
-) as unknown as <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement; // forwardRef return is non-generic; cast restores the polymorphic signature
+) as unknown as <T extends ComponentLike = "span">(_: TooltipProps<T>) => React.ReactElement;

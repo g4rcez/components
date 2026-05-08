@@ -68,7 +68,7 @@ const setPath = <O extends object>(o: O, path: string | Array<string | number>, 
 
 const sort = (a: string, b: string) => a.localeCompare(b);
 
-const noop = {} as never; // bottom-type default satisfies any Props constraint without widening to any
+const noop = {} as never;
 
 const getDefaultValue = (inner: z.ZodTypeAny): unknown => {
     const instanceName = inner._def.typeName;
@@ -104,9 +104,9 @@ const deepMerge = <T extends object, U extends object>(a: T, b: U): T & U => {
                 aValue !== null &&
                 !Array.isArray(aValue)
             ) {
-                result[key] = deepMerge(aValue as object, bValue as object);
+                result[key] = deepMerge(aValue as never, bValue as never);
             } else {
-                result[key] = bValue ? bValue : aValue;
+                result[key] = bValue ? (bValue as never) : (aValue as never);
             }
         }
     }
