@@ -1,6 +1,6 @@
 "use client";
 import { cva } from "class-variance-authority";
-import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion, type Variants, type Transition } from "motion/react";
 import { CheckCircleIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
 import React, { forwardRef, PropsWithChildren } from "react";
 import { useTranslations } from "../../hooks/use-translations";
@@ -11,9 +11,9 @@ import { Polymorph, PolymorphicProps } from "../core/polymorph";
 const variants = {
     true: { opacity: 1, height: "auto" },
     false: { opacity: [0.7, 0.3, 0], height: 0 },
-};
+} satisfies Variants;
 
-const transition = {
+const transition: Transition = {
     type: "tween",
     duration: 0.7,
     ease: [0.04, 0.62, 0.23, 0.98],
@@ -23,7 +23,7 @@ type CollapseProps = HTMLMotionProps<"section"> & { open: boolean };
 
 export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
     <motion.div
-        {...(props as any)}
+        {...(props as unknown as HTMLMotionProps<"div">)}
         layout
         layoutRoot
         layoutScroll
@@ -68,7 +68,7 @@ export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
     T
 >;
 
-export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) => any = forwardRef(function Alert(
+export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) => React.ReactNode = forwardRef(function Alert(
     { className, theme, Icon, onClose, open = true, ...props }: AlertProps,
     ref: React.ForwardedRef<HTMLDivElement>
 ) {
@@ -86,7 +86,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                     className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}
                 >
                     <Collapse data-open={!!open} open={!!open}>
-                        <Polymorph
+                        <Polymorph<"div">
                             {...props}
                             ref={ref}
                             role={liveRole}

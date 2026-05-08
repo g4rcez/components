@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 export const useOnClickOutside = <T extends HTMLElement>(ref: React.RefObject<T>, handler: (event: MouseEvent | TouchEvent) => void) => {
     useEffect(() => {
         const listener = (event: MouseEvent | TouchEvent) => {
-            if (!ref.current || ref.current.contains(event.target as any)) return;
+            if (!ref.current || ref.current.contains(event.target as Node | null)) return;
             handler(event);
         };
         const params = { passive: true };

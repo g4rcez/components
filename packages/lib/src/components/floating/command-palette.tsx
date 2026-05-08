@@ -246,7 +246,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                     }
                                 }
                             },
-                        } as any) as any)}
+                        } as unknown as React.HTMLProps<Element>) as React.InputHTMLAttributes<HTMLInputElement>)}
                         autoFocus
                         value={text}
                         data-combikeysbypass="true"

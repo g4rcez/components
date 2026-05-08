@@ -19,7 +19,7 @@ export type Never = Record<string, never>;
 export type Nil<T> = T | null | undefined;
 
 export interface ReactComponent<P = Any> {
-    propTypes?: any;
+    propTypes?: unknown;
     displayName?: string | undefined;
 
     (props: P): ReactNode | Promise<ReactNode>;
@@ -33,7 +33,7 @@ type Irreducible = string | number | null | undefined | Date | symbol;
 
 export type Walk<T> = T extends object
     ? {
-          [K in keyof T]: T[K] extends any[]
+          [K in keyof T]: T[K] extends readonly unknown[]
               ? K
               : K extends Irreducible
                 ? T[K] extends object

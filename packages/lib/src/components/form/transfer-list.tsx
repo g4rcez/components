@@ -18,10 +18,10 @@ export type TransferListProps<T> = {
 };
 
 const components = {
-    Item: forwardRef(function InnerList(props: any, ref) {
+    Item: forwardRef<HTMLLIElement, React.HTMLAttributes<HTMLLIElement>>(function InnerList(props, ref) {
         return <li {...props} ref={ref} className="flex items-center justify-between gap-1" />;
     }),
-    List: forwardRef(function InnerList(props: any, ref) {
+    List: forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(function InnerList(props, ref) {
         return <ul {...props} ref={ref} className="space-y-3" />;
     }),
 };
@@ -39,7 +39,7 @@ export const TransferList = <T extends POJO, K extends keyof T>(props: TransferL
                         height={h}
                         useWindowScroll
                         data={props.source}
-                        components={components as any}
+                        components={components as unknown as React.ComponentProps<typeof Virtuoso>["components"]}
                         itemContent={(_, row) => (
                             <Fragment>
                                 <Checkbox>

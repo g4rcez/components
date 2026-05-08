@@ -52,7 +52,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
         transform: true,
         whileElementsMounted: autoUpdate,
         onOpenChange: (nextValue, event) => {
-            const element = (event as any)?.relatedTarget as HTMLElement;
+            const element = (event as FocusEvent | undefined)?.relatedTarget as HTMLElement | null;
             if (element) {
                 if (element.dataset.floating === "true" && !nextValue) return;
             }
@@ -70,7 +70,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
 
     return (
         <Fragment>
-            <button ref={refs.setReference} {...(getReferenceProps(props.buttonProps as any) as any)} type="button">
+            <button ref={refs.setReference} {...(getReferenceProps(props.buttonProps as unknown as React.HTMLProps<Element>) as React.HTMLProps<HTMLButtonElement>)} type="button">
                 {props.trigger}
             </button>
             {open && (
