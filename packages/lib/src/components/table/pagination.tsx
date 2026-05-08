@@ -1,9 +1,9 @@
-import { Fragment, useId, useMemo } from "react";
+import React, { Fragment, useId, useMemo } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { Polymorph } from "../core/polymorph";
 import { TablePagination } from "./table-lib";
 
-function createPaginationItems(current: number, max: number) {
+export function createPaginationItems(current: number, max: number) {
     if (!current || !max) return [];
     const items: Array<string | number> = [1];
     if (current === 1 && max === 1) return items;
@@ -29,6 +29,7 @@ export const Pagination = (pagination: TablePagination) => {
     const translation = useTranslations();
     const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination.current, pagination.pages]);
     const hasNext = pagination.current < pagination.pages;
+    const Link: React.ElementType = pagination.asLink ?? "button";
 
     return (
         <footer className="flex flex-wrap items-center justify-center gap-4 border-t-muted p-3 text-sm lg:flex-nowrap lg:justify-between">
@@ -63,7 +64,7 @@ export const Pagination = (pagination: TablePagination) => {
                 <ul className="flex items-center gap-2">
                     {pagination.current > 1 ? (
                         <li>
-                            <Polymorph as={pagination.asLink || ("button" as any)} href="previous" className="">
+                            <Polymorph as={Link} href="previous" className="">
                                 {translation.tablePaginationPrevious}
                             </Polymorph>
                         </li>
@@ -78,7 +79,7 @@ export const Pagination = (pagination: TablePagination) => {
                                     <li>
                                         <Polymorph
                                             href={x}
-                                            as={pagination.asLink || ("button" as any)}
+                                            as={Link}
                                             className={`cursor-pointer border-b-2 px-3 py-1 proportional-nums transition-colors hover:border-primary-subtle hover:text-primary-subtle ${x === pagination.current ? "border-primary text-primary" : "border-transparent"}`}
                                         >
                                             {x}
@@ -90,7 +91,7 @@ export const Pagination = (pagination: TablePagination) => {
                     })}
                     {hasNext ? (
                         <li>
-                            <Polymorph as={pagination.asLink || ("button" as any)} href="next" className="">
+                            <Polymorph as={Link} href="next" className="">
                                 {translation.tablePaginationNext}
                             </Polymorph>
                         </li>

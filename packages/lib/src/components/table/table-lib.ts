@@ -107,7 +107,7 @@ export type TablePagination = {
     asLink?: React.FC<React.PropsWithChildren<{ href: number | "previous" | "next"; className: string }>>;
 };
 
-type TableGetters<T extends POJO> = {
+export type TableGetters<T extends POJO> = {
     rows: T[];
     cols: Col<T>[];
     sorters: Sorter<T>[];
@@ -136,7 +136,7 @@ export type TableOperationProps<T extends POJO> = TableConfiguration<
 
 export const createColumns = <T extends POJO>(callback: (o: ColConstructor<T>) => void) => {
     let items: Col<T>[] = [];
-    const add: ColConstructor<T>["add"] = (id, thead, options) => items.push({ ...options, id, thead } as any);
+    const add: ColConstructor<T>["add"] = (id, thead, options) => items.push({ ...options, id, thead } as Col<T>);
     const remove: ColConstructor<T>["remove"] = (id) => (items = items.filter((x) => x.id !== id));
     const getAll: ColConstructor<T>["getAll"] = () => Array.from(items);
     const filter: ColConstructor<T>["filter"] = (c) => (items = Array.from(items.filter(c)));

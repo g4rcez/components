@@ -1,10 +1,10 @@
 import Linq from "linq-arrays";
+import { Symbols } from "linq-arrays";
 import { AnimatePresence } from "motion/react";
 import React, { ComponentProps, CSSProperties, Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
-import { TableBodyProps, TableVirtuoso } from "react-virtuoso";
+import { ContextProp, ItemProps, TableBodyProps, TableComponents, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
-import { Any } from "../../types";
 import { Empty } from "../display/empty";
 import { SkeletonCell } from "../display/skeleton";
 import { OptionProps } from "../form/select";
@@ -17,7 +17,17 @@ import { CellAsideElement, Col, TableOperationProps } from "./table-lib";
 import { useTable } from "./table.context";
 import { TableHeader } from "./thead";
 
-export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
+type VirtuosoCtx = {
+    cols: Col<Record<string, unknown>>[];
+    loading?: boolean;
+    loadingMore?: boolean;
+    Aside?: React.FC<CellAsideElement<Record<string, unknown>>>;
+    getRowProps?: (_: Record<string, unknown>) => ComponentProps<"tr">;
+};
+
+type VirtuosoData = Record<string, unknown>;
+
+export type InnerTableProps<T extends Record<string, unknown>> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
         rows: T[];
         index: number;
@@ -39,59 +49,56 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
         setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
     };
 
-const TableBody = React.forwardRef(
-    (
-        {
-            context,
-            className = "",
-            ...props
-        }: TableBodyProps & {
-            context: any;
-        },
-        ref: any
-    ) => {
-        return (
-            <tbody {...(props as any)} role="rowgroup" className={`divide-y divide-table-border ${className}`} ref={ref}>
-                <AnimatePresence>{props.children}</AnimatePresence>
-            </tbody>
-        );
-    }
+const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & ContextProp<unknown>>(
+    ({ context: _context, className = "", ...props }, ref) => (
+        <tbody {...props} role="rowgroup" className={`divide-y divide-table-border ${className}`} ref={ref}>
+            <AnimatePresence>{props.children}</AnimatePresence>
+        </tbody>
+    )
 );
 
-const VirtualTable = React.forwardRef(({ context, className = "", ...props }: any, ref) => (
+type VirtualTableProps = Pick<React.ComponentProps<"table">, "children" | "style" | "className"> & ContextProp<unknown>;
+
+const VirtualTable = React.forwardRef<HTMLTableElement, VirtualTableProps>(({ context: _context, className = "", ...props }, ref) => (
     <table
         {...props}
         role="table"
-        ref={ref as any}
+        ref={ref}
         style={{ ...props.style, "--table-cell-padding": "0.75rem" } as CSSProperties}
         className={`table w-full table-fixed border-separate border-spacing-0 text-left ${className ?? ""}`}
     />
 ));
 
-const Thead = React.forwardRef(({ context, ...props }: any, ref: any) => {
+type TheadProps = Pick<React.ComponentProps<"thead">, "children" | "style"> & ContextProp<unknown>;
+
+const Thead = React.forwardRef<HTMLTableSectionElement, TheadProps>(({ context: _context, ...props }, ref) => {
     const ctx = useTable();
     const style = {
-        ...(props as any)?.style,
+        ...props.style,
         top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
     };
     return <thead {...props} ref={ref} style={style} role="rowgroup" className="group:sticky top-0 hidden bg-transparent md:table-header-group" />;
 });
 
-const TRow = React.forwardRef(({ context, item, ...props }: any, ref: any) => {
-    const contextProps = context?.getRowProps?.(item);
+type TRowProps = ItemProps<VirtuosoData> & ContextProp<VirtuosoCtx> & { className?: string };
+
+const TRow = React.forwardRef<HTMLTableRowElement, TRowProps>(({ context, item, className, ...props }, ref) => {
+    const contextProps = item ? context?.getRowProps?.(item) : undefined;
     const innerProps = { ...props, ...contextProps };
     return (
         <tr
-            {...innerProps}
+            {...(innerProps as React.HTMLAttributes<HTMLTableRowElement>)}
             role="row"
             ref={ref}
-            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-1 pb-4 md:table-row ${[props?.className, contextProps?.className].filter(Boolean).join(" ")}`}
+            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-1 pb-4 md:table-row ${[className, contextProps?.className].filter(Boolean).join(" ")}`}
         />
     );
 });
 
-const TFoot = React.forwardRef((props: any, ref: any) => {
-    if (props.context.loadingMore) {
+type TFootProps = Pick<React.ComponentProps<"tfoot">, "children" | "style"> & ContextProp<VirtuosoCtx>;
+
+const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, ...props }, ref) => {
+    if (context?.loadingMore) {
         return (
             <tfoot {...props} ref={ref} className="bg-card-background">
                 <tr role="row" className="bg-card-background">
@@ -105,12 +112,12 @@ const TFoot = React.forwardRef((props: any, ref: any) => {
     return null;
 });
 
-const components = {
-    TableRow: TRow as any,
-    TableFoot: TFoot as any,
-    TableHead: Thead as any,
-    Table: VirtualTable as any,
-    TableBody: TableBody as any,
+const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
+    TableRow: TRow,
+    TableFoot: TFoot,
+    TableHead: Thead,
+    Table: VirtualTable,
+    TableBody: TableBody,
 };
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -121,9 +128,9 @@ const EmptyContent = (props: { loading?: boolean }) => (
 
 const EmptyCell = () => <Fragment />;
 
-const emptyRows: any[] = [];
+const emptyRows: never[] = [];
 
-export const InnerTable = <T extends Any>({
+export const InnerTable = <T extends Record<string, unknown>>({
     cols,
     filters,
     setCols,
@@ -142,12 +149,12 @@ export const InnerTable = <T extends Any>({
     const loadingMoreRef = useStableRef(props.loadingMore);
 
     const rows = useMemo(() => {
-        if (props.loading) return loadingArray as any as T[];
+        if (props.loading) return loadingArray as unknown as T[];
         if (useControl) return props.rows;
         const linq = new Linq(props.rows);
         if (filters.length > 0) {
             filters.forEach((x) =>
-                x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name as any, x.operation.symbol as any, x.value)
+                x.value === "" || Number.isNaN(x.value) ? undefined : linq.Where(x.name as keyof T, x.operation.symbol as Symbols, x.value)
             );
         }
         if (sorters.length === 0) return linq.Select();
@@ -181,13 +188,13 @@ export const InnerTable = <T extends Any>({
     };
 
     return (
-        <div className="group bg-table-background relative flex w-full flex-col whitespace-nowrap rounded-lg">
+        <div className="group relative flex w-full flex-col whitespace-nowrap rounded-lg bg-table-background">
             <TableVirtuoso
                 components={components}
-                context={context as any}
+                context={context as VirtuosoCtx}
                 totalCount={rows.length}
                 itemContent={empty ? EmptyCell : Row}
-                data={empty ? (emptyRows as T[]) : rows}
+                data={empty ? emptyRows : rows}
                 useWindowScroll={getScrollRef ? false : true}
                 customScrollParent={getScrollRef ? getScrollRef() : undefined}
                 fixedHeaderContent={() => (
