@@ -1,0 +1,9 @@
+pre-commit:
+  commands:
+    oxfmt:
+      glob: "*.{ts,tsx}"
+      run: pnpm exec oxfmt --write {staged_files}
+      stage_fixed: true
+    oxlint:
+      glob: "*.{ts,tsx}"
+      run: pnpm exec oxlint {staged_files}
