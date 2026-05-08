@@ -27,6 +27,10 @@ export const isReactFC = (a: unknown) => Is.function(a);
 
 export const css = (...styles: ClassValue[]) => twMerge(clsx(styles));
 
+export const synthesizeChangeEvent = (input: HTMLInputElement): React.ChangeEvent<HTMLInputElement> => {
+    return { target: input, currentTarget: input } as unknown as React.ChangeEvent<HTMLInputElement>;
+};
+
 export const dispatchInput = (input: HTMLInputElement | undefined | null) => {
     const event = new Event("input", { bubbles: true, composed: true });
     input?.dispatchEvent(event);
