@@ -29,13 +29,8 @@
         "lib": ["dom", "dom.iterable", "esnext"],
         "noEmit": true,
         "incremental": true,
-        "jsx": "preserve",
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ]
+        "jsx": "react-jsx"
     },
-    "include": ["./src", ".next/types/**/*.ts"],
+    "include": ["./src", "./tests"],
     "exclude": ["node_modules", "docs", "app"]
 }
