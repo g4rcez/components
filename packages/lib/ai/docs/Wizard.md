@@ -21,40 +21,40 @@ import { Wizard } from "@g4rcez/components";
 
 ### Wizard
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `active` | `boolean` | `false` | Controls whether the wizard is visible |
-| `steps` | `WizardStep[]` | — | Ordered array of step configurations |
-| `onClose` | `() => void` | — | Callback when the user skips or dismisses the tour |
-| `onFinish` | `() => void` | — | Callback when the last step is completed |
-| `onChange` | `(index: number) => void` | — | Callback fired when the step index changes |
-| `labels` | `{ next?: string; skip?: string; finish?: string; previous?: string }` | — | Override button labels |
+| Prop       | Type                                                                   | Default | Description                                        |
+| ---------- | ---------------------------------------------------------------------- | ------- | -------------------------------------------------- |
+| `active`   | `boolean`                                                              | `false` | Controls whether the wizard is visible             |
+| `steps`    | `WizardStep[]`                                                         | —       | Ordered array of step configurations               |
+| `onClose`  | `() => void`                                                           | —       | Callback when the user skips or dismisses the tour |
+| `onFinish` | `() => void`                                                           | —       | Callback when the last step is completed           |
+| `onChange` | `(index: number) => void`                                              | —       | Callback fired when the step index changes         |
+| `labels`   | `{ next?: string; skip?: string; finish?: string; previous?: string }` | —       | Override button labels                             |
 
 ### WizardStep
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `element` | `string \| Element \| React.RefObject<Element \| null>` | — | Target element: CSS selector, DOM element, or React ref |
-| `title` | `React.ReactNode` | — | Step title displayed in the tooltip |
-| `description` | `React.ReactNode` | — | Step body content |
-| `side` | `Placement` | `"bottom"` | Tooltip placement relative to the target element |
-| `onEnter` | `() => void` | — | Called when this step becomes active |
-| `onNext` | `() => void` | — | Called before advancing to the next step |
-| `onPrevious` | `() => void` | — | Called before going back to the previous step |
+| Prop          | Type                                                    | Default    | Description                                             |
+| ------------- | ------------------------------------------------------- | ---------- | ------------------------------------------------------- |
+| `element`     | `string \| Element \| React.RefObject<Element \| null>` | —          | Target element: CSS selector, DOM element, or React ref |
+| `title`       | `React.ReactNode`                                       | —          | Step title displayed in the tooltip                     |
+| `description` | `React.ReactNode`                                       | —          | Step body content                                       |
+| `side`        | `Placement`                                             | `"bottom"` | Tooltip placement relative to the target element        |
+| `onEnter`     | `() => void`                                            | —          | Called when this step becomes active                    |
+| `onNext`      | `() => void`                                            | —          | Called before advancing to the next step                |
+| `onPrevious`  | `() => void`                                            | —          | Called before going back to the previous step           |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `text-floating-overlay` | `--floating-overlay` | SVG mask fill color (`/70` opacity applied) |
-| `bg-floating-background` | `--floating-background` | Step tooltip surface background |
-| `border-floating-border` | `--floating-border` | Step tooltip border and footer divider |
-| `z-wizard` | `--z-wizard` | Z-index for the overlay layer |
-| `z-floating` | `--z-floating` | Z-index for the step tooltip |
-| `text-muted-foreground` | `--muted-foreground` | Step counter and skip button text |
-| `text-foreground` | `--foreground` | Skip button hover text |
+| Token                    | CSS Variable            | Purpose                                     |
+| ------------------------ | ----------------------- | ------------------------------------------- |
+| `text-floating-overlay`  | `--floating-overlay`    | SVG mask fill color (`/70` opacity applied) |
+| `bg-floating-background` | `--floating-background` | Step tooltip surface background             |
+| `border-floating-border` | `--floating-border`     | Step tooltip border and footer divider      |
+| `z-wizard`               | `--z-wizard`            | Z-index for the overlay layer               |
+| `z-floating`             | `--z-floating`          | Z-index for the step tooltip                |
+| `text-muted-foreground`  | `--muted-foreground`    | Step counter and skip button text           |
+| `text-foreground`        | `--foreground`          | Skip button hover text                      |
 
 ## Examples
 
@@ -66,38 +66,38 @@ import { Wizard } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 
 function OnboardingTour() {
-  const [active, setActive] = useState(false);
+    const [active, setActive] = useState(false);
 
-  const steps = [
-    {
-      element: "#create-button",
-      title: "Create something new",
-      description: "Use this button to create a new project.",
-      side: "bottom" as const,
-    },
-    {
-      element: "#notifications-bell",
-      title: "Stay up to date",
-      description: "Check here for the latest updates.",
-      side: "left" as const,
-    },
-  ];
+    const steps = [
+        {
+            element: "#create-button",
+            title: "Create something new",
+            description: "Use this button to create a new project.",
+            side: "bottom" as const,
+        },
+        {
+            element: "#notifications-bell",
+            title: "Stay up to date",
+            description: "Check here for the latest updates.",
+            side: "left" as const,
+        },
+    ];
 
-  return (
-    <>
-      <Button onClick={() => setActive(true)}>Start Tour</Button>
+    return (
+        <>
+            <Button onClick={() => setActive(true)}>Start Tour</Button>
 
-      <Wizard
-        active={active}
-        steps={steps}
-        onClose={() => setActive(false)}
-        onFinish={() => {
-          setActive(false);
-          console.log("Tour complete");
-        }}
-      />
-    </>
-  );
+            <Wizard
+                active={active}
+                steps={steps}
+                onClose={() => setActive(false)}
+                onFinish={() => {
+                    setActive(false);
+                    console.log("Tour complete");
+                }}
+            />
+        </>
+    );
 }
 ```
 
@@ -109,32 +109,27 @@ import { Wizard } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 
 function RefTour() {
-  const [active, setActive] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+    const [active, setActive] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const steps = [
-    {
-      element: buttonRef,
-      title: "Action Button",
-      description: "Click here to perform the primary action.",
-      side: "right" as const,
-    },
-  ];
+    const steps = [
+        {
+            element: buttonRef,
+            title: "Action Button",
+            description: "Click here to perform the primary action.",
+            side: "right" as const,
+        },
+    ];
 
-  return (
-    <>
-      <Button ref={buttonRef} theme="primary">
-        Primary Action
-      </Button>
+    return (
+        <>
+            <Button ref={buttonRef} theme="primary">
+                Primary Action
+            </Button>
 
-      <Wizard
-        active={active}
-        steps={steps}
-        onClose={() => setActive(false)}
-        labels={{ finish: "Got it!", skip: "No thanks" }}
-      />
-    </>
-  );
+            <Wizard active={active} steps={steps} onClose={() => setActive(false)} labels={{ finish: "Got it!", skip: "No thanks" }} />
+        </>
+    );
 }
 ```
 
@@ -142,19 +137,19 @@ function RefTour() {
 
 ```tsx
 const steps = [
-  {
-    element: "#dashboard-chart",
-    title: "Your Analytics",
-    description: "This chart shows activity for the last 30 days.",
-    onEnter: () => console.log("User reached analytics step"),
-    onNext: () => console.log("User advancing past analytics"),
-  },
-  {
-    element: "#export-button",
-    title: "Export Data",
-    description: "Download your data at any time.",
-    side: "left" as const,
-  },
+    {
+        element: "#dashboard-chart",
+        title: "Your Analytics",
+        description: "This chart shows activity for the last 30 days.",
+        onEnter: () => console.log("User reached analytics step"),
+        onNext: () => console.log("User advancing past analytics"),
+    },
+    {
+        element: "#export-button",
+        title: "Export Data",
+        description: "Download your data at any time.",
+        side: "left" as const,
+    },
 ];
 ```
 
@@ -162,16 +157,16 @@ const steps = [
 
 ```tsx
 <Wizard
-  active={active}
-  steps={steps}
-  onClose={() => setActive(false)}
-  onFinish={() => setActive(false)}
-  labels={{
-    next: "Continue",
-    previous: "Back",
-    skip: "Skip tour",
-    finish: "Done",
-  }}
+    active={active}
+    steps={steps}
+    onClose={() => setActive(false)}
+    onFinish={() => setActive(false)}
+    labels={{
+        next: "Continue",
+        previous: "Back",
+        skip: "Skip tour",
+        finish: "Done",
+    }}
 />
 ```
 
@@ -200,8 +195,8 @@ const steps = [
 
 ## Data Attributes
 
-| Attribute | Applied to | Description |
-|-----------|-----------|-------------|
+| Attribute                 | Applied to            | Description                        |
+| ------------------------- | --------------------- | ---------------------------------- |
 | `data-component="wizard"` | Main wizard container | Identifies the wizard overlay root |
 
 ## Notes

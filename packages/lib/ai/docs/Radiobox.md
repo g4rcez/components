@@ -21,22 +21,22 @@ import { Radiobox } from "@g4rcez/components/radiobox";
 
 Accepts all standard HTML `input[type="radio"]` attributes, plus:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | — | Label text or element displayed next to the radio button. |
-| `size` | `"medium" \| "large"` | `"medium"` | Visual size of the radio button. |
-| `className` | `string` | — | Additional CSS classes for the `<input>` element. |
+| Prop        | Type                  | Default    | Description                                               |
+| ----------- | --------------------- | ---------- | --------------------------------------------------------- |
+| `children`  | `React.ReactNode`     | —          | Label text or element displayed next to the radio button. |
+| `size`      | `"medium" \| "large"` | `"medium"` | Visual size of the radio button.                          |
+| `className` | `string`              | —          | Additional CSS classes for the `<input>` element.         |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `border-card-border` | `--card-border` | Default border color of the radio circle |
-| `text-primary` | `--primary` | Checked fill color (via `accent-color`) |
-| `focus:ring-primary` | `--primary` | Focus ring color |
-| `disabled:opacity-70` | — | Reduced opacity for disabled state |
+| Token                 | CSS Variable    | Purpose                                  |
+| --------------------- | --------------- | ---------------------------------------- |
+| `border-card-border`  | `--card-border` | Default border color of the radio circle |
+| `text-primary`        | `--primary`     | Checked fill color (via `accent-color`)  |
+| `focus:ring-primary`  | `--primary`     | Focus ring color                         |
+| `disabled:opacity-70` | —               | Reduced opacity for disabled state       |
 
 ## Examples
 
@@ -46,19 +46,19 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { Radiobox } from "@g4rcez/components/radiobox";
 
 export default function PlanSelector() {
-  return (
-    <div className="flex flex-col gap-sm">
-      <Radiobox name="plan" value="basic" defaultChecked>
-        Basic Plan
-      </Radiobox>
-      <Radiobox name="plan" value="pro">
-        Pro Plan
-      </Radiobox>
-      <Radiobox name="plan" value="enterprise">
-        Enterprise Plan
-      </Radiobox>
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-sm">
+            <Radiobox name="plan" value="basic" defaultChecked>
+                Basic Plan
+            </Radiobox>
+            <Radiobox name="plan" value="pro">
+                Pro Plan
+            </Radiobox>
+            <Radiobox name="plan" value="enterprise">
+                Enterprise Plan
+            </Radiobox>
+        </div>
+    );
 }
 ```
 
@@ -68,11 +68,11 @@ export default function PlanSelector() {
 import { Radiobox } from "@g4rcez/components/radiobox";
 
 export default function DisabledOption() {
-  return (
-    <Radiobox disabled name="option" value="legacy">
-      Legacy (unavailable)
-    </Radiobox>
-  );
+    return (
+        <Radiobox disabled name="option" value="legacy">
+            Legacy (unavailable)
+        </Radiobox>
+    );
 }
 ```
 
@@ -82,14 +82,22 @@ export default function DisabledOption() {
 import { Radiobox } from "@g4rcez/components/radiobox";
 
 export default function GenderSelector() {
-  return (
-    <div className="grid grid-cols-2 gap-base">
-      <Radiobox name="gender" value="male">Male</Radiobox>
-      <Radiobox name="gender" value="female">Female</Radiobox>
-      <Radiobox name="gender" value="non-binary">Non-binary</Radiobox>
-      <Radiobox name="gender" value="prefer-not">Prefer not to say</Radiobox>
-    </div>
-  );
+    return (
+        <div className="grid grid-cols-2 gap-base">
+            <Radiobox name="gender" value="male">
+                Male
+            </Radiobox>
+            <Radiobox name="gender" value="female">
+                Female
+            </Radiobox>
+            <Radiobox name="gender" value="non-binary">
+                Non-binary
+            </Radiobox>
+            <Radiobox name="gender" value="prefer-not">
+                Prefer not to say
+            </Radiobox>
+        </div>
+    );
 }
 ```
 
@@ -116,10 +124,10 @@ export default function GenderSelector() {
 
 ## Data Attributes
 
-| Attribute | Element | Value | Description |
-|-----------|---------|-------|-------------|
-| `data-component` | `label` | `"radiobox"` | Identifies the component. |
-| `data-disabled` | `label` | `true \| undefined` | Set when the radio is disabled. |
+| Attribute        | Element | Value               | Description                     |
+| ---------------- | ------- | ------------------- | ------------------------------- |
+| `data-component` | `label` | `"radiobox"`        | Identifies the component.       |
+| `data-disabled`  | `label` | `true \| undefined` | Set when the radio is disabled. |
 
 ## Notes
 

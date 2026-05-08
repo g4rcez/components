@@ -80,7 +80,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale, type === "datetime" ? DATE_TIME_FORMAT : DATE_FORMAT), [locale, type]);
         const [innerDate, setInnerDate] = useState(date || undefined);
         const [open, setOpen] = useState(false);
-        const mask = formatParts(datetimeFormat, fixedDate).flatMap((x) => (Is.keyof(parts, x.type) ? parts[x.type]!(x.value) as Mask[] : [] as Mask[]));
+        const mask = formatParts(datetimeFormat, fixedDate).flatMap((x) =>
+            Is.keyof(parts, x.type) ? (parts[x.type]!(x.value) as Mask[]) : ([] as Mask[])
+        );
         const placeholder = useMemo(() => {
             return formatParts(datetimeFormat, fixedDate).reduce(
                 (acc, x) => acc + (Is.keyof(placeholders, x.type) ? placeholders[x.type](x.value) : ""),

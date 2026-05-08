@@ -21,9 +21,9 @@ import { Spinner, Loading } from "@g4rcez/components";
 
 ### Spinner
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `className` | `string` | — | Additional classes to customize size, color, or border |
+| Prop        | Type     | Default | Description                                            |
+| ----------- | -------- | ------- | ------------------------------------------------------ |
+| `className` | `string` | —       | Additional classes to customize size, color, or border |
 
 Default appearance: `size-12 border-4 border-background border-b-primary animate-spin rounded-full`.
 
@@ -35,10 +35,10 @@ No props. Renders a centered `Spinner` inside a `flex h-full w-full items-center
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
+| Token               | CSS Variable   | Purpose                     |
+| ------------------- | -------------- | --------------------------- |
 | `border-background` | `--background` | Inactive spinner ring color |
-| `border-b-primary` | `--primary` | Active spinner arc color |
+| `border-b-primary`  | `--primary`    | Active spinner arc color    |
 
 ## Examples
 
@@ -51,7 +51,9 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ### Full-Container Loading State
 
 ```tsx
-{isLoading ? <Loading /> : <Content />}
+{
+    isLoading ? <Loading /> : <Content />;
+}
 ```
 
 ### Custom Size
@@ -64,8 +66,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 <button type="submit" disabled={isSubmitting} className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-button">
-  {isSubmitting && <Spinner className="size-4 border-2 border-primary-foreground border-b-transparent" />}
-  {isSubmitting ? "Saving…" : "Save"}
+    {isSubmitting && <Spinner className="size-4 border-2 border-primary-foreground border-b-transparent" />}
+    {isSubmitting ? "Saving…" : "Save"}
 </button>
 ```
 
@@ -75,10 +77,10 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { Card } from "@g4rcez/components/card";
 
 <Card title="Analytics">
-  <div className="h-64 flex items-center justify-center">
-    <Spinner />
-  </div>
-</Card>
+    <div className="h-64 flex items-center justify-center">
+        <Spinner />
+    </div>
+</Card>;
 ```
 
 ### Lazy Component Fallback
@@ -88,8 +90,8 @@ import { Suspense } from "react";
 import { Loading } from "@g4rcez/components";
 
 <Suspense fallback={<Loading />}>
-  <HeavyComponent />
-</Suspense>
+    <HeavyComponent />
+</Suspense>;
 ```
 
 ## Do

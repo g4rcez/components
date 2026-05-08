@@ -19,30 +19,30 @@ import { Dropdown } from "@g4rcez/components/dropdown";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `trigger` | `React.ReactElement \| React.ReactNode` | — | Element that toggles the dropdown on click |
-| `open` | `boolean` | — | Controlled open state |
-| `arrow` | `boolean` | `false` | Show an arrow pointer pointing at the trigger |
-| `title` | `React.ReactNode \| string` | — | Header title rendered inside the panel |
-| `restoreFocus` | `boolean` | `true` | Restore focus to the trigger when the panel closes |
-| `returnFocus` | `boolean` | `true` | Return focus to the trigger element |
-| `onChange` | `(nextValue: boolean) => void` | — | Callback fired when the open state changes |
-| `buttonProps` | `React.HTMLProps<"button">` | — | Additional props forwarded to the trigger `<button>` |
-| `children` | `React.ReactNode` | — | Panel content |
+| Prop           | Type                                    | Default | Description                                          |
+| -------------- | --------------------------------------- | ------- | ---------------------------------------------------- |
+| `trigger`      | `React.ReactElement \| React.ReactNode` | —       | Element that toggles the dropdown on click           |
+| `open`         | `boolean`                               | —       | Controlled open state                                |
+| `arrow`        | `boolean`                               | `false` | Show an arrow pointer pointing at the trigger        |
+| `title`        | `React.ReactNode \| string`             | —       | Header title rendered inside the panel               |
+| `restoreFocus` | `boolean`                               | `true`  | Restore focus to the trigger when the panel closes   |
+| `returnFocus`  | `boolean`                               | `true`  | Return focus to the trigger element                  |
+| `onChange`     | `(nextValue: boolean) => void`          | —       | Callback fired when the open state changes           |
+| `buttonProps`  | `React.HTMLProps<"button">`             | —       | Additional props forwarded to the trigger `<button>` |
+| `children`     | `React.ReactNode`                       | —       | Panel content                                        |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-floating-background` | `--floating-background` | Panel surface background |
-| `border-floating-border` | `--floating-border` | Panel border and arrow stroke |
-| `fill-floating-background` | `--floating-background` | Arrow fill color |
-| `z-floating` | `--z-floating` | Z-index for the floating panel |
-| `shadow-shadow-floating` | `--shadow-floating` | Panel drop shadow |
-| `rounded-lg` | — | Panel corner radius |
+| Token                      | CSS Variable            | Purpose                        |
+| -------------------------- | ----------------------- | ------------------------------ |
+| `bg-floating-background`   | `--floating-background` | Panel surface background       |
+| `border-floating-border`   | `--floating-border`     | Panel border and arrow stroke  |
+| `fill-floating-background` | `--floating-background` | Arrow fill color               |
+| `z-floating`               | `--z-floating`          | Z-index for the floating panel |
+| `shadow-shadow-floating`   | `--shadow-floating`     | Panel drop shadow              |
+| `rounded-lg`               | —                       | Panel corner radius            |
 
 ## Examples
 
@@ -53,24 +53,16 @@ import { Dropdown } from "@g4rcez/components/dropdown";
 import { Button } from "@g4rcez/components/button";
 
 function SimpleDropdown() {
-  return (
-    <Dropdown
-      trigger={<Button theme="primary">Actions</Button>}
-    >
-      <div className="flex min-w-48 flex-col py-1">
-        <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">
-          Edit
-        </button>
-        <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">
-          Duplicate
-        </button>
-        <hr className="border-border my-1" />
-        <button className="w-full px-4 py-2 text-left text-danger hover:bg-floating-hover">
-          Delete
-        </button>
-      </div>
-    </Dropdown>
-  );
+    return (
+        <Dropdown trigger={<Button theme="primary">Actions</Button>}>
+            <div className="flex min-w-48 flex-col py-1">
+                <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">Edit</button>
+                <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">Duplicate</button>
+                <hr className="border-border my-1" />
+                <button className="w-full px-4 py-2 text-left text-danger hover:bg-floating-hover">Delete</button>
+            </div>
+        </Dropdown>
+    );
 }
 ```
 
@@ -81,31 +73,25 @@ import { UserIcon, CaretDownIcon } from "@phosphor-icons/react";
 import { Dropdown } from "@g4rcez/components/dropdown";
 
 function AccountDropdown() {
-  return (
-    <Dropdown
-      trigger={
-        <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
-          <UserIcon size={16} />
-          Account
-          <CaretDownIcon size={16} />
-        </button>
-      }
-      title="Account Options"
-      arrow
-    >
-      <div className="flex min-w-48 flex-col py-1">
-        <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">
-          Profile Settings
-        </button>
-        <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">
-          Billing
-        </button>
-        <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">
-          Sign Out
-        </button>
-      </div>
-    </Dropdown>
-  );
+    return (
+        <Dropdown
+            trigger={
+                <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
+                    <UserIcon size={16} />
+                    Account
+                    <CaretDownIcon size={16} />
+                </button>
+            }
+            title="Account Options"
+            arrow
+        >
+            <div className="flex min-w-48 flex-col py-1">
+                <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">Profile Settings</button>
+                <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">Billing</button>
+                <button className="w-full px-4 py-2 text-left text-foreground hover:bg-floating-hover">Sign Out</button>
+            </div>
+        </Dropdown>
+    );
 }
 ```
 
@@ -116,29 +102,22 @@ import { useState } from "react";
 import { Dropdown } from "@g4rcez/components/dropdown";
 
 function ControlledDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <Dropdown
-      trigger={
-        <button className="px-4 py-2 rounded-button bg-muted text-foreground">
-          {isOpen ? "Close" : "Open"} Menu
-        </button>
-      }
-      open={isOpen}
-      onChange={setIsOpen}
-    >
-      <div className="min-w-48 p-4">
-        <p className="text-foreground">Controlled dropdown content</p>
-        <button
-          onClick={() => setIsOpen(false)}
-          className="mt-2 px-3 py-1 bg-primary text-primary-foreground rounded-button text-sm"
+    return (
+        <Dropdown
+            trigger={<button className="px-4 py-2 rounded-button bg-muted text-foreground">{isOpen ? "Close" : "Open"} Menu</button>}
+            open={isOpen}
+            onChange={setIsOpen}
         >
-          Close
-        </button>
-      </div>
-    </Dropdown>
-  );
+            <div className="min-w-48 p-4">
+                <p className="text-foreground">Controlled dropdown content</p>
+                <button onClick={() => setIsOpen(false)} className="mt-2 px-3 py-1 bg-primary text-primary-foreground rounded-button text-sm">
+                    Close
+                </button>
+            </div>
+        </Dropdown>
+    );
 }
 ```
 
@@ -149,48 +128,41 @@ import { FunnelIcon } from "@phosphor-icons/react";
 import { Dropdown } from "@g4rcez/components/dropdown";
 
 function FilterDropdown() {
-  const [status, setStatus] = useState("");
+    const [status, setStatus] = useState("");
 
-  return (
-    <Dropdown
-      trigger={
-        <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
-          <FunnelIcon size={16} />
-          Filters
-          {status && <span className="h-2 w-2 rounded-full bg-primary" />}
-        </button>
-      }
-      title="Filter Options"
-    >
-      <div className="min-w-64 space-y-4 p-4">
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1">
-            Status
-          </label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full px-3 py-2 rounded-button border border-border bg-background text-foreground"
-          >
-            <option value="">All</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-        <div className="flex gap-2 pt-2">
-          <button
-            onClick={() => setStatus("")}
-            className="px-3 py-1 text-sm rounded-button border border-border text-foreground"
-          >
-            Clear
-          </button>
-          <button className="px-3 py-1 text-sm rounded-button bg-primary text-primary-foreground">
-            Apply
-          </button>
-        </div>
-      </div>
-    </Dropdown>
-  );
+    return (
+        <Dropdown
+            trigger={
+                <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
+                    <FunnelIcon size={16} />
+                    Filters
+                    {status && <span className="h-2 w-2 rounded-full bg-primary" />}
+                </button>
+            }
+            title="Filter Options"
+        >
+            <div className="min-w-64 space-y-4 p-4">
+                <div>
+                    <label className="block text-sm font-medium text-foreground mb-1">Status</label>
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className="w-full px-3 py-2 rounded-button border border-border bg-background text-foreground"
+                    >
+                        <option value="">All</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div className="flex gap-2 pt-2">
+                    <button onClick={() => setStatus("")} className="px-3 py-1 text-sm rounded-button border border-border text-foreground">
+                        Clear
+                    </button>
+                    <button className="px-3 py-1 text-sm rounded-button bg-primary text-primary-foreground">Apply</button>
+                </div>
+            </div>
+        </Dropdown>
+    );
 }
 ```
 

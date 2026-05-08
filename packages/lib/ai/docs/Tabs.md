@@ -21,35 +21,35 @@ import { Tabs, Tab } from "@g4rcez/components/tabs";
 
 ### Tabs (Container)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `active` | `string` | — | ID of the currently active tab |
-| `onChange` | `(id: string) => void` | — | Called when the active tab changes |
-| `container` | `string` | — | Additional classes for the outer card container |
-| `className` | `string` | — | Additional classes for the card body (content area) |
-| `children` | `Tab[]` | — | `Tab` panel components |
+| Prop        | Type                   | Default | Description                                         |
+| ----------- | ---------------------- | ------- | --------------------------------------------------- |
+| `active`    | `string`               | —       | ID of the currently active tab                      |
+| `onChange`  | `(id: string) => void` | —       | Called when the active tab changes                  |
+| `container` | `string`               | —       | Additional classes for the outer card container     |
+| `className` | `string`               | —       | Additional classes for the card body (content area) |
+| `children`  | `Tab[]`                | —       | `Tab` panel components                              |
 
 ### Tab (Panel)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `id` | `string` | — | Unique identifier; matched against `Tabs.active` |
-| `title` | `string` | — | Tab button label (use when label is a plain string) |
-| `label` | `string` | — | Accessible label when `title` is a non-string React element |
-| `disabled` | `boolean` | `false` | Disables the tab button and skips it during keyboard navigation |
-| `children` | `React.ReactNode` | — | Panel content rendered when this tab is active |
+| Prop       | Type              | Default | Description                                                     |
+| ---------- | ----------------- | ------- | --------------------------------------------------------------- |
+| `id`       | `string`          | —       | Unique identifier; matched against `Tabs.active`                |
+| `title`    | `string`          | —       | Tab button label (use when label is a plain string)             |
+| `label`    | `string`          | —       | Accessible label when `title` is a non-string React element     |
+| `disabled` | `boolean`         | `false` | Disables the tab button and skips it during keyboard navigation |
+| `children` | `React.ReactNode` | —       | Panel content rendered when this tab is active                  |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-card-background` | `--card-background` | Tab panel surface |
-| `border-card-border` | `--card-border` | Tab bar bottom line and card border |
-| `border-primary` | `--primary` | Active tab bottom indicator |
-| `text-primary` | `--primary` | Active tab text color |
-| `text-disabled` | `--disabled` | Disabled tab text |
+| Token                | CSS Variable        | Purpose                             |
+| -------------------- | ------------------- | ----------------------------------- |
+| `bg-card-background` | `--card-background` | Tab panel surface                   |
+| `border-card-border` | `--card-border`     | Tab bar bottom line and card border |
+| `border-primary`     | `--primary`         | Active tab bottom indicator         |
+| `text-primary`       | `--primary`         | Active tab text color               |
+| `text-disabled`      | `--disabled`        | Disabled tab text                   |
 
 ## Examples
 
@@ -59,38 +59,38 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 const [active, setActive] = useState("overview");
 
 <Tabs active={active} onChange={setActive}>
-  <Tab id="overview" title="Overview">
-    <h3>Project Overview</h3>
-    <p>This is the overview of your project.</p>
-  </Tab>
+    <Tab id="overview" title="Overview">
+        <h3>Project Overview</h3>
+        <p>This is the overview of your project.</p>
+    </Tab>
 
-  <Tab id="details" title="Details">
-    <h3>Project Details</h3>
-    <p>Detailed information about your project.</p>
-  </Tab>
+    <Tab id="details" title="Details">
+        <h3>Project Details</h3>
+        <p>Detailed information about your project.</p>
+    </Tab>
 
-  <Tab id="settings" title="Settings">
-    <h3>Project Settings</h3>
-    <p>Configure your project settings here.</p>
-  </Tab>
-</Tabs>
+    <Tab id="settings" title="Settings">
+        <h3>Project Settings</h3>
+        <p>Configure your project settings here.</p>
+    </Tab>
+</Tabs>;
 ```
 
 ### Tabs with Disabled State
 
 ```tsx
 <Tabs active={activeTab} onChange={setActiveTab}>
-  <Tab id="available" title="Available">
-    <p>This tab is available.</p>
-  </Tab>
+    <Tab id="available" title="Available">
+        <p>This tab is available.</p>
+    </Tab>
 
-  <Tab id="locked" title="Locked" disabled>
-    <p>This content is not accessible yet.</p>
-  </Tab>
+    <Tab id="locked" title="Locked" disabled>
+        <p>This content is not accessible yet.</p>
+    </Tab>
 
-  <Tab id="also-available" title="Also Available">
-    <p>This tab is also available.</p>
-  </Tab>
+    <Tab id="also-available" title="Also Available">
+        <p>This tab is also available.</p>
+    </Tab>
 </Tabs>
 ```
 
@@ -98,15 +98,15 @@ const [active, setActive] = useState("overview");
 
 ```tsx
 <Tabs active={activeTab} onChange={setActiveTab}>
-  <Tab id="general" title="General">
-    <GeneralSettings />
-  </Tab>
-  <Tab id="privacy" title="Privacy">
-    <PrivacySettings />
-  </Tab>
-  <Tab id="notifications" title="Notifications">
-    <NotificationSettings />
-  </Tab>
+    <Tab id="general" title="General">
+        <GeneralSettings />
+    </Tab>
+    <Tab id="privacy" title="Privacy">
+        <PrivacySettings />
+    </Tab>
+    <Tab id="notifications" title="Notifications">
+        <NotificationSettings />
+    </Tab>
 </Tabs>
 ```
 
@@ -114,33 +114,33 @@ const [active, setActive] = useState("overview");
 
 ```tsx
 function DynamicTabs() {
-  const [tabs, setTabs] = useState([
-    { id: "tab1", title: "Tab 1", content: "Content 1" },
-    { id: "tab2", title: "Tab 2", content: "Content 2" },
-  ]);
-  const [activeTab, setActiveTab] = useState("tab1");
+    const [tabs, setTabs] = useState([
+        { id: "tab1", title: "Tab 1", content: "Content 1" },
+        { id: "tab2", title: "Tab 2", content: "Content 2" },
+    ]);
+    const [activeTab, setActiveTab] = useState("tab1");
 
-  const addTab = () => {
-    const newId = `tab${tabs.length + 1}`;
-    setTabs([...tabs, { id: newId, title: `Tab ${tabs.length + 1}`, content: `Content ${tabs.length + 1}` }]);
-    setActiveTab(newId);
-  };
+    const addTab = () => {
+        const newId = `tab${tabs.length + 1}`;
+        setTabs([...tabs, { id: newId, title: `Tab ${tabs.length + 1}`, content: `Content ${tabs.length + 1}` }]);
+        setActiveTab(newId);
+    };
 
-  return (
-    <div className="space-y-4">
-      <button onClick={addTab} className="px-3 py-1 bg-primary text-primary-foreground rounded-button">
-        Add Tab
-      </button>
+    return (
+        <div className="space-y-4">
+            <button onClick={addTab} className="px-3 py-1 bg-primary text-primary-foreground rounded-button">
+                Add Tab
+            </button>
 
-      <Tabs active={activeTab} onChange={setActiveTab}>
-        {tabs.map((tab) => (
-          <Tab key={tab.id} id={tab.id} title={tab.title}>
-            <p>{tab.content}</p>
-          </Tab>
-        ))}
-      </Tabs>
-    </div>
-  );
+            <Tabs active={activeTab} onChange={setActiveTab}>
+                {tabs.map((tab) => (
+                    <Tab key={tab.id} id={tab.id} title={tab.title}>
+                        <p>{tab.content}</p>
+                    </Tab>
+                ))}
+            </Tabs>
+        </div>
+    );
 }
 ```
 
@@ -148,15 +148,15 @@ function DynamicTabs() {
 
 ```tsx
 <Tabs active={currentStep} onChange={setCurrentStep}>
-  <Tab id="step1" title="Personal Info">
-    <PersonalInfoForm />
-  </Tab>
-  <Tab id="step2" title="Address" disabled={!step1Complete}>
-    <AddressForm />
-  </Tab>
-  <Tab id="step3" title="Payment" disabled={!step2Complete}>
-    <PaymentForm />
-  </Tab>
+    <Tab id="step1" title="Personal Info">
+        <PersonalInfoForm />
+    </Tab>
+    <Tab id="step2" title="Address" disabled={!step1Complete}>
+        <AddressForm />
+    </Tab>
+    <Tab id="step3" title="Payment" disabled={!step2Complete}>
+        <PaymentForm />
+    </Tab>
 </Tabs>
 ```
 

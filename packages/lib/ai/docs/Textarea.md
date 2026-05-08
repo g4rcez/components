@@ -21,34 +21,34 @@ import { Textarea } from "@g4rcez/components";
 
 Inherits all `InputField` props and standard HTML `<textarea>` attributes, plus:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `Label` | — | Label for the textarea. |
-| `error` | `string` | — | Error message displayed below the field. |
-| `loading` | `boolean` | `false` | Disables the field and signals a pending state. |
-| `rows` | `number` | `2` | Initial number of visible text rows. |
-| `next` | `string` | — | ID of the next element to focus when Enter is pressed (requires `enterKeyHint="next"`). |
-| `placeholder` | `string` | — | Placeholder text. |
-| `required` | `boolean` | — | Marks the field as required. |
-| `className` | `string` | — | Additional CSS classes for the `<textarea>` element. |
+| Prop          | Type      | Default | Description                                                                             |
+| ------------- | --------- | ------- | --------------------------------------------------------------------------------------- |
+| `title`       | `Label`   | —       | Label for the textarea.                                                                 |
+| `error`       | `string`  | —       | Error message displayed below the field.                                                |
+| `loading`     | `boolean` | `false` | Disables the field and signals a pending state.                                         |
+| `rows`        | `number`  | `2`     | Initial number of visible text rows.                                                    |
+| `next`        | `string`  | —       | ID of the next element to focus when Enter is pressed (requires `enterKeyHint="next"`). |
+| `placeholder` | `string`  | —       | Placeholder text.                                                                       |
+| `required`    | `boolean` | —       | Marks the field as required.                                                            |
+| `className`   | `string`  | —       | Additional CSS classes for the `<textarea>` element.                                    |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `placeholder-input-mask` | `--input-mask` | Placeholder text color |
-| `placeholder-input-mask-error` (via `group-error`) | `--input-mask-error` | Placeholder tint in error state |
-| `text-foreground` | `--foreground` | Input text color |
-| `text-danger` (via `group-error`) | `--danger` | Text color in error state |
-| `bg-transparent` | — | Input background (inherits from field wrapper) |
-| `focus:ring-primary` | `--primary` | Focus ring |
-| `group-focus-within:border-primary` | `--primary` | Border highlight on focus |
-| `group-hover:border-primary` | `--primary` | Border highlight on hover |
-| `h-input-height` | `--input-height` | Base height token (overridden by `rows` in practice) |
-| `px-input-x` | `--input-x` | Horizontal padding |
-| `py-input-y` | `--input-y` | Vertical padding |
+| Token                                              | CSS Variable         | Purpose                                              |
+| -------------------------------------------------- | -------------------- | ---------------------------------------------------- |
+| `placeholder-input-mask`                           | `--input-mask`       | Placeholder text color                               |
+| `placeholder-input-mask-error` (via `group-error`) | `--input-mask-error` | Placeholder tint in error state                      |
+| `text-foreground`                                  | `--foreground`       | Input text color                                     |
+| `text-danger` (via `group-error`)                  | `--danger`           | Text color in error state                            |
+| `bg-transparent`                                   | —                    | Input background (inherits from field wrapper)       |
+| `focus:ring-primary`                               | `--primary`          | Focus ring                                           |
+| `group-focus-within:border-primary`                | `--primary`          | Border highlight on focus                            |
+| `group-hover:border-primary`                       | `--primary`          | Border highlight on hover                            |
+| `h-input-height`                                   | `--input-height`     | Base height token (overridden by `rows` in practice) |
+| `px-input-x`                                       | `--input-x`          | Horizontal padding                                   |
+| `py-input-y`                                       | `--input-y`          | Vertical padding                                     |
 
 ## Examples
 
@@ -58,15 +58,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { Textarea } from "@g4rcez/components";
 
 export default function BioField() {
-  return (
-    <Textarea
-      title="Bio"
-      name="bio"
-      placeholder="Tell us about yourself…"
-      rows={4}
-      onChange={(e) => console.log(e.target.value)}
-    />
-  );
+    return <Textarea title="Bio" name="bio" placeholder="Tell us about yourself…" rows={4} onChange={(e) => console.log(e.target.value)} />;
 }
 ```
 
@@ -76,15 +68,15 @@ export default function BioField() {
 import { Textarea } from "@g4rcez/components";
 
 export default function MessageField() {
-  return (
-    <Textarea
-      title="Message"
-      name="message"
-      required
-      error="Message is required and must be at least 10 characters."
-      placeholder="Enter your message…"
-    />
-  );
+    return (
+        <Textarea
+            title="Message"
+            name="message"
+            required
+            error="Message is required and must be at least 10 characters."
+            placeholder="Enter your message…"
+        />
+    );
 }
 ```
 
@@ -94,15 +86,7 @@ export default function MessageField() {
 import { Textarea } from "@g4rcez/components";
 
 export default function CssSnippetField() {
-  return (
-    <Textarea
-      title="CSS Snippet"
-      name="css"
-      className="font-mono text-sm"
-      rows={6}
-      placeholder="body { margin: 0; }"
-    />
-  );
+    return <Textarea title="CSS Snippet" name="css" className="font-mono text-sm" rows={6} placeholder="body { margin: 0; }" />;
 }
 ```
 
@@ -113,21 +97,14 @@ import { Textarea } from "@g4rcez/components";
 import { Input } from "@g4rcez/components";
 
 export default function MultiFieldForm() {
-  return (
-    <div className="flex flex-col gap-base">
-      <Textarea
-        title="Description"
-        name="description"
-        enterKeyHint="next"
-        next="submit-btn"
-        rows={3}
-        placeholder="Describe the issue…"
-      />
-      <button id="submit-btn" type="submit" className="btn">
-        Submit
-      </button>
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-base">
+            <Textarea title="Description" name="description" enterKeyHint="next" next="submit-btn" rows={3} placeholder="Describe the issue…" />
+            <button id="submit-btn" type="submit" className="btn">
+                Submit
+            </button>
+        </div>
+    );
 }
 ```
 
@@ -154,11 +131,11 @@ export default function MultiFieldForm() {
 
 ## Data Attributes
 
-| Attribute | Element | Value | Description |
-|-----------|---------|-------|-------------|
-| `data-component` | `InputField` root | `"textarea"` | Identifies the component. |
-| `data-error` | `InputField` root | truthy string | Present when an error message is supplied. |
-| `data-next` | `<textarea>` | element id | Target element id for Enter-key focus forwarding. |
+| Attribute        | Element           | Value         | Description                                       |
+| ---------------- | ----------------- | ------------- | ------------------------------------------------- |
+| `data-component` | `InputField` root | `"textarea"`  | Identifies the component.                         |
+| `data-error`     | `InputField` root | truthy string | Present when an error message is supplied.        |
+| `data-next`      | `<textarea>`      | element id    | Target element id for Enter-key focus forwarding. |
 
 ## Notes
 

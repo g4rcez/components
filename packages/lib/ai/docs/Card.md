@@ -21,40 +21,40 @@ import { Card } from "@g4rcez/components/card";
 
 ### Card
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `React.ReactNode` | — | Renders an automatic header with border separator |
-| `loading` | `boolean` | — | Replaces content with animated skeleton lines |
-| `titleClassName` | `string` | `""` | Additional classes for the title header element |
-| `header` | `React.ReactElement \| null` | `null` | Custom header element; overrides `title` |
-| `container` | `string` | `""` | Additional classes for the outer card element |
-| `as` | `React.ElementType` | `"div"` | Polymorphic root element |
-| `className` | `string` | `""` | Additional classes for the card body element |
-| `children` | `React.ReactNode` | — | Card body content |
+| Prop             | Type                         | Default | Description                                       |
+| ---------------- | ---------------------------- | ------- | ------------------------------------------------- |
+| `title`          | `React.ReactNode`            | —       | Renders an automatic header with border separator |
+| `loading`        | `boolean`                    | —       | Replaces content with animated skeleton lines     |
+| `titleClassName` | `string`                     | `""`    | Additional classes for the title header element   |
+| `header`         | `React.ReactElement \| null` | `null`  | Custom header element; overrides `title`          |
+| `container`      | `string`                     | `""`    | Additional classes for the outer card element     |
+| `as`             | `React.ElementType`          | `"div"` | Polymorphic root element                          |
+| `className`      | `string`                     | `""`    | Additional classes for the card body element      |
+| `children`       | `React.ReactNode`            | —       | Card body content                                 |
 
 ### Card.Title
 
 A composable header with a title and an optional navigation/action area.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `React.ReactElement \| string` | — | Title content |
-| `titleTag` | `React.ElementType` | `"h2"` | Element type for the title |
-| `navTag` | `React.ElementType` | `"nav"` | Element type for the actions wrapper |
-| `as` | `React.ElementType` | `"div"` | Element type for the container |
-| `children` | `React.ReactNode` | — | Action elements rendered in the navigation area |
+| Prop       | Type                           | Default | Description                                     |
+| ---------- | ------------------------------ | ------- | ----------------------------------------------- |
+| `title`    | `React.ReactElement \| string` | —       | Title content                                   |
+| `titleTag` | `React.ElementType`            | `"h2"`  | Element type for the title                      |
+| `navTag`   | `React.ElementType`            | `"nav"` | Element type for the actions wrapper            |
+| `as`       | `React.ElementType`            | `"div"` | Element type for the container                  |
+| `children` | `React.ReactNode`              | —       | Action elements rendered in the navigation area |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-card-background` | `--card-background` | Card surface color |
-| `border-card-border` | `--card-border` | Card border and title separator |
-| `rounded-card` | `--radius-card` | Corner radius |
-| `shadow-shadow-card` | `--shadow-card` | Card drop shadow |
-| `bg-muted` | `--muted` | Skeleton loading lines |
+| Token                | CSS Variable        | Purpose                         |
+| -------------------- | ------------------- | ------------------------------- |
+| `bg-card-background` | `--card-background` | Card surface color              |
+| `border-card-border` | `--card-border`     | Card border and title separator |
+| `rounded-card`       | `--radius-card`     | Corner radius                   |
+| `shadow-shadow-card` | `--shadow-card`     | Card drop shadow                |
+| `bg-muted`           | `--muted`           | Skeleton loading lines          |
 
 ## Examples
 
@@ -62,7 +62,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 <Card>
-  <p>Card content goes here.</p>
+    <p>Card content goes here.</p>
 </Card>
 ```
 
@@ -70,10 +70,10 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 <Card title="User Profile">
-  <div className="space-y-4">
-    <p>Name: John Doe</p>
-    <p>Email: john@example.com</p>
-  </div>
+    <div className="space-y-4">
+        <p>Name: John Doe</p>
+        <p>Email: john@example.com</p>
+    </div>
 </Card>
 ```
 
@@ -81,7 +81,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 <Card title="Analytics" loading={isLoading}>
-  <p>Loaded content rendered here when not loading.</p>
+    <p>Loaded content rendered here when not loading.</p>
 </Card>
 ```
 
@@ -91,26 +91,30 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { Button } from "@g4rcez/components/button";
 
 <Card>
-  <Card.Title title="Project Overview">
-    <Button theme="primary" size="small">Edit</Button>
-    <Button theme="neutral" size="small">Share</Button>
-  </Card.Title>
+    <Card.Title title="Project Overview">
+        <Button theme="primary" size="small">
+            Edit
+        </Button>
+        <Button theme="neutral" size="small">
+            Share
+        </Button>
+    </Card.Title>
 
-  <p>Project description and details.</p>
-</Card>
+    <p>Project description and details.</p>
+</Card>;
 ```
 
 ### Custom Header
 
 ```tsx
 <Card
-  header={
-    <header className="flex justify-between items-center p-4 border-b border-card-border">
-      <h2 className="text-foreground font-semibold">Custom Header</h2>
-    </header>
-  }
+    header={
+        <header className="flex justify-between items-center p-4 border-b border-card-border">
+            <h2 className="text-foreground font-semibold">Custom Header</h2>
+        </header>
+    }
 >
-  <p>Content with a completely custom header.</p>
+    <p>Content with a completely custom header.</p>
 </Card>
 ```
 
@@ -118,17 +122,17 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 <Card title="Dashboard">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <Card title="Statistics">
-      <p>Chart content here</p>
-    </Card>
-    <Card title="Recent Activity">
-      <ul>
-        <li>User logged in</li>
-        <li>New order received</li>
-      </ul>
-    </Card>
-  </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card title="Statistics">
+            <p>Chart content here</p>
+        </Card>
+        <Card title="Recent Activity">
+            <ul>
+                <li>User logged in</li>
+                <li>New order received</li>
+            </ul>
+        </Card>
+    </div>
 </Card>
 ```
 
@@ -136,7 +140,7 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 <Card as="article" title="Blog Post">
-  <p>Blog post content.</p>
+    <p>Blog post content.</p>
 </Card>
 ```
 

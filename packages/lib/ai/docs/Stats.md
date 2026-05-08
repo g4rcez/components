@@ -19,27 +19,27 @@ import { Stats } from "@g4rcez/components/stats";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `Label` | — | Metric label displayed above the value |
-| `Icon` | `React.FC<{ className: string }>` | — | Icon component to display (Phosphor recommended) |
-| `iconContainer` | `string` | — | Additional classes for the icon background container |
-| `footer` | `React.ReactElement` | — | Optional footer area for trend data or context |
-| `children` | `React.ReactNode` | — | The metric value (e.g. a number, formatted string) |
+| Prop            | Type                              | Default | Description                                          |
+| --------------- | --------------------------------- | ------- | ---------------------------------------------------- |
+| `title`         | `Label`                           | —       | Metric label displayed above the value               |
+| `Icon`          | `React.FC<{ className: string }>` | —       | Icon component to display (Phosphor recommended)     |
+| `iconContainer` | `string`                          | —       | Additional classes for the icon background container |
+| `footer`        | `React.ReactElement`              | —       | Optional footer area for trend data or context       |
+| `children`      | `React.ReactNode`                 | —       | The metric value (e.g. a number, formatted string)   |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-card-background` | `--card-background` | Card surface |
-| `border-card-border` | `--card-border` | Card border and divider |
-| `rounded-card` | `--radius-card` | Corner radius |
-| `shadow-shadow-card` | `--shadow-card` | Card drop shadow |
-| `bg-primary` | `--primary` | Icon container background (default) |
-| `text-primary-foreground` | `--primary-foreground` | Icon color (default) |
-| `divide-card-border` | `--card-border` | Divider between header and footer |
+| Token                     | CSS Variable           | Purpose                             |
+| ------------------------- | ---------------------- | ----------------------------------- |
+| `bg-card-background`      | `--card-background`    | Card surface                        |
+| `border-card-border`      | `--card-border`        | Card border and divider             |
+| `rounded-card`            | `--radius-card`        | Corner radius                       |
+| `shadow-shadow-card`      | `--shadow-card`        | Card drop shadow                    |
+| `bg-primary`              | `--primary`            | Icon container background (default) |
+| `text-primary-foreground` | `--primary-foreground` | Icon color (default)                |
+| `divide-card-border`      | `--card-border`        | Divider between header and footer   |
 
 ## Examples
 
@@ -49,8 +49,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { UsersIcon } from "@phosphor-icons/react";
 
 <Stats title="Active Users" Icon={UsersIcon}>
-  1,234
-</Stats>
+    1,234
+</Stats>;
 ```
 
 ### With Footer Trend
@@ -59,18 +59,18 @@ import { UsersIcon } from "@phosphor-icons/react";
 import { TrendUpIcon, CurrencyDollarIcon } from "@phosphor-icons/react";
 
 <Stats
-  title="Revenue"
-  Icon={CurrencyDollarIcon}
-  iconContainer="bg-success"
-  footer={
-    <div className="flex items-center gap-1 text-success text-sm font-medium">
-      <TrendUpIcon size={14} />
-      <span>+12% from last month</span>
-    </div>
-  }
+    title="Revenue"
+    Icon={CurrencyDollarIcon}
+    iconContainer="bg-success"
+    footer={
+        <div className="flex items-center gap-1 text-success text-sm font-medium">
+            <TrendUpIcon size={14} />
+            <span>+12% from last month</span>
+        </div>
+    }
 >
-  $45,200.00
-</Stats>
+    $45,200.00
+</Stats>;
 ```
 
 ### Custom Icon Container Theme
@@ -78,13 +78,9 @@ import { TrendUpIcon, CurrencyDollarIcon } from "@phosphor-icons/react";
 ```tsx
 import { WarningCircleIcon } from "@phosphor-icons/react";
 
-<Stats
-  title="Error Rate"
-  Icon={WarningCircleIcon}
-  iconContainer="bg-danger"
->
-  0.3%
-</Stats>
+<Stats title="Error Rate" Icon={WarningCircleIcon} iconContainer="bg-danger">
+    0.3%
+</Stats>;
 ```
 
 ### Dashboard Grid
@@ -93,10 +89,16 @@ import { WarningCircleIcon } from "@phosphor-icons/react";
 import { UsersIcon, ClockIcon, TargetIcon } from "@phosphor-icons/react";
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-  <Stats title="Users" Icon={UsersIcon}>1.2k</Stats>
-  <Stats title="Sessions" Icon={ClockIcon}>450</Stats>
-  <Stats title="Conversion" Icon={TargetIcon}>3.2%</Stats>
-</div>
+    <Stats title="Users" Icon={UsersIcon}>
+        1.2k
+    </Stats>
+    <Stats title="Sessions" Icon={ClockIcon}>
+        450
+    </Stats>
+    <Stats title="Conversion" Icon={TargetIcon}>
+        3.2%
+    </Stats>
+</div>;
 ```
 
 ### With Skeleton Loading
@@ -106,8 +108,8 @@ import { ChartBarIcon } from "@phosphor-icons/react";
 import { Skeleton } from "@g4rcez/components";
 
 <Stats title="Page Views" Icon={ChartBarIcon}>
-  {isLoading ? <Skeleton className="h-9 w-24" /> : "48,301"}
-</Stats>
+    {isLoading ? <Skeleton className="h-9 w-24" /> : "48,301"}
+</Stats>;
 ```
 
 ## Do

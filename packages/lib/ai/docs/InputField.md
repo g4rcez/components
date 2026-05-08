@@ -19,40 +19,40 @@ import { InputField } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `Label` | - | Main label text for the field |
-| `info` | `Label` | - | Informational text shown in a `Tooltip` icon next to the label |
-| `error` | `string` | - | Error message rendered below the field border |
-| `feedback` | `Label` | - | Success or neutral feedback message (hidden when `error` is present) |
-| `left` | `Label` | - | Content rendered to the left inside the field border |
-| `right` | `Label` | - | Content rendered to the right inside the field border |
-| `rightLabel` | `Label` | - | Content rendered to the right of the label text |
-| `required` | `boolean` | `false` | If `true`, hides the "Optional" badge |
-| `optionalText` | `string` | `"Optional"` | Text shown for optional fields (translatable) |
-| `disabled` | `boolean` | `false` | Applies disabled styling to the wrapper and label |
-| `interactive` | `boolean` | `false` | Sets `data-interactive` on the fieldset |
-| `container` | `string` | - | Extra CSS classes for the outer `<fieldset>` |
-| `labelClassName` | `string` | - | Extra CSS classes for the inner label/border wrapper `<div>` |
-| `hiddenLabel` | `boolean` | `false` | Visually hides the label row while keeping it accessible |
-| `reportStatus` | `boolean` | - | Show `CheckCircle`/`XCircle` icons alongside the label based on validity |
-| `componentName` | `string` | - | Sets `data-component` on the fieldset (e.g., `"input"`, `"select"`) |
-| `id` | `string` | - | `id` linked to the inner control via `htmlFor` on the label |
-| `name` | `string` | - | Fallback for `id` when `id` is not provided |
-| `children` | `React.ReactNode` | - | The actual form control (input, select, etc.) |
+| Prop             | Type              | Default      | Description                                                              |
+| ---------------- | ----------------- | ------------ | ------------------------------------------------------------------------ |
+| `title`          | `Label`           | -            | Main label text for the field                                            |
+| `info`           | `Label`           | -            | Informational text shown in a `Tooltip` icon next to the label           |
+| `error`          | `string`          | -            | Error message rendered below the field border                            |
+| `feedback`       | `Label`           | -            | Success or neutral feedback message (hidden when `error` is present)     |
+| `left`           | `Label`           | -            | Content rendered to the left inside the field border                     |
+| `right`          | `Label`           | -            | Content rendered to the right inside the field border                    |
+| `rightLabel`     | `Label`           | -            | Content rendered to the right of the label text                          |
+| `required`       | `boolean`         | `false`      | If `true`, hides the "Optional" badge                                    |
+| `optionalText`   | `string`          | `"Optional"` | Text shown for optional fields (translatable)                            |
+| `disabled`       | `boolean`         | `false`      | Applies disabled styling to the wrapper and label                        |
+| `interactive`    | `boolean`         | `false`      | Sets `data-interactive` on the fieldset                                  |
+| `container`      | `string`          | -            | Extra CSS classes for the outer `<fieldset>`                             |
+| `labelClassName` | `string`          | -            | Extra CSS classes for the inner label/border wrapper `<div>`             |
+| `hiddenLabel`    | `boolean`         | `false`      | Visually hides the label row while keeping it accessible                 |
+| `reportStatus`   | `boolean`         | -            | Show `CheckCircle`/`XCircle` icons alongside the label based on validity |
+| `componentName`  | `string`          | -            | Sets `data-component` on the fieldset (e.g., `"input"`, `"select"`)      |
+| `id`             | `string`          | -            | `id` linked to the inner control via `htmlFor` on the label              |
+| `name`           | `string`          | -            | Fallback for `id` when `id` is not provided                              |
+| `children`       | `React.ReactNode` | -            | The actual form control (input, select, etc.)                            |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `border-input-border` | `--input-border` | Default field border color |
-| `text-field-label` | `--field-label` | Label text color |
-| `text-primary` | `--primary` | Label and border color on focus/hover |
-| `text-danger` | `--danger` | Label, border, and error text color in error state |
-| `text-disabled` | `--disabled` | Label and border color when disabled |
-| `mt-input-gap` | `--input-gap` | Gap between border and error/feedback text |
+| Token                 | CSS Variable     | Purpose                                            |
+| --------------------- | ---------------- | -------------------------------------------------- |
+| `border-input-border` | `--input-border` | Default field border color                         |
+| `text-field-label`    | `--field-label`  | Label text color                                   |
+| `text-primary`        | `--primary`      | Label and border color on focus/hover              |
+| `text-danger`         | `--danger`       | Label, border, and error text color in error state |
+| `text-disabled`       | `--disabled`     | Label and border color when disabled               |
+| `mt-input-gap`        | `--input-gap`    | Gap between border and error/feedback text         |
 
 ## Examples
 
@@ -62,12 +62,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { InputField } from "@g4rcez/components";
 
 <InputField title="Username" name="username" required>
-  <input
-    id="username"
-    name="username"
-    className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
-  />
-</InputField>
+    <input id="username" name="username" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+</InputField>;
 ```
 
 ### With info tooltip and error
@@ -76,47 +72,51 @@ import { InputField } from "@g4rcez/components";
 import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 <InputField
-  title="API Key"
-  name="api_key"
-  info="Your secret API key from the developer portal."
-  error={apiKeyError}
-  left={<MagnifyingGlassIcon size={16} className="text-muted-foreground" />}
-  right={isValid ? <CheckIcon size={16} className="text-success" /> : null}
-  required
->
-  <input
-    id="api_key"
+    title="API Key"
     name="api_key"
-    type="password"
-    className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
-  />
-</InputField>
+    info="Your secret API key from the developer portal."
+    error={apiKeyError}
+    left={<MagnifyingGlassIcon size={16} className="text-muted-foreground" />}
+    right={isValid ? <CheckIcon size={16} className="text-success" /> : null}
+    required
+>
+    <input
+        id="api_key"
+        name="api_key"
+        type="password"
+        className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
+    />
+</InputField>;
 ```
 
 ### Optional vs required
 
 ```tsx
-{/* Required — "Optional" badge is hidden */}
+{
+    /* Required — "Optional" badge is hidden */
+}
 <InputField title="Email" name="email" required>
-  <input id="email" name="email" type="email" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
-</InputField>
+    <input id="email" name="email" type="email" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+</InputField>;
 
-{/* Optional — shows "Optional" badge */}
+{
+    /* Optional — shows "Optional" badge */
+}
 <InputField title="Website" name="website">
-  <input id="website" name="website" type="url" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
-</InputField>
+    <input id="website" name="website" type="url" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+</InputField>;
 ```
 
 ### Hidden label (accessible)
 
 ```tsx
 <InputField title="Search" name="search" hiddenLabel>
-  <input
-    id="search"
-    name="search"
-    placeholder="Search..."
-    className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
-  />
+    <input
+        id="search"
+        name="search"
+        placeholder="Search..."
+        className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
+    />
 </InputField>
 ```
 
@@ -124,13 +124,13 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 ```tsx
 <InputField
-  title="Slug"
-  name="slug"
-  feedback={isAvailable ? "This slug is available." : undefined}
-  error={!isAvailable ? "Slug is already taken." : undefined}
-  required
+    title="Slug"
+    name="slug"
+    feedback={isAvailable ? "This slug is available." : undefined}
+    error={!isAvailable ? "Slug is already taken." : undefined}
+    required
 >
-  <input id="slug" name="slug" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+    <input id="slug" name="slug" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
 </InputField>
 ```
 

@@ -88,18 +88,18 @@ const animations: Animations = {
 };
 
 const variants = cva(
-    "z-floating border border-floating-border ring-0 outline-0 appearance-none flex flex-col gap-4 flex-nowrap min-w-xs bg-floating-background",
+    "z-floating flex min-w-xs appearance-none flex-col flex-nowrap gap-4 border border-floating-border bg-floating-background outline-0 ring-0",
     {
         variants: {
             type: {
-                drawer: "max-h-screen max-w-[90%] absolute w-fit h-screen min-h-0",
-                dialog: "max-h-[calc(100lvh-10%)] relative container h-min rounded-lg py-4",
-                sheet: "w-screen absolute bottom-0 max-h-[calc(100vh-15%)] max-h-[calc(100svh-5%)] h-screen pt-6 pb-4 rounded-t-lg",
+                drawer: "absolute h-screen max-h-screen min-h-0 w-fit max-w-[90%]",
+                dialog: "container relative h-min max-h-[calc(100lvh-10%)] rounded-lg py-4",
+                sheet: "absolute bottom-0 h-screen max-h-[calc(100svh-5%)] max-h-[calc(100vh-15%)] w-screen rounded-t-lg pb-4 pt-6",
             },
             position: {
                 none: "",
-                right: "py-4 absolute right-0 top-0 rounded-l-lg",
-                left: "py-4 absolute left-0 top-0 rounded-r-lg",
+                right: "absolute right-0 top-0 rounded-l-lg py-4",
+                left: "absolute left-0 top-0 rounded-r-lg py-4",
             },
         },
         defaultVariants: { position: "right", type: "dialog" },
