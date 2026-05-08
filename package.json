@@ -11,12 +11,16 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "prettier": "3.8.1",
-    "prettier-plugin-tailwindcss": "0.6.12"
+    "lefthook": "2.1.6",
+    "oxfmt": "0.48.0",
+    "oxlint": "1.63.0"
   },
   "scripts": {
     "build": "pnpm run --filter ./packages/lib lib:css; pnpm run -r build",
     "dev": "pnpm run --filter ./packages/docs dev",
+    "format": "pnpm run -r format",
+    "lint": "pnpm run -r lint",
+    "prepare": "lefthook install",
     "start": "pnpm run --filter ./packages/docs start"
   }
 }
