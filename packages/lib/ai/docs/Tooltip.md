@@ -19,19 +19,19 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `Label` | — | Tooltip trigger element — the element the user interacts with |
-| `children` | `React.ReactNode` | — | Tooltip popup content |
-| `open` | `boolean` | — | Controlled open state |
-| `enabled` | `boolean` | `true` | Enable or disable the tooltip entirely |
-| `hover` | `boolean` | `true` | Show tooltip on hover |
-| `focus` | `boolean` | `true` | Show tooltip on focus |
-| `popover` | `boolean` | `true` | Show tooltip on click |
-| `placement` | `Placement` | auto | Preferred placement; falls back via `autoPlacement` |
-| `followCursor` | `boolean` | `false` | Tooltip follows the mouse cursor position |
-| `onChange` | `(open: boolean) => void` | — | Open state change handler |
-| `as` | `React.ElementType` | `"span"` | HTML element to render the trigger wrapper as |
+| Prop           | Type                      | Default  | Description                                                   |
+| -------------- | ------------------------- | -------- | ------------------------------------------------------------- |
+| `title`        | `Label`                   | —        | Tooltip trigger element — the element the user interacts with |
+| `children`     | `React.ReactNode`         | —        | Tooltip popup content                                         |
+| `open`         | `boolean`                 | —        | Controlled open state                                         |
+| `enabled`      | `boolean`                 | `true`   | Enable or disable the tooltip entirely                        |
+| `hover`        | `boolean`                 | `true`   | Show tooltip on hover                                         |
+| `focus`        | `boolean`                 | `true`   | Show tooltip on focus                                         |
+| `popover`      | `boolean`                 | `true`   | Show tooltip on click                                         |
+| `placement`    | `Placement`               | auto     | Preferred placement; falls back via `autoPlacement`           |
+| `followCursor` | `boolean`                 | `false`  | Tooltip follows the mouse cursor position                     |
+| `onChange`     | `(open: boolean) => void` | —        | Open state change handler                                     |
+| `as`           | `React.ElementType`       | `"span"` | HTML element to render the trigger wrapper as                 |
 
 > Note: `title` is the **trigger** and `children` is the **popup content**. This is the inverse of the HTML `title` attribute convention — the prop name matches how the component API evolved.
 
@@ -39,14 +39,14 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-tooltip-background` | `--tooltip-background` | Tooltip popup background |
-| `text-tooltip-foreground` | `--tooltip-foreground` | Tooltip popup text color |
-| `border-tooltip-border` | `--tooltip-border` | Tooltip popup border and arrow stroke |
-| `fill-tooltip-background` | `--tooltip-background` | Arrow fill color |
-| `z-tooltip` | `--z-tooltip` | Z-index of the tooltip popup |
-| `shadow-shadow-floating` | `--shadow-floating` | Tooltip drop shadow |
+| Token                     | CSS Variable           | Purpose                               |
+| ------------------------- | ---------------------- | ------------------------------------- |
+| `bg-tooltip-background`   | `--tooltip-background` | Tooltip popup background              |
+| `text-tooltip-foreground` | `--tooltip-foreground` | Tooltip popup text color              |
+| `border-tooltip-border`   | `--tooltip-border`     | Tooltip popup border and arrow stroke |
+| `fill-tooltip-background` | `--tooltip-background` | Arrow fill color                      |
+| `z-tooltip`               | `--z-tooltip`          | Z-index of the tooltip popup          |
+| `shadow-shadow-floating`  | `--shadow-floating`    | Tooltip drop shadow                   |
 
 ## Placement Options
 
@@ -60,8 +60,8 @@ Supports all Floating UI placements: `"top"`, `"top-start"`, `"top-end"`, `"bott
 import { Tooltip } from "@g4rcez/components/tooltip";
 
 <Tooltip title={<button className="px-4 py-2 bg-primary text-primary-foreground rounded-button">Hover me</button>}>
-  This is a helpful tooltip
-</Tooltip>
+    This is a helpful tooltip
+</Tooltip>;
 ```
 
 ### Icon Button with Label
@@ -71,9 +71,15 @@ import { FloppyDiskIcon } from "@phosphor-icons/react";
 import { Tooltip } from "@g4rcez/components/tooltip";
 import { Button } from "@g4rcez/components/button";
 
-<Tooltip title={<Button size="icon" theme="ghost-neutral"><FloppyDiskIcon size={16} /></Button>}>
-  Save (Ctrl+S)
-</Tooltip>
+<Tooltip
+    title={
+        <Button size="icon" theme="ghost-neutral">
+            <FloppyDiskIcon size={16} />
+        </Button>
+    }
+>
+    Save (Ctrl+S)
+</Tooltip>;
 ```
 
 ### Interaction Modes
@@ -81,32 +87,30 @@ import { Button } from "@g4rcez/components/button";
 ```tsx
 import { Tooltip } from "@g4rcez/components/tooltip";
 
-{/* Hover only */}
-<Tooltip
-  title={<button className="px-4 py-2 rounded-button border border-border text-foreground">Hover Only</button>}
-  focus={false}
-  popover={false}
->
-  Shown on hover
-</Tooltip>
+{
+    /* Hover only */
+}
+<Tooltip title={<button className="px-4 py-2 rounded-button border border-border text-foreground">Hover Only</button>} focus={false} popover={false}>
+    Shown on hover
+</Tooltip>;
 
-{/* Focus only — keyboard accessible */}
+{
+    /* Focus only — keyboard accessible */
+}
 <Tooltip
-  title={<input placeholder="Focus me with tab" className="px-3 py-2 rounded-button border border-border bg-background text-foreground" />}
-  hover={false}
-  popover={false}
+    title={<input placeholder="Focus me with tab" className="px-3 py-2 rounded-button border border-border bg-background text-foreground" />}
+    hover={false}
+    popover={false}
 >
-  Shown on focus
-</Tooltip>
+    Shown on focus
+</Tooltip>;
 
-{/* Click only — acts like a popover */}
-<Tooltip
-  title={<button className="px-4 py-2 bg-primary text-primary-foreground rounded-button">Click me</button>}
-  hover={false}
-  focus={false}
->
-  Shown on click
-</Tooltip>
+{
+    /* Click only — acts like a popover */
+}
+<Tooltip title={<button className="px-4 py-2 bg-primary text-primary-foreground rounded-button">Click me</button>} hover={false} focus={false}>
+    Shown on click
+</Tooltip>;
 ```
 
 ### Cursor-Following Tooltip
@@ -115,16 +119,16 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 import { Tooltip } from "@g4rcez/components/tooltip";
 
 <Tooltip
-  followCursor
-  placement="top-start"
-  title={
-    <div className="w-full h-32 rounded-card border border-border bg-muted flex items-center justify-center">
-      <span className="text-muted-foreground">Move your mouse over this area</span>
-    </div>
-  }
+    followCursor
+    placement="top-start"
+    title={
+        <div className="w-full h-32 rounded-card border border-border bg-muted flex items-center justify-center">
+            <span className="text-muted-foreground">Move your mouse over this area</span>
+        </div>
+    }
 >
-  Follows your cursor
-</Tooltip>
+    Follows your cursor
+</Tooltip>;
 ```
 
 ### Controlled Tooltip
@@ -134,31 +138,31 @@ import { useState } from "react";
 import { Tooltip } from "@g4rcez/components/tooltip";
 
 function ControlledTooltip() {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <>
-      <Tooltip
-        title={<button className="px-4 py-2 rounded-button border border-border text-foreground">Target</button>}
-        open={isOpen}
-        onChange={setIsOpen}
-        hover={false}
-        focus={false}
-        popover={false}
-      >
-        Externally controlled
-      </Tooltip>
+    return (
+        <>
+            <Tooltip
+                title={<button className="px-4 py-2 rounded-button border border-border text-foreground">Target</button>}
+                open={isOpen}
+                onChange={setIsOpen}
+                hover={false}
+                focus={false}
+                popover={false}
+            >
+                Externally controlled
+            </Tooltip>
 
-      <div className="mt-4 flex gap-2">
-        <button onClick={() => setIsOpen(true)} className="px-3 py-1 bg-primary text-primary-foreground rounded-button text-sm">
-          Show
-        </button>
-        <button onClick={() => setIsOpen(false)} className="px-3 py-1 bg-muted text-foreground rounded-button text-sm">
-          Hide
-        </button>
-      </div>
-    </>
-  );
+            <div className="mt-4 flex gap-2">
+                <button onClick={() => setIsOpen(true)} className="px-3 py-1 bg-primary text-primary-foreground rounded-button text-sm">
+                    Show
+                </button>
+                <button onClick={() => setIsOpen(false)} className="px-3 py-1 bg-muted text-foreground rounded-button text-sm">
+                    Hide
+                </button>
+            </div>
+        </>
+    );
 }
 ```
 
@@ -167,21 +171,19 @@ function ControlledTooltip() {
 ```tsx
 import { Tooltip } from "@g4rcez/components/tooltip";
 
-{/* Render as <div> */}
-<Tooltip
-  as="div"
-  title={<span className="p-3 bg-muted rounded-button inline-block text-foreground">Div with tooltip</span>}
->
-  Tooltip on a div
-</Tooltip>
+{
+    /* Render as <div> */
+}
+<Tooltip as="div" title={<span className="p-3 bg-muted rounded-button inline-block text-foreground">Div with tooltip</span>}>
+    Tooltip on a div
+</Tooltip>;
 
-{/* Wrap a paragraph */}
-<Tooltip
-  as="p"
-  title={<span className="text-primary cursor-pointer">Hover this paragraph</span>}
->
-  Paragraph tooltip
-</Tooltip>
+{
+    /* Wrap a paragraph */
+}
+<Tooltip as="p" title={<span className="text-primary cursor-pointer">Hover this paragraph</span>}>
+    Paragraph tooltip
+</Tooltip>;
 ```
 
 ### Form Field Help Tooltip
@@ -191,13 +193,11 @@ import { InfoIcon } from "@phosphor-icons/react";
 import { Tooltip } from "@g4rcez/components/tooltip";
 
 <label className="block text-sm font-medium text-foreground mb-1">
-  Username
-  <Tooltip
-    title={<InfoIcon className="inline ml-1 text-muted-foreground cursor-help" size={14} />}
-  >
-    3–20 characters; letters, numbers, and underscores only
-  </Tooltip>
-</label>
+    Username
+    <Tooltip title={<InfoIcon className="inline ml-1 text-muted-foreground cursor-help" size={14} />}>
+        3–20 characters; letters, numbers, and underscores only
+    </Tooltip>
+</label>;
 ```
 
 ## Do

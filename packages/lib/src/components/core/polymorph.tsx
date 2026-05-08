@@ -13,4 +13,3 @@ export const Polymorph = forwardRef(function InnerPolymorph<P extends React.Elem
     const Element = props.as || "span";
     return <Element ref={ref} {...props} as={undefined} />;
 });
-

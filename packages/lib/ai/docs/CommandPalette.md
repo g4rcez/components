@@ -19,18 +19,18 @@ import { CommandPalette } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `open` | `boolean` | — | Controlled open state |
-| `commands` | `CommandItemTypes[]` | — | Array of commands to display |
-| `onChangeVisibility` | `(next: boolean) => void` | — | Open/close handler |
-| `bind` | `string` | `"Mod + k"` | Global keyboard shortcut to open the palette |
-| `loading` | `boolean` | `false` | Show loading skeleton while commands load |
-| `emptyMessage` | `Label` | — | Message shown when no results match |
-| `footer` | `React.ReactElement` | — | Custom footer content |
-| `onChangeText` | `(text: string) => void` | — | Search text change handler |
-| `Preview` | `React.FC<{ command: CommandItemTypes; text: string }>` | — | Preview panel component for the active command |
-| `Icon` | `React.FC<IconProps & { text: string; Default: React.FC<IconProps> }>` | — | Custom search icon |
+| Prop                 | Type                                                                   | Default     | Description                                    |
+| -------------------- | ---------------------------------------------------------------------- | ----------- | ---------------------------------------------- |
+| `open`               | `boolean`                                                              | —           | Controlled open state                          |
+| `commands`           | `CommandItemTypes[]`                                                   | —           | Array of commands to display                   |
+| `onChangeVisibility` | `(next: boolean) => void`                                              | —           | Open/close handler                             |
+| `bind`               | `string`                                                               | `"Mod + k"` | Global keyboard shortcut to open the palette   |
+| `loading`            | `boolean`                                                              | `false`     | Show loading skeleton while commands load      |
+| `emptyMessage`       | `Label`                                                                | —           | Message shown when no results match            |
+| `footer`             | `React.ReactElement`                                                   | —           | Custom footer content                          |
+| `onChangeText`       | `(text: string) => void`                                               | —           | Search text change handler                     |
+| `Preview`            | `React.FC<{ command: CommandItemTypes; text: string }>`                | —           | Preview panel component for the active command |
+| `Icon`               | `React.FC<IconProps & { text: string; Default: React.FC<IconProps> }>` | —           | Custom search icon                             |
 
 ## Command Types
 
@@ -38,18 +38,18 @@ import { CommandPalette } from "@g4rcez/components";
 
 ```tsx
 type CommandShortcutItem = {
-  type: "shortcut";
-  title: string | ((props: { text: string }) => string);
-  hint?: string | string[];
-  shortcut?: string;
-  Icon?: React.ReactElement;
-  enabled?: boolean | ((props: { text: string }) => boolean);
-  action: (args: {
-    text: string;
-    setText: (state: string) => void;
-    setOpen: (state: boolean) => void;
-    event: KeyboardEvent | React.MouseEvent | React.KeyboardEvent;
-  }) => void | Promise<void>;
+    type: "shortcut";
+    title: string | ((props: { text: string }) => string);
+    hint?: string | string[];
+    shortcut?: string;
+    Icon?: React.ReactElement;
+    enabled?: boolean | ((props: { text: string }) => boolean);
+    action: (args: {
+        text: string;
+        setText: (state: string) => void;
+        setOpen: (state: boolean) => void;
+        event: KeyboardEvent | React.MouseEvent | React.KeyboardEvent;
+    }) => void | Promise<void>;
 };
 ```
 
@@ -57,9 +57,9 @@ type CommandShortcutItem = {
 
 ```tsx
 type CommandGroupItem = {
-  type: "group";
-  title: string | ((props: { text: string }) => string);
-  items: CommandItemTypes[];
+    type: "group";
+    title: string | ((props: { text: string }) => string);
+    items: CommandItemTypes[];
 };
 ```
 
@@ -67,13 +67,13 @@ type CommandGroupItem = {
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-floating-background` | `--floating-background` | Palette surface background |
-| `border-floating-border` | `--floating-border` | Palette surface border |
-| `bg-floating-hover` | `--floating-hover` | Hovered/active command item background |
-| `z-floating` | `--z-floating` | Z-index for the search header |
-| `text-secondary` | `--secondary` | Group label and empty state text color |
+| Token                    | CSS Variable            | Purpose                                |
+| ------------------------ | ----------------------- | -------------------------------------- |
+| `bg-floating-background` | `--floating-background` | Palette surface background             |
+| `border-floating-border` | `--floating-border`     | Palette surface border                 |
+| `bg-floating-hover`      | `--floating-hover`      | Hovered/active command item background |
+| `z-floating`             | `--z-floating`          | Z-index for the search header          |
+| `text-secondary`         | `--secondary`           | Group label and empty state text color |
 
 ## Examples
 
@@ -85,48 +85,42 @@ import { FileTextIcon, FloppyDiskIcon, FolderOpenIcon } from "@phosphor-icons/re
 import { CommandPalette } from "@g4rcez/components";
 
 function BasicCommandPalette() {
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-  const commands = [
-    {
-      type: "shortcut" as const,
-      title: "New Document",
-      shortcut: "Ctrl+N",
-      Icon: <FileTextIcon size={16} />,
-      action: ({ setOpen }) => {
-        console.log("Creating new document");
-        setOpen(false);
-      },
-    },
-    {
-      type: "shortcut" as const,
-      title: "Save Document",
-      shortcut: "Ctrl+S",
-      Icon: <FloppyDiskIcon size={16} />,
-      action: ({ setOpen }) => {
-        console.log("Saving document");
-        setOpen(false);
-      },
-    },
-    {
-      type: "shortcut" as const,
-      title: "Open File",
-      shortcut: "Ctrl+O",
-      Icon: <FolderOpenIcon size={16} />,
-      action: ({ setOpen }) => {
-        console.log("Opening file");
-        setOpen(false);
-      },
-    },
-  ];
+    const commands = [
+        {
+            type: "shortcut" as const,
+            title: "New Document",
+            shortcut: "Ctrl+N",
+            Icon: <FileTextIcon size={16} />,
+            action: ({ setOpen }) => {
+                console.log("Creating new document");
+                setOpen(false);
+            },
+        },
+        {
+            type: "shortcut" as const,
+            title: "Save Document",
+            shortcut: "Ctrl+S",
+            Icon: <FloppyDiskIcon size={16} />,
+            action: ({ setOpen }) => {
+                console.log("Saving document");
+                setOpen(false);
+            },
+        },
+        {
+            type: "shortcut" as const,
+            title: "Open File",
+            shortcut: "Ctrl+O",
+            Icon: <FolderOpenIcon size={16} />,
+            action: ({ setOpen }) => {
+                console.log("Opening file");
+                setOpen(false);
+            },
+        },
+    ];
 
-  return (
-    <CommandPalette
-      open={open}
-      commands={commands}
-      onChangeVisibility={setOpen}
-    />
-  );
+    return <CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} />;
 }
 ```
 
@@ -137,95 +131,83 @@ import { FileIcon, FolderOpenIcon, HouseIcon, GearIcon, MoonIcon } from "@phosph
 import { CommandPalette } from "@g4rcez/components";
 
 function GroupedCommandPalette() {
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-  const commands = [
-    {
-      type: "group" as const,
-      title: "File Operations",
-      items: [
+    const commands = [
         {
-          type: "shortcut" as const,
-          title: "New File",
-          hint: ["create", "new", "file"],
-          shortcut: "Ctrl+N",
-          Icon: <FileIcon size={16} />,
-          action: ({ setOpen }) => setOpen(false),
+            type: "group" as const,
+            title: "File Operations",
+            items: [
+                {
+                    type: "shortcut" as const,
+                    title: "New File",
+                    hint: ["create", "new", "file"],
+                    shortcut: "Ctrl+N",
+                    Icon: <FileIcon size={16} />,
+                    action: ({ setOpen }) => setOpen(false),
+                },
+                {
+                    type: "shortcut" as const,
+                    title: "Open File",
+                    hint: ["open", "load"],
+                    shortcut: "Ctrl+O",
+                    Icon: <FolderOpenIcon size={16} />,
+                    action: ({ setOpen }) => setOpen(false),
+                },
+            ],
         },
         {
-          type: "shortcut" as const,
-          title: "Open File",
-          hint: ["open", "load"],
-          shortcut: "Ctrl+O",
-          Icon: <FolderOpenIcon size={16} />,
-          action: ({ setOpen }) => setOpen(false),
+            type: "group" as const,
+            title: "Navigation",
+            items: [
+                {
+                    type: "shortcut" as const,
+                    title: "Go to Dashboard",
+                    hint: ["dashboard", "home", "main"],
+                    Icon: <HouseIcon size={16} />,
+                    action: ({ setOpen }) => {
+                        window.location.href = "/dashboard";
+                        setOpen(false);
+                    },
+                },
+                {
+                    type: "shortcut" as const,
+                    title: "Go to Settings",
+                    hint: ["settings", "preferences", "config"],
+                    Icon: <GearIcon size={16} />,
+                    action: ({ setOpen }) => {
+                        window.location.href = "/settings";
+                        setOpen(false);
+                    },
+                },
+            ],
         },
-      ],
-    },
-    {
-      type: "group" as const,
-      title: "Navigation",
-      items: [
         {
-          type: "shortcut" as const,
-          title: "Go to Dashboard",
-          hint: ["dashboard", "home", "main"],
-          Icon: <HouseIcon size={16} />,
-          action: ({ setOpen }) => {
-            window.location.href = "/dashboard";
-            setOpen(false);
-          },
+            type: "group" as const,
+            title: "Theme",
+            items: [
+                {
+                    type: "shortcut" as const,
+                    title: "Toggle Dark Mode",
+                    hint: ["dark", "theme", "mode"],
+                    Icon: <MoonIcon size={16} />,
+                    action: ({ setOpen }) => {
+                        document.documentElement.classList.toggle("dark");
+                        setOpen(false);
+                    },
+                },
+            ],
         },
-        {
-          type: "shortcut" as const,
-          title: "Go to Settings",
-          hint: ["settings", "preferences", "config"],
-          Icon: <GearIcon size={16} />,
-          action: ({ setOpen }) => {
-            window.location.href = "/settings";
-            setOpen(false);
-          },
-        },
-      ],
-    },
-    {
-      type: "group" as const,
-      title: "Theme",
-      items: [
-        {
-          type: "shortcut" as const,
-          title: "Toggle Dark Mode",
-          hint: ["dark", "theme", "mode"],
-          Icon: <MoonIcon size={16} />,
-          action: ({ setOpen }) => {
-            document.documentElement.classList.toggle("dark");
-            setOpen(false);
-          },
-        },
-      ],
-    },
-  ];
+    ];
 
-  return (
-    <CommandPalette
-      open={open}
-      commands={commands}
-      onChangeVisibility={setOpen}
-      emptyMessage="No commands found"
-    />
-  );
+    return <CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} emptyMessage="No commands found" />;
 }
 ```
 
 ### Custom Keyboard Shortcut
 
 ```tsx
-<CommandPalette
-  open={open}
-  commands={commands}
-  onChangeVisibility={setOpen}
-  bind="Mod + /"
-/>
+<CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} bind="Mod + /" />
 ```
 
 ### Conditional Commands
@@ -234,22 +216,22 @@ function GroupedCommandPalette() {
 import { UserIcon, ShieldIcon } from "@phosphor-icons/react";
 
 const commands = [
-  {
-    type: "shortcut" as const,
-    title: "User Dashboard",
-    Icon: <UserIcon size={16} />,
-    action: ({ setOpen }) => setOpen(false),
-  },
-  {
-    type: "shortcut" as const,
-    title: "Admin Panel",
-    enabled: user.isAdmin,
-    Icon: <ShieldIcon size={16} />,
-    action: ({ setOpen }) => {
-      console.log("Opening admin panel");
-      setOpen(false);
+    {
+        type: "shortcut" as const,
+        title: "User Dashboard",
+        Icon: <UserIcon size={16} />,
+        action: ({ setOpen }) => setOpen(false),
     },
-  },
+    {
+        type: "shortcut" as const,
+        title: "Admin Panel",
+        enabled: user.isAdmin,
+        Icon: <ShieldIcon size={16} />,
+        action: ({ setOpen }) => {
+            console.log("Opening admin panel");
+            setOpen(false);
+        },
+    },
 ];
 ```
 
@@ -277,12 +259,12 @@ const commands = [
 
 ## Data Attributes
 
-| Attribute | Applied to | Description |
-|-----------|-----------|-------------|
-| `data-component="command-palette"` | Root modal container | Identifies the palette root |
-| `data-component="command-palette-list"` | `<ul>` | Identifies the command list |
-| `data-component="command-palette-item"` | Each `<button>` item | Identifies individual command buttons |
-| `data-component="command-palette-container"` | List/preview wrapper | Identifies the content area |
+| Attribute                                    | Applied to           | Description                           |
+| -------------------------------------------- | -------------------- | ------------------------------------- |
+| `data-component="command-palette"`           | Root modal container | Identifies the palette root           |
+| `data-component="command-palette-list"`      | `<ul>`               | Identifies the command list           |
+| `data-component="command-palette-item"`      | Each `<button>` item | Identifies individual command buttons |
+| `data-component="command-palette-container"` | List/preview wrapper | Identifies the content area           |
 
 ## Notes
 

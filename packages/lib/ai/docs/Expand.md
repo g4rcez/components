@@ -21,12 +21,12 @@ import { Expand } from "@g4rcez/components/expand";
 
 `Expand` accepts all `Button` props plus the following:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `trigger` | `Label` | — | Content displayed on the button before expansion |
-| `open` | `boolean` | `false` | Controlled open state |
-| `disabled` | `boolean` | `false` | When `true`, the button cannot be expanded |
-| `children` | `React.ReactNode` | — | Content shown inside the expanded floating container |
+| Prop       | Type              | Default | Description                                          |
+| ---------- | ----------------- | ------- | ---------------------------------------------------- |
+| `trigger`  | `Label`           | —       | Content displayed on the button before expansion     |
+| `open`     | `boolean`         | `false` | Controlled open state                                |
+| `disabled` | `boolean`         | `false` | When `true`, the button cannot be expanded           |
+| `children` | `React.ReactNode` | —       | Content shown inside the expanded floating container |
 
 Inherits all `Button` props: `theme`, `size`, `rounded`, `className`, etc.
 
@@ -34,10 +34,10 @@ Inherits all `Button` props: `theme`, `size`, `rounded`, `className`, etc.
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
+| Token           | CSS Variable   | Purpose                                                 |
+| --------------- | -------------- | ------------------------------------------------------- |
 | `bg-background` | `--background` | Default expanded panel background (applied by consumer) |
-| `border-border` | `--border` | Default expanded panel border (applied by consumer) |
+| `border-border` | `--border`     | Default expanded panel border (applied by consumer)     |
 
 The `Expand` component itself only renders the trigger button and an animated wrapper; visual tokens for the expanded content are your responsibility via `children` className.
 
@@ -49,28 +49,19 @@ The `Expand` component itself only renders the trigger button and an animated wr
 import { PlusIcon } from "@phosphor-icons/react";
 import { Expand } from "@g4rcez/components/expand";
 
-<Expand
-  trigger={<PlusIcon size={16} />}
-  theme="primary"
-  size="icon"
-  rounded="circle"
->
-  <div className="w-64 rounded-card border border-border bg-background p-4 shadow-shadow-floating">
-    <h3 className="font-bold mb-2 text-foreground">Create New</h3>
-    <ul className="space-y-2">
-      <li>
-        <button className="w-full rounded-button p-2 text-left text-foreground hover:bg-muted">
-          Project
-        </button>
-      </li>
-      <li>
-        <button className="w-full rounded-button p-2 text-left text-foreground hover:bg-muted">
-          Task
-        </button>
-      </li>
-    </ul>
-  </div>
-</Expand>
+<Expand trigger={<PlusIcon size={16} />} theme="primary" size="icon" rounded="circle">
+    <div className="w-64 rounded-card border border-border bg-background p-4 shadow-shadow-floating">
+        <h3 className="font-bold mb-2 text-foreground">Create New</h3>
+        <ul className="space-y-2">
+            <li>
+                <button className="w-full rounded-button p-2 text-left text-foreground hover:bg-muted">Project</button>
+            </li>
+            <li>
+                <button className="w-full rounded-button p-2 text-left text-foreground hover:bg-muted">Task</button>
+            </li>
+        </ul>
+    </div>
+</Expand>;
 ```
 
 ### Expand with Label
@@ -80,11 +71,13 @@ import { Expand } from "@g4rcez/components/expand";
 import { Button } from "@g4rcez/components/button";
 
 <Expand trigger="Open Menu">
-  <div className="rounded-card border border-border bg-background p-4 shadow-shadow-floating">
-    <p className="text-foreground">Expanded content goes here.</p>
-    <Button theme="primary" className="mt-2">Action</Button>
-  </div>
-</Expand>
+    <div className="rounded-card border border-border bg-background p-4 shadow-shadow-floating">
+        <p className="text-foreground">Expanded content goes here.</p>
+        <Button theme="primary" className="mt-2">
+            Action
+        </Button>
+    </div>
+</Expand>;
 ```
 
 ### Controlled Expand
@@ -94,24 +87,17 @@ import { useState } from "react";
 import { Expand } from "@g4rcez/components/expand";
 
 function ControlledExpand() {
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-  return (
-    <Expand
-      trigger="Options"
-      open={open}
-      theme="ghost-neutral"
-    >
-      <div className="rounded-card border border-border bg-background p-4 shadow-shadow-floating">
-        <button
-          onClick={() => setOpen(false)}
-          className="text-sm text-foreground"
-        >
-          Close
-        </button>
-      </div>
-    </Expand>
-  );
+    return (
+        <Expand trigger="Options" open={open} theme="ghost-neutral">
+            <div className="rounded-card border border-border bg-background p-4 shadow-shadow-floating">
+                <button onClick={() => setOpen(false)} className="text-sm text-foreground">
+                    Close
+                </button>
+            </div>
+        </Expand>
+    );
 }
 ```
 

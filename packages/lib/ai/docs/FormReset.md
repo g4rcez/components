@@ -20,14 +20,14 @@ import { formReset } from "@g4rcez/components";
 ## Signature
 
 ```ts
-function formReset(form?: HTMLFormElement | null): void
+function formReset(form?: HTMLFormElement | null): void;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `form` | `HTMLFormElement \| null \| undefined` | The form element to reset. Safely no-ops if `null` or `undefined`. |
+| Parameter | Type                                   | Description                                                        |
+| --------- | -------------------------------------- | ------------------------------------------------------------------ |
+| `form`    | `HTMLFormElement \| null \| undefined` | The form element to reset. Safely no-ops if `null` or `undefined`. |
 
 ## How It Works
 
@@ -48,21 +48,23 @@ import { Button } from "@g4rcez/components/button";
 import { formReset } from "@g4rcez/components";
 
 function ContactForm() {
-  const formRef = useRef<HTMLFormElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget);
-    await submitToServer(Object.fromEntries(data));
-    formReset(formRef.current);
-  };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        const data = new FormData(e.currentTarget);
+        await submitToServer(Object.fromEntries(data));
+        formReset(formRef.current);
+    };
 
-  return (
-    <Form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-base">
-      <Input name="name" title="Name" required />
-      <Input name="email" type="email" title="Email" required />
-      <Button theme="primary" type="submit">Send</Button>
-    </Form>
-  );
+    return (
+        <Form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-base">
+            <Input name="name" title="Name" required />
+            <Input name="email" type="email" title="Email" required />
+            <Button theme="primary" type="submit">
+                Send
+            </Button>
+        </Form>
+    );
 }
 ```
 
@@ -70,24 +72,22 @@ function ContactForm() {
 
 ```tsx
 function EditForm({ defaultValues }: { defaultValues: Record<string, string> }) {
-  const formRef = useRef<HTMLFormElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
-  return (
-    <Form ref={formRef} onSubmit={handleSave} className="flex flex-col gap-base">
-      <Input name="title" title="Title" defaultValue={defaultValues.title} />
-      <Input name="description" title="Description" defaultValue={defaultValues.description} />
-      <div className="flex gap-sm">
-        <Button theme="primary" type="submit">Save</Button>
-        <Button
-          theme="ghost"
-          type="button"
-          onClick={() => formReset(formRef.current)}
-        >
-          Cancel
-        </Button>
-      </div>
-    </Form>
-  );
+    return (
+        <Form ref={formRef} onSubmit={handleSave} className="flex flex-col gap-base">
+            <Input name="title" title="Title" defaultValue={defaultValues.title} />
+            <Input name="description" title="Description" defaultValue={defaultValues.description} />
+            <div className="flex gap-sm">
+                <Button theme="primary" type="submit">
+                    Save
+                </Button>
+                <Button theme="ghost" type="button" onClick={() => formReset(formRef.current)}>
+                    Cancel
+                </Button>
+            </div>
+        </Form>
+    );
 }
 ```
 

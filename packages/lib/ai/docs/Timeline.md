@@ -31,39 +31,39 @@ A single event entry. Renders as a `<li>` with `role="listitem"` and `pb-12` ver
 
 The visual marker — a rounded circle, typically containing an icon. Renders as a `<header>`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `className` | `string` | — | Override icon container appearance |
-| `children` | `React.ReactNode` | — | Icon element |
+| Prop        | Type              | Default | Description                        |
+| ----------- | ----------------- | ------- | ---------------------------------- |
+| `className` | `string`          | —       | Override icon container appearance |
+| `children`  | `React.ReactNode` | —       | Icon element                       |
 
 ### TimelineItem.Body
 
 The main content area. Polymorphic — defaults to `<section>`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `as` | `React.ElementType` | `"section"` | HTML element to render as |
-| `className` | `string` | — | Additional classes |
-| `children` | `React.ReactNode` | — | Event body content |
+| Prop        | Type                | Default     | Description               |
+| ----------- | ------------------- | ----------- | ------------------------- |
+| `as`        | `React.ElementType` | `"section"` | HTML element to render as |
+| `className` | `string`            | —           | Additional classes        |
+| `children`  | `React.ReactNode`   | —           | Event body content        |
 
 ### TimelineItem.Right
 
 Optional right-side slot for timestamps or auxiliary actions. Renders inside a `<footer>` wrapper. Polymorphic — defaults to `<button>`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `as` | `React.ElementType` | `"button"` | HTML element to render as |
-| `children` | `React.ReactNode` | — | Right-side content |
+| Prop       | Type                | Default    | Description               |
+| ---------- | ------------------- | ---------- | ------------------------- |
+| `as`       | `React.ElementType` | `"button"` | HTML element to render as |
+| `children` | `React.ReactNode`   | —          | Right-side content        |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-card-border` | `--card-border` | Vertical connector line color |
-| `bg-primary` | `--primary` | Icon container default background |
-| `text-primary-foreground` | `--primary-foreground` | Icon default text/icon color |
+| Token                     | CSS Variable           | Purpose                           |
+| ------------------------- | ---------------------- | --------------------------------- |
+| `bg-card-border`          | `--card-border`        | Vertical connector line color     |
+| `bg-primary`              | `--primary`            | Icon container default background |
+| `text-primary-foreground` | `--primary-foreground` | Icon default text/icon color      |
 
 ## Examples
 
@@ -73,55 +73,55 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { CheckIcon, PackageIcon, TruckIcon } from "@phosphor-icons/react";
 
 <Timeline>
-  <TimelineItem>
-    <TimelineItem.Icon>
-      <CheckIcon size={20} />
-    </TimelineItem.Icon>
-    <TimelineItem.Body>
-      <h4 className="font-bold">Order Placed</h4>
-      <p className="text-muted-foreground">Your order has been received and is being processed.</p>
-    </TimelineItem.Body>
-    <TimelineItem.Right as="time">10:00 AM</TimelineItem.Right>
-  </TimelineItem>
+    <TimelineItem>
+        <TimelineItem.Icon>
+            <CheckIcon size={20} />
+        </TimelineItem.Icon>
+        <TimelineItem.Body>
+            <h4 className="font-bold">Order Placed</h4>
+            <p className="text-muted-foreground">Your order has been received and is being processed.</p>
+        </TimelineItem.Body>
+        <TimelineItem.Right as="time">10:00 AM</TimelineItem.Right>
+    </TimelineItem>
 
-  <TimelineItem>
-    <TimelineItem.Icon>
-      <PackageIcon size={20} />
-    </TimelineItem.Icon>
-    <TimelineItem.Body>
-      <h4 className="font-bold">Packed</h4>
-      <p className="text-muted-foreground">Your order has been packed and is ready for shipment.</p>
-    </TimelineItem.Body>
-    <TimelineItem.Right as="time">1:00 PM</TimelineItem.Right>
-  </TimelineItem>
+    <TimelineItem>
+        <TimelineItem.Icon>
+            <PackageIcon size={20} />
+        </TimelineItem.Icon>
+        <TimelineItem.Body>
+            <h4 className="font-bold">Packed</h4>
+            <p className="text-muted-foreground">Your order has been packed and is ready for shipment.</p>
+        </TimelineItem.Body>
+        <TimelineItem.Right as="time">1:00 PM</TimelineItem.Right>
+    </TimelineItem>
 
-  <TimelineItem>
-    <TimelineItem.Icon>
-      <TruckIcon size={20} />
-    </TimelineItem.Icon>
-    <TimelineItem.Body>
-      <h4 className="font-bold">Shipped</h4>
-      <p className="text-muted-foreground">Your package is on its way.</p>
-    </TimelineItem.Body>
-    <TimelineItem.Right as="time">2:30 PM</TimelineItem.Right>
-  </TimelineItem>
-</Timeline>
+    <TimelineItem>
+        <TimelineItem.Icon>
+            <TruckIcon size={20} />
+        </TimelineItem.Icon>
+        <TimelineItem.Body>
+            <h4 className="font-bold">Shipped</h4>
+            <p className="text-muted-foreground">Your package is on its way.</p>
+        </TimelineItem.Body>
+        <TimelineItem.Right as="time">2:30 PM</TimelineItem.Right>
+    </TimelineItem>
+</Timeline>;
 ```
 
 ### Simple Text Timeline
 
 ```tsx
 <Timeline>
-  <TimelineItem>
-    <TimelineItem.Body>
-      <strong>Step 1:</strong> Initial setup completed.
-    </TimelineItem.Body>
-  </TimelineItem>
-  <TimelineItem>
-    <TimelineItem.Body>
-      <strong>Step 2:</strong> Data migration started.
-    </TimelineItem.Body>
-  </TimelineItem>
+    <TimelineItem>
+        <TimelineItem.Body>
+            <strong>Step 1:</strong> Initial setup completed.
+        </TimelineItem.Body>
+    </TimelineItem>
+    <TimelineItem>
+        <TimelineItem.Body>
+            <strong>Step 2:</strong> Data migration started.
+        </TimelineItem.Body>
+    </TimelineItem>
 </Timeline>
 ```
 
@@ -131,33 +131,35 @@ import { CheckIcon, PackageIcon, TruckIcon } from "@phosphor-icons/react";
 import { UserIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 
 function ActivityFeed({ events }: { events: ActivityEvent[] }) {
-  const iconMap = {
-    create: UserIcon,
-    update: PencilSimpleIcon,
-    delete: TrashIcon,
-  };
+    const iconMap = {
+        create: UserIcon,
+        update: PencilSimpleIcon,
+        delete: TrashIcon,
+    };
 
-  return (
-    <Timeline>
-      {events.map((event) => {
-        const Icon = iconMap[event.type];
-        return (
-          <TimelineItem key={event.id}>
-            <TimelineItem.Icon>
-              <Icon size={18} />
-            </TimelineItem.Icon>
-            <TimelineItem.Body>
-              <p className="font-medium">{event.user} {event.action}</p>
-              <p className="text-sm text-muted-foreground">{event.description}</p>
-            </TimelineItem.Body>
-            <TimelineItem.Right as="time" dateTime={event.iso}>
-              {event.relativeTime}
-            </TimelineItem.Right>
-          </TimelineItem>
-        );
-      })}
-    </Timeline>
-  );
+    return (
+        <Timeline>
+            {events.map((event) => {
+                const Icon = iconMap[event.type];
+                return (
+                    <TimelineItem key={event.id}>
+                        <TimelineItem.Icon>
+                            <Icon size={18} />
+                        </TimelineItem.Icon>
+                        <TimelineItem.Body>
+                            <p className="font-medium">
+                                {event.user} {event.action}
+                            </p>
+                            <p className="text-sm text-muted-foreground">{event.description}</p>
+                        </TimelineItem.Body>
+                        <TimelineItem.Right as="time" dateTime={event.iso}>
+                            {event.relativeTime}
+                        </TimelineItem.Right>
+                    </TimelineItem>
+                );
+            })}
+        </Timeline>
+    );
 }
 ```
 
@@ -167,14 +169,14 @@ function ActivityFeed({ events }: { events: ActivityEvent[] }) {
 import { WarningCircleIcon } from "@phosphor-icons/react";
 
 <TimelineItem>
-  <TimelineItem.Icon className="bg-danger text-danger-foreground">
-    <WarningCircleIcon size={20} />
-  </TimelineItem.Icon>
-  <TimelineItem.Body>
-    <h4 className="font-bold text-danger-foreground">Deployment Failed</h4>
-    <p className="text-muted-foreground">Build step exited with code 1.</p>
-  </TimelineItem.Body>
-</TimelineItem>
+    <TimelineItem.Icon className="bg-danger text-danger-foreground">
+        <WarningCircleIcon size={20} />
+    </TimelineItem.Icon>
+    <TimelineItem.Body>
+        <h4 className="font-bold text-danger-foreground">Deployment Failed</h4>
+        <p className="text-muted-foreground">Build step exited with code 1.</p>
+    </TimelineItem.Body>
+</TimelineItem>;
 ```
 
 ## Do

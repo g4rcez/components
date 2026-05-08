@@ -19,24 +19,24 @@ import { Progress } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `percent` | `number` | — | Current progress value (0–100) |
-| `max` | `number` | — | Maximum value (forwarded to Base UI `Progress.Root`) |
-| `label` | `Label` | — | Custom text overlay; overrides the default `{percent} %` |
-| `container` | `string` | — | Additional classes for the track element |
-| `className` | `string` | — | Additional classes for the indicator (fill) element |
-| `textClassName` | `string` | — | Additional classes for the label text overlay |
+| Prop            | Type     | Default | Description                                              |
+| --------------- | -------- | ------- | -------------------------------------------------------- |
+| `percent`       | `number` | —       | Current progress value (0–100)                           |
+| `max`           | `number` | —       | Maximum value (forwarded to Base UI `Progress.Root`)     |
+| `label`         | `Label`  | —       | Custom text overlay; overrides the default `{percent} %` |
+| `container`     | `string` | —       | Additional classes for the track element                 |
+| `className`     | `string` | —       | Additional classes for the indicator (fill) element      |
+| `textClassName` | `string` | —       | Additional classes for the label text overlay            |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-background` | `--background` | Track (unfilled) background |
-| `bg-primary` | `--primary` | Indicator (fill) color |
-| `text-primary-foreground` | `--primary-foreground` | Default label text color |
+| Token                     | CSS Variable           | Purpose                     |
+| ------------------------- | ---------------------- | --------------------------- |
+| `bg-background`           | `--background`         | Track (unfilled) background |
+| `bg-primary`              | `--primary`            | Indicator (fill) color      |
+| `text-primary-foreground` | `--primary-foreground` | Default label text color    |
 
 ## Examples
 
@@ -50,16 +50,16 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 function AnimatedProgress() {
-  const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => (prev >= 100 ? 0 : prev + 10));
-    }, 500);
-    return () => clearInterval(timer);
-  }, []);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setProgress((prev) => (prev >= 100 ? 0 : prev + 10));
+        }, 500);
+        return () => clearInterval(timer);
+    }, []);
 
-  return <Progress percent={progress} />;
+    return <Progress percent={progress} />;
 }
 ```
 
@@ -74,26 +74,30 @@ function AnimatedProgress() {
 When `percent` is `undefined` the indicator is not rendered and the label is hidden, leaving only the track. Combine with a separate `Spinner` for unknown-duration operations.
 
 ```tsx
-{isLoading ? <Spinner /> : <Progress percent={uploadPercent} />}
+{
+    isLoading ? <Spinner /> : <Progress percent={uploadPercent} />;
+}
 ```
 
 ### Multi-Step Form Progress
 
 ```tsx
 function MultiStepForm() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
-  const progress = (currentStep / totalSteps) * 100;
+    const [currentStep, setCurrentStep] = useState(1);
+    const totalSteps = 4;
+    const progress = (currentStep / totalSteps) * 100;
 
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center text-sm text-muted-foreground">
-        <span>Step {currentStep} of {totalSteps}</span>
-        <span>{Math.round(progress)}% complete</span>
-      </div>
-      <Progress percent={progress} />
-    </div>
-  );
+    return (
+        <div className="space-y-4">
+            <div className="flex justify-between items-center text-sm text-muted-foreground">
+                <span>
+                    Step {currentStep} of {totalSteps}
+                </span>
+                <span>{Math.round(progress)}% complete</span>
+            </div>
+            <Progress percent={progress} />
+        </div>
+    );
 }
 ```
 
@@ -101,22 +105,22 @@ function MultiStepForm() {
 
 ```tsx
 function FileUploadProgress({ fileName, percent }: { fileName: string; percent: number }) {
-  const isDone = percent >= 100;
+    const isDone = percent >= 100;
 
-  return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-sm">
-        <span className="text-foreground">{fileName}</span>
-        <span className="text-muted-foreground">{percent}%</span>
-      </div>
-      <Progress
-        percent={percent}
-        label={isDone ? "Complete" : undefined}
-        container={isDone ? "bg-success/20" : undefined}
-        className={isDone ? "bg-success" : undefined}
-      />
-    </div>
-  );
+    return (
+        <div className="space-y-1">
+            <div className="flex justify-between text-sm">
+                <span className="text-foreground">{fileName}</span>
+                <span className="text-muted-foreground">{percent}%</span>
+            </div>
+            <Progress
+                percent={percent}
+                label={isDone ? "Complete" : undefined}
+                container={isDone ? "bg-success/20" : undefined}
+                className={isDone ? "bg-success" : undefined}
+            />
+        </div>
+    );
 }
 ```
 

@@ -19,20 +19,20 @@ import { Toolbar } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | — | Items displayed inside the toolbar |
-| `root` | `HTMLElement` | — | Optional root element reference for scrolling context |
+| Prop       | Type              | Default | Description                                           |
+| ---------- | ----------------- | ------- | ----------------------------------------------------- |
+| `children` | `React.ReactNode` | —       | Items displayed inside the toolbar                    |
+| `root`     | `HTMLElement`     | —       | Optional root element reference for scrolling context |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-background` | `--background` | Toolbar surface background |
-| `border-card-border` | `--card-border` | Toolbar border |
-| `rounded-lg` | — | Toolbar corner radius |
+| Token                | CSS Variable    | Purpose                    |
+| -------------------- | --------------- | -------------------------- |
+| `bg-background`      | `--background`  | Toolbar surface background |
+| `border-card-border` | `--card-border` | Toolbar border             |
+| `rounded-lg`         | —               | Toolbar corner radius      |
 
 ## Examples
 
@@ -43,9 +43,9 @@ import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 
 <Toolbar>
-  <Button theme="ghost-muted">Cancel</Button>
-  <Button theme="primary">Save Changes</Button>
-</Toolbar>
+    <Button theme="ghost-muted">Cancel</Button>
+    <Button theme="primary">Save Changes</Button>
+</Toolbar>;
 ```
 
 ### Rich Text Editor Toolbar
@@ -57,24 +57,26 @@ import { Button } from "@g4rcez/components/button";
 import { Tooltip } from "@g4rcez/components/tooltip";
 
 <Toolbar>
-  <Tooltip title="Bold">
-    <Button size="icon" theme="ghost-neutral">
-      <BoldIcon size={16} />
+    <Tooltip title="Bold">
+        <Button size="icon" theme="ghost-neutral">
+            <BoldIcon size={16} />
+        </Button>
+    </Tooltip>
+    <Tooltip title="Italic">
+        <Button size="icon" theme="ghost-neutral">
+            <ItalicIcon size={16} />
+        </Button>
+    </Tooltip>
+    <Tooltip title="Underline">
+        <Button size="icon" theme="ghost-neutral">
+            <UnderlineIcon size={16} />
+        </Button>
+    </Tooltip>
+    <div className="mx-2 h-6 w-px bg-card-border" />
+    <Button theme="primary" size="small">
+        Publish
     </Button>
-  </Tooltip>
-  <Tooltip title="Italic">
-    <Button size="icon" theme="ghost-neutral">
-      <ItalicIcon size={16} />
-    </Button>
-  </Tooltip>
-  <Tooltip title="Underline">
-    <Button size="icon" theme="ghost-neutral">
-      <UnderlineIcon size={16} />
-    </Button>
-  </Tooltip>
-  <div className="mx-2 h-6 w-px bg-card-border" />
-  <Button theme="primary" size="small">Publish</Button>
-</Toolbar>
+</Toolbar>;
 ```
 
 ### Batch Action Toolbar
@@ -85,23 +87,21 @@ import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 
 function BatchToolbar({ selectedCount }: { selectedCount: number }) {
-  if (selectedCount === 0) return null;
+    if (selectedCount === 0) return null;
 
-  return (
-    <Toolbar>
-      <span className="text-sm text-muted-foreground">
-        {selectedCount} selected
-      </span>
-      <Button theme="ghost-neutral" size="small">
-        <DownloadIcon size={16} />
-        Export
-      </Button>
-      <Button theme="danger" size="small">
-        <TrashIcon size={16} />
-        Delete
-      </Button>
-    </Toolbar>
-  );
+    return (
+        <Toolbar>
+            <span className="text-sm text-muted-foreground">{selectedCount} selected</span>
+            <Button theme="ghost-neutral" size="small">
+                <DownloadIcon size={16} />
+                Export
+            </Button>
+            <Button theme="danger" size="small">
+                <TrashIcon size={16} />
+                Delete
+            </Button>
+        </Toolbar>
+    );
 }
 ```
 

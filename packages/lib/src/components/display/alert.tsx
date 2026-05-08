@@ -52,7 +52,7 @@ const themeVariants = {
     },
 };
 
-const alertVariants = cva("p-4 w-full block border relative rounded-lg text-sm", {
+const alertVariants = cva("relative block w-full rounded-lg border p-4 text-sm", {
     variants: themeVariants,
     defaultVariants: { theme: "neutral" },
 });

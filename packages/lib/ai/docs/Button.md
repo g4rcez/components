@@ -19,43 +19,43 @@ import { Button } from "@g4rcez/components/button";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `theme` | `"main" \| "primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral" \| "ghost-primary" \| "ghost-secondary" \| "ghost-info" \| "ghost-warn" \| "ghost-danger" \| "ghost-success" \| "ghost-muted" \| "ghost-neutral" \| "raw" \| "disabled" \| "loading"` | `"main"` | Visual theme/variant of the button |
-| `size` | `"icon" \| "min" \| "small" \| "default" \| "big" \| "tiny"` | `"default"` | Size of the button |
-| `rounded` | `"rough" \| "squared" \| "default" \| "circle"` | `"default"` | Border radius style |
-| `icon` | `React.ReactNode` | - | Icon to display before button content |
-| `loading` | `boolean` | `false` | Shows loading state with pulse animation and disables interaction |
-| `disabled` | `boolean` | `false` | Disables the button |
-| `as` | `React.ElementType` | `"button"` | HTML element to render as |
-| `type` | `string` | `"button"` | Button type attribute |
-| `className` | `string` | - | Additional CSS classes |
-| `children` | `React.ReactNode` | - | Button content |
+| Prop        | Type                                                                                                                                                                                                                                                                                           | Default     | Description                                                       |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------- |
+| `theme`     | `"main" \| "primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral" \| "ghost-primary" \| "ghost-secondary" \| "ghost-info" \| "ghost-warn" \| "ghost-danger" \| "ghost-success" \| "ghost-muted" \| "ghost-neutral" \| "raw" \| "disabled" \| "loading"` | `"main"`    | Visual theme/variant of the button                                |
+| `size`      | `"icon" \| "min" \| "small" \| "default" \| "big" \| "tiny"`                                                                                                                                                                                                                                   | `"default"` | Size of the button                                                |
+| `rounded`   | `"rough" \| "squared" \| "default" \| "circle"`                                                                                                                                                                                                                                                | `"default"` | Border radius style                                               |
+| `icon`      | `React.ReactNode`                                                                                                                                                                                                                                                                              | -           | Icon to display before button content                             |
+| `loading`   | `boolean`                                                                                                                                                                                                                                                                                      | `false`     | Shows loading state with pulse animation and disables interaction |
+| `disabled`  | `boolean`                                                                                                                                                                                                                                                                                      | `false`     | Disables the button                                               |
+| `as`        | `React.ElementType`                                                                                                                                                                                                                                                                            | `"button"`  | HTML element to render as                                         |
+| `type`      | `string`                                                                                                                                                                                                                                                                                       | `"button"`  | Button type attribute                                             |
+| `className` | `string`                                                                                                                                                                                                                                                                                       | -           | Additional CSS classes                                            |
+| `children`  | `React.ReactNode`                                                                                                                                                                                                                                                                              | -           | Button content                                                    |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-button-primary-bg` | `--button-primary-bg` | Background for primary/main theme |
-| `text-button-primary-text` | `--button-primary-text` | Text color for primary/main theme |
-| `bg-button-secondary-bg` | `--button-secondary-bg` | Background for secondary theme |
-| `text-button-secondary-text` | `--button-secondary-text` | Text color for secondary theme |
-| `bg-button-info-bg` | `--button-info-bg` | Background for info theme |
-| `text-button-info-text` | `--button-info-text` | Text color for info theme |
-| `bg-button-warn-bg` | `--button-warn-bg` | Background for warn theme |
-| `text-button-warn-text` | `--button-warn-text` | Text color for warn theme |
-| `bg-button-danger-bg` | `--button-danger-bg` | Background for danger theme |
-| `text-button-danger-text` | `--button-danger-text` | Text color for danger theme |
-| `bg-button-success-bg` | `--button-success-bg` | Background for success theme |
-| `text-button-success-text` | `--button-success-text` | Text color for success theme |
-| `bg-button-muted-bg` | `--button-muted-bg` | Background for muted theme |
-| `text-button-muted-text` | `--button-muted-text` | Text color for muted theme |
-| `bg-disabled` | `--disabled` | Background for disabled/loading states |
-| `border-card-border` | `--card-border` | Border color for neutral theme |
-| `rounded-button` | `--radius-button` | Default border radius |
-| `focus-visible:ring-ring` | `--ring` | Focus ring color |
+| Token                        | CSS Variable              | Purpose                                |
+| ---------------------------- | ------------------------- | -------------------------------------- |
+| `bg-button-primary-bg`       | `--button-primary-bg`     | Background for primary/main theme      |
+| `text-button-primary-text`   | `--button-primary-text`   | Text color for primary/main theme      |
+| `bg-button-secondary-bg`     | `--button-secondary-bg`   | Background for secondary theme         |
+| `text-button-secondary-text` | `--button-secondary-text` | Text color for secondary theme         |
+| `bg-button-info-bg`          | `--button-info-bg`        | Background for info theme              |
+| `text-button-info-text`      | `--button-info-text`      | Text color for info theme              |
+| `bg-button-warn-bg`          | `--button-warn-bg`        | Background for warn theme              |
+| `text-button-warn-text`      | `--button-warn-text`      | Text color for warn theme              |
+| `bg-button-danger-bg`        | `--button-danger-bg`      | Background for danger theme            |
+| `text-button-danger-text`    | `--button-danger-text`    | Text color for danger theme            |
+| `bg-button-success-bg`       | `--button-success-bg`     | Background for success theme           |
+| `text-button-success-text`   | `--button-success-text`   | Text color for success theme           |
+| `bg-button-muted-bg`         | `--button-muted-bg`       | Background for muted theme             |
+| `text-button-muted-text`     | `--button-muted-text`     | Text color for muted theme             |
+| `bg-disabled`                | `--disabled`              | Background for disabled/loading states |
+| `border-card-border`         | `--card-border`           | Border color for neutral theme         |
+| `rounded-button`             | `--radius-button`         | Default border radius                  |
+| `focus-visible:ring-ring`    | `--ring`                  | Focus ring color                       |
 
 ## Theme Variants
 
@@ -131,7 +131,7 @@ import { PlusIcon } from "@phosphor-icons/react";
 
 ```tsx
 <Button as="a" href="/dashboard" theme="primary">
-  Go to Dashboard
+    Go to Dashboard
 </Button>
 ```
 

@@ -24,7 +24,7 @@ export const defaultTranslations = {
     pageCalendarMonthGrid: "Calendar month",
     pageCalendarFilterEnabled: "enabled",
     pageCalendarFilterDisabled: "disabled",
-    pageCalendarEventCount: (n: number) => n === 1 ? "1 event" : `${n} events`,
+    pageCalendarEventCount: (n: number) => (n === 1 ? "1 event" : `${n} events`),
     pageCalendarEventAt: (title: string, time: string) => `${title} at ${time}`,
     commandPaletteEmpty: "Nothing here...",
     commandPaletteLoading: "Loading...",

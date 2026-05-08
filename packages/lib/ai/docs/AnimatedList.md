@@ -21,19 +21,19 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 
 ### AnimatedList
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | — | One or more `AnimatedListItem` elements. |
+| Prop       | Type              | Default | Description                              |
+| ---------- | ----------------- | ------- | ---------------------------------------- |
+| `children` | `React.ReactNode` | —       | One or more `AnimatedListItem` elements. |
 
 ### AnimatedListItem
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `Label` | — | Primary heading shown in the list row and the overlay header. |
-| `description` | `Label` | — | Secondary text shown below the title in both the row and overlay header. |
-| `children` | `Label` | — | Content rendered inside the expanded overlay below the header. |
-| `avatar` | `Label` | — | Optional node (icon, image, or element) shown at the leading edge of the row. |
-| `leading` | `React.FC<{ open: () => void }>` | — | Optional render-prop component placed at the trailing edge of the row. Receives an `open` function to trigger the overlay programmatically. |
+| Prop          | Type                             | Default | Description                                                                                                                                 |
+| ------------- | -------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `Label`                          | —       | Primary heading shown in the list row and the overlay header.                                                                               |
+| `description` | `Label`                          | —       | Secondary text shown below the title in both the row and overlay header.                                                                    |
+| `children`    | `Label`                          | —       | Content rendered inside the expanded overlay below the header.                                                                              |
+| `avatar`      | `Label`                          | —       | Optional node (icon, image, or element) shown at the leading edge of the row.                                                               |
+| `leading`     | `React.FC<{ open: () => void }>` | —       | Optional render-prop component placed at the trailing edge of the row. Receives an `open` function to trigger the overlay programmatically. |
 
 `Label` is `string | number | ReactNode`.
 
@@ -41,19 +41,19 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `border-card-border` | `--card-border` | Row separator border and overlay border |
-| `bg-card-background` | `--card-background` | Overlay card background |
-| `rounded-card` | `--radius-card` | Overlay card border radius |
-| `shadow-shadow-card` | `--shadow-card` | Overlay card drop shadow |
-| `text-foreground` | `--foreground` | Default row and overlay text color |
-| `text-secondary` | `--secondary` | Description text color in rows and overlay |
-| `text-primary` | `--primary` | Row title hover color |
-| `text-danger` | `--danger` | Close button hover color |
+| Token                 | CSS Variable         | Purpose                                     |
+| --------------------- | -------------------- | ------------------------------------------- |
+| `border-card-border`  | `--card-border`      | Row separator border and overlay border     |
+| `bg-card-background`  | `--card-background`  | Overlay card background                     |
+| `rounded-card`        | `--radius-card`      | Overlay card border radius                  |
+| `shadow-shadow-card`  | `--shadow-card`      | Overlay card drop shadow                    |
+| `text-foreground`     | `--foreground`       | Default row and overlay text color          |
+| `text-secondary`      | `--secondary`        | Description text color in rows and overlay  |
+| `text-primary`        | `--primary`          | Row title hover color                       |
+| `text-danger`         | `--danger`           | Close button hover color                    |
 | `bg-floating-overlay` | `--floating-overlay` | Overlay backdrop tint (used at 70% opacity) |
-| `z-floating` | `--z-floating` | `z-index` for the overlay (value: 22) |
-| `z-overlay` | `--z-overlay` | `z-index` for the backdrop scrim |
+| `z-floating`          | `--z-floating`       | `z-index` for the overlay (value: 22)       |
+| `z-overlay`           | `--z-overlay`        | `z-index` for the backdrop scrim            |
 
 ## Examples
 
@@ -63,26 +63,20 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 
 const items = [
-  { id: "1", name: "Alice Johnson", role: "Engineering" },
-  { id: "2", name: "Bob Smith", role: "Design" },
+    { id: "1", name: "Alice Johnson", role: "Engineering" },
+    { id: "2", name: "Bob Smith", role: "Design" },
 ];
 
 export function TeamList() {
-  return (
-    <AnimatedList>
-      {items.map((member) => (
-        <AnimatedListItem
-          key={member.id}
-          title={member.name}
-          description={member.role}
-        >
-          <p className="text-foreground">
-            Full profile details for {member.name}.
-          </p>
-        </AnimatedListItem>
-      ))}
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            {items.map((member) => (
+                <AnimatedListItem key={member.id} title={member.name} description={member.role}>
+                    <p className="text-foreground">Full profile details for {member.name}.</p>
+                </AnimatedListItem>
+            ))}
+        </AnimatedList>
+    );
 }
 ```
 
@@ -93,20 +87,20 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 import { UserCircleIcon } from "@phosphor-icons/react";
 
 export function UserDirectory() {
-  return (
-    <AnimatedList>
-      <AnimatedListItem
-        title="Carol White"
-        description="Product Manager"
-        avatar={<UserCircleIcon size={40} className="text-muted-foreground" />}
-      >
-        <div className="flex flex-col gap-2 text-foreground">
-          <p>Department: Product</p>
-          <p>Location: San Francisco</p>
-        </div>
-      </AnimatedListItem>
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            <AnimatedListItem
+                title="Carol White"
+                description="Product Manager"
+                avatar={<UserCircleIcon size={40} className="text-muted-foreground" />}
+            >
+                <div className="flex flex-col gap-2 text-foreground">
+                    <p>Department: Product</p>
+                    <p>Location: San Francisco</p>
+                </div>
+            </AnimatedListItem>
+        </AnimatedList>
+    );
 }
 ```
 
@@ -117,24 +111,24 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 
 export function OrderList({ orders }: { orders: Order[] }) {
-  return (
-    <AnimatedList>
-      {orders.map((order) => (
-        <AnimatedListItem
-          key={order.id}
-          title={`Order #${order.id}`}
-          description={`Total: ${order.total}`}
-          leading={({ open }) => (
-            <Button size="small" theme="ghost-muted" onClick={open}>
-              View details
-            </Button>
-          )}
-        >
-          <OrderDetailContent order={order} />
-        </AnimatedListItem>
-      ))}
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            {orders.map((order) => (
+                <AnimatedListItem
+                    key={order.id}
+                    title={`Order #${order.id}`}
+                    description={`Total: ${order.total}`}
+                    leading={({ open }) => (
+                        <Button size="small" theme="ghost-muted" onClick={open}>
+                            View details
+                        </Button>
+                    )}
+                >
+                    <OrderDetailContent order={order} />
+                </AnimatedListItem>
+            ))}
+        </AnimatedList>
+    );
 }
 ```
 
@@ -145,25 +139,32 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 import { BellIcon, CheckCircleIcon, WarningIcon } from "@phosphor-icons/react";
 
 const activities = [
-  { id: "a1", icon: <CheckCircleIcon size={20} className="text-success" />, title: "Deployment succeeded", description: "2 minutes ago", detail: "All 3 services started." },
-  { id: "a2", icon: <WarningIcon size={20} className="text-warn" />, title: "High memory usage", description: "15 minutes ago", detail: "Instance i-0ab2c was at 91%." },
+    {
+        id: "a1",
+        icon: <CheckCircleIcon size={20} className="text-success" />,
+        title: "Deployment succeeded",
+        description: "2 minutes ago",
+        detail: "All 3 services started.",
+    },
+    {
+        id: "a2",
+        icon: <WarningIcon size={20} className="text-warn" />,
+        title: "High memory usage",
+        description: "15 minutes ago",
+        detail: "Instance i-0ab2c was at 91%.",
+    },
 ];
 
 export function ActivityFeed() {
-  return (
-    <AnimatedList>
-      {activities.map((a) => (
-        <AnimatedListItem
-          key={a.id}
-          title={a.title}
-          description={a.description}
-          avatar={a.icon}
-        >
-          <p className="text-sm text-muted-foreground">{a.detail}</p>
-        </AnimatedListItem>
-      ))}
-    </AnimatedList>
-  );
+    return (
+        <AnimatedList>
+            {activities.map((a) => (
+                <AnimatedListItem key={a.id} title={a.title} description={a.description} avatar={a.icon}>
+                    <p className="text-sm text-muted-foreground">{a.detail}</p>
+                </AnimatedListItem>
+            ))}
+        </AnimatedList>
+    );
 }
 ```
 

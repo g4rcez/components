@@ -148,7 +148,13 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                 >
                     {hiddenLabel ? (
                         <span className="sr-only">
-                            <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder} />
+                            <InputFeedback
+                                info={info}
+                                hideLeft={hideLeft}
+                                reportStatus={reportStatusDefault}
+                                title={title}
+                                placeholder={placeholder}
+                            />
                         </span>
                     ) : (
                         <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder}>

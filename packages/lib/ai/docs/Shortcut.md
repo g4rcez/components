@@ -19,9 +19,9 @@ import { Shortcut } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | — | Shortcut string to display, e.g. `"Mod + K"` or `"Shift + Alt + P"` |
+| Prop    | Type     | Default | Description                                                         |
+| ------- | -------- | ------- | ------------------------------------------------------------------- |
+| `value` | `string` | —       | Shortcut string to display, e.g. `"Mod + K"` or `"Shift + Alt + P"` |
 
 ## Design Tokens
 
@@ -31,10 +31,10 @@ The `Shortcut` component inherits text color and size from its parent. No compon
 
 The component automatically maps keys based on the user's operating system:
 
-| Key token | macOS | Other |
-|-----------|-------|-------|
-| `Mod` | `⌘` (CommandIcon, `size={12}`) | `Ctrl` |
-| `Alt` | `⌥` (OptionIcon, `size={12}`) | `Alt` |
+| Key token | macOS                          | Other  |
+| --------- | ------------------------------ | ------ |
+| `Mod`     | `⌘` (CommandIcon, `size={12}`) | `Ctrl` |
+| `Alt`     | `⌥` (OptionIcon, `size={12}`)  | `Alt`  |
 
 All other key tokens are rendered as-is.
 
@@ -50,9 +50,9 @@ All other key tokens are rendered as-is.
 
 ```tsx
 <Tooltip title="Save changes">
-  <div className="flex gap-2 items-center">
-    Save <Shortcut value="Mod + S" />
-  </div>
+    <div className="flex gap-2 items-center">
+        Save <Shortcut value="Mod + S" />
+    </div>
 </Tooltip>
 ```
 
@@ -60,8 +60,8 @@ All other key tokens are rendered as-is.
 
 ```tsx
 <div className="flex items-center justify-between w-full">
-  <span>Open command palette</span>
-  <Shortcut value="Mod + K" />
+    <span>Open command palette</span>
+    <Shortcut value="Mod + K" />
 </div>
 ```
 
@@ -76,8 +76,8 @@ All other key tokens are rendered as-is.
 
 ```tsx
 <div className="flex items-center justify-between px-4 py-2">
-  <span className="text-foreground">New File</span>
-  <Shortcut value="Mod + N" />
+    <span className="text-foreground">New File</span>
+    <Shortcut value="Mod + N" />
 </div>
 ```
 

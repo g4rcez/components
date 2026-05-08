@@ -1,14 +1,14 @@
 ---
 name: g4rcez-components
 description: >
-  Use when: setting up @g4rcez/components in a new project, migrating native
-  HTML elements or hand-rolled UI to this design system, building any React UI
-  that should use @g4rcez/components, or when the user's project already has
-  @g4rcez/components as a dependency. Covers installation, Tailwind v3 preset,
-  Tailwind v4 CSS-first setup, theming with createTokenStyles/TokenRemap,
-  ComponentsProvider/tweaks, parsers, the full component catalog (components,
-  hooks, React, UI, design-system, tokens, Tailwind, forms, modals,
-  notifications, tables, calendar, theming), and native-element migration.
+    Use when: setting up @g4rcez/components in a new project, migrating native
+    HTML elements or hand-rolled UI to this design system, building any React UI
+    that should use @g4rcez/components, or when the user's project already has
+    @g4rcez/components as a dependency. Covers installation, Tailwind v3 preset,
+    Tailwind v4 CSS-first setup, theming with createTokenStyles/TokenRemap,
+    ComponentsProvider/tweaks, parsers, the full component catalog (components,
+    hooks, React, UI, design-system, tokens, Tailwind, forms, modals,
+    notifications, tables, calendar, theming), and native-element migration.
 ---
 
 Loaded automatically when this package is present. Read fully before writing or modifying UI.
@@ -28,6 +28,7 @@ pnpm add @g4rcez/components
 ```
 
 The package ships:
+
 - `dist/` — compiled JS/TS and CSS
 - `dist/index.css` — main stylesheet
 - `ai/SKILL.md` — this file
@@ -47,11 +48,8 @@ Add the library preset to `tailwind.config.ts`. The preset registers all design 
 import preset from "@g4rcez/components/preset.tailwind";
 
 export default {
-  presets: [preset],
-  content: [
-    "./src/**/*.{ts,tsx}",
-    "./node_modules/@g4rcez/components/dist/**/*.js",
-  ],
+    presets: [preset],
+    content: ["./src/**/*.{ts,tsx}", "./node_modules/@g4rcez/components/dist/**/*.js"],
 };
 ```
 
@@ -71,11 +69,8 @@ The library's `tailwind.config.ts` uses `plugin.tailwind` (the v4-compatible plu
 import plugin from "@g4rcez/components/plugin.tailwind";
 
 export default {
-  plugins: [plugin],
-  content: [
-    "./src/**/*.{ts,tsx}",
-    "./node_modules/@g4rcez/components/dist/**/*.js",
-  ],
+    plugins: [plugin],
+    content: ["./src/**/*.{ts,tsx}", "./node_modules/@g4rcez/components/dist/**/*.js"],
 };
 ```
 
@@ -97,11 +92,7 @@ Wrap your app root to enable i18n strings, locale-aware masks, and `Modal.confir
 import { ComponentsProvider } from "@g4rcez/components";
 
 export default function App({ children }) {
-  return (
-    <ComponentsProvider locale="en-US">
-      {children}
-    </ComponentsProvider>
-  );
+    return <ComponentsProvider locale="en-US">{children}</ComponentsProvider>;
 }
 ```
 
@@ -112,11 +103,7 @@ export default function App({ children }) {
 Use `createTokenStyles` to generate scoped CSS strings for light and dark themes, then inject them into `<head>` via a `<style>` element.
 
 ```ts
-import {
-  createTokenStyles,
-  createCssProperties,
-  type TokenRemap,
-} from "@g4rcez/components";
+import { createTokenStyles, createCssProperties, type TokenRemap } from "@g4rcez/components";
 ```
 
 - `createTokenStyles(theme, map?)` — returns a scoped CSS string, e.g. `html { --primary: … }`
@@ -127,23 +114,18 @@ import {
 ### Two-theme pattern (light + dark)
 
 ```tsx
-import {
-  createTokenStyles,
-  type TokenRemap,
-  defaultLightTheme,
-  defaultDarkTheme,
-} from "@g4rcez/components";
+import { createTokenStyles, type TokenRemap, defaultLightTheme, defaultDarkTheme } from "@g4rcez/components";
 
 const tokenRemap: TokenRemap = {
-  colors: (t) => {
-    // Strip hsla( wrapper so Tailwind opacity utilities (bg-primary/50) work
-    t.value = t.value.replace("hsla(", "").replace(/\)$/, "");
-    return t;
-  },
+    colors: (t) => {
+        // Strip hsla( wrapper so Tailwind opacity utilities (bg-primary/50) work
+        t.value = t.value.replace("hsla(", "").replace(/\)$/, "");
+        return t;
+    },
 };
 
 const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
-const stylesDark  = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
+const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
 
 // Inject stylesLight and stylesDark as <style> elements in your layout <head>.
 // Both are internally-generated CSS strings (design tokens only), not user input.
@@ -156,12 +138,7 @@ const stylesDark  = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "
 `TokenRemap` transforms each design token value before it is emitted as a CSS custom property.
 
 ```ts
-export type TokenRemap = Partial<
-  Record<
-    "colors" | "spacing" | "rounded" | "customTokens" | "zIndex",
-    (t: Token) => Token
-  > & { name: string }
->;
+export type TokenRemap = Partial<Record<"colors" | "spacing" | "rounded" | "customTokens" | "zIndex", (t: Token) => Token> & { name: string }>;
 ```
 
 Stripping `hsla(…)` in the colors transformer is required for Tailwind opacity utilities (`bg-primary/50`) — they expect raw channel values (`210 40% 60%`), not a wrapped `hsla(210 40% 60%)`.
@@ -174,17 +151,17 @@ Stripping `hsla(…)` in the colors transformer is required for Tailwind opacity
 import { ComponentsProvider, type Tweaks, parsers } from "@g4rcez/components";
 
 const tweaks: Tweaks = {
-  table: {
-    sorters:    true,
-    filters:    true,
-    operations: true,
-    sticky:     55,
-  },
+    table: {
+        sorters: true,
+        filters: true,
+        operations: true,
+        sticky: 55,
+    },
 };
 
 <ComponentsProvider locale="en-US" tweaks={tweaks} parser={parsers.hsla}>
-  {children}
-</ComponentsProvider>
+    {children}
+</ComponentsProvider>;
 ```
 
 ---
@@ -248,6 +225,7 @@ Each component has a dedicated doc page with full props, design tokens, and usag
 `@g4rcez/components/ai/docs/<ComponentName>.md`
 
 Examples:
+
 - `@g4rcez/components/ai/docs/Button.md`
 - `@g4rcez/components/ai/docs/Input.md`
 - `@g4rcez/components/ai/docs/Modal.md`

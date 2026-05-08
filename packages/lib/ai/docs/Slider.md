@@ -21,27 +21,27 @@ import { Slider } from "@g4rcez/components";
 
 `Slider` accepts all props from `@base-ui/react/slider` Root, plus:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `tooltip` | `boolean` | `false` | Shows a tooltip with the current value above the thumb while dragging. |
-| `value` | `number[]` | — | Controlled value(s). |
-| `defaultValue` | `number[]` | `[0]` | Initial value(s) for uncontrolled usage. |
-| `min` | `number` | `0` | Minimum value. |
-| `max` | `number` | `100` | Maximum value. |
-| `step` | `number` | `1` | Increment between selectable values. |
-| `className` | `string` | — | Additional classes applied to the control track wrapper. |
+| Prop           | Type       | Default | Description                                                            |
+| -------------- | ---------- | ------- | ---------------------------------------------------------------------- |
+| `tooltip`      | `boolean`  | `false` | Shows a tooltip with the current value above the thumb while dragging. |
+| `value`        | `number[]` | —       | Controlled value(s).                                                   |
+| `defaultValue` | `number[]` | `[0]`   | Initial value(s) for uncontrolled usage.                               |
+| `min`          | `number`   | `0`     | Minimum value.                                                         |
+| `max`          | `number`   | `100`   | Maximum value.                                                         |
+| `step`         | `number`   | `1`     | Increment between selectable values.                                   |
+| `className`    | `string`   | —       | Additional classes applied to the control track wrapper.               |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-background` | `--background` | Track background (unfilled area) |
-| `bg-primary` | `--primary` | Indicator fill (filled area) |
-| `border-input-border` | `--input-border` | Thumb border color |
-| `bg-input-switch` | `--input-switch` | Thumb fill color (checked/active) |
-| `focus-within:ring-primary` | `--primary` | Focus ring on thumb |
+| Token                       | CSS Variable     | Purpose                           |
+| --------------------------- | ---------------- | --------------------------------- |
+| `bg-background`             | `--background`   | Track background (unfilled area)  |
+| `bg-primary`                | `--primary`      | Indicator fill (filled area)      |
+| `border-input-border`       | `--input-border` | Thumb border color                |
+| `bg-input-switch`           | `--input-switch` | Thumb fill color (checked/active) |
+| `focus-within:ring-primary` | `--primary`      | Focus ring on thumb               |
 
 ## Variants
 
@@ -61,14 +61,7 @@ Two values in `defaultValue` render two thumbs that define a range.
 import { Slider } from "@g4rcez/components";
 
 export default function VolumeControl() {
-  return (
-    <Slider
-      min={0}
-      max={100}
-      defaultValue={[50]}
-      onChange={(value) => console.log(value)}
-    />
-  );
+    return <Slider min={0} max={100} defaultValue={[50]} onChange={(value) => console.log(value)} />;
 }
 ```
 
@@ -78,14 +71,7 @@ export default function VolumeControl() {
 import { Slider } from "@g4rcez/components";
 
 export default function PriceRangeFilter() {
-  return (
-    <Slider
-      min={0}
-      max={1000}
-      defaultValue={[200, 800]}
-      tooltip
-    />
-  );
+    return <Slider min={0} max={1000} defaultValue={[200, 800]} tooltip />;
 }
 ```
 
@@ -96,23 +82,14 @@ import { useState } from "react";
 import { Slider } from "@g4rcez/components";
 
 export default function SteppedSlider() {
-  const [value, setValue] = useState([0.5]);
+    const [value, setValue] = useState([0.5]);
 
-  return (
-    <div className="flex flex-col gap-base">
-      <Slider
-        min={0}
-        max={1}
-        step={0.1}
-        value={value}
-        tooltip
-        onValueChange={setValue}
-      />
-      <span className="text-sm text-muted-foreground">
-        Current: {value[0].toFixed(1)}
-      </span>
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-base">
+            <Slider min={0} max={1} step={0.1} value={value} tooltip onValueChange={setValue} />
+            <span className="text-sm text-muted-foreground">Current: {value[0].toFixed(1)}</span>
+        </div>
+    );
 }
 ```
 
