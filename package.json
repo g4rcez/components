@@ -25,7 +25,7 @@
 ||||||| parent of 735922a (chore: add oxlint, oxfmt, lefthook to workspace root)
 =======
     "format": "pnpm run -r format",
-    "lint": "pnpm run -r lint",
+    "lint": "pnpm run -r --sequential lint",
     "prepare": "lefthook install",
 >>>>>>> 735922a (chore: add oxlint, oxfmt, lefthook to workspace root)
     "start": "pnpm run --filter ./packages/docs start"
