@@ -8,8 +8,8 @@ React
 - TanStack Query
 - Vite
 - Vitest
-- Eslint
-- Prettier
+- oxlint
+- oxfmt
 
 ## Commands
 
@@ -18,8 +18,8 @@ pnpm dev          # start dev server
 pnpm build        # production build
 pnpm test         # run tests
 pnpm test:watch   # watch mode
-pnpm lint         # biome lint
-pnpm format       # biome format
+pnpm lint         # oxlint across workspace
+pnpm format       # oxfmt across workspace
 ```
 
 ## Project Structure
