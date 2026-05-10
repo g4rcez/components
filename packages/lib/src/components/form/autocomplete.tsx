@@ -15,13 +15,13 @@ import {
 } from "@floating-ui/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, Fragment, type PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { type Components, type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
-import { css, dispatchInput, getRemainingSize, initializeInputDataset, mergeRefs, synthesizeChangeEvent } from "../../lib/dom";
+import { css, dispatchInput, getRemainingSize, initializeInputDataset, synthesizeChangeEvent } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { fzf } from "../../lib/fzf";
 import { Label } from "../../types";
@@ -62,7 +62,7 @@ const Item = forwardRef<HTMLLIElement, ItemProps<AutocompleteItemProps> & Contex
     return <motion.li {...props} ref={ref} className="first:rounded-t-lg last:rounded-t-lg" />;
 });
 
-const components: Components<AutocompleteItemProps> = { List, Item };
+const components = { List, Item };
 
 const EMPTY_NODES: Array<HTMLElement | null> = [];
 
@@ -263,22 +263,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 {...props}
                 left={left}
                 error={error}
-                ref={fieldset}
+                id={shadowId}
                 form={props.form}
                 loading={loading}
                 name={props.name}
-                feedback={open && isTopPlacement ? props.title : feedback}
                 hideLeft={hideLeft}
                 required={required}
                 title={props.title}
                 container={container}
                 rightLabel={rightLabel}
                 interactive={interactive}
-                id={shadowId}
                 optionalText={optionalText}
                 componentName="autocomplete"
                 labelClassName={labelClassName}
                 placeholder={props.placeholder}
+                ref={fieldset as unknown as Ref<HTMLInputElement>}
+                feedback={open && isTopPlacement ? props.title : feedback}
                 right={
                     <span className="flex items-center gap-0.5">
                         {right}
@@ -378,7 +378,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
                             <motion.div
                                 {...getFloatingProps({
-                                    ref: mergeRefs(removeScrollRef, refs.setFloating),
+                                    ref: refs.setFloating,
                                     style: { ...transitions.styles, left: x, top: y ?? 0, position: strategy, height: "auto" },
                                 })}
                                 initial={false}
@@ -412,8 +412,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     data={displayList}
                                     style={{ height: h }}
                                     defaultItemHeight={MIN_SIZE}
-                                    components={components}
-                                    scrollerRef={(e) => void (scroller.current = e as HTMLElement)}
+                                    components={components as never}
+                                    scrollerRef={(e) => {
+                                        scroller.current = e as HTMLElement;
+                                        removeScrollRef.current = e as HTMLElement;
+                                    }}
                                     className="border-floating max-h-full overscroll-contain rounded-lg bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = option.Render ?? Frag;
@@ -437,7 +440,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                                     className: `cursor-pointer min-h-10 hover:bg-floating-hover w-full p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
                                                 })}
                                             >
-                                                <Label {...props} label={option.label} value={option.value} children={children} />
+                                                <Label {...option} ref={undefined} label={option.label} value={option.value}>
+                                                    {children}
+                                                </Label>
                                             </button>
                                         );
                                     }}

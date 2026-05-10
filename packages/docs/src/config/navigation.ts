@@ -151,11 +151,6 @@ export const sections: Section[] = [
             { title: "Switch", href: "/docs/switch", icon: ToggleLeftIcon },
             { title: "Task List", href: "/docs/task-list", icon: CheckSquareIcon },
             { title: "Textarea", href: "/docs/textarea", icon: TextAlignLeftIcon },
-            {
-                title: "Transfer List",
-                href: "/docs/transfer-list",
-                icon: ArrowsLeftRightIcon,
-            },
             { title: "useForm", href: "/docs/form", icon: FileTextIcon },
         ],
     },

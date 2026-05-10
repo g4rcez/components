@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "4.1.0",
+    "version": "4.1.1",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -94,12 +94,6 @@
             "import": "./dist/components/form/form.js",
             "require": "./dist/components/form/form.js",
             "default": "./dist/components/form/form.js"
-        },
-        "./transfer-list": {
-            "type": "./dist/components/form/transfer-list.d.ts",
-            "import": "./dist/components/form/transfer-list.js",
-            "require": "./dist/components/form/transfer-list.js",
-            "default": "./dist/components/form/transfer-list.js"
         },
         "./radiobox": {
             "type": "./dist/components/form/radiobox.d.ts",

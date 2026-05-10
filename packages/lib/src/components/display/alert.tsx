@@ -70,7 +70,7 @@ export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
 
 export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) => React.ReactNode = forwardRef(function Alert(
     { className, theme, Icon, onClose, open = true, ...props }: AlertProps,
-    ref: React.ForwardedRef<HTMLDivElement>
+    ref: React.Ref<"div">
 ) {
     const t = useTranslations();
     const close = () => onClose?.(false);
@@ -86,12 +86,12 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                     className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}
                 >
                     <Collapse data-open={!!open} open={!!open}>
-                        <Polymorph<"div">
+                        <Polymorph
                             {...props}
                             ref={ref}
                             role={liveRole}
                             data-theme={theme}
-                            as={props.as ?? "div"}
+                            as={props.as || "div"}
                             className={css(alertVariants({ theme }), className)}
                         >
                             <div className="grid grid-cols-[auto_1fr] gap-base">

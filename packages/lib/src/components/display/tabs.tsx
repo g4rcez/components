@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef } from "react";
+import React, { createContext, PropsWithChildren, useContext, useEffect, useRef } from "react";
 import { Is, Nullable } from "sidekicker";
 import { useReactive } from "../../hooks/use-reactive";
 import { useStableRef } from "../../hooks/use-stable-ref";
@@ -77,7 +77,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
         if (onChangeRef.current) onChangeRef.current(active);
     }, [onChangeRef, active]);
 
-    const items = React.Children.toArray(props.children as React.ReactElement<TabProps>);
+    const items = React.Children.toArray(props.children as React.ReactElement<TabProps>) as Array<React.ReactElement<TabProps>>;
 
     const onClick = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
         const anchor = e.currentTarget;
@@ -121,7 +121,6 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             data-id={inner.id}
                                             data-active={current}
                                             key={`tab-header-${inner.id}`}
-                                            aria-disabled={inner.disabled}
                                             className={css(
                                                 "relative w-fit border-b border-transparent transition-all",
                                                 current ? "border-primary font-medium text-primary" : "",
@@ -129,15 +128,15 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             )}
                                         >
                                             <Polymorph
+                                                role="tab"
                                                 as="button"
                                                 type="button"
-                                                role="tab"
                                                 data-id={inner.id}
                                                 id={`${inner.id}-tab`}
                                                 aria-selected={current}
-                                                aria-controls={`${inner.id}-panel`}
-                                                tabIndex={current ? 0 : -1}
                                                 disabled={inner.disabled}
+                                                tabIndex={current ? 0 : -1}
+                                                aria-controls={`${inner.id}-panel`}
                                                 onClick={inner.disabled ? undefined : onClick}
                                                 className="block w-full whitespace-nowrap px-10 py-4 disabled:cursor-not-allowed"
                                             >

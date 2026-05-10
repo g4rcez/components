@@ -35,7 +35,6 @@ export * from "./form/input-field";
 export * from "./floating/dropdown";
 export * from "./form/autocomplete";
 export * from "./form/multi-select";
-export * from "./form/transfer-list";
 export * from "./core/render-on-view";
 export * from "./display/notifications";
 export * from "./floating/command-palette";

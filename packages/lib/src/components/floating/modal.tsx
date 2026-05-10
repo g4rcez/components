@@ -493,7 +493,7 @@ export type ConfirmOptions = {
 
 type ConfirmContextType = (options: ConfirmOptions) => Promise<boolean>;
 
-let confirmGlobal: ConfirmContextType = async <T,>(options: ConfirmOptions): Promise<T> => {
+let confirmGlobal: ConfirmContextType = async <T,>(_: ConfirmOptions): Promise<T> => {
     if (typeof window !== "undefined") {
         console.warn("ConfirmationProvider is not mounted");
     }
@@ -521,13 +521,13 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
 
     const onConfirm = () => {
         setOpen(false);
-        const value = options.confirm?.value ?? true;
+        const value = (options.confirm?.value as boolean) ?? true;
         resolve(value ?? true);
     };
 
     const onCancel = () => {
         setOpen(false);
-        const value = options.cancel?.value ?? false;
+        const value = (options.cancel?.value as boolean) ?? false;
         resolve(value ?? false);
     };
 

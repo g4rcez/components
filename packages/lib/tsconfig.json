@@ -29,7 +29,7 @@
         "lib": ["dom", "dom.iterable", "esnext"],
         "noEmit": true,
         "incremental": true,
-        "jsx": "react-jsx"
+        "jsx": "preserve"
     },
     "include": ["./src", "./tests"],
     "exclude": ["node_modules", "docs", "app"]

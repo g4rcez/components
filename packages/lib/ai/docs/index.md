@@ -62,7 +62,6 @@ import "@g4rcez/components/index.css";
 | Switch         | Form     | `import { Switch } from "@g4rcez/components/switch"`               | Toggle switch for boolean values                                          |
 | TaskList       | Form     | `import { TaskList } from "@g4rcez/components/task-list"`          | Checklist with completion tracking                                        |
 | Textarea       | Form     | `import { Textarea } from "@g4rcez/components"`                    | Multi-line text input with auto-resize                                    |
-| TransferList   | Form     | `import { TransferList } from "@g4rcez/components/transfer-list"`  | Dual-pane list for moving items between sets                              |
 | CommandPalette | Floating | `import { CommandPalette } from "@g4rcez/components"`              | Spotlight-style command palette with keyboard navigation                  |
 | Dropdown       | Floating | `import { Dropdown } from "@g4rcez/components/dropdown"`           | Floating dropdown menu anchored to a trigger                              |
 | Expand         | Floating | `import { Expand } from "@g4rcez/components/expand"`               | Collapsible accordion/expand panel                                        |
@@ -128,7 +127,6 @@ import "@g4rcez/components/index.css";
 | Switch       | `import { Switch } from "@g4rcez/components/switch"`              | Toggle switch for boolean values                      |
 | TaskList     | `import { TaskList } from "@g4rcez/components/task-list"`         | Checklist with completion tracking                    |
 | Textarea     | `import { Textarea } from "@g4rcez/components"`                   | Multi-line text input with auto-resize                |
-| TransferList | `import { TransferList } from "@g4rcez/components/transfer-list"` | Dual-pane list for moving items between sets          |
 
 ## Floating
 

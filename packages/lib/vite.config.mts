@@ -20,7 +20,6 @@ export default defineConfig({
                 "components/core/button": "./src/components/core/button.tsx",
                 "components/core/tag": "./src/components/core/tag.tsx",
                 "components/form/form": "./src/components/form/form.tsx",
-                "components/form/transfer-list": "./src/components/form/transfer-list.tsx",
                 "components/form/radiobox": "./src/components/form/radiobox.tsx",
                 "components/form/date-picker": "./src/components/form/date-picker.tsx",
                 "components/form/task-list": "./src/components/form/task-list.tsx",

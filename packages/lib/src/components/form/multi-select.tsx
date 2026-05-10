@@ -1,5 +1,6 @@
 "use client";
 import {
+    autoPlacement,
     autoUpdate,
     FloatingFocusManager,
     FloatingOverlay,
@@ -16,6 +17,7 @@ import {
 import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { type Components, type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
@@ -50,7 +52,7 @@ const MIN_SIZE = 40;
 const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
 const transitionStyles = {
-    duration: 300,
+    duration: 200,
     initial: { transform: "scaleY(0)", opacity: 0.2 },
     open: { transform: "scaleY(1)", opacity: 1 },
     close: { transform: "scaleY(0)", opacity: 0 },
@@ -59,22 +61,22 @@ const transitionStyles = {
 const EMPTY_NODES: Array<HTMLElement | null> = [];
 const EMPTY_VALUES: string[] = [];
 
-const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
+const List = forwardRef(function VirtualItem(
+    { item, context, ...props }: Record<string, never>,
+    ref
+) {
+    return <motion.li {...props} ref={ref as never} className="last:rounded-t-lg" />;
+});
+
+const Item = forwardRef<HTMLLIElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.ul {...props} role="listbox" ref={ref} className="w-full rounded-b-lg border-b border-tooltip-border last:border-transparent">
+        <motion.ul {...props} role="listbox" ref={ref as never} className="w-full rounded-b-lg border-b border-tooltip-border last:border-transparent">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
     );
 });
 
-const Item = forwardRef<HTMLLIElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualItem(
-    { item, context, ...props },
-    ref
-) {
-    return <motion.li {...props} ref={ref} className="last:rounded-t-lg" />;
-});
-
-const components: Components<MultiSelectItemProps> = { List, Item };
+const components = { List, Item };
 
 const OverflowControl = (props: PropsWithChildren<{ label?: string }>) => {
     const translate = useTranslations();
@@ -128,6 +130,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         }: MultiSelectProps,
         externalRef
     ) => {
+        const scroller = useRef<HTMLElement | null>(null);
         const map = useMemo(() => new Dict(options.map((x) => [x.value, x])), [options]);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
@@ -143,13 +146,15 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             });
             return d;
         });
-        const values = useMemo(() => Array.from(value.keys()), [value]);
         const [label, setLabel] = useState<string[]>(() => {
             const d = new Set(defaults);
             return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
         });
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
+        const [, tick] = useState(0);
+        const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
+        const removeScrollRef = useRemoveScroll<HTMLElement>(open, "block-only");
 
         const innerOptions = useMemo<MultiSelectItemProps[]>(
             () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
@@ -167,15 +172,20 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             [innerOptions, shadow]
         );
 
-        const removeScrollRef = useRemoveScroll<HTMLDivElement>(open, "block-only");
-
         const displayList = useMemo(() => list.filter((x) => x.hidden !== true), [list]);
 
-        const h = Math.min(320, (displayList.length || 1) * MIN_SIZE);
+        const values = useMemo(() => Array.from(value.keys()), [value]);
 
         const isEmpty = displayList.length === 0;
 
-        const { x, y, strategy, refs, context } = useFloating<HTMLInputElement>({
+        const openDropdown = () => flushSync(() => setOpen(true));
+
+        const setClosed = () => {
+            setOpen(false);
+            setH(0);
+        };
+
+        const { x, y, strategy, refs, context, placement } = useFloating<HTMLInputElement>({
             open,
             transform: true,
             placement: "bottom-start",
@@ -184,21 +194,20 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),
+                autoPlacement({ allowedPlacements: ["top-start", "bottom-start"], alignment: "start" }),
                 size({
                     padding: 10,
                     elementContext: "reference",
                     apply(args) {
-                        const ul = args.elements.floating.querySelector("ul");
-                        const fullSize = ul?.getBoundingClientRect().height || 0;
                         const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
-                        const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE, args.availableHeight);
-                        const size = displayList.length === 0 ? MIN_SIZE : Math.min(maxH, DEFAULT_SIZE, fullSize);
-                        const mw = `${fieldset.current!.getBoundingClientRect().width!}px`;
-                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw, height: size });
+                        const mw = `${fieldset.current?.getBoundingClientRect().width || DEFAULT_SIZE}px`;
+                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw });
                     },
                 }),
             ],
         });
+
+        const isTopPlacement = placement === "top" || placement === "top-start";
 
         const transitions = useTransitionStyles(context, transitionStyles);
 
@@ -232,6 +241,21 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             return initializeInputDataset(input);
         }, []);
 
+        useEffect(() => {
+            if (!open) return;
+            const id = requestAnimationFrame(() => tick((n) => n + 1));
+            return () => cancelAnimationFrame(id);
+        }, [open]);
+
+        useEffect(() => {
+            if (!open) {
+                setH(0);
+                return;
+            }
+            const id = setTimeout(() => setH(Math.min(320, displayList.length * MIN_SIZE)), 100);
+            return () => clearTimeout(id);
+        }, [open, displayList.length]);
+
         const onSelect = (opt: MultiSelectItemProps, i: number) => {
             const clone = value.clone((c) => {
                 if (c.has(opt.value)) return c.remove(opt.value);
@@ -240,39 +264,39 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             setValue(clone);
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
-            const options = clone.map((x) => x.value);
-            input?.setAttribute("data-value", JSON.stringify(options));
-            if (onChangeOptions) onChangeOptions(options);
+            const opts = clone.map((x) => x.value);
+            input?.setAttribute("data-value", JSON.stringify(opts));
+            if (onChangeOptions) onChangeOptions(opts);
             setLabel((prev) => prev.concat(opt.label ?? ""));
             setShadow("");
             setIndex(i);
         };
 
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value;
-            setShadow(value);
-            if (!open && value === "") return setOpen(true);
+            const v = event.target.value;
+            setShadow(v);
+            if (!open && v === "") return setOpen(true);
             event.target.name = props.name || "";
-            return value ? setOpen(true) : undefined;
+            return v ? setOpen(true) : undefined;
         };
 
         const onCaretDownClick = () => {
-            setOpen(true);
+            openDropdown();
             setShadow("");
             (refs.reference.current as HTMLInputElement)?.focus();
         };
 
         const onFocus = () => {
-            setOpen(true);
+            openDropdown();
             setShadow("");
         };
 
         const onClose = () => {
             (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "[]");
             setShadow("");
-            setOpen(false);
             setValue(new Dict());
             onChangeOptions?.([]);
+            setClosed();
         };
 
         const id = props.id || props.name;
@@ -300,14 +324,12 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             </Tag>
         ));
 
-        const scrollableContainerStyle = { height: isEmpty ? "0" : h };
-
         return (
             <InputField
                 {...props}
                 left={left}
                 error={error}
-                ref={fieldset}
+                ref={fieldset as never}
                 form={props.form}
                 name={props.name}
                 feedback={feedback}
@@ -390,20 +412,23 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
-                        <FloatingOverlay lockScroll>
+                        <FloatingOverlay lockScroll className="z-floating">
                             <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
                                 <div
                                     {...getFloatingProps({
                                         ref: refs.setFloating,
                                         style: {
                                             ...transitions.styles,
+                                            left: x,
                                             top: y ?? 0,
                                             position: strategy,
-                                            left: x,
                                         },
                                     })}
                                     data-floating="true"
-                                    className="shadow-floating isolate z-floating m-0 max-h-96 w-full origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground"
+                                    className={css(
+                                        "relative shadow-floating overflow-clip isolate z-floating m-0 max-h-96 list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
+                                        isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
+                                    )}
                                 >
                                     <input
                                         autoFocus
@@ -411,7 +436,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                         onChange={onChange}
                                         title={props.title}
                                         placeholder={translation.multiSelectInnerPlaceholder}
-                                        className="input placeholder-input-mask group mb-1 h-10 w-full flex-1 rounded border-b border-input-border bg-transparent px-input-x py-input-y outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary"
+                                        className="input placeholder-input-mask group mb-1 h-10 w-full flex-1 rounded-none border-b border-input-border bg-transparent px-input-x py-input-y outline-none transition-colors focus:border-primary"
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                                             if (event.key === "ArrowDown") {
                                                 let next = index! + 1;
@@ -427,7 +452,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             }
                                             if (event.key === "Escape") {
                                                 event.currentTarget.blur();
-                                                return setOpen(false);
+                                                return setClosed();
                                             }
                                             if (event.key === "Enter") {
                                                 if (index !== null && displayList[index]) {
@@ -451,18 +476,31 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     {isEmpty ? null : (
                                         <motion.div
                                             initial={false}
-                                            data-floating="true"
-                                            ref={removeScrollRef}
                                             animate={{ height: isEmpty ? "auto" : h }}
-                                            style={scrollableContainerStyle}
                                             className="max-h-72 w-full overscroll-contain"
+                                            onAnimationComplete={() => {
+                                                if (!open) {
+                                                    setH(0);
+                                                    return;
+                                                }
+                                                const li = refs.floating.current?.querySelector("li");
+                                                const sum = (li?.getBoundingClientRect().height ?? MIN_SIZE) * displayList.length;
+                                                flushSync(() => setH(Math.min(320, sum + 2)));
+                                            }}
                                         >
                                             <Virtuoso
+                                                overscan={40}
                                                 ref={virtuoso}
                                                 hidden={isEmpty}
                                                 data={displayList}
-                                                components={components}
-                                                style={scrollableContainerStyle}
+                                                style={{ height: h }}
+                                                defaultItemHeight={MIN_SIZE}
+                                                components={components as never}
+                                                totalListHeightChanged={(totalHeight) => setH(Math.min(320, totalHeight))}
+                                                scrollerRef={(e) => {
+                                                    scroller.current = e as HTMLElement;
+                                                    removeScrollRef.current = e as HTMLElement;
+                                                }}
                                                 className="max-h-72 border-floating-border bg-floating-background p-0 text-foreground"
                                                 itemContent={(i, option) => {
                                                     const Label = option.Render ?? Frag;
@@ -495,7 +533,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                                     onSelect(option, i);
                                                                 }}
                                                             />
-                                                            <Label {...props} label={option.label} value={option.value} children={children} />
+                                                            <Label {...option} label={option.label} value={option.value}>
+                                                                {children}
+                                                            </Label>
                                                         </button>
                                                     );
                                                 }}

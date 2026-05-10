@@ -75,22 +75,22 @@ export type InputFieldProps<T extends "input" | "select" | "textarea"> = Polymor
         Override<
             FeedbackProps,
             {
-                loading: boolean;
-                componentName: string;
-                info: Label;
-                labelClassName: string;
-                error: string;
-                hideLeft: boolean;
-                interactive: boolean;
-                container: string;
-                left: Label;
-                feedback: Label;
-                optionalText: string;
-                right: Label;
-                rightLabel: Label;
                 id: string;
+                info: Label;
+                left: Label;
                 name: string;
+                right: Label;
+                error: string;
+                feedback: Label;
+                loading: boolean;
+                container: string;
+                hideLeft: boolean;
+                rightLabel: Label;
                 placeholder: string;
+                interactive: boolean;
+                optionalText: string;
+                componentName: string;
+                labelClassName: string;
             }
         >
     >,
@@ -123,7 +123,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
             reportStatus,
             hiddenLabel,
         }: PropsWithChildren<InputFieldProps<T>>,
-        ref: React.ForwardedRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+        ref: React.Ref<HTMLFieldSetElement>
     ) => {
         const tweaks = useTweaks();
         const reportStatusDefault = reportStatus !== undefined ? reportStatus : tweaks.input.iconFeedback;
