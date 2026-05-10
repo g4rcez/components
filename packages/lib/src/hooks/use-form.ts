@@ -34,8 +34,6 @@ const isValidJSON = (value: unknown): boolean => {
         } catch {
             return false;
         }
-    } else {
-        str = value;
     }
     try {
         JSON.parse(str);

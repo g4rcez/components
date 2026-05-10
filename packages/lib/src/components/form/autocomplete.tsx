@@ -47,8 +47,6 @@ const transitionStyles = {
     initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
-const EMPTY_NODES: Array<HTMLElement | null> = [];
-
 const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
     return (
         <motion.ul {...props} ref={ref} className="max-h-96 w-full overscroll-contain rounded-lg">
@@ -65,6 +63,8 @@ const Item = forwardRef<HTMLLIElement, ItemProps<AutocompleteItemProps> & Contex
 });
 
 const components: Components<AutocompleteItemProps> = { List, Item };
+
+const EMPTY_NODES: Array<HTMLElement | null> = [];
 
 const MIN_SIZE = 40;
 
@@ -101,6 +101,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
+        const [, tick] = useState(0);
         const removeScrollRef = useRemoveScroll(open, "block-only");
 
         const innerOptions = useMemo<AutocompleteItemProps[]>(
@@ -121,11 +122,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             [innerOptions, shadow]
         );
 
-        const setClosed = () => setOpen(false);
+        const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
+
+        const setClosed = () => {
+            setOpen(false);
+            setH(0);
+        };
 
         const displayList = useMemo(() => list.filter((x) => x.hidden !== true), [list]);
-
-        const h = Math.min(320, (displayList.length || 1) * MIN_SIZE);
 
         const pattern = useMemo(
             () =>
@@ -146,13 +150,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     padding: 10,
                     elementContext: "reference",
                     apply(args) {
-                        const ul = args.elements.floating.querySelector("ul");
-                        const fullSize = ul?.getBoundingClientRect().height || 0;
                         const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
-                        const maxH = Math.min(fullSize < MIN_SIZE ? DEFAULT_SIZE : fullSize, DEFAULT_SIZE, args.availableHeight);
-                        const size = displayList.length === 0 ? MIN_SIZE : Math.min(maxH, DEFAULT_SIZE, fullSize);
                         const mw = `${fieldset.current?.getBoundingClientRect().width || DEFAULT_SIZE}px`;
-                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw, height: size });
+                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw });
                     },
                 }),
             ],
@@ -190,6 +190,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             if (!input) return;
             return initializeInputDataset(input);
         }, []);
+
+        useEffect(() => {
+            if (!open) return;
+            const id = requestAnimationFrame(() => tick((n) => n + 1));
+            return () => cancelAnimationFrame(id);
+        }, [open]);
+
+        useEffect(() => {
+            if (!open) {
+                setH(0);
+                return;
+            }
+            const id = setTimeout(() => setH(Math.min(320, displayList.length * MIN_SIZE)), 100);
+            return () => clearTimeout(id);
+        }, [open, displayList.length]);
 
         const onSelect = (opt: AutocompleteItemProps, i: number) => {
             setValue(opt.value);
@@ -369,6 +384,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 initial={false}
                                 data-floating="true"
                                 animate={{ height: isEmpty ? "auto" : h }}
+                                onAnimationComplete={() => {
+                                    if (!open) {
+                                        setH(0);
+                                        return;
+                                    }
+                                    const li = refs.floating.current?.querySelector("li");
+                                    const sum = (li?.getBoundingClientRect().height ?? MIN_SIZE) * displayList.length;
+                                    flushSync(() => setH(Math.min(320, sum + 2)));
+                                }}
                                 className={css(
                                     "shadow-floating isolate z-floating m-0 max-h-80 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
                                     isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
