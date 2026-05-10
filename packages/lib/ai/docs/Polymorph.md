@@ -19,20 +19,20 @@ import { Polymorph } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `as` | `React.ElementType` | `"span"` | The HTML element or React component to render as |
-| `ref` | `React.Ref` | - | Forwarded ref to the rendered element |
-| `...props` | `React.ComponentPropsWithoutRef<T>` | - | All props valid for the chosen element type |
+| Prop       | Type                                | Default  | Description                                      |
+| ---------- | ----------------------------------- | -------- | ------------------------------------------------ |
+| `as`       | `React.ElementType`                 | `"span"` | The HTML element or React component to render as |
+| `ref`      | `React.Ref`                         | -        | Forwarded ref to the rendered element            |
+| `...props` | `React.ComponentPropsWithoutRef<T>` | -        | All props valid for the chosen element type      |
 
 ## Type Definitions
 
 ```tsx
 export type PolymorphicProps<Props, T extends React.ElementType> = Props & {
-  as?: T;
+    as?: T;
 } & Omit<React.ComponentPropsWithoutRef<T>, keyof Props | "as" | "ref"> & {
-  ref?: React.ComponentProps<T>["ref"];
-};
+        ref?: React.ComponentProps<T>["ref"];
+    };
 ```
 
 ## Design Tokens
@@ -61,17 +61,13 @@ None — Polymorph itself applies no styles. It is a structural primitive only.
 import { useRef } from "react";
 
 const MyComponent = () => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
-  return (
-    <Polymorph
-      as="button"
-      ref={buttonRef}
-      onClick={() => buttonRef.current?.focus()}
-    >
-      Focus Me
-    </Polymorph>
-  );
+    return (
+        <Polymorph as="button" ref={buttonRef} onClick={() => buttonRef.current?.focus()}>
+            Focus Me
+        </Polymorph>
+    );
 };
 ```
 
@@ -79,13 +75,9 @@ const MyComponent = () => {
 
 ```tsx
 const DynamicItem = ({ isLink, href }: { isLink: boolean; href?: string }) => (
-  <Polymorph
-    as={isLink ? "a" : "button"}
-    href={isLink ? href : undefined}
-    className="text-foreground"
-  >
-    {isLink ? "Visit Link" : "Click Button"}
-  </Polymorph>
+    <Polymorph as={isLink ? "a" : "button"} href={isLink ? href : undefined} className="text-foreground">
+        {isLink ? "Visit Link" : "Click Button"}
+    </Polymorph>
 );
 ```
 
@@ -94,22 +86,14 @@ const DynamicItem = ({ isLink, href }: { isLink: boolean; href?: string }) => (
 ```tsx
 import { Polymorph, PolymorphicProps } from "@g4rcez/components";
 
-type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<
-  { variant?: "default" | "muted" },
-  T
->;
+type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<{ variant?: "default" | "muted" }, T>;
 
-const Card = <T extends React.ElementType = "div">({
-  as,
-  variant = "default",
-  className,
-  ...props
-}: CardProps<T>) => (
-  <Polymorph
-    as={as ?? "div"}
-    className={`rounded-card border border-border ${variant === "muted" ? "bg-muted" : "bg-card-background"} ${className ?? ""}`}
-    {...props}
-  />
+const Card = <T extends React.ElementType = "div">({ as, variant = "default", className, ...props }: CardProps<T>) => (
+    <Polymorph
+        as={as ?? "div"}
+        className={`rounded-card border border-border ${variant === "muted" ? "bg-muted" : "bg-card-background"} ${className ?? ""}`}
+        {...props}
+    />
 );
 ```
 

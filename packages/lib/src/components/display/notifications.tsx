@@ -9,17 +9,17 @@ import { css } from "../../lib/dom";
 import { Label } from "../../types";
 
 const variants = cva(
-    "relative isolate z-tooltip flex w-full flex-col overflow-hidden rounded-xl border bg-card-background backdrop-blur-md text-sm shadow-notification transition-all duration-300",
+    "shadow-notification relative isolate z-tooltip flex w-full flex-col overflow-hidden rounded-xl border bg-card-background text-sm backdrop-blur-md transition-all duration-300",
     {
         variants: {
             theme: {
                 default: "border-card-border text-foreground shadow-black/5",
-                info: "bg-alert-info-bg text-alert-info-text border-alert-info-border",
-                warn: "bg-alert-warn-bg text-alert-warn-text border-alert-warn-border",
-                muted: "bg-alert-muted-bg text-alert-muted-text border-alert-muted-border",
-                danger: "bg-alert-danger-bg text-alert-danger-text border-alert-danger-border",
-                success: "bg-alert-success-bg text-alert-success-text border-alert-success-border",
-                secondary: "bg-alert-secondary-bg text-alert-secondary-text border-alert-secondary-border",
+                info: "border-alert-info-border bg-alert-info-bg text-alert-info-text",
+                warn: "border-alert-warn-border bg-alert-warn-bg text-alert-warn-text",
+                muted: "border-alert-muted-border bg-alert-muted-bg text-alert-muted-text",
+                danger: "border-alert-danger-border bg-alert-danger-bg text-alert-danger-text",
+                success: "border-alert-success-border bg-alert-success-bg text-alert-success-text",
+                secondary: "border-alert-secondary-border bg-alert-secondary-bg text-alert-secondary-text",
             },
         },
         defaultVariants: { theme: "default" },

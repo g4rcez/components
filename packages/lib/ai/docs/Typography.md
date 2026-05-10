@@ -14,13 +14,7 @@ A set of text and page-structure components for consistent typographic styling a
 ## Import
 
 ```tsx
-import {
-  Paragraph,
-  Description,
-  Info,
-  PageTitle,
-  PageHeader,
-} from "@g4rcez/components";
+import { Paragraph, Description, Info, PageTitle, PageHeader } from "@g4rcez/components";
 ```
 
 ## Props
@@ -29,66 +23,66 @@ import {
 
 Renders a `<p>` element with `text-base leading-snug`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | - | Paragraph content |
-| `className` | `string` | - | Additional CSS classes |
-| `...props` | `React.ComponentProps<"p">` | - | All standard `<p>` attributes |
+| Prop        | Type                        | Default | Description                   |
+| ----------- | --------------------------- | ------- | ----------------------------- |
+| `children`  | `React.ReactNode`           | -       | Paragraph content             |
+| `className` | `string`                    | -       | Additional CSS classes        |
+| `...props`  | `React.ComponentProps<"p">` | -       | All standard `<p>` attributes |
 
 ### Description
 
 Renders a `<p>` element with `text-sm text-secondary mb-kilo`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | - | Description content |
-| `className` | `string` | - | Additional CSS classes |
-| `...props` | `React.ComponentProps<"p">` | - | All standard `<p>` attributes |
+| Prop        | Type                        | Default | Description                   |
+| ----------- | --------------------------- | ------- | ----------------------------- |
+| `children`  | `React.ReactNode`           | -       | Description content           |
+| `className` | `string`                    | -       | Additional CSS classes        |
+| `...props`  | `React.ComponentProps<"p">` | -       | All standard `<p>` attributes |
 
 ### Info
 
 Renders a labeled key-value pair in a flex container.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `Label` | - | The label text (required) |
-| `children` | `React.ReactNode` | - | The value content |
-| `row` | `boolean` | `false` | Renders label and value side-by-side instead of stacked |
-| `disabled` | `Label` | - | When set, applies `text-disabled` to the value |
-| `className` | `string` | - | Additional classes for the container |
-| `info` | `Label` | - | Reserved field (available in type, not currently rendered) |
-| `infoDescription` | `string` | - | Reserved field (available in type, not currently rendered) |
+| Prop              | Type              | Default | Description                                                |
+| ----------------- | ----------------- | ------- | ---------------------------------------------------------- |
+| `label`           | `Label`           | -       | The label text (required)                                  |
+| `children`        | `React.ReactNode` | -       | The value content                                          |
+| `row`             | `boolean`         | `false` | Renders label and value side-by-side instead of stacked    |
+| `disabled`        | `Label`           | -       | When set, applies `text-disabled` to the value             |
+| `className`       | `string`          | -       | Additional classes for the container                       |
+| `info`            | `Label`           | -       | Reserved field (available in type, not currently rendered) |
+| `infoDescription` | `string`          | -       | Reserved field (available in type, not currently rendered) |
 
 ### PageTitle
 
 Renders an `<h2>` title with a paragraph subtitle.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | - | Main title text (required) |
-| `children` | `React.ReactNode` | - | Subtitle or description beneath the title |
+| Prop       | Type              | Default | Description                               |
+| ---------- | ----------------- | ------- | ----------------------------------------- |
+| `title`    | `string`          | -       | Main title text (required)                |
+| `children` | `React.ReactNode` | -       | Subtitle or description beneath the title |
 
 ### PageHeader
 
 Renders a `<header>` element with title/description on the left and action slots on the right.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | - | Page title (required) |
-| `description` | `Label` | - | Short description beneath the title (required) |
-| `children` | `React.ReactNode` | - | Action buttons or other right-aligned content |
+| Prop          | Type              | Default | Description                                    |
+| ------------- | ----------------- | ------- | ---------------------------------------------- |
+| `title`       | `string`          | -       | Page title (required)                          |
+| `description` | `Label`           | -       | Short description beneath the title (required) |
+| `children`    | `React.ReactNode` | -       | Action buttons or other right-aligned content  |
 
 ## Design Tokens
 
 Tokens these components read. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `text-secondary` | `--secondary` | Description and subtitle text color |
-| `text-disabled` | `--disabled` | Disabled value text in `Info` |
-| `mb-kilo` | `--spacing-kilo` | Bottom margin on `Description` |
-| `gap-mega` | `--spacing-mega` | Gap in `PageHeader` between sections |
-| `gap-kilo` | `--spacing-kilo` | Gap between action items in `PageHeader` |
+| Token            | CSS Variable     | Purpose                                  |
+| ---------------- | ---------------- | ---------------------------------------- |
+| `text-secondary` | `--secondary`    | Description and subtitle text color      |
+| `text-disabled`  | `--disabled`     | Disabled value text in `Info`            |
+| `mb-kilo`        | `--spacing-kilo` | Bottom margin on `Description`           |
+| `gap-mega`       | `--spacing-mega` | Gap in `PageHeader` between sections     |
+| `gap-kilo`       | `--spacing-kilo` | Gap between action items in `PageHeader` |
 
 ## Examples
 
@@ -98,17 +92,17 @@ Tokens these components read. Customize by overriding these CSS variables in you
 import { Button } from "@g4rcez/components/button";
 
 <PageHeader title="Orders" description="List of all orders from your shop">
-  <Button size="small">Export CSV</Button>
-  <Button theme="primary" size="small">Create Order</Button>
-</PageHeader>
+    <Button size="small">Export CSV</Button>
+    <Button theme="primary" size="small">
+        Create Order
+    </Button>
+</PageHeader>;
 ```
 
 ### Standalone Page Title
 
 ```tsx
-<PageTitle title="Dashboard">
-  Overview of your application metrics
-</PageTitle>
+<PageTitle title="Dashboard">Overview of your application metrics</PageTitle>
 ```
 
 ### Paragraph and Description
@@ -142,7 +136,7 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 <Info label="API Key" disabled="true">
-  sk-••••••••••••••••
+    sk-••••••••••••••••
 </Info>
 ```
 
@@ -150,12 +144,18 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 <div className="flex flex-col gap-base rounded-card border border-border bg-card-background p-4">
-  <PageTitle title="John Doe">Software Engineer</PageTitle>
-  <div className="flex flex-col gap-sm">
-    <Info label="Email" row>john@example.com</Info>
-    <Info label="Team" row>Platform</Info>
-    <Info label="Joined" row>March 2024</Info>
-  </div>
+    <PageTitle title="John Doe">Software Engineer</PageTitle>
+    <div className="flex flex-col gap-sm">
+        <Info label="Email" row>
+            john@example.com
+        </Info>
+        <Info label="Team" row>
+            Platform
+        </Info>
+        <Info label="Joined" row>
+            March 2024
+        </Info>
+    </div>
 </div>
 ```
 

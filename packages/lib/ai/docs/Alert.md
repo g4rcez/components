@@ -19,30 +19,30 @@ import { Alert } from "@g4rcez/components/alert";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `theme` | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "neutral"` | `"neutral"` | Visual theme variant |
-| `title` | `string` | — | Alert heading text |
-| `Icon` | `React.ReactElement` | — | Custom icon element (overrides default theme icon) |
-| `open` | `boolean` | `true` | Controls visibility with collapse animation |
-| `onClose` | `(nextState: boolean) => void` | — | Callback when close button is clicked; omit to hide the button |
-| `container` | `string` | — | Additional classes for the outer wrapper |
-| `as` | `React.ElementType` | `"div"` | Polymorphic root element |
-| `className` | `string` | — | Additional classes for the alert element |
-| `children` | `React.ReactNode` | — | Alert body content |
+| Prop        | Type                                                                                 | Default     | Description                                                    |
+| ----------- | ------------------------------------------------------------------------------------ | ----------- | -------------------------------------------------------------- |
+| `theme`     | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "neutral"` | `"neutral"` | Visual theme variant                                           |
+| `title`     | `string`                                                                             | —           | Alert heading text                                             |
+| `Icon`      | `React.ReactElement`                                                                 | —           | Custom icon element (overrides default theme icon)             |
+| `open`      | `boolean`                                                                            | `true`      | Controls visibility with collapse animation                    |
+| `onClose`   | `(nextState: boolean) => void`                                                       | —           | Callback when close button is clicked; omit to hide the button |
+| `container` | `string`                                                                             | —           | Additional classes for the outer wrapper                       |
+| `as`        | `React.ElementType`                                                                  | `"div"`     | Polymorphic root element                                       |
+| `className` | `string`                                                                             | —           | Additional classes for the alert element                       |
+| `children`  | `React.ReactNode`                                                                    | —           | Alert body content                                             |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-alert-{theme}-bg` | `--alert-{theme}-bg` | Background per theme |
-| `text-alert-{theme}-text` | `--alert-{theme}-text` | Text color per theme |
-| `border-alert-{theme}-border` | `--alert-{theme}-border` | Border color per theme |
-| `border-card-border` | `--card-border` | Border for `neutral` theme |
-| `text-foreground` | `--foreground` | Close button color |
-| `text-danger` | `--danger` | Close button hover color |
+| Token                         | CSS Variable             | Purpose                    |
+| ----------------------------- | ------------------------ | -------------------------- |
+| `bg-alert-{theme}-bg`         | `--alert-{theme}-bg`     | Background per theme       |
+| `text-alert-{theme}-text`     | `--alert-{theme}-text`   | Text color per theme       |
+| `border-alert-{theme}-border` | `--alert-{theme}-border` | Border color per theme     |
+| `border-card-border`          | `--card-border`          | Border for `neutral` theme |
+| `text-foreground`             | `--foreground`           | Close button color         |
+| `text-danger`                 | `--danger`               | Close button hover color   |
 
 Themes: `primary`, `secondary`, `info`, `warn`, `danger`, `success`, `neutral`.
 
@@ -50,13 +50,13 @@ Themes: `primary`, `secondary`, `info`, `warn`, `danger`, `success`, `neutral`.
 
 Each theme maps to a set of `bg-alert-{theme}-*` tokens and provides default icons for some variants:
 
-| Theme | Default Icon |
-|-------|-------------|
-| `success` | `CheckCircleIcon` |
-| `info` | `InfoIcon` |
-| `danger` | `TriangleAlertIcon` |
-| `warn` | — |
-| `primary` / `secondary` / `neutral` | — |
+| Theme                               | Default Icon        |
+| ----------------------------------- | ------------------- |
+| `success`                           | `CheckCircleIcon`   |
+| `info`                              | `InfoIcon`          |
+| `danger`                            | `TriangleAlertIcon` |
+| `warn`                              | —                   |
+| `primary` / `secondary` / `neutral` | —                   |
 
 ## Examples
 
@@ -86,8 +86,8 @@ Each theme maps to a set of `bg-alert-{theme}-*` tokens and provides default ico
 import { BellIcon } from "@phosphor-icons/react";
 
 <Alert theme="info" title="Notification" Icon={<BellIcon size={20} />}>
-  You have new messages.
-</Alert>
+    You have new messages.
+</Alert>;
 ```
 
 ### Dismissible Alert
@@ -95,14 +95,9 @@ import { BellIcon } from "@phosphor-icons/react";
 ```tsx
 const [showAlert, setShowAlert] = useState(true);
 
-<Alert
-  theme="success"
-  title="Welcome!"
-  open={showAlert}
-  onClose={() => setShowAlert(false)}
->
-  Thanks for joining our platform.
-</Alert>
+<Alert theme="success" title="Welcome!" open={showAlert} onClose={() => setShowAlert(false)}>
+    Thanks for joining our platform.
+</Alert>;
 ```
 
 ### Rich Content
@@ -111,12 +106,16 @@ const [showAlert, setShowAlert] = useState(true);
 import { Button } from "@g4rcez/components/button";
 
 <Alert theme="info" title="Update Available">
-  <p>A new version of the application is available.</p>
-  <div className="mt-3 flex gap-2">
-    <Button theme="primary" size="small">Update Now</Button>
-    <Button theme="neutral" size="small">Later</Button>
-  </div>
-</Alert>
+    <p>A new version of the application is available.</p>
+    <div className="mt-3 flex gap-2">
+        <Button theme="primary" size="small">
+            Update Now
+        </Button>
+        <Button theme="neutral" size="small">
+            Later
+        </Button>
+    </div>
+</Alert>;
 ```
 
 ### Form Validation
@@ -125,12 +124,12 @@ import { Button } from "@g4rcez/components/button";
 const [errors, setErrors] = useState<string[]>([]);
 
 <Alert theme="danger" title="Validation Errors" open={errors.length > 0}>
-  <ul className="list-disc list-inside space-y-1">
-    {errors.map((error, index) => (
-      <li key={index}>{error}</li>
-    ))}
-  </ul>
-</Alert>
+    <ul className="list-disc list-inside space-y-1">
+        {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+        ))}
+    </ul>
+</Alert>;
 ```
 
 ## Do

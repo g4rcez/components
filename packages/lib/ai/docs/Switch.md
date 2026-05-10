@@ -21,27 +21,27 @@ import { Switch } from "@g4rcez/components/switch";
 
 Inherits all standard HTML `input[type="checkbox"]` attributes, plus:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | — | Label text or element displayed next to the switch. |
-| `onCheck` | `(nextValue: boolean) => void` | — | Called with the new boolean value after toggling. |
-| `error` | `string` | — | Error message displayed below the switch. |
-| `loading` | `boolean` | `false` | Disables the switch and signals a pending operation. |
-| `container` | `string` | — | Additional CSS classes for the outer `<fieldset>`. |
+| Prop        | Type                           | Default | Description                                          |
+| ----------- | ------------------------------ | ------- | ---------------------------------------------------- |
+| `children`  | `React.ReactNode`              | —       | Label text or element displayed next to the switch.  |
+| `onCheck`   | `(nextValue: boolean) => void` | —       | Called with the new boolean value after toggling.    |
+| `error`     | `string`                       | —       | Error message displayed below the switch.            |
+| `loading`   | `boolean`                      | `false` | Disables the switch and signals a pending operation. |
+| `container` | `string`                       | —       | Additional CSS classes for the outer `<fieldset>`.   |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
+| Token                | CSS Variable        | Purpose                         |
+| -------------------- | ------------------- | ------------------------------- |
 | `bg-input-switch-bg` | `--input-switch-bg` | Track background when unchecked |
-| `bg-primary` | `--primary` | Track background when checked |
-| `bg-disabled` | `--disabled` | Thumb fill when unchecked |
-| `bg-input-switch` | `--input-switch` | Thumb fill when checked |
-| `focus:ring-primary` | `--primary` | Focus ring on the toggle button |
-| `text-danger` | `--danger` | Error message color |
-| `text-foreground` | `--foreground` | Label text color |
+| `bg-primary`         | `--primary`         | Track background when checked   |
+| `bg-disabled`        | `--disabled`        | Thumb fill when unchecked       |
+| `bg-input-switch`    | `--input-switch`    | Thumb fill when checked         |
+| `focus:ring-primary` | `--primary`         | Focus ring on the toggle button |
+| `text-danger`        | `--danger`          | Error message color             |
+| `text-foreground`    | `--foreground`      | Label text color                |
 
 ## Themes
 
@@ -55,11 +55,11 @@ The switch appearance is driven entirely by design tokens. Override them in your
 import { Switch } from "@g4rcez/components/switch";
 
 export default function NotificationsToggle() {
-  return (
-    <Switch defaultChecked onChange={(e) => console.log(e.target.checked)}>
-      Enable notifications
-    </Switch>
-  );
+    return (
+        <Switch defaultChecked onChange={(e) => console.log(e.target.checked)}>
+            Enable notifications
+        </Switch>
+    );
 }
 ```
 
@@ -70,13 +70,13 @@ import { useState } from "react";
 import { Switch } from "@g4rcez/components/switch";
 
 export default function DarkModeToggle() {
-  const [enabled, setEnabled] = useState(false);
+    const [enabled, setEnabled] = useState(false);
 
-  return (
-    <Switch checked={enabled} onCheck={setEnabled}>
-      Dark mode
-    </Switch>
-  );
+    return (
+        <Switch checked={enabled} onCheck={setEnabled}>
+            Dark mode
+        </Switch>
+    );
 }
 ```
 
@@ -86,11 +86,7 @@ export default function DarkModeToggle() {
 import { Switch } from "@g4rcez/components/switch";
 
 export default function SyncSwitch() {
-  return (
-    <Switch loading>
-      Syncing data…
-    </Switch>
-  );
+    return <Switch loading>Syncing data…</Switch>;
 }
 ```
 
@@ -100,11 +96,7 @@ export default function SyncSwitch() {
 import { Switch } from "@g4rcez/components/switch";
 
 export default function TermsSwitch() {
-  return (
-    <Switch error="You must accept the terms to continue">
-      Accept terms and conditions
-    </Switch>
-  );
+    return <Switch error="You must accept the terms to continue">Accept terms and conditions</Switch>;
 }
 ```
 
@@ -114,19 +106,17 @@ export default function TermsSwitch() {
 import { Switch } from "@g4rcez/components/switch";
 
 export default function PrivacySettings() {
-  return (
-    <div className="flex flex-col gap-base">
-      <Switch defaultChecked onCheck={(v) => updateSetting("emails", v)}>
-        Receive marketing emails
-      </Switch>
-      <Switch onCheck={(v) => updateSetting("analytics", v)}>
-        Share analytics data
-      </Switch>
-      <Switch defaultChecked onCheck={(v) => updateSetting("notifications", v)}>
-        Push notifications
-      </Switch>
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-base">
+            <Switch defaultChecked onCheck={(v) => updateSetting("emails", v)}>
+                Receive marketing emails
+            </Switch>
+            <Switch onCheck={(v) => updateSetting("analytics", v)}>Share analytics data</Switch>
+            <Switch defaultChecked onCheck={(v) => updateSetting("notifications", v)}>
+                Push notifications
+            </Switch>
+        </div>
+    );
 }
 ```
 
@@ -154,11 +144,11 @@ export default function PrivacySettings() {
 
 ## Data Attributes
 
-| Attribute | Element | Value | Description |
-|-----------|---------|-------|-------------|
-| `data-component` | `fieldset` | `"switch"` | Identifies the component. |
-| `data-checked` | `input`, `button`, thumb `span` | `"true" \| "false"` | Reflects the checked state for CSS targeting. |
-| `data-trigger` | `input` | `"change"` | Used internally to track the synthetic change event. |
+| Attribute        | Element                         | Value               | Description                                          |
+| ---------------- | ------------------------------- | ------------------- | ---------------------------------------------------- |
+| `data-component` | `fieldset`                      | `"switch"`          | Identifies the component.                            |
+| `data-checked`   | `input`, `button`, thumb `span` | `"true" \| "false"` | Reflects the checked state for CSS targeting.        |
+| `data-trigger`   | `input`                         | `"change"`          | Used internally to track the synthetic change event. |
 
 ## Notes
 

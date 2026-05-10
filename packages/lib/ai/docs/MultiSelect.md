@@ -21,46 +21,46 @@ import { MultiSelect } from "@g4rcez/components";
 
 The `MultiSelect` component inherits all props from `InputField`, plus:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `options` | `MultiSelectItemProps[]` | — | Array of `{ value, label, Render? }` option objects. |
-| `value` | `string[]` | — | Controlled selected values. |
-| `defaultValue` | `string[]` | `[]` | Initial selected values for uncontrolled usage. |
-| `onChangeOptions` | `(options: string[]) => void` | — | Called when the selection changes. |
-| `dynamicOption` | `boolean` | `false` | Allows users to select their search query as a new option. |
-| `emptyMessage` | `Label` | — | Message shown when no options match the search. |
-| `selectedLabel` | `string` | — | Text shown in the overflow counter (e.g., "selected"). |
+| Prop              | Type                          | Default | Description                                                |
+| ----------------- | ----------------------------- | ------- | ---------------------------------------------------------- |
+| `options`         | `MultiSelectItemProps[]`      | —       | Array of `{ value, label, Render? }` option objects.       |
+| `value`           | `string[]`                    | —       | Controlled selected values.                                |
+| `defaultValue`    | `string[]`                    | `[]`    | Initial selected values for uncontrolled usage.            |
+| `onChangeOptions` | `(options: string[]) => void` | —       | Called when the selection changes.                         |
+| `dynamicOption`   | `boolean`                     | `false` | Allows users to select their search query as a new option. |
+| `emptyMessage`    | `Label`                       | —       | Message shown when no options match the search.            |
+| `selectedLabel`   | `string`                      | —       | Text shown in the overflow counter (e.g., "selected").     |
 
 ### MultiSelectItemProps
 
 Extends `OptionProps` with an optional custom renderer:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `value` | `string` | Option value. |
-| `label` | `string` | Option display text. |
+| Field    | Type                    | Description                                   |
+| -------- | ----------------------- | --------------------------------------------- |
+| `value`  | `string`                | Option value.                                 |
+| `label`  | `string`                | Option display text.                          |
 | `Render` | `React.FC<OptionProps>` | Custom render component for the dropdown row. |
-| `hidden` | `boolean` | Hides the option from the list. |
+| `hidden` | `boolean`               | Hides the option from the list.               |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `placeholder-input-mask` | `--input-mask` | Placeholder text color |
-| `placeholder-input-mask-error` | `--input-mask-error` | Placeholder color in error state |
-| `border-input-border` | `--input-border` | Search input bottom border in dropdown |
-| `bg-floating-background` | `--floating-background` | Dropdown panel background |
-| `border-floating-border` | `--floating-border` | Dropdown panel border |
-| `bg-floating-hover` | `--floating-hover` | Option row hover/active background |
-| `text-foreground` | `--foreground` | Option text color |
-| `text-input-placeholder` | `--input-placeholder` | Placeholder li color |
-| `text-disabled` | `--disabled` | Empty-state text color |
-| `focus:ring-primary` | `--primary` | Keyboard focus ring |
-| `h-input-height` | `--input-height` | Trigger element height (2.5 rem) |
-| `px-input-x` | `--input-x` | Horizontal padding |
-| `py-input-y` | `--input-y` | Vertical padding |
+| Token                          | CSS Variable            | Purpose                                |
+| ------------------------------ | ----------------------- | -------------------------------------- |
+| `placeholder-input-mask`       | `--input-mask`          | Placeholder text color                 |
+| `placeholder-input-mask-error` | `--input-mask-error`    | Placeholder color in error state       |
+| `border-input-border`          | `--input-border`        | Search input bottom border in dropdown |
+| `bg-floating-background`       | `--floating-background` | Dropdown panel background              |
+| `border-floating-border`       | `--floating-border`     | Dropdown panel border                  |
+| `bg-floating-hover`            | `--floating-hover`      | Option row hover/active background     |
+| `text-foreground`              | `--foreground`          | Option text color                      |
+| `text-input-placeholder`       | `--input-placeholder`   | Placeholder li color                   |
+| `text-disabled`                | `--disabled`            | Empty-state text color                 |
+| `focus:ring-primary`           | `--primary`             | Keyboard focus ring                    |
+| `h-input-height`               | `--input-height`        | Trigger element height (2.5 rem)       |
+| `px-input-x`                   | `--input-x`             | Horizontal padding                     |
+| `py-input-y`                   | `--input-y`             | Vertical padding                       |
 
 ## Examples
 
@@ -70,19 +70,13 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { MultiSelect } from "@g4rcez/components";
 
 const options = [
-  { value: "react", label: "React" },
-  { value: "vue", label: "Vue" },
-  { value: "angular", label: "Angular" },
+    { value: "react", label: "React" },
+    { value: "vue", label: "Vue" },
+    { value: "angular", label: "Angular" },
 ];
 
 export default function FrameworkPicker() {
-  return (
-    <MultiSelect
-      title="Frameworks"
-      options={options}
-      onChangeOptions={(values) => console.log(values)}
-    />
-  );
+    return <MultiSelect title="Frameworks" options={options} onChangeOptions={(values) => console.log(values)} />;
 }
 ```
 
@@ -93,20 +87,20 @@ import { useState } from "react";
 import { MultiSelect } from "@g4rcez/components";
 
 export default function ControlledMultiSelect() {
-  const [selected, setSelected] = useState<string[]>(["react"]);
+    const [selected, setSelected] = useState<string[]>(["react"]);
 
-  return (
-    <MultiSelect
-      title="Frameworks"
-      options={[
-        { value: "react", label: "React" },
-        { value: "vue", label: "Vue" },
-        { value: "angular", label: "Angular" },
-      ]}
-      value={selected}
-      onChangeOptions={setSelected}
-    />
-  );
+    return (
+        <MultiSelect
+            title="Frameworks"
+            options={[
+                { value: "react", label: "React" },
+                { value: "vue", label: "Vue" },
+                { value: "angular", label: "Angular" },
+            ]}
+            value={selected}
+            onChangeOptions={setSelected}
+        />
+    );
 }
 ```
 
@@ -117,24 +111,18 @@ import { ShieldIcon } from "@phosphor-icons/react";
 import { MultiSelect } from "@g4rcez/components";
 
 const roleOptions = roles.map((r) => ({
-  value: r.id,
-  label: r.name,
-  Render: () => (
-    <span className="flex items-center gap-base">
-      <ShieldIcon size={14} className="text-primary" />
-      {r.name}
-    </span>
-  ),
+    value: r.id,
+    label: r.name,
+    Render: () => (
+        <span className="flex items-center gap-base">
+            <ShieldIcon size={14} className="text-primary" />
+            {r.name}
+        </span>
+    ),
 }));
 
 export default function RolePicker() {
-  return (
-    <MultiSelect
-      title="Roles"
-      options={roleOptions}
-      onChangeOptions={(ids) => console.log(ids)}
-    />
-  );
+    return <MultiSelect title="Roles" options={roleOptions} onChangeOptions={(ids) => console.log(ids)} />;
 }
 ```
 
@@ -144,14 +132,7 @@ export default function RolePicker() {
 import { MultiSelect } from "@g4rcez/components";
 
 export default function TagInput() {
-  return (
-    <MultiSelect
-      title="Tags"
-      dynamicOption
-      options={existingTags}
-      onChangeOptions={(tags) => console.log(tags)}
-    />
-  );
+    return <MultiSelect title="Tags" dynamicOption options={existingTags} onChangeOptions={(tags) => console.log(tags)} />;
 }
 ```
 
@@ -178,14 +159,14 @@ export default function TagInput() {
 
 ## Data Attributes
 
-| Attribute | Element | Value | Description |
-|-----------|---------|-------|-------------|
-| `data-component` | trigger `ul` | `"autocomplete"` | Identifies the component type. |
-| `data-shadow` | trigger `ul` | `"true"` | Marks the visual shadow trigger. |
-| `data-value` | trigger `ul` | JSON string | Currently selected values as a JSON array. |
-| `data-floating` | dropdown root | `"true"` | Marks the floating panel. |
-| `data-dynamic` | option button | `"true"` | Marks options injected via `dynamicOption`. |
-| `data-error` | trigger `ul` | boolean string | Reflects the error state. |
+| Attribute        | Element       | Value            | Description                                 |
+| ---------------- | ------------- | ---------------- | ------------------------------------------- |
+| `data-component` | trigger `ul`  | `"autocomplete"` | Identifies the component type.              |
+| `data-shadow`    | trigger `ul`  | `"true"`         | Marks the visual shadow trigger.            |
+| `data-value`     | trigger `ul`  | JSON string      | Currently selected values as a JSON array.  |
+| `data-floating`  | dropdown root | `"true"`         | Marks the floating panel.                   |
+| `data-dynamic`   | option button | `"true"`         | Marks options injected via `dynamicOption`. |
+| `data-error`     | trigger `ul`  | boolean string   | Reflects the error state.                   |
 
 ## Notes
 

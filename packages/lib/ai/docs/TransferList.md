@@ -19,25 +19,25 @@ import { TransferList } from "@g4rcez/components/transfer-list";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `source` | `T[]` | — | Items in the left (available) list. |
-| `target` | `T[]` | — | Items in the right (selected) list. |
-| `Item` | `React.FC<{ data: T }>` | — | Component used to render each list row. |
-| `reference` | `keyof T` | — | Unique key used to identify and compare items (e.g., `"id"`). |
-| `setSource` | `Dispatch<SetStateAction<T[]>>` | — | State setter for the source list. |
-| `setTarget` | `Dispatch<SetStateAction<T[]>>` | — | State setter for the target list. |
+| Prop        | Type                            | Default | Description                                                   |
+| ----------- | ------------------------------- | ------- | ------------------------------------------------------------- |
+| `source`    | `T[]`                           | —       | Items in the left (available) list.                           |
+| `target`    | `T[]`                           | —       | Items in the right (selected) list.                           |
+| `Item`      | `React.FC<{ data: T }>`         | —       | Component used to render each list row.                       |
+| `reference` | `keyof T`                       | —       | Unique key used to identify and compare items (e.g., `"id"`). |
+| `setSource` | `Dispatch<SetStateAction<T[]>>` | —       | State setter for the source list.                             |
+| `setTarget` | `Dispatch<SetStateAction<T[]>>` | —       | State setter for the target list.                             |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `border-card-border` | `--card-border` | Border around each list panel |
-| `bg-background` | `--background` | Panel background (inherited) |
-| `text-foreground` | `--foreground` | Item text color (inherited) |
-| `border-border` | `--border` | Section divider inside the panel header |
+| Token                | CSS Variable    | Purpose                                 |
+| -------------------- | --------------- | --------------------------------------- |
+| `border-card-border` | `--card-border` | Border around each list panel           |
+| `bg-background`      | `--background`  | Panel background (inherited)            |
+| `text-foreground`    | `--foreground`  | Item text color (inherited)             |
+| `border-border`      | `--border`      | Section divider inside the panel header |
 
 ## Examples
 
@@ -50,30 +50,19 @@ import { TransferList } from "@g4rcez/components/transfer-list";
 type Role = { id: string; name: string };
 
 const allRoles: Role[] = [
-  { id: "admin", name: "Administrator" },
-  { id: "editor", name: "Editor" },
-  { id: "viewer", name: "Viewer" },
-  { id: "auditor", name: "Auditor" },
+    { id: "admin", name: "Administrator" },
+    { id: "editor", name: "Editor" },
+    { id: "viewer", name: "Viewer" },
+    { id: "auditor", name: "Auditor" },
 ];
 
-const RoleItem: React.FC<{ data: Role }> = ({ data }) => (
-  <span className="text-sm text-foreground">{data.name}</span>
-);
+const RoleItem: React.FC<{ data: Role }> = ({ data }) => <span className="text-sm text-foreground">{data.name}</span>;
 
 export default function RoleAssignment() {
-  const [available, setAvailable] = useState(allRoles);
-  const [assigned, setAssigned] = useState<Role[]>([]);
+    const [available, setAvailable] = useState(allRoles);
+    const [assigned, setAssigned] = useState<Role[]>([]);
 
-  return (
-    <TransferList
-      source={available}
-      target={assigned}
-      setSource={setAvailable}
-      setTarget={setAssigned}
-      reference="id"
-      Item={RoleItem}
-    />
-  );
+    return <TransferList source={available} target={assigned} setSource={setAvailable} setTarget={setAssigned} reference="id" Item={RoleItem} />;
 }
 ```
 
@@ -86,27 +75,18 @@ import { TransferList } from "@g4rcez/components/transfer-list";
 type Permission = { id: string; label: string; scope: string };
 
 const PermissionItem: React.FC<{ data: Permission }> = ({ data }) => (
-  <span className="flex items-center gap-base">
-    <ShieldIcon size={14} className="text-primary" />
-    <span className="text-sm text-foreground">{data.label}</span>
-    <span className="ml-auto text-xs text-muted-foreground">{data.scope}</span>
-  </span>
+    <span className="flex items-center gap-base">
+        <ShieldIcon size={14} className="text-primary" />
+        <span className="text-sm text-foreground">{data.label}</span>
+        <span className="ml-auto text-xs text-muted-foreground">{data.scope}</span>
+    </span>
 );
 
 export default function PermissionManager() {
-  const [source, setSource] = useState(allPermissions);
-  const [target, setTarget] = useState<Permission[]>([]);
+    const [source, setSource] = useState(allPermissions);
+    const [target, setTarget] = useState<Permission[]>([]);
 
-  return (
-    <TransferList
-      source={source}
-      target={target}
-      setSource={setSource}
-      setTarget={setTarget}
-      reference="id"
-      Item={PermissionItem}
-    />
-  );
+    return <TransferList source={source} target={target} setSource={setSource} setTarget={setTarget} reference="id" Item={PermissionItem} />;
 }
 ```
 

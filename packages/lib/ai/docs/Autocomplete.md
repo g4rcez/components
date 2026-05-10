@@ -19,34 +19,34 @@ import { Autocomplete } from "@g4rcez/components/autocomplete";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | - | Field label |
-| `value` | `string` | - | Controlled selected value |
-| `options` | `AutocompleteItemProps[]` | - | List of selectable options |
-| `emptyMessage` | `Label` | - | Message displayed when no options match |
-| `dynamicOption` | `boolean` | `false` | Allow creating new options from typed text |
-| `onChange` | `(e: React.ChangeEvent<HTMLInputElement>) => void` | - | Change handler |
-| `error` | `string` | - | Error message displayed below the field |
-| `feedback` | `Label` | - | Success/neutral feedback text below the field |
-| `left` | `Label` | - | Content rendered on the left inside the field border |
-| `right` | `Label` | - | Content rendered on the right inside the field border |
-| `required` | `boolean` | `false` | Marks field as required; hides "Optional" text |
-| `disabled` | `boolean` | `false` | Disables the field |
-| `loading` | `boolean` | `false` | Shows loading state |
-| `container` | `string` | - | Extra CSS classes for the outer `fieldset` |
-| `labelClassName` | `string` | - | Extra CSS classes for the label/border wrapper |
+| Prop             | Type                                               | Default | Description                                           |
+| ---------------- | -------------------------------------------------- | ------- | ----------------------------------------------------- |
+| `title`          | `string`                                           | -       | Field label                                           |
+| `value`          | `string`                                           | -       | Controlled selected value                             |
+| `options`        | `AutocompleteItemProps[]`                          | -       | List of selectable options                            |
+| `emptyMessage`   | `Label`                                            | -       | Message displayed when no options match               |
+| `dynamicOption`  | `boolean`                                          | `false` | Allow creating new options from typed text            |
+| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void` | -       | Change handler                                        |
+| `error`          | `string`                                           | -       | Error message displayed below the field               |
+| `feedback`       | `Label`                                            | -       | Success/neutral feedback text below the field         |
+| `left`           | `Label`                                            | -       | Content rendered on the left inside the field border  |
+| `right`          | `Label`                                            | -       | Content rendered on the right inside the field border |
+| `required`       | `boolean`                                          | `false` | Marks field as required; hides "Optional" text        |
+| `disabled`       | `boolean`                                          | `false` | Disables the field                                    |
+| `loading`        | `boolean`                                          | `false` | Shows loading state                                   |
+| `container`      | `string`                                           | -       | Extra CSS classes for the outer `fieldset`            |
+| `labelClassName` | `string`                                           | -       | Extra CSS classes for the label/border wrapper        |
 
 ### AutocompleteItemProps
 
 ```tsx
 type AutocompleteItemProps = {
-  value: string;
-  label?: string;
-  hidden?: boolean;
-  disabled?: boolean;
-  "data-dynamic"?: string;
-  Render?: React.FC<OptionProps>;
+    value: string;
+    label?: string;
+    hidden?: boolean;
+    disabled?: boolean;
+    "data-dynamic"?: string;
+    Render?: React.FC<OptionProps>;
 } & Record<`data-${string}`, string>;
 ```
 
@@ -54,24 +54,24 @@ type AutocompleteItemProps = {
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `h-input-height` | `--input-height` | Input height |
-| `px-input-x` | `--input-x` | Horizontal input padding |
-| `py-input-y` | `--input-y` | Vertical input padding |
-| `border-input-border` | `--input-border` | Default field border color |
-| `placeholder-input-mask` | `--input-mask` | Placeholder text color |
-| `placeholder-input-mask-error` | `--input-mask-error` | Placeholder color in error state |
-| `text-foreground` | `--foreground` | Input text color |
-| `text-danger` | `--danger` | Text color in error state |
-| `text-primary` | `--primary` | Focus/hover border and ring color |
-| `bg-floating-background` | `--floating-background` | Dropdown background |
-| `border-floating-border` | `--floating-border` | Dropdown border color |
-| `bg-floating-hover` | `--floating-hover` | Option background on hover/keyboard focus |
-| `text-disabled` | `--disabled` | Empty message text color |
-| `border-tooltip-border` | `--tooltip-border` | Separator inside dropdown |
-| `z-floating` | `--z-floating` | Z-index for the floating panel |
-| `shadow-floating` | `--shadow-floating` | Drop shadow for the floating panel |
+| Token                          | CSS Variable            | Purpose                                   |
+| ------------------------------ | ----------------------- | ----------------------------------------- |
+| `h-input-height`               | `--input-height`        | Input height                              |
+| `px-input-x`                   | `--input-x`             | Horizontal input padding                  |
+| `py-input-y`                   | `--input-y`             | Vertical input padding                    |
+| `border-input-border`          | `--input-border`        | Default field border color                |
+| `placeholder-input-mask`       | `--input-mask`          | Placeholder text color                    |
+| `placeholder-input-mask-error` | `--input-mask-error`    | Placeholder color in error state          |
+| `text-foreground`              | `--foreground`          | Input text color                          |
+| `text-danger`                  | `--danger`              | Text color in error state                 |
+| `text-primary`                 | `--primary`             | Focus/hover border and ring color         |
+| `bg-floating-background`       | `--floating-background` | Dropdown background                       |
+| `border-floating-border`       | `--floating-border`     | Dropdown border color                     |
+| `bg-floating-hover`            | `--floating-hover`      | Option background on hover/keyboard focus |
+| `text-disabled`                | `--disabled`            | Empty message text color                  |
+| `border-tooltip-border`        | `--tooltip-border`      | Separator inside dropdown                 |
+| `z-floating`                   | `--z-floating`          | Z-index for the floating panel            |
+| `shadow-floating`              | `--shadow-floating`     | Drop shadow for the floating panel        |
 
 ## Examples
 
@@ -81,23 +81,23 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { Autocomplete } from "@g4rcez/components/autocomplete";
 
 const options = [
-  { value: "react", label: "React" },
-  { value: "vue", label: "Vue" },
-  { value: "svelte", label: "Svelte" },
+    { value: "react", label: "React" },
+    { value: "vue", label: "Vue" },
+    { value: "svelte", label: "Svelte" },
 ];
 
 function FrameworkPicker() {
-  const [value, setValue] = useState("");
+    const [value, setValue] = useState("");
 
-  return (
-    <Autocomplete
-      title="Framework"
-      placeholder="Search frameworks..."
-      options={options}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
-  );
+    return (
+        <Autocomplete
+            title="Framework"
+            placeholder="Search frameworks..."
+            options={options}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+        />
+    );
 }
 ```
 
@@ -105,31 +105,31 @@ function FrameworkPicker() {
 
 ```tsx
 function TagPicker() {
-  const [value, setValue] = useState("");
-  const [tags, setTags] = useState([
-    { value: "typescript", label: "TypeScript" },
-    { value: "javascript", label: "JavaScript" },
-  ]);
+    const [value, setValue] = useState("");
+    const [tags, setTags] = useState([
+        { value: "typescript", label: "TypeScript" },
+        { value: "javascript", label: "JavaScript" },
+    ]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const next = e.target.value;
-    setValue(next);
-    if (next && !tags.find((t) => t.value === next)) {
-      setTags((prev) => [...prev, { value: next, label: next }]);
-    }
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const next = e.target.value;
+        setValue(next);
+        if (next && !tags.find((t) => t.value === next)) {
+            setTags((prev) => [...prev, { value: next, label: next }]);
+        }
+    };
 
-  return (
-    <Autocomplete
-      title="Tag"
-      placeholder="Search or create a tag..."
-      options={tags}
-      value={value}
-      onChange={handleChange}
-      dynamicOption
-      emptyMessage="Type to create a new tag"
-    />
-  );
+    return (
+        <Autocomplete
+            title="Tag"
+            placeholder="Search or create a tag..."
+            options={tags}
+            value={value}
+            onChange={handleChange}
+            dynamicOption
+            emptyMessage="Type to create a new tag"
+        />
+    );
 }
 ```
 
@@ -139,15 +139,15 @@ function TagPicker() {
 type UserOption = AutocompleteItemProps & { email: string; role: string };
 
 const UserRow = ({ value, label, ...props }: UserOption) => (
-  <div className="flex flex-col gap-0.5 py-1">
-    <span className="font-medium text-sm text-foreground">{label}</span>
-    <span className="text-xs text-muted-foreground">{props.email}</span>
-  </div>
+    <div className="flex flex-col gap-0.5 py-1">
+        <span className="font-medium text-sm text-foreground">{label}</span>
+        <span className="text-xs text-muted-foreground">{props.email}</span>
+    </div>
 );
 
 const users: UserOption[] = [
-  { value: "alice", label: "Alice", email: "alice@example.com", role: "admin", Render: UserRow },
-  { value: "bob", label: "Bob", email: "bob@example.com", role: "member", Render: UserRow },
+    { value: "alice", label: "Alice", email: "alice@example.com", role: "admin", Render: UserRow },
+    { value: "bob", label: "Bob", email: "bob@example.com", role: "member", Render: UserRow },
 ];
 
 <Autocomplete title="Assign to" options={users} value="" onChange={() => {}} />;
@@ -160,29 +160,25 @@ import { Form } from "@g4rcez/components/form";
 import { Button } from "@g4rcez/components/button";
 
 const countries = [
-  { value: "br", label: "Brazil" },
-  { value: "us", label: "United States" },
-  { value: "de", label: "Germany" },
+    { value: "br", label: "Brazil" },
+    { value: "us", label: "United States" },
+    { value: "de", label: "Germany" },
 ];
 
 function ContactForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget);
-    console.log(Object.fromEntries(data));
-  };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const data = new FormData(e.currentTarget);
+        console.log(Object.fromEntries(data));
+    };
 
-  return (
-    <Form onSubmit={handleSubmit} className="flex flex-col gap-base">
-      <Autocomplete
-        name="country"
-        title="Country"
-        options={countries}
-        required
-        emptyMessage="No countries found"
-      />
-      <Button theme="primary" type="submit">Submit</Button>
-    </Form>
-  );
+    return (
+        <Form onSubmit={handleSubmit} className="flex flex-col gap-base">
+            <Autocomplete name="country" title="Country" options={countries} required emptyMessage="No countries found" />
+            <Button theme="primary" type="submit">
+                Submit
+            </Button>
+        </Form>
+    );
 }
 ```
 

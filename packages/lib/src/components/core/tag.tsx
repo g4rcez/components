@@ -31,7 +31,7 @@ type Variants = CvaVariants<typeof variants>;
 
 type Themes = NonNullable<Variants["theme"]>;
 
-const indicatorVariant = cva("size-2 aspect-square rounded-full border-0", {
+const indicatorVariant = cva("aspect-square size-2 rounded-full border-0", {
     variants: {
         theme: {
             info: "bg-info",
@@ -47,7 +47,7 @@ const indicatorVariant = cva("size-2 aspect-square rounded-full border-0", {
 });
 
 const tagVariants = cva(
-    "inline-flex rounded-pill gap-1.5 border-0 items-center justify-center align-middle whitespace-nowrap ease-linear duration-300 transition-all",
+    "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-pill border-0 align-middle transition-all duration-300 ease-linear",
     {
         variants,
         defaultVariants: { theme: "primary", size: "default" },
@@ -77,4 +77,3 @@ export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => Reac
         </Polymorph>
     );
 }) as unknown as <T extends React.ElementType = "span">(_: TagProps<T>) => React.ReactNode;
-

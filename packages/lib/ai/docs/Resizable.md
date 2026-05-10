@@ -19,9 +19,9 @@ import { Resizable } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | - | Content rendered inside the animated container |
+| Prop       | Type              | Default | Description                                    |
+| ---------- | ----------------- | ------- | ---------------------------------------------- |
+| `children` | `React.ReactNode` | -       | Content rendered inside the animated container |
 
 ## Design Tokens
 
@@ -42,27 +42,23 @@ None — `Resizable` is a layout animation primitive that applies no color or sp
 import { useState } from "react";
 
 const CollapsiblePanel = () => {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <div className="border border-border rounded-card">
-      <button
-        type="button"
-        className="w-full px-4 py-3 text-left font-medium text-foreground"
-        onClick={() => setIsOpen((v) => !v)}
-      >
-        Toggle Details
-      </button>
-      <Resizable>
-        {isOpen ? (
-          <div className="px-4 pb-4 text-foreground">
-            <p>This content expands and collapses with a smooth height animation.</p>
-            <p>Additional paragraphs will also animate smoothly.</p>
-          </div>
-        ) : null}
-      </Resizable>
-    </div>
-  );
+    return (
+        <div className="border border-border rounded-card">
+            <button type="button" className="w-full px-4 py-3 text-left font-medium text-foreground" onClick={() => setIsOpen((v) => !v)}>
+                Toggle Details
+            </button>
+            <Resizable>
+                {isOpen ? (
+                    <div className="px-4 pb-4 text-foreground">
+                        <p>This content expands and collapses with a smooth height animation.</p>
+                        <p>Additional paragraphs will also animate smoothly.</p>
+                    </div>
+                ) : null}
+            </Resizable>
+        </div>
+    );
 };
 ```
 
@@ -73,27 +69,24 @@ import { useState } from "react";
 import { Button } from "@g4rcez/components/button";
 
 const GrowingList = () => {
-  const [items, setItems] = useState(["Item 1"]);
+    const [items, setItems] = useState(["Item 1"]);
 
-  return (
-    <div className="flex flex-col gap-base">
-      <Button
-        theme="primary"
-        onClick={() => setItems((prev) => [...prev, `Item ${prev.length + 1}`])}
-      >
-        Add Item
-      </Button>
-      <Resizable>
-        <ul className="flex flex-col gap-sm">
-          {items.map((item) => (
-            <li key={item} className="text-foreground">
-              {item}
-            </li>
-          ))}
-        </ul>
-      </Resizable>
-    </div>
-  );
+    return (
+        <div className="flex flex-col gap-base">
+            <Button theme="primary" onClick={() => setItems((prev) => [...prev, `Item ${prev.length + 1}`])}>
+                Add Item
+            </Button>
+            <Resizable>
+                <ul className="flex flex-col gap-sm">
+                    {items.map((item) => (
+                        <li key={item} className="text-foreground">
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+            </Resizable>
+        </div>
+    );
 };
 ```
 
@@ -101,13 +94,13 @@ const GrowingList = () => {
 
 ```tsx
 const TabbedContent = ({ activeTab }: { activeTab: string }) => (
-  <Resizable>
-    <div className="p-4 text-foreground">
-      {activeTab === "overview" && <OverviewPanel />}
-      {activeTab === "settings" && <SettingsPanel />}
-      {activeTab === "history"  && <HistoryPanel />}
-    </div>
-  </Resizable>
+    <Resizable>
+        <div className="p-4 text-foreground">
+            {activeTab === "overview" && <OverviewPanel />}
+            {activeTab === "settings" && <SettingsPanel />}
+            {activeTab === "history" && <HistoryPanel />}
+        </div>
+    </Resizable>
 );
 ```
 
@@ -115,19 +108,21 @@ const TabbedContent = ({ activeTab }: { activeTab: string }) => (
 
 ```tsx
 const AsyncCard = ({ data }: { data: string[] | null }) => (
-  <div className="rounded-card border border-border bg-card-background shadow-shadow-card">
-    <Resizable>
-      {data === null ? (
-        <div className="p-4 text-muted-foreground">Loading…</div>
-      ) : (
-        <ul className="p-4 flex flex-col gap-sm">
-          {data.map((item) => (
-            <li key={item} className="text-foreground">{item}</li>
-          ))}
-        </ul>
-      )}
-    </Resizable>
-  </div>
+    <div className="rounded-card border border-border bg-card-background shadow-shadow-card">
+        <Resizable>
+            {data === null ? (
+                <div className="p-4 text-muted-foreground">Loading…</div>
+            ) : (
+                <ul className="p-4 flex flex-col gap-sm">
+                    {data.map((item) => (
+                        <li key={item} className="text-foreground">
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </Resizable>
+    </div>
 );
 ```
 

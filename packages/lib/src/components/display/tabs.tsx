@@ -174,12 +174,7 @@ export const Tab = (props: PropsWithChildren<TabProps>) => {
     const active = useTabs();
     if (props.id !== active) return null;
     return (
-        <div
-            role="tabpanel"
-            tabIndex={0}
-            id={`${props.id}-panel`}
-            aria-labelledby={`${props.id}-tab`}
-        >
+        <div role="tabpanel" tabIndex={0} id={`${props.id}-panel`} aria-labelledby={`${props.id}-tab`}>
             {props.children}
         </div>
     );

@@ -19,28 +19,28 @@ import { Slot, Slottable } from "@g4rcez/components";
 
 ## Exports
 
-| Export | Description |
-|--------|-------------|
-| `Slot` | Merges props into the single child element |
-| `Slottable` | Marks which child is the slot target when the component has internal structure |
-| `createSlot(ownerName)` | Factory to create a named `Slot` (for building design-system components) |
-| `createSlottable(ownerName)` | Factory to create a named `Slottable` |
+| Export                       | Description                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| `Slot`                       | Merges props into the single child element                                     |
+| `Slottable`                  | Marks which child is the slot target when the component has internal structure |
+| `createSlot(ownerName)`      | Factory to create a named `Slot` (for building design-system components)       |
+| `createSlottable(ownerName)` | Factory to create a named `Slottable`                                          |
 
 ## Props
 
 ### Slot
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | - | A single valid React element that will receive all of Slot's props |
-| `ref` | `React.ForwardedRef<HTMLElement>` | - | Forwarded to the child element |
-| `...props` | `React.HTMLAttributes<HTMLElement>` | - | Props merged into the child |
+| Prop       | Type                                | Default | Description                                                        |
+| ---------- | ----------------------------------- | ------- | ------------------------------------------------------------------ |
+| `children` | `React.ReactNode`                   | -       | A single valid React element that will receive all of Slot's props |
+| `ref`      | `React.ForwardedRef<HTMLElement>`   | -       | Forwarded to the child element                                     |
+| `...props` | `React.HTMLAttributes<HTMLElement>` | -       | Props merged into the child                                        |
 
 ### Slottable
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | - | The element to render as the slot target |
+| Prop       | Type              | Default | Description                              |
+| ---------- | ----------------- | ------- | ---------------------------------------- |
+| `children` | `React.ReactNode` | -       | The element to render as the slot target |
 
 ## Design Tokens
 
@@ -133,9 +133,7 @@ Both handlers are called when both the `Slot` and the child define the same even
 
 ```tsx
 <Slot onClick={() => console.log("slot handler")}>
-  <button onClick={() => console.log("child handler")}>
-    Click me
-  </button>
+    <button onClick={() => console.log("child handler")}>Click me</button>
 </Slot>
 // Logs: "child handler", then "slot handler"
 ```
