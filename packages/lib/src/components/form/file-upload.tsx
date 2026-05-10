@@ -87,7 +87,12 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
         <li className="flex w-full flex-row justify-between gap-4 border-b border-card-border last:border-b-transparent">
             <div className="flex flex-col gap-4">
                 <div className="flex flex-row items-center gap-4">
-                    <button type="button" onClick={onViewFile} aria-label={`View ${fileName}`} className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden">
+                    <button
+                        type="button"
+                        onClick={onViewFile}
+                        aria-label={`View ${fileName}`}
+                        className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden"
+                    >
                         {Element}
                     </button>
                     <div className="flex flex-col items-start justify-start text-left">
@@ -195,12 +200,12 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {state[0] ? <FileViewer item={state[0]!} /> : null}
             </Modal>
             <div
-                {...(getRootProps() as any)}
+                {...(getRootProps() as unknown as React.HTMLAttributes<HTMLDivElement>)}
                 aria-label={t.fileUploadZoneLabel}
                 data-active={items ? items.length > 0 : false}
                 className="flex flex-col items-center justify-center rounded-lg border border-card-border p-6 text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
             >
-                <input {...getInputProps(props as any)} name={props.name} id={props.name} />
+                <input {...getInputProps(props as unknown as React.InputHTMLAttributes<HTMLInputElement>)} name={props.name} id={props.name} />
                 <InteractiveArea File={File} onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={items} />
             </div>
         </Context.Provider>

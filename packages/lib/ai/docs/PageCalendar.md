@@ -19,19 +19,19 @@ import { PageCalendar } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `events` | `CalendarEvent<T>[]` | — | Array of event objects to display across all views. |
-| `filters` | `CalendarFilter[]` | `[]` | Filter tag definitions. Each filter can be toggled to hide/show matching events. |
-| `defaultView` | `"month" \| "week" \| "day"` | `"month"` | Initial view rendered when the component mounts. |
-| `defaultDate` | `Date` | `new Date()` | Initial date the calendar focuses on. |
-| `onEventClick` | `(event: CalendarEvent) => void` | — | Called when the user clicks an event pill. |
-| `onSlotClick` | `(date: Date) => void` | — | Called when the user clicks an empty time slot (week and day views). |
-| `onAddEvent` | `() => void` | — | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
-| `onChangeFilters` | `(filters: CalendarFilter[]) => void` | — | Called whenever a filter is toggled, receiving the updated filter array. |
-| `renderEvent` | `(event: CalendarEvent<T>) => ReactNode` | — | Custom renderer for the selected event detail panel in day view. |
-| `filterArea` | `ReactNode` | — | Replaces the default filter tag row in the header with custom content. |
-| `getFilterId` | `() => void` | — | Custom accessor to extract a `filterId` from an event. Defaults to `event.filterId`. |
+| Prop              | Type                                     | Default      | Description                                                                           |
+| ----------------- | ---------------------------------------- | ------------ | ------------------------------------------------------------------------------------- |
+| `events`          | `CalendarEvent<T>[]`                     | —            | Array of event objects to display across all views.                                   |
+| `filters`         | `CalendarFilter[]`                       | `[]`         | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
+| `defaultView`     | `"month" \| "week" \| "day"`             | `"month"`    | Initial view rendered when the component mounts.                                      |
+| `defaultDate`     | `Date`                                   | `new Date()` | Initial date the calendar focuses on.                                                 |
+| `onEventClick`    | `(event: CalendarEvent) => void`         | —            | Called when the user clicks an event pill.                                            |
+| `onSlotClick`     | `(date: Date) => void`                   | —            | Called when the user clicks an empty time slot (week and day views).                  |
+| `onAddEvent`      | `() => void`                             | —            | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
+| `onChangeFilters` | `(filters: CalendarFilter[]) => void`    | —            | Called whenever a filter is toggled, receiving the updated filter array.              |
+| `renderEvent`     | `(event: CalendarEvent<T>) => ReactNode` | —            | Custom renderer for the selected event detail panel in day view.                      |
+| `filterArea`      | `ReactNode`                              | —            | Replaces the default filter tag row in the header with custom content.                |
+| `getFilterId`     | `() => void`                             | —            | Custom accessor to extract a `filterId` from an event. Defaults to `event.filterId`.  |
 
 ## Type Definitions
 
@@ -39,8 +39,8 @@ import { PageCalendar } from "@g4rcez/components";
 
 ```ts
 type CalendarEventBase = {
-  id: string;
-  date: Date;
+    id: string;
+    date: Date;
 };
 ```
 
@@ -48,9 +48,9 @@ type CalendarEventBase = {
 
 ```ts
 type CalendarEvent<T extends CalendarEventBase = CalendarEventBase> = T & {
-  title: string;
-  filterId?: string;
-  className?: string;
+    title: string;
+    filterId?: string;
+    className?: string;
 };
 ```
 
@@ -60,10 +60,10 @@ type CalendarEvent<T extends CalendarEventBase = CalendarEventBase> = T & {
 
 ```ts
 type CalendarFilter = {
-  id: string;
-  label: string;
-  enabled: boolean;
-  theme: TagProps["theme"]; // "primary" | "success" | "warn" | "danger" | "info" | "neutral" | "secondary" | "muted"
+    id: string;
+    label: string;
+    enabled: boolean;
+    theme: TagProps["theme"]; // "primary" | "success" | "warn" | "danger" | "info" | "neutral" | "secondary" | "muted"
 };
 ```
 
@@ -77,18 +77,18 @@ type ViewMode = "month" | "week" | "day";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-primary` | `--primary` | Today indicator background, selected day highlight |
-| `text-primary-foreground` | `--primary-foreground` | Text on today / selected day indicator |
-| `bg-card` | `--card` | Non-today day indicator background in header |
-| `text-foreground` | `--foreground` | Default text in day cells and header |
-| `text-muted-foreground` | `--muted-foreground` | Week label, hour labels, secondary text |
-| `border-border` | `--border` | Grid cell borders, day view hour-slot dividers |
-| `border-card-border` | `--card-border` | Day and week view column borders |
-| `bg-muted` | `--muted` | Hover background on time slots |
-| `z-calendar` | `--z-calendar` | `z-index` for the column resizer handle (value: 2) |
-| `z-floating` | `--z-floating` | `z-index` for floating overlays (value: 22) |
+| Token                     | CSS Variable           | Purpose                                            |
+| ------------------------- | ---------------------- | -------------------------------------------------- |
+| `bg-primary`              | `--primary`            | Today indicator background, selected day highlight |
+| `text-primary-foreground` | `--primary-foreground` | Text on today / selected day indicator             |
+| `bg-card`                 | `--card`               | Non-today day indicator background in header       |
+| `text-foreground`         | `--foreground`         | Default text in day cells and header               |
+| `text-muted-foreground`   | `--muted-foreground`   | Week label, hour labels, secondary text            |
+| `border-border`           | `--border`             | Grid cell borders, day view hour-slot dividers     |
+| `border-card-border`      | `--card-border`        | Day and week view column borders                   |
+| `bg-muted`                | `--muted`              | Hover background on time slots                     |
+| `z-calendar`              | `--z-calendar`         | `z-index` for the column resizer handle (value: 2) |
+| `z-floating`              | `--z-floating`         | `z-index` for floating overlays (value: 22)        |
 
 ## Views
 
@@ -113,17 +113,10 @@ import { PageCalendar } from "@g4rcez/components";
 
 type MyEvent = { id: string; date: Date; title: string };
 
-const events: MyEvent[] = [
-  { id: "1", date: new Date(), title: "Team standup" },
-];
+const events: MyEvent[] = [{ id: "1", date: new Date(), title: "Team standup" }];
 
 export function MyCalendar() {
-  return (
-    <PageCalendar
-      events={events}
-      onEventClick={(event) => console.log(event)}
-    />
-  );
+    return <PageCalendar events={events} onEventClick={(event) => console.log(event)} />;
 }
 ```
 
@@ -134,23 +127,17 @@ import { PageCalendar } from "@g4rcez/components";
 import type { CalendarFilter } from "@g4rcez/components";
 
 const filters: CalendarFilter[] = [
-  { id: "work", label: "Work", enabled: true, theme: "primary" },
-  { id: "personal", label: "Personal", enabled: true, theme: "success" },
+    { id: "work", label: "Work", enabled: true, theme: "primary" },
+    { id: "personal", label: "Personal", enabled: true, theme: "success" },
 ];
 
 const events = [
-  { id: "1", date: new Date(), title: "Sprint planning", filterId: "work" },
-  { id: "2", date: new Date(), title: "Gym", filterId: "personal" },
+    { id: "1", date: new Date(), title: "Sprint planning", filterId: "work" },
+    { id: "2", date: new Date(), title: "Gym", filterId: "personal" },
 ];
 
 export function FilteredCalendar() {
-  return (
-    <PageCalendar
-      events={events}
-      filters={filters}
-      onChangeFilters={(updated) => console.log(updated)}
-    />
-  );
+    return <PageCalendar events={events} filters={filters} onChangeFilters={(updated) => console.log(updated)} />;
 }
 ```
 
@@ -161,21 +148,21 @@ import { PageCalendar } from "@g4rcez/components";
 import { MapPinIcon } from "@phosphor-icons/react";
 
 export function DetailCalendar() {
-  return (
-    <PageCalendar
-      events={events}
-      defaultView="day"
-      renderEvent={(event) => (
-        <div className="flex flex-col gap-1 p-2 bg-muted rounded-card">
-          <span className="font-semibold text-foreground">{event.title}</span>
-          <span className="flex items-center gap-1 text-sm text-muted-foreground">
-            <MapPinIcon size={12} />
-            {event.location}
-          </span>
-        </div>
-      )}
-    />
-  );
+    return (
+        <PageCalendar
+            events={events}
+            defaultView="day"
+            renderEvent={(event) => (
+                <div className="flex flex-col gap-1 p-2 bg-muted rounded-card">
+                    <span className="font-semibold text-foreground">{event.title}</span>
+                    <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <MapPinIcon size={12} />
+                        {event.location}
+                    </span>
+                </div>
+            )}
+        />
+    );
 }
 ```
 
@@ -186,22 +173,22 @@ import { useState } from "react";
 import { PageCalendar } from "@g4rcez/components";
 
 export function EditableCalendar() {
-  const [showForm, setShowForm] = useState(false);
-  const [slotDate, setSlotDate] = useState<Date | null>(null);
+    const [showForm, setShowForm] = useState(false);
+    const [slotDate, setSlotDate] = useState<Date | null>(null);
 
-  return (
-    <>
-      <PageCalendar
-        events={events}
-        onAddEvent={() => setShowForm(true)}
-        onSlotClick={(date) => {
-          setSlotDate(date);
-          setShowForm(true);
-        }}
-      />
-      {showForm && <EventForm defaultDate={slotDate} onClose={() => setShowForm(false)} />}
-    </>
-  );
+    return (
+        <>
+            <PageCalendar
+                events={events}
+                onAddEvent={() => setShowForm(true)}
+                onSlotClick={(date) => {
+                    setSlotDate(date);
+                    setShowForm(true);
+                }}
+            />
+            {showForm && <EventForm defaultDate={slotDate} onClose={() => setShowForm(false)} />}
+        </>
+    );
 }
 ```
 
@@ -212,17 +199,21 @@ import { PageCalendar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 
 export function CustomFilterCalendar() {
-  return (
-    <PageCalendar
-      events={events}
-      filterArea={
-        <div className="flex items-center gap-2 rounded-card bg-muted px-3 py-1.5">
-          <Button theme="ghost-muted" size="small">All</Button>
-          <Button theme="primary" size="small">Mine</Button>
-        </div>
-      }
-    />
-  );
+    return (
+        <PageCalendar
+            events={events}
+            filterArea={
+                <div className="flex items-center gap-2 rounded-card bg-muted px-3 py-1.5">
+                    <Button theme="ghost-muted" size="small">
+                        All
+                    </Button>
+                    <Button theme="primary" size="small">
+                        Mine
+                    </Button>
+                </div>
+            }
+        />
+    );
 }
 ```
 
@@ -258,7 +249,7 @@ export function CustomFilterCalendar() {
 
 ```css
 [data-component="day-view-scroller"] {
-  height: calc(100dvh - 200px);
+    height: calc(100dvh - 200px);
 }
 ```
 

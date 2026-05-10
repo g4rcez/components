@@ -40,7 +40,7 @@ const config: Partial<Config> = {
                 calendar: "var(--z-calendar)",
                 floating: "var(--z-floating)",
             },
-        }
+        },
     },
     plugins: [forms({ strategy: "class" }), customPlugins],
 };

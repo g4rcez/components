@@ -20,39 +20,39 @@ import type { Range, Locales } from "@g4rcez/components/calendar";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `date` | `Date` | — | Selected date (single-date mode) |
-| `range` | `Range` | — | Selected range `{ from?: Date; to?: Date }` |
-| `rangeMode` | `boolean` | `false` | Enable range selection mode |
-| `markRange` | `boolean` | `true` | Visually highlight dates inside a range |
-| `markToday` | `boolean` | `true` | Emphasize today's date |
-| `type` | `"date" \| "datetime"` | `"date"` | Show an additional time input when `"datetime"` |
-| `datetimeTitle` | `string` | — | Label for the time input in `"datetime"` mode |
-| `onChange` | `OnChangeDate \| OnChangeRange` | — | Called when a date or range changes |
-| `changeOnlyOnClick` | `boolean` | `false` | Suppress onChange on keyboard navigation; fire only on explicit click |
-| `onChangeYear` | `(date: Date) => void` | — | Called when the year changes |
-| `onChangeMonth` | `(date: Date) => void` | — | Called when the month changes |
-| `disabledDate` | `(date: Date) => boolean` | — | Return `true` to disable a specific date |
-| `RenderOnDay` | `React.FC<{ date: Date }>` | — | Custom renderer overlaid on each day cell |
-| `locale` | `Locales` | — | BCP 47 locale string for month/weekday labels |
-| `labelRange` | `{ from: string; to: string }` | — | Labels shown on the selected range endpoints |
-| `styles` | `CalendarStyles` | — | Fine-grained class overrides per calendar section |
+| Prop                | Type                            | Default  | Description                                                           |
+| ------------------- | ------------------------------- | -------- | --------------------------------------------------------------------- |
+| `date`              | `Date`                          | —        | Selected date (single-date mode)                                      |
+| `range`             | `Range`                         | —        | Selected range `{ from?: Date; to?: Date }`                           |
+| `rangeMode`         | `boolean`                       | `false`  | Enable range selection mode                                           |
+| `markRange`         | `boolean`                       | `true`   | Visually highlight dates inside a range                               |
+| `markToday`         | `boolean`                       | `true`   | Emphasize today's date                                                |
+| `type`              | `"date" \| "datetime"`          | `"date"` | Show an additional time input when `"datetime"`                       |
+| `datetimeTitle`     | `string`                        | —        | Label for the time input in `"datetime"` mode                         |
+| `onChange`          | `OnChangeDate \| OnChangeRange` | —        | Called when a date or range changes                                   |
+| `changeOnlyOnClick` | `boolean`                       | `false`  | Suppress onChange on keyboard navigation; fire only on explicit click |
+| `onChangeYear`      | `(date: Date) => void`          | —        | Called when the year changes                                          |
+| `onChangeMonth`     | `(date: Date) => void`          | —        | Called when the month changes                                         |
+| `disabledDate`      | `(date: Date) => boolean`       | —        | Return `true` to disable a specific date                              |
+| `RenderOnDay`       | `React.FC<{ date: Date }>`      | —        | Custom renderer overlaid on each day cell                             |
+| `locale`            | `Locales`                       | —        | BCP 47 locale string for month/weekday labels                         |
+| `labelRange`        | `{ from: string; to: string }`  | —        | Labels shown on the selected range endpoints                          |
+| `styles`            | `CalendarStyles`                | —        | Fine-grained class overrides per calendar section                     |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-primary` | `--primary` | Selected day background |
-| `text-primary-foreground` | `--primary-foreground` | Selected day text |
-| `hover:bg-primary` | `--primary` | Navigation button hover background |
-| `hover:text-primary-foreground` | `--primary-foreground` | Navigation button hover text |
-| `text-primary` | `--primary` | "Today" button and year/month hover color |
-| `text-disabled` | `--disabled` | Days outside the current month |
-| `border-card-border` | `--card-border` | Range highlight border |
-| `text-foreground` | `--foreground` | Range endpoint label |
+| Token                           | CSS Variable           | Purpose                                   |
+| ------------------------------- | ---------------------- | ----------------------------------------- |
+| `bg-primary`                    | `--primary`            | Selected day background                   |
+| `text-primary-foreground`       | `--primary-foreground` | Selected day text                         |
+| `hover:bg-primary`              | `--primary`            | Navigation button hover background        |
+| `hover:text-primary-foreground` | `--primary-foreground` | Navigation button hover text              |
+| `text-primary`                  | `--primary`            | "Today" button and year/month hover color |
+| `text-disabled`                 | `--disabled`           | Days outside the current month            |
+| `border-card-border`            | `--card-border`        | Range highlight border                    |
+| `text-foreground`               | `--foreground`         | Range endpoint label                      |
 
 ## Examples
 
@@ -62,15 +62,9 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { useState } from "react";
 
 function DatePicker() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  return (
-    <Calendar
-      date={selectedDate}
-      onChange={setSelectedDate}
-      markToday
-    />
-  );
+    return <Calendar date={selectedDate} onChange={setSelectedDate} markToday />;
 }
 ```
 
@@ -81,17 +75,9 @@ import { useState } from "react";
 import { Calendar, type Range } from "@g4rcez/components/calendar";
 
 function DateRangePicker() {
-  const [range, setRange] = useState<Range>({ from: undefined, to: undefined });
+    const [range, setRange] = useState<Range>({ from: undefined, to: undefined });
 
-  return (
-    <Calendar
-      range={range}
-      rangeMode
-      markRange
-      onChange={setRange}
-      labelRange={{ from: "Start Date", to: "End Date" }}
-    />
-  );
+    return <Calendar range={range} rangeMode markRange onChange={setRange} labelRange={{ from: "Start Date", to: "End Date" }} />;
 }
 ```
 
@@ -99,44 +85,40 @@ function DateRangePicker() {
 
 ```tsx
 const isPastDate = (date: Date): boolean => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return date < today;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
 };
 
-<Calendar
-  date={selectedDate}
-  onChange={setSelectedDate}
-  disabledDate={isPastDate}
-/>
+<Calendar date={selectedDate} onChange={setSelectedDate} disabledDate={isPastDate} />;
 ```
 
 ### Booking Calendar with Range Restrictions
 
 ```tsx
 function BookingCalendar() {
-  const [bookingRange, setBookingRange] = useState<Range>({});
+    const [bookingRange, setBookingRange] = useState<Range>({});
 
-  const isDateDisabled = (date: Date): boolean => {
-    const today = new Date();
-    const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 2);
-    const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 90);
-    return date < minDate || date > maxDate;
-  };
+    const isDateDisabled = (date: Date): boolean => {
+        const today = new Date();
+        const minDate = new Date(today);
+        minDate.setDate(today.getDate() + 2);
+        const maxDate = new Date(today);
+        maxDate.setDate(today.getDate() + 90);
+        return date < minDate || date > maxDate;
+    };
 
-  return (
-    <Calendar
-      range={bookingRange}
-      rangeMode
-      markRange
-      markToday
-      onChange={setBookingRange}
-      disabledDate={isDateDisabled}
-      labelRange={{ from: "Check-in", to: "Check-out" }}
-    />
-  );
+    return (
+        <Calendar
+            range={bookingRange}
+            rangeMode
+            markRange
+            markToday
+            onChange={setBookingRange}
+            disabledDate={isDateDisabled}
+            labelRange={{ from: "Check-in", to: "Check-out" }}
+        />
+    );
 }
 ```
 
@@ -146,17 +128,10 @@ function BookingCalendar() {
 import { Calendar, type Locales } from "@g4rcez/components/calendar";
 
 function InternationalCalendar() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [locale, setLocale] = useState<Locales>("en");
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [locale, setLocale] = useState<Locales>("en");
 
-  return (
-    <Calendar
-      date={selectedDate}
-      onChange={setSelectedDate}
-      locale={locale}
-      markToday
-    />
-  );
+    return <Calendar date={selectedDate} onChange={setSelectedDate} locale={locale} markToday />;
 }
 ```
 
@@ -164,20 +139,11 @@ function InternationalCalendar() {
 
 ```tsx
 function EventDot({ date }: { date: Date }) {
-  const hasEvent = myEvents.some(
-    (e) => e.date.toDateString() === date.toDateString()
-  );
-  return hasEvent ? (
-    <span className="absolute bottom-1 left-1/2 -translate-x-1/2 size-1 rounded-full bg-primary" />
-  ) : null;
+    const hasEvent = myEvents.some((e) => e.date.toDateString() === date.toDateString());
+    return hasEvent ? <span className="absolute bottom-1 left-1/2 -translate-x-1/2 size-1 rounded-full bg-primary" /> : null;
 }
 
-<Calendar
-  date={selectedDate}
-  onChange={setSelectedDate}
-  RenderOnDay={EventDot}
-  markToday
-/>
+<Calendar date={selectedDate} onChange={setSelectedDate} RenderOnDay={EventDot} markToday />;
 ```
 
 ## Do

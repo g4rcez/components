@@ -16,8 +16,7 @@ import {
     SwitchProps,
     TextareaProps,
 } from "../components";
-import { path } from "../lib/fns";
-import { Any, SetState } from "../types";
+import { SetState, Walk } from "../types";
 
 /**
  * Validates if a value is valid JSON
@@ -25,16 +24,21 @@ import { Any, SetState } from "../types";
  * @returns True if the value is valid JSON
  * @internal
  */
-const isValidJSON = (value: any): boolean => {
-    if (typeof value !== "string") {
+const isValidJSON = (value: unknown): boolean => {
+    let str: string;
+    if (typeof value === "string") {
+        str = value;
+    } else {
         try {
-            value = JSON.stringify(value);
+            str = JSON.stringify(value);
         } catch {
             return false;
         }
+    } else {
+        str = value;
     }
     try {
-        JSON.parse(value);
+        JSON.parse(str);
         return true;
     } catch {
         return false;
@@ -43,7 +47,7 @@ const isValidJSON = (value: any): boolean => {
 
 const convertPath = (path: string): string[] => path.replace(/\[(\d+)]/g, ".$1").split(".");
 
-const shallowSetPath = (obj: any, keys: string[], value: any): any => {
+const shallowSetPath = (obj: unknown, keys: string[], value: unknown): unknown => {
     if (keys.length === 0) return value;
     const [key, ...rest] = keys;
     const current = obj != null ? obj[key!] : undefined;
@@ -58,7 +62,7 @@ const shallowSetPath = (obj: any, keys: string[], value: any): any => {
     return { ...(obj ?? {}), [key!]: updated };
 };
 
-const setPath = <O extends object>(o: O, path: string | Array<string | number>, value: any): O => {
+const setPath = <O extends object>(o: O, path: string | Array<string | number>, value: unknown): O => {
     const pathArr = Array.isArray(path) ? path.map(String) : convertPath(path);
     return shallowSetPath(o, pathArr, value) as O;
 };
@@ -83,7 +87,7 @@ const getDefaultValue = (inner: z.ZodTypeAny): unknown => {
 const getDefaults = <TSchema extends z.AnyZodObject>(schema: TSchema) =>
     Object.fromEntries(
         Object.entries(schema.shape).map(([key, value]) => {
-            return [key, getDefaultValue(value as any)];
+            return [key, getDefaultValue(value as z.ZodTypeAny)];
         })
     );
 
@@ -101,9 +105,9 @@ const deepMerge = <T extends object, U extends object>(a: T, b: U): T & U => {
                 aValue !== null &&
                 !Array.isArray(aValue)
             ) {
-                result[key] = deepMerge(aValue as object, bValue as object);
+                result[key] = deepMerge(aValue as never, bValue as never);
             } else {
-                result[key] = bValue ? bValue : aValue;
+                result[key] = bValue ? (bValue as never) : (aValue as never);
             }
         }
     }
@@ -128,15 +132,15 @@ const options = {
  * @param form - The HTML form element to convert
  * @returns A JSON object representing the form data
  */
-export const formToJson = (form: HTMLFormElement): any => {
+export const formToJson = (form: HTMLFormElement): Record<string, unknown> => {
     const formData = new FormData(form);
     const urlSearchParams = new URLSearchParams(formData as any);
     return parse(urlSearchParams.toString(), options) as never;
 };
 
-const schemaShapeCache = new WeakMap<z.ZodObject<any>, Map<string, z.ZodTypeAny>>();
+const schemaShapeCache = new WeakMap<z.ZodObject<z.ZodRawShape>, Map<string, z.ZodTypeAny>>();
 
-export const getSchemaShape = <T extends z.ZodObject<any>>(name: string, schema: T) => {
+export const getSchemaShape = <T extends z.ZodObject<z.ZodRawShape>>(name: string, schema: T) => {
     let nameMap = schemaShapeCache.get(schema);
     if (!nameMap) {
         nameMap = new Map();
@@ -144,11 +148,12 @@ export const getSchemaShape = <T extends z.ZodObject<any>>(name: string, schema:
     }
     const cached = nameMap.get(name);
     if (cached !== undefined) return cached;
-    const result = convertPath(name).reduce((acc, el) => {
+    const result = convertPath(name).reduce<z.ZodTypeAny>((acc, el) => {
         if (el === "") return acc;
-        const shape = acc.shape?.[el] || acc;
+        const zodObj = acc as z.ZodObject<z.ZodRawShape>;
+        const shape = zodObj.shape?.[el] || acc;
         return shape._def.typeName === "ZodArray" ? shape.element : shape;
-    }, schema);
+    }, schema as z.ZodTypeAny);
     nameMap.set(name, result);
     return result;
 };
@@ -174,11 +179,11 @@ type CustomOnInvalid = (args: { form: HTMLFormElement; errors: Record<string, st
 
 export type UseOnSubmitArgs<T> = {
     data: T;
-    json: any;
+    json: Record<string, unknown>;
     success: boolean;
     reset: () => void;
     form: HTMLFormElement;
-    setErrors: SetState<Any>;
+    setErrors: SetState<Record<string, unknown> | null>;
     event: React.FormEvent<HTMLFormElement>;
     errors: Array<{ message: string; path: string[] }>;
 };
@@ -211,7 +216,7 @@ const getName = (e: HTMLEntryElements) => e.dataset.target || e.name;
  * @param name - The unique name for the form storage
  * @returns An interceptor object with get, set, and clear methods
  */
-export const createFormStorage = (name: string): Interceptor<any> => {
+export const createFormStorage = (name: string): Interceptor<Record<string, unknown>> => {
     const key = `@use-form/${name}`;
     return {
         get: <T extends object>(): T | object => {
@@ -339,7 +344,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
                 if (e === null) return;
                 ref.current[name] = { element: e, schema: validator };
             },
-        } as any;
+        } as unknown as DatePickerProps;
     };
 
     const select = <Props extends SelectProps | AutocompleteProps>(name: Fields, props: Props = noop): Props => {
@@ -367,7 +372,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
                           schema: validator,
                       })
                     : undefined,
-        } as any;
+        } as unknown as Props;
     };
 
     const checkbox = <Props extends CheckboxProps | SwitchProps>(name: Fields, props: Props = noop): Props => {
@@ -375,7 +380,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
         const onChange: Props["onChange"] = (e) => {
             const value = e.target.checked;
             setState((prev) => setPath(prev ?? {}, name, value));
-            props?.onChange?.(e as any);
+            props?.onChange?.(e);
         };
         return {
             ...props,
@@ -394,7 +399,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
                           schema: validator,
                       })
                     : undefined,
-        } as any;
+        } as unknown as Props;
     };
 
     const textarea = <Props extends TextareaProps>(name: Fields, props: Props = noop): Props => {
@@ -424,7 +429,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
                           element: e,
                           schema: validator,
                       }),
-        } as any;
+        } as unknown as Props;
     };
 
     const multiselect = <Props extends MultiSelectProps>(name: Fields, props: Props = noop): Props => {
@@ -450,7 +455,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
                           element: e,
                           schema: validator,
                       }),
-        } as any;
+        } as unknown as Props;
     };
 
     const input = <Props extends InputProps>(name: Fields, props: Props = noop): Props => {
@@ -481,7 +486,7 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
                           element: e,
                           schema: validator,
                       }),
-        } as any;
+        } as unknown as Props;
     };
 
     useEffect(() => {
@@ -493,8 +498,10 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
             const onBlurField = (e: any) => {
                 const name = getName(e.target);
                 if (!name) return false;
-                const current = e.target;
-                const value = getDataTarget(e.target) || (e.relatedTarget ? getValueByType(e.relatedTarget) : "");
+                const current = target;
+                // reason: FocusEvent.relatedTarget needed for blur; addEventListener signature uses base Event
+                const relatedTarget = (e as FocusEvent).relatedTarget as HTMLEntryElements | null;
+                const value = getDataTarget(target) || (relatedTarget ? getValueByType(relatedTarget) : "");
                 const validation = input.schema.safeParse(value);
                 current.setAttribute("value", value as string);
                 if (validation.success) {
@@ -541,12 +548,12 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
         elements.forEach((field) => {
             if (field.tagName === "SELECT") {
                 const input = field as HTMLSelectElement;
-                json = setPath<any>(json as any, input.name, input.value);
+                json = setPath(json, input.name, input.value);
             }
             if (field.tagName === "INPUT") {
                 const input = field as HTMLInputElement;
                 const value = getDataTarget(input) || (input ? getValueByType(input) : "");
-                json = setPath<any>(json as any, input.dataset.target || input.name, value);
+                json = setPath(json, input.dataset.target || input.name, value);
             }
         });
         const input = deepMerge(json, state);
@@ -619,5 +626,5 @@ export const useForm = <T extends z.ZodObject<any>>(schema: T, formName: string,
     };
 };
 
-export const getJsonForm = <T extends z.ZodObject<any>>(form?: HTMLFormElement | null): z.infer<T> =>
-    !form ? {} : (JSON.parse(form.getAttribute("data-json")!) as any);
+export const getJsonForm = <T extends z.ZodObject<z.ZodRawShape>>(form?: HTMLFormElement | null): z.infer<T> =>
+    !form ? ({} as z.infer<T>) : (JSON.parse(form.getAttribute("data-json")!) as z.infer<T>);

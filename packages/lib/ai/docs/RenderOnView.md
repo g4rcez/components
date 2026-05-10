@@ -19,12 +19,12 @@ import { RenderOnView } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `onIntersection` | `() => void` | - | Callback fired once when the container first enters the viewport |
-| `children` | `React.ReactNode` | - | Content to render when the container is visible |
-| `as` | `React.ElementType` | `"div"` | HTML element to render the container as |
-| `...props` | `React.ComponentPropsWithoutRef<T>` | - | All props valid for the chosen element type |
+| Prop             | Type                                | Default | Description                                                      |
+| ---------------- | ----------------------------------- | ------- | ---------------------------------------------------------------- |
+| `onIntersection` | `() => void`                        | -       | Callback fired once when the container first enters the viewport |
+| `children`       | `React.ReactNode`                   | -       | Content to render when the container is visible                  |
+| `as`             | `React.ElementType`                 | `"div"` | HTML element to render the container as                          |
+| `...props`       | `React.ComponentPropsWithoutRef<T>` | -       | All props valid for the chosen element type                      |
 
 ## Design Tokens
 
@@ -44,13 +44,11 @@ None — `RenderOnView` is a layout/performance primitive that applies no styles
 
 ```tsx
 <div>
-  <div className="h-screen flex items-center justify-center text-foreground">
-    Scroll down to see lazy content
-  </div>
+    <div className="h-screen flex items-center justify-center text-foreground">Scroll down to see lazy content</div>
 
-  <RenderOnView>
-    <ExpensiveChart data={largeDataset} />
-  </RenderOnView>
+    <RenderOnView>
+        <ExpensiveChart data={largeDataset} />
+    </RenderOnView>
 </div>
 ```
 
@@ -58,11 +56,7 @@ None — `RenderOnView` is a layout/performance primitive that applies no styles
 
 ```tsx
 const TrackableSection = ({ sectionName, children }: { sectionName: string; children: React.ReactNode }) => (
-  <RenderOnView
-    onIntersection={() => analytics.track("Section Viewed", { section: sectionName })}
-  >
-    {children}
-  </RenderOnView>
+    <RenderOnView onIntersection={() => analytics.track("Section Viewed", { section: sectionName })}>{children}</RenderOnView>
 );
 ```
 
@@ -70,19 +64,19 @@ const TrackableSection = ({ sectionName, children }: { sectionName: string; chil
 
 ```tsx
 <main>
-  <HeroSection />
+    <HeroSection />
 
-  <RenderOnView>
-    <FeaturesSection />
-  </RenderOnView>
+    <RenderOnView>
+        <FeaturesSection />
+    </RenderOnView>
 
-  <RenderOnView>
-    <TestimonialsSection />
-  </RenderOnView>
+    <RenderOnView>
+        <TestimonialsSection />
+    </RenderOnView>
 
-  <RenderOnView>
-    <ContactForm />
-  </RenderOnView>
+    <RenderOnView>
+        <ContactForm />
+    </RenderOnView>
 </main>
 ```
 
@@ -90,7 +84,7 @@ const TrackableSection = ({ sectionName, children }: { sectionName: string; chil
 
 ```tsx
 <RenderOnView as="section" aria-label="Analytics charts">
-  <RevenueChart />
+    <RevenueChart />
 </RenderOnView>
 ```
 
@@ -103,10 +97,10 @@ import { Spinner } from "@g4rcez/components";
 const HeavyComponent = lazy(() => import("./HeavyComponent"));
 
 <RenderOnView>
-  <Suspense fallback={<Spinner />}>
-    <HeavyComponent />
-  </Suspense>
-</RenderOnView>
+    <Suspense fallback={<Spinner />}>
+        <HeavyComponent />
+    </Suspense>
+</RenderOnView>;
 ```
 
 ## Do

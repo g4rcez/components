@@ -2,54 +2,44 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React, { useState } from "react";
-import {
-  Autocomplete,
-  AutocompleteItemProps,
-  Card,
-} from "../../../../../../lib/src";
+import { Autocomplete, AutocompleteItemProps, Card } from "../../../../../../lib/src";
 
 const options = [
-  { value: "1", label: "JavaScript" },
-  { value: "2", label: "Python" },
-  { value: "3", label: "Java" },
-  { value: "4", label: "C#" },
-  { value: "5", label: "C++" },
-  { value: "6", label: "Ruby" },
-  { value: "7", label: "Go" },
-  { value: "8", label: "Swift" },
-  { value: "9", label: "TypeScript" },
-  { value: "10", label: "PHP" },
-  { value: "11", label: "Kotlin" },
-  { value: "12", label: "Rust" },
-  { value: "13", label: "Scala" },
-  { value: "14", label: "Perl" },
-  { value: "15", label: "Haskell" },
+    { value: "1", label: "JavaScript" },
+    { value: "2", label: "Python" },
+    { value: "3", label: "Java" },
+    { value: "4", label: "C#" },
+    { value: "5", label: "C++" },
+    { value: "6", label: "Ruby" },
+    { value: "7", label: "Go" },
+    { value: "8", label: "Swift" },
+    { value: "9", label: "TypeScript" },
+    { value: "10", label: "PHP" },
+    { value: "11", label: "Kotlin" },
+    { value: "12", label: "Rust" },
+    { value: "13", label: "Scala" },
+    { value: "14", label: "Perl" },
+    { value: "15", label: "Haskell" },
 ];
 
 export default function AutocompleteWithHidden() {
-  const [state, setState] = useState<string[]>([]);
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setState((prev) => {
-      if (prev.includes(e.target.value)) return prev.filter((x) => x !== value);
-      return [...prev, value];
-    });
-  };
+    const [state, setState] = useState<string[]>([]);
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setState((prev) => {
+            if (prev.includes(e.target.value)) return prev.filter((x) => x !== value);
+            return [...prev, value];
+        });
+    };
 
-  const opts = options
-    .slice(0, 4)
-    .map((x) => ({ ...x, hidden: state.includes(x.value) }));
+    const opts = options.slice(0, 4).map((x) => ({ ...x, hidden: state.includes(x.value) }));
 
-  return (
-    <DocsLayout
-      title="Autocomplete"
-      section="form"
-      description="Demonstrates how to use autocomplete with hidden options."
-    >
-      <ComponentDemo
-        title="Autocomplete with Hidden Options"
-        description="Options can be dynamically hidden from the autocomplete list based on custom logic. Try selecting and deselecting to see options appear/disappear."
-        code={`"use client";
+    return (
+        <DocsLayout title="Autocomplete" section="form" description="Demonstrates how to use autocomplete with hidden options.">
+            <ComponentDemo
+                title="Autocomplete with Hidden Options"
+                description="Options can be dynamically hidden from the autocomplete list based on custom logic. Try selecting and deselecting to see options appear/disappear."
+                code={`"use client";
 import { useState } from "react";
 import { Autocomplete, AutocompleteItemProps } from "@g4rcez/components";
 
@@ -90,21 +80,16 @@ function AutocompleteHiddenDemo() {
     </div>
   );
 }`}
-      >
-        <Card title="Test 1">
-          <Autocomplete
-            options={opts}
-            onChange={onChange}
-            placeholder="Test..."
-            title="Choose your language"
-          />
-          <ul className="list-disc list-inside">
-            {state.map((x) => (
-              <li key={x}>Selected: {options.find(opt => opt.value === x)?.label}</li>
-            ))}
-          </ul>
-        </Card>
-      </ComponentDemo>
-    </DocsLayout>
-  );
+            >
+                <Card title="Test 1">
+                    <Autocomplete options={opts} onChange={onChange} placeholder="Test..." title="Choose your language" />
+                    <ul className="list-inside list-disc">
+                        {state.map((x) => (
+                            <li key={x}>Selected: {options.find((opt) => opt.value === x)?.label}</li>
+                        ))}
+                    </ul>
+                </Card>
+            </ComponentDemo>
+        </DocsLayout>
+    );
 }

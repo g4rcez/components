@@ -21,39 +21,39 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 ### Menu
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string \| React.ReactElement` | — | Trigger content |
-| `title` | `string` | — | Required for accessibility when `label` is an element; also used for typeahead |
-| `hover` | `boolean` | `true` | Open on hover in addition to click |
-| `open` | `boolean` | `false` | Initial open state |
-| `asChild` | `boolean` | `false` | Use the `Slot` pattern — merge props onto the child element instead of wrapping in a `<button>` |
-| `restoreFocus` | `boolean` | `false` | Restore focus to the trigger after the menu closes |
-| `floatingClassName` | `string` | — | Additional CSS classes for the floating list container |
-| `FloatingComponent` | `React.ElementType` | `"div"` | Element type for the floating container |
+| Prop                | Type                           | Default | Description                                                                                     |
+| ------------------- | ------------------------------ | ------- | ----------------------------------------------------------------------------------------------- |
+| `label`             | `string \| React.ReactElement` | —       | Trigger content                                                                                 |
+| `title`             | `string`                       | —       | Required for accessibility when `label` is an element; also used for typeahead                  |
+| `hover`             | `boolean`                      | `true`  | Open on hover in addition to click                                                              |
+| `open`              | `boolean`                      | `false` | Initial open state                                                                              |
+| `asChild`           | `boolean`                      | `false` | Use the `Slot` pattern — merge props onto the child element instead of wrapping in a `<button>` |
+| `restoreFocus`      | `boolean`                      | `false` | Restore focus to the trigger after the menu closes                                              |
+| `floatingClassName` | `string`                       | —       | Additional CSS classes for the floating list container                                          |
+| `FloatingComponent` | `React.ElementType`            | `"div"` | Element type for the floating container                                                         |
 
 ### MenuItem
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | — | Item text; used for typeahead matching and the `title` attribute |
-| `children` | `React.ReactNode` | — | Visual content of the item |
-| `disabled` | `boolean` | `false` | Removes item from keyboard navigation and typeahead |
-| `Right` | `React.FC<IconProps>` | — | Icon rendered on the right side |
-| `onClick` | `function` | — | Click handler |
+| Prop       | Type                  | Default | Description                                                      |
+| ---------- | --------------------- | ------- | ---------------------------------------------------------------- |
+| `title`    | `string`              | —       | Item text; used for typeahead matching and the `title` attribute |
+| `children` | `React.ReactNode`     | —       | Visual content of the item                                       |
+| `disabled` | `boolean`             | `false` | Removes item from keyboard navigation and typeahead              |
+| `Right`    | `React.FC<IconProps>` | —       | Icon rendered on the right side                                  |
+| `onClick`  | `function`            | —       | Click handler                                                    |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `bg-floating-background` | `--floating-background` | Menu list surface background |
-| `border-floating-border` | `--floating-border` | Menu list border |
-| `shadow-shadow-floating` | `--shadow-floating` | Menu list drop shadow |
-| `z-tooltip` | `--z-tooltip` | Z-index of the floating list |
-| `bg-primary` | `--primary` | Active/focused item background |
-| `text-primary-foreground` | `--primary-foreground` | Active/focused item text |
+| Token                     | CSS Variable            | Purpose                        |
+| ------------------------- | ----------------------- | ------------------------------ |
+| `bg-floating-background`  | `--floating-background` | Menu list surface background   |
+| `border-floating-border`  | `--floating-border`     | Menu list border               |
+| `shadow-shadow-floating`  | `--shadow-floating`     | Menu list drop shadow          |
+| `z-tooltip`               | `--z-tooltip`           | Z-index of the floating list   |
+| `bg-primary`              | `--primary`             | Active/focused item background |
+| `text-primary-foreground` | `--primary-foreground`  | Active/focused item text       |
 
 ## Examples
 
@@ -63,9 +63,9 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 <Menu label="Actions">
-  <MenuItem title="Edit">Edit Profile</MenuItem>
-  <MenuItem title="Share">Share Profile</MenuItem>
-</Menu>
+    <MenuItem title="Edit">Edit Profile</MenuItem>
+    <MenuItem title="Share">Share Profile</MenuItem>
+</Menu>;
 ```
 
 ### With Icons and Shortcuts
@@ -75,11 +75,13 @@ import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 <Menu label="Settings">
-  <MenuItem title="Edit" Right={PencilSimpleIcon}>Edit</MenuItem>
-  <MenuItem title="Delete" Right={TrashIcon} className="text-danger">
-    Delete
-  </MenuItem>
-</Menu>
+    <MenuItem title="Edit" Right={PencilSimpleIcon}>
+        Edit
+    </MenuItem>
+    <MenuItem title="Delete" Right={TrashIcon} className="text-danger">
+        Delete
+    </MenuItem>
+</Menu>;
 ```
 
 ### Nested Submenus
@@ -88,15 +90,15 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 <Menu label="Actions">
-  <MenuItem title="Edit">Edit Profile</MenuItem>
-  <MenuItem title="Share">Share Profile</MenuItem>
-  <Menu label="More Options" title="More Options">
-    <MenuItem title="Archive">Archive Account</MenuItem>
-    <MenuItem title="Delete" className="text-danger">
-      Delete Account
-    </MenuItem>
-  </Menu>
-</Menu>
+    <MenuItem title="Edit">Edit Profile</MenuItem>
+    <MenuItem title="Share">Share Profile</MenuItem>
+    <Menu label="More Options" title="More Options">
+        <MenuItem title="Archive">Archive Account</MenuItem>
+        <MenuItem title="Delete" className="text-danger">
+            Delete Account
+        </MenuItem>
+    </Menu>
+</Menu>;
 ```
 
 ### Using asChild for Custom Triggers
@@ -105,14 +107,10 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 import { Button } from "@g4rcez/components/button";
 
-<Menu
-  label={<Button theme="primary">Main Action</Button>}
-  asChild
-  title="Main Action"
->
-  <MenuItem title="Save">Save Version</MenuItem>
-  <MenuItem title="Publish">Publish Now</MenuItem>
-</Menu>
+<Menu label={<Button theme="primary">Main Action</Button>} asChild title="Main Action">
+    <MenuItem title="Save">Save Version</MenuItem>
+    <MenuItem title="Publish">Publish Now</MenuItem>
+</Menu>;
 ```
 
 ### Disabled Items
@@ -121,10 +119,14 @@ import { Button } from "@g4rcez/components/button";
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 <Menu label="Options">
-  <MenuItem title="Export">Export Data</MenuItem>
-  <MenuItem title="Import" disabled>Import (unavailable)</MenuItem>
-  <MenuItem title="Delete" className="text-danger">Delete</MenuItem>
-</Menu>
+    <MenuItem title="Export">Export Data</MenuItem>
+    <MenuItem title="Import" disabled>
+        Import (unavailable)
+    </MenuItem>
+    <MenuItem title="Delete" className="text-danger">
+        Delete
+    </MenuItem>
+</Menu>;
 ```
 
 ## Do
@@ -151,12 +153,12 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 ## Data Attributes
 
-| Attribute | Applied to | Description |
-|-----------|-----------|-------------|
-| `data-open` | Menu trigger, MenuItem | Present when the menu/item is open |
-| `data-nested` | Nested menu trigger | Present on triggers that open a submenu |
-| `data-focus-inside` | Menu trigger | Present when focus is inside an open submenu |
-| `data-active` | MenuItem | Present on the currently focused item |
+| Attribute           | Applied to             | Description                                  |
+| ------------------- | ---------------------- | -------------------------------------------- |
+| `data-open`         | Menu trigger, MenuItem | Present when the menu/item is open           |
+| `data-nested`       | Nested menu trigger    | Present on triggers that open a submenu      |
+| `data-focus-inside` | Menu trigger           | Present when focus is inside an open submenu |
+| `data-active`       | MenuItem               | Present on the currently focused item        |
 
 ## Notes
 

@@ -21,60 +21,60 @@ import { Input } from "@g4rcez/components/input";
 
 `Input` extends all standard HTML `<input>` attributes plus `InputField` layout props:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `mask` | `AllMasks \| Array<string \| RegExp> \| ((value: string) => AllMasks)` | - | Input mask pattern |
-| `locale` | `Locales` | - | Locale for currency/number formatting |
-| `currency` | `CurrencyCode` | - | Currency code when using `mask="currency"` |
-| `error` | `string` | - | Error message shown below the field |
-| `title` | `string` | - | Field label |
-| `feedback` | `Label` | - | Success or neutral feedback text below the field |
-| `left` | `Label` | - | Content rendered on the left inside the field border |
-| `right` | `Label` | - | Content rendered on the right inside the field border |
-| `required` | `boolean` | `false` | Marks field as required; hides "Optional" label text |
-| `disabled` | `boolean` | `false` | Disabled state |
-| `loading` | `boolean` | `false` | Loading state |
-| `container` | `string` | - | Extra CSS classes for the outer `fieldset` |
-| `labelClassName` | `string` | - | Extra CSS classes for the label/border wrapper |
-| `next` | `string` | - | `id` of the next field to focus when Enter is pressed with `enterKeyHint="next"` |
-| `hiddenLabel` | `boolean` | `false` | Visually hides the label but keeps it for screen readers |
-| `...props` | `React.InputHTMLAttributes<HTMLInputElement>` | - | All standard input attributes |
+| Prop             | Type                                                                   | Default | Description                                                                      |
+| ---------------- | ---------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------- |
+| `mask`           | `AllMasks \| Array<string \| RegExp> \| ((value: string) => AllMasks)` | -       | Input mask pattern                                                               |
+| `locale`         | `Locales`                                                              | -       | Locale for currency/number formatting                                            |
+| `currency`       | `CurrencyCode`                                                         | -       | Currency code when using `mask="currency"`                                       |
+| `error`          | `string`                                                               | -       | Error message shown below the field                                              |
+| `title`          | `string`                                                               | -       | Field label                                                                      |
+| `feedback`       | `Label`                                                                | -       | Success or neutral feedback text below the field                                 |
+| `left`           | `Label`                                                                | -       | Content rendered on the left inside the field border                             |
+| `right`          | `Label`                                                                | -       | Content rendered on the right inside the field border                            |
+| `required`       | `boolean`                                                              | `false` | Marks field as required; hides "Optional" label text                             |
+| `disabled`       | `boolean`                                                              | `false` | Disabled state                                                                   |
+| `loading`        | `boolean`                                                              | `false` | Loading state                                                                    |
+| `container`      | `string`                                                               | -       | Extra CSS classes for the outer `fieldset`                                       |
+| `labelClassName` | `string`                                                               | -       | Extra CSS classes for the label/border wrapper                                   |
+| `next`           | `string`                                                               | -       | `id` of the next field to focus when Enter is pressed with `enterKeyHint="next"` |
+| `hiddenLabel`    | `boolean`                                                              | `false` | Visually hides the label but keeps it for screen readers                         |
+| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`                          | -       | All standard input attributes                                                    |
 
 ### Mask patterns
 
-| Pattern char | Matches |
-|---|---|
-| `9` | Digit (0–9) |
-| `A` | Letter (a–z, A–Z) |
-| `S` | Alphanumeric |
-| `*` | Any character |
+| Pattern char | Matches           |
+| ------------ | ----------------- |
+| `9`          | Digit (0–9)       |
+| `A`          | Letter (a–z, A–Z) |
+| `S`          | Alphanumeric      |
+| `*`          | Any character     |
 
 ### Special mask strings
 
-| Value | Description |
-|---|---|
-| `"currency"` | Currency formatting (requires `locale` and `currency`) |
-| `"percentage"` | Percentage input with `%` symbol |
-| `"decimal"` | Decimal number formatting |
+| Value          | Description                                            |
+| -------------- | ------------------------------------------------------ |
+| `"currency"`   | Currency formatting (requires `locale` and `currency`) |
+| `"percentage"` | Percentage input with `%` symbol                       |
+| `"decimal"`    | Decimal number formatting                              |
 
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token | CSS Variable | Purpose |
-|-------|-------------|---------|
-| `h-input-height` | `--input-height` | Input height |
-| `px-input-x` | `--input-x` | Horizontal padding |
-| `py-input-y` | `--input-y` | Vertical padding |
-| `mt-input-gap` | `--input-gap` | Gap between field border and error/feedback text |
-| `border-input-border` | `--input-border` | Default border color |
-| `text-field-label` | `--field-label` | Label text color |
-| `text-foreground` | `--foreground` | Input text color |
-| `text-primary` | `--primary` | Focus ring, focus/hover border color |
-| `text-danger` | `--danger` | Error state border, text, and label color |
-| `text-disabled` | `--disabled` | Disabled text and border color |
-| `placeholder-input-mask` | `--input-mask` | Placeholder text color |
-| `placeholder-input-mask-error` | `--input-mask-error` | Placeholder color in error state |
+| Token                          | CSS Variable         | Purpose                                          |
+| ------------------------------ | -------------------- | ------------------------------------------------ |
+| `h-input-height`               | `--input-height`     | Input height                                     |
+| `px-input-x`                   | `--input-x`          | Horizontal padding                               |
+| `py-input-y`                   | `--input-y`          | Vertical padding                                 |
+| `mt-input-gap`                 | `--input-gap`        | Gap between field border and error/feedback text |
+| `border-input-border`          | `--input-border`     | Default border color                             |
+| `text-field-label`             | `--field-label`      | Label text color                                 |
+| `text-foreground`              | `--foreground`       | Input text color                                 |
+| `text-primary`                 | `--primary`          | Focus ring, focus/hover border color             |
+| `text-danger`                  | `--danger`           | Error state border, text, and label color        |
+| `text-disabled`                | `--disabled`         | Disabled text and border color                   |
+| `placeholder-input-mask`       | `--input-mask`       | Placeholder text color                           |
+| `placeholder-input-mask-error` | `--input-mask-error` | Placeholder color in error state                 |
 
 ## Examples
 
@@ -83,47 +83,27 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ```tsx
 import { Input } from "@g4rcez/components/input";
 
-<Input name="name" title="Full name" placeholder="Jane Smith" required />
+<Input name="name" title="Full name" placeholder="Jane Smith" required />;
 ```
 
 ### Phone number mask
 
 ```tsx
-<Input
-  name="phone"
-  title="Phone"
-  mask="(99) 99999-9999"
-  placeholder="(00) 00000-0000"
-/>
+<Input name="phone" title="Phone" mask="(99) 99999-9999" placeholder="(00) 00000-0000" />
 ```
 
 ### Currency input
 
 ```tsx
-<Input
-  name="price"
-  title="Price"
-  mask="currency"
-  currency="USD"
-  locale="en-US"
-  placeholder="0.00"
-/>
+<Input name="price" title="Price" mask="currency" currency="USD" locale="en-US" placeholder="0.00" />
 ```
 
 ### Dynamic mask (CPF / CNPJ)
 
 ```tsx
-const docMask = (value: string) =>
-  value.replace(/\D/g, "").length <= 11
-    ? "999.999.999-99"
-    : "99.999.999/9999-99";
+const docMask = (value: string) => (value.replace(/\D/g, "").length <= 11 ? "999.999.999-99" : "99.999.999/9999-99");
 
-<Input
-  name="document"
-  title="CPF or CNPJ"
-  mask={docMask}
-  placeholder="000.000.000-00"
-/>
+<Input name="document" title="CPF or CNPJ" mask={docMask} placeholder="000.000.000-00" />;
 ```
 
 ### Input with inline left/right slots
@@ -131,31 +111,24 @@ const docMask = (value: string) =>
 ```tsx
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
-<Input
-  name="search"
-  title="Search"
-  left={<MagnifyingGlassIcon size={16} className="text-muted-foreground" />}
-  placeholder="Type to search..."
-/>
+<Input name="search" title="Search" left={<MagnifyingGlassIcon size={16} className="text-muted-foreground" />} placeholder="Type to search..." />;
 ```
 
 ### Input with error and feedback
 
 ```tsx
 const [email, setEmail] = useState("");
-const error = email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  ? "Enter a valid email address"
-  : undefined;
+const error = email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? "Enter a valid email address" : undefined;
 
 <Input
-  name="email"
-  type="email"
-  title="Email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  error={error}
-  feedback={!error && email ? "Looks good!" : undefined}
-/>
+    name="email"
+    type="email"
+    title="Email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    error={error}
+    feedback={!error && email ? "Looks good!" : undefined}
+/>;
 ```
 
 ### Enter-to-advance between fields
@@ -182,19 +155,21 @@ import { Form } from "@g4rcez/components/form";
 import { Button } from "@g4rcez/components/button";
 
 function SignUpForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget);
-    console.log(Object.fromEntries(data));
-  };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const data = new FormData(e.currentTarget);
+        console.log(Object.fromEntries(data));
+    };
 
-  return (
-    <Form onSubmit={handleSubmit} className="flex flex-col gap-base max-w-md">
-      <Input name="name" title="Full name" required />
-      <Input name="email" type="email" title="Email" required />
-      <Input name="phone" title="Phone" mask="(99) 99999-9999" />
-      <Button theme="primary" type="submit">Sign up</Button>
-    </Form>
-  );
+    return (
+        <Form onSubmit={handleSubmit} className="flex flex-col gap-base max-w-md">
+            <Input name="name" title="Full name" required />
+            <Input name="email" type="email" title="Email" required />
+            <Input name="phone" title="Phone" mask="(99) 99999-9999" />
+            <Button theme="primary" type="submit">
+                Sign up
+            </Button>
+        </Form>
+    );
 }
 ```
 

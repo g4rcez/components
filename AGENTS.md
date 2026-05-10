@@ -23,9 +23,9 @@ Run all commands from the root directory unless specified otherwise. Use `pnpm -
 
 ### Lint & Format
 
-- **Format code**: `pnpm --filter @g4rcez/components format` (Runs Prettier)
-- **Lint library**: `npx eslint .` (inside `packages/lib`) or rely on format/build checks.
-- **Lint docs**: `pnpm --filter docs lint` (Runs Next.js linting)
+- **Format code**: `pnpm --filter @g4rcez/components format` (Runs oxfmt)
+- **Lint library**: `pnpm --filter @g4rcez/components lint` (Runs oxlint)
+- **Lint docs**: `pnpm --filter docs lint` (Runs oxlint)
 
 ### Test (Library)
 

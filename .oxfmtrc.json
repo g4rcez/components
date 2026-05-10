@@ -1,0 +1,13 @@
+{
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "printWidth": 150,
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "sortTailwindcss": {
+        "config": "./packages/lib/tailwind.config.ts",
+        "functions": ["cn", "cva", "clsx"]
+    }
+}
