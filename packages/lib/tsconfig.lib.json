@@ -17,7 +17,7 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
         "resolveJsonModule": true,
@@ -28,7 +28,8 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "target": "ESNext",
-        "lib": ["ESNext", "DOM"]
+        "lib": ["ESNext", "DOM"],
+        "types": ["node"]
     },
     "include": ["./src"]
 }
