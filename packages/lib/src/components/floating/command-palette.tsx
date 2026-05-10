@@ -138,6 +138,9 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     const translations = useTranslations();
     const valueRef = useStableRef(text);
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    useEffect(() => {
+        setActiveIndex(null);
+    }, [text]);
     const bindKey = props.bind ?? "Mod + k";
     const root = useFloating<HTMLInputElement>({
         open: props.open,
