@@ -16,9 +16,7 @@ import {
     SwitchProps,
     TextareaProps,
 } from "../components";
-import { SetState } from "../types";
-
-type Obj = Record<string, unknown>;
+import { Any, SetState } from "../types";
 
 /**
  * Validates if a value is valid JSON
@@ -47,7 +45,7 @@ const isValidJSON = (value: unknown): boolean => {
 
 const convertPath = (path: string): string[] => path.replace(/\[(\d+)]/g, ".$1").split(".");
 
-const shallowSetPath = <T extends Obj>(obj: T, keys: string[], value: unknown): unknown => {
+const shallowSetPath = <T extends Any>(obj: T, keys: string[], value: unknown): unknown => {
     if (keys.length === 0) return value;
     const [key, ...rest] = keys;
     const current = obj !== null ? obj[key!] : undefined;
@@ -62,7 +60,7 @@ const shallowSetPath = <T extends Obj>(obj: T, keys: string[], value: unknown): 
     return { ...(obj ?? {}), [key!]: updated };
 };
 
-const setPath = <O extends Obj>(o: O, path: string | Array<string | number>, value: unknown): O => {
+const setPath = <O extends Any>(o: O, path: string | Array<string | number>, value: unknown): O => {
     const pathArr = Array.isArray(path) ? path.map(String) : convertPath(path);
     return shallowSetPath(o, pathArr, value) as O;
 };
@@ -212,10 +210,10 @@ const getName = (e: HTMLEntryElements) => e.dataset.target || e.name;
  * @param name - The unique name for the form storage
  * @returns An interceptor object with get, set, and clear methods
  */
-export const createFormStorage = (name: string): Interceptor<Obj> => {
+export const createFormStorage = (name: string): Interceptor<Any> => {
     const key = `@use-form/${name}`;
     return {
-        get: <T extends Obj>(): T => {
+        get: <T extends Any>(): T => {
             const state = LocalStorage.get(key);
             return isValidJSON(state) ? (state as T) : ({} as T);
         },

@@ -16,6 +16,7 @@ import { multiSort, Sorter } from "./sort";
 import { CellAsideElement, Col, TableOperationProps } from "./table-lib";
 import { useTable } from "./table.context";
 import { TableHeader } from "./thead";
+import { Any } from "../../types";
 
 type VirtuosoCtx = {
     cols: Col<Record<string, unknown>>[];
@@ -27,7 +28,7 @@ type VirtuosoCtx = {
 
 type VirtuosoData = Record<string, unknown>;
 
-export type InnerTableProps<T extends Record<string, unknown>> = HTMLAttributes<HTMLTableElement> &
+export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
     TableOperationProps<T> & {
         rows: T[];
         index: number;
