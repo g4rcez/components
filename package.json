@@ -24,6 +24,7 @@
     "format": "pnpm run -r format",
     "lint": "pnpm run -r --workspace-concurrency=1 lint",
     "prepare": "lefthook install",
-    "start": "pnpm run --filter ./packages/docs start"
+    "start": "pnpm run --filter ./packages/docs start",
+    "components:skills": "node ./scripts/skills.mjs"
   }
 }
