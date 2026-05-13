@@ -10,6 +10,7 @@
   },
   "keywords": [],
   "license": "MIT",
+  "private": true,
   "bin": {
     "components:skills": "./scripts/skills.mjs"
   },
