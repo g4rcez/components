@@ -50,14 +50,14 @@ import { PlusIcon } from "@phosphor-icons/react";
 import { Expand } from "@g4rcez/components/expand";
 
 <Expand trigger={<PlusIcon size={16} />} theme="primary" size="icon" rounded="circle">
-    <div className="w-64 rounded-card border border-border bg-background p-4 shadow-shadow-floating">
+    <div className="w-64 rounded-card-radius border border-border bg-background p-4 shadow-shadow-floating">
         <h3 className="font-bold mb-2 text-foreground">Create New</h3>
         <ul className="space-y-2">
             <li>
-                <button className="w-full rounded-button p-2 text-left text-foreground hover:bg-muted">Project</button>
+                <button className="w-full rounded-button-radius p-2 text-left text-foreground hover:bg-muted">Project</button>
             </li>
             <li>
-                <button className="w-full rounded-button p-2 text-left text-foreground hover:bg-muted">Task</button>
+                <button className="w-full rounded-button-radius p-2 text-left text-foreground hover:bg-muted">Task</button>
             </li>
         </ul>
     </div>
@@ -71,7 +71,7 @@ import { Expand } from "@g4rcez/components/expand";
 import { Button } from "@g4rcez/components/button";
 
 <Expand trigger="Open Menu">
-    <div className="rounded-card border border-border bg-background p-4 shadow-shadow-floating">
+    <div className="rounded-card-radius border border-border bg-background p-4 shadow-shadow-floating">
         <p className="text-foreground">Expanded content goes here.</p>
         <Button theme="primary" className="mt-2">
             Action
@@ -91,7 +91,7 @@ function ControlledExpand() {
 
     return (
         <Expand trigger="Options" open={open} theme="ghost-neutral">
-            <div className="rounded-card border border-border bg-background p-4 shadow-shadow-floating">
+            <div className="rounded-card-radius border border-border bg-background p-4 shadow-shadow-floating">
                 <button onClick={() => setOpen(false)} className="text-sm text-foreground">
                     Close
                 </button>

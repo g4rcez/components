@@ -10,7 +10,12 @@ import { Input, InputTypes } from "../form/input";
 import { OptionProps, Select } from "../form/select";
 import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
 
-type Operators = { value: string; label: string; symbol: string; "data-default"?: string };
+type Operators = {
+    value: string;
+    label: string;
+    symbol: string;
+    "data-default"?: string;
+};
 
 type OperatorTypes = "contains" | "is" | "isNot" | "notContains" | "lessThan" | "greaterThan" | "startsWith" | "endsWith";
 
@@ -49,7 +54,15 @@ export const createFilterFromCol = <T extends Any>(
     const typeOptions = options[type] ?? [];
     const operatorId = (typeOptions.find((x) => x["data-default"])?.value ?? typeOptions[0]?.value) as OperatorTypes;
     const operation = operations[operatorId];
-    return { id: uuid(), operation, label: getLabel(f), name, type, value: "", ...rest };
+    return {
+        id: uuid(),
+        operation,
+        label: getLabel(f),
+        name,
+        type,
+        value: "",
+        ...rest,
+    };
 };
 
 export const useOperators = () => {
@@ -64,16 +77,36 @@ export const useOperators = () => {
                     "data-default": "true",
                 },
                 is: { value: "is", label: translation.tableFilterTypeIs, symbol: "is" },
-                isNot: { value: "isNot", label: translation.tableFilterTypeIsNot, symbol: "!==" },
+                isNot: {
+                    value: "isNot",
+                    label: translation.tableFilterTypeIsNot,
+                    symbol: "!==",
+                },
                 notContains: {
                     value: "notContains",
                     label: translation.tableFilterTypeNotContains,
                     symbol: "notIncludes",
                 },
-                lessThan: { value: "lessThan", label: translation.tableFilterTypeLessThan, symbol: "<=" },
-                greaterThan: { value: "greaterThan", label: translation.tableFilterTypeGreaterThan, symbol: ">=" },
-                startsWith: { value: "startsWith", label: translation.tableFilterTypeStartsWith, symbol: "startsWith" },
-                endsWith: { value: "endsWith", label: translation.tableFilterTypeEndsWith, symbol: "endsWith" },
+                lessThan: {
+                    value: "lessThan",
+                    label: translation.tableFilterTypeLessThan,
+                    symbol: "<=",
+                },
+                greaterThan: {
+                    value: "greaterThan",
+                    label: translation.tableFilterTypeGreaterThan,
+                    symbol: ">=",
+                },
+                startsWith: {
+                    value: "startsWith",
+                    label: translation.tableFilterTypeStartsWith,
+                    symbol: "startsWith",
+                },
+                endsWith: {
+                    value: "endsWith",
+                    label: translation.tableFilterTypeEndsWith,
+                    symbol: "endsWith",
+                },
             }) satisfies Record<string, OptionProps & { symbol: Symbols }>,
         [translation]
     );
@@ -155,11 +188,11 @@ export const Filter = <T extends object>(props: Props<T>) => {
                     </span>
                 }
             >
-                <ul className="mt-4 space-y-2">
+                <ul className="mt-table-filter-list-mt space-y-2">
                     {props.filters.map((filter) => {
                         const options = operators.options[filter.type]!;
                         return (
-                            <li key={`filter-select-${filter.id}`} className="flex flex-nowrap gap-3">
+                            <li key={`filter-select-${filter.id}`} className="flex flex-nowrap gap-table-filter-row-gap">
                                 <Select
                                     options={props.options}
                                     title={translation.tableFilterColumnTitle}
@@ -236,7 +269,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="flex flex-nowrap items-center gap-4 py-2">
+        <div className="flex flex-nowrap items-center gap-table-filter-inline-gap py-table-filter-inline-py">
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}

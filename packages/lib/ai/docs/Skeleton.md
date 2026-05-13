@@ -85,7 +85,7 @@ function TableSkeleton() {
 ```tsx
 function CardSkeleton() {
     return (
-        <div className="rounded-card border border-card-border bg-card-background p-6 space-y-4">
+        <div className="rounded-card-radius border border-card-border bg-card-background p-6 space-y-4">
             <Skeleton className="h-4 w-3/4" />
             <div className="space-y-2">
                 <SkeletonCell />

@@ -128,7 +128,7 @@ function DynamicTabs() {
 
     return (
         <div className="space-y-4">
-            <button onClick={addTab} className="px-3 py-1 bg-primary text-primary-foreground rounded-button">
+            <button onClick={addTab} className="px-3 py-1 bg-primary text-primary-foreground rounded-button-radius">
                 Add Tab
             </button>
 

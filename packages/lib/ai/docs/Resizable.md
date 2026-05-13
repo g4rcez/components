@@ -45,7 +45,7 @@ const CollapsiblePanel = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="border border-border rounded-card">
+        <div className="border border-border rounded-card-radius">
             <button type="button" className="w-full px-4 py-3 text-left font-medium text-foreground" onClick={() => setIsOpen((v) => !v)}>
                 Toggle Details
             </button>
@@ -108,7 +108,7 @@ const TabbedContent = ({ activeTab }: { activeTab: string }) => (
 
 ```tsx
 const AsyncCard = ({ data }: { data: string[] | null }) => (
-    <div className="rounded-card border border-border bg-card-background shadow-shadow-card">
+    <div className="rounded-card-radius border border-border bg-card-background shadow-shadow-card">
         <Resizable>
             {data === null ? (
                 <div className="p-4 text-muted-foreground">Loading…</div>
@@ -131,7 +131,7 @@ const AsyncCard = ({ data }: { data: string[] | null }) => (
 - Use `Resizable` around any content that changes height to provide a polished animation
 - Wrap only the specific dynamic section — not large, stable portions of the page
 - Apply visual styles (`bg-*`, `border-*`, `rounded-*`) to elements inside `Resizable`, not to `Resizable` itself
-- Use design-token classes for all styling (`bg-background`, `border-border`, `rounded-card`)
+- Use design-token classes for all styling (`bg-background`, `border-border`, `rounded-card-radius`)
 
 ## Don't
 

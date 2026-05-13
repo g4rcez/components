@@ -47,8 +47,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `group-focus-within:border-primary`                | `--primary`          | Border highlight on focus                            |
 | `group-hover:border-primary`                       | `--primary`          | Border highlight on hover                            |
 | `h-input-height`                                   | `--input-height`     | Base height token (overridden by `rows` in practice) |
-| `px-input-x`                                       | `--input-x`          | Horizontal padding                                   |
-| `py-input-y`                                       | `--input-y`          | Vertical padding                                     |
+| `px-input-padding-x`                               | `--input-padding-x`  | Horizontal padding                                   |
+| `py-input-padding-y`                               | `--input-padding-y`  | Vertical padding                                     |
 
 ## Examples
 

@@ -9,7 +9,7 @@ import { css } from "../../lib/dom";
 import { Label } from "../../types";
 
 const variants = cva(
-    "shadow-notification relative isolate z-tooltip flex w-full flex-col overflow-hidden rounded-xl border bg-card-background text-sm backdrop-blur-md transition-all duration-300",
+    "shadow-notification text-typography-sm relative isolate z-tooltip flex w-full flex-col overflow-hidden rounded-notification-radius border bg-card-background backdrop-blur-md transition-all duration-300",
     {
         variants: {
             theme: {
@@ -87,18 +87,18 @@ function Notification(props: NotificationItemProps) {
                 className="pointer-events-auto w-full list-none"
             >
                 <Base.Content className={css(className, "shadow-lg")}>
-                    <div className="flex items-start gap-3 p-4">
+                    <div className="flex items-start gap-notification-gap p-notification-p">
                         <div className={css("mt-0.5 shrink-0 opacity-80", loading && "animate-spin")}>
                             <Icon className="size-4" />
                         </div>
 
-                        <div className="flex flex-1 flex-col gap-1 overflow-hidden">
+                        <div className="flex flex-1 flex-col gap-notification-inner-gap overflow-hidden">
                             {props.toast.title ? <Base.Title className="select-text truncate font-semibold leading-tight tracking-tight" /> : null}
                             <Base.Description className="line-clamp-2 select-text text-xs font-medium leading-relaxed opacity-90" />
                         </div>
 
                         {closable && !loading ? (
-                            <Base.Close className="-mr-1 -mt-1 shrink-0 rounded-lg p-1.5 text-foreground/40 transition hover:bg-foreground/10 hover:text-foreground">
+                            <Base.Close className="rounded-notification-close-radius -mr-1 -mt-1 shrink-0 p-notification-close-p text-foreground/40 transition hover:bg-foreground/10 hover:text-foreground">
                                 <XIcon className="size-3.5" />
                             </Base.Close>
                         ) : null}
@@ -122,7 +122,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
     return (
         <Base.Viewport
             ref={ref}
-            className="pointer-events-none fixed left-1/2 top-6 z-[100] flex w-full max-w-[380px] -translate-x-1/2 flex-col gap-3 overflow-visible outline-none"
+            className="pointer-events-none fixed left-1/2 top-6 z-[100] flex w-full max-w-[380px] -translate-x-1/2 flex-col gap-notification-list-gap overflow-visible outline-none"
         >
             <AnimatePresence mode="popLayout" initial={false}>
                 {visibleToasts.map((toast) => (
@@ -136,7 +136,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-foreground/50 shadow-sm backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
+                    className="pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-notification-badge-px py-notification-badge-py text-[10px] font-bold uppercase tracking-wider text-foreground/50 shadow-sm backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
                 >
                     +{hiddenCount} more
                 </motion.div>
@@ -154,7 +154,11 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
 
     const notify = useCallback(
         (description: Label, args?: NotificationOptions) => {
-            const data = { theme: args?.theme, closable: args?.closable, loading: args?.loading };
+            const data = {
+                theme: args?.theme,
+                closable: args?.closable,
+                loading: args?.loading,
+            };
 
             if (args?.id) {
                 const existing = toastManager.toasts.find((t) => t.id === args.id);

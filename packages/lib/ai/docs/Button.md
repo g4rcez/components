@@ -54,7 +54,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `text-button-muted-text`     | `--button-muted-text`     | Text color for muted theme             |
 | `bg-disabled`                | `--disabled`              | Background for disabled/loading states |
 | `border-card-border`         | `--card-border`           | Border color for neutral theme         |
-| `rounded-button`             | `--radius-button`         | Default border radius                  |
+| `rounded-button-radius`      | `--button-radius`         | Default border radius                  |
 | `focus-visible:ring-ring`    | `--ring`                  | Focus ring color                       |
 
 ## Theme Variants

@@ -153,7 +153,7 @@ export function DetailCalendar() {
             events={events}
             defaultView="day"
             renderEvent={(event) => (
-                <div className="flex flex-col gap-1 p-2 bg-muted rounded-card">
+                <div className="flex flex-col gap-1 p-2 bg-muted rounded-card-radius">
                     <span className="font-semibold text-foreground">{event.title}</span>
                     <span className="flex items-center gap-1 text-sm text-muted-foreground">
                         <MapPinIcon size={12} />
@@ -203,7 +203,7 @@ export function CustomFilterCalendar() {
         <PageCalendar
             events={events}
             filterArea={
-                <div className="flex items-center gap-2 rounded-card bg-muted px-3 py-1.5">
+                <div className="flex items-center gap-2 rounded-card-radius bg-muted px-3 py-1.5">
                     <Button theme="ghost-muted" size="small">
                         All
                     </Button>

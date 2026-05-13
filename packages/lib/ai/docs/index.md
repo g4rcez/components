@@ -110,23 +110,23 @@ import "@g4rcez/components/index.css";
 
 ## Form
 
-| Component    | Import                                                            | Description                                           |
-| ------------ | ----------------------------------------------------------------- | ----------------------------------------------------- |
-| Autocomplete | `import { Autocomplete } from "@g4rcez/components/autocomplete"`  | Text input with dropdown suggestions                  |
-| Checkbox     | `import { Checkbox } from "@g4rcez/components/checkbox"`          | Checkbox with indeterminate support                   |
-| DatePicker   | `import { DatePicker } from "@g4rcez/components/date-picker"`     | Date input with calendar popover                      |
-| FileUpload   | `import { FileUpload } from "@g4rcez/components/file-upload"`     | Drag-and-drop file upload with preview                |
-| Form         | `import { Form } from "@g4rcez/components/form"`                  | Form wrapper with Zod validation and field management |
-| FormReset    | `import { FormReset } from "@g4rcez/components"`                  | Reset button wired to the nearest Form context        |
-| Input        | `import { Input } from "@g4rcez/components/input"`                | Text input with mask, prefix/suffix, and error states |
-| InputField   | `import { InputField } from "@g4rcez/components"`                 | Input with label, helper text, and error message      |
-| MultiSelect  | `import { MultiSelect } from "@g4rcez/components"`                | Multi-value select with search and tag display        |
-| Radiobox     | `import { Radiobox } from "@g4rcez/components/radiobox"`          | Styled radio button group                             |
-| Select       | `import { Select } from "@g4rcez/components/select"`              | Dropdown select with search and virtual scroll        |
-| Slider       | `import { Slider } from "@g4rcez/components"`                     | Range slider input                                    |
-| Switch       | `import { Switch } from "@g4rcez/components/switch"`              | Toggle switch for boolean values                      |
-| TaskList     | `import { TaskList } from "@g4rcez/components/task-list"`         | Checklist with completion tracking                    |
-| Textarea     | `import { Textarea } from "@g4rcez/components"`                   | Multi-line text input with auto-resize                |
+| Component    | Import                                                           | Description                                           |
+| ------------ | ---------------------------------------------------------------- | ----------------------------------------------------- |
+| Autocomplete | `import { Autocomplete } from "@g4rcez/components/autocomplete"` | Text input with dropdown suggestions                  |
+| Checkbox     | `import { Checkbox } from "@g4rcez/components/checkbox"`         | Checkbox with indeterminate support                   |
+| DatePicker   | `import { DatePicker } from "@g4rcez/components/date-picker"`    | Date input with calendar popover                      |
+| FileUpload   | `import { FileUpload } from "@g4rcez/components/file-upload"`    | Drag-and-drop file upload with preview                |
+| Form         | `import { Form } from "@g4rcez/components/form"`                 | Form wrapper with Zod validation and field management |
+| FormReset    | `import { FormReset } from "@g4rcez/components"`                 | Reset button wired to the nearest Form context        |
+| Input        | `import { Input } from "@g4rcez/components/input"`               | Text input with mask, prefix/suffix, and error states |
+| InputField   | `import { InputField } from "@g4rcez/components"`                | Input with label, helper text, and error message      |
+| MultiSelect  | `import { MultiSelect } from "@g4rcez/components"`               | Multi-value select with search and tag display        |
+| Radiobox     | `import { Radiobox } from "@g4rcez/components/radiobox"`         | Styled radio button group                             |
+| Select       | `import { Select } from "@g4rcez/components/select"`             | Dropdown select with search and virtual scroll        |
+| Slider       | `import { Slider } from "@g4rcez/components"`                    | Range slider input                                    |
+| Switch       | `import { Switch } from "@g4rcez/components/switch"`             | Toggle switch for boolean values                      |
+| TaskList     | `import { TaskList } from "@g4rcez/components/task-list"`        | Checklist with completion tracking                    |
+| Textarea     | `import { Textarea } from "@g4rcez/components"`                  | Multi-line text input with auto-resize                |
 
 ## Floating
 

@@ -70,7 +70,7 @@ const StyledButton = ({ asChild, children, ...props }: ButtonProps) => {
   const Component = asChild ? Slot : "button";
   return (
     <Component
-      className="inline-flex items-center rounded-button bg-button-primary-bg text-button-primary-text px-4 py-2 font-medium"
+      className="inline-flex items-center rounded-button-radius bg-button-primary-bg text-button-primary-text px-4 py-2 font-medium"
       {...props}
     >
       {children}
@@ -98,7 +98,7 @@ const IconButton = ({ asChild, children, ...props }: { asChild?: boolean; childr
   const Component = asChild ? Slot : "button";
   return (
     <Component
-      className="inline-flex items-center gap-1.5 rounded-button bg-button-success-bg text-button-success-text px-4 py-2"
+      className="inline-flex items-center gap-1.5 rounded-button-radius bg-button-success-bg text-button-success-text px-4 py-2"
       {...props}
     >
       <Slottable>{children}</Slottable>
@@ -143,7 +143,7 @@ Both handlers are called when both the `Slot` and the child define the same even
 - Use `Slot` when building reusable components that should support any element type via `asChild`
 - Use `Slottable` when your component wraps children with internal structure (icons, labels)
 - Pass accessibility attributes (`aria-*`, `role`) to `Slot` — they will be merged into the child
-- Use design-token classes in the `className` passed to `Slot` (`rounded-button`, `bg-button-primary-bg`)
+- Use design-token classes in the `className` passed to `Slot` (`rounded-button-radius`, `bg-button-primary-bg`)
 
 ## Don't
 

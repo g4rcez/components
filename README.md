@@ -4,7 +4,17 @@ A comprehensive React component library built with TypeScript, Tailwind CSS, and
 
 ## Agent skill
 
-This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. Tools that follow the Anthropic Agent Skills convention will load it automatically; agents without auto-loading should `Read` that file before writing any UI in a codebase that depends on this package.
+This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. It covers installation, Tailwind setup, theming APIs, design token conventions, and the full component catalog.
+
+**Install with the [skills CLI](https://github.com/vercel-labs/skills):**
+
+```bash
+npx skills add @g4rcez/components
+```
+
+This installs the skill into your agent's skill directory (Claude Code, Cursor, Copilot, and others). The skill is then loaded automatically when the agent works in a project that depends on this package.
+
+**Manual fallback:** tools that follow the Anthropic Agent Skills convention will load the skill automatically from `package.json`. Agents without auto-loading should `Read @g4rcez/components/ai/SKILL.md` before writing any UI in a codebase that depends on this package.
 
 ## 📋 Table of Contents
 

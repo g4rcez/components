@@ -45,14 +45,14 @@ import { InputField } from "@g4rcez/components";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token                 | CSS Variable     | Purpose                                            |
-| --------------------- | ---------------- | -------------------------------------------------- |
-| `border-input-border` | `--input-border` | Default field border color                         |
-| `text-field-label`    | `--field-label`  | Label text color                                   |
-| `text-primary`        | `--primary`      | Label and border color on focus/hover              |
-| `text-danger`         | `--danger`       | Label, border, and error text color in error state |
-| `text-disabled`       | `--disabled`     | Label and border color when disabled               |
-| `mt-input-gap`        | `--input-gap`    | Gap between border and error/feedback text         |
+| Token                   | CSS Variable         | Purpose                                            |
+| ----------------------- | -------------------- | -------------------------------------------------- |
+| `border-input-border`   | `--input-border`     | Default field border color                         |
+| `text-input-label-text` | `--input-label-text` | Label text color                                   |
+| `text-primary`          | `--primary`          | Label and border color on focus/hover              |
+| `text-danger`           | `--danger`           | Label, border, and error text color in error state |
+| `text-disabled`         | `--disabled`         | Label and border color when disabled               |
+| `mt-input-gap`          | `--input-gap`        | Gap between border and error/feedback text         |
 
 ## Examples
 
@@ -62,7 +62,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { InputField } from "@g4rcez/components";
 
 <InputField title="Username" name="username" required>
-    <input id="username" name="username" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+    <input id="username" name="username" className="h-input-height w-full flex-1 bg-transparent px-input-padding-x text-foreground outline-none" />
 </InputField>;
 ```
 
@@ -84,7 +84,7 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
         id="api_key"
         name="api_key"
         type="password"
-        className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
+        className="h-input-height w-full flex-1 bg-transparent px-input-padding-x text-foreground outline-none"
     />
 </InputField>;
 ```
@@ -96,14 +96,24 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
     /* Required — "Optional" badge is hidden */
 }
 <InputField title="Email" name="email" required>
-    <input id="email" name="email" type="email" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+    <input
+        id="email"
+        name="email"
+        type="email"
+        className="h-input-height w-full flex-1 bg-transparent px-input-padding-x text-foreground outline-none"
+    />
 </InputField>;
 
 {
     /* Optional — shows "Optional" badge */
 }
 <InputField title="Website" name="website">
-    <input id="website" name="website" type="url" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+    <input
+        id="website"
+        name="website"
+        type="url"
+        className="h-input-height w-full flex-1 bg-transparent px-input-padding-x text-foreground outline-none"
+    />
 </InputField>;
 ```
 
@@ -115,7 +125,7 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
         id="search"
         name="search"
         placeholder="Search..."
-        className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none"
+        className="h-input-height w-full flex-1 bg-transparent px-input-padding-x text-foreground outline-none"
     />
 </InputField>
 ```
@@ -130,7 +140,7 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
     error={!isAvailable ? "Slug is already taken." : undefined}
     required
 >
-    <input id="slug" name="slug" className="h-input-height w-full flex-1 bg-transparent px-input-x text-foreground outline-none" />
+    <input id="slug" name="slug" className="h-input-height w-full flex-1 bg-transparent px-input-padding-x text-foreground outline-none" />
 </InputField>
 ```
 

@@ -37,7 +37,7 @@ const Thumb = (props: { tooltip: boolean }) => {
             ref={ref}
             as={Base.Thumb}
             enabled={props.tooltip}
-            className="focus-within::scale-105 block size-5 cursor-grab rounded-full border-2 border-input-border bg-input-switch shadow-shadow-floating focus-within:border-primary focus-within:outline active:cursor-grabbing"
+            className="focus-within::scale-105 block size-slider-thumb-size cursor-grab rounded-full border-2 border-input-border bg-input-switch shadow-shadow-floating focus-within:border-primary focus-within:outline active:cursor-grabbing"
         >
             {float}
         </Tooltip>
@@ -52,8 +52,8 @@ export const Slider = (props: SliderProps) => {
 
     return (
         <Base.Root {...restProps} value={value} locale={locale} defaultValue={defaultValue}>
-            <Base.Control className={css("relative flex h-5 w-full touch-none select-none items-center", className)}>
-                <Base.Track className="relative h-2 grow rounded-full bg-background">
+            <Base.Control className={css("relative flex h-slider-control-h w-full touch-none select-none items-center", className)}>
+                <Base.Track className="relative h-slider-track-h grow rounded-full bg-background">
                     <Base.Indicator className="absolute h-full rounded-full bg-primary" />
                 </Base.Track>
                 {Array.isArray(array) ? array.map((_, i) => <Thumb tooltip={tooltip ?? false} key={`${id.current}-${i}`} />) : null}

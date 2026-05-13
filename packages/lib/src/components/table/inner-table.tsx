@@ -91,7 +91,7 @@ const TRow = React.forwardRef<HTMLTableRowElement, TRowProps>(({ context, item, 
             {...(innerProps as React.HTMLAttributes<HTMLTableRowElement>)}
             role="row"
             ref={ref}
-            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-1 pb-4 md:table-row ${[className, contextProps?.className].filter(Boolean).join(" ")}`}
+            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-table-row-gap pb-table-row-pb md:table-row ${[className, contextProps?.className].filter(Boolean).join(" ")}`}
         />
     );
 });
@@ -103,8 +103,8 @@ const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, 
         return (
             <tfoot {...props} ref={ref} className="bg-card-background">
                 <tr role="row" className="bg-card-background">
-                    <td colSpan={999} className="h-14 bg-card-background px-2">
-                        <span className="block h-2 w-full animate-pulse rounded bg-foreground opacity-60" />
+                    <td colSpan={999} className="h-table-loading-h bg-card-background px-table-cell-px">
+                        <span className="rounded-table-loading-bar-radius block h-table-loading-bar-h w-full animate-pulse bg-foreground opacity-60" />
                     </td>
                 </tr>
             </tfoot>
@@ -124,7 +124,7 @@ const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const EmptyContent = (props: { loading?: boolean }) => (
-    <div className="flex h-48 w-full items-center justify-center px-2">{props.loading ? SkeletonCell : <Empty />}</div>
+    <div className="flex h-table-empty-h w-full items-center justify-center px-table-cell-px">{props.loading ? SkeletonCell : <Empty />}</div>
 );
 
 const EmptyCell = () => <Fragment />;
@@ -189,7 +189,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
     };
 
     return (
-        <div className="group relative flex w-full flex-col whitespace-nowrap rounded-lg bg-table-background">
+        <div className="group relative flex w-full flex-col whitespace-nowrap rounded-table-radius bg-table-background">
             <TableVirtuoso
                 components={components}
                 context={context as VirtuosoCtx}

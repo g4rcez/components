@@ -45,7 +45,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | --------------------- | -------------------- | ------------------------------------------- |
 | `border-card-border`  | `--card-border`      | Row separator border and overlay border     |
 | `bg-card-background`  | `--card-background`  | Overlay card background                     |
-| `rounded-card`        | `--radius-card`      | Overlay card border radius                  |
+| `rounded-card-radius` | `--card-radius`      | Overlay card border radius                  |
 | `shadow-shadow-card`  | `--shadow-card`      | Overlay card drop shadow                    |
 | `text-foreground`     | `--foreground`       | Default row and overlay text color          |
 | `text-secondary`      | `--secondary`        | Description text color in rows and overlay  |

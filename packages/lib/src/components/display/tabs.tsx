@@ -109,7 +109,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                 className={props.className}
                 container={css("pt-0 max-w-full w-full min-w-0", props.container)}
                 header={
-                    <header className="relative mb-2 overflow-x-auto">
+                    <header className="relative mb-tabs-header-mb overflow-x-auto">
                         <div className="absolute bottom-0 h-[1px] w-full bg-card-border" />
                         <nav className="min-w-0">
                             <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
@@ -138,7 +138,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                                 tabIndex={current ? 0 : -1}
                                                 aria-controls={`${inner.id}-panel`}
                                                 onClick={inner.disabled ? undefined : onClick}
-                                                className="block w-full whitespace-nowrap px-10 py-4 disabled:cursor-not-allowed"
+                                                className="block w-full whitespace-nowrap px-tabs-item-px py-tabs-item-py disabled:cursor-not-allowed"
                                             >
                                                 {inner.title as React.ReactNode}
                                             </Polymorph>

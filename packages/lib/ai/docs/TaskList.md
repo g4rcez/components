@@ -47,7 +47,7 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 
 export default function OnboardingChecklist() {
     return (
-        <TaskList className="flex flex-col gap-sm border border-border rounded-card p-4">
+        <TaskList className="flex flex-col gap-sm border border-border rounded-card-radius p-4">
             <Checkbox asTask>Complete initial setup</Checkbox>
             <Checkbox asTask>Upload profile picture</Checkbox>
             <Checkbox asTask>Verify email address</Checkbox>
@@ -90,7 +90,7 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 
 export default function ProjectSubtasks() {
     return (
-        <TaskList className="flex flex-col gap-sm rounded-card border border-border p-4">
+        <TaskList className="flex flex-col gap-sm rounded-card-radius border border-border p-4">
             <legend className="px-1 text-sm font-medium text-foreground">Phase 1 — Design</legend>
             <Checkbox asTask>Create wireframes</Checkbox>
             <Checkbox asTask>Review with stakeholders</Checkbox>
@@ -105,7 +105,7 @@ export default function ProjectSubtasks() {
 - Use `asTask` on every `Checkbox` inside `TaskList` so they are counted for the completion animation.
 - Group closely related tasks — the animation is most meaningful when all items belong to one milestone.
 - Provide adequate vertical spacing between items (`gap-sm`, `gap-base`) for readability.
-- Use design-token classes for wrappers (`bg-background`, `border-border`, `rounded-card`).
+- Use design-token classes for wrappers (`bg-background`, `border-border`, `rounded-card-radius`).
 
 ## Don't
 

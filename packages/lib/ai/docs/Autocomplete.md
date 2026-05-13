@@ -57,8 +57,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | Token                          | CSS Variable            | Purpose                                   |
 | ------------------------------ | ----------------------- | ----------------------------------------- |
 | `h-input-height`               | `--input-height`        | Input height                              |
-| `px-input-x`                   | `--input-x`             | Horizontal input padding                  |
-| `py-input-y`                   | `--input-y`             | Vertical input padding                    |
+| `px-input-padding-x`           | `--input-padding-x`     | Horizontal input padding                  |
+| `py-input-padding-y`           | `--input-padding-y`     | Vertical input padding                    |
 | `border-input-border`          | `--input-border`        | Default field border color                |
 | `placeholder-input-mask`       | `--input-mask`          | Placeholder text color                    |
 | `placeholder-input-mask-error` | `--input-mask-error`    | Placeholder color in error state          |

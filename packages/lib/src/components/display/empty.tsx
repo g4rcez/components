@@ -8,7 +8,7 @@ export const Empty = (props: EmptyProps) => {
     const Icon = props.Icon ?? FileIcon;
     const translate = useTranslations();
     return (
-        <div className="flex w-full flex-col items-center justify-center gap-4 px-8 py-12">
+        <div className="flex w-full flex-col items-center justify-center gap-empty-gap px-empty-px py-empty-py">
             <Icon size={64} className="text-disabled" />
             <p className="text-disabled">{props.message ?? translate.emptyDataMessage}</p>
         </div>

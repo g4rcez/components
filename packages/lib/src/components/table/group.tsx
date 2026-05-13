@@ -64,7 +64,14 @@ export const Group = <T extends object>(props: Props<T>) => {
         props.setGroups(
             keys(groupBy).map((groupName, index): GroupItem<T> => {
                 const rows = groupBy[groupName];
-                return { ...col, groupId: uuid(), groupKey: key, index, rows, groupName: groupName as string };
+                return {
+                    ...col,
+                    groupId: uuid(),
+                    groupKey: key,
+                    index,
+                    rows,
+                    groupName: groupName as string,
+                };
             })
         );
     };
@@ -93,7 +100,7 @@ export const Group = <T extends object>(props: Props<T>) => {
                 {props.groups.length > 0 ? (
                     <section className="my-4">
                         <header>
-                            <h2 className="text-xl font-medium">Order groups</h2>
+                            <h2 className="text-typography-xl font-medium">Order groups</h2>
                         </header>
                         <LayoutGroup>
                             <Reorder.Group

@@ -52,7 +52,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `text-tag-muted-text`     | `--tag-muted-text`     | Text color for muted theme             |
 | `bg-disabled`             | `--disabled`           | Background for disabled/loading states |
 | `border-card-border`      | `--card-border`        | Border color for neutral theme         |
-| `rounded-pill`            | `--radius-pill`        | Pill border radius applied to all tags |
+| `rounded-tag-radius`      | `--tag-radius`         | Tag border radius                      |
 | `bg-primary`              | `--primary`            | Dot color for primary indicator        |
 | `bg-secondary`            | `--secondary`          | Dot color for secondary indicator      |
 | `bg-info`                 | `--info`               | Dot color for info indicator           |

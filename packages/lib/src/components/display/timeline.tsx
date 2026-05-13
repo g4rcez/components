@@ -3,8 +3,11 @@ import { css } from "../../lib/dom";
 import { Polymorph, PolymorphicProps } from "../core/polymorph";
 
 export const TimelineItem = (props: PropsWithChildren) => (
-    <li data-component="timeline-item" className="relative pb-12" role="listitem">
-        <span aria-hidden="true" className="absolute left-6 top-8 -ml-px h-full w-0.5 bg-card-border" />
+    <li data-component="timeline-item" className="relative pb-timeline-item-pb" role="listitem">
+        <span
+            aria-hidden="true"
+            className="absolute left-timeline-connector-left top-timeline-connector-top -ml-px h-full w-timeline-connector-w bg-card-border"
+        />
         <div className="relative flex items-stretch justify-start space-x-3">{props.children}</div>
     </li>
 );
@@ -13,7 +16,10 @@ TimelineItem.Icon = function TimelineIcon(props: PropsWithChildren<ComponentProp
     return (
         <header
             {...props}
-            className={css("flex size-12 items-center justify-center rounded-full bg-primary p-2 text-warn-foreground", props.className)}
+            className={css(
+                "flex size-timeline-icon-size items-center justify-center rounded-full bg-primary p-timeline-icon-p text-warn-foreground",
+                props.className
+            )}
         >
             {props.children}
         </header>
@@ -30,7 +36,7 @@ TimelineItem.Body = function TimelineItemBody<T extends ElementType = "section">
 
 TimelineItem.Right = function TimelineItemRight<T extends ElementType = "button">(props: PolymorphicProps<object, T>) {
     return (
-        <footer className="flex gap-6 self-stretch px-4 align-baseline">
+        <footer className="flex gap-timeline-right-gap self-stretch px-timeline-right-px align-baseline">
             <Polymorph {...props} type="button" />
         </footer>
     );

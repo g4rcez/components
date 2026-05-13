@@ -93,7 +93,7 @@ function Wizard() {
                 <Step step={4} currentStep={currentStep} title="Review" onClick={() => setCurrentStep(4)} />
             </Steps>
 
-            <div className="p-6 rounded-card border border-card-border bg-card-background">
+            <div className="p-6 rounded-card-radius border border-card-border bg-card-background">
                 {currentStep === 1 && <AccountForm />}
                 {currentStep === 2 && <ProfileForm />}
                 {currentStep === 3 && <PaymentForm />}

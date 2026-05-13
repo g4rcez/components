@@ -6,13 +6,27 @@ import { Label } from "../../types";
 
 const PROGRESS_BAR_DURATION = 0.3;
 
-const transition: Transition = { duration: PROGRESS_BAR_DURATION, type: "tween", ease: "easeInOut" };
+const transition: Transition = {
+    duration: PROGRESS_BAR_DURATION,
+    type: "tween",
+    ease: "easeInOut",
+};
 
-type StepContextValue = { currentStep: number; previousStep: number; progressBarDuration: number; steps: number };
+type StepContextValue = {
+    currentStep: number;
+    previousStep: number;
+    progressBarDuration: number;
+    steps: number;
+};
 
 const StepContext = createContext<StepContextValue | null>(null);
 
-const iconTransitions: Transition = { delay: 0.2, duration: 0.3, type: "tween", ease: "easeOut" };
+const iconTransitions: Transition = {
+    delay: 0.2,
+    duration: 0.3,
+    type: "tween",
+    ease: "easeOut",
+};
 
 const states = {
     initial: { pathLength: 0, opacity: 0 },
@@ -54,7 +68,12 @@ const variants = {
     active: { scale: 1, transition: { delay: 0, duration: 0.3 } },
 };
 
-const transitions: Transition = { duration: 0.6, delay: 0.2, type: "tween", ease: "circOut" };
+const transitions: Transition = {
+    duration: 0.6,
+    delay: 0.2,
+    type: "tween",
+    ease: "circOut",
+};
 
 const getCurrentStatus = (step: StepProps["step"], currentStep: StepProps["currentStep"], status: StepProps["status"]): StepStatus => {
     if (status === "error") return "error";
@@ -124,7 +143,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                     initial={false}
                     animate={innerStatus}
                     transition={transition}
-                    className="relative flex aspect-square size-10 items-center justify-center rounded-full font-medium"
+                    className="relative flex aspect-square size-step-size items-center justify-center rounded-full font-medium"
                     variants={{
                         error: {
                             color: parser("var(--danger-foreground)"),
@@ -153,9 +172,9 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                 >
                     <div className="flex items-center justify-center">
                         {innerStatus === "complete" ? (
-                            <CheckIcon className="size-6 text-primary-foreground" />
+                            <CheckIcon className="size-step-icon-size text-primary-foreground" />
                         ) : innerStatus === "error" ? (
-                            <ErrorIcon className="size-6 text-danger-foreground" />
+                            <ErrorIcon className="size-step-icon-size text-danger-foreground" />
                         ) : (
                             <Fragment>
                                 <span>{step}</span>
@@ -163,7 +182,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                         )}
                     </div>
                 </motion.div>
-                <header className="flex flex-col items-start justify-start px-2">
+                <header className="flex flex-col items-start justify-start px-step-label-px">
                     <h3 className={`flex h-full items-center whitespace-nowrap font-normal ${titleClassName}`}>{title}</h3>
                 </header>
             </motion.button>
@@ -192,7 +211,7 @@ export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: num
 
     return (
         <StepContext.Provider value={contextValue}>
-            <div className="relative flex w-full flex-col items-start justify-center gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative flex w-full flex-col items-start justify-center gap-step-gap lg:flex-row lg:items-center lg:justify-between">
                 {props.children}
             </div>
         </StepContext.Provider>

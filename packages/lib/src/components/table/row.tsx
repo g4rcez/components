@@ -70,7 +70,7 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className="block text-sm font-bold leading-tight md:hidden">{col.thead}</span>
+                        <span className="text-typography-sm block font-bold leading-tight md:hidden">{col.thead}</span>
                         <span className="relative">
                             {loading ? (
                                 SkeletonCell

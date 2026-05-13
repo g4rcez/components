@@ -64,11 +64,11 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | Token                          | CSS Variable         | Purpose                                          |
 | ------------------------------ | -------------------- | ------------------------------------------------ |
 | `h-input-height`               | `--input-height`     | Input height                                     |
-| `px-input-x`                   | `--input-x`          | Horizontal padding                               |
-| `py-input-y`                   | `--input-y`          | Vertical padding                                 |
+| `px-input-padding-x`           | `--input-padding-x`  | Horizontal padding                               |
+| `py-input-padding-y`           | `--input-padding-y`  | Vertical padding                                 |
 | `mt-input-gap`                 | `--input-gap`        | Gap between field border and error/feedback text |
 | `border-input-border`          | `--input-border`     | Default border color                             |
-| `text-field-label`             | `--field-label`      | Label text color                                 |
+| `text-input-label-text`        | `--input-label-text` | Label text color                                 |
 | `text-foreground`              | `--foreground`       | Input text color                                 |
 | `text-primary`                 | `--primary`          | Focus ring, focus/hover border color             |
 | `text-danger`                  | `--danger`           | Error state border, text, and label color        |

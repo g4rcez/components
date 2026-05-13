@@ -59,8 +59,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `text-disabled`                | `--disabled`            | Empty-state text color                 |
 | `focus:ring-primary`           | `--primary`             | Keyboard focus ring                    |
 | `h-input-height`               | `--input-height`        | Trigger element height (2.5 rem)       |
-| `px-input-x`                   | `--input-x`             | Horizontal padding                     |
-| `py-input-y`                   | `--input-y`             | Vertical padding                       |
+| `px-input-padding-x`           | `--input-padding-x`     | Horizontal padding                     |
+| `py-input-padding-y`           | `--input-padding-y`     | Vertical padding                       |
 
 ## Examples
 

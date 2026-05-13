@@ -6,11 +6,11 @@ import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const variants = {
     size: {
-        icon: "p-1",
-        big: "h-12 px-6 py-4",
-        default: "h-8 px-4 py-2",
-        tiny: "h-5 p-1 px-2 text-xs",
-        small: "h-6 p-2 px-3 text-sm",
+        icon: "p-tag-padding-icon",
+        big: "h-tag-height-big px-tag-padding-x-big py-tag-padding-y-big",
+        default: "h-tag-height px-tag-padding-x py-tag-padding-y",
+        tiny: "h-tag-height-tiny px-tag-padding-x-tiny py-tag-padding-y-tiny text-typography-xs",
+        small: "h-tag-height-small px-tag-padding-x-small py-tag-padding-y-small text-typography-sm",
     },
     theme: {
         custom: "",
@@ -31,7 +31,7 @@ type Variants = CvaVariants<typeof variants>;
 
 type Themes = NonNullable<Variants["theme"]>;
 
-const indicatorVariant = cva("aspect-square size-2 rounded-full border-0", {
+const indicatorVariant = cva("aspect-square size-tag-indicator-size rounded-full border-0", {
     variants: {
         theme: {
             info: "bg-info",
@@ -47,7 +47,7 @@ const indicatorVariant = cva("aspect-square size-2 rounded-full border-0", {
 });
 
 const tagVariants = cva(
-    "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-pill border-0 align-middle transition-all duration-300 ease-linear",
+    "inline-flex items-center justify-center gap-tag-gap whitespace-nowrap rounded-tag-radius border-0 align-middle transition-all duration-300 ease-linear",
     {
         variants,
         defaultVariants: { theme: "primary", size: "default" },
@@ -71,7 +71,14 @@ export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => Reac
             as={props.as ?? "span"}
             className={css(tagVariants({ size, theme: loading ? "loading" : theme }), className)}
         >
-            {indicator ? <span aria-hidden="true" className={indicatorVariant({ theme: indicator === true ? theme : indicator })} /> : null}
+            {indicator ? (
+                <span
+                    aria-hidden="true"
+                    className={indicatorVariant({
+                        theme: indicator === true ? theme : indicator,
+                    })}
+                />
+            ) : null}
             {icon}
             {props.children}
         </Polymorph>

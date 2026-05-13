@@ -5,9 +5,9 @@ import { Sort } from "./sort";
 import { TableOperationProps, valueFromType } from "./table-lib";
 
 export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
-    <header className="mb-1 min-w-full">
-        <div className="flex min-w-full flex-wrap items-center justify-between gap-x-4 gap-y-1">
-            <div className="items-centeend flex w-fit gap-4 whitespace-nowrap py-2">
+    <header className="mb-table-metadata-mb min-w-full">
+        <div className="flex min-w-full flex-wrap items-center justify-between gap-x-table-metadata-gap-x gap-y-table-metadata-gap-y">
+            <div className="items-centeend flex w-fit gap-table-ops-gap whitespace-nowrap py-table-ops-py">
                 <span>
                     <Filter cols={props.cols} options={props.options} filters={props.filters} set={props.setFilters} />
                 </span>
@@ -18,11 +18,17 @@ export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
                     <Group rows={props.rows} groups={props.groups} setGroups={props.setGroups} options={props.options} cols={props.cols} />
                 </span>
             </div>
-            <ul className="flex w-full flex-1 flex-grow flex-row flex-wrap items-center gap-4 md:justify-end">
+            <ul className="flex w-full flex-1 flex-grow flex-row flex-wrap items-center gap-table-filter-gap md:justify-end">
                 {props.filters.map((x) => (
-                    <li key={`filter-table-${x.id}`} className="flex items-center gap-1 rounded-xl border border-card-border px-4 py-0.5">
+                    <li
+                        key={`filter-table-${x.id}`}
+                        className="rounded-table-pill-radius flex items-center gap-1 border border-card-border px-table-pill-px py-table-pill-py"
+                    >
                         <span>
-                            <span className="mr-2 inline-block aspect-square size-3 rounded-full bg-primary" aria-hidden="true" />
+                            <span
+                                className="mr-table-filter-dot-mr inline-block aspect-square size-table-filter-dot-size rounded-full bg-primary"
+                                aria-hidden="true"
+                            />
                             {x.label} {x.operation.label.toLowerCase()}:
                         </span>
                         <div className="relative w-min min-w-[1ch]">

@@ -32,10 +32,10 @@ import { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
-        "w-full min-w-36 outline-none p-2.5 items-center flex justify-between text-left",
+        "w-full min-w-36 outline-none p-menu-item-p items-center flex justify-between text-left",
         "hover:bg-primary focus:bg-primary aria-expanded:opacity-80",
         "focus:text-primary-foreground hover:text-primary-foreground",
-        "first-of-type:rounded-t-lg last-of-type:rounded-b-lg",
+        "first-of-type:rounded-t-menu-radius last-of-type:rounded-b-menu-radius",
         "disabled:opacity-40 disabled:cursor-not-allowed",
         highlight
     );
@@ -95,7 +95,14 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             onOpenChange: setIsOpen,
             whileElementsMounted: autoUpdate,
             placement: isNested ? "right" : "bottom-start",
-            middleware: [offset({ mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0 }), flip(), shift()],
+            middleware: [
+                offset({
+                    mainAxis: isNested ? 0 : 4,
+                    alignmentAxis: isNested ? -4 : 0,
+                }),
+                flip(),
+                shift(),
+            ],
         });
         const role = useRole(context, { role: "menu" });
         const dismiss = useDismiss(context, { bubbles: true });
@@ -103,7 +110,10 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             move: false,
             enabled: hover,
             delay: { open: FLOATING_DELAY },
-            handleClose: safePolygon({ blockPointerEvents: true, requireIntent: false }),
+            handleClose: safePolygon({
+                blockPointerEvents: true,
+                requireIntent: false,
+            }),
         });
 
         const click = useClick(context, {
@@ -205,7 +215,15 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                         </button>
                     )}
                 </Fragment>
-                <MenuContext.Provider value={{ activeIndex, setActiveIndex, getItemProps, setHasFocusInside, isOpen }}>
+                <MenuContext.Provider
+                    value={{
+                        activeIndex,
+                        setActiveIndex,
+                        getItemProps,
+                        setHasFocusInside,
+                        isOpen,
+                    }}
+                >
                     <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
                         {isOpen && (
                             <FloatingPortal>
@@ -220,7 +238,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                         ref={refs.setFloating}
                                         style={{ ...props.style, ...floatingStyles }}
                                         className={css(
-                                            "isolate z-tooltip flex max-h-80 flex-col items-start overflow-y-auto rounded-lg border border-floating-border bg-floating-background text-left shadow-shadow-floating outline-none",
+                                            "isolate z-tooltip flex max-h-menu-max-h flex-col items-start overflow-y-auto rounded-menu-radius border border-floating-border bg-floating-background text-left shadow-shadow-floating outline-none",
                                             floatingClassName
                                         )}
                                     >

@@ -77,30 +77,50 @@ const drawerRight: Record<string, TargetAndTransition> = {
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     sheet: {
-        enter: { opacity: 1, y: "0%", animationDuration, transformOrigin: "bottom" },
-        exit: { opacity: 0.4, y: "10%", animationDuration, transformOrigin: "bottom" },
-        initial: { opacity: 0.7, y: "10%", animationDuration, transformOrigin: "bottom" },
+        enter: {
+            opacity: 1,
+            y: "0%",
+            animationDuration,
+            transformOrigin: "bottom",
+        },
+        exit: {
+            opacity: 0.4,
+            y: "10%",
+            animationDuration,
+            transformOrigin: "bottom",
+        },
+        initial: {
+            opacity: 0.7,
+            y: "10%",
+            animationDuration,
+            transformOrigin: "bottom",
+        },
     },
     dialog: {
         exit: { opacity: 0, scale: 0.95, animationDuration },
         enter: { opacity: 1, scale: [1.05, 1], animationDuration },
-        initial: { opacity: 0.5, scale: 0.95, animationDuration, transition: { duration: 0.5, ease: "easeInOut" } },
+        initial: {
+            opacity: 0.5,
+            scale: 0.95,
+            animationDuration,
+            transition: { duration: 0.5, ease: "easeInOut" },
+        },
     },
 };
 
 const variants = cva(
-    "z-floating flex min-w-xs appearance-none flex-col flex-nowrap gap-4 border border-floating-border bg-floating-background outline-0 ring-0",
+    "z-floating flex min-w-xs appearance-none flex-col flex-nowrap gap-modal-gap border border-floating-border bg-floating-background outline-0 ring-0",
     {
         variants: {
             type: {
                 drawer: "absolute h-screen max-h-screen min-h-0 w-fit max-w-[90%]",
-                dialog: "container relative h-min max-h-[calc(100lvh-10%)] rounded-lg py-4",
-                sheet: "absolute bottom-0 h-screen max-h-[calc(100svh-5%)] max-h-[calc(100vh-15%)] w-screen rounded-t-lg pb-4 pt-6",
+                dialog: "container relative h-min max-h-[calc(100lvh-10%)] rounded-modal-radius py-modal-padding-y",
+                sheet: "absolute bottom-0 h-screen max-h-[calc(100svh-5%)] max-h-[calc(100vh-15%)] w-screen rounded-t-modal-radius pb-modal-sheet-pb pt-modal-sheet-pt",
             },
             position: {
                 none: "",
-                right: "absolute right-0 top-0 rounded-l-lg py-4",
-                left: "absolute left-0 top-0 rounded-r-lg py-4",
+                right: "absolute right-0 top-0 rounded-l-modal-radius py-modal-padding-y",
+                left: "absolute left-0 top-0 rounded-r-modal-radius py-modal-padding-y",
             },
         },
         defaultVariants: { position: "right", type: "dialog" },
@@ -191,16 +211,16 @@ const Draggable = (props: DraggableProps) => {
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
             className={css(
-                "absolute isolate z-calendar rounded-lg",
+                "absolute isolate z-calendar rounded-modal-resizer-radius",
                 props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
                 props.sheet
-                    ? "top-1 flex h-3 w-full justify-center py-2"
+                    ? "top-1 flex h-modal-sheet-handle-h w-full justify-center py-modal-sheet-handle-py"
                     : props.position === "left"
-                      ? "right-5 top-1/2 h-10 w-2"
-                      : "left-2 top-1/2 h-10 w-2"
+                      ? "right-5 top-1/2 h-modal-drawer-resizer-h w-modal-drawer-resizer-w"
+                      : "left-2 top-1/2 h-modal-drawer-resizer-h w-modal-drawer-resizer-w"
             )}
         >
-            {props.sheet ? <div className="h-2 w-1/4 rounded-lg bg-floating-border" /> : null}
+            {props.sheet ? <div className="rounded-modal-sheet-pill-radius h-modal-sheet-pill-h w-modal-sheet-pill-w bg-floating-border" /> : null}
         </motion.button>
     );
 };
@@ -213,7 +233,10 @@ const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsTy
     return forceType ? positions[type] : positions.sheet;
 };
 
-export type ModalRef = { context: FloatingContext; floating: HTMLElement | null };
+export type ModalRef = {
+    context: FloatingContext;
+    floating: HTMLElement | null;
+};
 
 const noop: ElementProps[] = [];
 
@@ -262,7 +285,11 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const type = isDesktop ? _type : forceType ? _type : "sheet";
         const useResizer = type !== "dialog";
 
-        const floating = useFloating({ open, onOpenChange: onChange, strategy: "fixed" });
+        const floating = useFloating({
+            open,
+            onOpenChange: onChange,
+            strategy: "fixed",
+        });
         const click = useClick(floating.context, {});
         const role = useRole(floating.context, { role: "dialog" });
         const dismiss = useDismiss(floating.context, {
@@ -347,7 +374,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                     lockScroll
                                     className={css(
                                         "inset-0 isolate z-overlay flex h-[100dvh] !overflow-clip bg-floating-overlay/80",
-                                        type === "drawer" ? "" : "items-start justify-center pt-10 lg:p-10",
+                                        type === "drawer" ? "" : "items-start justify-center pt-modal-overlay-pt lg:p-modal-overlay-p",
                                         overlayClassName
                                     )}
                                 >
@@ -389,7 +416,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         {title ? (
                                                             <h2
                                                                 id={headingId}
-                                                                className="block select-text border-b border-floating-border px-8 pb-2 text-3xl font-medium leading-relaxed"
+                                                                className="block select-text border-b border-floating-border px-modal-padding-x pb-modal-title-pb text-3xl font-medium leading-relaxed"
                                                             >
                                                                 {title}
                                                             </h2>
@@ -400,7 +427,10 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     ref={innerContent}
                                                     id={title ? descriptionId : undefined}
                                                     data-component="modal-body"
-                                                    className={css("flex-1 select-text overflow-y-auto px-8 py-1", bodyClassName)}
+                                                    className={css(
+                                                        "flex-1 select-text overflow-y-auto px-modal-padding-x py-modal-body-py",
+                                                        bodyClassName
+                                                    )}
                                                     onTouchEnd={async () => {
                                                         scroll.set(undefined);
                                                         scrollInitial.set(undefined);
@@ -414,7 +444,11 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                                     .finished;
                                                                 onChange(false);
                                                             } else {
-                                                                animate(sheetYNumeric, 0, { type: "spring", bounce: 0, duration: 0.3 });
+                                                                animate(sheetYNumeric, 0, {
+                                                                    type: "spring",
+                                                                    bounce: 0,
+                                                                    duration: 0.3,
+                                                                });
                                                             }
                                                             isDragging.current = false;
                                                         }
@@ -451,15 +485,17 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     {children}
                                                 </motion.section>
                                                 {footer ? (
-                                                    <footer className="w-full select-text border-t border-floating-border px-8 pt-4">{footer}</footer>
+                                                    <footer className="w-full select-text border-t border-floating-border px-modal-padding-x pt-modal-footer-pt">
+                                                        {footer}
+                                                    </footer>
                                                 ) : null}
                                                 {closable ? (
-                                                    <div className="absolute right-4 top-1 z-floating">
+                                                    <div className="absolute right-modal-close-right top-modal-close-top z-floating">
                                                         <button
                                                             type="button"
                                                             onClick={onClose}
                                                             aria-label={t.closeButton}
-                                                            className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                                            className="p-modal-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                                         >
                                                             <XIcon aria-hidden="true" />
                                                         </button>
@@ -543,7 +579,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                 title={options.title || "Confirmation"}
                 className="container max-w-dialog lg:max-w-96"
                 footer={
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-modal-footer-gap">
                         <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
                             {options.cancel?.text || "Cancel"}
                         </Button>
@@ -553,7 +589,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                     </div>
                 }
             >
-                <div className="py-2 text-foreground">{options.description}</div>
+                <div className="py-modal-confirm-py text-foreground">{options.description}</div>
             </Modal>
         </ConfirmContext.Provider>
     );

@@ -1,14 +1,16 @@
 import { rounded, spacing, zIndex } from "./common";
+import { components } from "./components";
 import { DesignTokens } from "./theme.types";
 
 export const LIGHT_THEME: DesignTokens = {
     rounded,
     spacing,
+    components,
     name: "light",
     shadow: {
         "shadow-notification": "1px 2px 2px 2px hsla(210, 25%, 40%, 0.15)",
         "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-        "shadow-card": "0px 1px 2px 1px hsla(210, 25%, 20%, 0.1)",
+        "shadow-card": "0px 1px 2px 1px transparent",
         "shadow-table": "0px 1px 1px 1px hsla(210, 0%, 0%,  0.1)",
     },
     zIndex,
@@ -24,15 +26,15 @@ export const LIGHT_THEME: DesignTokens = {
         },
         disabled: "hsla(240, 5%, 96%)",
         emphasis: {
-            foreground: "hsla(199, 89%, 48%)",
+            foreground: "hsla(199, 89%, 28%)",
             DEFAULT: "hsla(199, 89%, 96%)",
             subtle: "hsla(199, 89%, 92%)",
-            hover: "hsla(199, 89%, 40%)",
+            hover: "hsla(199, 89%, 24%)",
         },
         primary: {
             foreground: "hsla(240, 6%, 10%)",
-            DEFAULT: "hsla(201,49%,54%)",
-            subtle: "hsla(201,49%,36%)",
+            DEFAULT: "hsla(201,49%,36%)",
+            subtle: "hsla(201,49%,28%)",
             hover: "hsla(201,49%,22%)",
         },
         secondary: {
@@ -70,7 +72,7 @@ export const LIGHT_THEME: DesignTokens = {
             foreground: "hsla(0, 0%, 100%)",
             notification: "hsla(142, 71%, 45%)",
         },
-        ring: "hsla(201,49%,40%)",
+        ring: "hsla(201,49%,36%)",
         input: {
             border: "hsla(240, 6%, 90%)",
             placeholder: "hsla(240, 4%, 46%)",
@@ -110,23 +112,23 @@ export const LIGHT_THEME: DesignTokens = {
             },
             primary: {
                 text: "hsla(0, 0%, 100%)",
-                bg: "hsla(201,49%,54%)",
+                bg: "hsla(201,49%,36%)",
             },
             warn: {
                 bg: "hsla(38, 92%, 50%)",
-                text: "hsla(0, 0%, 100%)",
+                text: "hsla(38, 92%, 15%)",
             },
             info: {
                 text: "hsla(0, 0%, 100%)",
-                bg: "hsla(199, 89%, 48%)",
+                bg: "hsla(199, 89%, 35%)",
             },
             success: {
-                text: "hsla(0, 0%, 100%)",
+                text: "hsla(142, 71%, 15%)",
                 bg: "hsla(142, 71%, 45%)",
             },
             danger: {
                 text: "hsla(0, 0%, 100%)",
-                bg: "hsla(0, 84%, 60%)",
+                bg: "hsla(0, 72%, 42%)",
             },
             neutral: {
                 text: "hsla(240, 6%, 10%)",
@@ -140,26 +142,26 @@ export const LIGHT_THEME: DesignTokens = {
         tag: {
             muted: {
                 bg: "hsla(240, 5%, 96%)",
-                text: "hsla(240, 4%, 46%)",
+                text: "hsla(240, 4%, 40%)",
             },
             primary: {
-                text: "hsla(199, 89%, 48%)",
+                text: "hsla(199, 89%, 28%)",
                 bg: "hsla(199, 89%, 96%)",
             },
             warn: {
                 bg: "hsla(38, 92%, 96%)",
-                text: "hsla(38, 92%, 40%)",
+                text: "hsla(38, 92%, 28%)",
             },
             info: {
-                text: "hsla(199, 89%, 40%)",
+                text: "hsla(199, 89%, 30%)",
                 bg: "hsla(199, 89%, 96%)",
             },
             success: {
-                text: "hsla(142, 71%, 35%)",
+                text: "hsla(142, 71%, 25%)",
                 bg: "hsla(142, 71%, 96%)",
             },
             danger: {
-                text: "hsla(0, 84%, 45%)",
+                text: "hsla(0, 84%, 40%)",
                 bg: "hsla(0, 84%, 96%)",
             },
             neutral: {
@@ -178,17 +180,17 @@ export const LIGHT_THEME: DesignTokens = {
                 border: "hsla(240, 6%, 90%)",
             },
             primary: {
-                text: "hsla(199, 89%, 40%)",
+                text: "hsla(199, 89%, 28%)",
                 border: "hsla(199, 89%, 90%)",
                 bg: "hsla(199, 89%, 98%)",
             },
             warn: {
                 bg: "hsla(38, 92%, 98%)",
-                text: "hsla(38, 92%, 35%)",
+                text: "hsla(38, 92%, 28%)",
                 border: "hsla(38, 92%, 90%)",
             },
             info: {
-                text: "hsla(199, 89%, 35%)",
+                text: "hsla(199, 89%, 30%)",
                 bg: "hsla(199, 89%, 98%)",
                 border: "hsla(199, 89%, 90%)",
             },

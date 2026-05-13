@@ -91,7 +91,7 @@ type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<{ variant
 const Card = <T extends React.ElementType = "div">({ as, variant = "default", className, ...props }: CardProps<T>) => (
     <Polymorph
         as={as ?? "div"}
-        className={`rounded-card border border-border ${variant === "muted" ? "bg-muted" : "bg-card-background"} ${className ?? ""}`}
+        className={`rounded-card-radius border border-border ${variant === "muted" ? "bg-muted" : "bg-card-background"} ${className ?? ""}`}
         {...props}
     />
 );

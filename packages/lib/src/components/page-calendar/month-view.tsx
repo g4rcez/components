@@ -24,7 +24,10 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                 {WEEKDAY_LABELS.map((date) => {
                     const day = formatWeekDay(date, locale);
                     return (
-                        <li key={day} className="py-2 text-center text-xs font-medium text-muted-foreground">
+                        <li
+                            key={day}
+                            className="py-page-calendar-weekday-py text-center text-page-calendar-weekday-text font-medium text-muted-foreground"
+                        >
                             {day}
                         </li>
                     );
@@ -42,17 +45,17 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                             type="button"
                             onClick={() => onDayClick(day)}
                             aria-label={`${formatFullDate(day, locale)}${events.length > 0 ? `, ${t.pageCalendarEventCount(events.length)}` : ""}`}
-                            className={`group flex min-h-32 cursor-pointer flex-col gap-1 border-b border-r border-border p-2 transition-colors hover:bg-muted hover:bg-opacity-20 ${!isCurrentMonth ? "opacity-50" : ""}`}
+                            className={`group flex min-h-page-calendar-cell-min-h cursor-pointer flex-col gap-page-calendar-cell-gap border-b border-r border-border p-page-calendar-cell-p transition-colors hover:bg-muted hover:bg-opacity-20 ${!isCurrentMonth ? "opacity-50" : ""}`}
                         >
                             <div className="flex items-center justify-between">
                                 <span
-                                    className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
+                                    className={`flex size-page-calendar-month-badge-size items-center justify-center rounded-full text-page-calendar-month-badge-text font-medium ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
                                 >
                                     {formatDay(day, locale)}
                                 </span>
                                 <span
                                     aria-hidden="true"
-                                    className="text-lg leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40"
+                                    className="text-page-calendar-overflow-text leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40"
                                 >
                                     +
                                 </span>

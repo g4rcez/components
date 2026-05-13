@@ -55,8 +55,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `text-danger` (via `group-error`)         | `--danger`            | Text color in error state        |
 | `hover:text-primary`                      | `--primary`           | Caret icon hover color           |
 | `h-input-height`                          | `--input-height`      | Control height (2.5 rem)         |
-| `px-input-x`                              | `--input-x`           | Horizontal padding               |
-| `py-input-y`                              | `--input-y`           | Vertical padding                 |
+| `px-input-padding-x`                      | `--input-padding-x`   | Horizontal padding               |
+| `py-input-padding-y`                      | `--input-padding-y`   | Vertical padding                 |
 
 ## Examples
 

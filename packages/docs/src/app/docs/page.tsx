@@ -1,3 +1,4 @@
+"use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { CodeBlock } from "@/components/code-block";

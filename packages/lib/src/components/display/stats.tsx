@@ -11,21 +11,17 @@ export type StatsProps = {
 
 export const Stats = (props: React.PropsWithChildren<StatsProps>) => {
     return (
-        <div className="divide-y divide-card-border rounded-card border border-card-border bg-card-background shadow-shadow-card">
-            <header className="flex items-start gap-4 p-6">
-                <div className={css("flex aspect-square size-10 items-center justify-center rounded-card bg-primary p-8", props.iconContainer)}>
-                    <div>
-                        <props.Icon className="aspect-square size-10 text-primary-foreground" />
-                    </div>
+        <div className="divide-y divide-card-border overflow-hidden rounded-stats-radius border border-card-border bg-card-background shadow-shadow-card">
+            <header className="flex items-stretch gap-stats-gap">
+                <div className={css("flex shrink-0 items-center justify-center bg-primary p-stats-icon-p", props.iconContainer)}>
+                    <props.Icon className="aspect-square size-stats-icon-size text-primary-foreground" />
                 </div>
-                <div className="flex flex-col gap-1">
-                    <header>
-                        <h3 className="text-base leading-none">{props.title}</h3>
-                    </header>
+                <div className="flex flex-col justify-center gap-stats-inner-gap py-stats-p pr-stats-p">
+                    <h3 className="text-typography-base leading-none">{props.title}</h3>
                     <p className="text-4xl font-semibold">{props.children}</p>
                 </div>
             </header>
-            {props.footer ? <footer className="px-6 py-2">{props.footer}</footer> : null}
+            {props.footer ? <footer className="px-stats-footer-px py-stats-footer-py">{props.footer}</footer> : null}
         </div>
     );
 };

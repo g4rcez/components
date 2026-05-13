@@ -48,13 +48,13 @@ A composable header with a title and an optional navigation/action area.
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token                | CSS Variable        | Purpose                         |
-| -------------------- | ------------------- | ------------------------------- |
-| `bg-card-background` | `--card-background` | Card surface color              |
-| `border-card-border` | `--card-border`     | Card border and title separator |
-| `rounded-card`       | `--radius-card`     | Corner radius                   |
-| `shadow-shadow-card` | `--shadow-card`     | Card drop shadow                |
-| `bg-muted`           | `--muted`           | Skeleton loading lines          |
+| Token                 | CSS Variable        | Purpose                         |
+| --------------------- | ------------------- | ------------------------------- |
+| `bg-card-background`  | `--card-background` | Card surface color              |
+| `border-card-border`  | `--card-border`     | Card border and title separator |
+| `rounded-card-radius` | `--card-radius`     | Corner radius                   |
+| `shadow-shadow-card`  | `--shadow-card`     | Card drop shadow                |
+| `bg-muted`            | `--muted`           | Skeleton loading lines          |
 
 ## Examples
 

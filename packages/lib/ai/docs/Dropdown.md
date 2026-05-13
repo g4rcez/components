@@ -76,7 +76,7 @@ function AccountDropdown() {
     return (
         <Dropdown
             trigger={
-                <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
+                <button className="flex items-center gap-2 px-3 py-2 rounded-button-radius border border-border text-foreground">
                     <UserIcon size={16} />
                     Account
                     <CaretDownIcon size={16} />
@@ -106,13 +106,13 @@ function ControlledDropdown() {
 
     return (
         <Dropdown
-            trigger={<button className="px-4 py-2 rounded-button bg-muted text-foreground">{isOpen ? "Close" : "Open"} Menu</button>}
+            trigger={<button className="px-4 py-2 rounded-button-radius bg-muted text-foreground">{isOpen ? "Close" : "Open"} Menu</button>}
             open={isOpen}
             onChange={setIsOpen}
         >
             <div className="min-w-48 p-4">
                 <p className="text-foreground">Controlled dropdown content</p>
-                <button onClick={() => setIsOpen(false)} className="mt-2 px-3 py-1 bg-primary text-primary-foreground rounded-button text-sm">
+                <button onClick={() => setIsOpen(false)} className="mt-2 px-3 py-1 bg-primary text-primary-foreground rounded-button-radius text-sm">
                     Close
                 </button>
             </div>
@@ -133,7 +133,7 @@ function FilterDropdown() {
     return (
         <Dropdown
             trigger={
-                <button className="flex items-center gap-2 px-3 py-2 rounded-button border border-border text-foreground">
+                <button className="flex items-center gap-2 px-3 py-2 rounded-button-radius border border-border text-foreground">
                     <FunnelIcon size={16} />
                     Filters
                     {status && <span className="h-2 w-2 rounded-full bg-primary" />}
@@ -147,7 +147,7 @@ function FilterDropdown() {
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
-                        className="w-full px-3 py-2 rounded-button border border-border bg-background text-foreground"
+                        className="w-full px-3 py-2 rounded-button-radius border border-border bg-background text-foreground"
                     >
                         <option value="">All</option>
                         <option value="active">Active</option>
@@ -155,10 +155,10 @@ function FilterDropdown() {
                     </select>
                 </div>
                 <div className="flex gap-2 pt-2">
-                    <button onClick={() => setStatus("")} className="px-3 py-1 text-sm rounded-button border border-border text-foreground">
+                    <button onClick={() => setStatus("")} className="px-3 py-1 text-sm rounded-button-radius border border-border text-foreground">
                         Clear
                     </button>
-                    <button className="px-3 py-1 text-sm rounded-button bg-primary text-primary-foreground">Apply</button>
+                    <button className="px-3 py-1 text-sm rounded-button-radius bg-primary text-primary-foreground">Apply</button>
                 </div>
             </div>
         </Dropdown>

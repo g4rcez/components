@@ -143,7 +143,7 @@ import { Button } from "@g4rcez/components/button";
 ### Profile Card
 
 ```tsx
-<div className="flex flex-col gap-base rounded-card border border-border bg-card-background p-4">
+<div className="flex flex-col gap-base rounded-card-radius border border-border bg-card-background p-4">
     <PageTitle title="John Doe">Software Engineer</PageTitle>
     <div className="flex flex-col gap-sm">
         <Info label="Email" row>

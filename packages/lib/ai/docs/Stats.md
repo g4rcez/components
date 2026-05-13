@@ -35,7 +35,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | ------------------------- | ---------------------- | ----------------------------------- |
 | `bg-card-background`      | `--card-background`    | Card surface                        |
 | `border-card-border`      | `--card-border`        | Card border and divider             |
-| `rounded-card`            | `--radius-card`        | Corner radius                       |
+| `rounded-stats-radius`    | `--stats-radius`       | Corner radius                       |
 | `shadow-shadow-card`      | `--shadow-card`        | Card drop shadow                    |
 | `bg-primary`              | `--primary`            | Icon container background (default) |
 | `text-primary-foreground` | `--primary-foreground` | Icon color (default)                |
