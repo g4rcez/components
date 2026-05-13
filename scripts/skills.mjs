@@ -10,7 +10,7 @@ const dest = join(repoRoot, ".claude", "skills", "components-design-system");
 const [, , subcommand] = process.argv;
 
 if (subcommand !== "install") {
-    process.stderr.write("Usage: npx components/skills install\n");
+    process.stderr.write("Usage: npx components:skills install\n");
     process.exit(1);
 }
 

@@ -10,6 +10,9 @@
   },
   "keywords": [],
   "license": "MIT",
+  "bin": {
+    "components:skills": "./scripts/skills.mjs"
+  },
   "devDependencies": {
     "lefthook": "2.1.6",
     "oxfmt": "0.48.0",
