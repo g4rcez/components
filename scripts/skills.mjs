@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { cpSync, existsSync, mkdirSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -14,6 +14,11 @@ if (subcommand !== "install") {
     process.exit(1);
 }
 
+if (!existsSync(src)) {
+    process.stderr.write(`error: skill source directory not found at ${src}\n`);
+    process.exit(1);
+}
+
 if (!existsSync(join(src, "SKILL.md"))) {
     process.stderr.write(`error: skill source not found at ${join(src, "SKILL.md")}\n`);
     process.exit(1);
@@ -24,6 +29,7 @@ if (!existsSync(join(src, "docs"))) {
     process.exit(1);
 }
 
+rmSync(dest, { recursive: true, force: true });
 mkdirSync(join(dest, "docs"), { recursive: true });
 
 cpSync(join(src, "SKILL.md"), join(dest, "SKILL.md"));
@@ -31,3 +37,4 @@ process.stdout.write(`copied SKILL.md → .claude/skills/components-design-syste
 
 cpSync(join(src, "docs"), join(dest, "docs"), { recursive: true });
 process.stdout.write(`copied docs/    → .claude/skills/components-design-system/docs/\n`);
+process.stdout.write("install complete\n");
