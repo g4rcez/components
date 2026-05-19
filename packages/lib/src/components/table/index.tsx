@@ -58,7 +58,10 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                 (arg: V) => {
                     const state = get.state();
                     type StateValue = (typeof state)[keyof typeof state];
-                    return { ...state, [key]: dispatcherFun(state[key as keyof typeof state], arg as StateValue) };
+                    return {
+                        ...state,
+                        [key]: dispatcherFun(state[key as keyof typeof state], arg as StateValue),
+                    };
                 };
             return {
                 cols: create<DispatcherFun<Col<T>[]>>("cols"),
@@ -125,7 +128,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         inlineSorter={props.inlineSorter ?? true}
                     />
                 ) : (
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-table-groups-gap">
                         {state.groups.map((group, index) => (
                             <div className="min-w-full" key={`group-${group.groupId}`}>
                                 <InnerTable

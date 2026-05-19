@@ -5,19 +5,10 @@ import { ListIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "../../../lib/src";
 import { Modal } from "../../../lib/src/components/floating/modal";
 import { usePrevious } from "../../../lib/src/hooks/use-previous";
 import { Navigation } from "./navigation";
 
-const Brand = () => (
-    <Link href="/" className="group flex items-center gap-3 transition-all duration-500">
-        <div className="flex size-8 items-center justify-center rounded-full bg-foreground text-xs font-bold text-background shadow-xl shadow-foreground/5 transition-transform group-hover:scale-110">
-            C
-        </div>
-        <span className="text-lg font-semibold tracking-tight text-foreground/90 transition-colors group-hover:text-foreground">Library</span>
-    </Link>
-);
 
 export const Header = () => {
     const [open, setOpen] = useState(false);

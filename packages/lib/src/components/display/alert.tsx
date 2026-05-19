@@ -52,7 +52,7 @@ const themeVariants = {
     },
 };
 
-const alertVariants = cva("relative block w-full rounded-lg border p-4 text-sm", {
+const alertVariants = cva("text-typography-sm relative block w-full rounded-alert-radius border p-alert-p", {
     variants: themeVariants,
     defaultVariants: { theme: "neutral" },
 });
@@ -94,25 +94,29 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                             as={props.as || "div"}
                             className={css(alertVariants({ theme }), className)}
                         >
-                            <div className="grid grid-cols-[auto_1fr] gap-base">
+                            <div className="flex flex-col gap-alert-gap">
                                 {onClose !== undefined && open ? (
                                     <button
                                         type="button"
                                         onClick={close}
                                         aria-label={t.closeButton}
-                                        className="absolute right-3 top-3 text-foreground transition-colors duration-300 ease-in-out hover:text-danger"
+                                        className="absolute right-alert-close-right top-alert-close-top text-foreground transition-colors duration-300 ease-in-out hover:text-danger"
                                     >
                                         <XIcon size={20} aria-hidden="true" />
                                     </button>
                                 ) : null}
-                                <div className={css("flex items-center gap-2", props.title ? "" : "w-fit")}>
+                                <div className="flex items-center gap-alert-gap">
                                     {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" size={20} /> : null}
                                     {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" size={20} /> : null}
                                     {!Icon && theme === "danger" ? <WarningIcon aria-hidden="true" size={20} /> : null}
                                     {Icon}
+                                    {props.title ? (
+                                        <h4 className="tracking-3 text-typography-lg text-balance font-semibold">{props.title}</h4>
+                                    ) : (
+                                        <div className="w-full">{props.children}</div>
+                                    )}
                                 </div>
-                                {props.title ? <h4 className="tracking-3 col-start-2 text-balance text-lg font-semibold">{props.title}</h4> : null}
-                                <div className="col-start-2 w-full">{props.children}</div>
+                                {props.title ? <div className="w-full">{props.children}</div> : null}
                             </div>
                         </Polymorph>
                     </Collapse>

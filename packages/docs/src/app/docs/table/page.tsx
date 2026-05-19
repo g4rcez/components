@@ -1,8 +1,7 @@
 "use client";
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
-import { Fragment, useState } from "react";
-import { Button, ColType, createColumns, getModalScrollerRef, Modal, Table, useTablePreferences, uuid } from "../../../../../lib/src";
+import { ColType, createColumns, Table, useTablePreferences, uuid } from "../../../../../lib/src";
 
 type User = { id: string; name: string; type: string; document: string };
 

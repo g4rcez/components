@@ -78,12 +78,12 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`typography relative min-w-0 cursor-grab overflow-clip border-r-[1px] border-table-border bg-table-header font-medium first:rounded-tl-lg last:rounded-tr-lg last:border-r-transparent md:h-14 ${props.header.thProps?.className ?? ""}`}
+            className={`typography relative min-w-0 cursor-grab overflow-clip border-r-table-cell-border border-table-border bg-table-header font-medium first:rounded-tl-table-radius last:rounded-tr-table-radius last:border-r-transparent md:h-14 ${props.header.thProps?.className ?? ""}`}
         >
             <span
-                className={`flex h-full items-center justify-between bg-table-header p-[var(--table-cell-padding)] ${props.isLast ? "rounded-tr-lg" : ""} ${props.index === 0 ? "rounded-tl-lg" : ""}`}
+                className={`flex h-full items-center justify-between bg-table-header p-table-cell-padding ${props.isLast ? "rounded-tr-table-radius" : ""} ${props.index === 0 ? "rounded-tl-table-radius" : ""}`}
             >
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-table-inline-gap-tight">
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
                             arrow
@@ -96,7 +96,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 </span>
                             }
                             title={
-                                <span className="text-lg">
+                                <span className="text-typography-lg">
                                     {translation.tableFilterDropdownTitleUnique} <span className="font-medium">{label}</span>
                                 </span>
                             }
@@ -114,7 +114,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 <li>
                                     <button
                                         type="button"
-                                        className="flex items-center gap-1 text-primary"
+                                        className="flex items-center gap-table-inline-gap-tight text-primary"
                                         onClick={() =>
                                             props.setFilters((prev) =>
                                                 prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
@@ -127,7 +127,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                             </ul>
                         </Dropdown>
                     ) : null}
-                    <span className="pointer-events-auto text-balance text-base">{props.header.thead}</span>
+                    <span className="text-typography-base pointer-events-auto text-balance">{props.header.thead}</span>
                     {props.inlineSorter && defaultAllowSort ? (
                         <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
                     ) : null}
@@ -149,7 +149,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="absolute -right-[0.5px] top-0 z-calendar block h-full w-[1px] cursor-col-resize bg-transparent hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
+                    className="absolute -right-[0.5px] top-0 z-calendar block h-full w-table-divider-w cursor-col-resize bg-transparent hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
                     onClick={(e) => void e.currentTarget.focus()}
                     onKeyDown={(e) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {

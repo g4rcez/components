@@ -6,17 +6,17 @@ import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const variants = {
     size: {
-        icon: "p-1",
-        big: "h-12 px-6 py-4",
-        default: "h-10 px-4 py-2",
-        min: "h-7 px-3 py-1 text-sm",
-        small: "h-8 px-4 py-2 text-sm",
-        tiny: "h-6 px-2 py-1 text-sm",
+        icon: "p-button-padding-icon",
+        big: "h-button-height-big px-button-padding-x-big py-button-padding-y-big",
+        default: "h-button-height px-button-padding-x py-button-padding-y",
+        min: "h-button-height-min px-button-padding-x-min py-button-padding-y-min text-typography-sm",
+        tiny: "h-button-height-tiny px-button-padding-x-tiny py-button-padding-y-tiny text-typography-sm",
+        small: "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-typography-sm",
     },
     rounded: {
-        rough: "rounded-sm",
-        squared: "rounded-none",
-        default: "rounded-button",
+        rough: "rounded-button-radius-rough",
+        squared: "rounded-button-radius-squared",
+        default: "rounded-button-radius",
         circle: "rounded-full aspect-square",
     },
     theme: {
@@ -45,7 +45,7 @@ const variants = {
 };
 
 const buttonVariants = cva(
-    "relative inline-flex cursor-pointer items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap align-middle font-medium transition-colors duration-300 ease-linear focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 data-[loading=true]:animate-pulse data-[loading=true]:opacity-30",
+    "relative inline-flex cursor-pointer items-center justify-center gap-button-gap overflow-hidden whitespace-nowrap align-middle font-medium transition-colors duration-300 ease-linear focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 data-[loading=true]:animate-pulse data-[loading=true]:opacity-30",
     {
         variants,
         defaultVariants: { theme: "main", size: "default", rounded: "default" },

@@ -2,7 +2,7 @@
 import { CaretRightIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
-import { Alert, Button, Modal } from "../../../lib/src";
+import { Button, Modal } from "../../../lib/src";
 import { AnimatedList, AnimatedListItem } from "../../../lib/src/components/display/list";
 
 type State = {

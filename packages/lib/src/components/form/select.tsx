@@ -28,7 +28,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             required = true,
             options,
             info,
-            selectContainer = "",
+            selectContainer: _selectContainer = "",
             feedback = null,
             labelClassName,
             interactive,
@@ -107,8 +107,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     data-selected={!!props.value || false}
                     title={typeof props.title === "string" ? props.title : undefined}
                     className={css(
-                        "input select group h-10 w-full flex-1 appearance-none rounded-md text-base",
-                        "bg-transparent px-2 py-1 text-foreground placeholder-input-placeholder",
+                        "input select group h-input-height w-full flex-1 appearance-none rounded-input-radius text-input-text",
+                        "bg-transparent px-input-padding-x py-input-padding-y text-foreground placeholder-input-placeholder",
                         "outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
                         "data-[selected=false]:text-input-placeholder",
                         props.className
@@ -121,9 +121,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                         <option
                             {...option}
                             value={option.value}
-                            children={option.label ?? option.value}
                             key={`${id}-select-option-${option.value}`}
-                        />
+                        >
+                            {option.label ?? option.value}
+                        </option>
                     ))}
                 </select>
             </InputField>

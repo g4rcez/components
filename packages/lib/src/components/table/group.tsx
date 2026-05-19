@@ -64,7 +64,14 @@ export const Group = <T extends object>(props: Props<T>) => {
         props.setGroups(
             keys(groupBy).map((groupName, index): GroupItem<T> => {
                 const rows = groupBy[groupName];
-                return { ...col, groupId: uuid(), groupKey: key, index, rows, groupName: groupName as string };
+                return {
+                    ...col,
+                    groupId: uuid(),
+                    groupKey: key,
+                    index,
+                    rows,
+                    groupName: groupName as string,
+                };
             })
         );
     };
@@ -77,7 +84,7 @@ export const Group = <T extends object>(props: Props<T>) => {
                 arrow={false}
                 title={translations.tableGroupLabel}
                 trigger={
-                    <span className="flex items-center gap-1 proportional-nums">
+                    <span className="flex items-center gap-table-inline-gap-tight proportional-nums">
                         <StackMinusIcon size={14} />
                         {translations.tableGroupLabelWithCount}
                         {props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
@@ -86,14 +93,14 @@ export const Group = <T extends object>(props: Props<T>) => {
             >
                 <div className="flex flex-nowrap items-center">
                     <Select value={group} title="Tipo de agrupamento" onChange={onChange} options={options} placeholder="Agrupar por..." />
-                    <Button className="mt-4" onClick={onDelete} theme="raw" data-id={group}>
+                    <Button className="mt-table-groups-mt" onClick={onDelete} theme="raw" data-id={group}>
                         <TrashIcon size={16} className="text-danger" />
                     </Button>
                 </div>
                 {props.groups.length > 0 ? (
-                    <section className="my-4">
+                    <section className="my-table-groups-my">
                         <header>
-                            <h2 className="text-xl font-medium">Order groups</h2>
+                            <h2 className="text-typography-xl font-medium">Order groups</h2>
                         </header>
                         <LayoutGroup>
                             <Reorder.Group

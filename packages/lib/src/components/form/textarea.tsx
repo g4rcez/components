@@ -3,7 +3,7 @@ import React from "react";
 import { Any } from "../../types";
 import { createFreeText, FreeTextProps } from "./free-text";
 
-export type TextareaProps = FreeTextProps<"textarea", Any>;
+export type TextareaProps = FreeTextProps<"textarea", React.ComponentProps<"textarea">>;
 
 export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTMLTextAreaElement, Any>(
     "textarea",

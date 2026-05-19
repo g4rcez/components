@@ -7,7 +7,7 @@ export type ToolbarProps = {
 };
 
 export const Toolbar = (props: PropsWithChildren<ToolbarProps>) => (
-    <motion.div className="sticky bottom-4 flex items-center justify-center rounded-lg border border-card-border bg-background p-4">
+    <motion.div className="sticky bottom-toolbar-bottom flex items-center justify-center rounded-toolbar-radius border border-card-border bg-background p-toolbar-p">
         {props.children}
     </motion.div>
 );

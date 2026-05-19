@@ -1,4 +1,5 @@
 import { rounded, spacing, zIndex } from "./common";
+import { components } from "./components";
 import { DesignTokens } from "./theme.types";
 
 export const DARK_THEME: DesignTokens = {
@@ -6,10 +7,11 @@ export const DARK_THEME: DesignTokens = {
     zIndex,
     rounded,
     spacing,
+    components,
     shadow: {
         "shadow-notification": "1px 2px 2px 2px hsla(210, 15%, 20%,  0.15)",
         "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-        "shadow-card": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
+        "shadow-card": "0px 1px 1px 1px transparent",
         "shadow-table": "0px 1px 1px 1px hsla(210, 25%, 20%,  0.1)",
     },
     colors: {
@@ -113,7 +115,7 @@ export const DARK_THEME: DesignTokens = {
                 bg: "hsla(38, 92%, 50%)",
             },
             info: {
-                text: "hsla(0, 0%, 100%)",
+                text: "hsla(240, 10%, 4%)",
                 bg: "hsla(199, 89%, 48%)",
             },
             success: {
@@ -122,7 +124,7 @@ export const DARK_THEME: DesignTokens = {
             },
             danger: {
                 text: "hsla(0, 0%, 100%)",
-                bg: "hsla(0, 84%, 60%)",
+                bg: "hsla(0, 72%, 42%)",
             },
             muted: {
                 text: "hsla(240, 5%, 96%)",

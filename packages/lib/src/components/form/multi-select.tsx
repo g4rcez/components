@@ -18,7 +18,7 @@ import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { type Components, type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type ContextProp, type ItemProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
@@ -31,7 +31,9 @@ import { Checkbox } from "./checkbox";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
-export type MultiSelectItemProps = OptionProps & { Render?: React.FC<OptionProps> };
+export type MultiSelectItemProps = OptionProps & {
+    Render?: React.FC<OptionProps>;
+};
 
 export type MultiSelectProps = Override<
     InputFieldProps<"input">,
@@ -61,18 +63,19 @@ const transitionStyles = {
 const EMPTY_NODES: Array<HTMLElement | null> = [];
 const EMPTY_VALUES: string[] = [];
 
-const List = forwardRef(function VirtualItem(
-    { item, context, ...props }: Record<string, never>,
-    ref
-) {
-    return <motion.li {...props} ref={ref as never} className="last:rounded-t-lg" />;
+const List = forwardRef(function VirtualItem({ item: _item, context: _context, ...props }: Record<string, never>, ref) {
+    return <motion.li {...props} ref={ref as never} className="last:rounded-t-dropdown-radius" />;
 });
 
-const Item = forwardRef<HTMLLIElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
+const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList({ context: _context, ...props }, ref) {
     return (
-        <motion.ul {...props} role="listbox" ref={ref as never} className="w-full rounded-b-lg border-b border-tooltip-border last:border-transparent">
+        <motion.div
+            {...props}
+            ref={ref as never}
+            className="w-full rounded-b-dropdown-radius border-b border-tooltip-border last:border-transparent"
+        >
             <AnimatePresence>{props.children}</AnimatePresence>
-        </motion.ul>
+        </motion.div>
     );
 });
 
@@ -134,6 +137,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const map = useMemo(() => new Dict(options.map((x) => [x.value, x])), [options]);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
+        const searchInputRef = useRef<HTMLInputElement>(null);
         const defaults = props.value ?? props.defaultValue ?? EMPTY_VALUES;
         const translation = useTranslations();
         const [open, setOpen] = useState(false);
@@ -146,7 +150,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             });
             return d;
         });
-        const [label, setLabel] = useState<string[]>(() => {
+        const [_label, setLabel] = useState<string[]>(() => {
             const d = new Set(defaults);
             return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
         });
@@ -194,14 +198,20 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),
-                autoPlacement({ allowedPlacements: ["top-start", "bottom-start"], alignment: "start" }),
+                autoPlacement({
+                    allowedPlacements: ["top-start", "bottom-start"],
+                    alignment: "start",
+                }),
                 size({
                     padding: 10,
                     elementContext: "reference",
                     apply(args) {
                         const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
                         const mw = `${fieldset.current?.getBoundingClientRect().width || DEFAULT_SIZE}px`;
-                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw });
+                        Object.assign(args.elements.floating.style, {
+                            width: mw,
+                            maxWidth: mw,
+                        });
                     },
                 }),
             ],
@@ -239,7 +249,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             return initializeInputDataset(input);
-        }, []);
+        }, [refs.reference]);
 
         useEffect(() => {
             if (!open) return;
@@ -374,26 +384,24 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 <ul
                     {...getReferenceProps({
                         ...props,
+                        tabIndex: 0,
                         onFocus,
                         id: `${id}-shadow`,
                         name: `${id}-shadow`,
                         ref: refs.setReference,
                     } as React.HTMLProps<HTMLElement>)}
-                    tabIndex={0}
-                    role="button"
                     data-name={id}
                     data-target={id}
                     data-shadow="true"
                     data-error={!!error}
-                    aria-autocomplete="list"
                     data-value={values.join(",")}
                     className={css(
-                        "input placeholder-input-mask group h-input-height w-full text-base",
-                        "rounded-md bg-transparent px-input-x py-input-y text-foreground",
+                        "input placeholder-input-mask group h-input-height w-full text-input-text",
+                        "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-foreground",
                         "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                         "group-error:text-danger group-error:placeholder-input-mask-error",
                         "group-focus-within:border-primary group-hover:border-primary",
-                        "flex flex-row items-center gap-2 whitespace-nowrap text-left",
+                        "flex flex-row items-center gap-input-gap whitespace-nowrap text-left",
                         "max-w-full overflow-x-auto truncate overflow-ellipsis",
                         props.className
                     )}
@@ -413,7 +421,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 <FloatingPortal preserveTabOrder>
                     {open ? (
                         <FloatingOverlay lockScroll className="z-floating">
-                            <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
+                            <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={searchInputRef} visuallyHiddenDismiss>
                                 <div
                                     {...getFloatingProps({
                                         ref: refs.setFloating,
@@ -426,17 +434,17 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     })}
                                     data-floating="true"
                                     className={css(
-                                        "relative shadow-floating overflow-clip isolate z-floating m-0 max-h-96 list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
+                                        "relative shadow-floating overflow-clip isolate z-floating m-0 max-h-dropdown-max-h list-none overscroll-contain rounded-dropdown-radius border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
                                         isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
                                     )}
                                 >
                                     <input
-                                        autoFocus
+                                        ref={searchInputRef}
                                         value={shadow}
                                         onChange={onChange}
                                         title={props.title}
                                         placeholder={translation.multiSelectInnerPlaceholder}
-                                        className="input placeholder-input-mask group mb-1 h-10 w-full flex-1 rounded-none border-b border-input-border bg-transparent px-input-x py-input-y outline-none transition-colors focus:border-primary"
+                                        className="input placeholder-input-mask group mb-1 h-input-height w-full flex-1 rounded-none border-b border-input-border bg-transparent px-input-padding-x py-input-padding-y outline-none transition-colors focus:border-primary"
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                                             if (event.key === "ArrowDown") {
                                                 let next = index! + 1;
@@ -468,7 +476,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     />
                                     {isEmpty ? (
                                         <li className="w-full border-b border-tooltip-border last:border-transparent">
-                                            <span className="flex w-full justify-between p-2 text-left text-disabled">
+                                            <span className="flex w-full justify-between p-menu-item-p text-left text-disabled">
                                                 {emptyMessage || translation.autocompleteEmpty}
                                             </span>
                                         </li>
@@ -522,7 +530,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                                 "aria-disabled": option.disabled,
                                                                 onClick: () => onSelect(option, i),
                                                             })}
-                                                            className={`flex w-full max-w-full cursor-pointer items-center justify-start p-2 text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
+                                                            className={`flex w-full max-w-full cursor-pointer items-center justify-start p-menu-item-p text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
                                                         >
                                                             <Checkbox
                                                                 onChange={noop}
@@ -542,7 +550,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             />
                                         </motion.div>
                                     )}
-                                    <div className="sticky bottom-0 flex w-full flex-nowrap items-center gap-2 overflow-x-auto rounded-b-lg bg-floating-background p-2">
+                                    <div className="gap-menu-item-gap sticky bottom-0 flex w-full flex-nowrap items-center overflow-x-auto rounded-b-dropdown-radius bg-floating-background p-menu-item-p">
                                         {value.size === 0 ? (
                                             <Tag theme="muted" size="small">
                                                 {translation.autocompleteEmpty}
