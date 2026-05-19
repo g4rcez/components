@@ -172,7 +172,9 @@ const FileViewer = (props: { item: ContextItem }) => {
                 <video className="container block w-full max-w-96" src={props.item.url} controls muted />
             ) : type === "audio" ? (
                 <figure>
-                    <audio controls src={props.item.url}></audio>
+                    <audio controls src={props.item.url}>
+                        <track kind="captions" />
+                    </audio>
                 </figure>
             ) : null}
         </div>

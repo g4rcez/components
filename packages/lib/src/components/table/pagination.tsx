@@ -27,7 +27,7 @@ export function createPaginationItems(current: number, max: number) {
 export const Pagination = (pagination: TablePagination) => {
     const id = useId();
     const translation = useTranslations();
-    const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination.current, pagination.pages]);
+    const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination]);
     const hasNext = pagination.current < pagination.pages;
     const Link: React.ElementType = pagination.asLink ?? "button";
 

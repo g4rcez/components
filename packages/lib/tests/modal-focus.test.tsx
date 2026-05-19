@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import React, { useState } from "react";
 import { Modal } from "../src/components/floating/modal";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";

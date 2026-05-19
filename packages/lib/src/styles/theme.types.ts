@@ -42,6 +42,7 @@ export type CardTokens = {
     "stats-icon-col-p": string;
     "stats-content-gap": string;
     "stats-content-py": string;
+    "title-text": string;
 };
 
 export type ButtonTokens = {
@@ -63,6 +64,8 @@ export type ButtonTokens = {
     "padding-x-tiny": string;
     "padding-y-tiny": string;
     "padding-icon": string;
+    "radius-rough": string;
+    "radius-squared": string;
 };
 
 export type AlertTokens = {
@@ -98,6 +101,12 @@ export type ModalTokens = {
     "resizer-radius": string;
     "overlay-pt": string;
     "overlay-p": string;
+    "dialog-max-w-mobile": string;
+    "sheet-max-h-svh": string;
+    "sheet-max-h-lvh": string;
+    "sheet-max-h-vh": string;
+    "title-text": string;
+    "overlay-h": string;
 };
 
 export type DropdownTokens = {
@@ -127,6 +136,7 @@ export type StatsTokens = {
     "inner-gap": string;
     "footer-px": string;
     "footer-py": string;
+    "value-text": string;
 };
 
 export type NotificationTokens = {
@@ -139,6 +149,9 @@ export type NotificationTokens = {
     "list-gap": string;
     "badge-px": string;
     "badge-py": string;
+    "list-top": string;
+    "list-max-w": string;
+    "badge-text": string;
 };
 
 export type CommandTokens = {
@@ -158,6 +171,7 @@ export type CommandTokens = {
     "icon-size": string;
     "input-px": string;
     "input-py": string;
+    "list-px": string;
 };
 
 export type TagTokens = {
@@ -192,6 +206,8 @@ export type CalendarTokens = {
     "nav-py": string;
     "year-w": string;
     "icon-size": string;
+    "weekday-text": string;
+    "cell-text": string;
 };
 
 export type TableTokens = {
@@ -224,6 +240,13 @@ export type TableTokens = {
     "filter-inline-gap": string;
     "filter-inline-py": string;
     "filter-list-mt": string;
+    "cell-border": string;
+    "divider-w": string;
+    "groups-mt": string;
+    "groups-my": string;
+    "metadata-min-w": string;
+    "inline-gap-tight": string;
+    "cell-padding": string;
 };
 
 export type SkeletonTokens = {
@@ -332,6 +355,7 @@ export type ListTokens = {
     "item-gap": string;
     "avatar-px": string;
     "body-py": string;
+    "title-text": string;
 };
 
 export type TimelineTokens = {
@@ -350,12 +374,14 @@ export type StepTokens = {
     "icon-size": string;
     "label-px": string;
     gap: string;
+    "connector-h": string;
 };
 
 export type TabsTokens = {
     "header-mb": string;
     "item-px": string;
     "item-py": string;
+    "divider-h": string;
 };
 
 export type ShortcutTokens = {
@@ -428,6 +454,8 @@ export type PageCalendarTokens = {
     "hour-text": string;
     "pill-radius": string;
     "pill-text": string;
+    "cell-gap-tight": string;
+    "nav-mr": string;
 };
 
 export type ComponentTokens = {

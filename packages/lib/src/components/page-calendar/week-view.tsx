@@ -76,26 +76,20 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                 const slotDate = new Date(day);
                                 slotDate.setHours(hour, 0, 0, 0);
                                 return (
-                                    <div
+                                    <button
                                         key={hour}
-                                        role="button"
-                                        tabIndex={0}
+                                        type="button"
                                         aria-label={formatHourLabel(hour, locale)}
-                                        className="cursor-pointer border-b border-border/50 hover:bg-muted/20"
+                                        className="w-full cursor-pointer border-b border-border/50 hover:bg-muted/20"
                                         style={{ height: HOUR_HEIGHT }}
                                         onClick={() => onSlotClick?.(slotDate)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter" || e.key === " ") {
-                                                e.preventDefault();
-                                                onSlotClick?.(slotDate);
-                                            }
-                                        }}
                                     />
                                 );
                             })}
                             {computeEventColumns(events).map(({ event, columnIndex, columnCount }) => (
                                 <div
                                     key={event.id}
+                                    role="presentation"
                                     className="absolute"
                                     style={{
                                         top: getTopOffset(event),
@@ -104,6 +98,7 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                         width: `calc(${100 / columnCount}% - 2px)`,
                                     }}
                                     onClick={(e) => e.stopPropagation()}
+                                    onKeyDown={(e) => e.stopPropagation()}
                                 >
                                     <EventPill event={event} onClick={() => onEventClick(event)} />
                                 </div>

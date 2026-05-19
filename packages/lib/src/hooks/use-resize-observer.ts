@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { noop } from "../lib/fns";
 
 export const useResizeObserver = (element: HTMLElement | null, onResize: (entry: ResizeObserverEntry) => void) => {
     const onResizeRef = useRef(onResize);

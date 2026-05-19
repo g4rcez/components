@@ -712,7 +712,7 @@ const Controls = ({
 }) => (
   <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2">
     {Object.entries(tokens).map(([id, c]) => (
-      <label key={id} className="flex flex-col gap-1 text-xs">
+      <label key={id} aria-label={`--${c.label}`} className="flex flex-col gap-1 text-xs">
         <span className="flex justify-between font-mono text-muted-foreground">
           <span>--{c.label}</span>
           <span>

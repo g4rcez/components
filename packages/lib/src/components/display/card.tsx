@@ -109,7 +109,7 @@ export const StatsCard = (props: StatsCardProps) => {
             >
                 <div
                     className={css(
-                        "flex h-[stretch] w-card-stats-icon-col-w items-center justify-center rounded-l-card-radius bg-primary p-card-stats-icon-col-p text-primary-foreground",
+                        "flex self-stretch w-card-stats-icon-col-w items-center justify-center rounded-l-card-radius bg-primary p-card-stats-icon-col-p text-primary-foreground",
                         props.mark
                     )}
                 >
@@ -117,7 +117,7 @@ export const StatsCard = (props: StatsCardProps) => {
                 </div>
                 <div className="flex flex-col justify-center gap-card-stats-content-gap py-card-stats-content-py">
                     <p className="text-typography-lg">{props.title}</p>
-                    {props.loading ? <Skeleton className="h-10" /> : <p className="text-4xl font-bold tracking-wide">{props.value}</p>}
+                    {props.loading ? <Skeleton className="h-10" /> : <p className="text-card-title-text font-bold tracking-wide">{props.value}</p>}
                 </div>
             </div>
         </Card>

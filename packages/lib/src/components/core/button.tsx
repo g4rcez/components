@@ -14,8 +14,8 @@ const variants = {
         small: "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-typography-sm",
     },
     rounded: {
-        rough: "rounded-sm",
-        squared: "rounded-none",
+        rough: "rounded-button-radius-rough",
+        squared: "rounded-button-radius-squared",
         default: "rounded-button-radius",
         circle: "rounded-full aspect-square",
     },

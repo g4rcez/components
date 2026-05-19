@@ -28,7 +28,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             required = true,
             options,
             info,
-            selectContainer = "",
+            selectContainer: _selectContainer = "",
             feedback = null,
             labelClassName,
             interactive,
@@ -121,9 +121,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                         <option
                             {...option}
                             value={option.value}
-                            children={option.label ?? option.value}
                             key={`${id}-select-option-${option.value}`}
-                        />
+                        >
+                            {option.label ?? option.value}
+                        </option>
                     ))}
                 </select>
             </InputField>

@@ -110,7 +110,7 @@ export function CalendarHeader({
                                 onClick={() => setCurrentView(v.value)}
                                 theme={currentView === v.value ? "primary" : "muted"}
                                 aria-pressed={currentView === v.value}
-                                className="first:rounded-l-button last:rounded-r-button rounded-none"
+                                className="first:rounded-l-button last:rounded-r-button rounded-button-radius-squared"
                             >
                                 {v.label}
                             </Button>
@@ -128,7 +128,7 @@ export function CalendarHeader({
                 (filters.length > 0 && (
                     <div role="group" aria-label={t.pageCalendarFilter} className="flex flex-wrap items-center gap-page-calendar-filter-gap">
                         <CalendarIcon size={14} className="text-muted-foreground" aria-hidden="true" />
-                        <span className="mr-1 text-page-calendar-filter-text text-muted-foreground">{t.pageCalendarFilter}</span>
+                        <span className="mr-page-calendar-nav-mr text-page-calendar-filter-text text-muted-foreground">{t.pageCalendarFilter}</span>
                         {filters.map((filter) => (
                             <Tag
                                 as="button"

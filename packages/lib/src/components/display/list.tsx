@@ -72,7 +72,7 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
                                     </button>
                                 </nav>
                                 <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-list-header-gap">
-                                    <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
+                                    <h3 className="min-w-full text-balance text-list-title-text font-medium">{item.title}</h3>
                                     <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
                                 </motion.header>
                                 <motion.div layout>{item.children}</motion.div>

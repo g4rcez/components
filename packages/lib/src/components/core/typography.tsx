@@ -29,7 +29,7 @@ export const Info = (props: React.PropsWithChildren<InfoProps>) => (
 
 export const PageTitle = (props: PropsWithChildren<{ title: string }>) => (
     <div>
-        <h2 className="typography text-3xl font-bold tracking-wide">{props.title}</h2>
+        <h2 className="typography text-typography-3xl font-bold tracking-wide">{props.title}</h2>
         <p className="typography text-secondary">{props.children}</p>
     </div>
 );

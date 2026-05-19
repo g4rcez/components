@@ -29,7 +29,6 @@ import {
   WarningIcon,
   RadioIcon,
   ToggleLeftIcon,
-  ArrowsLeftRightIcon,
   UploadSimpleIcon,
   FunnelIcon,
   TextAlignLeftIcon,

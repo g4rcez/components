@@ -113,9 +113,9 @@ const variants = cva(
     {
         variants: {
             type: {
-                drawer: "absolute h-screen max-h-screen min-h-0 w-fit max-w-[90%]",
-                dialog: "container relative h-min max-h-[calc(100lvh-10%)] rounded-modal-radius py-modal-padding-y",
-                sheet: "absolute bottom-0 h-screen max-h-[calc(100svh-5%)] max-h-[calc(100vh-15%)] w-screen rounded-t-modal-radius pb-modal-sheet-pb pt-modal-sheet-pt",
+                drawer: "absolute h-screen max-h-screen min-h-0 w-fit max-w-modal-dialog-max-w-mobile",
+                dialog: "container relative h-min max-h-modal-sheet-max-h-lvh rounded-modal-radius py-modal-padding-y",
+                sheet: "absolute bottom-0 h-screen max-h-modal-sheet-max-h-svh max-h-modal-sheet-max-h-vh w-screen rounded-t-modal-radius pb-modal-sheet-pb pt-modal-sheet-pt",
             },
             position: {
                 none: "",
@@ -373,7 +373,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                 <FloatingOverlay
                                     lockScroll
                                     className={css(
-                                        "inset-0 isolate z-overlay flex h-[100dvh] !overflow-clip bg-floating-overlay/80",
+                                        "inset-0 isolate z-overlay flex h-modal-overlay-h !overflow-clip bg-floating-overlay/80",
                                         type === "drawer" ? "" : "items-start justify-center pt-modal-overlay-pt lg:p-modal-overlay-p",
                                         overlayClassName
                                     )}
@@ -416,7 +416,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         {title ? (
                                                             <h2
                                                                 id={headingId}
-                                                                className="block select-text border-b border-floating-border px-modal-padding-x pb-modal-title-pb text-3xl font-medium leading-relaxed"
+                                                                className="block select-text border-b border-floating-border px-modal-padding-x pb-modal-title-pb text-modal-title-text font-medium leading-relaxed"
                                                             >
                                                                 {title}
                                                             </h2>
@@ -542,6 +542,10 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState<Partial<ConfirmOptions>>({});
     const [resolve, setResolve] = useState<(value: boolean) => void>(() => {});
+    const confirmRef = useRef<HTMLButtonElement>(null);
+    useEffect(() => {
+        if (open) confirmRef.current?.focus();
+    }, [open]);
 
     const confirmAction = useCallback((opts: ConfirmOptions): Promise<boolean> => {
         setOptions(opts);
@@ -583,7 +587,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                         <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
                             {options.cancel?.text || "Cancel"}
                         </Button>
-                        <Button autoFocus theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
+                        <Button ref={confirmRef} theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
                             {options.confirm?.text || "Confirm"}
                         </Button>
                     </div>

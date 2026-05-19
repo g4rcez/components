@@ -18,7 +18,7 @@ import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { type Components, type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type ContextProp, type ItemProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
@@ -63,20 +63,19 @@ const transitionStyles = {
 const EMPTY_NODES: Array<HTMLElement | null> = [];
 const EMPTY_VALUES: string[] = [];
 
-const List = forwardRef(function VirtualItem({ item, context, ...props }: Record<string, never>, ref) {
+const List = forwardRef(function VirtualItem({ item: _item, context: _context, ...props }: Record<string, never>, ref) {
     return <motion.li {...props} ref={ref as never} className="last:rounded-t-dropdown-radius" />;
 });
 
-const Item = forwardRef<HTMLLIElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
+const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList({ context: _context, ...props }, ref) {
     return (
-        <motion.ul
+        <motion.div
             {...props}
-            role="listbox"
             ref={ref as never}
             className="w-full rounded-b-dropdown-radius border-b border-tooltip-border last:border-transparent"
         >
             <AnimatePresence>{props.children}</AnimatePresence>
-        </motion.ul>
+        </motion.div>
     );
 });
 
@@ -138,6 +137,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const map = useMemo(() => new Dict(options.map((x) => [x.value, x])), [options]);
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
+        const searchInputRef = useRef<HTMLInputElement>(null);
         const defaults = props.value ?? props.defaultValue ?? EMPTY_VALUES;
         const translation = useTranslations();
         const [open, setOpen] = useState(false);
@@ -150,7 +150,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             });
             return d;
         });
-        const [label, setLabel] = useState<string[]>(() => {
+        const [_label, setLabel] = useState<string[]>(() => {
             const d = new Set(defaults);
             return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
         });
@@ -249,7 +249,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             return initializeInputDataset(input);
-        }, []);
+        }, [refs.reference]);
 
         useEffect(() => {
             if (!open) return;
@@ -384,18 +384,16 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 <ul
                     {...getReferenceProps({
                         ...props,
+                        tabIndex: 0,
                         onFocus,
                         id: `${id}-shadow`,
                         name: `${id}-shadow`,
                         ref: refs.setReference,
                     } as React.HTMLProps<HTMLElement>)}
-                    tabIndex={0}
-                    role="button"
                     data-name={id}
                     data-target={id}
                     data-shadow="true"
                     data-error={!!error}
-                    aria-autocomplete="list"
                     data-value={values.join(",")}
                     className={css(
                         "input placeholder-input-mask group h-input-height w-full text-input-text",
@@ -423,7 +421,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 <FloatingPortal preserveTabOrder>
                     {open ? (
                         <FloatingOverlay lockScroll className="z-floating">
-                            <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
+                            <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={searchInputRef} visuallyHiddenDismiss>
                                 <div
                                     {...getFloatingProps({
                                         ref: refs.setFloating,
@@ -441,7 +439,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     )}
                                 >
                                     <input
-                                        autoFocus
+                                        ref={searchInputRef}
                                         value={shadow}
                                         onChange={onChange}
                                         title={props.title}

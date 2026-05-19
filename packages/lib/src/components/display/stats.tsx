@@ -18,7 +18,7 @@ export const Stats = (props: React.PropsWithChildren<StatsProps>) => {
                 </div>
                 <div className="flex flex-col justify-center gap-stats-inner-gap py-stats-p pr-stats-p">
                     <h3 className="text-typography-base leading-none">{props.title}</h3>
-                    <p className="text-4xl font-semibold">{props.children}</p>
+                    <p className="text-stats-value-text font-semibold">{props.children}</p>
                 </div>
             </header>
             {props.footer ? <footer className="px-stats-footer-px py-stats-footer-py">{props.footer}</footer> : null}

@@ -175,7 +175,6 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                     },
                                 })
                             )}
-                            children={label}
                             className={className}
                             data-open={isOpen ? "" : undefined}
                             data-nested={isNested ? "" : undefined}
@@ -183,7 +182,9 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                             data-focus-inside={hasFocusInside ? "" : undefined}
                             ref={mergeRefs(refs.setReference, item.ref, forwardedRef) as unknown as React.Ref<HTMLElement>}
                             tabIndex={!isNested ? undefined : parent.activeIndex === item.index ? 0 : -1}
-                        />
+                        >
+                            {label}
+                        </Slot>
                     ) : (
                         <button
                             type="button"

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { QuestionIcon } from "@phosphor-icons/react";
-import { Button, Card, Expand, Tag } from "../../../../../lib/src";
+import { Card, Expand, Tag } from "../../../../../lib/src";
 
 export default function ExpandPage() {
     return (
@@ -12,7 +12,7 @@ export default function ExpandPage() {
                 description="Demonstrates a button that expands to reveal additional information or components within a popover-style container."
                 code={`"use client";
 import { QuestionIcon } from "@phosphor-icons/react";
-import { Button, Card, Expand, Tag } from "@g4rcez/components";
+import { Card, Expand, Tag } from "@g4rcez/components";
 
 function SimpleExpandDemo() {
   return (

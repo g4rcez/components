@@ -1,5 +1,5 @@
 "use client";
-import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
+import { autoUpdate, useFloating, useInteractions, useListNavigation, useRole } from "@floating-ui/react";
 import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
@@ -138,7 +138,7 @@ const findFirstClickable = (items: CommandItemTypes[]): CommandItemTypes | null 
 
 export const CommandPalette = (props: CommandPaletteProps) => {
     const id = useId();
-    const scrollContainerRef = useRef<HTMLUListElement | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
     const [text, setText] = useState("");
     const listRef = useRef<Array<HTMLElement | null>>([]);
     const translations = useTranslations();
@@ -201,7 +201,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             });
         },
     });
-    const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav]);
+    const listRole = useRole(root.context, { role: "listbox" });
+    const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav, listRole]);
 
     useEffect(() => {
         const combi = new CombiKeys();
@@ -269,7 +270,6 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                 }
                             },
                         } as unknown as React.HTMLProps<Element>) as React.InputHTMLAttributes<HTMLInputElement>)}
-                        autoFocus
                         value={text}
                         data-combikeysbypass="true"
                         placeholder="Search for..."
@@ -278,8 +278,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                     />
                 </header>
                 {props.loading ? (
-                    <ul
-                        role="listbox"
+                    <div
                         data-component="command-palette-list"
                         className="my-command-list-my flex max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-group-px"
                     >
@@ -287,23 +286,22 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                             {translations.commandPaletteLoading}
                         </div>
                         {loadingSkeleton.map((_, i) => (
-                            <li
+                            <div
                                 key={`${id}-${i}-skeleton-index`}
                                 className={css(
                                     "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-primary hover:text-primary-foreground"
                                 )}
                             >
                                 {SkeletonCell}
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 ) : (
                     <div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
-                        <ul
-                            role="listbox"
+                        <div
                             ref={scrollContainerRef}
                             data-component="command-palette-list"
-                            className="my-command-list-my flex h-fit max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-2"
+                            className="my-command-list-my flex h-fit max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-list-px"
                         >
                             {displayItems.map((item, index) => (
                                 <Item
@@ -335,7 +333,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                     {translations.commandPaletteEmpty ?? props.emptyMessage}
                                 </div>
                             ) : null}
-                        </ul>
+                        </div>
                         {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}
                     </div>
                 )}

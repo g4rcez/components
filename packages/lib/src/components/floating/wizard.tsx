@@ -197,14 +197,14 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 initial={{ opacity: 0, scale: 0.9 }}
-                                className="flex w-wizard-w max-w-sm flex-col gap-wizard-gap rounded-wizard-radius border border-floating-border bg-floating-background p-wizard-p shadow-lg"
+                                className="flex w-wizard-w max-w-sm flex-col gap-wizard-gap rounded-wizard-radius border border-floating-border bg-floating-background p-wizard-p shadow-shadow-floating"
                             >
                                 {element && (
                                     <FloatingArrow ref={arrowRef} context={context} className="fill-floating-background stroke-floating-border" />
                                 )}
                                 {currentStep.title && <h3>{currentStep.title}</h3>}
                                 {currentStep.description && <Fragment>{currentStep.description}</Fragment>}
-                                <div className="mt-2 flex items-center justify-between border-t border-floating-border pt-wizard-footer-pt">
+                                <div className="mt-wizard-footer-pt flex items-center justify-between border-t border-floating-border pt-wizard-footer-pt">
                                     <Button
                                         theme="raw"
                                         size="small"

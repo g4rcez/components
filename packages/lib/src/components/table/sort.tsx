@@ -84,13 +84,13 @@ export const Sort = <T extends Any>(props: Props<T>) => {
             <Dropdown
                 title={translation.tableSortDropdownTitle}
                 trigger={
-                    <span className="flex items-center gap-1 proportional-nums">
+                    <span className="flex items-center gap-table-inline-gap-tight proportional-nums">
                         <CaretUpDownIcon size={14} />
                         {translation.tableSortOrderByLabel} {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
                     </span>
                 }
             >
-                <ul className="mt-4 space-y-2">
+                <ul className="mt-table-groups-mt space-y-2">
                     {props.sorters.map((sorter) => {
                         return (
                             <li key={`sorter-select-${sorter.id}`} className="flex flex-nowrap gap-3">
@@ -108,14 +108,14 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                                     title={translation.tableSortTypeInputTitle}
                                     placeholder={translation.tableSortTypeInputPlaceholder}
                                 />
-                                <button className="mt-4" data-id={sorter.id} onClick={onDelete}>
+                                <button className="mt-table-groups-mt" data-id={sorter.id} onClick={onDelete}>
                                     <TrashIcon className="text-danger" size={14} />
                                 </button>
                             </li>
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddSorter} className="flex items-center gap-1 text-primary">
+                        <button type="button" onClick={onAddSorter} className="flex items-center gap-table-inline-gap-tight text-primary">
                             <PlusIcon size={14} /> {translation.tableSortAddButton}
                         </button>
                     </li>

@@ -110,7 +110,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                 container={css("pt-0 max-w-full w-full min-w-0", props.container)}
                 header={
                     <header className="relative mb-tabs-header-mb overflow-x-auto">
-                        <div className="absolute bottom-0 h-[1px] w-full bg-card-border" />
+                        <div className="absolute bottom-0 h-tabs-divider-h w-full bg-card-border" />
                         <nav className="min-w-0">
                             <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
                                 {items.map((x: React.ReactElement<TabProps>) => {

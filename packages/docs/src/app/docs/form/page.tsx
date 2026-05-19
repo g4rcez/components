@@ -60,7 +60,7 @@ const schema = z.object({
         z.object({
             document: z
                 .string()
-                .regex(/[[0-9]{4,6}\/[A-Z]/, "Invalid OAB document")
+                .regex(new RegExp("[[0-9]{4,6}/[A-Z]"), "Invalid OAB document")
                 .transform((x) => x.toUpperCase()),
         }),
         { message: "At least one OAB" }
@@ -141,9 +141,9 @@ const oabMask = (str: string) => {
   const numbers = str.replace(/[^0-9]/g, "");
   const len = clamp(4, numbers.length, 6);
   if (numbers.length === 6)
-    return [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, "/", /[A-Za-z]/, /[A-Za-z]/];
+    return [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, "/", /[A-Za-z]/, /[A-Za-z]/];
   return Array.from({ length: len })
-    .map((): string | RegExp => /\d/)
+    .map((): string | RegExp => /[0-9]/)
     .concat(["/", /[A-Za-z]/, /[A-Za-z]/]);
 };
 
@@ -166,7 +166,7 @@ const schema = z.object({
     z.object({
       document: z
         .string()
-        .regex(/[[0-9]{4,6}\/[A-Z]/, "Invalid OAB document")
+        .regex(new RegExp("[[0-9]{4,6}/[A-Z]"), "Invalid OAB document")
         .transform((x) => x.toUpperCase()),
     }),
     { message: "At least one OAB" },

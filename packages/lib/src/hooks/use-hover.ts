@@ -15,6 +15,6 @@ export const useHover = (ref: RefObject<HTMLElement>) => {
                 el.removeEventListener("mouseleave", leave);
             };
         }
-    }, []);
+    }, [ref]);
     return hovered;
 };

@@ -12,6 +12,7 @@ export const components: ComponentTokens = {
         "stats-icon-col-p": "1rem",
         "stats-content-gap": "0.5rem",
         "stats-content-py": "0.5rem",
+        "title-text": "2.25rem",
     },
     button: {
         radius: "0.55rem",
@@ -32,6 +33,8 @@ export const components: ComponentTokens = {
         "padding-x-tiny": "0.5rem",
         "padding-y-tiny": "0.25rem",
         "padding-icon": "0.25rem",
+        "radius-rough": "0.125rem",
+        "radius-squared": "0px",
     },
     alert: {
         radius: "0.5rem",
@@ -65,6 +68,12 @@ export const components: ComponentTokens = {
         "resizer-radius": "0.5rem",
         "overlay-pt": "2.5rem",
         "overlay-p": "2.5rem",
+        "dialog-max-w-mobile": "90%",
+        "sheet-max-h-svh": "calc(100svh - 5%)",
+        "sheet-max-h-lvh": "calc(100lvh - 10%)",
+        "sheet-max-h-vh": "calc(100vh - 15%)",
+        "title-text": "1.875rem",
+        "overlay-h": "100dvh",
     },
     dropdown: {
         radius: "0.5rem",
@@ -90,6 +99,7 @@ export const components: ComponentTokens = {
         "inner-gap": "0.25rem",
         "footer-px": "1.5rem",
         "footer-py": "0.5rem",
+        "value-text": "2.25rem",
     },
     notification: {
         radius: "0.75rem",
@@ -101,6 +111,9 @@ export const components: ComponentTokens = {
         "list-gap": "0.75rem",
         "badge-px": "0.75rem",
         "badge-py": "0.25rem",
+        "list-top": "1.5rem",
+        "list-max-w": "380px",
+        "badge-text": "0.625rem",
     },
     command: {
         radius: "0.5rem",
@@ -119,6 +132,7 @@ export const components: ComponentTokens = {
         "icon-size": "2.5rem",
         "input-px": "0.5rem",
         "input-py": "0.5rem",
+        "list-px": "0.5rem",
     },
     tag: {
         radius: "2rem",
@@ -151,6 +165,8 @@ export const components: ComponentTokens = {
         "nav-py": "0.25rem",
         "year-w": "4rem",
         "icon-size": "1rem",
+        "weekday-text": "0.75rem",
+        "cell-text": "0.75rem",
     },
     table: {
         radius: "0.5rem",
@@ -182,6 +198,13 @@ export const components: ComponentTokens = {
         "filter-inline-gap": "1rem",
         "filter-inline-py": "0.5rem",
         "filter-list-mt": "1rem",
+        "cell-border": "1px",
+        "divider-w": "1px",
+        "groups-mt": "1rem",
+        "groups-my": "1rem",
+        "metadata-min-w": "1ch",
+        "inline-gap-tight": "0.25rem",
+        "cell-padding": "0.75rem",
     },
     skeleton: {
         radius: "0.25rem",
@@ -278,6 +301,7 @@ export const components: ComponentTokens = {
         "item-gap": "1rem",
         "avatar-px": "0.25rem",
         "body-py": "0.25rem",
+        "title-text": "1.5rem",
     },
     timeline: {
         "item-pb": "3rem",
@@ -294,11 +318,13 @@ export const components: ComponentTokens = {
         "icon-size": "1.5rem",
         "label-px": "0.5rem",
         gap: "1rem",
+        "connector-h": "2px",
     },
     tabs: {
         "header-mb": "0.5rem",
         "item-px": "2.5rem",
         "item-py": "1rem",
+        "divider-h": "1px",
     },
     shortcut: {
         gap: "0.25rem",
@@ -366,5 +392,7 @@ export const components: ComponentTokens = {
         "hour-text": "0.625rem",
         "pill-radius": "0.25rem",
         "pill-text": "0.75rem",
+        "cell-gap-tight": "0.125rem",
+        "nav-mr": "0.25rem",
     },
 };

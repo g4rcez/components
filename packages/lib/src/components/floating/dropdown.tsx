@@ -44,7 +44,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 element: arrowRef,
             }),
         ],
-        [props.arrow]
+        []
     );
     const { refs, floatingStyles, context } = useFloating({
         open,
@@ -94,7 +94,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                                 className="fill-floating-background stroke-floating-border"
                             />
                             <header className="mb-dropdown-header-mb">
-                                <h3 id={headingId} className="text-left text-2xl font-medium leading-snug tracking-wide">
+                                <h3 id={headingId} className="text-left text-typography-2xl font-medium leading-snug tracking-wide">
                                     {props.title}
                                 </h3>
                             </header>

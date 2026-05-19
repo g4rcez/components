@@ -49,7 +49,7 @@ const transitionStyles = {
     initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
-const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
+const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context: _context, ...props }, ref) {
     return (
         <motion.ul {...props} ref={ref} className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius">
             <AnimatePresence>{props.children}</AnimatePresence>
@@ -58,7 +58,7 @@ const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(func
 });
 
 const Item = forwardRef<HTMLLIElement, ItemProps<AutocompleteItemProps> & ContextProp<unknown>>(function VirtualItem(
-    { item, context, ...props },
+    { item: _item, context: _context, ...props },
     ref
 ) {
     return <motion.li {...props} ref={ref} className="first:rounded-t-dropdown-radius last:rounded-t-dropdown-radius" />;
@@ -191,13 +191,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     setValue(props.value);
                 }
             }
-        }, [props.value, options.length]);
+        }, [props.value, options]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             return initializeInputDataset(input);
-        }, []);
+        }, [refs.reference]);
 
         useEffect(() => {
             if (!open) return;

@@ -120,12 +120,12 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
 
     const innerStatus = getCurrentStatus(step, visualCurrentStep, status);
 
-    const widthPerStep = context?.steps ? 100 / context?.steps : undefined;
+    const _widthPerStep = context?.steps ? 100 / context?.steps : undefined;
 
     return (
         <Fragment>
             <div
-                className={`hidden h-[2px] w-full bg-card-border first:hidden xl:block ${innerStatus === "active" || innerStatus === "complete" ? "bg-success" : ""}`}
+                className={`hidden h-step-connector-h w-full bg-card-border first:hidden xl:block ${innerStatus === "active" || innerStatus === "complete" ? "bg-success" : ""}`}
             />
             <motion.button
                 {...(props as unknown as HTMLMotionProps<"button">)}

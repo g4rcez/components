@@ -22,7 +22,7 @@ export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
                 {props.filters.map((x) => (
                     <li
                         key={`filter-table-${x.id}`}
-                        className="rounded-table-pill-radius flex items-center gap-1 border border-card-border px-table-pill-px py-table-pill-py"
+                        className="rounded-table-pill-radius flex items-center gap-table-inline-gap-tight border border-card-border px-table-pill-px py-table-pill-py"
                     >
                         <span>
                             <span
@@ -31,7 +31,7 @@ export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
                             />
                             {x.label} {x.operation.label.toLowerCase()}:
                         </span>
-                        <div className="relative w-min min-w-[1ch]">
+                        <div className="relative w-min min-w-table-metadata-min-w">
                             <span aria-hidden="true" className="invisible whitespace-pre p-0">
                                 {x.value || " "}
                             </span>

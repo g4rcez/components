@@ -191,14 +191,14 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                         {day.getDate()}
                                         {isSelected && props.stateRange.from?.toISOString() === key ? (
                                             <span className="absolute -top-2 left-0 h-full w-full">
-                                                <span className="text-xs text-foreground">
+                                                <span className="text-calendar-cell-text text-foreground">
                                                     {props.labelRange?.from ?? translate.calendarFromDate}
                                                 </span>
                                             </span>
                                         ) : null}
                                         {isSelected && props.stateRange.to?.toISOString() === key ? (
                                             <span className="absolute -top-2 left-0 h-full w-full">
-                                                <span className="text-xs text-foreground">{props.labelRange?.to ?? translate.calendarToDate}</span>
+                                                <span className="text-calendar-cell-text text-foreground">{props.labelRange?.to ?? translate.calendarToDate}</span>
                                             </span>
                                         ) : null}
                                     </button>
@@ -372,7 +372,7 @@ export const Calendar = ({
 
     useEffect(() => {
         if (!changeOnlyOnClick) onChange?.(state.date);
-    }, [currentAsString, changeOnlyOnClick]);
+    }, [currentAsString, changeOnlyOnClick, state.date, onChange]);
 
     const defer = useDebounce((y: string) => dispatch.date((prev) => setYear(new Date(prev), +y)), 1200);
 

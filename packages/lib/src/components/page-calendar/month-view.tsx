@@ -61,9 +61,14 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                 </span>
                             </div>
                             <div className="min-h-0 flex-1 overflow-y-auto">
-                                <div className="flex flex-col gap-0.5">
+                                <div className="flex flex-col gap-page-calendar-cell-gap-tight">
                                     {events.map((event) => (
-                                        <div key={event.id} onClick={(e) => e.stopPropagation()}>
+                                        <div
+                                            key={event.id}
+                                            role="presentation"
+                                            onClick={(e) => e.stopPropagation()}
+                                            onKeyDown={(e) => e.stopPropagation()}
+                                        >
                                             <EventPill compact event={event} onClick={() => onEventClick(event)} />
                                         </div>
                                     ))}

@@ -86,7 +86,7 @@ function Notification(props: NotificationItemProps) {
                 }}
                 className="pointer-events-auto w-full list-none"
             >
-                <Base.Content className={css(className, "shadow-lg")}>
+                <Base.Content className={className}>
                     <div className="flex items-start gap-notification-gap p-notification-p">
                         <div className={css("mt-0.5 shrink-0 opacity-80", loading && "animate-spin")}>
                             <Icon className="size-4" />
@@ -94,7 +94,7 @@ function Notification(props: NotificationItemProps) {
 
                         <div className="flex flex-1 flex-col gap-notification-inner-gap overflow-hidden">
                             {props.toast.title ? <Base.Title className="select-text truncate font-semibold leading-tight tracking-tight" /> : null}
-                            <Base.Description className="line-clamp-2 select-text text-xs font-medium leading-relaxed opacity-90" />
+                            <Base.Description className="line-clamp-2 select-text text-typography-xs font-medium leading-relaxed opacity-90" />
                         </div>
 
                         {closable && !loading ? (
@@ -122,7 +122,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
     return (
         <Base.Viewport
             ref={ref}
-            className="pointer-events-none fixed left-1/2 top-6 z-[100] flex w-full max-w-[380px] -translate-x-1/2 flex-col gap-notification-list-gap overflow-visible outline-none"
+            className="pointer-events-none fixed left-1/2 top-notification-list-top z-floating flex w-full max-w-notification-list-max-w -translate-x-1/2 flex-col gap-notification-list-gap overflow-visible outline-none"
         >
             <AnimatePresence mode="popLayout" initial={false}>
                 {visibleToasts.map((toast) => (
@@ -136,7 +136,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-notification-badge-px py-notification-badge-py text-[10px] font-bold uppercase tracking-wider text-foreground/50 shadow-sm backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
+                    className="pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-notification-badge-px py-notification-badge-py text-notification-badge-text font-bold uppercase tracking-wider text-foreground/50 shadow-notification backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
                 >
                     +{hiddenCount} more
                 </motion.div>

@@ -15,7 +15,7 @@ export type CheckboxProps = Override<
 >;
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-    ({ children, asTask = false, labelClassName, loading, error, className = "", size, container, ...props }: CheckboxProps, ref) => {
+    ({ children, asTask = false, labelClassName, loading, error, className = "", size: _size, container, ...props }: CheckboxProps, ref) => {
         const d = props.disabled || loading;
         return (
             <label

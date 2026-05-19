@@ -1,9 +1,9 @@
+import { type TokenRemap } from "@g4rcez/components";
+import { createTokenStyles } from "@g4rcez/components/styles";
+import { defaultDarkTheme } from "@g4rcez/components/themes";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { createTokenStyles } from "@g4rcez/components/styles";
-import { defaultDarkTheme, defaultLightTheme } from "@g4rcez/components/themes";
-import { type TokenRemap } from "@g4rcez/components";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

@@ -182,7 +182,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="flex items-center gap-1 proportional-nums">
+                    <span className="flex items-center gap-table-inline-gap-tight proportional-nums">
                         <FunnelIcon size={14} />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
@@ -227,7 +227,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="flex items-center gap-1 text-primary">
+                        <button type="button" onClick={onAddFilter} className="flex items-center gap-table-inline-gap-tight text-primary">
                             <PlusIcon size={14} /> {translation.tableFilterNewFilter}
                         </button>
                     </li>

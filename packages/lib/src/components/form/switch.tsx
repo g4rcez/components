@@ -29,7 +29,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(({ children, loa
                 return () => ref?.removeEventListener("change", onChange);
             }
         }
-    }, []);
+    }, [stableOnChange]);
 
     const onCheck = () => {
         const checked = !innerRef.current?.checked;
