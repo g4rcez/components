@@ -44,7 +44,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 element: arrowRef,
             }),
         ],
-        [props.arrow]
+        []
     );
     const { refs, floatingStyles, context } = useFloating({
         open,
@@ -81,7 +81,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="relative isolate z-floating rounded-lg border border-floating-border bg-floating-background p-4 shadow-shadow-floating"
+                            className="relative isolate z-floating rounded-dropdown-radius border border-floating-border bg-floating-background p-dropdown-p shadow-shadow-floating"
                             ref={refs.setFloating}
                             aria-labelledby={headingId}
                             style={floatingStyles as unknown as React.CSSProperties}
@@ -93,8 +93,8 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                                 strokeWidth={0.1}
                                 className="fill-floating-background stroke-floating-border"
                             />
-                            <header className="mb-2">
-                                <h3 id={headingId} className="text-left text-2xl font-medium leading-snug tracking-wide">
+                            <header className="mb-dropdown-header-mb">
+                                <h3 id={headingId} className="text-left text-typography-2xl font-medium leading-snug tracking-wide">
                                     {props.title}
                                 </h3>
                             </header>

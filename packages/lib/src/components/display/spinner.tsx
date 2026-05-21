@@ -9,7 +9,7 @@ export const Spinner = (props: { className?: string }) => {
             aria-live="polite"
             aria-label={t.spinnerLoading}
             className={css(
-                "box-border inline-block aspect-square size-12 animate-spin rounded-full border-4 border-background border-b-primary",
+                "box-border inline-block aspect-square size-spinner-size animate-spin rounded-full border-spinner-border border-background border-b-primary",
                 props.className
             )}
         />
@@ -18,7 +18,7 @@ export const Spinner = (props: { className?: string }) => {
 
 export const Loading = () => {
     return (
-        <div className="flex h-full w-full items-center justify-center p-12">
+        <div className="flex h-full w-full items-center justify-center p-spinner-container-p">
             <Spinner />
         </div>
     );

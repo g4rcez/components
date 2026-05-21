@@ -15,7 +15,7 @@ export type CheckboxProps = Override<
 >;
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-    ({ children, asTask = false, labelClassName, loading, error, className = "", size, container, ...props }: CheckboxProps, ref) => {
+    ({ children, asTask = false, labelClassName, loading, error, className = "", size: _size, container, ...props }: CheckboxProps, ref) => {
         const d = props.disabled || loading;
         return (
             <label
@@ -36,12 +36,15 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                     type="checkbox"
                     data-task={asTask}
                     className={css(
-                        "form-checkbox mr-2 inline-block size-4 appearance-none rounded border-card-border bg-origin-border text-primary focus:ring-primary disabled:opacity-70 group-aria-disabled:cursor-not-allowed",
+                        "form-checkbox mr-checkbox-gap inline-block size-checkbox-size appearance-none rounded-checkbox-radius border-card-border bg-origin-border text-primary focus:ring-primary disabled:opacity-70 group-aria-disabled:cursor-not-allowed",
                         className
                     )}
                 />
                 {children}
-                <span data-name="checkbox-label" className={css("min-w-full flex-1 text-xs text-danger empty:mt-0 empty:hidden", labelClassName)}>
+                <span
+                    data-name="checkbox-label"
+                    className={css("min-w-full flex-1 text-checkbox-hint-text text-danger empty:mt-0 empty:hidden", labelClassName)}
+                >
                     {error}
                 </span>
             </label>

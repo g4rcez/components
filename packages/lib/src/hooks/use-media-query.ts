@@ -23,7 +23,7 @@ export const useMediaQuery = (query: string, defaultValue: boolean = true) => {
         }
         matchMedia.addEventListener("change", onChange);
         return () => matchMedia.removeEventListener("change", onChange);
-    }, [query]);
+    }, [query, defaultValue]);
 
     return matches;
 };

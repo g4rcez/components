@@ -1,5 +1,5 @@
 "use client";
-import { format, isValid, Locale, parse, startOfDay } from "date-fns";
+import { format, isValid, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
@@ -58,7 +58,7 @@ const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
             }
             return x;
         });
-    } catch (e) {
+    } catch {
         return [];
     }
 };
@@ -125,7 +125,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 setInnerDate(date);
                 setValue(format(date!, placeholder));
             }
-        }, [isoDateEffect, placeholder]);
+        }, [isoDateEffect, placeholder, date]);
 
         const onChangeDate = (d: Date | undefined) => {
             setInnerDate(d);

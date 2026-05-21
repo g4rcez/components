@@ -62,7 +62,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
             <div className="min-w-0 flex-1">
                 <header>
                     <div className="mb-4 flex items-center gap-2">
-                        <Tag size="small">{props.section}</Tag>
+                        <Tag size="tiny">{props.section}</Tag>
                     </div>
                     <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-foreground lg:text-5xl">{props.title}</h1>
                     <p className="max-w-3xl font-medium leading-relaxed text-muted-foreground">{props.description}</p>

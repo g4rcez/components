@@ -169,7 +169,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                     key={key}
                                     align="center"
                                     className={css(
-                                        "relative p-1",
+                                        "relative p-calendar-cell-p",
                                         Is.function(props.styles?.dayFrame) ? props.styles?.dayFrame(day) : props.styles?.dayFrame
                                     )}
                                 >
@@ -182,8 +182,8 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                         onClick={props.dispatch.onSelectDate}
                                         data-view={props.stateDate.getMonth().toString()}
                                         className={css(
-                                            `relative flex size-9 items-center justify-center rounded-full proportional-nums disabled:cursor-not-allowed ${today ? "text-emphasis" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
-                                            isInRange && props.markRange ? "size-9 border border-dashed border-card-border" : "",
+                                            `relative flex size-calendar-day-size items-center justify-center rounded-full proportional-nums disabled:cursor-not-allowed ${today ? "text-emphasis" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
+                                            isInRange && props.markRange ? "size-calendar-day-size border border-dashed border-card-border" : "",
                                             Is.function(props.styles?.day) ? props.styles?.day(day) : props.styles?.day
                                         )}
                                     >
@@ -191,14 +191,14 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                         {day.getDate()}
                                         {isSelected && props.stateRange.from?.toISOString() === key ? (
                                             <span className="absolute -top-2 left-0 h-full w-full">
-                                                <span className="text-xs text-foreground">
+                                                <span className="text-calendar-cell-text text-foreground">
                                                     {props.labelRange?.from ?? translate.calendarFromDate}
                                                 </span>
                                             </span>
                                         ) : null}
                                         {isSelected && props.stateRange.to?.toISOString() === key ? (
                                             <span className="absolute -top-2 left-0 h-full w-full">
-                                                <span className="text-xs text-foreground">{props.labelRange?.to ?? translate.calendarToDate}</span>
+                                                <span className="text-calendar-cell-text text-foreground">{props.labelRange?.to ?? translate.calendarToDate}</span>
                                             </span>
                                         ) : null}
                                     </button>
@@ -251,7 +251,10 @@ export const Calendar = ({
             range: { from: range?.from, to: range?.to },
             months: getOptionsMonth(id.current, providedDate, currentLocale),
             selectMode: (rangeMode ? "from" : undefined) as SelectMode | undefined,
-            week: eachDayOfInterval({ start: startOfWeek(providedDate), end: endOfWeek(providedDate) }),
+            week: eachDayOfInterval({
+                start: startOfWeek(providedDate),
+                end: endOfWeek(providedDate),
+            }),
         },
         (get) => ({
             onChangeYear: (year: string) => ({ year }),
@@ -269,14 +272,24 @@ export const Calendar = ({
                 const state = get.state();
                 if (state.isAnimating) return state;
                 const date = add(state.date, { months: 1 });
-                return { date, isAnimating: true, direction: 1, year: formatYear(date) };
+                return {
+                    date,
+                    isAnimating: true,
+                    direction: 1,
+                    year: formatYear(date),
+                };
             },
             previousMonth: (e?: React.MouseEvent<HTMLButtonElement>) => {
                 if (e) monthClicked.current = e.currentTarget;
                 const state = get.state();
                 if (state.isAnimating) return state;
                 const date = sub(state.date, { months: 1 });
-                return { date, isAnimating: true, direction: -1, year: formatYear(date) };
+                return {
+                    date,
+                    isAnimating: true,
+                    direction: -1,
+                    year: formatYear(date),
+                };
             },
             onSelectDate: (e: React.MouseEvent<HTMLButtonElement>) => {
                 const state = get.state();
@@ -359,7 +372,7 @@ export const Calendar = ({
 
     useEffect(() => {
         if (!changeOnlyOnClick) onChange?.(state.date);
-    }, [currentAsString, changeOnlyOnClick]);
+    }, [currentAsString, changeOnlyOnClick, state.date, onChange]);
 
     const defer = useDebounce((y: string) => dispatch.date((prev) => setYear(new Date(prev), +y)), 1200);
 
@@ -390,7 +403,7 @@ export const Calendar = ({
                 onTouchStart={swipe.onTouchStart}
                 className={css("relative overflow-hidden", Is.function(styles?.calendar) ? styles?.calendar(allDaysOfMonth) : styles?.calendar)}
             >
-                <div className="flex flex-col justify-center rounded text-center">
+                <div className="rounded-calendar-header-radius flex flex-col justify-center text-center">
                     <AnimatePresence initial={false} mode="popLayout" custom={state.direction} onExitComplete={dispatch.onExitComplete}>
                         <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
                             <header className="relative flex justify-between">
@@ -401,9 +414,9 @@ export const Calendar = ({
                                     variants={removeImmediately}
                                     onClick={dispatch.previousMonth}
                                     title={translations.calendarBackMonth}
-                                    className="z-calendar rounded-full p-1.5 hover:bg-primary hover:text-primary-foreground"
+                                    className="z-calendar rounded-full p-calendar-nav-p hover:bg-primary hover:text-primary-foreground"
                                 >
-                                    <CaretLeftIcon className="h-4 w-4" />
+                                    <CaretLeftIcon className="size-calendar-icon-size" />
                                 </motion.button>
                                 <motion.span
                                     layout
@@ -411,7 +424,7 @@ export const Calendar = ({
                                     custom={state.direction}
                                     className="absolute inset-0 isolate z-normal flex items-center justify-center font-semibold"
                                 >
-                                    <span className="flex w-fit items-center justify-center gap-0.5 py-1">
+                                    <span className="flex w-fit items-center justify-center gap-calendar-nav-gap py-calendar-nav-py">
                                         <select
                                             value={monthString}
                                             onChange={dispatch.onChangeMonth}
@@ -428,7 +441,7 @@ export const Calendar = ({
                                             value={state.year}
                                             onChange={internalOnChangeYear}
                                             style={{ width: `${state.year.length}ch` }}
-                                            className="w-16 cursor-pointer appearance-none bg-transparent hover:text-primary"
+                                            className="w-calendar-year-w cursor-pointer appearance-none bg-transparent hover:text-primary"
                                         />
                                     </span>
                                 </motion.span>
@@ -439,12 +452,12 @@ export const Calendar = ({
                                     variants={removeImmediately}
                                     onClick={dispatch.nextMonth}
                                     title={translations.calendarNextMonth}
-                                    className="z-calendar rounded-full p-1.5 hover:bg-primary hover:text-primary-foreground"
+                                    className="z-calendar rounded-full p-calendar-nav-p hover:bg-primary hover:text-primary-foreground"
                                 >
-                                    <CaretRightIcon className="h-4 w-4" />
+                                    <CaretRightIcon className="size-calendar-icon-size" />
                                 </motion.button>
                             </header>
-                            <motion.table className="mt-2 table min-w-full table-auto border-0">
+                            <motion.table className="mt-calendar-table-mt table min-w-full table-auto border-0">
                                 <thead>
                                     <tr>
                                         {state.week.map((dayOfWeek) => (
@@ -452,11 +465,13 @@ export const Calendar = ({
                                                 role="columnheader"
                                                 key={dayOfWeek.toString()}
                                                 className={css(
-                                                    "py-2 text-sm font-medium capitalize",
+                                                    "py-calendar-weekday-py text-typography-sm font-medium capitalize",
                                                     Is.function(styles?.weekDay) ? styles.weekDay(dayOfWeek) : styles?.weekDay
                                                 )}
                                             >
-                                                {dayOfWeek.toLocaleDateString(currentLocale, { weekday: "short" })}
+                                                {dayOfWeek.toLocaleDateString(currentLocale, {
+                                                    weekday: "short",
+                                                })}
                                             </th>
                                         ))}
                                     </tr>
@@ -483,7 +498,7 @@ export const Calendar = ({
                     </AnimatePresence>
                 </div>
                 {type === "datetime" ? (
-                    <section className="my-4 grid items-center">
+                    <section className="my-calendar-datetime-my grid items-center">
                         <Input
                             info={null}
                             mask="time"
@@ -498,14 +513,18 @@ export const Calendar = ({
                                 if (!match) return;
                                 const hour = match.groups!.hour;
                                 const min = match.groups!.min;
-                                const d = set(state.date, { hours: Number(hour), minutes: Number(min), seconds: 0 });
+                                const d = set(state.date, {
+                                    hours: Number(hour),
+                                    minutes: Number(min),
+                                    seconds: 0,
+                                });
                                 dispatch.date(() => d);
                                 onChange?.(d);
                             }}
                         />
                     </section>
                 ) : null}
-                <footer className="mt-2 text-center text-primary">
+                <footer className="mt-calendar-footer-mt text-center text-primary">
                     <button type="button" onClick={onSetToday} className="transition-transform duration-300 hover:scale-105">
                         {translations.calendarToday}
                     </button>

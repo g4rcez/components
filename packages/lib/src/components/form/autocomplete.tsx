@@ -28,7 +28,9 @@ import { Label } from "../../types";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
-export type AutocompleteItemProps = OptionProps & { Render?: React.FC<OptionProps> };
+export type AutocompleteItemProps = OptionProps & {
+    Render?: React.FC<OptionProps>;
+};
 
 export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
     title?: string;
@@ -47,19 +49,19 @@ const transitionStyles = {
     initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
-const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context, ...props }, ref) {
+const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context: _context, ...props }, ref) {
     return (
-        <motion.ul {...props} ref={ref} className="max-h-96 w-full overscroll-contain rounded-lg">
+        <motion.ul {...props} ref={ref} className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.ul>
     );
 });
 
 const Item = forwardRef<HTMLLIElement, ItemProps<AutocompleteItemProps> & ContextProp<unknown>>(function VirtualItem(
-    { item, context, ...props },
+    { item: _item, context: _context, ...props },
     ref
 ) {
-    return <motion.li {...props} ref={ref} className="first:rounded-t-lg last:rounded-t-lg" />;
+    return <motion.li {...props} ref={ref} className="first:rounded-t-dropdown-radius last:rounded-t-dropdown-radius" />;
 });
 
 const components = { List, Item };
@@ -145,14 +147,20 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),
-                autoPlacement({ allowedPlacements: ["top-start", "bottom-start"], alignment: "start" }),
+                autoPlacement({
+                    allowedPlacements: ["top-start", "bottom-start"],
+                    alignment: "start",
+                }),
                 size({
                     padding: 10,
                     elementContext: "reference",
                     apply(args) {
                         const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
                         const mw = `${fieldset.current?.getBoundingClientRect().width || DEFAULT_SIZE}px`;
-                        Object.assign(args.elements.floating.style, { width: mw, maxWidth: mw });
+                        Object.assign(args.elements.floating.style, {
+                            width: mw,
+                            maxWidth: mw,
+                        });
                     },
                 }),
             ],
@@ -183,13 +191,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     setValue(props.value);
                 }
             }
-        }, [props.value, options.length]);
+        }, [props.value, options]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             return initializeInputDataset(input);
-        }, []);
+        }, [refs.reference]);
 
         useEffect(() => {
             if (!open) return;
@@ -282,7 +290,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 right={
                     <span className="flex items-center gap-0.5">
                         {right}
-                        <button type="button" className="p-2 transition-colors link:text-primary md:p-1" onClick={onCaretDownClick}>
+                        <button type="button" className="p-input-gap transition-colors link:text-primary md:p-1" onClick={onCaretDownClick}>
                             <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
@@ -291,7 +299,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 type="button"
                                 onClick={onClose}
                                 aria-label={translation.inputCloseValue}
-                                className="p-2 transition-colors link:text-danger md:p-1"
+                                className="p-input-gap transition-colors link:text-danger md:p-1"
                             >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -357,10 +365,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     autoComplete="off"
                     className={css(
                         "input placeholder-input-mask group h-input-height w-full flex-1",
-                        "rounded-md bg-transparent px-input-x py-input-y text-foreground",
+                        "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-foreground",
                         "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                         "group-error:text-danger group-error:placeholder-input-mask-error",
-                        "text-base group-focus-within:border-primary group-hover:border-primary",
+                        "text-input-text group-focus-within:border-primary group-hover:border-primary",
                         props.className
                     )}
                 />
@@ -379,7 +387,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <motion.div
                                 {...getFloatingProps({
                                     ref: refs.setFloating,
-                                    style: { ...transitions.styles, left: x, top: y ?? 0, position: strategy, height: "auto" },
+                                    style: {
+                                        ...transitions.styles,
+                                        left: x,
+                                        top: y ?? 0,
+                                        position: strategy,
+                                        height: "auto",
+                                    },
                                 })}
                                 initial={false}
                                 data-floating="true"
@@ -394,13 +408,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     flushSync(() => setH(Math.min(320, sum + 2)));
                                 }}
                                 className={css(
-                                    "shadow-floating isolate z-floating m-0 max-h-80 origin-[top_center] list-none overscroll-contain rounded-b-lg rounded-t-lg border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
+                                    "shadow-floating isolate z-floating m-0 max-h-80 origin-[top_center] list-none overscroll-contain rounded-dropdown-radius border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
                                     isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
                                 )}
                             >
                                 {isEmpty ? (
                                     <div className="w-full border-b border-tooltip-border">
-                                        <span className="flex w-full justify-between p-2 text-left text-disabled">
+                                        <span className="flex w-full justify-between p-menu-item-p text-left text-disabled">
                                             {emptyMessage || translation.autocompleteEmpty}
                                         </span>
                                     </div>
@@ -417,7 +431,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         scroller.current = e as HTMLElement;
                                         removeScrollRef.current = e as HTMLElement;
                                     }}
-                                    className="border-floating max-h-full overscroll-contain rounded-lg bg-floating-background p-0 text-foreground"
+                                    className="border-floating max-h-full overscroll-contain rounded-dropdown-radius bg-floating-background p-0 text-foreground"
                                     itemContent={(i, option) => {
                                         const Label = option.Render ?? Frag;
                                         const active = value === option.value || value === option.label;
@@ -437,7 +451,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                                     "aria-selected": active,
                                                     "aria-disabled": option.disabled,
                                                     onClick: () => onSelect(option, i),
-                                                    className: `cursor-pointer min-h-10 hover:bg-floating-hover w-full p-2 text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
+                                                    className: `cursor-pointer min-h-10 hover:bg-floating-hover w-full p-menu-item-p text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
                                                 })}
                                             >
                                                 <Label {...option} ref={undefined} label={option.label} value={option.value}>

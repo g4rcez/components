@@ -110,7 +110,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         ref={mergeRefs(ref, inputRef) as unknown as React.Ref<Html>}
                         className={css(
                             "input placeholder-input-mask group h-input-height w-full flex-1",
-                            "rounded-md bg-transparent px-input-x py-input-y text-base text-foreground",
+                            "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-input-text text-foreground",
                             "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
                             "group-error:text-danger group-error:placeholder-input-mask-error",
                             "resize-y group-focus-within:border-primary group-hover:border-primary",

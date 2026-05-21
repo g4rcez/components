@@ -15,6 +15,6 @@ export const useParentHeight = (ref: React.RefObject<HTMLElement>) => {
         return () => {
             parent.removeEventListener("resize", listener);
         };
-    }, []);
+    }, [ref]);
     return h;
 };

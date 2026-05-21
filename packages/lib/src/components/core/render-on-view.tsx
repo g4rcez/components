@@ -35,7 +35,7 @@ export const RenderOnView = ({ children, ...props }: PropsWithChildren<RenderOnV
         });
         observer.observe(div);
         return () => observer.disconnect();
-    }, []);
+    }, [onIntersect]);
 
     return (
         <div {...props} ref={ref}>

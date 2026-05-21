@@ -46,8 +46,8 @@ const variants = {
         muted:   "bg-button-muted-bg text-button-muted-text",
     },
     size: {
-        default: "h-10 px-4 py-2",
-        small:   "h-8 px-3 py-1 text-sm",
+        default: "h-button-height px-button-padding-x py-button-padding-y",
+        small:   "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-typography-sm",
     },
 };
 
@@ -131,6 +131,47 @@ type CustomProps = Override<React.HTMLAttributes<HTMLDivElement>, { onClick: (id
 
 No `text-[#fff]`, `rounded-[8px]`, `z-[9999]`, `p-[12px]`. Use tokens only.
 
+### Component Token System
+
+All component-specific tokens are defined in `packages/lib/src/styles/components.ts` and auto-registered in Tailwind by `preset.tailwind.ts`. The mapping rule is:
+
+| Attribute in `components.ts` | Tailwind class pattern |
+|-------------------------------|------------------------|
+| `radius` | `rounded-{component}-radius` |
+| `border` or `*-border` | `border-{component}-{attr}` (also usable as spacing) |
+| `text`, `*-text`, `text-*` | `text-{component}-{attr}` (also usable as spacing) |
+| anything else | spacing — `h-`, `p-`, `px-`, `py-`, `gap-`, `w-`, `m-`, etc. |
+
+Typography sizes are a special case: attrs from `components.typography` register as `text-typography-{size}` (not `text-{size}`):
+- `text-typography-xs` · `text-typography-sm` · `text-typography-base`
+- `text-typography-lg` · `text-typography-xl` · `text-typography-2xl`
+- `text-typography-3xl` · `text-typography-4xl` · `text-typography-5xl`
+
+**Common examples:**
+
+Button:
+- `h-button-height`, `px-button-padding-x`, `py-button-padding-y`
+- `h-button-height-small`, `px-button-padding-x-small`, `py-button-padding-y-small`
+- `h-button-height-big`, `h-button-height-min`, `h-button-height-tiny`
+- `rounded-button-radius`, `gap-button-gap`, `p-button-padding-icon`
+
+Input:
+- `h-input-height`, `px-input-padding-x`, `py-input-padding-y`
+- `rounded-input-radius`, `gap-input-gap`
+- `text-input-text`, `text-input-label-text`, `text-input-hint-text`
+
+Card:
+- `rounded-card-radius`, `px-card-padding-x`, `py-card-padding-y`, `gap-card-gap`
+
+Modal:
+- `rounded-modal-radius`, `px-modal-padding-x`, `py-modal-padding-y`
+
+Tag:
+- `h-tag-height`, `px-tag-padding-x`, `py-tag-padding-y`, `gap-tag-gap`
+- `rounded-tag-radius`, `size-tag-indicator-size`
+
+For any component token not listed here, read `packages/lib/src/styles/components.ts` directly — every key maps to a Tailwind class following the rule above.
+
 ### Colors — Semantic Tokens
 
 Use as `bg-{token}`, `text-{token}`, `border-{token}`:
@@ -155,22 +196,21 @@ Use as `bg-{token}`, `text-{token}`, `border-{token}`:
 - Table: `bg-table-header`, `bg-table-background`, `border-table-border`
 - Input: `border-input-border`, `text-input-placeholder`, `bg-input-mask-error`, `bg-input-switch-bg`, `bg-input-switch`, `bg-input-slider`
 
-### Spacing — from `common.ts`
+### Global Spacing — from `common.ts`
 
 - `gap-base`, `p-base`, `px-base`, `py-base` (1rem)
 - `gap-lg`, `p-lg` (1.125rem)
 - `gap-sm`, `p-sm` (0.75rem)
 - `gap-hairline`, `p-hairline` (0.0625rem)
-- `h-input-height` (2.5rem), `h-field-height` (1.5rem)
-- `px-input-x`, `py-input-y`, `gap-input-gap`
-- `w-dialog` (modal width: 20rem)
+- `w-dialog` (modal/dialog width: 20rem)
 
-### Rounded
+### Rounded — Global Tokens
 
-- `rounded-button` — for buttons
-- `rounded-card` — for cards and panels
-- `rounded-pill` — for pill-shaped elements
-- `rounded-full` — for circles / avatars
+Only `pill` and `full` remain as global rounded tokens:
+- `rounded-pill` — pill-shaped elements (e.g. tags, indicators)
+- `rounded-full` — circles / avatars
+
+All other component radii use the component token pattern: `rounded-{component}-radius` (e.g. `rounded-button-radius`, `rounded-card-radius`, `rounded-modal-radius`, `rounded-input-radius`).
 
 ### Shadows
 
@@ -207,12 +247,12 @@ const variants = {
         muted:   "bg-button-muted-bg text-button-muted-text",
     },
     size: {
-        default: "h-10 px-4 py-2",
-        small:   "h-8 px-3 py-1 text-sm",
+        default: "h-button-height px-button-padding-x py-button-padding-y",
+        small:   "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-typography-sm",
     },
 };
 
-const badgeVariants = cva("inline-flex items-center font-medium rounded-button", {
+const badgeVariants = cva("inline-flex items-center font-medium rounded-button-radius", {
     variants,
     defaultVariants: { theme: "primary", size: "default" },
 });
@@ -246,7 +286,7 @@ export const Badge: <T extends React.ElementType = "span">(_: BadgeProps<T>) => 
 ### Card (`/packages/lib/src/components/display/card.tsx`)
 
 - DO NOT add custom `rounded-*`, `p-*`, `shadow-*`, `border-*` overrides
-- Use tokens: `rounded-card`, `shadow-shadow-card`, `border-card-border`, `bg-card-background`
+- Use tokens: `rounded-card-radius`, `shadow-shadow-card`, `border-card-border`, `bg-card-background`
 
 ```tsx
 <Card container="custom-layout-class" />  // OK
@@ -256,7 +296,7 @@ export const Badge: <T extends React.ElementType = "span">(_: BadgeProps<T>) => 
 ### Modal (`/packages/lib/src/components/floating/modal.tsx`)
 
 - DO NOT add custom `z-*`, `rounded-*`, `p-*` overrides
-- Use tokens: `z-floating`, `bg-floating-background`, `border-floating-border`
+- Use tokens: `z-floating`, `bg-floating-background`, `border-floating-border`, `rounded-modal-radius`
 
 ```tsx
 <Modal type="dialog" />                          // OK
@@ -273,9 +313,12 @@ When creating or reviewing component code:
 - [ ] No hardcoded spacing (`p-[12px]`, `gap-[8px]`)
 - [ ] No arbitrary Tailwind values (`rounded-[8px]`, `z-[9999]`)
 - [ ] Primary color uses `primary` token, not "blue"
-- [ ] Card: no custom `rounded-*`, `p-*`, `shadow-*`
-- [ ] Modal: no custom `z-*`, `rounded-*`, `p-*`
+- [ ] Card: no custom `rounded-*`, `p-*`, `shadow-*` — use `rounded-card-radius`
+- [ ] Modal: no custom `z-*`, `rounded-*`, `p-*` — use `rounded-modal-radius`
+- [ ] Button: uses `rounded-button-radius` not `rounded-button` or `rounded-md`
 - [ ] All z-index from token system (`z-floating`, `z-tooltip`, etc.)
+- [ ] Typography font sizes use `text-typography-{size}` not `text-sm`, `text-xs`, etc.
+- [ ] Component sizes/spacing use `{component}-{attr}` tokens not hardcoded values
 - [ ] Component uses `forwardRef`
 - [ ] Component uses `cva()` for variants
 - [ ] Variant types use `CvaVariants<typeof variants>` (variants object, not cva result)
@@ -291,7 +334,9 @@ When creating or reviewing component code:
 | Concern | File |
 |---------|------|
 | Colors | `packages/lib/src/styles/light.ts` / `dark.ts` |
-| Spacing / Rounded / Z-Index | `packages/lib/src/styles/common.ts` |
+| Component tokens (sizing, radius, spacing, font sizes) | `packages/lib/src/styles/components.ts` |
+| Global spacing / Rounded / Z-Index | `packages/lib/src/styles/common.ts` |
+| Tailwind token registration | `packages/lib/preset.tailwind.ts` |
 | `css()` utility | `packages/lib/src/lib/dom.ts` |
 | Type utilities | `packages/lib/src/types.ts` |
 | Polymorph | `packages/lib/src/components/core/polymorph.tsx` |

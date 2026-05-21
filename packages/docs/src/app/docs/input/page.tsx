@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React, { useState } from "react";
-import { Card, Input, Locales, CurrencyCode } from "../../../../../lib/src";
+import { Card, Input, CurrencyCode } from "../../../../../lib/src";
 
 export default function InputPage() {
     const [currency, setCurrency] = useState<CurrencyCode>("BRL");

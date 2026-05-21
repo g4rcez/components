@@ -37,18 +37,18 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
     return (
         <div className="flex flex-1 flex-col overflow-hidden">
             <div className="flex flex-shrink-0 border-b border-border">
-                <div className="w-[60px] flex-shrink-0" />
+                <div className="w-page-calendar-gutter-w flex-shrink-0" />
                 {days.map((day, idx) => {
                     const isCurrentDay = isToday(day);
                     return (
                         <div
                             key={idx}
                             aria-label={formatFullDate(day, locale)}
-                            className="flex-1 py-2 text-center text-xs font-medium text-muted-foreground"
+                            className="flex-1 py-page-calendar-weekday-py text-center text-page-calendar-weekday-text font-medium text-muted-foreground"
                         >
                             <span className="block">{formatWeekdayShort(day, locale)}</span>
                             <span
-                                className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
+                                className={`inline-flex size-page-calendar-week-badge-size items-center justify-center rounded-full text-page-calendar-week-badge-text font-bold ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
                             >
                                 {formatDay(day, locale)}
                             </span>
@@ -57,10 +57,10 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                 })}
             </div>
             <div ref={scrollBodyRef} className="flex flex-1 items-start overflow-y-auto">
-                <div className="w-[60px] flex-shrink-0">
+                <div className="w-page-calendar-gutter-w flex-shrink-0">
                     {hours.map((hour) => (
                         <div key={hour} className="relative" style={{ height: HOUR_HEIGHT }}>
-                            <span className="absolute -top-2.5 right-2 text-[10px] text-muted-foreground">
+                            <span className="absolute -top-2.5 right-2 text-page-calendar-hour-text text-muted-foreground">
                                 {hour === 0 ? "" : formatHourLabel(hour, locale)}
                             </span>
                             {hour === new Date().getHours() && <div ref={currentHourRef} />}
@@ -76,26 +76,20 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                 const slotDate = new Date(day);
                                 slotDate.setHours(hour, 0, 0, 0);
                                 return (
-                                    <div
+                                    <button
                                         key={hour}
-                                        role="button"
-                                        tabIndex={0}
+                                        type="button"
                                         aria-label={formatHourLabel(hour, locale)}
-                                        className="cursor-pointer border-b border-border/50 hover:bg-muted/20"
+                                        className="w-full cursor-pointer border-b border-border/50 hover:bg-muted/20"
                                         style={{ height: HOUR_HEIGHT }}
                                         onClick={() => onSlotClick?.(slotDate)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter" || e.key === " ") {
-                                                e.preventDefault();
-                                                onSlotClick?.(slotDate);
-                                            }
-                                        }}
                                     />
                                 );
                             })}
                             {computeEventColumns(events).map(({ event, columnIndex, columnCount }) => (
                                 <div
                                     key={event.id}
+                                    role="presentation"
                                     className="absolute"
                                     style={{
                                         top: getTopOffset(event),
@@ -104,6 +98,7 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                         width: `calc(${100 / columnCount}% - 2px)`,
                                     }}
                                     onClick={(e) => e.stopPropagation()}
+                                    onKeyDown={(e) => e.stopPropagation()}
                                 >
                                     <EventPill event={event} onClick={() => onEventClick(event)} />
                                 </div>

@@ -159,7 +159,11 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                 fill="black"
                                 initial={false}
                                 onAnimationComplete={() => setIsOverlayReady(true)}
-                                transition={{ type: "spring", duration: 0.5, ease: "easeInOut" }}
+                                transition={{
+                                    type: "spring",
+                                    duration: 0.5,
+                                    ease: "easeInOut",
+                                }}
                                 animate={{
                                     x: rect.left - 5,
                                     y: rect.top - 5,
@@ -193,23 +197,23 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 initial={{ opacity: 0, scale: 0.9 }}
-                                className="flex w-80 max-w-sm flex-col gap-3 rounded-lg border border-floating-border bg-floating-background p-4 shadow-lg"
+                                className="flex w-wizard-w max-w-sm flex-col gap-wizard-gap rounded-wizard-radius border border-floating-border bg-floating-background p-wizard-p shadow-shadow-floating"
                             >
                                 {element && (
                                     <FloatingArrow ref={arrowRef} context={context} className="fill-floating-background stroke-floating-border" />
                                 )}
                                 {currentStep.title && <h3>{currentStep.title}</h3>}
                                 {currentStep.description && <Fragment>{currentStep.description}</Fragment>}
-                                <div className="mt-2 flex items-center justify-between border-t border-floating-border pt-2">
+                                <div className="mt-wizard-footer-pt flex items-center justify-between border-t border-floating-border pt-wizard-footer-pt">
                                     <Button
                                         theme="raw"
                                         size="small"
                                         onClick={onClose}
-                                        className="text-xs text-muted-foreground hover:text-foreground"
+                                        className="text-wizard-label-text text-muted-foreground hover:text-foreground"
                                     >
                                         {labels.skip}
                                     </Button>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-wizard-actions-gap">
                                         {hasPrevious && (
                                             <Button size="small" theme="ghost-muted" onClick={handlePrevious}>
                                                 {labels.previous}
@@ -220,7 +224,7 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="absolute right-2 top-2 text-xs text-muted-foreground">
+                                <div className="absolute right-wizard-counter-right top-wizard-counter-top text-wizard-label-text text-muted-foreground">
                                     {index + 1} / {steps.length}
                                 </div>
                             </motion.div>

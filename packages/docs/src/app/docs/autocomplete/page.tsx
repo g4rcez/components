@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React, { Fragment, useEffect, useState } from "react";
-import { Autocomplete, Button, Card, Modal } from "../../../../../lib/src";
+import { Autocomplete, Button, Modal } from "../../../../../lib/src";
 
 const defaults = [
     { label: "JavaScript", value: "javascript" },

@@ -4,7 +4,12 @@ import { css } from "../../lib/dom";
 import { Polymorph } from "../core/polymorph";
 
 export const SkeletonCell = (
-    <div role="status" aria-busy="true" aria-label="Loading content" className="h-6 w-10/12 animate-pulse rounded bg-muted" />
+    <div
+        role="status"
+        aria-busy="true"
+        aria-label="Loading content"
+        className="h-skeleton-cell-h w-10/12 animate-pulse rounded-skeleton-radius bg-muted"
+    />
 );
 
 export const Skeleton = (props: { className?: string; as?: ElementType; style?: CSSProperties }) => {
@@ -16,7 +21,7 @@ export const Skeleton = (props: { className?: string; as?: ElementType; style?: 
             aria-busy="true"
             aria-label={t.skeletonLoading}
             as={props.as || "span"}
-            className={css("block h-8 w-32 animate-pulse rounded bg-muted", props.className)}
+            className={css("block h-skeleton-height w-skeleton-width animate-pulse rounded-skeleton-radius bg-muted", props.className)}
         />
     );
 };
@@ -30,7 +35,7 @@ export const SkeletonList = (props: { className?: string; rows: number }) => {
         })
     );
     return (
-        <ul role="status" aria-busy="true" aria-label={t.skeletonLoading} className={css("flex flex-col gap-6", props.className)}>
+        <ul role="status" aria-busy="true" aria-label={t.skeletonLoading} className={css("flex flex-col gap-skeleton-list-gap", props.className)}>
             {items.current}
         </ul>
     );

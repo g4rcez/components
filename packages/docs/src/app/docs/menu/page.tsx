@@ -17,30 +17,30 @@ function SimpleNestedMenu() {
   return (
     <div className="flex flex-wrap gap-8">
       <Menu label="I'm a menu">
-        <MenuItem title="Menu Item X" children="Item 1" />
+        <MenuItem title="Menu Item X">Item 1</MenuItem>
         <Menu label="Submenu">
-          <MenuItem title="Menu Item X" children="Sub item 2" />
-          <MenuItem title="Menu Item X" children="Sub item 3" />
+          <MenuItem title="Menu Item X">Sub item 2</MenuItem>
+          <MenuItem title="Menu Item X">Sub item 3</MenuItem>
           <Menu label="Deep menu">
-            <MenuItem title="Menu Item X" children="Last node" />
+            <MenuItem title="Menu Item X">Last node</MenuItem>
           </Menu>
         </Menu>
-        <MenuItem title="Menu Item X" children="Item 2" />
-        <MenuItem title="Menu Item X" children="Item 3" />
-        <MenuItem title="Menu Item X" children="Item 4" />
-        <MenuItem title="Menu Item X" children="Item 5" />
-        <MenuItem title="Menu Item X" children="Item 6" />
-        <MenuItem title="Menu Item X" children="Item 7" />
-        <MenuItem title="Menu Item X" children="Item 8" />
-        <MenuItem title="Menu Item X" children="Item 9" />
-        <MenuItem title="Menu Item X" children="Item 10" />
+        <MenuItem title="Menu Item X">Item 2</MenuItem>
+        <MenuItem title="Menu Item X">Item 3</MenuItem>
+        <MenuItem title="Menu Item X">Item 4</MenuItem>
+        <MenuItem title="Menu Item X">Item 5</MenuItem>
+        <MenuItem title="Menu Item X">Item 6</MenuItem>
+        <MenuItem title="Menu Item X">Item 7</MenuItem>
+        <MenuItem title="Menu Item X">Item 8</MenuItem>
+        <MenuItem title="Menu Item X">Item 9</MenuItem>
+        <MenuItem title="Menu Item X">Item 10</MenuItem>
       </Menu>
       <Menu label="I'm a menu without hover" hover={false}>
-        <MenuItem title="Menu Item X" children="Item 1" />
-        <MenuItem title="Menu Item X" children="Item 2" />
-        <MenuItem title="Menu Item X" children="Item 3" />
+        <MenuItem title="Menu Item X">Item 1</MenuItem>
+        <MenuItem title="Menu Item X">Item 2</MenuItem>
+        <MenuItem title="Menu Item X">Item 3</MenuItem>
         <Menu label="Deep menu">
-          <MenuItem title="Menu Item X" children="Last node" />
+          <MenuItem title="Menu Item X">Last node</MenuItem>
         </Menu>
       </Menu>
     </div>
@@ -49,30 +49,30 @@ function SimpleNestedMenu() {
             >
                 <Card title="Simple menu" className="flex gap-8">
                     <Menu label="I'm a menu">
-                        <MenuItem title="Menu Item X" children="Item 1" />
+                        <MenuItem title="Menu Item X">Item 1</MenuItem>
                         <Menu label="Submenu">
-                            <MenuItem title="Menu Item X" children="Sub item 2" />
-                            <MenuItem title="Menu Item X" children="Sub item 3" />
+                            <MenuItem title="Menu Item X">Sub item 2</MenuItem>
+                            <MenuItem title="Menu Item X">Sub item 3</MenuItem>
                             <Menu label="Deep menu">
-                                <MenuItem title="Menu Item X" children="Last node" />
+                                <MenuItem title="Menu Item X">Last node</MenuItem>
                             </Menu>
                         </Menu>
-                        <MenuItem title="Menu Item X" children="Item 2" />
-                        <MenuItem title="Menu Item X" children="Item 3" />
-                        <MenuItem title="Menu Item X" children="Item 4" />
-                        <MenuItem title="Menu Item X" children="Item 5" />
-                        <MenuItem title="Menu Item X" children="Item 6" />
-                        <MenuItem title="Menu Item X" children="Item 7" />
-                        <MenuItem title="Menu Item X" children="Item 8" />
-                        <MenuItem title="Menu Item X" children="Item 9" />
-                        <MenuItem title="Menu Item X" children="Item 10" />
+                        <MenuItem title="Menu Item X">Item 2</MenuItem>
+                        <MenuItem title="Menu Item X">Item 3</MenuItem>
+                        <MenuItem title="Menu Item X">Item 4</MenuItem>
+                        <MenuItem title="Menu Item X">Item 5</MenuItem>
+                        <MenuItem title="Menu Item X">Item 6</MenuItem>
+                        <MenuItem title="Menu Item X">Item 7</MenuItem>
+                        <MenuItem title="Menu Item X">Item 8</MenuItem>
+                        <MenuItem title="Menu Item X">Item 9</MenuItem>
+                        <MenuItem title="Menu Item X">Item 10</MenuItem>
                     </Menu>
                     <Menu label="I'm a menu without hover" hover={false}>
-                        <MenuItem title="Menu Item X" children="Item 1" />
-                        <MenuItem title="Menu Item X" children="Item 2" />
-                        <MenuItem title="Menu Item X" children="Item 3" />
+                        <MenuItem title="Menu Item X">Item 1</MenuItem>
+                        <MenuItem title="Menu Item X">Item 2</MenuItem>
+                        <MenuItem title="Menu Item X">Item 3</MenuItem>
                         <Menu label="Deep menu">
-                            <MenuItem title="Menu Item X" children="Last node" />
+                            <MenuItem title="Menu Item X">Last node</MenuItem>
                         </Menu>
                     </Menu>
                 </Card>

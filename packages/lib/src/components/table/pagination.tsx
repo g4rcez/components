@@ -27,12 +27,12 @@ export function createPaginationItems(current: number, max: number) {
 export const Pagination = (pagination: TablePagination) => {
     const id = useId();
     const translation = useTranslations();
-    const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination.current, pagination.pages]);
+    const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination]);
     const hasNext = pagination.current < pagination.pages;
     const Link: React.ElementType = pagination.asLink ?? "button";
 
     return (
-        <footer className="flex flex-wrap items-center justify-center gap-4 border-t-muted p-3 text-sm lg:flex-nowrap lg:justify-between">
+        <footer className="text-typography-sm flex flex-wrap items-center justify-center gap-table-pag-gap border-t-muted p-table-pag-p lg:flex-nowrap lg:justify-between">
             <p>
                 <translation.tablePaginationFooter
                     {...pagination}
@@ -61,7 +61,7 @@ export const Pagination = (pagination: TablePagination) => {
                 />
             </p>
             <nav>
-                <ul className="flex items-center gap-2">
+                <ul className="flex items-center gap-table-pag-items-gap">
                     {pagination.current > 1 ? (
                         <li>
                             <Polymorph as={Link} href="previous" className="">
@@ -80,7 +80,7 @@ export const Pagination = (pagination: TablePagination) => {
                                         <Polymorph
                                             href={x}
                                             as={Link}
-                                            className={`cursor-pointer border-b-2 px-3 py-1 proportional-nums transition-colors hover:border-primary-subtle hover:text-primary-subtle ${x === pagination.current ? "border-primary text-primary" : "border-transparent"}`}
+                                            className={`cursor-pointer border-b-2 px-table-pag-item-px py-table-pag-item-py proportional-nums transition-colors hover:border-primary-subtle hover:text-primary-subtle ${x === pagination.current ? "border-primary text-primary" : "border-transparent"}`}
                                         >
                                             {x}
                                         </Polymorph>

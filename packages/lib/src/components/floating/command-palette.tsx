@@ -1,5 +1,5 @@
 "use client";
-import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
+import { autoUpdate, useFloating, useInteractions, useListNavigation, useRole } from "@floating-ui/react";
 import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
@@ -51,7 +51,7 @@ type ItemProps = {
 };
 
 const Group = (props: { item: CommandGroupItem; text: string }) => (
-    <span className="flex h-full items-center text-left text-sm font-medium text-secondary">
+    <span className="text-typography-sm flex h-full items-center text-left font-medium text-secondary">
         {isReactFC(props.item.title) ? <props.item.title text={props.text} /> : props.item.title}
     </span>
 );
@@ -62,7 +62,7 @@ const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">
     const item = props.item;
     if (item.type === "group")
         return (
-            <div id={id} className="h-10 px-2 pb-1 pt-2">
+            <div id={id} className="h-command-row-h px-command-group-px pb-command-group-pb pt-command-group-pt">
                 <Group text={props.text} item={item} />
             </div>
         );
@@ -76,9 +76,12 @@ const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">
             type="button"
             aria-selected={active}
             data-component="command-palette-item"
-            className={css("flex h-10 items-center justify-between rounded-lg p-2 hover:bg-floating-hover", active ? "bg-floating-hover" : "")}
+            className={css(
+                "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-floating-hover",
+                active ? "bg-floating-hover" : ""
+            )}
         >
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-command-item-gap">
                 {item.Icon ? item.Icon : null}
                 <span>{isReactFC(item.title) ? <item.title text={props.text} /> : item.title}</span>
             </span>
@@ -107,7 +110,10 @@ const getFuzzyData = (commands: CommandItemTypes[], value: string) => {
         { key: "shortcut", value },
         { key: "hint", value },
     ];
-    const normalize = commands.map((x) => ({ ...x, title: Is.function(x.title) ? x.title({ text: value }) : x.title }));
+    const normalize = commands.map((x) => ({
+        ...x,
+        title: Is.function(x.title) ? x.title({ text: value }) : x.title,
+    }));
     const target = normalize.reduce<CommandItemTypes[]>((acc, x) => {
         const enabled = Is.function(x.enabled) ? x.enabled({ text: value }) : (x.enabled ?? true);
         if (enabled) acc.push({ ...x, enabled: enabled });
@@ -132,7 +138,7 @@ const findFirstClickable = (items: CommandItemTypes[]): CommandItemTypes | null 
 
 export const CommandPalette = (props: CommandPaletteProps) => {
     const id = useId();
-    const scrollContainerRef = useRef<HTMLUListElement | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
     const [text, setText] = useState("");
     const listRef = useRef<Array<HTMLElement | null>>([]);
     const translations = useTranslations();
@@ -184,7 +190,10 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         onNavigate: (n) => {
             if (Is.number(n)) {
                 if (!isChildVisible(scrollContainerRef.current!, listRef.current[n]!))
-                    listRef.current[n]?.scrollIntoView({ block: "start", inline: "start" });
+                    listRef.current[n]?.scrollIntoView({
+                        block: "start",
+                        inline: "start",
+                    });
             }
             setActiveIndex((prev) => {
                 if (Is.number(n)) return n;
@@ -192,7 +201,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             });
         },
     });
-    const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav]);
+    const listRole = useRole(root.context, { role: "listbox" });
+    const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav, listRole]);
 
     useEffect(() => {
         const combi = new CombiKeys();
@@ -228,8 +238,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 onChange={props.onChangeVisibility}
                 className="container relative overflow-clip py-0 md:max-w-screen-sm lg:max-w-screen-md"
             >
-                <header className="sticky top-0 isolate z-floating flex h-12 w-full items-center overflow-clip border-b border-floating-border bg-floating-background">
-                    <div className="flex size-10 items-center justify-center">
+                <header className="sticky top-0 isolate z-floating flex h-command-header-h w-full items-center overflow-clip border-b border-floating-border bg-floating-background">
+                    <div className="flex size-command-icon-size items-center justify-center">
                         {props.Icon ? <Icon Default={FunnelIcon} text={text} size={16} /> : <FunnelIcon size={16} />}
                     </div>
                     <input
@@ -241,48 +251,57 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                 if (key === "Enter") {
                                     if (item) {
                                         if (item.type === "shortcut")
-                                            item.action({ event: e, text: text, setOpen: props.onChangeVisibility, setText });
+                                            item.action({
+                                                event: e,
+                                                text: text,
+                                                setOpen: props.onChangeVisibility,
+                                                setText,
+                                            });
                                     } else {
                                         const item = findFirstClickable(fuzzy);
                                         if (item?.type === "shortcut")
-                                            item.action({ event: e, text: text, setOpen: props.onChangeVisibility, setText });
+                                            item.action({
+                                                event: e,
+                                                text: text,
+                                                setOpen: props.onChangeVisibility,
+                                                setText,
+                                            });
                                     }
                                 }
                             },
                         } as unknown as React.HTMLProps<Element>) as React.InputHTMLAttributes<HTMLInputElement>)}
-                        autoFocus
                         value={text}
                         data-combikeysbypass="true"
                         placeholder="Search for..."
                         onChange={(e) => setText(e.target.value)}
-                        className="h-12 w-full items-center bg-transparent px-2 py-2 pb-2 text-left text-lg outline-none"
+                        className="text-typography-lg h-command-header-h w-full items-center bg-transparent px-command-input-px py-command-input-py pb-command-input-py text-left outline-none"
                     />
                 </header>
                 {props.loading ? (
-                    <ul
-                        role="listbox"
+                    <div
                         data-component="command-palette-list"
-                        className="my-2 flex max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
+                        className="my-command-list-my flex max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-group-px"
                     >
-                        <div className="h-10 px-2 pb-1 pt-2">{translations.commandPaletteLoading}</div>
+                        <div className="h-command-row-h px-command-group-px pb-command-group-pb pt-command-group-pt">
+                            {translations.commandPaletteLoading}
+                        </div>
                         {loadingSkeleton.map((_, i) => (
-                            <li
+                            <div
                                 key={`${id}-${i}-skeleton-index`}
                                 className={css(
-                                    "flex h-10 items-center justify-between rounded-lg p-2 hover:bg-primary hover:text-primary-foreground"
+                                    "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-primary hover:text-primary-foreground"
                                 )}
                             >
                                 {SkeletonCell}
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 ) : (
                     <div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
-                        <ul
-                            role="listbox"
+                        <div
                             ref={scrollContainerRef}
                             data-component="command-palette-list"
-                            className="my-2 flex h-fit max-h-96 w-full origin-[top_center] flex-col gap-1 overflow-y-auto px-2"
+                            className="my-command-list-my flex h-fit max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-list-px"
                         >
                             {displayItems.map((item, index) => (
                                 <Item
@@ -295,7 +314,12 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                             e.preventDefault();
                                             props.onChangeVisibility(false);
                                             if (item.type === "shortcut")
-                                                item.action({ event: e, text: text, setOpen: props.onChangeVisibility, setText });
+                                                item.action({
+                                                    event: e,
+                                                    text: text,
+                                                    setOpen: props.onChangeVisibility,
+                                                    setText,
+                                                });
                                         },
                                     })}
                                     item={item}
@@ -305,16 +329,18 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                 />
                             ))}
                             {displayItems.length === 1 ? (
-                                <div className={css("flex items-center justify-between rounded-lg p-2 text-secondary")}>
+                                <div className={css("flex items-center justify-between rounded-command-radius p-command-item-p text-secondary")}>
                                     {translations.commandPaletteEmpty ?? props.emptyMessage}
                                 </div>
                             ) : null}
-                        </ul>
+                        </div>
                         {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}
                     </div>
                 )}
                 {props.footer ? (
-                    <footer className="flex h-8 items-center rounded-b-lg border-t border-floating-border p-2">{props.footer}</footer>
+                    <footer className="flex h-command-footer-h items-center rounded-b-command-radius border-t border-floating-border p-command-footer-p">
+                        {props.footer}
+                    </footer>
                 ) : null}
             </Modal>
         </Fragment>

@@ -534,7 +534,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
         const hasErrors = events.some((x) => x.hasInitialError);
         if (hasErrors) setErrors((prev) => (prev === null ? {} : prev));
         return () => events.forEach((item) => item.unsubscribe());
-    });
+    }, []);
 
     const onSubmit = (exec?: UseFormSubmit<z.infer<T>>) => (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -601,7 +601,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
 
     useEffect(() => {
         if (opts.interceptor) opts.interceptor?.set(state);
-    }, [state]);
+    }, [state, opts.interceptor]);
 
     return {
         get,

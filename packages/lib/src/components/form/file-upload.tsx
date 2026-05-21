@@ -84,20 +84,20 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
     const Element = info.type === "img" ? <img src={info.url} className="w-full object-contain" alt={props.file.name} /> : <Icon size={48} />;
 
     return (
-        <li className="flex w-full flex-row justify-between gap-4 border-b border-card-border last:border-b-transparent">
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-row items-center gap-4">
+        <li className="flex w-full flex-row justify-between gap-file-upload-gap border-b border-card-border last:border-b-transparent">
+            <div className="flex flex-col gap-file-upload-gap">
+                <div className="flex flex-row items-center gap-file-upload-gap">
                     <button
                         type="button"
                         onClick={onViewFile}
                         aria-label={`View ${fileName}`}
-                        className="m-2 flex size-16 max-w-16 items-center justify-center overflow-hidden"
+                        className="m-2 flex size-file-upload-thumb-size items-center justify-center overflow-hidden"
                     >
                         {Element}
                     </button>
                     <div className="flex flex-col items-start justify-start text-left">
                         <span>{props.file.name}</span>
-                        <span className="text-sm italic">{info.size}</span>
+                        <span className="text-file-upload-text-size italic">{info.size}</span>
                     </div>
                 </div>
                 {props.File ? (
@@ -106,7 +106,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
                     </div>
                 ) : null}
             </div>
-            <div className="align-start flex justify-start py-4 transition-colors duration-300 ease-linear hover:text-danger-hover">
+            <div className="align-start flex justify-start py-file-upload-delete-py transition-colors duration-300 ease-linear hover:text-danger-hover">
                 <button onClick={onDeleteFile} type="button" aria-label={`Remove ${fileName}`} className="flex size-6 items-center justify-center">
                     <XIcon size={16} aria-hidden="true" />
                 </button>
@@ -128,10 +128,10 @@ const Idle = (props: { dragging: boolean; files?: File[] }) => {
     const Icon = props.dragging ? FolderOpenIcon : FolderIcon;
     return (
         <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center gap-2">
+            <div className="flex flex-col items-center justify-center gap-file-upload-inner-gap">
                 <Icon className="text-primary" size={80} />
             </div>
-            <div className="my-4 flex flex-col items-center gap-1">
+            <div className="my-file-upload-thumb-my flex flex-col items-center gap-file-upload-thumb-gap">
                 <p>{t.uploadIdle}</p>
                 <button className="text-primary underline" type="button">
                     {t.uploadIdleButton}
@@ -163,16 +163,18 @@ const FileViewer = (props: { item: ContextItem }) => {
     const file = props.item.file;
     const type = props.item.type;
     return (
-        <div className="flex flex-col gap-4">
-            <p className="text-lg font-medium">{props.item.file.name}</p>
-            <p className="text-base">{props.item.size}</p>
+        <div className="flex flex-col gap-file-upload-gap">
+            <p className="text-file-upload-text-name font-medium">{props.item.file.name}</p>
+            <p className="text-file-upload-text-size">{props.item.size}</p>
             {type === "img" ? (
                 <img className="container inline-block w-full max-w-96" src={props.item.url} alt={file.name} />
             ) : type === "video" ? (
                 <video className="container block w-full max-w-96" src={props.item.url} controls muted />
             ) : type === "audio" ? (
                 <figure>
-                    <audio controls src={props.item.url}></audio>
+                    <audio controls src={props.item.url}>
+                        <track kind="captions" />
+                    </audio>
                 </figure>
             ) : null}
         </div>
@@ -192,7 +194,9 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
         setFiles((prev) => prev.concat(x));
     };
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: drop });
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop: drop,
+    });
 
     return (
         <Context.Provider value={state}>
@@ -203,7 +207,7 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {...(getRootProps() as unknown as React.HTMLAttributes<HTMLDivElement>)}
                 aria-label={t.fileUploadZoneLabel}
                 data-active={items ? items.length > 0 : false}
-                className="flex flex-col items-center justify-center rounded-lg border border-card-border p-6 text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
+                className="flex flex-col items-center justify-center rounded-file-upload-radius border border-card-border p-file-upload-p text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
             >
                 <input {...getInputProps(props as unknown as React.InputHTMLAttributes<HTMLInputElement>)} name={props.name} id={props.name} />
                 <InteractiveArea File={File} onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={items} />

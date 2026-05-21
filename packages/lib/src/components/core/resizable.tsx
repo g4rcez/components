@@ -37,7 +37,7 @@ const useElementRect = <E extends Element = Element>() => {
                           });
                       }
                   }),
-        []
+        [motion]
     );
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const useElementRect = <E extends Element = Element>() => {
         if (observer === null) return;
         observer.observe(element);
         return () => observer.disconnect();
-    }, [element]);
+    }, [element, observer]);
 
     return [ref, motion] as const;
 };

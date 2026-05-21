@@ -63,14 +63,14 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`typography group-table-cell flex border-collapse flex-col whitespace-pre-wrap border border-y border-b border-table-border p-[var(--table-cell-padding)] md:table-cell md:border-b-0 md:border-r md:border-l-transparent md:last:border-r-transparent ${className}`}
+                        className={`typography group-table-cell flex border-collapse flex-col whitespace-pre-wrap border border-y border-b border-table-border p-table-cell-padding md:table-cell md:border-b-0 md:border-r md:border-l-transparent md:last:border-r-transparent ${className}`}
                     >
                         {exposeAside ? (
                             <RowAside>
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className="block text-sm font-bold leading-tight md:hidden">{col.thead}</span>
+                        <span className="text-typography-sm block font-bold leading-tight md:hidden">{col.thead}</span>
                         <span className="relative">
                             {loading ? (
                                 SkeletonCell

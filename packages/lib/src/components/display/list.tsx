@@ -58,7 +58,7 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
                                 initial={{ opacity: 0.6, scale: 0.98 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.98 }}
-                                className="relative flex h-min w-min min-w-xs flex-col gap-4 rounded-card border border-card-border bg-card-background p-6 py-4 pb-8 shadow-shadow-card"
+                                className="relative flex h-min w-min min-w-xs flex-col gap-list-card-gap rounded-list-radius border border-card-border bg-card-background p-list-card-p py-list-card-py pb-list-card-pb shadow-shadow-card"
                                 ref={refs.setFloating}
                                 {...get()}
                             >
@@ -66,14 +66,14 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
                                     <button
                                         type="button"
                                         onClick={setter}
-                                        className="p-1 opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                        className="p-list-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                     >
                                         <XIcon />
                                     </button>
                                 </nav>
-                                <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-2">
-                                    <h3 className="min-w-full text-balance text-2xl font-medium">{item.title}</h3>
-                                    <p className="text-sm leading-snug text-secondary">{item.description}</p>
+                                <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-list-header-gap">
+                                    <h3 className="min-w-full text-balance text-list-title-text font-medium">{item.title}</h3>
+                                    <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
                                 </motion.header>
                                 <motion.div layout>{item.children}</motion.div>
                             </motion.div>
@@ -95,7 +95,11 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
     });
     const click = useClick(context);
     const role = useRole(context, { role: "dialog" });
-    const dismiss = useDismiss(context, { escapeKey: true, referencePress: true, outsidePress: true });
+    const dismiss = useDismiss(context, {
+        escapeKey: true,
+        referencePress: true,
+        outsidePress: true,
+    });
     const { getFloatingProps } = useInteractions([click, role, dismiss]);
 
     const clear = useCallback(() => {
@@ -118,28 +122,28 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                             layout
                             key={innerId}
                             layoutId={`item-${innerId}`}
-                            className={`border-b border-card-border py-2 last:border-transparent`}
+                            className={`border-b border-card-border py-list-item-py last:border-transparent`}
                         >
                             <motion.div layoutId={`toast-${innerId}`} className="relative">
                                 <div className="relative flex items-start space-x-3">
                                     <Fragment>
                                         {item.avatar ? (
                                             <div>
-                                                <div className="relative px-1">
+                                                <div className="relative px-list-avatar-px">
                                                     <button onClick={setter} className="flex size-10 items-center justify-center ring-primary">
                                                         {item.avatar}
                                                     </button>
                                                 </div>
                                             </div>
                                         ) : null}
-                                        <div className="min-w-0 flex-1 py-1 text-foreground">
-                                            <div className="flex flex-row flex-nowrap justify-between gap-4">
+                                        <div className="min-w-0 flex-1 py-list-body-py text-foreground">
+                                            <div className="flex flex-row flex-nowrap justify-between gap-list-item-gap">
                                                 <button
                                                     onClick={setter}
                                                     className="cursor-pointer text-left transition-all ease-out hover:text-primary"
                                                 >
                                                     <h3>{item.title}</h3>
-                                                    <p className="text-sm leading-snug text-secondary">{item.description}</p>
+                                                    <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
                                                 </button>
                                                 {Leading ? <Leading open={setter} /> : null}
                                             </div>

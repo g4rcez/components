@@ -144,7 +144,9 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                 <label
                     form={form}
                     htmlFor={ID}
-                    className="relative inline-flex w-full max-w-full cursor-text flex-row flex-wrap justify-between gap-1 text-field-label text-sm transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
+                    className={css(
+                        "relative inline-flex w-full max-w-full cursor-text flex-row flex-wrap justify-between gap-input-label-mb text-input-label-text transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
+                    )}
                 >
                     {hiddenLabel ? (
                         <span className="sr-only">
@@ -157,7 +159,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                             />
                         </span>
                     ) : (
-                        <InputFeedback info={info} hideLeft={hideLeft} reportStatus={reportStatusDefault} title={title} placeholder={placeholder}>
+                        <InputFeedback info={info} title={title} hideLeft={hideLeft} placeholder={placeholder} reportStatus={reportStatusDefault}>
                             {optionalText || rightLabel ? (
                                 <Fragment>
                                     {!required ? (
@@ -174,21 +176,24 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                         </InputFeedback>
                     )}
                     <div
-                        className={`group relative flex w-full flex-row flex-nowrap items-center gap-x-2 gap-y-1 rounded-md border border-input-border bg-transparent transition-colors group-hover:border-primary group-disabled:border-disabled group-error:border-danger ${labelClassName}`}
+                        className={css(
+                            "group relative flex w-full flex-row flex-nowrap items-center gap-x-input-gap gap-y-input-inline rounded-input-radius border border-input-border bg-transparent transition-colors group-hover:border-primary group-disabled:border-disabled group-error:border-danger",
+                            labelClassName
+                        )}
                     >
-                        {left ? <span className="flex flex-nowrap gap-1 whitespace-nowrap pl-2">{left}</span> : null}
+                        {left ? <span className="flex flex-nowrap gap-input-slot-gap whitespace-nowrap pl-input-slot-pl">{left}</span> : null}
                         {children}
-                        {right ? <span className="flex flex-nowrap gap-2 whitespace-nowrap pr-2">{right}</span> : null}
+                        {right ? <span className="flex flex-nowrap gap-input-slot-gap whitespace-nowrap pr-input-slot-pr">{right}</span> : null}
                     </div>
                 </label>
                 <p
                     id={`${ID}-error`}
                     role="alert"
-                    className="mt-input-gap hidden whitespace-pre-wrap text-wrap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger"
+                    className="mt-input-hint-mt hidden whitespace-pre-wrap text-wrap text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger"
                 >
                     {error}
                 </p>
-                <p className="mt-input-gap text-xs empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">
+                <p className="mt-input-hint-mt text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">
                     {feedback}
                 </p>
             </fieldset>

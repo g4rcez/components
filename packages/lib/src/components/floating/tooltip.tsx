@@ -74,10 +74,19 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             middleware: [shift(), offset(5), autoPlacement(), arrow({ padding: 5, element: arrowRef }), flip({ fallbackAxisSideDirection: "start" })],
         });
         const dismiss = useDismiss(context, { enabled });
-        const role = useRole(context, { role: popover ? "dialog" : "tooltip", enabled });
-        const focusController = useFocus(context, { enabled: enabled ? focus : false });
-        const clickController = useClick(context, { enabled: enabled ? popover : false });
-        const clientPoint = useClientPoint(context, { enabled: !!enabled && !!followCursor });
+        const role = useRole(context, {
+            role: popover ? "dialog" : "tooltip",
+            enabled,
+        });
+        const focusController = useFocus(context, {
+            enabled: enabled ? focus : false,
+        });
+        const clickController = useClick(context, {
+            enabled: enabled ? popover : false,
+        });
+        const clientPoint = useClientPoint(context, {
+            enabled: !!enabled && !!followCursor,
+        });
         const hoverController = useHover(context, {
             move: true,
             delay: { open: FLOATING_DELAY },
@@ -109,7 +118,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                             {...getFloatingProps()}
                             style={floatingStyles}
                             ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
-                            className="isolate z-tooltip rounded-lg border border-tooltip-border bg-tooltip-background p-3 text-tooltip-foreground shadow-shadow-floating"
+                            className="isolate z-tooltip rounded-tooltip-radius border border-tooltip-border bg-tooltip-background p-tooltip-p text-tooltip-foreground shadow-shadow-floating"
                         >
                             <FloatingArrow
                                 ref={arrowRef}

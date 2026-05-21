@@ -20,7 +20,10 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             height: "1.25rem",
             borderRadius: "0.25rem",
         } as CSSProperties,
-        className: css("w-full border-0 justify-start rounded text-xs truncate text-ellipsis overflow-hidden border leading-tight", event.className),
+        className: css(
+            "w-full border-0 justify-start rounded-page-calendar-pill-radius text-page-calendar-pill-text truncate text-ellipsis overflow-hidden border leading-tight",
+            event.className
+        ),
     };
     if (compact) {
         return (
@@ -47,7 +50,7 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             theme={event.className ? "raw" : "primary"}
         >
             <div className="truncate font-medium">{event.title}</div>
-            <div className="text-xs opacity-60">{formatEventTime(event.date)}</div>
+            <div className="text-page-calendar-pill-text opacity-60">{formatEventTime(event.date)}</div>
         </Button>
     );
 }

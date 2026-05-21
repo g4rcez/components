@@ -53,7 +53,7 @@ export function PageCalendar<T extends CalendarEventBase>({
         if (filters.length === 0) return events;
         const get = getFilterId ?? ((e: CalendarEvent<T>) => e?.filterId);
         return events.filter((e) => internalFilters.find((f) => f.id === get(e))?.enabled ?? true);
-    }, [events, internalFilters, filters]);
+    }, [events, internalFilters, filters, getFilterId]);
 
     const eventsByDate = useMemo(() => groupEventsByDate(filteredEvents), [filteredEvents]);
     const monthDays = useMemo(() => getMonthDays(currentDate), [currentDate]);
@@ -67,7 +67,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     };
 
     return (
-        <div role="application" aria-label={t.pageCalendarLabel} className="flex h-full w-full flex-grow flex-col gap-4">
+        <div role="application" aria-label={t.pageCalendarLabel} className="flex h-full w-full flex-grow flex-col gap-page-calendar-gap">
             <CalendarHeader
                 filters={internalFilters}
                 filterArea={filterArea}
