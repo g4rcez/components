@@ -278,6 +278,7 @@ export const components: ComponentTokens = {
     },
     progress: {
         "track-h": "1.5rem",
+        radius: "100%",
     },
     spinner: {
         size: "3rem",

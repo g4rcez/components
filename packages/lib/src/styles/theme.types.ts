@@ -329,6 +329,7 @@ export type FileUploadTokens = {
 
 export type ProgressTokens = {
     "track-h": string;
+    radius: string;
 };
 
 export type SpinnerTokens = {

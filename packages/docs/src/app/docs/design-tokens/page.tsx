@@ -1,14 +1,21 @@
 "use client";
 import {
   ChartBarIcon,
+  CheckCircleIcon,
   ListBulletsIcon,
+  MagnifyingGlassIcon,
   RocketLaunchIcon,
+  SparkleIcon,
+  UploadIcon,
 } from "@phosphor-icons/react";
 import { CSSProperties, useState } from "react";
 import {
   Alert,
   AnimatedList,
   AnimatedListItem,
+  Button,
+  Calendar,
+  Card,
   Empty,
   Info,
   Loading,
@@ -29,6 +36,8 @@ import {
 import { Shortcut } from "../../../../../lib/src/components/display/shortcut";
 import { Checkbox } from "../../../../../lib/src/components/form/checkbox";
 import { Input } from "../../../../../lib/src/components/form/input";
+import { Radiobox } from "../../../../../lib/src/components/form/radiobox";
+import { Slider } from "../../../../../lib/src/components/form/slider";
 import { Switch } from "../../../../../lib/src/components/form/switch";
 import { Skeleton } from "../../../../../lib/src/components/display/skeleton";
 import { ComponentDemo } from "@/components/component-demo";
@@ -83,6 +92,15 @@ const alertDefaults: TokenGroup = {
 };
 
 const statsDefaults: TokenGroup = {
+  radius: {
+    key: "stats-radius",
+    label: "stats-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
   p: {
     key: "stats-p",
     label: "stats-p",
@@ -304,6 +322,15 @@ const progressDefaults: TokenGroup = {
     step: 1,
     unit: "px",
     value: 24,
+  },
+  radius: {
+    key: "progress-radius",
+    label: "progress-radius",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+    value: 100,
   },
 };
 
@@ -703,6 +730,405 @@ const cardStatsDefaults: TokenGroup = {
   },
 };
 
+const buttonDefaults: TokenGroup = {
+  radius: {
+    key: "button-radius",
+    label: "button-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 9,
+  },
+  height: {
+    key: "button-height",
+    label: "button-height",
+    min: 24,
+    max: 64,
+    step: 1,
+    unit: "px",
+    value: 40,
+  },
+  paddingX: {
+    key: "button-padding-x",
+    label: "button-padding-x",
+    min: 0,
+    max: 48,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+  gap: {
+    key: "button-gap",
+    label: "button-gap",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 6,
+  },
+};
+
+const cardDefaults: TokenGroup = {
+  radius: {
+    key: "card-radius",
+    label: "card-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+  paddingX: {
+    key: "card-padding-x",
+    label: "card-padding-x",
+    min: 0,
+    max: 48,
+    step: 2,
+    unit: "px",
+    value: 24,
+  },
+  paddingY: {
+    key: "card-padding-y",
+    label: "card-padding-y",
+    min: 0,
+    max: 48,
+    step: 2,
+    unit: "px",
+    value: 12,
+  },
+  gap: {
+    key: "card-gap",
+    label: "card-gap",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+};
+
+const modalDefaults: TokenGroup = {
+  radius: {
+    key: "modal-radius",
+    label: "modal-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  paddingX: {
+    key: "modal-padding-x",
+    label: "modal-padding-x",
+    min: 0,
+    max: 64,
+    step: 2,
+    unit: "px",
+    value: 32,
+  },
+  paddingY: {
+    key: "modal-padding-y",
+    label: "modal-padding-y",
+    min: 0,
+    max: 48,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+  footerGap: {
+    key: "modal-footer-gap",
+    label: "modal-footer-gap",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+};
+
+const dropdownDefaults: TokenGroup = {
+  radius: {
+    key: "dropdown-radius",
+    label: "dropdown-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  p: {
+    key: "dropdown-p",
+    label: "dropdown-p",
+    min: 0,
+    max: 48,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+  headerMb: {
+    key: "dropdown-header-mb",
+    label: "dropdown-header-mb",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+};
+
+const tooltipDefaults: TokenGroup = {
+  radius: {
+    key: "tooltip-radius",
+    label: "tooltip-radius",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  p: {
+    key: "tooltip-p",
+    label: "tooltip-p",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 12,
+  },
+};
+
+const menuDefaults: TokenGroup = {
+  radius: {
+    key: "menu-radius",
+    label: "menu-radius",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  itemP: {
+    key: "menu-item-p",
+    label: "menu-item-p",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 10,
+  },
+};
+
+const notificationDefaults: TokenGroup = {
+  radius: {
+    key: "notification-radius",
+    label: "notification-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 12,
+  },
+  p: {
+    key: "notification-p",
+    label: "notification-p",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+  gap: {
+    key: "notification-gap",
+    label: "notification-gap",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 12,
+  },
+};
+
+const commandDefaults: TokenGroup = {
+  radius: {
+    key: "command-radius",
+    label: "command-radius",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  itemP: {
+    key: "command-item-p",
+    label: "command-item-p",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  rowH: {
+    key: "command-row-h",
+    label: "command-row-h",
+    min: 24,
+    max: 64,
+    step: 1,
+    unit: "px",
+    value: 40,
+  },
+};
+
+const calendarDefaults: TokenGroup = {
+  daySize: {
+    key: "calendar-day-size",
+    label: "calendar-day-size",
+    min: 24,
+    max: 56,
+    step: 1,
+    unit: "px",
+    value: 36,
+  },
+  cellP: {
+    key: "calendar-cell-p",
+    label: "calendar-cell-p",
+    min: 0,
+    max: 16,
+    step: 1,
+    unit: "px",
+    value: 4,
+  },
+  weekdayPy: {
+    key: "calendar-weekday-py",
+    label: "calendar-weekday-py",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+};
+
+const tableDefaults: TokenGroup = {
+  radius: {
+    key: "table-radius",
+    label: "table-radius",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  cellPx: {
+    key: "table-cell-px",
+    label: "table-cell-px",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  cellPadding: {
+    key: "table-cell-padding",
+    label: "table-cell-padding",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 12,
+  },
+  rowGap: {
+    key: "table-row-gap",
+    label: "table-row-gap",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 4,
+  },
+};
+
+const radioboxDefaults: TokenGroup = {
+  size: {
+    key: "radiobox-size",
+    label: "radiobox-size",
+    min: 12,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 16,
+  },
+  gap: {
+    key: "radiobox-gap",
+    label: "radiobox-gap",
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+};
+
+const sliderDefaults: TokenGroup = {
+  controlH: {
+    key: "slider-control-h",
+    label: "slider-control-h",
+    min: 12,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 20,
+  },
+  trackH: {
+    key: "slider-track-h",
+    label: "slider-track-h",
+    min: 2,
+    max: 16,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  thumbSize: {
+    key: "slider-thumb-size",
+    label: "slider-thumb-size",
+    min: 12,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 20,
+  },
+};
+
+const fileUploadDefaults: TokenGroup = {
+  p: {
+    key: "file-upload-p",
+    label: "file-upload-p",
+    min: 0,
+    max: 48,
+    step: 2,
+    unit: "px",
+    value: 24,
+  },
+  radius: {
+    key: "file-upload-radius",
+    label: "file-upload-radius",
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    value: 8,
+  },
+  thumbSize: {
+    key: "file-upload-thumb-size",
+    label: "file-upload-thumb-size",
+    min: 32,
+    max: 96,
+    step: 2,
+    unit: "px",
+    value: 64,
+  },
+};
+
 const Controls = ({
   tokens,
   onChange,
@@ -760,6 +1186,21 @@ export default function DesignTokensPage() {
   const [pageCalendarTokens, setPageCalendarTokens] =
     useState(pageCalendarDefaults);
   const [cardStatsTokens, setCardStatsTokens] = useState(cardStatsDefaults);
+  const [buttonTokens, setButtonTokens] = useState(buttonDefaults);
+  const [cardTokens, setCardTokens] = useState(cardDefaults);
+  const [modalTokens, setModalTokens] = useState(modalDefaults);
+  const [dropdownTokens, setDropdownTokens] = useState(dropdownDefaults);
+  const [tooltipTokens, setTooltipTokens] = useState(tooltipDefaults);
+  const [menuTokens, setMenuTokens] = useState(menuDefaults);
+  const [notificationTokens, setNotificationTokens] = useState(notificationDefaults);
+  const [commandTokens, setCommandTokens] = useState(commandDefaults);
+  const [calendarTokens, setCalendarTokens] = useState(calendarDefaults);
+  const [tableTokens, setTableTokens] = useState(tableDefaults);
+  const [radioboxTokens, setRadioboxTokens] = useState(radioboxDefaults);
+  const [sliderTokens, setSliderTokens] = useState(sliderDefaults);
+  const [fileUploadTokens, setFileUploadTokens] = useState(fileUploadDefaults);
+  const [calendarDate, setCalendarDate] = useState<Date | undefined>(new Date());
+  const [sliderValue, setSliderValue] = useState(40);
 
   return (
     <DocsLayout
@@ -767,6 +1208,7 @@ export default function DesignTokensPage() {
       section="theming"
       description="Per-component CSS variables exposed as Tailwind utilities. Override --component-attr on any container to reskin geometry without touching markup."
     >
+    <div className="flex flex-col gap-10">
       <ComponentDemo
         title="Alert tokens"
         description="Padding, radius and inner gap are owned by --alert-p, --alert-radius and --alert-gap. Drag the sliders to override them on this scoped container."
@@ -789,8 +1231,8 @@ export default function DesignTokensPage() {
 
       <ComponentDemo
         title="Stats tokens"
-        description="--stats-p, --stats-gap, --stats-icon-size and --stats-icon-p drive layout independently of color tokens."
-        code={`<div style={{ "--stats-p": "32px", "--stats-icon-size": "56px" }}>
+        description="--stats-radius, --stats-p, --stats-gap, --stats-icon-size and --stats-icon-p drive layout independently of color tokens."
+        code={`<div style={{ "--stats-radius": "20px", "--stats-p": "32px", "--stats-icon-size": "56px" }}>
   <Stats title="Revenue" Icon={ChartBarIcon}>$12,480</Stats>
 </div>`}
       >
@@ -902,8 +1344,8 @@ export default function DesignTokensPage() {
 
       <ComponentDemo
         title="Progress tokens"
-        description="Track height comes from --progress-track-h. Override it to reskin every Progress bar without touching markup."
-        code={`<div style={{ "--progress-track-h": "2rem" }}>
+        description="Track height and corner shape come from --progress-track-h and --progress-radius. Override them to reskin every Progress bar without touching markup."
+        code={`<div style={{ "--progress-track-h": "2rem", "--progress-radius": "8px" }}>
   <Progress value={60} />
 </div>`}
       >
@@ -1218,6 +1660,333 @@ export default function DesignTokensPage() {
       </ComponentDemo>
 
       <ComponentDemo
+        title="Button tokens"
+        description="Button height, radius, horizontal padding and icon/text gap come from --button-height, --button-radius, --button-padding-x and --button-gap."
+        code={`<div style={{ "--button-radius": "1rem", "--button-height": "3rem" }}>
+  <Button theme="primary">Save changes</Button>
+</div>`}
+      >
+        <div style={toStyle(buttonTokens)} className="flex w-full flex-col gap-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <Button theme="primary">Primary</Button>
+            <Button theme="secondary">Secondary</Button>
+            <Button theme="danger">Danger</Button>
+            <Button theme="muted">
+              <SparkleIcon size={16} aria-hidden />
+              With icon
+            </Button>
+          </div>
+          <Controls tokens={buttonTokens} onChange={setButtonTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Card tokens"
+        description="Card geometry resolves through --card-radius, --card-padding-x, --card-padding-y and --card-gap."
+        code={`<div style={{ "--card-radius": "1.5rem", "--card-padding-x": "2rem" }}>
+  <Card title="Workspace"><p>Body</p></Card>
+</div>`}
+      >
+        <div style={toStyle(cardTokens)} className="flex w-full flex-col gap-6">
+          <Card title="Workspace">
+            <p className="text-typography-sm text-muted-foreground">
+              Card padding, radius and stack gap come from CSS variables.
+            </p>
+          </Card>
+          <Controls tokens={cardTokens} onChange={setCardTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Modal tokens"
+        description="Modal surface geometry resolves through --modal-radius, --modal-padding-x, --modal-padding-y and --modal-footer-gap. The demo shows a static surface using the same skin classes."
+        code={`<div style={{ "--modal-radius": "1rem", "--modal-padding-x": "2.5rem" }}>
+  <Modal type="dialog" trigger={<button>Open</button>}>...</Modal>
+</div>`}
+      >
+        <div
+          style={toStyle(modalTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="w-full max-w-dialog rounded-modal-radius border border-floating-border bg-floating-background px-modal-padding-x py-modal-padding-y shadow-shadow-floating">
+            <header className="pb-modal-title-pb text-typography-xl font-semibold">
+              Confirm deployment
+            </header>
+            <p className="py-modal-body-py text-typography-sm text-muted-foreground">
+              Override `--modal-radius` and `--modal-padding-x` on a scoped
+              container to reshape every Modal surface.
+            </p>
+            <footer className="flex justify-end gap-modal-footer-gap pt-modal-footer-pt">
+              <button
+                type="button"
+                className="rounded-button-radius border border-card-border px-3 py-1.5 text-typography-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="rounded-button-radius bg-primary px-3 py-1.5 text-typography-sm text-primary-foreground"
+              >
+                Confirm
+              </button>
+            </footer>
+          </div>
+          <Controls tokens={modalTokens} onChange={setModalTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Dropdown tokens"
+        description="Floating dropdown surface uses --dropdown-radius, --dropdown-p and --dropdown-header-mb."
+        code={`<div style={{ "--dropdown-radius": "0.75rem" }}>
+  <Dropdown header="Header">...</Dropdown>
+</div>`}
+      >
+        <div
+          style={toStyle(dropdownTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="w-full max-w-xs rounded-dropdown-radius border border-floating-border bg-floating-background p-dropdown-p shadow-shadow-floating">
+            <header className="mb-dropdown-header-mb text-typography-sm font-semibold">
+              Account
+            </header>
+            <ul className="flex flex-col gap-1 text-typography-sm">
+              <li>Profile</li>
+              <li>Workspace settings</li>
+              <li className="text-danger">Sign out</li>
+            </ul>
+          </div>
+          <Controls tokens={dropdownTokens} onChange={setDropdownTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Tooltip tokens"
+        description="Tooltip surface resolves through --tooltip-radius and --tooltip-p."
+        code={`<div style={{ "--tooltip-radius": "0.75rem", "--tooltip-p": "1rem" }}>
+  <Tooltip title="Tip">Hover me</Tooltip>
+</div>`}
+      >
+        <div
+          style={toStyle(tooltipTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="rounded-tooltip-radius bg-tooltip-background p-tooltip-p text-tooltip-foreground shadow-shadow-floating">
+            <p className="text-typography-sm">Override the tokens to reshape every tooltip.</p>
+          </div>
+          <Controls tokens={tooltipTokens} onChange={setTooltipTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Menu tokens"
+        description="Floating Menu surface uses --menu-radius and --menu-item-p."
+        code={`<div style={{ "--menu-radius": "1rem" }}>
+  <Menu options={[{ label: "Item" }]}>Open</Menu>
+</div>`}
+      >
+        <div
+          style={toStyle(menuTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="w-full max-w-xs rounded-menu-radius border border-floating-border bg-floating-background shadow-shadow-floating">
+            <ul className="flex flex-col">
+              <li className="p-menu-item-p text-typography-sm hover:bg-floating-hover">Duplicate</li>
+              <li className="p-menu-item-p text-typography-sm hover:bg-floating-hover">Archive</li>
+              <li className="p-menu-item-p text-typography-sm text-danger hover:bg-floating-hover">
+                Delete
+              </li>
+            </ul>
+          </div>
+          <Controls tokens={menuTokens} onChange={setMenuTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Notification tokens"
+        description="Toast geometry resolves through --notification-radius, --notification-p and --notification-gap."
+        code={`<div style={{ "--notification-radius": "1rem", "--notification-p": "1.25rem" }}>
+  <Notifications>...</Notifications>
+</div>`}
+      >
+        <div
+          style={toStyle(notificationTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="flex w-full max-w-sm items-start gap-notification-gap rounded-notification-radius border border-success-subtle bg-success-subtle p-notification-p text-success-foreground shadow-shadow-notification">
+            <CheckCircleIcon size={24} aria-hidden />
+            <div className="flex flex-col gap-notification-inner-gap">
+              <strong className="text-typography-sm">Deploy succeeded</strong>
+              <span className="text-typography-xs">main → production · 12s ago</span>
+            </div>
+          </div>
+          <Controls
+            tokens={notificationTokens}
+            onChange={setNotificationTokens}
+          />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Command palette tokens"
+        description="Command surface resolves through --command-radius, --command-item-p and --command-row-h."
+        code={`<div style={{ "--command-radius": "1rem", "--command-row-h": "3rem" }}>
+  <CommandPalette items={items} />
+</div>`}
+      >
+        <div
+          style={toStyle(commandTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="w-full max-w-md overflow-hidden rounded-command-radius border border-floating-border bg-floating-background shadow-shadow-floating">
+            <div className="flex h-command-header-h items-center gap-2 px-command-input-px py-command-input-py">
+              <MagnifyingGlassIcon size={16} aria-hidden />
+              <span className="text-typography-sm text-muted-foreground">
+                Search the workspace…
+              </span>
+            </div>
+            <ul className="flex flex-col gap-command-list-gap px-command-list-px py-command-list-my">
+              <li className="flex h-command-row-h items-center gap-command-item-gap rounded-md p-command-item-p text-typography-sm hover:bg-floating-hover">
+                Create deployment
+              </li>
+              <li className="flex h-command-row-h items-center gap-command-item-gap rounded-md p-command-item-p text-typography-sm hover:bg-floating-hover">
+                Invite teammate
+              </li>
+              <li className="flex h-command-row-h items-center gap-command-item-gap rounded-md p-command-item-p text-typography-sm hover:bg-floating-hover">
+                Open settings
+              </li>
+            </ul>
+          </div>
+          <Controls tokens={commandTokens} onChange={setCommandTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Calendar tokens"
+        description="Inline Calendar geometry uses --calendar-day-size, --calendar-cell-p and --calendar-weekday-py."
+        code={`<div style={{ "--calendar-day-size": "3rem" }}>
+  <Calendar date={date} onChange={setDate} />
+</div>`}
+      >
+        <div
+          style={toStyle(calendarTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <Calendar date={calendarDate} changeOnlyOnClick onChange={setCalendarDate} />
+          <Controls tokens={calendarTokens} onChange={setCalendarTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Table tokens"
+        description="Table geometry resolves through --table-radius, --table-cell-px, --table-cell-padding and --table-row-gap."
+        code={`<div style={{ "--table-radius": "1rem" }}>
+  <Table cols={cols} rows={rows} />
+</div>`}
+      >
+        <div style={toStyle(tableTokens)} className="flex w-full flex-col gap-6">
+          <div className="overflow-hidden rounded-table-radius border border-table-border bg-table-background shadow-shadow-table">
+            <table className="w-full border-collapse">
+              <thead className="bg-table-header">
+                <tr>
+                  <th className="p-table-cell-padding text-left text-typography-sm">Name</th>
+                  <th className="p-table-cell-padding text-left text-typography-sm">Role</th>
+                  <th className="p-table-cell-padding text-left text-typography-sm">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-table-border">
+                  <td className="px-table-cell-px p-table-cell-padding text-typography-sm">Allan</td>
+                  <td className="px-table-cell-px p-table-cell-padding text-typography-sm">Owner</td>
+                  <td className="px-table-cell-px p-table-cell-padding text-typography-sm">Active</td>
+                </tr>
+                <tr className="border-t border-table-border">
+                  <td className="px-table-cell-px p-table-cell-padding text-typography-sm">Marina</td>
+                  <td className="px-table-cell-px p-table-cell-padding text-typography-sm">Member</td>
+                  <td className="px-table-cell-px p-table-cell-padding text-typography-sm">Invited</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <Controls tokens={tableTokens} onChange={setTableTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Radiobox tokens"
+        description="Radiobox geometry resolves through --radiobox-size and --radiobox-gap."
+        code={`<div style={{ "--radiobox-size": "1.25rem" }}>
+  <Radiobox name="plan" value="pro">Pro</Radiobox>
+</div>`}
+      >
+        <div
+          style={toStyle(radioboxTokens)}
+          className="flex w-full flex-col gap-6"
+        >
+          <div className="flex flex-col gap-2">
+            <Radiobox name="dt-plan" value="free" defaultChecked>
+              Free
+            </Radiobox>
+            <Radiobox name="dt-plan" value="pro">
+              Pro
+            </Radiobox>
+            <Radiobox name="dt-plan" value="enterprise">
+              Enterprise
+            </Radiobox>
+          </div>
+          <Controls tokens={radioboxTokens} onChange={setRadioboxTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="Slider tokens"
+        description="Slider geometry resolves through --slider-control-h, --slider-track-h and --slider-thumb-size."
+        code={`<div style={{ "--slider-thumb-size": "1.5rem" }}>
+  <Slider value={[40]} />
+</div>`}
+      >
+        <div
+          style={toStyle(sliderTokens)}
+          className="flex w-full flex-col gap-6"
+        >
+          <Slider
+            value={[sliderValue]}
+            onValueChange={(v) =>
+              setSliderValue(Array.isArray(v) ? Number(v[0]) : Number(v))
+            }
+          />
+          <Controls tokens={sliderTokens} onChange={setSliderTokens} />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
+        title="File upload tokens"
+        description="Dropzone geometry resolves through --file-upload-p, --file-upload-radius, --file-upload-thumb-size and friends."
+        code={`<div style={{ "--file-upload-radius": "1rem" }}>
+  <FileUpload onDrop={...} />
+</div>`}
+      >
+        <div
+          style={toStyle(fileUploadTokens)}
+          className="flex w-full flex-col items-center gap-6"
+        >
+          <div className="flex w-full flex-col items-center gap-file-upload-gap rounded-file-upload-radius border-2 border-dashed border-input-border bg-card-background p-file-upload-p text-center">
+            <span className="flex size-file-upload-thumb-size items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <UploadIcon size={28} aria-hidden />
+            </span>
+            <strong className="text-file-upload-text-name">Drop files here</strong>
+            <span className="text-file-upload-text-size text-muted-foreground">
+              PNG, JPG or PDF up to 10 MB
+            </span>
+          </div>
+          <Controls
+            tokens={fileUploadTokens}
+            onChange={setFileUploadTokens}
+          />
+        </div>
+      </ComponentDemo>
+
+      <ComponentDemo
         title="Tag size tokens"
         description="Tag size variants are now token-backed: --tag-height(-big/-small/-tiny) and matching padding-x/padding-y per size. Same component, same variant — different geometry by overriding a single variable."
         code={`<div style={{ "--tag-height": "3rem", "--tag-padding-x": "1.5rem" }}>
@@ -1239,6 +2008,7 @@ export default function DesignTokensPage() {
           </div>
         </div>
       </ComponentDemo>
+    </div>
     </DocsLayout>
   );
 }

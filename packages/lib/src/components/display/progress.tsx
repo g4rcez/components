@@ -37,7 +37,7 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
       value={hasValue ? rawValue! : null}
       style={{ transform: "translateZ(0)" }}
       className={css(
-        "relative h-progress-track-h w-full overflow-hidden rounded-full bg-background",
+        "relative h-progress-track-h w-full overflow-hidden rounded-progress-radius bg-background",
         props.container,
       )}
     >
