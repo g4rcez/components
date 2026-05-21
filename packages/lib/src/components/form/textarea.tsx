@@ -10,12 +10,28 @@ export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTML
     "textarea",
     { container: "w-full" },
     (textarea: HTMLTextAreaElement) => {
-        const adjustHeight = () => {
-            const lineBreakers = textarea.value.split("\n");
-            textarea.style.height = "auto";
-            if (lineBreakers.length > 1) return void (textarea.style.height = `${textarea.scrollHeight}px`);
+        const hasRows = textarea.hasAttribute("rows");
+        const computeMinHeight = (): number => {
+            if (!hasRows) return textarea.offsetHeight;
+            const s = window.getComputedStyle(textarea);
+            return (
+                textarea.rows * parseFloat(s.lineHeight) +
+                parseFloat(s.paddingTop) +
+                parseFloat(s.paddingBottom) +
+                parseFloat(s.borderTopWidth) +
+                parseFloat(s.borderBottomWidth)
+            );
         };
+        const minHeight = computeMinHeight();
+        const adjustHeight = () => {
+            textarea.style.height = "0px";
+            textarea.style.height = `${Math.max(textarea.scrollHeight, minHeight)}px`;
+        };
+        adjustHeight();
         textarea.addEventListener("input", adjustHeight);
-        return () => textarea.removeEventListener("input", adjustHeight);
+        return () => {
+            textarea.removeEventListener("input", adjustHeight);
+            textarea.style.height = "";
+        };
     }
 );
