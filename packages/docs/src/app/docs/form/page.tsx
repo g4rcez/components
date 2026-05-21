@@ -360,14 +360,12 @@ function DynamicForm() {
                                 options: languages,
                             })}
                         />
-                        {/* @ts-expect-error Type mismatch in React 19 refs */}
                         <DatePicker
                             {...form.datepicker("date", {
                                 title: "Date",
                                 clickToClose: true,
                             })}
                         />
-                        {/* @ts-expect-error Type mismatch in React 19 refs */}
                         <DatePicker
                             {...form.datepicker("datetime", {
                                 title: "Date",
