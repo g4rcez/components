@@ -1,8 +1,29 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import React, { useState } from "react";
-import { Card, Input, CurrencyCode } from "../../../../../lib/src";
+import { useState } from "react";
+import { Card, Input, CurrencyCode, InputTypes } from "../../../../../lib/src";
+import { EyesIcon, EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
+
+const Password = () => {
+    const [type, setType] = useState<InputTypes>("password");
+    return (
+        <Input
+            type={type}
+            title="Secret..."
+            required
+            right={
+                <button type="button" onClick={() => setType((p) => (p === "text" ? "password" : "text"))}>
+                    {type === "password" ? (
+                        <EyeIcon className="text-foreground" size={18} />
+                    ) : (
+                        <EyeClosedIcon className="text-foreground" size={18} />
+                    )}
+                </button>
+            }
+        />
+    );
+};
 
 export default function InputPage() {
     const [currency, setCurrency] = useState<CurrencyCode>("BRL");
@@ -129,6 +150,7 @@ function CustomAndInteractiveMasks() {
                     <Input mask="money" title="Monetary - Locale from browser" placeholder="$$$" required />
                     <Input mask="currency" title="Monetary - Locale en-US" placeholder="$$$" required />
                     <Input mask="percent" title="Percent %" placeholder="%%%" required />
+                    <Password />
                     <Input
                         mask="money"
                         locale={currency === "BRL" ? "pt-BR" : "en-US"}

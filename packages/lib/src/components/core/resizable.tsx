@@ -1,61 +1,74 @@
 "use client";
-import { motion, useMotionValue } from "motion/react";
-import React, { useEffect, useMemo, useState } from "react";
-import { isSsr } from "../../lib/fns";
+import { animate, motion, useMotionValue } from "motion/react";
+import React, { useEffect, useRef, useState } from "react";
 
-const defaultState = {
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+type Props = React.PropsWithChildren<{
+  open?: boolean;
+  className?: string;
+  destroyOnUnmount?: boolean;
+}>;
+
+const DESTROY_DELAY_MS = 600;
+const SPRING = {
+  type: "spring" as const,
+  stiffness: 500,
+  damping: 50,
+  mass: 0.5,
 };
 
-const useElementRect = <E extends Element = Element>() => {
-    const [element, ref] = useState<E | null>(null);
-    const motion = useMotionValue(defaultState);
+export const Resizable = ({
+  children,
+  open = true,
+  className,
+  destroyOnUnmount = false,
+}: Props) => {
+  const [element, ref] = useState<HTMLDivElement | null>(null);
+  const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(destroyOnUnmount ? open : true);
+  const measured = useRef(0);
+  const height = useMotionValue<number>(0);
 
-    const observer = useMemo(
-        () =>
-            isSsr()
-                ? null
-                : new window.ResizeObserver((entries) => {
-                      if (entries[0]) {
-                          const rect = entries[0].contentRect;
-                          motion.set({
-                              x: rect.x,
-                              y: rect.y,
-                              width: rect.width,
-                              height: rect.height,
-                              top: rect.top,
-                              left: rect.left,
-                              bottom: rect.bottom,
-                              right: rect.right,
-                          });
-                      }
-                  }),
-        [motion]
-    );
+  useEffect(() => {
+    if (!destroyOnUnmount) return;
+    if (open) {
+      setMounted(true);
+      return;
+    }
+    const id = setTimeout(() => setMounted(false), DESTROY_DELAY_MS);
+    return () => clearTimeout(id);
+  }, [open, destroyOnUnmount]);
 
-    useEffect(() => {
-        if (!element) return;
-        if (observer === null) return;
-        observer.observe(element);
-        return () => observer.disconnect();
-    }, [element, observer]);
+  useEffect(() => {
+    if (!element) return;
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      const h = entry.contentRect.height;
+      if (h <= 0) return;
+      measured.current = h;
+      if (!ready) {
+        height.jump(open ? h : 0);
+        setReady(true);
+      }
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element, ready, open, height]);
 
-    return [ref, motion] as const;
-};
+  useEffect(() => {
+    if (!ready) return;
+    const controls = animate(height, open ? measured.current : 0, SPRING);
+    return () => controls.stop();
+  }, [open, ready, height]);
 
-export const Resizable = ({ children }: React.PropsWithChildren) => {
-    const [ref, bounds] = useElementRect();
-    const h = bounds.get().height;
-    return (
-        <motion.div animate={{ height: h > 0 ? h : "auto" }}>
-            <div ref={ref}>{children}</div>
-        </motion.div>
-    );
+  if (!mounted) return null;
+
+  return (
+    <motion.div
+      className={className}
+      style={{ height: ready ? height : open ? "auto" : 0, overflow: "hidden" }}
+    >
+      <div ref={ref}>{children}</div>
+    </motion.div>
+  );
 };

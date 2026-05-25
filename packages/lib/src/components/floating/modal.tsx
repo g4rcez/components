@@ -115,7 +115,7 @@ const variants = cva(
             type: {
                 drawer: "absolute h-screen max-h-screen min-h-0 w-fit max-w-modal-dialog-max-w-mobile",
                 dialog: "container relative h-min max-h-modal-sheet-max-h-lvh rounded-modal-radius py-modal-padding-y",
-                sheet: "absolute bottom-0 h-screen max-h-modal-sheet-max-h-svh max-h-modal-sheet-max-h-vh w-screen rounded-t-modal-radius pb-modal-sheet-pb pt-modal-sheet-pt",
+                sheet: "absolute bottom-0 h-screen max-h-modal-sheet-max-h-svh w-screen rounded-t-modal-radius pb-modal-sheet-pb pt-modal-sheet-pt",
             },
             position: {
                 none: "",
@@ -220,7 +220,7 @@ const Draggable = (props: DraggableProps) => {
                       : "left-2 top-1/2 h-modal-drawer-resizer-h w-modal-drawer-resizer-w"
             )}
         >
-            {props.sheet ? <div className="rounded-modal-sheet-pill-radius h-modal-sheet-pill-h w-modal-sheet-pill-w bg-floating-border" /> : null}
+            {props.sheet ? <div className="h-modal-sheet-pill-h w-modal-sheet-pill-w rounded-modal-sheet-pill-radius bg-floating-border" /> : null}
         </motion.button>
     );
 };
@@ -497,7 +497,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             aria-label={t.closeButton}
                                                             className="p-modal-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                                         >
-                                                            <XIcon aria-hidden="true" />
+                                                            <XIcon size={18} aria-hidden="true" />
                                                         </button>
                                                     </div>
                                                 ) : null}
