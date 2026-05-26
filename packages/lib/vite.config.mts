@@ -1,10 +1,46 @@
+/// <reference types="vitest" />
+import { readdirSync } from "node:fs";
+import { extname, join, relative } from "node:path";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import tsconfig from "vite-tsconfig-paths";
 
-/// <reference types="vitest" />
+const componentsRoot = "src/components";
+const componentEntryExtensions = new Set([".ts", ".tsx"]);
+const ignoredComponentEntries = [/\.types\.ts$/, /\.utils\.ts$/, /\.context\.tsx$/];
+
+function toPosixPath(path: string) {
+    return path.replaceAll("\\", "/");
+}
+
+function componentEntryName(path: string) {
+    return toPosixPath(relative("src", path)).replace(/\.(?:m|c)?tsx?$/, "");
+}
+
+function getComponentEntries(directory = componentsRoot): Record<string, string> {
+    const entries: Record<string, string> = {};
+
+    for (const file of readdirSync(directory, { withFileTypes: true })) {
+        const path = toPosixPath(join(directory, file.name));
+
+        if (file.isDirectory()) {
+            Object.assign(entries, getComponentEntries(path));
+            continue;
+        }
+
+        if (path === `${componentsRoot}/index.ts`) continue;
+        if (!componentEntryExtensions.has(extname(path))) continue;
+        if (ignoredComponentEntries.some((pattern) => pattern.test(path))) continue;
+
+        entries[componentEntryName(path)] = `./${path}`;
+    }
+
+    return entries;
+}
+
 export default defineConfig({
-    plugins: [react(), tsconfig({ configNames: ["tsconfig.lib.json"] })],
+    plugins: [react()],
+    resolve: { tsconfigPaths: true },
     test: {
         globals: true,
         environment: "jsdom",
@@ -17,32 +53,7 @@ export default defineConfig({
         lib: {
             entry: {
                 index: "./src/index.ts",
-                "components/core/button": "./src/components/core/button.tsx",
-                "components/core/tag": "./src/components/core/tag.tsx",
-                "components/form/form": "./src/components/form/form.tsx",
-                "components/form/radiobox": "./src/components/form/radiobox.tsx",
-                "components/form/date-picker": "./src/components/form/date-picker.tsx",
-                "components/form/task-list": "./src/components/form/task-list.tsx",
-                "components/form/checkbox": "./src/components/form/checkbox.tsx",
-                "components/form/input": "./src/components/form/input.tsx",
-                "components/form/autocomplete": "./src/components/form/autocomplete.tsx",
-                "components/form/switch": "./src/components/form/switch.tsx",
-                "components/form/file-upload": "./src/components/form/file-upload.tsx",
-                "components/form/select": "./src/components/form/select.tsx",
-                "components/floating/expand": "./src/components/floating/expand.tsx",
-                "components/floating/dropdown": "./src/components/floating/dropdown.tsx",
-                "components/floating/modal": "./src/components/floating/modal.tsx",
-                "components/floating/tooltip": "./src/components/floating/tooltip.tsx",
-                "components/floating/menu": "./src/components/floating/menu.tsx",
-                "components/display/notifications": "./src/components/display/notifications.tsx",
-                "components/display/timeline": "./src/components/display/timeline.tsx",
-                "components/display/list": "./src/components/display/list.tsx",
-                "components/display/calendar": "./src/components/display/calendar.tsx",
-                "components/display/card": "./src/components/display/card.tsx",
-                "components/display/tabs": "./src/components/display/tabs.tsx",
-                "components/display/stats": "./src/components/display/stats.tsx",
-                "components/display/alert": "./src/components/display/alert.tsx",
-                "components/table/table": "./src/components/table/index.tsx",
+                ...getComponentEntries(),
             },
             formats: ["es"],
         },
