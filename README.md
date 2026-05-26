@@ -253,6 +253,8 @@ pnpm build
 - `pnpm build` - Build both library and docs
 - `pnpm test` - Run tests
 - `pnpm format` - Format code with oxfmt
+- `pnpm knip` - Check for unused files, exports, and dependencies
+- `pnpm knip:production` - Run Knip in production mode
 
 ### Testing
 

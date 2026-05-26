@@ -21,6 +21,7 @@
     }
   },
   "devDependencies": {
+    "knip": "6.14.2",
     "lefthook": "2.1.6",
     "oxfmt": "0.48.0",
     "oxlint": "1.63.0"
@@ -29,6 +30,8 @@
     "build": "pnpm run --filter ./packages/lib lib:css; pnpm run -r build",
     "dev": "pnpm run --filter ./packages/docs dev",
     "format": "pnpm run -r format",
+    "knip": "knip",
+    "knip:production": "knip --production",
     "lint": "pnpm run -r --workspace-concurrency=1 lint",
     "prepare": "lefthook install",
     "start": "pnpm run --filter ./packages/docs start",
