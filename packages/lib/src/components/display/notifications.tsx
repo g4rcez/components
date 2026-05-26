@@ -88,18 +88,20 @@ function Notification(props: NotificationItemProps) {
             >
                 <Base.Content className={className}>
                     <div className="flex items-start gap-notification-gap p-notification-p">
-                        <div className={css("mt-0.5 shrink-0 opacity-80", loading && "animate-spin")}>
-                            <Icon className="size-4" />
+                        <div className={css("mt-0.5 flex size-4 shrink-0 items-center justify-center opacity-80", loading && "animate-spin")}>
+                            <Icon aria-hidden="true" />
                         </div>
 
                         <div className="flex flex-1 flex-col gap-notification-inner-gap overflow-hidden">
                             {props.toast.title ? <Base.Title className="select-text truncate font-semibold leading-tight tracking-tight" /> : null}
-                            <Base.Description className="line-clamp-2 select-text text-typography-xs font-medium leading-relaxed opacity-90" />
+                            <Base.Description className="text-typography-xs line-clamp-2 select-text font-medium leading-relaxed opacity-90" />
                         </div>
 
                         {closable && !loading ? (
-                            <Base.Close className="rounded-notification-close-radius -mr-1 -mt-1 shrink-0 p-notification-close-p text-foreground/40 transition hover:bg-foreground/10 hover:text-foreground">
-                                <XIcon className="size-3.5" />
+                            <Base.Close className="-mr-1 -mt-1 shrink-0 rounded-notification-close-radius p-notification-close-p text-foreground/40 transition hover:bg-foreground/10 hover:text-foreground">
+                                <span className="flex size-3.5 items-center justify-center">
+                                    <XIcon aria-hidden="true" />
+                                </span>
                             </Base.Close>
                         ) : null}
                     </div>
@@ -136,7 +138,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-notification-badge-px py-notification-badge-py text-notification-badge-text font-bold uppercase tracking-wider text-foreground/50 shadow-notification backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
+                    className="shadow-notification pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-notification-badge-px py-notification-badge-py text-notification-badge-text font-bold uppercase tracking-wider text-foreground/50 backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
                 >
                     +{hiddenCount} more
                 </motion.div>

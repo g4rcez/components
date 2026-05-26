@@ -13,6 +13,7 @@ import {
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { XIcon } from "@phosphor-icons/react";
 import React, { Fragment, PropsWithChildren, useCallback, useId, useState } from "react";
+import { useTranslations } from "../../hooks/use-translations";
 import { Label } from "../../types";
 
 type AnimatedItemProps = {
@@ -35,57 +36,63 @@ type FloatItemProps = {
     get: ReturnType<typeof useInteractions>["getFloatingProps"];
 };
 
-const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => (
-    <FloatingPortal>
-        <MotionConfig reducedMotion="user" transition={{ type: "spring", damping: 30, stiffness: 350 }}>
-            <AnimatePresence mode="wait" presenceAffectsLayout>
-                {item ? (
-                    <motion.div
-                        key="overlay"
-                        exit={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        initial={{ opacity: 0 }}
-                        transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
-                        className="pointer-events-none fixed inset-0 top-0 z-overlay h-screen w-screen bg-floating-overlay/70"
-                    />
-                ) : null}
-                {item ? (
-                    <FloatingOverlay key="card" lockScroll className="absolute inset-0 z-floating flex items-center justify-center">
-                        <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
-                            <motion.div
-                                layout
-                                layoutId={`item-${item.id}`}
-                                initial={{ opacity: 0.6, scale: 0.98 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.98 }}
-                                className="relative flex h-min w-min min-w-xs flex-col gap-list-card-gap rounded-list-radius border border-card-border bg-card-background p-list-card-p py-list-card-py pb-list-card-pb shadow-shadow-card"
-                                ref={refs.setFloating}
-                                {...get()}
-                            >
-                                <nav className="absolute right-4 top-1 lg:right-2">
-                                    <button
-                                        type="button"
-                                        onClick={setter}
-                                        className="p-list-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
-                                    >
-                                        <XIcon />
-                                    </button>
-                                </nav>
-                                <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-list-header-gap">
-                                    <h3 className="min-w-full text-balance text-list-title-text font-medium">{item.title}</h3>
-                                    <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
-                                </motion.header>
-                                <motion.div layout>{item.children}</motion.div>
-                            </motion.div>
-                        </FloatingFocusManager>
-                    </FloatingOverlay>
-                ) : null}
-            </AnimatePresence>
-        </MotionConfig>
-    </FloatingPortal>
-);
+const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => {
+    const translations = useTranslations();
+
+    return (
+        <FloatingPortal>
+            <MotionConfig reducedMotion="user" transition={{ type: "spring", damping: 30, stiffness: 350 }}>
+                <AnimatePresence mode="wait" presenceAffectsLayout>
+                    {item ? (
+                        <motion.div
+                            key="overlay"
+                            exit={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            initial={{ opacity: 0 }}
+                            transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
+                            className="pointer-events-none fixed inset-0 top-0 z-overlay h-screen w-screen bg-floating-overlay/70"
+                        />
+                    ) : null}
+                    {item ? (
+                        <FloatingOverlay key="card" lockScroll className="absolute inset-0 z-floating flex items-center justify-center">
+                            <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
+                                <motion.div
+                                    layout
+                                    layoutId={`item-${item.id}`}
+                                    initial={{ opacity: 0.6, scale: 0.98 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.98 }}
+                                    className="relative flex h-min w-min min-w-xs flex-col gap-list-card-gap rounded-list-radius border border-card-border bg-card-background p-list-card-p py-list-card-py pb-list-card-pb shadow-shadow-card"
+                                    ref={refs.setFloating}
+                                    {...get()}
+                                >
+                                    <nav className="absolute right-4 top-1 lg:right-2">
+                                        <button
+                                            type="button"
+                                            onClick={setter}
+                                            aria-label={translations.listCloseDetails}
+                                            className="p-list-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                        >
+                                            <XIcon />
+                                        </button>
+                                    </nav>
+                                    <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-list-header-gap">
+                                        <h3 className="min-w-full text-balance text-list-title-text font-medium">{item.title}</h3>
+                                        <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
+                                    </motion.header>
+                                    <motion.div layout>{item.children}</motion.div>
+                                </motion.div>
+                            </FloatingFocusManager>
+                        </FloatingOverlay>
+                    ) : null}
+                </AnimatePresence>
+            </MotionConfig>
+        </FloatingPortal>
+    );
+};
 
 export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
+    const translations = useTranslations();
     const [selected, setSelected] = useState<IdAnimatedItem | null>(null);
     const id = useId();
     const { context, refs } = useFloating({
@@ -130,7 +137,12 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                                         {item.avatar ? (
                                             <div>
                                                 <div className="relative px-list-avatar-px">
-                                                    <button onClick={setter} className="flex size-10 items-center justify-center ring-primary">
+                                                    <button
+                                                        type="button"
+                                                        onClick={setter}
+                                                        aria-label={translations.listOpenDetails(String(item.title))}
+                                                        className="flex size-10 items-center justify-center ring-primary"
+                                                    >
                                                         {item.avatar}
                                                     </button>
                                                 </div>
@@ -139,7 +151,9 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                                         <div className="min-w-0 flex-1 py-list-body-py text-foreground">
                                             <div className="flex flex-row flex-nowrap justify-between gap-list-item-gap">
                                                 <button
+                                                    type="button"
                                                     onClick={setter}
+                                                    aria-label={translations.listOpenDetails(String(item.title))}
                                                     className="cursor-pointer text-left transition-all ease-out hover:text-primary"
                                                 >
                                                     <h3>{item.title}</h3>

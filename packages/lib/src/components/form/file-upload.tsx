@@ -12,8 +12,8 @@ import {
     XIcon,
 } from "@phosphor-icons/react";
 import prettyBytes from "pretty-bytes";
-import React, { createContext, Fragment, useContext, useEffect, useState } from "react";
-import { DropzoneProps, useDropzone } from "react-dropzone";
+import React, { cloneElement, createContext, Fragment, useContext, useEffect, useState } from "react";
+import { DropzoneOptions, DropzoneProps, useDropzone } from "react-dropzone";
 import { Override } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
 import { SetState } from "../../types";
@@ -29,7 +29,7 @@ const useFileManager = () => useContext(Context);
 
 type Props = Override<React.ComponentProps<"input">, DropzoneProps> & {
     files?: File[];
-    idle?: React.ReactElement;
+    idle?: React.ReactElement<IdleProps>;
     File?: React.FC<{ file: File }>;
     onDrop?: (file: File[]) => void;
     onDeleteFile?: (file: File) => void;
@@ -55,6 +55,7 @@ const extensionMap: Record<string, Icon> = {
 };
 
 const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => {
+    const translations = useTranslations();
     const [, setManager] = useFileManager();
     const [info, setInfo] = useState({ url: "", type: "", size: "" });
 
@@ -90,7 +91,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
                     <button
                         type="button"
                         onClick={onViewFile}
-                        aria-label={`View ${fileName}`}
+                        aria-label={translations.fileUploadViewFile(fileName)}
                         className="m-2 flex size-file-upload-thumb-size items-center justify-center overflow-hidden"
                     >
                         {Element}
@@ -107,7 +108,12 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
                 ) : null}
             </div>
             <div className="align-start flex justify-start py-file-upload-delete-py transition-colors duration-300 ease-linear hover:text-danger-hover">
-                <button onClick={onDeleteFile} type="button" aria-label={`Remove ${fileName}`} className="flex size-6 items-center justify-center">
+                <button
+                    onClick={onDeleteFile}
+                    type="button"
+                    aria-label={translations.fileUploadRemoveFile(fileName)}
+                    className="flex size-6 items-center justify-center"
+                >
                     <XIcon size={16} aria-hidden="true" />
                 </button>
             </div>
@@ -123,17 +129,43 @@ const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; 
     </ul>
 );
 
-const Idle = (props: { dragging: boolean; files?: File[] }) => {
+type IdleProps = {
+    dragging: boolean;
+    files?: File[];
+    onUpload?: () => void;
+};
+
+const Idle = (props: IdleProps) => {
     const t = useTranslations();
     const Icon = props.dragging ? FolderOpenIcon : FolderIcon;
+
+    const onUpload = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        props.onUpload?.();
+    };
+
+    const onUploadKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        onUpload(event);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="flex flex-col items-center justify-center gap-file-upload-inner-gap">
-                <Icon className="text-primary" size={80} />
+                <span className="text-primary">
+                    <Icon size={80} aria-hidden="true" />
+                </span>
             </div>
             <div className="my-file-upload-thumb-my flex flex-col items-center gap-file-upload-thumb-gap">
                 <p>{t.uploadIdle}</p>
-                <button className="text-primary underline" type="button">
+                <button
+                    className="text-primary underline"
+                    type="button"
+                    aria-label={t.fileUploadUploadButtonLabel(t.uploadIdleButton)}
+                    onClick={onUpload}
+                    onKeyDown={onUploadKeyDown}
+                >
                     {t.uploadIdleButton}
                 </button>
             </div>
@@ -144,17 +176,18 @@ const Idle = (props: { dragging: boolean; files?: File[] }) => {
 type InteractiveAreaProps = {
     files: File[];
     isDragActive: boolean;
-    idle: React.ReactElement;
+    idle: React.ReactElement<IdleProps>;
+    onUpload: () => void;
     File?: React.FC<{ file: File }>;
     onDeleteFile?: (file: File) => void;
 };
 
 const InteractiveArea = (props: InteractiveAreaProps) => {
-    if (props.isDragActive) return <Idle files={props.files} dragging />;
+    if (props.isDragActive) return <Idle files={props.files} dragging onUpload={props.onUpload} />;
     if (props.files.length > 0) {
         return <FilesList File={props.File} onDeleteFile={props.onDeleteFile} files={props.files} />;
     }
-    return <Fragment>{props.idle}</Fragment>;
+    return <Fragment>{cloneElement(props.idle, { onUpload: props.onUpload })}</Fragment>;
 };
 
 const DefaultIdle = <Idle dragging={false} />;
@@ -194,9 +227,14 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
         setFiles((prev) => prev.concat(x));
     };
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const dropzoneOptions: DropzoneOptions = {
+        multiple: props.multiple,
+        onDragEnter: props.onDragEnter,
+        onDragOver: props.onDragOver,
+        onDragLeave: props.onDragLeave,
         onDrop: drop,
-    });
+    };
+    const { getRootProps, getInputProps, isDragActive, open } = useDropzone(dropzoneOptions);
 
     return (
         <Context.Provider value={state}>
@@ -204,13 +242,15 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {state[0] ? <FileViewer item={state[0]!} /> : null}
             </Modal>
             <div
-                {...(getRootProps() as unknown as React.HTMLAttributes<HTMLDivElement>)}
-                aria-label={t.fileUploadZoneLabel}
-                data-active={items ? items.length > 0 : false}
-                className="flex flex-col items-center justify-center rounded-file-upload-radius border border-card-border p-file-upload-p text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background"
+                {...getRootProps({
+                    "aria-label": t.fileUploadZoneLabel,
+                    "data-active": items ? items.length > 0 : false,
+                    className:
+                        "flex flex-col items-center justify-center rounded-file-upload-radius border border-card-border p-file-upload-p text-foreground data-[active=true]:border-solid data-[active=false]:border-dashed data-[active=true]:border-transparent data-[active=true]:bg-card-background",
+                })}
             >
-                <input {...getInputProps(props as unknown as React.InputHTMLAttributes<HTMLInputElement>)} name={props.name} id={props.name} />
-                <InteractiveArea File={File} onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={items} />
+                <input {...getInputProps()} aria-label={t.fileUploadZoneLabel} name={props.name} id={props.name} />
+                <InteractiveArea File={File} onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={items} onUpload={open} />
             </div>
         </Context.Provider>
     );

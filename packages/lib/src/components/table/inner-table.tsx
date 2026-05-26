@@ -104,7 +104,7 @@ const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, 
             <tfoot {...props} ref={ref} className="bg-card-background">
                 <tr role="row" className="bg-card-background">
                     <td colSpan={999} className="h-table-loading-h bg-card-background px-table-cell-px">
-                        <span className="rounded-table-loading-bar-radius block h-table-loading-bar-h w-full animate-pulse bg-foreground opacity-60" />
+                        <span className="block h-table-loading-bar-h w-full animate-pulse rounded-table-loading-bar-radius bg-foreground opacity-60" />
                     </td>
                 </tr>
             </tfoot>

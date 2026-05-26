@@ -21,6 +21,7 @@ export const Navigation = () => {
                                     <li key={`section-item-${item.title}`}>
                                         <Link
                                             href={item.href}
+                                            aria-current={isActive ? "page" : undefined}
                                             className={`-ml-px block border-l py-1.5 pl-4 text-[14px] transition-all ${
                                                 isActive
                                                     ? "border-primary font-semibold text-primary"

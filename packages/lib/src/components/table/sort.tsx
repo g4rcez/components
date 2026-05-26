@@ -109,7 +109,9 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                                     placeholder={translation.tableSortTypeInputPlaceholder}
                                 />
                                 <button className="mt-table-groups-mt" data-id={sorter.id} onClick={onDelete}>
-                                    <TrashIcon className="text-danger" size={14} />
+                                    <span className="text-danger">
+                                        <TrashIcon aria-hidden="true" size={14} />
+                                    </span>
                                 </button>
                             </li>
                         );

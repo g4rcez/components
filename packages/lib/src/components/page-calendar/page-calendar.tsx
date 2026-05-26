@@ -67,7 +67,11 @@ export function PageCalendar<T extends CalendarEventBase>({
     };
 
     return (
-        <div role="application" aria-label={t.pageCalendarLabel} className="flex h-full w-full flex-grow flex-col gap-page-calendar-gap">
+        <section
+            aria-label={t.pageCalendarLabel}
+            data-component="page-calendar"
+            className="flex h-full w-full flex-grow flex-col gap-page-calendar-gap"
+        >
             <CalendarHeader
                 filters={internalFilters}
                 filterArea={filterArea}
@@ -106,6 +110,6 @@ export function PageCalendar<T extends CalendarEventBase>({
                     onEventClick={handleEventClick}
                 />
             )}
-        </div>
+        </section>
     );
 }

@@ -28,6 +28,10 @@ export const defaultTranslations = {
     pageCalendarEventAt: (title: string, time: string) => `${title} at ${time}`,
     commandPaletteEmpty: "Nothing here...",
     commandPaletteLoading: "Loading...",
+    commandPaletteResults: "Results",
+    commandPaletteSearchLabel: "Command palette search",
+    commandPaletteSearchPlaceholder: "Search for...",
+    commandPaletteTitle: "Command palette",
     datePickerCalendarButtonLabel: "Click to open a date picker",
     emptyDataMessage: "No data",
     inputCaretDown: "Click to see all options",
@@ -58,8 +62,12 @@ export const defaultTranslations = {
     tableFilterTypeStartsWith: "Starts with",
     tableFilterValuePlaceholder: "Something...",
     tableFilterValueTitle: "Value",
+    tableFilterDeleteLabel: (label: string) => `Delete filter ${label}`,
     tableGroupLabel: "Group",
     tableGroupLabelWithCount: "Group",
+    tableGroupOrderTitle: "Order groups",
+    tableGroupPlaceholder: "Group by...",
+    tableGroupTypeTitle: "Group type",
     tablePaginationFooter: (pagination: { pages: number; totalItems: number; sizes?: number[]; current: number; select: React.ReactNode }) => (
         <Fragment>
             {pagination.current} to {pagination.pages} of {pagination.totalItems} items.{Array.isArray(pagination.sizes) ? pagination.select : null}{" "}
@@ -83,12 +91,22 @@ export const defaultTranslations = {
     uploadIdleButton: "Choose your files",
     uploadDragging: (props: { n: number }) => `Dragging ${props.n} ${props.n > 0 ? "files" : "file"}`,
     uploadDialogTitle: "Details of your file",
+    fileUploadRemoveFile: (name: string) => `Remove ${name}`,
+    fileUploadUploadButtonLabel: (label: string) => `Upload ${label}`,
+    fileUploadViewFile: (name: string) => `View ${name}`,
+    dialogResizeLabel: "Resize modal",
+    dialogResizeInstructions: "Use arrow keys to resize the modal",
+    modalConfirmCancel: "Cancel",
+    modalConfirmConfirm: "Confirm",
+    modalConfirmTitle: "Confirmation",
 
     datepickerPlaceholder: (_: string) => "day/month/year",
     spinnerLoading: "Loading",
     skeletonLoading: "Loading content",
     closeButton: "Close",
     fileUploadZoneLabel: "File upload area. Drag files here or press Enter to browse.",
+    listCloseDetails: "Close details",
+    listOpenDetails: (title: string) => `Open details for ${title}`,
 };
 
 export type Translations = typeof defaultTranslations;

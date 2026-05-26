@@ -1,6 +1,6 @@
 "use client";
 import { CaretDownIcon } from "@phosphor-icons/react";
-import React, { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import React, { forwardRef, useEffect, useId, useImperativeHandle, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
 import { Override } from "../../types";
@@ -47,7 +47,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     ) => {
         const translation = useTranslations();
         const inputRef = useRef<HTMLSelectElement>(null);
-        const id = props.id ?? props.name;
+        const generatedId = useId();
+        const id = props.id ?? props.name ?? generatedId;
+        const describedBy =
+            [props["aria-describedby"], feedback ? `${id}-feedback` : undefined, error ? `${id}-error` : undefined].filter(Boolean).join(" ") ||
+            undefined;
         useImperativeHandle(ref, () => inputRef.current!);
 
         useEffect(() => {
@@ -74,7 +78,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 error={error}
                 form={props.form}
                 loading={loading}
-                name={props.name}
+                name={props.name ?? id}
                 feedback={feedback}
                 hideLeft={hideLeft}
                 required={required}
@@ -84,26 +88,29 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 rightLabel={rightLabel}
                 hiddenLabel={hiddenLabel}
                 interactive={interactive}
-                id={props.name || props.id}
+                id={id}
                 optionalText={optionalText}
                 labelClassName={labelClassName}
                 placeholder={props.placeholder}
                 right={
-                    <label htmlFor={id}>
+                    <span>
                         {right}
                         <button onClick={onClickLabel} type="button" className="mt-2 transition-colors hover:text-primary">
                             <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
-                    </label>
+                    </span>
                 }
             >
                 <select
                     {...props}
                     id={id}
-                    name={id}
+                    name={props.name ?? id}
                     required={required}
                     ref={mergeRefs(ref, inputRef)}
+                    aria-invalid={error ? true : props["aria-invalid"]}
+                    aria-labelledby={`${id}-label`}
+                    aria-describedby={describedBy}
                     data-selected={!!props.value || false}
                     title={typeof props.title === "string" ? props.title : undefined}
                     className={css(
@@ -118,11 +125,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                         {props.placeholder}
                     </option>
                     {options.map((option) => (
-                        <option
-                            {...option}
-                            value={option.value}
-                            key={`${id}-select-option-${option.value}`}
-                        >
+                        <option {...option} value={option.value} key={`${id}-select-option-${option.value}`}>
                             {option.label ?? option.value}
                         </option>
                     ))}

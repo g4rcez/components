@@ -127,45 +127,89 @@ const variants = cva(
     }
 );
 
+type ModalAccessibleNameProps = { title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label };
+
+type ModalOptions = Partial<{
+    footer: Label;
+    role: "dialog";
+    trigger: Label;
+    type: ModalType;
+    asChild: boolean;
+    layoutId: string;
+    resizer: boolean;
+    animated: boolean;
+    className: string;
+    closable: boolean;
+    forceType: boolean;
+    bodyClassName: string;
+    closeOnFocusOut: boolean;
+    overlayClassName: string;
+    position: DrawerPosition;
+    overlayClickClose: boolean;
+    interactions: ElementProps[];
+    initialFocus: React.ComponentProps<typeof FloatingFocusManager>["initialFocus"];
+}>;
+
 export type ModalProps = Override<
     HTMLMotionProps<"div">,
-    ({ title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label }) & {
+    {
         open: boolean;
         onChange: (nextState: boolean) => void;
-    } & Partial<{
-            footer: Label;
-            type: ModalType;
-            animated: boolean;
-            asChild: boolean;
-            layoutId: string;
-            resizer: boolean;
-            className: string;
-            closable: boolean;
-            forceType: boolean;
-            bodyClassName: string;
-            overlayClassName: string;
-            position: DrawerPosition;
-            overlayClickClose: boolean;
-            closeOnFocusOut: boolean;
-            role: "dialog";
-            interactions: ElementProps[];
-            trigger: Label;
-        }>
+    } & ModalAccessibleNameProps &
+        ModalOptions
 >;
 
 type DraggableProps = {
     sheet: boolean;
+    instructionsId: string;
     position: DrawerPosition;
-    parent: React.MutableRefObject<HTMLElement | null>;
     onChange: (nextState: boolean) => void;
     value: MotionValue<number | undefined>;
+    parent: React.RefObject<HTMLElement | null>;
 };
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
 
+const keyboardResizeStep = 32;
+
 const calculateClose = (n: number) => n * 0.6;
 
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
 const Draggable = (props: DraggableProps) => {
+    const translations = useTranslations();
+
+    const getKeyboardResize = (delta: number) => {
+        const element = props.parent.current;
+        if (!element) return undefined;
+
+        const rect = element.getBoundingClientRect();
+        const current = props.value.get() || (props.sheet ? rect.height : rect.width);
+
+        if (props.sheet) {
+            const max = window.outerHeight || rect.height || current;
+            return clamp(current + delta, calculateClose(max), max);
+        }
+
+        const max = window.outerWidth || rect.width || current;
+        return clamp(current + delta, 0, max);
+    };
+
+    const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        const delta =
+            event.key === "ArrowRight" || event.key === "ArrowDown"
+                ? keyboardResizeStep
+                : event.key === "ArrowLeft" || event.key === "ArrowUp"
+                  ? -keyboardResizeStep
+                  : undefined;
+
+        if (delta === undefined) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const nextValue = getKeyboardResize(delta);
+        if (nextValue !== undefined) props.value.set(nextValue);
+    };
+
     const onDrag = (e: Event, info: PanInfo) => {
         if (props.parent.current) {
             e.stopPropagation();
@@ -197,7 +241,6 @@ const Draggable = (props: DraggableProps) => {
             draggable
             dragListener
             dragMomentum
-            tabIndex={-1}
             type="button"
             animate={false}
             dragElastic={0}
@@ -206,12 +249,14 @@ const Draggable = (props: DraggableProps) => {
             onDrag={onDrag}
             dragSnapToOrigin
             dragDirectionLock
-            aria-hidden="true"
+            onKeyDown={onKeyDown}
+            aria-label={translations.dialogResizeLabel}
             drag={props.sheet ? "y" : "x"}
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
+            aria-describedby={props.instructionsId}
             className={css(
-                "absolute isolate z-calendar rounded-modal-resizer-radius",
+                "absolute isolate z-calendar rounded-modal-resizer-radius focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
                 props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
                 props.sheet
                     ? "top-1 flex h-modal-sheet-handle-h w-full justify-center py-modal-sheet-handle-py"
@@ -267,9 +312,10 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             position: propsPosition,
             overlayClickClose = false,
             closeOnFocusOut = false,
+            initialFocus,
             interactions: outInteractions = noop,
             ...props
-        }: PropsWithChildren<ModalProps>,
+        },
         externalRef: ForwardedRef<ModalRef>
     ) => {
         const t = useTranslations();
@@ -278,11 +324,13 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const removeScrollRef = useRef<HTMLDivElement>(null);
         const headingId = useId();
         const descriptionId = useId();
+        const resizeDescriptionId = useId();
+        const modalType = _type as ModalType;
         const isDesktop = useMediaQuery("(min-width: 64rem)");
-        const position = fetchPosition(isDesktop, forceType, _type, propsPosition);
-        const func = isDesktop ? animations[_type] : forceType ? animations[_type] : animations.sheet;
+        const position = fetchPosition(isDesktop, forceType, modalType, propsPosition);
+        const func = isDesktop ? animations[modalType] : forceType ? animations[modalType] : animations.sheet;
         const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
-        const type = isDesktop ? _type : forceType ? _type : "sheet";
+        const type = isDesktop ? modalType : forceType ? modalType : "sheet";
         const useResizer = type !== "dialog";
 
         const floating = useFloating({
@@ -357,14 +405,18 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const scrollInitial = useMotionValue<number | undefined>(undefined);
         const scroll = useMotionValue<number | undefined>(undefined);
 
-        const Component = asChild ? Slot : motion.button;
-
         return (
             <Fragment>
                 {trigger ? (
-                    <Component ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
-                        {trigger}
-                    </Component>
+                    asChild ? (
+                        <Slot ref={floating.refs.setReference} {...interactions.getReferenceProps()}>
+                            {trigger}
+                        </Slot>
+                    ) : (
+                        <motion.button ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
+                            {trigger}
+                        </motion.button>
+                    )
                 ) : null}
                 <MotionConfig reducedMotion={animated ? "user" : "always"}>
                     <FloatingPortal preserveTabOrder root={root}>
@@ -378,7 +430,13 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                         overlayClassName
                                     )}
                                 >
-                                    <FloatingFocusManager guards modal closeOnFocusOut={closeOnFocusOut} context={floating.context}>
+                                    <FloatingFocusManager
+                                        guards
+                                        modal
+                                        closeOnFocusOut={closeOnFocusOut}
+                                        context={floating.context}
+                                        initialFocus={initialFocus}
+                                    >
                                         <AnimatePresence propagate>
                                             <motion.div
                                                 {...props}
@@ -403,13 +461,19 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
                                             >
                                                 {useResizer && resizer ? (
-                                                    <Draggable
-                                                        onChange={onChange}
-                                                        value={floatingSize}
-                                                        sheet={type === "sheet"}
-                                                        position={position as DrawerPosition}
-                                                        parent={floating.refs.floating}
-                                                    />
+                                                    <>
+                                                        <span id={resizeDescriptionId} className="sr-only">
+                                                            {t.dialogResizeInstructions}
+                                                        </span>
+                                                        <Draggable
+                                                            onChange={onChange}
+                                                            value={floatingSize}
+                                                            sheet={type === "sheet"}
+                                                            instructionsId={resizeDescriptionId}
+                                                            position={position as DrawerPosition}
+                                                            parent={floating.refs.floating}
+                                                        />
+                                                    </>
                                                 ) : null}
                                                 {title ? (
                                                     <motion.header {...draggableMotionProps} className="relative isolate w-full">
@@ -453,13 +517,13 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             isDragging.current = false;
                                                         }
                                                     }}
-                                                    onTouchStart={(e) => {
+                                                    onTouchStart={(e: React.TouchEvent<HTMLElement>) => {
                                                         const touch = e.changedTouches[0];
                                                         scrollInitial.set(touch.pageY);
                                                         scroll.set(touch.pageY);
                                                         isDragging.current = false;
                                                     }}
-                                                    onTouchMove={(e) => {
+                                                    onTouchMove={(e: React.TouchEvent<HTMLElement>) => {
                                                         const touch = e.changedTouches[0];
                                                         const y = touch.pageY;
                                                         const prevY = scroll.get() || y;
@@ -497,7 +561,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             aria-label={t.closeButton}
                                                             className="p-modal-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
                                                         >
-                                                            <XIcon size={18} aria-hidden="true" />
+                                                            <XIcon size={20} aria-hidden="true" />
                                                         </button>
                                                     </div>
                                                 ) : null}
@@ -539,6 +603,7 @@ let confirmGlobal: ConfirmContextType = async <T,>(_: ConfirmOptions): Promise<T
 Modal.confirm = <T,>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as unknown as Promise<T>;
 
 export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }) => {
+    const translations = useTranslations();
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState<Partial<ConfirmOptions>>({});
     const [resolve, setResolve] = useState<(value: boolean) => void>(() => {});
@@ -580,15 +645,15 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                 closable={false}
                 onChange={setOpen}
                 overlayClickClose={false}
-                title={options.title || "Confirmation"}
+                title={options.title || translations.modalConfirmTitle}
                 className="container max-w-dialog lg:max-w-96"
                 footer={
                     <div className="flex justify-end gap-modal-footer-gap">
                         <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
-                            {options.cancel?.text || "Cancel"}
+                            {options.cancel?.text || translations.modalConfirmCancel}
                         </Button>
                         <Button ref={confirmRef} theme={options.confirm?.theme || "primary"} onClick={onConfirm}>
-                            {options.confirm?.text || "Confirm"}
+                            {options.confirm?.text || translations.modalConfirmConfirm}
                         </Button>
                     </div>
                 }

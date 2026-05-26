@@ -1,10 +1,13 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
+import { toHaveNoViolations } from "vitest-axe/matchers";
 
 afterEach(() => {
     cleanup();
 });
+
+expect.extend(toHaveNoViolations);
 
 Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -25,4 +28,14 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
+}));
+
+global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+    takeRecords: vi.fn(),
+    root: null,
+    rootMargin: "0px",
+    thresholds: [],
 }));

@@ -10,12 +10,11 @@ import {
     useFloating,
     useInteractions,
     useListNavigation,
-    useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { forwardRef, Fragment, type PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, Fragment, type PropsWithChildren, Ref, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
@@ -49,19 +48,25 @@ const transitionStyles = {
     initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
-const List = forwardRef<HTMLUListElement, ListProps & ContextProp<unknown>>(function VirtualList({ context: _context, ...props }, ref) {
+const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: string }>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.ul {...props} ref={ref} className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius">
+        <motion.div
+            {...props}
+            id={context?.listboxId}
+            ref={ref}
+            role="listbox"
+            className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius"
+        >
             <AnimatePresence>{props.children}</AnimatePresence>
-        </motion.ul>
+        </motion.div>
     );
 });
 
-const Item = forwardRef<HTMLLIElement, ItemProps<AutocompleteItemProps> & ContextProp<unknown>>(function VirtualItem(
+const Item = forwardRef<HTMLDivElement, ItemProps<AutocompleteItemProps> & ContextProp<unknown>>(function VirtualItem(
     { item: _item, context: _context, ...props },
     ref
 ) {
-    return <motion.li {...props} ref={ref} className="first:rounded-t-dropdown-radius last:rounded-t-dropdown-radius" />;
+    return <motion.div {...props} ref={ref} role="presentation" className="first:rounded-t-dropdown-radius last:rounded-t-dropdown-radius" />;
 });
 
 const components = { List, Item };
@@ -97,6 +102,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
+        const generatedId = useId();
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
@@ -167,7 +173,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         });
         const transitions = useTransitionStyles(context, transitionStyles);
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
-            useRole(context, { role: "listbox" }),
             useDismiss(context),
             useListNavigation(context, {
                 cols: 0,
@@ -227,6 +232,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setClosed();
             setShadow("");
             setIndex(i);
+            input.focus();
         };
 
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,13 +264,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setClosed();
         };
 
-        const id = props.id || props.name;
+        const id = props.id || props.name || generatedId;
 
         const shadowId = `${id}-shadow`;
+        const listboxId = `${shadowId}-listbox`;
 
         const isEmpty = displayList.length === 0;
 
         const isTopPlacement = placement === "top" || placement === "top-start";
+
+        const activeOptionId = open && index !== null && displayList[index] ? `${shadowId}-option-${index}` : undefined;
 
         return (
             <InputField
@@ -326,18 +335,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         ref: refs.setReference,
                         onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
                         onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+                            props.onKeyDown?.(event);
+                            if (event.defaultPrevented) return;
                             if (event.key === "Escape") {
-                                event.currentTarget.blur();
+                                event.preventDefault();
                                 return setClosed();
                             }
                             if (!open) return;
                             if (event.key === "ArrowDown") {
+                                event.preventDefault();
                                 let next = Is.number(index) ? index + 1 : 0;
                                 if (next > displayList.length - 1) next = 0;
                                 virtuoso.current?.scrollIntoView({ index: next });
                                 return setIndex(next);
                             }
                             if (event.key === "ArrowUp") {
+                                event.preventDefault();
                                 let next = Is.number(index) ? index! - 1 : displayList.length - 1;
                                 if (next < 0) next = displayList.length - 1;
                                 virtuoso.current?.scrollIntoView({ index: next });
@@ -361,7 +374,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     data-target={id}
                     required={required}
                     value={open ? shadow : options.length === 0 ? "" : label || value}
+                    role="combobox"
                     aria-autocomplete="list"
+                    aria-expanded={open}
+                    aria-haspopup="listbox"
+                    aria-controls={listboxId}
+                    aria-activedescendant={activeOptionId}
+                    aria-labelledby={`${shadowId}-label`}
                     autoComplete="off"
                     className={css(
                         "input placeholder-input-mask group h-input-height w-full flex-1",
@@ -424,7 +443,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     ref={virtuoso}
                                     hidden={isEmpty}
                                     data={displayList}
+                                    context={{ listboxId }}
                                     style={{ height: h }}
+                                    initialItemCount={displayList.length}
                                     defaultItemHeight={MIN_SIZE}
                                     components={components as never}
                                     scrollerRef={(e) => {
@@ -438,26 +459,31 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         const selected = index === i;
                                         const children = option.label ?? option.value;
                                         return (
-                                            <button
+                                            <div
+                                                id={`${shadowId}-option-${i}`}
                                                 data-value={option.value}
                                                 {...getItemProps({
-                                                    ref: (node) => {
+                                                    ref: (node: HTMLElement | null) => {
                                                         listRef.current[i] = node;
                                                     },
                                                     role: "option",
-                                                    type: "button",
-                                                    "aria-checked": active,
-                                                    "aria-current": active,
                                                     "aria-selected": active,
                                                     "aria-disabled": option.disabled,
-                                                    onClick: () => onSelect(option, i),
-                                                    className: `cursor-pointer min-h-10 hover:bg-floating-hover w-full p-menu-item-p text-left ${active ? "bg-primary-hover text-primary-foreground" : ""} ${selected ? "bg-floating-hover text-floating-foreground" : ""}`,
+                                                    tabIndex: -1,
+                                                    onClick: () => {
+                                                        if (!option.disabled) onSelect(option, i);
+                                                    },
+                                                    className: css(
+                                                        "min-h-10 w-full cursor-pointer p-menu-item-p text-left hover:bg-floating-hover",
+                                                        active ? "bg-primary-hover text-primary-foreground" : "",
+                                                        selected ? "bg-floating-hover text-floating-foreground" : ""
+                                                    ),
                                                 })}
                                             >
                                                 <Label {...option} ref={undefined} label={option.label} value={option.value}>
                                                     {children}
                                                 </Label>
-                                            </button>
+                                            </div>
                                         );
                                     }}
                                 />

@@ -1,5 +1,5 @@
 "use client";
-import { autoUpdate, useFloating, useInteractions, useListNavigation, useRole } from "@floating-ui/react";
+import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
 import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
@@ -7,7 +7,7 @@ import { useStableRef } from "../../hooks/use-stable-ref";
 import { useTranslations } from "../../hooks/use-translations";
 import { CombiKeys } from "../../lib/combi-keys";
 import { Dict } from "../../lib/dict";
-import { css, isChildVisible, isReactFC } from "../../lib/dom";
+import { css, isChildVisible, isReactFC, mergeRefs } from "../../lib/dom";
 import { fzf, MatchValue } from "../../lib/fzf";
 import { Label } from "../../types";
 import { Shortcut } from "../display/shortcut";
@@ -44,6 +44,7 @@ type CommandGroupItem = CommandItem<"group", { title: View; items: CommandItemTy
 export type CommandItemTypes = CommandGroupItem | CommandShortcutItem;
 
 type ItemProps = {
+    id: string;
     text: string;
     active: boolean;
     item: CommandItemTypes;
@@ -56,39 +57,42 @@ const Group = (props: { item: CommandGroupItem; text: string }) => (
     </span>
 );
 
-const Item = forwardRef<HTMLButtonElement, Omit<ItemProps, "onChangeVisibility">>((props, ref) => {
-    const id = useId();
-    const active = props.active;
-    const item = props.item;
-    if (item.type === "group")
+const Item = forwardRef<HTMLDivElement, Omit<ItemProps, "onChangeVisibility"> & React.HTMLAttributes<HTMLDivElement>>(
+    ({ active, id, item, text, ...props }, ref) => {
+        if (item.type === "group")
+            return (
+                <div id={id} role="presentation" className="h-command-row-h px-command-group-px pb-command-group-pb pt-command-group-pt">
+                    <Group text={text} item={item} />
+                </div>
+            );
+        if (item.type !== "shortcut") return <Fragment />;
         return (
-            <div id={id} className="h-command-row-h px-command-group-px pb-command-group-pb pt-command-group-pt">
-                <Group text={props.text} item={item} />
+            <div
+                {...props}
+                id={id}
+                ref={ref}
+                role="option"
+                tabIndex={-1}
+                aria-selected={active}
+                data-component="command-palette-item"
+                onMouseDown={(event) => {
+                    props.onMouseDown?.(event);
+                    if (!event.defaultPrevented) event.preventDefault();
+                }}
+                className={css(
+                    "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-floating-hover",
+                    active ? "bg-floating-hover" : ""
+                )}
+            >
+                <span className="flex items-center gap-command-item-gap">
+                    {item.Icon ? item.Icon : null}
+                    <span>{isReactFC(item.title) ? <item.title text={text} /> : item.title}</span>
+                </span>
+                {item.shortcut ? <Shortcut value={item.shortcut} /> : null}
             </div>
         );
-    if (item.type !== "shortcut") return <Fragment />;
-    return (
-        <button
-            {...props}
-            id={id}
-            ref={ref}
-            role="option"
-            type="button"
-            aria-selected={active}
-            data-component="command-palette-item"
-            className={css(
-                "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-floating-hover",
-                active ? "bg-floating-hover" : ""
-            )}
-        >
-            <span className="flex items-center gap-command-item-gap">
-                {item.Icon ? item.Icon : null}
-                <span>{isReactFC(item.title) ? <item.title text={props.text} /> : item.title}</span>
-            </span>
-            {item.shortcut ? <Shortcut value={item.shortcut} /> : null}
-        </button>
-    );
-});
+    }
+);
 
 export type CommandPaletteProps = {
     bind?: string;
@@ -139,6 +143,7 @@ const findFirstClickable = (items: CommandItemTypes[]): CommandItemTypes | null 
 export const CommandPalette = (props: CommandPaletteProps) => {
     const id = useId();
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+    const searchInputRef = useRef<HTMLInputElement | null>(null);
     const [text, setText] = useState("");
     const listRef = useRef<Array<HTMLElement | null>>([]);
     const translations = useTranslations();
@@ -165,11 +170,14 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             : [
                   {
                       type: "group",
-                      title: "Results",
+                      title: translations.commandPaletteResults,
                       items: [],
                   },
                   ...fuzzy.filter((x) => x.type !== "group"),
               ];
+
+    const listboxId = `${id}-listbox`;
+    const activeOptionId = Is.number(activeIndex) && displayItems[activeIndex]?.type === "shortcut" ? `${id}-option-${activeIndex}` : undefined;
 
     const listNav = useListNavigation(root.context, {
         listRef,
@@ -177,7 +185,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         activeIndex,
         virtual: true,
         allowEscape: false,
-        focusItemOnOpen: true,
+        focusItemOnOpen: false,
         focusItemOnHover: true,
         openOnArrowKeyDown: true,
         scrollItemIntoView: false,
@@ -201,8 +209,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
             });
         },
     });
-    const listRole = useRole(root.context, { role: "listbox" });
-    const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav, listRole]);
+    const { getItemProps, getReferenceProps, getFloatingProps } = useInteractions([listNav]);
 
     useEffect(() => {
         const combi = new CombiKeys();
@@ -232,7 +239,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 closable={false}
                 open={props.open}
                 overlayClickClose
-                ariaTitle="Command palette"
+                initialFocus={searchInputRef}
+                ariaTitle={translations.commandPaletteTitle}
                 bodyClassName="px-0 py-0 pt-0"
                 data-component="command-palette"
                 onChange={props.onChangeVisibility}
@@ -244,11 +252,17 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                     </div>
                     <input
                         {...(getReferenceProps({
-                            ref: root.refs.setReference,
+                            ref: mergeRefs(root.refs.setReference, searchInputRef),
                             onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
                                 const item = Is.number(activeIndex) ? displayItems[activeIndex] : null;
                                 const key = e.key;
+                                if (key === "Escape") {
+                                    e.preventDefault();
+                                    props.onChangeVisibility(false);
+                                    return;
+                                }
                                 if (key === "Enter") {
+                                    e.preventDefault();
                                     if (item) {
                                         if (item.type === "shortcut")
                                             item.action({
@@ -271,8 +285,15 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                             },
                         } as unknown as React.HTMLProps<Element>) as React.InputHTMLAttributes<HTMLInputElement>)}
                         value={text}
+                        role="combobox"
+                        aria-label={translations.commandPaletteSearchLabel}
+                        aria-autocomplete="list"
+                        aria-expanded={props.open}
+                        aria-haspopup="listbox"
+                        aria-controls={listboxId}
+                        aria-activedescendant={activeOptionId}
                         data-combikeysbypass="true"
-                        placeholder="Search for..."
+                        placeholder={translations.commandPaletteSearchPlaceholder}
                         onChange={(e) => setText(e.target.value)}
                         className="text-typography-lg h-command-header-h w-full items-center bg-transparent px-command-input-px py-command-input-py pb-command-input-py text-left outline-none"
                     />
@@ -299,18 +320,21 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 ) : (
                     <div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
                         <div
+                            role="listbox"
+                            id={listboxId}
                             ref={scrollContainerRef}
                             data-component="command-palette-list"
                             className="my-command-list-my flex h-fit max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-list-px"
                         >
                             {displayItems.map((item, index) => (
                                 <Item
+                                    id={`${id}-option-${index}`}
                                     {...getItemProps({
                                         onMouseEnter: () => setActiveIndex(index),
-                                        ref(node) {
+                                        ref(node: HTMLElement | null) {
                                             listRef.current[index] = node;
                                         },
-                                        onClick(e) {
+                                        onClick(e: React.MouseEvent<HTMLDivElement>) {
                                             e.preventDefault();
                                             props.onChangeVisibility(false);
                                             if (item.type === "shortcut")

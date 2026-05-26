@@ -9,7 +9,9 @@ export const Empty = (props: EmptyProps) => {
     const translate = useTranslations();
     return (
         <div className="flex w-full flex-col items-center justify-center gap-empty-gap px-empty-px py-empty-py">
-            <Icon size={64} className="text-disabled" />
+            <span className="text-disabled">
+                <Icon size={64} aria-hidden="true" />
+            </span>
             <p className="text-disabled">{props.message ?? translate.emptyDataMessage}</p>
         </div>
     );

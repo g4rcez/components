@@ -91,7 +91,7 @@ function InteractiveFilterBar() {
                             <Input required placeholder="Text..." title="Search everywhere..." />
                         </Tooltip>
                         <Button size="small">
-                            <FunnelIcon />
+                            <FunnelIcon size={16} />
                         </Button>
                     </div>
                 </Card>

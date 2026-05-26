@@ -52,7 +52,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             focus = true,
             hover = true,
             enabled = true,
-            popover = true,
+            popover = false,
             onChange = noop,
             followCursor = false,
             ...props

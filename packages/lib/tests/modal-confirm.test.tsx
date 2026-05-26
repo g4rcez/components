@@ -58,4 +58,28 @@ describe("Modal.confirm", () => {
         });
         expect(window.alert).toHaveBeenCalledWith("Cancelled");
     });
+
+    it("uses provider map labels for default confirmation copy", async () => {
+        const handleConfirm = async () => {
+            await Modal.confirm({ description: "Mapped confirmation body" });
+        };
+
+        render(
+            <ComponentsProvider
+                map={{
+                    modalConfirmCancel: "Go back",
+                    modalConfirmConfirm: "Proceed",
+                    modalConfirmTitle: "Please decide",
+                }}
+            >
+                <button onClick={handleConfirm}>Open mapped confirm</button>
+            </ComponentsProvider>
+        );
+
+        fireEvent.click(screen.getByText("Open mapped confirm"));
+
+        expect(screen.getByRole("dialog", { name: "Please decide" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Go back" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Proceed" })).toBeInTheDocument();
+    });
 });

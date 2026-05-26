@@ -273,6 +273,7 @@
         "@tailwindcss/forms": "0.5.11",
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",
+        "@testing-library/user-event": "^14.6.1",
         "@types/node": "25.9.1",
         "@types/qs": "6.15.1",
         "@types/react": "19.2.15",
@@ -285,7 +286,8 @@
         "typescript": "6.0.3",
         "vite": "8.0.14",
         "vite-tsconfig-paths": "6.1.1",
-        "vitest": "4.1.7"
+        "vitest": "4.1.7",
+        "vitest-axe": "0.1.0"
     },
     "peerDependencies": {
         "react": ">=18",

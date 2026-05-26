@@ -3,60 +3,60 @@
 @tailwind utilities;
 
 html {
-  -webkit-text-size-adjust: 100%;
-  color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
 }
 
 html.dark {
-  color-scheme: dark;
+    color-scheme: dark;
 }
 
 select.select {
-  @apply appearance-none bg-no-repeat;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-indent: 1px;
-  text-overflow: "";
+    @apply appearance-none bg-no-repeat;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: "";
 }
 
 input,
 select,
 textarea {
-  font-size: 16px;
+    font-size: 16px;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type="number"] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 @layer utilities {
-  .max-h-modal-sheet-max-h-svh {
-    max-height: var(--modal-sheet-max-h-svh);
-  }
-  .max-h-modal-sheet-max-h-vh {
-    max-height: var(--modal-sheet-max-h-vh);
-  }
-  .max-h-modal-sheet-max-h-lvh {
-    max-height: var(--modal-sheet-max-h-lvh);
-  }
+    .max-h-modal-sheet-max-h-svh {
+        max-height: var(--modal-sheet-max-h-svh);
+    }
+    .max-h-modal-sheet-max-h-vh {
+        max-height: var(--modal-sheet-max-h-vh);
+    }
+    .max-h-modal-sheet-max-h-lvh {
+        max-height: var(--modal-sheet-max-h-lvh);
+    }
 }
 
 @layer components {
-  .typography {
-    @apply font-normal leading-typography tracking-typography;
-  }
+    .typography {
+        @apply font-normal leading-typography tracking-typography;
+    }
 
-  a[href="https://reactflow.dev"] {
-    display: none;
-  }
+    a[href="https://reactflow.dev"] {
+        display: none;
+    }
 
-  .group-table-row:hover .group-table-cell-aside {
-    @apply opacity-100;
-  }
+    .group-table-row:hover .group-table-cell-aside {
+        @apply opacity-100;
+    }
 }

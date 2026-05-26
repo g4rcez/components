@@ -92,15 +92,23 @@ export const Group = <T extends object>(props: Props<T>) => {
                 }
             >
                 <div className="flex flex-nowrap items-center">
-                    <Select value={group} title="Tipo de agrupamento" onChange={onChange} options={options} placeholder="Agrupar por..." />
+                    <Select
+                        value={group}
+                        title={translations.tableGroupTypeTitle}
+                        onChange={onChange}
+                        options={options}
+                        placeholder={translations.tableGroupPlaceholder}
+                    />
                     <Button className="mt-table-groups-mt" onClick={onDelete} theme="raw" data-id={group}>
-                        <TrashIcon size={16} className="text-danger" />
+                        <span className="text-danger">
+                            <TrashIcon size={16} aria-hidden="true" />
+                        </span>
                     </Button>
                 </div>
                 {props.groups.length > 0 ? (
                     <section className="my-table-groups-my">
                         <header>
-                            <h2 className="text-typography-xl font-medium">Order groups</h2>
+                            <h2 className="text-typography-xl font-medium">{translations.tableGroupOrderTitle}</h2>
                         </header>
                         <LayoutGroup>
                             <Reorder.Group

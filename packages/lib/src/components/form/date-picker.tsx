@@ -190,7 +190,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                                             <span id={labelId} className="sr-only">
                                                 {translation.datePickerCalendarButtonLabel}
                                             </span>
-                                            <CalendarIcon />
+                                            <CalendarIcon size={16} />
                                         </span>
                                     }
                                 >

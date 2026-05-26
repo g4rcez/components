@@ -25,7 +25,7 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
     <span className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
             <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:text-disabled group-error:text-danger">
-                {title}
+                <span id={id ? `${id}-label` : undefined}>{title}</span>
                 {reportStatus || info ? (
                     <span className="flex items-center justify-center gap-1">
                         {info ? (
@@ -36,7 +36,9 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                                 aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}` : undefined}
                                 title={
                                     <span className="cursor-help">
-                                        <InfoIcon className="aspect-square size-3" aria-hidden="true" size={16} />
+                                        <span className="flex aspect-square size-3 items-center justify-center">
+                                            <InfoIcon aria-hidden="true" size={16} />
+                                        </span>
                                     </span>
                                 }
                             >
@@ -50,16 +52,12 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                         ) : null}
                         {reportStatus ? (
                             <span className="flex h-3 min-w-6 items-center">
-                                <CheckCircleIcon
-                                    className="hidden aspect-square size-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100"
-                                    aria-hidden="true"
-                                    size={16}
-                                />
-                                <XCircleIcon
-                                    className="hidden aspect-square size-3 opacity-0 transition-opacity group-error:block group-error:opacity-100"
-                                    aria-hidden="true"
-                                    size={16}
-                                />
+                                <span className="hidden aspect-square size-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100">
+                                    <CheckCircleIcon aria-hidden="true" size={16} />
+                                </span>
+                                <span className="hidden aspect-square size-3 opacity-0 transition-opacity group-error:block group-error:opacity-100">
+                                    <XCircleIcon aria-hidden="true" size={16} />
+                                </span>
                             </span>
                         ) : null}
                     </span>
@@ -151,6 +149,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     {hiddenLabel ? (
                         <span className="sr-only">
                             <InputFeedback
+                                id={ID}
                                 info={info}
                                 hideLeft={hideLeft}
                                 reportStatus={reportStatusDefault}
@@ -159,7 +158,14 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                             />
                         </span>
                     ) : (
-                        <InputFeedback info={info} title={title} hideLeft={hideLeft} placeholder={placeholder} reportStatus={reportStatusDefault}>
+                        <InputFeedback
+                            id={ID}
+                            info={info}
+                            title={title}
+                            hideLeft={hideLeft}
+                            placeholder={placeholder}
+                            reportStatus={reportStatusDefault}
+                        >
                             {optionalText || rightLabel ? (
                                 <Fragment>
                                     {!required ? (
@@ -187,13 +193,16 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     </div>
                 </label>
                 <p
-                    id={`${ID}-error`}
+                    id={ID ? `${ID}-error` : undefined}
                     role="alert"
                     className="mt-input-hint-mt hidden whitespace-pre-wrap text-wrap text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger"
                 >
                     {error}
                 </p>
-                <p className="mt-input-hint-mt text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden">
+                <p
+                    id={ID ? `${ID}-feedback` : undefined}
+                    className="mt-input-hint-mt text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden"
+                >
                     {feedback}
                 </p>
             </fieldset>

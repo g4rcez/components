@@ -22,7 +22,7 @@ export const Metadata = <T extends Any>(props: TableOperationProps<T>) => (
                 {props.filters.map((x) => (
                     <li
                         key={`filter-table-${x.id}`}
-                        className="rounded-table-pill-radius flex items-center gap-table-inline-gap-tight border border-card-border px-table-pill-px py-table-pill-py"
+                        className="flex items-center gap-table-inline-gap-tight rounded-table-pill-radius border border-card-border px-table-pill-px py-table-pill-py"
                     >
                         <span>
                             <span

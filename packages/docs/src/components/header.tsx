@@ -9,7 +9,6 @@ import { Modal } from "../../../lib/src/components/floating/modal";
 import { usePrevious } from "../../../lib/src/hooks/use-previous";
 import { Navigation } from "./navigation";
 
-
 export const Header = () => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
@@ -40,11 +39,16 @@ export const Header = () => {
                     <nav className="ml-8 hidden items-center gap-6 md:flex">
                         <Link
                             href="/docs/get-started"
+                            aria-current={pathname.startsWith("/docs") ? "page" : undefined}
                             className={`text-sm font-medium transition-colors hover:text-primary ${pathname.startsWith("/docs") ? "text-primary" : "text-muted-foreground"}`}
                         >
                             Docs
                         </Link>
-                        <Link href="/docs/buttons" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                        <Link
+                            href="/docs/buttons"
+                            aria-current={pathname === "/docs/buttons" ? "page" : undefined}
+                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                        >
                             Components
                         </Link>
                     </nav>

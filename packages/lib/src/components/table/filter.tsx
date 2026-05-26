@@ -25,6 +25,9 @@ type OperationOptions = Partial<Record<ColType, OptionProps[]>>;
 
 type FilterValue = string | number | string[] | boolean;
 
+const getFilterDeleteLabel = <T extends object>(filter: Pick<FilterConfig<T>, "label" | "name">, translate: (label: string) => string) =>
+    translate(typeof filter.label === "string" ? filter.label : filter.name);
+
 export type FilterConfig<T extends object = object> = {
     id: string;
     label: Label;
@@ -219,8 +222,15 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     placeholder={translation.tableFilterValuePlaceholder}
                                 />
                                 <div className="mt-5 flex items-center justify-center">
-                                    <button data-id={filter.id} type="button" onClick={onDelete}>
-                                        <TrashIcon className="text-danger" size={16} />
+                                    <button
+                                        data-id={filter.id}
+                                        type="button"
+                                        onClick={onDelete}
+                                        aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
+                                    >
+                                        <span className="text-danger">
+                                            <TrashIcon aria-hidden="true" size={16} />
+                                        </span>
                                     </button>
                                 </div>
                             </li>
@@ -287,8 +297,16 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 title={translation.tableFilterValueTitle}
                 placeholder={translation.tableFilterValueTitle}
             />
-            <button onClick={onDelete} data-id={filter.id} type="button" className="mt-4">
-                <TrashIcon className="text-danger" size={14} />
+            <button
+                onClick={onDelete}
+                data-id={filter.id}
+                type="button"
+                className="mt-4"
+                aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
+            >
+                <span className="text-danger">
+                    <TrashIcon aria-hidden="true" size={14} />
+                </span>
             </button>
         </div>
     );

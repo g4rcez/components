@@ -11,23 +11,20 @@ import {
     useFloating,
     useInteractions,
     useListNavigation,
-    useRole,
     useTransitionStyles,
 } from "@floating-ui/react";
 import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { type ContextProp, type ItemProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useRemoveScroll } from "../../hooks/use-remove-scroll";
 import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
 import { css, getRemainingSize, initializeInputDataset } from "../../lib/dom";
-import { noop } from "../../lib/fns";
 import { fzf } from "../../lib/fzf";
 import { Label, Override } from "../../types";
 import { Tag } from "../core/tag";
-import { Checkbox } from "./checkbox";
 import { InputField, InputFieldProps } from "./input-field";
 import { type OptionProps } from "./select";
 
@@ -63,17 +60,16 @@ const transitionStyles = {
 const EMPTY_NODES: Array<HTMLElement | null> = [];
 const EMPTY_VALUES: string[] = [];
 
-const List = forwardRef(function VirtualItem({ item: _item, context: _context, ...props }: Record<string, never>, ref) {
-    return <motion.li {...props} ref={ref as never} className="last:rounded-t-dropdown-radius" />;
+const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: string }>>(function VirtualList({ context, ...props }, ref) {
+    return <motion.div {...props} id={context?.listboxId} ref={ref} role="listbox" className="last:rounded-t-dropdown-radius" />;
 });
 
-const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList({ context: _context, ...props }, ref) {
+const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList(
+    { context: _context, ...props },
+    ref
+) {
     return (
-        <motion.div
-            {...props}
-            ref={ref as never}
-            className="w-full rounded-b-dropdown-radius border-b border-tooltip-border last:border-transparent"
-        >
+        <motion.div {...props} ref={ref as never} role="presentation" className="w-full">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.div>
     );
@@ -140,6 +136,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const searchInputRef = useRef<HTMLInputElement>(null);
         const defaults = props.value ?? props.defaultValue ?? EMPTY_VALUES;
         const translation = useTranslations();
+        const generatedId = useId();
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState<Dict<string, MultiSelectItemProps>>(() => {
@@ -222,7 +219,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const transitions = useTransitionStyles(context, transitionStyles);
 
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
-            useRole(context, { role: "listbox" }),
             useDismiss(context),
             useListNavigation(context, {
                 cols: 0,
@@ -280,6 +276,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             setLabel((prev) => prev.concat(opt.label ?? ""));
             setShadow("");
             setIndex(i);
+            searchInputRef.current?.focus();
         };
 
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -309,7 +306,10 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             setClosed();
         };
 
-        const id = props.id || props.name;
+        const id = props.id || props.name || generatedId;
+        const shadowId = `${id}-shadow`;
+        const listboxId = `${shadowId}-listbox`;
+        const activeOptionId = open && index !== null && displayList[index] ? `${shadowId}-option-${index}` : undefined;
 
         const tags = value.map((x, i) => (
             <Tag
@@ -349,7 +349,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 container={container}
                 rightLabel={rightLabel}
                 interactive={interactive}
-                id={props.name || props.id}
+                id={id}
                 optionalText={optionalText}
                 componentName="autocomplete"
                 labelClassName={labelClassName}
@@ -381,14 +381,20 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     </span>
                 }
             >
-                <ul
+                <div
                     {...getReferenceProps({
                         ...props,
-                        tabIndex: 0,
+                        tabIndex: open ? -1 : 0,
                         onFocus,
-                        id: `${id}-shadow`,
-                        name: `${id}-shadow`,
+                        id: shadowId,
+                        role: open ? "presentation" : "combobox",
+                        name: shadowId,
                         ref: refs.setReference,
+                        "aria-expanded": open,
+                        "aria-haspopup": "listbox",
+                        "aria-controls": listboxId,
+                        "aria-activedescendant": activeOptionId,
+                        "aria-labelledby": `${id}-label`,
                     } as React.HTMLProps<HTMLElement>)}
                     data-name={id}
                     data-target={id}
@@ -406,9 +412,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         props.className
                     )}
                 >
-                    {values.length > 0 ? null : <li className="text-input-placeholder">{props.placeholder}</li>}
+                    {values.length > 0 ? null : <span className="text-input-placeholder">{props.placeholder}</span>}
                     <OverflowControl label={selectedLabel}>{tags}</OverflowControl>
-                </ul>
+                </div>
                 <input
                     id={id}
                     name={id}
@@ -421,7 +427,14 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 <FloatingPortal preserveTabOrder>
                     {open ? (
                         <FloatingOverlay lockScroll className="z-floating">
-                            <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={searchInputRef} visuallyHiddenDismiss>
+                            <FloatingFocusManager
+                                modal
+                                guards
+                                returnFocus={false}
+                                context={context}
+                                initialFocus={searchInputRef}
+                                visuallyHiddenDismiss
+                            >
                                 <div
                                     {...getFloatingProps({
                                         ref: refs.setFloating,
@@ -443,26 +456,36 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                         value={shadow}
                                         onChange={onChange}
                                         title={props.title}
+                                        role="combobox"
+                                        aria-autocomplete="list"
+                                        aria-expanded={open}
+                                        aria-haspopup="listbox"
+                                        aria-controls={listboxId}
+                                        aria-activedescendant={activeOptionId}
+                                        aria-labelledby={`${id}-label`}
+                                        autoComplete="off"
                                         placeholder={translation.multiSelectInnerPlaceholder}
                                         className="input placeholder-input-mask group mb-1 h-input-height w-full flex-1 rounded-none border-b border-input-border bg-transparent px-input-padding-x py-input-padding-y outline-none transition-colors focus:border-primary"
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                                             if (event.key === "ArrowDown") {
-                                                let next = index! + 1;
+                                                event.preventDefault();
+                                                let next = index === null ? 0 : index + 1;
                                                 if (next > displayList.length - 1) next = 0;
                                                 virtuoso.current?.scrollIntoView({ index: next });
                                                 return setIndex(next);
                                             }
                                             if (event.key === "ArrowUp") {
-                                                let next = index! - 1;
+                                                event.preventDefault();
+                                                let next = index === null ? displayList.length - 1 : index - 1;
                                                 if (next < 0) next = displayList.length - 1;
                                                 virtuoso.current?.scrollIntoView({ index: next });
                                                 return setIndex(next);
                                             }
                                             if (event.key === "Escape") {
-                                                event.currentTarget.blur();
+                                                event.preventDefault();
                                                 return setClosed();
                                             }
-                                            if (event.key === "Enter") {
+                                            if (event.key === "Enter" || event.key === " " || event.code === "Space") {
                                                 if (index !== null && displayList[index]) {
                                                     event.preventDefault();
                                                     return onSelect(displayList[index], index);
@@ -501,7 +524,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                 ref={virtuoso}
                                                 hidden={isEmpty}
                                                 data={displayList}
+                                                context={{ listboxId }}
                                                 style={{ height: h }}
+                                                initialItemCount={displayList.length}
                                                 defaultItemHeight={MIN_SIZE}
                                                 components={components as never}
                                                 totalListHeightChanged={(totalHeight) => setH(Math.min(320, totalHeight))}
@@ -516,35 +541,35 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                     const selected = index === i;
                                                     const children = option.label ?? option.value;
                                                     return (
-                                                        <button
+                                                        <div
+                                                            id={`${shadowId}-option-${i}`}
                                                             data-value={option.value}
                                                             {...getItemProps({
-                                                                ref: (node) => {
+                                                                ref: (node: HTMLElement | null) => {
                                                                     listRef.current[i] = node;
                                                                 },
                                                                 role: "option",
-                                                                type: "button",
-                                                                "aria-checked": active,
-                                                                "aria-current": active,
                                                                 "aria-selected": active,
                                                                 "aria-disabled": option.disabled,
-                                                                onClick: () => onSelect(option, i),
+                                                                tabIndex: -1,
+                                                                onClick: () => {
+                                                                    if (!option.disabled) onSelect(option, i);
+                                                                },
                                                             })}
-                                                            className={`flex w-full max-w-full cursor-pointer items-center justify-start p-menu-item-p text-left hover:bg-floating-hover focus:bg-floating-hover ${active || selected ? "bg-floating-hover text-floating-foreground" : ""}`}
+                                                            className={css(
+                                                                "flex w-full max-w-full cursor-pointer items-center justify-start p-menu-item-p text-left hover:bg-floating-hover focus:bg-floating-hover",
+                                                                active || selected ? "bg-floating-hover text-floating-foreground" : ""
+                                                            )}
                                                         >
-                                                            <Checkbox
-                                                                onChange={noop}
-                                                                checked={active}
-                                                                aria-checked={active}
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    onSelect(option, i);
-                                                                }}
+                                                            <span
+                                                                aria-hidden="true"
+                                                                data-selected={active}
+                                                                className="mr-checkbox-gap inline-block size-checkbox-size rounded-checkbox-radius border border-card-border data-[selected=true]:bg-primary"
                                                             />
                                                             <Label {...option} label={option.label} value={option.value}>
                                                                 {children}
                                                             </Label>
-                                                        </button>
+                                                        </div>
                                                     );
                                                 }}
                                             />

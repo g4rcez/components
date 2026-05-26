@@ -97,7 +97,7 @@ export const DARK_THEME: DesignTokens = {
             foreground: "hsla(240, 10%, 4%)",
             background: "hsla(0, 0%, 100%)",
             hover: "hsla(0, 0%, 100%)",
-            border: "hsla(0, 0%, 100%)",
+            border: "hsla(221, 10%, 17%)",
             overlay: "hsla(0, 0%, 0%)",
         },
         table: {

@@ -34,14 +34,24 @@ const states = {
 };
 
 const ErrorIcon = (props: ComponentProps<"svg">) => (
-    <svg {...props} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+        {...props}
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
         <motion.path className="currentColor" initial={states.initial} animate={states.animate} transition={iconTransitions} d="M18 6 6 18" />
         <motion.path className="currentColor" initial={states.initial} animate={states.animate} transition={iconTransitions} d="m6 6 12 12" />
     </svg>
 );
 
 const CheckIcon = (props: ComponentProps<"svg">) => (
-    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+    <svg {...props} aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
         <motion.path
             d="M5 13l4 4L19 7"
             strokeLinecap="round"
@@ -130,6 +140,7 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
             <motion.button
                 {...(props as unknown as HTMLMotionProps<"button">)}
                 type="button"
+                aria-current={innerStatus === "active" ? "step" : undefined}
                 data-step={step}
                 animate={innerStatus}
                 className="relative flex w-auto items-center justify-center text-center"
@@ -182,9 +193,9 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                         )}
                     </div>
                 </motion.div>
-                <header className="flex flex-col items-start justify-start px-step-label-px">
+                <div className="flex flex-col items-start justify-start px-step-label-px">
                     <h3 className={`flex h-full items-center whitespace-nowrap font-normal ${titleClassName}`}>{title}</h3>
-                </header>
+                </div>
             </motion.button>
         </Fragment>
     );

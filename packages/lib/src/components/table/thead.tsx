@@ -150,8 +150,8 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     title={props.header.id}
                     dragConstraints={dragConstraints}
                     className="absolute -right-[0.5px] top-0 z-calendar block h-full w-table-divider-w cursor-col-resize bg-transparent hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
-                    onClick={(e) => void e.currentTarget.focus()}
-                    onKeyDown={(e) => {
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => void e.currentTarget.focus()}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
                             if (th.current === null) return;
                             th.current.setAttribute("data-resized", "true");

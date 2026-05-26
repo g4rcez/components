@@ -30,7 +30,9 @@ const CurrencyShowCase = () => {
                         }}
                     >
                         {options.map((x) => (
-                            <option key={x.currency} value={x.currency}>{x.label}</option>
+                            <option key={x.currency} value={x.currency}>
+                                {x.label}
+                            </option>
                         ))}
                     </select>
                 }
