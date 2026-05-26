@@ -171,7 +171,7 @@ Components integrate with custom hooks for common functionality:
 const Component = (props) => {
   const theme = useTweaks(); // Theme access
   const translations = useTranslations(); // i18n
-  const id = useInputId(); // Unique IDs
+  const id = props.id ?? props.name; // Stable IDs from props when needed
 
   // Component implementation
 };
