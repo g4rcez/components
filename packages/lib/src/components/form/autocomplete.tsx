@@ -52,9 +52,9 @@ const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: st
     return (
         <motion.div
             {...props}
-            id={context?.listboxId}
             ref={ref}
-            role="listbox"
+            role="select"
+            id={context?.listboxId}
             className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius"
         >
             <AnimatePresence>{props.children}</AnimatePresence>
