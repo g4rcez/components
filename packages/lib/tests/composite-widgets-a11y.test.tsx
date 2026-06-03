@@ -160,6 +160,46 @@ describe("composite widget a11y", () => {
         await waitFor(() => expect(screen.queryByRole("combobox", { name: /command palette search/i })).not.toBeInTheDocument());
     });
 
+    it("keeps CommandPalette arrow navigation inside filtered options", async () => {
+        const user = userEvent.setup();
+        const alphaAction = vi.fn();
+        const bravoAction = vi.fn();
+        const charlieAction = vi.fn();
+
+        const commands: CommandItemTypes[] = [
+            { type: "group", title: "Navigation", items: [] },
+            { type: "shortcut", title: "Open Alpha", action: alphaAction },
+            { type: "shortcut", title: "Open Bravo", action: bravoAction },
+            { type: "shortcut", title: "Open Charlie", action: charlieAction },
+        ];
+
+        render(
+            <ComponentsProvider>
+                <CommandPalette open commands={commands} onChangeVisibility={() => {}} />
+            </ComponentsProvider>
+        );
+
+        const combobox = await screen.findByRole("combobox", { name: /command palette search/i });
+        const listbox = await screen.findByRole("listbox");
+
+        await user.type(combobox, "bravo");
+
+        const bravoOption = await within(listbox).findByRole("option", { name: /Open Bravo/ });
+        expect(within(listbox).queryByRole("option", { name: /Open Alpha/ })).not.toBeInTheDocument();
+        expect(within(listbox).queryByRole("option", { name: /Open Charlie/ })).not.toBeInTheDocument();
+
+        await user.keyboard("[ArrowDown][ArrowDown]");
+
+        expect(document.activeElement).toBe(combobox);
+        expect(bravoOption).toHaveAttribute("id", combobox.getAttribute("aria-activedescendant"));
+
+        await user.keyboard("[Enter]");
+
+        expect(alphaAction).not.toHaveBeenCalled();
+        expect(bravoAction).toHaveBeenCalledTimes(1);
+        expect(charlieAction).not.toHaveBeenCalled();
+    });
+
     it("uses provider map labels for CommandPalette title, search, placeholder, and results", async () => {
         const user = userEvent.setup();
 

@@ -1,0 +1,24 @@
+{
+    "name": "bundled",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "typecheck": "tsc --noEmit",
+        "build": "pnpm run typecheck && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@g4rcez/components": "workspace:*",
+        "react": "19.2.3",
+        "react-dom": "19.2.3"
+    },
+    "devDependencies": {
+        "@types/react": "19.2.14",
+        "@types/react-dom": "19.2.3",
+        "@vitejs/plugin-react": "6.0.2",
+        "typescript": "6.0.3",
+        "vite": "8.0.14"
+    }
+}

@@ -55,6 +55,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `bg-disabled`                | `--disabled`              | Background for disabled/loading states |
 | `border-card-border`         | `--card-border`           | Border color for neutral theme         |
 | `rounded-button-radius`      | `--button-radius`         | Default border radius                  |
+| `text-button-text`           | `--button-text`           | Default size font size                 |
+| `text-button-text-big`       | `--button-text-big`       | Big size font size                     |
+| `text-button-text-small`     | `--button-text-small`     | Small size font size                   |
+| `text-button-text-min`       | `--button-text-min`       | Min size font size                     |
+| `text-button-text-tiny`      | `--button-text-tiny`      | Tiny size font size                    |
+| `text-button-text-icon`      | `--button-text-icon`      | Icon size font size                    |
 | `focus-visible:ring-ring`    | `--ring`                  | Focus ring color                       |
 
 ## Theme Variants

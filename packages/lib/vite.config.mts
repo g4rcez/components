@@ -3,11 +3,15 @@ import { readdirSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
-import tsconfig from "vite-tsconfig-paths";
 
 const componentsRoot = "src/components";
 const componentEntryExtensions = new Set([".ts", ".tsx"]);
 const ignoredComponentEntries = [/\.types\.ts$/, /\.utils\.ts$/, /\.context\.tsx$/];
+const externalPackages = new Set(["react", "react-dom", "tailwindcss", "use-sync-external-store"]);
+
+function isExternalDependency(id: string) {
+    return externalPackages.has(id) || [...externalPackages].some((pkg) => id.startsWith(`${pkg}/`));
+}
 
 function toPosixPath(path: string) {
     return path.replaceAll("\\", "/");
@@ -53,16 +57,18 @@ export default defineConfig({
         lib: {
             entry: {
                 index: "./src/index.ts",
+                "styles/theme": "./src/styles/theme.ts",
+                "styles/design-tokens": "./src/styles/design-tokens.ts",
                 ...getComponentEntries(),
             },
             formats: ["es"],
         },
         rollupOptions: {
             treeshake: true,
-            external: ["react", "react/jsx-runtime", "react-dom", "tailwindcss"],
+            external: isExternalDependency,
             output: {
-                entryFileNames: "[name].js",
-                chunkFileNames: "[name]-[hash].js",
+                entryFileNames: "[name].mjs",
+                chunkFileNames: "[name]-[hash].mjs",
             },
         },
     },

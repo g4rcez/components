@@ -25,6 +25,7 @@ export * from "./display/spinner";
 export * from "./floating/expand";
 export * from "./floating/wizard";
 export * from "./display/calendar";
+export * from "./display/masonry";
 export * from "./display/progress";
 export * from "./display/timeline";
 export * from "./floating/toolbar";

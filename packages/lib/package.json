@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "5.0.3",
+    "version": "5.0.5",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -34,211 +34,178 @@
         "ai"
     ],
     "sideEffects": false,
-    "main": "./dist/index.js",
-    "module": "./dist/index.js",
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
-            "types": {
-                "import": "./dist/index.d.ts",
-                "require": "./dist/index.d.ts",
-                "default": "./dist/index.d.ts"
-            },
-            "default": {
-                "type": "./dist/index.d.ts",
-                "import": "./dist/index.js",
-                "require": "./dist/index.js",
-                "default": "./dist/index.js"
-            }
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.mjs"
         },
         "./index.css": "./dist/index.css",
         "./dist/index.css": "./dist/index.css",
         "./themes": {
-            "type": "./dist/styles/theme.d.ts",
-            "import": "./dist/styles/theme.js",
-            "require": "./dist/styles/theme.js",
-            "default": "./dist/styles/theme.js"
+            "types": "./dist/styles/theme.d.ts",
+            "import": "./dist/styles/theme.mjs",
+            "default": "./dist/styles/theme.mjs"
         },
         "./styles": {
-            "type": "./dist/styles/design-tokens.d.ts",
-            "import": "./dist/styles/design-tokens.js",
-            "require": "./dist/styles/design-tokens.js",
-            "default": "./dist/styles/design-tokens.js"
+            "types": "./dist/styles/design-tokens.d.ts",
+            "import": "./dist/styles/design-tokens.mjs",
+            "default": "./dist/styles/design-tokens.mjs"
         },
         "./plugin.tailwind": {
-            "type": "./dist/preset/plugin.tailwind.d.ts",
+            "types": "./dist/preset/plugin.tailwind.d.ts",
             "import": "./dist/preset/plugin.tailwind.js",
             "require": "./dist/preset/plugin.tailwind.js",
             "default": "./dist/preset/plugin.tailwind.js"
         },
         "./preset.tailwind": {
-            "type": "./dist/preset/preset.tailwind.d.ts",
+            "types": "./dist/preset/preset.tailwind.d.ts",
             "import": "./dist/preset/preset.tailwind.js",
             "require": "./dist/preset/preset.tailwind.js",
             "default": "./dist/preset/preset.tailwind.js"
         },
         "./components/*": {
             "types": "./dist/components/*.d.ts",
-            "type": "./dist/components/*.d.ts",
-            "import": "./dist/components/*.js",
-            "require": "./dist/components/*.js",
-            "default": "./dist/components/*.js"
+            "import": "./dist/components/*.mjs",
+            "default": "./dist/components/*.mjs"
         },
         "./tag": {
-            "type": "./dist/components/core/tag.d.ts",
-            "import": "./dist/components/core/tag.js",
-            "require": "./dist/components/core/tag.js",
-            "default": "./dist/components/core/tag.js"
+            "types": "./dist/components/core/tag.d.ts",
+            "import": "./dist/components/core/tag.mjs",
+            "default": "./dist/components/core/tag.mjs"
         },
         "./button": {
-            "type": "./dist/components/core/button.d.ts",
-            "import": "./dist/components/core/button.js",
-            "require": "./dist/components/core/button.js",
-            "default": "./dist/components/core/button.js"
+            "types": "./dist/components/core/button.d.ts",
+            "import": "./dist/components/core/button.mjs",
+            "default": "./dist/components/core/button.mjs"
         },
         "./form": {
-            "type": "./dist/components/form/form.d.ts",
-            "import": "./dist/components/form/form.js",
-            "require": "./dist/components/form/form.js",
-            "default": "./dist/components/form/form.js"
+            "types": "./dist/components/form/form.d.ts",
+            "import": "./dist/components/form/form.mjs",
+            "default": "./dist/components/form/form.mjs"
         },
         "./radiobox": {
-            "type": "./dist/components/form/radiobox.d.ts",
-            "import": "./dist/components/form/radiobox.js",
-            "require": "./dist/components/form/radiobox.js",
-            "default": "./dist/components/form/radiobox.js"
+            "types": "./dist/components/form/radiobox.d.ts",
+            "import": "./dist/components/form/radiobox.mjs",
+            "default": "./dist/components/form/radiobox.mjs"
         },
         "./date-picker": {
-            "type": "./dist/components/form/date-picker.d.ts",
-            "import": "./dist/components/form/date-picker.js",
-            "require": "./dist/components/form/date-picker.js",
-            "default": "./dist/components/form/date-picker.js"
+            "types": "./dist/components/form/date-picker.d.ts",
+            "import": "./dist/components/form/date-picker.mjs",
+            "default": "./dist/components/form/date-picker.mjs"
         },
         "./task-list": {
-            "type": "./dist/components/form/task-list.d.ts",
-            "import": "./dist/components/form/task-list.js",
-            "require": "./dist/components/form/task-list.js",
-            "default": "./dist/components/form/task-list.js"
+            "types": "./dist/components/form/task-list.d.ts",
+            "import": "./dist/components/form/task-list.mjs",
+            "default": "./dist/components/form/task-list.mjs"
         },
         "./checkbox": {
-            "type": "./dist/components/form/checkbox.d.ts",
-            "import": "./dist/components/form/checkbox.js",
-            "require": "./dist/components/form/checkbox.js",
-            "default": "./dist/components/form/checkbox.js"
+            "types": "./dist/components/form/checkbox.d.ts",
+            "import": "./dist/components/form/checkbox.mjs",
+            "default": "./dist/components/form/checkbox.mjs"
         },
         "./input": {
-            "type": "./dist/components/form/input.d.ts",
-            "import": "./dist/components/form/input.js",
-            "require": "./dist/components/form/input.js",
-            "default": "./dist/components/form/input.js"
+            "types": "./dist/components/form/input.d.ts",
+            "import": "./dist/components/form/input.mjs",
+            "default": "./dist/components/form/input.mjs"
         },
         "./autocomplete": {
-            "type": "./dist/components/form/autocomplete.d.ts",
-            "import": "./dist/components/form/autocomplete.js",
-            "require": "./dist/components/form/autocomplete.js",
-            "default": "./dist/components/form/autocomplete.js"
+            "types": "./dist/components/form/autocomplete.d.ts",
+            "import": "./dist/components/form/autocomplete.mjs",
+            "default": "./dist/components/form/autocomplete.mjs"
         },
         "./switch": {
-            "type": "./dist/components/form/switch.d.ts",
-            "import": "./dist/components/form/switch.js",
-            "require": "./dist/components/form/switch.js",
-            "default": "./dist/components/form/switch.js"
+            "types": "./dist/components/form/switch.d.ts",
+            "import": "./dist/components/form/switch.mjs",
+            "default": "./dist/components/form/switch.mjs"
         },
         "./file-upload": {
-            "type": "./dist/components/form/file-upload.d.ts",
-            "import": "./dist/components/form/file-upload.js",
-            "require": "./dist/components/form/file-upload.js",
-            "default": "./dist/components/form/file-upload.js"
+            "types": "./dist/components/form/file-upload.d.ts",
+            "import": "./dist/components/form/file-upload.mjs",
+            "default": "./dist/components/form/file-upload.mjs"
         },
         "./select": {
-            "type": "./dist/components/form/select.d.ts",
-            "import": "./dist/components/form/select.js",
-            "require": "./dist/components/form/select.js",
-            "default": "./dist/components/form/select.js"
+            "types": "./dist/components/form/select.d.ts",
+            "import": "./dist/components/form/select.mjs",
+            "default": "./dist/components/form/select.mjs"
         },
         "./expand": {
-            "type": "./dist/components/floating/expand.d.ts",
-            "import": "./dist/components/floating/expand.js",
-            "require": "./dist/components/floating/expand.js",
-            "default": "./dist/components/floating/expand.js"
+            "types": "./dist/components/floating/expand.d.ts",
+            "import": "./dist/components/floating/expand.mjs",
+            "default": "./dist/components/floating/expand.mjs"
         },
         "./dropdown": {
-            "type": "./dist/components/floating/dropdown.d.ts",
-            "import": "./dist/components/floating/dropdown.js",
-            "require": "./dist/components/floating/dropdown.js",
-            "default": "./dist/components/floating/dropdown.js"
+            "types": "./dist/components/floating/dropdown.d.ts",
+            "import": "./dist/components/floating/dropdown.mjs",
+            "default": "./dist/components/floating/dropdown.mjs"
         },
         "./modal": {
-            "type": "./dist/components/floating/modal.d.ts",
-            "import": "./dist/components/floating/modal.js",
-            "require": "./dist/components/floating/modal.js",
-            "default": "./dist/components/floating/modal.js"
+            "types": "./dist/components/floating/modal.d.ts",
+            "import": "./dist/components/floating/modal.mjs",
+            "default": "./dist/components/floating/modal.mjs"
         },
         "./tooltip": {
-            "type": "./dist/components/floating/tooltip.d.ts",
-            "import": "./dist/components/floating/tooltip.js",
-            "require": "./dist/components/floating/tooltip.js",
-            "default": "./dist/components/floating/tooltip.js"
+            "types": "./dist/components/floating/tooltip.d.ts",
+            "import": "./dist/components/floating/tooltip.mjs",
+            "default": "./dist/components/floating/tooltip.mjs"
         },
         "./notifications": {
-            "type": "./dist/components/display/notifications.d.ts",
-            "import": "./dist/components/display/notifications.js",
-            "require": "./dist/components/display/notifications.js",
-            "default": "./dist/components/display/notifications.js"
+            "types": "./dist/components/display/notifications.d.ts",
+            "import": "./dist/components/display/notifications.mjs",
+            "default": "./dist/components/display/notifications.mjs"
         },
         "./timeline": {
-            "type": "./dist/components/display/timeline.d.ts",
-            "import": "./dist/components/display/timeline.js",
-            "require": "./dist/components/display/timeline.js",
-            "default": "./dist/components/display/timeline.js"
+            "types": "./dist/components/display/timeline.d.ts",
+            "import": "./dist/components/display/timeline.mjs",
+            "default": "./dist/components/display/timeline.mjs"
         },
         "./list": {
-            "type": "./dist/components/display/list.d.ts",
-            "import": "./dist/components/display/list.js",
-            "require": "./dist/components/display/list.js",
-            "default": "./dist/components/display/list.js"
+            "types": "./dist/components/display/list.d.ts",
+            "import": "./dist/components/display/list.mjs",
+            "default": "./dist/components/display/list.mjs"
         },
         "./calendar": {
-            "type": "./dist/components/display/calendar.d.ts",
-            "import": "./dist/components/display/calendar.js",
-            "require": "./dist/components/display/calendar.js",
-            "default": "./dist/components/display/calendar.js"
+            "types": "./dist/components/display/calendar.d.ts",
+            "import": "./dist/components/display/calendar.mjs",
+            "default": "./dist/components/display/calendar.mjs"
+        },
+        "./masonry": {
+            "types": "./dist/components/display/masonry.d.ts",
+            "import": "./dist/components/display/masonry.mjs",
+            "default": "./dist/components/display/masonry.mjs"
         },
         "./card": {
-            "type": "./dist/components/display/card.d.ts",
-            "import": "./dist/components/display/card.js",
-            "require": "./dist/components/display/card.js",
-            "default": "./dist/components/display/card.js"
+            "types": "./dist/components/display/card.d.ts",
+            "import": "./dist/components/display/card.mjs",
+            "default": "./dist/components/display/card.mjs"
         },
         "./table": {
-            "type": "./dist/components/table/index.d.ts",
-            "import": "./dist/components/table/index.js",
-            "require": "./dist/components/table/index.js",
-            "default": "./dist/components/table/index.js"
+            "types": "./dist/components/table/index.d.ts",
+            "import": "./dist/components/table/index.mjs",
+            "default": "./dist/components/table/index.mjs"
         },
         "./menu": {
-            "type": "./dist/components/floating/menu.d.ts",
-            "import": "./dist/components/floating/menu.js",
-            "require": "./dist/components/floating/menu.js",
-            "default": "./dist/components/floating/menu.js"
+            "types": "./dist/components/floating/menu.d.ts",
+            "import": "./dist/components/floating/menu.mjs",
+            "default": "./dist/components/floating/menu.mjs"
         },
         "./tabs": {
-            "type": "./dist/components/display/tabs.d.ts",
-            "import": "./dist/components/display/tabs.js",
-            "require": "./dist/components/display/tabs.js",
-            "default": "./dist/components/display/tabs.js"
+            "types": "./dist/components/display/tabs.d.ts",
+            "import": "./dist/components/display/tabs.mjs",
+            "default": "./dist/components/display/tabs.mjs"
         },
         "./stats": {
-            "type": "./dist/components/display/stats.d.ts",
-            "import": "./dist/components/display/stats.js",
-            "require": "./dist/components/display/stats.js",
-            "default": "./dist/components/display/stats.js"
+            "types": "./dist/components/display/stats.d.ts",
+            "import": "./dist/components/display/stats.mjs",
+            "default": "./dist/components/display/stats.mjs"
         },
         "./alert": {
-            "type": "./dist/components/display/alert.d.ts",
-            "import": "./dist/components/display/alert.js",
-            "require": "./dist/components/display/alert.js",
-            "default": "./dist/components/display/alert.js"
+            "types": "./dist/components/display/alert.d.ts",
+            "import": "./dist/components/display/alert.mjs",
+            "default": "./dist/components/display/alert.mjs"
         },
         "./ai/*": "./ai/*"
     },
@@ -273,6 +240,7 @@
         "storage-manager-js": "4.2.6-5",
         "tailwind-merge": "3.4.0",
         "the-mask-input": "3.3.14",
+        "use-sync-external-store": "1.6.0",
         "use-typed-reducer": "4.3.0",
         "zod": "3.25.67"
     },

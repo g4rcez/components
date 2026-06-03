@@ -6,12 +6,12 @@ import { Polymorph, PolymorphicProps } from "./polymorph";
 
 const variants = {
     size: {
-        icon: "p-button-padding-icon",
-        big: "h-button-height-big px-button-padding-x-big py-button-padding-y-big",
-        default: "h-button-height px-button-padding-x py-button-padding-y",
-        min: "h-button-height-min px-button-padding-x-min py-button-padding-y-min text-typography-sm",
-        tiny: "h-button-height-tiny px-button-padding-x-tiny py-button-padding-y-tiny text-typography-sm",
-        small: "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-typography-sm",
+        icon: "p-button-padding-icon text-button-text-icon",
+        big: "h-button-height-big px-button-padding-x-big py-button-padding-y-big text-button-text-big",
+        default: "h-button-height px-button-padding-x py-button-padding-y text-button-text",
+        min: "h-button-height-min px-button-padding-x-min py-button-padding-y-min text-button-text-min",
+        tiny: "h-button-height-tiny px-button-padding-x-tiny py-button-padding-y-tiny text-button-text-tiny",
+        small: "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-button-text-small",
     },
     rounded: {
         rough: "rounded-button-radius-rough",

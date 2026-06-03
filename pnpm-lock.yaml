@@ -25,6 +25,34 @@ importers:
         specifier: 1.63.0
         version: 1.63.0
 
+  packages/bundled:
+    dependencies:
+      '@g4rcez/components':
+        specifier: workspace:*
+        version: link:../lib
+      react:
+        specifier: 19.2.3
+        version: 19.2.3
+      react-dom:
+        specifier: 19.2.3
+        version: 19.2.3(react@19.2.3)
+    devDependencies:
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react':
+        specifier: 6.0.2
+        version: 6.0.2(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.2)(jiti@2.7.0)(yaml@2.9.0))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vite:
+        specifier: 8.0.14
+        version: 8.0.14(@types/node@25.9.1)(esbuild@0.27.2)(jiti@2.7.0)(yaml@2.9.0)
+
   packages/docs:
     dependencies:
       '@g4rcez/components':
@@ -142,6 +170,9 @@ importers:
       the-mask-input:
         specifier: 3.3.14
         version: 3.3.14(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      use-sync-external-store:
+        specifier: 1.6.0
+        version: 1.6.0(react@19.2.3)
       use-typed-reducer:
         specifier: 4.3.0
         version: 4.3.0(react@19.2.3)

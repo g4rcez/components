@@ -176,6 +176,10 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                   ...fuzzy.filter((x) => x.type !== "group"),
               ];
 
+    useEffect(() => {
+        listRef.current.length = displayItems.length;
+    }, [displayItems.length]);
+
     const listboxId = `${id}-listbox`;
     const activeOptionId = Is.number(activeIndex) && displayItems[activeIndex]?.type === "shortcut" ? `${id}-option-${activeIndex}` : undefined;
 
