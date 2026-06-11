@@ -28,7 +28,7 @@ import { CaretRightIcon, type Icon } from "@phosphor-icons/react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../constants";
 import { css, mergeRefs } from "../../lib/dom";
-import { Override } from "../../types";
+import type { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
@@ -40,9 +40,11 @@ const menuItemClassName = (highlight: string = "") =>
         highlight
     );
 
+type FloatingInteractionPropsGetter = ReturnType<typeof useInteractions>["getItemProps"];
+
 const MenuContext = createContext<{
     activeIndex: number | null;
-    getItemProps: (props?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
+    getItemProps: FloatingInteractionPropsGetter;
     isOpen: boolean;
     setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
     setHasFocusInside: React.Dispatch<React.SetStateAction<boolean>>;

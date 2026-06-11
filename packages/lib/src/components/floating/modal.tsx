@@ -15,21 +15,21 @@ import { cva } from "class-variance-authority";
 import { XIcon } from "@phosphor-icons/react";
 import {
     AnimatePresence,
-    HTMLMotionProps,
+    type HTMLMotionProps,
     motion,
     MotionConfig,
-    MotionValue,
-    PanInfo,
-    TargetAndTransition,
+    type MotionValue,
+    type PanInfo,
+    type TargetAndTransition,
     useMotionValue,
     animate,
 } from "motion/react";
 import { Slot } from "../core/slot";
 import React, {
-    ForwardedRef,
+    type ForwardedRef,
     forwardRef,
     Fragment,
-    PropsWithChildren,
+    type PropsWithChildren,
     useEffect,
     useId,
     useImperativeHandle,
@@ -38,11 +38,11 @@ import React, {
     useCallback,
 } from "react";
 import { useMediaQuery } from "../../hooks/use-media-query";
-import { css, mergeRefs } from "../../lib/dom";
-import { Label, Nil, Override } from "../../types";
+import { css } from "../../lib/dom";
+import type { Label, Nil, Override } from "../../types";
 import { useFloatingRef } from "../../hooks/use-floating-ref";
 import { useTranslations } from "../../hooks/use-translations";
-import { Button, ButtonProps } from "../core/button";
+import { Button, type ButtonProps } from "../core/button";
 
 type AnimationLabels = "initial" | "enter" | "exit";
 
@@ -131,8 +131,9 @@ type ModalAccessibleNameProps = { title: Label; ariaTitle?: string } | { ariaTit
 
 type ModalOptions = Partial<{
     footer: Label;
-    role: "dialog";
+    role: "dialog" | "alertdialog";
     trigger: Label;
+    ariaDescription: string;
     type: ModalType;
     asChild: boolean;
     layoutId: string;
@@ -161,6 +162,7 @@ export type ModalProps = Override<
 
 type DraggableProps = {
     sheet: boolean;
+    controlsId: string;
     instructionsId: string;
     position: DrawerPosition;
     onChange: (nextState: boolean) => void;
@@ -196,12 +198,17 @@ const Draggable = (props: DraggableProps) => {
     };
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        const delta =
-            event.key === "ArrowRight" || event.key === "ArrowDown"
+        const delta = props.sheet
+            ? event.key === "ArrowUp"
                 ? keyboardResizeStep
-                : event.key === "ArrowLeft" || event.key === "ArrowUp"
+                : event.key === "ArrowDown"
                   ? -keyboardResizeStep
-                  : undefined;
+                  : undefined
+            : event.key === "ArrowRight" || event.key === "ArrowDown"
+              ? keyboardResizeStep
+              : event.key === "ArrowLeft" || event.key === "ArrowUp"
+                ? -keyboardResizeStep
+                : undefined;
 
         if (delta === undefined) return;
         event.preventDefault();
@@ -252,9 +259,11 @@ const Draggable = (props: DraggableProps) => {
             onKeyDown={onKeyDown}
             aria-label={translations.dialogResizeLabel}
             drag={props.sheet ? "y" : "x"}
+            aria-controls={props.controlsId}
             dragConstraints={dragConstraints}
             whileDrag={{ cursor: "grabbing" }}
             aria-describedby={props.instructionsId}
+            aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
             className={css(
                 "absolute isolate z-calendar rounded-modal-resizer-radius focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
                 props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
@@ -302,6 +311,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             ariaTitle,
             className,
             bodyClassName,
+            ariaDescription,
             resizer = true,
             animated = true,
             closable = true,
@@ -313,6 +323,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             overlayClickClose = false,
             closeOnFocusOut = false,
             initialFocus,
+            role: modalRole = "dialog",
             interactions: outInteractions = noop,
             ...props
         },
@@ -322,6 +333,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const root = useFloatingRef();
         const innerContent = useRef<HTMLDivElement>(null);
         const removeScrollRef = useRef<HTMLDivElement>(null);
+        const modalId = useId();
         const headingId = useId();
         const descriptionId = useId();
         const resizeDescriptionId = useId();
@@ -332,14 +344,9 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
         const type = isDesktop ? modalType : forceType ? modalType : "sheet";
         const useResizer = type !== "dialog";
-
-        const floating = useFloating({
-            open,
-            onOpenChange: onChange,
-            strategy: "fixed",
-        });
+        const floating = useFloating({ open, onOpenChange: onChange, strategy: "fixed" });
         const click = useClick(floating.context, {});
-        const role = useRole(floating.context, { role: "dialog" });
+        const role = useRole(floating.context, { role: modalRole });
         const dismiss = useDismiss(floating.context, {
             bubbles: true,
             escapeKey: true,
@@ -362,6 +369,14 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         }, [type, floatingSize, sheetY]);
 
         const onClose = () => onChange(false);
+
+        const setModalRef = useCallback(
+            (node: HTMLDivElement | null) => {
+                floating.refs.setFloating(node);
+                removeScrollRef.current = node;
+            },
+            [floating.refs]
+        );
 
         useImperativeHandle(externalRef, () => ({ context: floating.context, floating: removeScrollRef.current }), [
             floating.context,
@@ -409,11 +424,27 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             <Fragment>
                 {trigger ? (
                     asChild ? (
-                        <Slot ref={floating.refs.setReference} {...interactions.getReferenceProps()}>
+                        <Slot
+                            ref={floating.refs.setReference}
+                            {...interactions.getReferenceProps({
+                                "aria-controls": open ? modalId : undefined,
+                                "aria-expanded": open,
+                                "aria-haspopup": "dialog",
+                            })}
+                        >
                             {trigger}
                         </Slot>
                     ) : (
-                        <motion.button ref={floating.refs.setReference} {...interactions.getReferenceProps()} layoutId={layoutId} type="button">
+                        <motion.button
+                            ref={floating.refs.setReference}
+                            {...interactions.getReferenceProps({
+                                "aria-controls": open ? modalId : undefined,
+                                "aria-expanded": open,
+                                "aria-haspopup": "dialog",
+                            })}
+                            layoutId={layoutId}
+                            type="button"
+                        >
                             {trigger}
                         </motion.button>
                     )
@@ -424,6 +455,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                             {open ? (
                                 <FloatingOverlay
                                     lockScroll
+                                    data-component="overlay"
                                     className={css(
                                         "inset-0 isolate z-overlay flex h-modal-overlay-h !overflow-clip bg-floating-overlay/80",
                                         type === "drawer" ? "" : "items-start justify-center pt-modal-overlay-pt lg:p-modal-overlay-p",
@@ -431,26 +463,23 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                     )}
                                 >
                                     <FloatingFocusManager
-                                        guards
                                         modal
-                                        closeOnFocusOut={closeOnFocusOut}
+                                        guards
                                         context={floating.context}
                                         initialFocus={initialFocus}
+                                        closeOnFocusOut={closeOnFocusOut}
                                     >
                                         <AnimatePresence propagate>
                                             <motion.div
                                                 {...props}
-                                                {...(title
-                                                    ? {
-                                                          "aria-labelledby": headingId,
-                                                          "aria-describedby": descriptionId,
-                                                      }
-                                                    : { "aria-label": ariaTitle })}
                                                 {...interactions.getFloatingProps({
+                                                    id: modalId,
                                                     "aria-modal": open,
-                                                    ref: mergeRefs<HTMLDivElement>(floating.refs.setFloating, removeScrollRef),
                                                     className: css(variants({ position, type }), className, "isolate overscroll-contain"),
                                                 })}
+                                                ref={setModalRef}
+                                                {...(title ? { "aria-labelledby": headingId } : { "aria-label": ariaTitle })}
+                                                {...(ariaDescription ? { "aria-describedby": descriptionId } : undefined)}
                                                 exit="exit"
                                                 layout={true}
                                                 animate="enter"
@@ -469,6 +498,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             onChange={onChange}
                                                             value={floatingSize}
                                                             sheet={type === "sheet"}
+                                                            controlsId={modalId}
                                                             instructionsId={resizeDescriptionId}
                                                             position={position as DrawerPosition}
                                                             parent={floating.refs.floating}
@@ -487,9 +517,13 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         ) : null}
                                                     </motion.header>
                                                 ) : null}
+                                                {ariaDescription ? (
+                                                    <span id={descriptionId} className="sr-only">
+                                                        {ariaDescription}
+                                                    </span>
+                                                ) : null}
                                                 <motion.section
                                                     ref={innerContent}
-                                                    id={title ? descriptionId : undefined}
                                                     data-component="modal-body"
                                                     className={css(
                                                         "flex-1 select-text overflow-y-auto px-modal-padding-x py-modal-body-py",
@@ -559,7 +593,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             type="button"
                                                             onClick={onClose}
                                                             aria-label={t.closeButton}
-                                                            className="p-modal-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                                            className="rounded-button-radius p-modal-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                                                         >
                                                             <XIcon size={20} aria-hidden="true" />
                                                         </button>
@@ -643,7 +677,10 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                 open={open}
                 type="dialog"
                 closable={false}
-                onChange={setOpen}
+                forceType
+                role="alertdialog"
+                onChange={(nextOpen) => (nextOpen ? setOpen(true) : onCancel())}
+                ariaDescription={typeof options.description === "string" ? options.description : undefined}
                 overlayClickClose={false}
                 title={options.title || translations.modalConfirmTitle}
                 className="container max-w-dialog lg:max-w-96"

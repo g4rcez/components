@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 
@@ -58,5 +59,33 @@ describe("Select a11y", () => {
         expect(select).toHaveAttribute("aria-describedby", expect.stringContaining("country-feedback"));
         expect(select).toHaveAttribute("aria-describedby", expect.stringContaining("country-error"));
         expect((await axe(container)).violations).toHaveLength(0);
+    });
+
+    it("keeps a single field-level focus treatment after selecting an option", async () => {
+        const user = userEvent.setup();
+
+        render(<Select title="Choose country" name="country" options={options} placeholder="Choose country" />);
+
+        const select = screen.getByRole("combobox", { name: "Choose country" });
+        await user.selectOptions(select, "us");
+
+        expect(document.activeElement).toBe(select);
+        expect(select).not.toHaveClass("focus:ring-2");
+        expect(select).not.toHaveClass("focus:ring-inset");
+        expect(select).not.toHaveClass("focus:ring-primary");
+        expect(select.parentElement).toHaveClass("focus-within:border-primary");
+    });
+
+    it("disables select interactions and uses not-allowed affordances", () => {
+        render(<Select disabled title="Choose country" name="country" options={options} placeholder="Choose country" />);
+
+        const select = screen.getByRole("combobox", { name: "Choose country" });
+        const caretButton = screen.getByRole("button");
+
+        expect(select).toBeDisabled();
+        expect(select).toHaveClass("disabled:cursor-not-allowed");
+        expect(caretButton).toBeDisabled();
+        expect(caretButton).toHaveClass("disabled:cursor-not-allowed");
+        expect(select.parentElement).toHaveClass("group-disabled:!border-disabled");
     });
 });

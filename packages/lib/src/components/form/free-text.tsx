@@ -1,9 +1,11 @@
 "use client";
-import React, { forwardRef, useEffect, useRef } from "react";
-import MaskInput, { InputTypes } from "the-mask-input";
+import type React from "react";
+import { forwardRef, useEffect, useRef } from "react";
+import type MaskInput from "the-mask-input";
+import type { InputTypes } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
-import { Any, Override, ReactComponent } from "../../types";
-import { FeedbackProps, InputField, InputFieldProps } from "./input-field";
+import type { Any, Override, ReactComponent } from "../../types";
+import { type FeedbackProps, InputField, type InputFieldProps } from "./input-field";
 
 type FreeTextTag = "input" | "textarea";
 
@@ -91,7 +93,11 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                     componentName={elementName}
                     id={props.name || props.id}
                     optionalText={optionalText}
-                    labelClassName={labelClassName}
+                    labelClassName={css(
+                        !props.disabled && "focus-within:border-primary",
+                        props.disabled && "group-disabled:!border-disabled",
+                        labelClassName
+                    )}
                     placeholder={props.placeholder}
                     container={css(container, defaultProps.container)}
                 >
@@ -113,7 +119,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                             "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-input-text text-foreground",
                             "outline-none transition-colors",
                             "group-error:text-danger group-error:placeholder-input-mask-error",
-                            "resize-y group-focus-within:border-primary group-hover:border-primary",
+                            "resize-y",
                             "disabled:cursor-not-allowed disabled:text-disabled",
                             props.className
                         )}

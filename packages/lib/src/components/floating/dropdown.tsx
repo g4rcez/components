@@ -15,7 +15,8 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
-import React, { Fragment, PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
+import type React from "react";
+import { Fragment, type PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
 
 type DropdownProps = {
     open?: boolean;
@@ -72,7 +73,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
         <Fragment>
             <button
                 ref={refs.setReference}
-                {...(getReferenceProps(props.buttonProps as unknown as React.HTMLProps<Element>) as React.HTMLProps<HTMLButtonElement>)}
+                {...(getReferenceProps(props.buttonProps as Parameters<typeof getReferenceProps>[0]) as React.HTMLProps<HTMLButtonElement>)}
                 type="button"
             >
                 {props.trigger}

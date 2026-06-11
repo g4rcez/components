@@ -25,6 +25,7 @@ describe("Modal focus management", () => {
         const closeButton = await screen.findByRole("button", { name: /close/i });
         expect(closeButton).toBeInTheDocument();
         expect(closeButton).not.toHaveAttribute("tabindex", "-1");
+        expect(closeButton).toHaveClass("focus-visible:ring-2");
     });
 
     it("close button click calls onChange with false", async () => {
@@ -36,6 +37,34 @@ describe("Modal focus management", () => {
         await waitFor(() => {
             expect(screen.queryByText("Focus Test")).not.toBeInTheDocument();
         });
+    });
+
+    it("exposes dialog disclosure state on the trigger", async () => {
+        const TriggerModal = () => {
+            const [open, setOpen] = useState(false);
+            return (
+                <ComponentsProvider>
+                    <Modal open={open} title="Trigger Test" trigger="Launch" onChange={setOpen}>
+                        Content
+                    </Modal>
+                </ComponentsProvider>
+            );
+        };
+
+        render(<TriggerModal />);
+
+        const trigger = screen.getByRole("button", { name: "Launch" });
+
+        expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+        expect(trigger).toHaveAttribute("aria-expanded", "false");
+        expect(trigger).not.toHaveAttribute("aria-controls");
+
+        fireEvent.click(trigger);
+
+        const dialog = await screen.findByRole("dialog", { name: "Trigger Test" });
+
+        expect(trigger).toHaveAttribute("aria-expanded", "true");
+        expect(trigger).toHaveAttribute("aria-controls", dialog.id);
     });
 
     it("focus moves inside modal on open", async () => {

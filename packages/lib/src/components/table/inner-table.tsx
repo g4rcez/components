@@ -1,22 +1,22 @@
 import Linq from "linq-arrays";
-import { Symbols } from "linq-arrays";
+import type { Symbols } from "linq-arrays";
 import { AnimatePresence } from "motion/react";
-import React, { ComponentProps, CSSProperties, Fragment, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
-import { ContextProp, ItemProps, TableBodyProps, TableComponents, TableVirtuoso } from "react-virtuoso";
+import React, { type ComponentProps, type CSSProperties, Fragment, type HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
+import { type ContextProp, type ItemProps, type TableBodyProps, type TableComponents, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { Empty } from "../display/empty";
 import { SkeletonCell } from "../display/skeleton";
-import { OptionProps } from "../form/select";
-import { FilterConfig } from "./filter";
-import { GroupItem } from "./group";
+import type { OptionProps } from "../form/select";
+import type { FilterConfig } from "./filter";
+import type { GroupItem } from "./group";
 import { Pagination } from "./pagination";
 import { Row } from "./row";
-import { multiSort, Sorter } from "./sort";
-import { CellAsideElement, Col, TableOperationProps } from "./table-lib";
+import { multiSort, type Sorter } from "./sort";
+import type { CellAsideElement, Col, TableOperationProps } from "./table-lib";
 import { useTable } from "./table.context";
 import { TableHeader } from "./thead";
-import { Any } from "../../types";
+import type { Any } from "../../types";
 
 type VirtuosoCtx = {
     cols: Col<Record<string, unknown>>[];
@@ -115,10 +115,10 @@ const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, 
 
 const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
     TableRow: TRow,
-    TableFoot: TFoot,
-    TableHead: Thead,
+    TableFoot: TFoot as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableFoot"],
+    TableHead: Thead as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableHead"],
     Table: VirtualTable,
-    TableBody: TableBody,
+    TableBody: TableBody as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableBody"],
 };
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

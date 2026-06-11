@@ -40,8 +40,8 @@ class IntersectionObserverMock {
     }
 }
 
-global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
-global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;
+globalThis.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+globalThis.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;
 
 const options = [
     { value: "alpha", label: "Alpha" },
@@ -77,8 +77,37 @@ describe("composite widget a11y", () => {
         await user.keyboard("[Enter]");
 
         await waitFor(() => expect(onChange).toHaveBeenCalled());
+        await waitFor(() => expect(document.activeElement).toBe(combobox));
+        expect(combobox).not.toHaveClass("focus:ring-2");
+        expect(combobox).not.toHaveClass("focus:ring-inset");
+        expect(combobox).not.toHaveClass("focus:ring-primary");
+        expect(combobox.parentElement).toHaveClass("focus-within:border-primary");
         expect(combobox).toHaveAttribute("data-value", "alpha");
         expect((await axe(container)).violations).toHaveLength(0);
+    });
+
+    it("keeps disabled Autocomplete readonly with not-allowed affordances", async () => {
+        const user = userEvent.setup();
+
+        const { container } = render(
+            <ComponentsProvider>
+                <Autocomplete disabled title="Assignee" name="assignee" placeholder="Pick assignee" options={options} />
+            </ComponentsProvider>
+        );
+
+        const combobox = screen.getByRole("combobox", { name: "Assignee" });
+        const caretButton = container.querySelector("button");
+
+        expect(combobox).toBeDisabled();
+        expect(combobox).toHaveClass("disabled:cursor-not-allowed");
+        expect(caretButton).toBeDisabled();
+        expect(caretButton).toHaveClass("disabled:cursor-not-allowed");
+        expect(combobox.parentElement).toHaveClass("group-disabled:!border-disabled");
+
+        await user.click(combobox);
+        if (caretButton) await user.click(caretButton);
+
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
     it("keeps MultiSelect input focus, exposes selected options, and toggles with Enter and Space", async () => {

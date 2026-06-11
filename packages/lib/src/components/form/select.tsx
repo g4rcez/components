@@ -1,10 +1,11 @@
 "use client";
 import { CaretDownIcon } from "@phosphor-icons/react";
-import React, { forwardRef, useEffect, useId, useImperativeHandle, useRef } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useId, useImperativeHandle, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { css, initializeInputDataset, mergeRefs } from "../../lib/dom";
-import { Override } from "../../types";
-import { InputField, InputFieldProps } from "./input-field";
+import type { Override } from "../../types";
+import { InputField, type InputFieldProps } from "./input-field";
 
 export type OptionProps = Override<
     React.ComponentProps<"option">,
@@ -87,15 +88,25 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 componentName="select"
                 rightLabel={rightLabel}
                 hiddenLabel={hiddenLabel}
+                disabled={props.disabled}
                 interactive={interactive}
                 id={id}
                 optionalText={optionalText}
-                labelClassName={labelClassName}
+                labelClassName={css(
+                    !props.disabled && "focus-within:border-primary",
+                    props.disabled && "group-disabled:!border-disabled",
+                    labelClassName
+                )}
                 placeholder={props.placeholder}
                 right={
                     <span>
                         {right}
-                        <button onClick={onClickLabel} type="button" className="mt-2 transition-colors hover:text-primary">
+                        <button
+                            disabled={props.disabled}
+                            onClick={onClickLabel}
+                            type="button"
+                            className="mt-2 transition-colors enabled:hover:text-primary disabled:cursor-not-allowed disabled:text-disabled"
+                        >
                             <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
@@ -117,7 +128,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                         "input select group h-input-height w-full flex-1 appearance-none rounded-input-radius text-input-text",
                         "bg-transparent px-input-padding-x py-input-padding-y text-foreground placeholder-input-placeholder",
                         "outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
-                        "data-[selected=false]:text-input-placeholder",
+                        "data-[selected=false]:text-input-placeholder disabled:cursor-not-allowed disabled:text-disabled",
                         props.className
                     )}
                 >

@@ -23,10 +23,10 @@ import { useTranslations } from "../../hooks/use-translations";
 import { Dict } from "../../lib/dict";
 import { css, getRemainingSize, initializeInputDataset } from "../../lib/dom";
 import { fzf } from "../../lib/fzf";
-import { Label, Override } from "../../types";
+import type { Label, Override } from "../../types";
 import { Tag } from "../core/tag";
-import { InputField, InputFieldProps } from "./input-field";
-import { type OptionProps } from "./select";
+import { InputField, type InputFieldProps } from "./input-field";
+import type { OptionProps } from "./select";
 
 export type MultiSelectItemProps = OptionProps & {
     Render?: React.FC<OptionProps>;
@@ -395,7 +395,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         "aria-controls": listboxId,
                         "aria-activedescendant": activeOptionId,
                         "aria-labelledby": `${id}-label`,
-                    } as React.HTMLProps<HTMLElement>)}
+                    } as Parameters<typeof getReferenceProps>[0])}
                     data-name={id}
                     data-target={id}
                     data-shadow="true"

@@ -31,8 +31,9 @@ describe("Modal.confirm", () => {
         fireEvent.click(screen.getByText("Open Confirm"));
 
         // Check if modal is visible
-        expect(screen.getByText("Confirm Action")).toBeInTheDocument();
-        expect(screen.getByText("Are you sure you want to proceed?")).toBeInTheDocument();
+        const dialog = screen.getByRole("alertdialog", { name: "Confirm Action" });
+        expect(dialog).toHaveAccessibleDescription("Are you sure you want to proceed?");
+        expect(screen.getAllByText("Are you sure you want to proceed?")).toHaveLength(2);
 
         // Click "Yes, do it"
         fireEvent.click(screen.getByText("Yes, do it"));
@@ -78,8 +79,27 @@ describe("Modal.confirm", () => {
 
         fireEvent.click(screen.getByText("Open mapped confirm"));
 
-        expect(screen.getByRole("dialog", { name: "Please decide" })).toBeInTheDocument();
+        const dialog = screen.getByRole("alertdialog", { name: "Please decide" });
+
+        expect(dialog).toBeInTheDocument();
+        expect(dialog).toHaveAccessibleDescription("Mapped confirmation body");
         expect(screen.getByRole("button", { name: "Go back" })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Proceed" })).toBeInTheDocument();
+    });
+
+    it("resolves to false when dismissed with Escape", async () => {
+        vi.spyOn(window, "alert").mockImplementation(() => {});
+        render(<TestApp />);
+
+        fireEvent.click(screen.getByText("Open Confirm"));
+
+        expect(screen.getByRole("alertdialog", { name: "Confirm Action" })).toHaveAccessibleDescription("Are you sure you want to proceed?");
+
+        fireEvent.keyDown(document, { key: "Escape", code: "Escape" });
+
+        await waitFor(() => {
+            expect(screen.queryByText("Confirm Action")).not.toBeInTheDocument();
+        });
+        expect(window.alert).toHaveBeenCalledWith("Cancelled");
     });
 });

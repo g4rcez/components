@@ -4,8 +4,8 @@ import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
 import { css } from "../../lib/dom";
-import { type Label, Override } from "../../types";
-import { type PolymorphicProps } from "../core/polymorph";
+import type { Label, Override } from "../../types";
+import type { PolymorphicProps } from "../core/polymorph";
 import { Tooltip } from "../floating/tooltip";
 
 export type FeedbackProps = React.PropsWithChildren<
@@ -24,7 +24,7 @@ export type FeedbackProps = React.PropsWithChildren<
 export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <span className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
         {hideLeft ? null : (
-            <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:text-disabled group-error:text-danger">
+            <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:!text-disabled group-error:text-danger">
                 <span id={id ? `${id}-label` : undefined}>{title}</span>
                 {reportStatus || info ? (
                     <span className="flex items-center justify-center gap-1">
@@ -171,7 +171,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                                     {!required ? (
                                         <span
                                             aria-disabled={disabled}
-                                            className="text-opacity-70 transition-colors group-focus-within:text-primary group-hover:text-primary aria-disabled:text-disabled"
+                                            className="text-opacity-70 transition-colors group-focus-within:text-primary group-hover:text-primary aria-disabled:!text-disabled"
                                         >
                                             {optionalText}
                                         </span>
@@ -183,7 +183,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     )}
                     <div
                         className={css(
-                            "group relative flex w-full flex-row flex-nowrap items-center gap-x-input-gap gap-y-input-inline rounded-input-radius border border-input-border bg-transparent transition-colors group-hover:border-primary group-disabled:border-disabled group-error:border-danger",
+                            "group relative flex w-full flex-row flex-nowrap items-center gap-x-input-gap gap-y-input-inline rounded-input-radius border border-input-border bg-transparent transition-colors group-hover:border-primary group-disabled:!border-disabled group-error:border-danger",
                             labelClassName
                         )}
                     >

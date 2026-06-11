@@ -14,7 +14,8 @@ import {
 } from "@floating-ui/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { forwardRef, Fragment, type PropsWithChildren, Ref, useEffect, useId, useMemo, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, Fragment, type PropsWithChildren, type Ref, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { Is } from "sidekicker";
@@ -23,9 +24,9 @@ import { useTranslations } from "../../hooks/use-translations";
 import { css, dispatchInput, getRemainingSize, initializeInputDataset, synthesizeChangeEvent } from "../../lib/dom";
 import { safeRegex } from "../../lib/fns";
 import { fzf } from "../../lib/fzf";
-import { Label } from "../../types";
-import { InputField, InputFieldProps } from "./input-field";
-import { type OptionProps } from "./select";
+import type { Label } from "../../types";
+import { InputField, type InputFieldProps } from "./input-field";
+import type { OptionProps } from "./select";
 
 export type AutocompleteItemProps = OptionProps & {
     Render?: React.FC<OptionProps>;
@@ -53,7 +54,7 @@ const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: st
         <motion.div
             {...props}
             ref={ref}
-            role="select"
+            role="listbox"
             id={context?.listboxId}
             className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius"
         >
@@ -136,6 +137,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setOpen(false);
             setH(0);
         };
+
+        useEffect(() => {
+            if (!props.disabled) return;
+            setOpen(false);
+            setH(0);
+        }, [props.disabled]);
 
         const displayList = useMemo(() => list.filter((x) => x.hidden !== true), [list]);
 
@@ -232,7 +239,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setClosed();
             setShadow("");
             setIndex(i);
-            input.focus();
+            requestAnimationFrame(() => {
+                if (input.isConnected) input.focus();
+            });
         };
 
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,18 +253,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         };
 
         const onCaretDownClick = () => {
+            if (props.disabled) return;
             openDropdown();
             setShadow("");
             (refs.reference.current as HTMLInputElement)?.focus();
         };
 
         const onFocus = () => {
+            if (props.disabled) return;
             setIndex((prev) => (prev === null ? 0 : prev));
             openDropdown();
             setShadow("");
         };
 
         const onClose = () => {
+            if (props.disabled) return;
             (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
             setShadow("");
             setValue("");
@@ -292,14 +304,26 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 interactive={interactive}
                 optionalText={optionalText}
                 componentName="autocomplete"
-                labelClassName={labelClassName}
+                labelClassName={css(
+                    !props.disabled && "focus-within:border-primary",
+                    props.disabled && "group-disabled:!border-disabled",
+                    labelClassName
+                )}
                 placeholder={props.placeholder}
                 ref={fieldset as unknown as Ref<HTMLInputElement>}
                 feedback={open && isTopPlacement ? props.title : feedback}
                 right={
                     <span className="flex items-center gap-0.5">
                         {right}
-                        <button type="button" className="p-input-gap transition-colors link:text-primary md:p-1" onClick={onCaretDownClick}>
+                        <button
+                            type="button"
+                            disabled={props.disabled}
+                            className={css(
+                                "p-input-gap transition-colors disabled:cursor-not-allowed disabled:text-disabled md:p-1",
+                                !props.disabled && "link:text-primary"
+                            )}
+                            onClick={onCaretDownClick}
+                        >
                             <CaretDownIcon size={20} />
                             <span className="sr-only">{translation.inputCaretDown}</span>
                         </button>
@@ -307,8 +331,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             <button
                                 type="button"
                                 onClick={onClose}
+                                disabled={props.disabled}
                                 aria-label={translation.inputCloseValue}
-                                className="p-input-gap transition-colors link:text-danger md:p-1"
+                                className={css(
+                                    "p-input-gap transition-colors disabled:cursor-not-allowed disabled:text-disabled md:p-1",
+                                    !props.disabled && "link:text-danger"
+                                )}
                             >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -367,7 +395,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 }
                             }
                         },
-                    } as React.HTMLProps<HTMLInputElement>)}
+                    })}
                     data-value={value}
                     data-error={!!error}
                     data-name={id}
@@ -385,9 +413,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     className={css(
                         "input placeholder-input-mask group h-input-height w-full flex-1",
                         "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-foreground",
-                        "outline-none transition-colors focus:ring-2 focus:ring-inset focus:ring-primary",
+                        "outline-none transition-colors disabled:cursor-not-allowed disabled:text-disabled",
                         "group-error:text-danger group-error:placeholder-input-mask-error",
-                        "text-input-text group-focus-within:border-primary group-hover:border-primary",
+                        "text-input-text",
+                        !props.disabled && "group-focus-within:border-primary group-hover:border-primary",
                         props.className
                     )}
                 />
@@ -401,7 +430,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     defaultValue={props.value || value || undefined}
                 />
                 <FloatingPortal preserveTabOrder>
-                    {open ? (
+                    {open && !props.disabled ? (
                         <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
                             <motion.div
                                 {...getFloatingProps({

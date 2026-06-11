@@ -1,15 +1,16 @@
 "use client";
 import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
 import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
-import React, { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { useTranslations } from "../../hooks/use-translations";
 import { CombiKeys } from "../../lib/combi-keys";
 import { Dict } from "../../lib/dict";
 import { css, isChildVisible, isReactFC, mergeRefs } from "../../lib/dom";
-import { fzf, MatchValue } from "../../lib/fzf";
-import { Label } from "../../types";
+import { fzf, type MatchValue } from "../../lib/fzf";
+import type { Label } from "../../types";
 import { Shortcut } from "../display/shortcut";
 import { SkeletonCell } from "../display/skeleton";
 import { Modal } from "./modal";
@@ -287,7 +288,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                     }
                                 }
                             },
-                        } as unknown as React.HTMLProps<Element>) as React.InputHTMLAttributes<HTMLInputElement>)}
+                        } as Parameters<typeof getReferenceProps>[0]) as React.InputHTMLAttributes<HTMLInputElement>)}
                         value={text}
                         role="combobox"
                         aria-label={translations.commandPaletteSearchLabel}
