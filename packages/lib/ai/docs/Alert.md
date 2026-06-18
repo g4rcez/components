@@ -141,8 +141,8 @@ const [errors, setErrors] = useState<string[]>([]);
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use `theme` or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use `theme` or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `danger` for non-critical information; use `warn` or `info` instead.
 - Don't omit `onClose` if the alert must be dismissible — the close button only renders when the prop is provided.
 

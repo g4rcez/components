@@ -94,8 +94,8 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                     id={props.name || props.id}
                     optionalText={optionalText}
                     labelClassName={css(
-                        !props.disabled && "focus-within:border-primary",
-                        props.disabled && "group-disabled:!border-disabled",
+                        !props.disabled && "__form-free-text__tw-1",
+                        props.disabled && "__form-free-text__disabled-border",
                         labelClassName
                     )}
                     placeholder={props.placeholder}
@@ -115,12 +115,12 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         aria-describedby={error ? `${id}-error` : undefined}
                         ref={mergeRefs(ref, inputRef) as unknown as React.Ref<Html>}
                         className={css(
-                            "input placeholder-input-mask group h-input-height w-full flex-1",
-                            "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-input-text text-foreground",
-                            "outline-none transition-colors",
-                            "group-error:text-danger group-error:placeholder-input-mask-error",
-                            "resize-y",
-                            "disabled:cursor-not-allowed disabled:text-disabled",
+                            "input __form-free-text__tw-2 __form-free-text__tw-extra-1 __form-free-text__tw-state-1",
+                            "__form-free-text__tw-3",
+                            "__form-free-text__tw-4",
+                            "__form-free-text__tw-state-2",
+                            "__form-free-text__tw-5",
+                            "__form-free-text__tw-6",
                             props.className
                         )}
                     />

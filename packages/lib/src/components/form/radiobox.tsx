@@ -14,16 +14,9 @@ export const Radiobox = ({ children, className = "", size: _size, ...props }: Ra
         data-component="radiobox"
         data-disabled={props.disabled}
         aria-disabled={props.disabled}
-        className={css("group flex items-center gap-radiobox-gap font-normal data-[disabled=true]:cursor-not-allowed")}
+        className={css("__form-radiobox__tw-1 __form-radiobox__tw-extra-1")}
     >
-        <input
-            {...props}
-            type="radio"
-            className={css(
-                "app form-radio inline-block size-radiobox-size appearance-none rounded-full border-card-border bg-origin-border text-primary focus:ring-primary disabled:opacity-70 group-aria-disabled:cursor-not-allowed",
-                className
-            )}
-        />
+        <input {...props} type="radio" className={css("app __form-radiobox__tw-2 __form-radiobox__tw-state-1", className)} />
         {children}
     </label>
 );

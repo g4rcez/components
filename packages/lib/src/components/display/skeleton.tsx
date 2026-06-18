@@ -3,14 +3,7 @@ import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import { Polymorph } from "../core/polymorph";
 
-export const SkeletonCell = (
-    <div
-        role="status"
-        aria-busy="true"
-        aria-label="Loading content"
-        className="h-skeleton-cell-h w-10/12 animate-pulse rounded-skeleton-radius bg-muted"
-    />
-);
+export const SkeletonCell = <div role="status" aria-busy="true" aria-label="Loading content" className="__display-skeleton__tw-1" />;
 
 export const Skeleton = (props: { className?: string; as?: ElementType; style?: CSSProperties }) => {
     const t = useTranslations();
@@ -21,7 +14,7 @@ export const Skeleton = (props: { className?: string; as?: ElementType; style?: 
             aria-busy="true"
             aria-label={t.skeletonLoading}
             as={props.as || "span"}
-            className={css("block h-skeleton-height w-skeleton-width animate-pulse rounded-skeleton-radius bg-muted", props.className)}
+            className={css("__display-skeleton__tw-2", props.className)}
         />
     );
 };
@@ -35,7 +28,12 @@ export const SkeletonList = (props: { className?: string; rows: number }) => {
         })
     );
     return (
-        <ul role="status" aria-busy="true" aria-label={t.skeletonLoading} className={css("flex flex-col gap-skeleton-list-gap", props.className)}>
+        <ul
+            role="status"
+            aria-busy="true"
+            aria-label={t.skeletonLoading}
+            className={css("__display-skeleton__tw-3 __display-skeleton__tw-extra-1", props.className)}
+        >
             {items.current}
         </ul>
     );

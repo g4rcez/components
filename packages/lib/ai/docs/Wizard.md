@@ -182,8 +182,8 @@ const steps = [
 - Don't use the wizard for critical information that isn't accessible elsewhere — some users will skip it.
 - Don't pass more than ~10 steps; tours that feel long are abandoned.
 - Don't block users from navigating if they skip the wizard.
-- Don't pass raw Tailwind color classes in `title` or `description` content — use design-token classes.
-- Don't use arbitrary Tailwind values (`z-[9999]`) — the wizard already uses `z-wizard`; override the CSS variable if needed.
+- Don't pass raw utility color classes in `title` or `description` content — use design-token classes.
+- Don't use arbitrary utility values (`z-[9999]`) — the wizard already uses `z-wizard`; override the CSS variable if needed.
 
 ## Accessibility
 

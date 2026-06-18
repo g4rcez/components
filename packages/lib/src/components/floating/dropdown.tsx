@@ -82,20 +82,15 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="relative isolate z-floating rounded-dropdown-radius border border-floating-border bg-floating-background p-dropdown-p shadow-shadow-floating"
+                            className="__floating-dropdown__border __floating-dropdown__tw-1"
                             ref={refs.setFloating}
                             aria-labelledby={headingId}
                             style={floatingStyles as unknown as React.CSSProperties}
                             {...getFloatingProps()}
                         >
-                            <FloatingArrow
-                                ref={arrowRef}
-                                context={context}
-                                strokeWidth={0.1}
-                                className="fill-floating-background stroke-floating-border"
-                            />
-                            <header className="mb-dropdown-header-mb">
-                                <h3 id={headingId} className="text-typography-2xl text-left font-medium leading-snug tracking-wide">
+                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="__floating-dropdown__tw-2" />
+                            <header className="__floating-dropdown__tw-3">
+                                <h3 id={headingId} className="__floating-dropdown__tw-4">
                                     {props.title}
                                 </h3>
                             </header>

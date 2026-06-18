@@ -1,6 +1,15 @@
-# Tailwind CSS v4 Integration Guide
+# Tailwind CSS v4 Compatibility Guide
 
-This guide demonstrates how to leverage Tailwind CSS v4's advanced features with @g4rcez/components for modern, responsive, and highly customizable user interfaces.
+@g4rcez/components v6 is moving Tailwind CSS out of the styling foundation. Components now have plain CSS files, stable public selectors, semantic `--var-*` CSS variables, and manifest entries. Button is fully ported to handwritten v6 CSS; the remaining component chunks are in place while legacy utility class names are retired component-by-component. Tailwind remains available as compatibility tooling for applications that use Tailwind utilities alongside the component library.
+
+Use the plain CSS setup first:
+
+```css
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
+```
+
+This guide demonstrates how to add Tailwind CSS v4 compatibility on top of that model.
 
 ## Table of Contents
 
@@ -44,36 +53,32 @@ npm install @g4rcez/components
 ```js
 // tailwind.config.js
 module.exports = {
-  presets: [require("@g4rcez/components/preset.tailwind")],
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@g4rcez/components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      // Custom theme extensions
-      colors: {
-        brand: {
-          50: "#f0f9ff",
-          500: "#3b82f6",
-          900: "#1e3a8a",
+    content: ["./src/**/*.{js,ts,jsx,tsx}", "./node_modules/@g4rcez/components/**/*.{js,ts,jsx,tsx}"],
+    theme: {
+        extend: {
+            // Custom theme extensions
+            colors: {
+                brand: {
+                    50: "#f0f9ff",
+                    500: "#3b82f6",
+                    900: "#1e3a8a",
+                },
+            },
+            container: {
+                queries: {
+                    xs: "20rem",
+                    sm: "24rem",
+                    md: "28rem",
+                    lg: "32rem",
+                    xl: "36rem",
+                },
+            },
         },
-      },
-      container: {
-        queries: {
-          xs: "20rem",
-          sm: "24rem",
-          md: "28rem",
-          lg: "32rem",
-          xl: "36rem",
-        },
-      },
     },
-  },
-  plugins: [
-    require("@tailwindcss/container-queries"),
-    // Other plugins
-  ],
+    plugins: [
+        require("@tailwindcss/container-queries"),
+        // Other plugins
+    ],
 };
 ```
 
@@ -82,51 +87,52 @@ module.exports = {
 ```css
 /* styles/globals.css */
 @import "tailwindcss";
-@import "@g4rcez/components/index.css";
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
 
 /* Custom CSS variables for theming */
 @theme {
-  --color-brand-primary: #3b82f6;
-  --color-brand-secondary: #64748b;
-  --color-brand-accent: #8b5cf6;
+    --color-brand-primary: #3b82f6;
+    --color-brand-secondary: #64748b;
+    --color-brand-accent: #8b5cf6;
 
-  --spacing-component: 1rem;
-  --radius-component: 0.5rem;
+    --spacing-component: 1rem;
+    --radius-component: 0.5rem;
 
-  --shadow-component: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-component: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 /* Custom animations */
 @keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes pulse-soft {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
 }
 ```
 
@@ -139,33 +145,28 @@ Tailwind v4's enhanced CSS variable support allows for dynamic theming:
 ```tsx
 // Dynamic theme switching
 const ThemeProvider = ({ theme, children }) => {
-  const themeVars = {
-    light: {
-      "--bg-primary": "theme(colors.white)",
-      "--text-primary": "theme(colors.gray.900)",
-      "--border-primary": "theme(colors.gray.200)",
-    },
-    dark: {
-      "--bg-primary": "theme(colors.gray.900)",
-      "--text-primary": "theme(colors.white)",
-      "--border-primary": "theme(colors.gray.700)",
-    },
-  };
+    const themeVars = {
+        light: {
+            "--bg-primary": "theme(colors.white)",
+            "--text-primary": "theme(colors.gray.900)",
+            "--border-primary": "theme(colors.gray.200)",
+        },
+        dark: {
+            "--bg-primary": "theme(colors.gray.900)",
+            "--text-primary": "theme(colors.white)",
+            "--border-primary": "theme(colors.gray.700)",
+        },
+    };
 
-  return (
-    <div
-      style={themeVars[theme]}
-      className="bg-[--bg-primary] text-[--text-primary]"
-    >
-      {children}
-    </div>
-  );
+    return (
+        <div style={themeVars[theme]} className="bg-[--bg-primary] text-[--text-primary]">
+            {children}
+        </div>
+    );
 };
 
 // Usage with components
-<Button className="bg-[--bg-primary] border-[--border-primary]">
-  Themed Button
-</Button>;
+<Button className="bg-[--bg-primary] border-[--border-primary]">Themed Button</Button>;
 ```
 
 ### Container Queries
@@ -175,16 +176,14 @@ Element-based responsive design that adapts to container size rather than viewpo
 ```tsx
 // Responsive card grid
 <div className="@container">
-  <div className="grid @sm:grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-4">
-    <Card className="@container">
-      <Card.Title title="Responsive Card">
-        <Button className="@sm:w-full @lg:w-auto">Action</Button>
-      </Card.Title>
-      <div className="@sm:text-sm @lg:text-base">
-        Content that adapts to card size
-      </div>
-    </Card>
-  </div>
+    <div className="grid @sm:grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-4">
+        <Card className="@container">
+            <Card.Title title="Responsive Card">
+                <Button className="@sm:w-full @lg:w-auto">Action</Button>
+            </Card.Title>
+            <div className="@sm:text-sm @lg:text-base">Content that adapts to card size</div>
+        </Card>
+    </div>
 </div>
 ```
 
@@ -195,7 +194,7 @@ Named grid areas for complex layouts:
 ```tsx
 // Dashboard layout with named areas
 <div
-  className="
+    className="
   grid 
   [grid-template-areas:'header_header''sidebar_main''footer_footer'] 
   @lg:[grid-template-areas:'header_header_header''sidebar_main_aside''footer_footer_footer']
@@ -204,27 +203,27 @@ Named grid areas for complex layouts:
   min-h-screen
 "
 >
-  <header className="[grid-area:header] bg-white border-b p-4">
-    <h1>Dashboard</h1>
-  </header>
+    <header className="[grid-area:header] bg-white border-b p-4">
+        <h1>Dashboard</h1>
+    </header>
 
-  <aside className="[grid-area:sidebar] bg-gray-50 p-4">
-    <nav>Navigation</nav>
-  </aside>
+    <aside className="[grid-area:sidebar] bg-gray-50 p-4">
+        <nav>Navigation</nav>
+    </aside>
 
-  <main className="[grid-area:main] p-6">
-    <Card title="Main Content">
-      <p>Dashboard content</p>
-    </Card>
-  </main>
+    <main className="[grid-area:main] p-6">
+        <Card title="Main Content">
+            <p>Dashboard content</p>
+        </Card>
+    </main>
 
-  <aside className="[grid-area:aside] @lg:block hidden bg-gray-50 p-4">
-    <div>Sidebar content</div>
-  </aside>
+    <aside className="[grid-area:aside] @lg:block hidden bg-gray-50 p-4">
+        <div>Sidebar content</div>
+    </aside>
 
-  <footer className="[grid-area:footer] bg-white border-t p-4">
-    <p>Footer</p>
-  </footer>
+    <footer className="[grid-area:footer] bg-white border-t p-4">
+        <p>Footer</p>
+    </footer>
 </div>
 ```
 
@@ -235,26 +234,26 @@ Advanced color manipulation with CSS color functions:
 ```tsx
 // Dynamic color mixing
 const ColorMixButton = ({ baseColor = "blue", intensity = 80 }) => {
-  return (
-    <Button
-      className="transition-all duration-300"
-      style={{
-        "--btn-bg": `color-mix(in srgb, theme(colors.${baseColor}.500) ${intensity}%, white)`,
-        "--btn-hover": `color-mix(in srgb, theme(colors.${baseColor}.600) ${intensity}%, white)`,
-        "--btn-text": `color-mix(in srgb, theme(colors.${baseColor}.900) 90%, black)`,
-        backgroundColor: "var(--btn-bg)",
-        color: "var(--btn-text)",
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.backgroundColor = "var(--btn-hover)";
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.backgroundColor = "var(--btn-bg)";
-      }}
-    >
-      Color Mix Button
-    </Button>
-  );
+    return (
+        <Button
+            className="transition-all duration-300"
+            style={{
+                "--btn-bg": `color-mix(in srgb, theme(colors.${baseColor}.500) ${intensity}%, white)`,
+                "--btn-hover": `color-mix(in srgb, theme(colors.${baseColor}.600) ${intensity}%, white)`,
+                "--btn-text": `color-mix(in srgb, theme(colors.${baseColor}.900) 90%, black)`,
+                backgroundColor: "var(--btn-bg)",
+                color: "var(--btn-text)",
+            }}
+            onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "var(--btn-hover)";
+            }}
+            onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "var(--btn-bg)";
+            }}
+        >
+            Color Mix Button
+        </Button>
+    );
 };
 ```
 
@@ -265,40 +264,40 @@ Enhanced animation support with better performance:
 ```tsx
 // Staggered animations
 const AnimatedList = ({ items }) => {
-  return (
-    <div className="space-y-2">
-      {items.map((item, index) => (
-        <Card
-          key={item.id}
-          className="animate-[fadeInUp_0.6s_ease-out] hover:animate-[pulse-soft_2s_ease-in-out_infinite]"
-          style={{
-            animationDelay: `${index * 0.1}s`,
-            animationFillMode: "both",
-          }}
-        >
-          <p>{item.content}</p>
-        </Card>
-      ))}
-    </div>
-  );
+    return (
+        <div className="space-y-2">
+            {items.map((item, index) => (
+                <Card
+                    key={item.id}
+                    className="animate-[fadeInUp_0.6s_ease-out] hover:animate-[pulse-soft_2s_ease-in-out_infinite]"
+                    style={{
+                        animationDelay: `${index * 0.1}s`,
+                        animationFillMode: "both",
+                    }}
+                >
+                    <p>{item.content}</p>
+                </Card>
+            ))}
+        </div>
+    );
 };
 
 // Scroll-triggered animations
 const ScrollAnimatedSection = () => {
-  return (
-    <div
-      className="
+    return (
+        <div
+            className="
       opacity-0 translate-y-8 
       animate-[fadeInUp_0.8s_ease-out_forwards]
       [animation-timeline:view()]
       [animation-range:entry_0%_entry_50%]
     "
-    >
-      <Card title="Scroll Animated Content">
-        <p>This content animates when scrolled into view.</p>
-      </Card>
-    </div>
-  );
+        >
+            <Card title="Scroll Animated Content">
+                <p>This content animates when scrolled into view.</p>
+            </Card>
+        </div>
+    );
 };
 ```
 
@@ -309,45 +308,34 @@ const ScrollAnimatedSection = () => {
 ```tsx
 // Progressive enhancement with container queries
 const ResponsiveForm = () => {
-  return (
-    <div className="@container max-w-4xl mx-auto p-4">
-      <Card className="@container">
-        <Card.Title title="Responsive Form" />
+    return (
+        <div className="@container max-w-4xl mx-auto p-4">
+            <Card className="@container">
+                <Card.Title title="Responsive Form" />
 
-        <form
-          className="
+                <form
+                    className="
           grid gap-4
           @sm:grid-cols-1 
           @md:grid-cols-2 
           @lg:grid-cols-3
           @xl:grid-cols-4
         "
-        >
-          <Input placeholder="Name" className="@sm:col-span-1 @lg:col-span-2" />
-          <Input
-            placeholder="Email"
-            className="@sm:col-span-1 @lg:col-span-2"
-          />
-          <Select
-            options={countryOptions}
-            placeholder="Country"
-            className="@sm:col-span-1"
-          />
-          <Select
-            options={stateOptions}
-            placeholder="State"
-            className="@sm:col-span-1"
-          />
-          <Input placeholder="City" className="@sm:col-span-1" />
-          <Input placeholder="ZIP" className="@sm:col-span-1" />
+                >
+                    <Input placeholder="Name" className="@sm:col-span-1 @lg:col-span-2" />
+                    <Input placeholder="Email" className="@sm:col-span-1 @lg:col-span-2" />
+                    <Select options={countryOptions} placeholder="Country" className="@sm:col-span-1" />
+                    <Select options={stateOptions} placeholder="State" className="@sm:col-span-1" />
+                    <Input placeholder="City" className="@sm:col-span-1" />
+                    <Input placeholder="ZIP" className="@sm:col-span-1" />
 
-          <div className="@sm:col-span-1 @md:col-span-2 @lg:col-span-3 @xl:col-span-4">
-            <Button className="@sm:w-full @md:w-auto">Submit Form</Button>
-          </div>
-        </form>
-      </Card>
-    </div>
-  );
+                    <div className="@sm:col-span-1 @md:col-span-2 @lg:col-span-3 @xl:col-span-4">
+                        <Button className="@sm:w-full @md:w-auto">Submit Form</Button>
+                    </div>
+                </form>
+            </Card>
+        </div>
+    );
 };
 ```
 
@@ -356,29 +344,29 @@ const ResponsiveForm = () => {
 ```tsx
 // Components that change behavior based on available space
 const AdaptiveNavigation = () => {
-  return (
-    <nav className="@container">
-      {/* Horizontal navigation on larger containers */}
-      <div className="@lg:flex @lg:items-center @lg:space-x-4 @lg:space-y-0 space-y-2">
-        <Button className="@lg:w-auto w-full">Home</Button>
-        <Button className="@lg:w-auto w-full">About</Button>
-        <Button className="@lg:w-auto w-full">Services</Button>
-        <Button className="@lg:w-auto w-full">Contact</Button>
-      </div>
+    return (
+        <nav className="@container">
+            {/* Horizontal navigation on larger containers */}
+            <div className="@lg:flex @lg:items-center @lg:space-x-4 @lg:space-y-0 space-y-2">
+                <Button className="@lg:w-auto w-full">Home</Button>
+                <Button className="@lg:w-auto w-full">About</Button>
+                <Button className="@lg:w-auto w-full">Services</Button>
+                <Button className="@lg:w-auto w-full">Contact</Button>
+            </div>
 
-      {/* Dropdown menu on smaller containers */}
-      <div className="@lg:hidden">
-        <Modal trigger={<Button>Menu</Button>} type="sheet" title="Navigation">
-          <div className="space-y-2">
-            <Button className="w-full justify-start">Home</Button>
-            <Button className="w-full justify-start">About</Button>
-            <Button className="w-full justify-start">Services</Button>
-            <Button className="w-full justify-start">Contact</Button>
-          </div>
-        </Modal>
-      </div>
-    </nav>
-  );
+            {/* Dropdown menu on smaller containers */}
+            <div className="@lg:hidden">
+                <Modal trigger={<Button>Menu</Button>} type="sheet" title="Navigation">
+                    <div className="space-y-2">
+                        <Button className="w-full justify-start">Home</Button>
+                        <Button className="w-full justify-start">About</Button>
+                        <Button className="w-full justify-start">Services</Button>
+                        <Button className="w-full justify-start">Contact</Button>
+                    </div>
+                </Modal>
+            </div>
+        </nav>
+    );
 };
 ```
 
@@ -389,26 +377,26 @@ const AdaptiveNavigation = () => {
 ```tsx
 // Define theme variables at the root level
 const AppTheme = ({ theme, children }) => {
-  const themes = {
-    light: {
-      "--color-bg": "theme(colors.white)",
-      "--color-text": "theme(colors.gray.900)",
-      "--color-primary": "theme(colors.blue.500)",
-      "--color-border": "theme(colors.gray.200)",
-    },
-    dark: {
-      "--color-bg": "theme(colors.gray.900)",
-      "--color-text": "theme(colors.white)",
-      "--color-primary": "theme(colors.blue.400)",
-      "--color-border": "theme(colors.gray.700)",
-    },
-  };
+    const themes = {
+        light: {
+            "--color-bg": "theme(colors.white)",
+            "--color-text": "theme(colors.gray.900)",
+            "--color-primary": "theme(colors.blue.500)",
+            "--color-border": "theme(colors.gray.200)",
+        },
+        dark: {
+            "--color-bg": "theme(colors.gray.900)",
+            "--color-text": "theme(colors.white)",
+            "--color-primary": "theme(colors.blue.400)",
+            "--color-border": "theme(colors.gray.700)",
+        },
+    };
 
-  return (
-    <div style={themes[theme]} className="bg-[--color-bg] text-[--color-text]">
-      {children}
-    </div>
-  );
+    return (
+        <div style={themes[theme]} className="bg-[--color-bg] text-[--color-text]">
+            {children}
+        </div>
+    );
 };
 ```
 
@@ -417,19 +405,19 @@ const AppTheme = ({ theme, children }) => {
 ```tsx
 // Component-level responsiveness
 const ResponsiveCard = ({ children }) => {
-  return (
-    <Card className="@container">
-      <div
-        className="
+    return (
+        <Card className="@container">
+            <div
+                className="
         @sm:p-4 @md:p-6 @lg:p-8
         @sm:text-sm @md:text-base @lg:text-lg
         @sm:space-y-2 @md:space-y-4 @lg:space-y-6
       "
-      >
-        {children}
-      </div>
-    </Card>
-  );
+            >
+                {children}
+            </div>
+        </Card>
+    );
 };
 ```
 
@@ -438,22 +426,22 @@ const ResponsiveCard = ({ children }) => {
 ```tsx
 // Named grid areas for maintainable layouts
 const DashboardLayout = () => {
-  return (
-    <div
-      className="
+    return (
+        <div
+            className="
       grid min-h-screen
       [grid-template-areas:'header''main''footer']
       @lg:[grid-template-areas:'header_header''sidebar_main''footer_footer']
       grid-rows-[auto_1fr_auto]
       @lg:grid-cols-[250px_1fr]
     "
-    >
-      <header className="[grid-area:header]">Header</header>
-      <aside className="[grid-area:sidebar] @lg:block hidden">Sidebar</aside>
-      <main className="[grid-area:main]">Main Content</main>
-      <footer className="[grid-area:footer]">Footer</footer>
-    </div>
-  );
+        >
+            <header className="[grid-area:header]">Header</header>
+            <aside className="[grid-area:sidebar] @lg:block hidden">Sidebar</aside>
+            <main className="[grid-area:main]">Main Content</main>
+            <footer className="[grid-area:footer]">Footer</footer>
+        </div>
+    );
 };
 ```
 
@@ -462,9 +450,9 @@ const DashboardLayout = () => {
 ```tsx
 // Start with basic functionality, enhance with advanced features
 const ProgressiveButton = ({ children, ...props }) => {
-  return (
-    <Button
-      className="
+    return (
+        <Button
+            className="
         /* Base styles */
         px-4 py-2 rounded
         
@@ -481,11 +469,11 @@ const ProgressiveButton = ({ children, ...props }) => {
         @sm:px-3 @sm:py-1.5 @sm:text-sm
         @lg:px-6 @lg:py-3 @lg:text-base
       "
-      {...props}
-    >
-      {children}
-    </Button>
-  );
+            {...props}
+        >
+            {children}
+        </Button>
+    );
 };
 ```
 
@@ -532,21 +520,21 @@ const ProgressiveButton = ({ children, ...props }) => {
 ```js
 // tailwind.config.js
 module.exports = {
-  // Enable JIT mode for better performance
-  mode: "jit",
+    // Enable JIT mode for better performance
+    mode: "jit",
 
-  // Optimize for production
-  purge: {
-    enabled: process.env.NODE_ENV === "production",
-    content: ["./src/**/*.{js,ts,jsx,tsx}"],
-    options: {
-      safelist: [
-        // Safelist dynamic classes
-        /^@/, // Container query classes
-        /^grid-area-/, // Grid area classes
-      ],
+    // Optimize for production
+    purge: {
+        enabled: process.env.NODE_ENV === "production",
+        content: ["./src/**/*.{js,ts,jsx,tsx}"],
+        options: {
+            safelist: [
+                // Safelist dynamic classes
+                /^@/, // Container query classes
+                /^grid-area-/, // Grid area classes
+            ],
+        },
     },
-  },
 };
 ```
 
@@ -555,28 +543,28 @@ module.exports = {
 ```tsx
 // Use CSS variables to avoid inline style recalculation
 const OptimizedComponent = ({ theme }) => {
-  // Good: CSS variables
-  return (
-    <div
-      className="bg-[--theme-bg] text-[--theme-text]"
-      style={{
-        "--theme-bg": `theme(colors.${theme}.50)`,
-        "--theme-text": `theme(colors.${theme}.900)`,
-      }}
-    >
-      Content
-    </div>
-  );
+    // Good: CSS variables
+    return (
+        <div
+            className="bg-[--theme-bg] text-[--theme-text]"
+            style={{
+                "--theme-bg": `theme(colors.${theme}.50)`,
+                "--theme-text": `theme(colors.${theme}.900)`,
+            }}
+        >
+            Content
+        </div>
+    );
 
-  // Avoid: Inline styles that change frequently
-  // return (
-  //   <div style={{
-  //     backgroundColor: colors[theme][50],
-  //     color: colors[theme][900]
-  //   }}>
-  //     Content
-  //   </div>
-  // );
+    // Avoid: Inline styles that change frequently
+    // return (
+    //   <div style={{
+    //     backgroundColor: colors[theme][50],
+    //     color: colors[theme][900]
+    //   }}>
+    //     Content
+    //   </div>
+    // );
 };
 ```
 

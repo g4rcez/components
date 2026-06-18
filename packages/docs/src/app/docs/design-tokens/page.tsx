@@ -8,7 +8,7 @@ import {
     SparkleIcon,
     UploadIcon,
 } from "@phosphor-icons/react";
-import { CSSProperties, useState } from "react";
+import { useState } from "react";
 import {
     Alert,
     AnimatedList,
@@ -42,1122 +42,48 @@ import { Switch } from "../../../../../lib/src/components/form/switch";
 import { Skeleton } from "../../../../../lib/src/components/display/skeleton";
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
+import {
+    mergeTokenDefaults,
+    pickTokenDefaults,
+    TokenControls as Controls,
+    tokenGroupDefaults,
+    tokensToStyle as toStyle,
+} from "@/components/editable-tokens";
 
-type TokenControl = {
-    key: string;
-    label: string;
-    min: number;
-    max: number;
-    step: number;
-    unit: string;
-    value: number;
-};
-
-type TokenGroup = Record<string, TokenControl>;
-
-const toStyle = (group: TokenGroup): CSSProperties =>
-    Object.values(group).reduce<CSSProperties>((acc, c) => {
-        (acc as Record<string, string>)[`--${c.key}`] = `${c.value}${c.unit}`;
-        return acc;
-    }, {});
-
-const alertDefaults: TokenGroup = {
-    radius: {
-        key: "alert-radius",
-        label: "alert-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    padding: {
-        key: "alert-p",
-        label: "alert-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-    gap: {
-        key: "alert-gap",
-        label: "alert-gap",
-        min: 0,
-        max: 32,
-        step: 2,
-        unit: "px",
-        value: 8,
-    },
-};
-
-const statsDefaults: TokenGroup = {
-    radius: {
-        key: "stats-radius",
-        label: "stats-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    p: {
-        key: "stats-p",
-        label: "stats-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 24,
-    },
-    gap: {
-        key: "stats-gap",
-        label: "stats-gap",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-    iconSize: {
-        key: "stats-icon-size",
-        label: "stats-icon-size",
-        min: 24,
-        max: 80,
-        step: 2,
-        unit: "px",
-        value: 40,
-    },
-    iconP: {
-        key: "stats-icon-p",
-        label: "stats-icon-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 32,
-    },
-};
-
-const typographyDefaults: TokenGroup = {
-    xs: {
-        key: "typography-xs",
-        label: "text-xs",
-        min: 8,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-    sm: {
-        key: "typography-sm",
-        label: "text-sm",
-        min: 10,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 14,
-    },
-    base: {
-        key: "typography-base",
-        label: "text-base",
-        min: 12,
-        max: 28,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    lg: {
-        key: "typography-lg",
-        label: "text-lg",
-        min: 12,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 18,
-    },
-    "2xl": {
-        key: "typography-2xl",
-        label: "text-2xl",
-        min: 16,
-        max: 48,
-        step: 1,
-        unit: "px",
-        value: 24,
-    },
-    "4xl": {
-        key: "typography-4xl",
-        label: "text-4xl",
-        min: 24,
-        max: 72,
-        step: 1,
-        unit: "px",
-        value: 36,
-    },
-    "5xl": {
-        key: "typography-5xl",
-        label: "text-5xl",
-        min: 28,
-        max: 96,
-        step: 1,
-        unit: "px",
-        value: 48,
-    },
-};
-
-const inputDefaults: TokenGroup = {
-    radius: {
-        key: "input-radius",
-        label: "input-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 6,
-    },
-    paddingX: {
-        key: "input-padding-x",
-        label: "input-padding-x",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    paddingY: {
-        key: "input-padding-y",
-        label: "input-padding-y",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    text: {
-        key: "input-text",
-        label: "input-text",
-        min: 10,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const selectionDefaults: TokenGroup = {
-    checkboxSize: {
-        key: "checkbox-size",
-        label: "checkbox-size",
-        min: 12,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    switchTrackW: {
-        key: "switch-track-w",
-        label: "switch-track-w",
-        min: 24,
-        max: 72,
-        step: 1,
-        unit: "px",
-        value: 44,
-    },
-    switchThumbSize: {
-        key: "switch-thumb-size",
-        label: "switch-thumb-size",
-        min: 12,
-        max: 36,
-        step: 1,
-        unit: "px",
-        value: 20,
-    },
-};
-
-const skeletonDefaults: TokenGroup = {
-    height: {
-        key: "skeleton-height",
-        label: "skeleton-height",
-        min: 8,
-        max: 80,
-        step: 2,
-        unit: "px",
-        value: 32,
-    },
-    width: {
-        key: "skeleton-width",
-        label: "skeleton-width",
-        min: 32,
-        max: 320,
-        step: 8,
-        unit: "px",
-        value: 128,
-    },
-    radius: {
-        key: "skeleton-radius",
-        label: "skeleton-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    listGap: {
-        key: "skeleton-list-gap",
-        label: "skeleton-list-gap",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 24,
-    },
-};
-
-const progressDefaults: TokenGroup = {
-    trackH: {
-        key: "progress-track-h",
-        label: "progress-track-h",
-        min: 4,
-        max: 48,
-        step: 1,
-        unit: "px",
-        value: 24,
-    },
-    radius: {
-        key: "progress-radius",
-        label: "progress-radius",
-        min: 0,
-        max: 100,
-        step: 1,
-        unit: "%",
-        value: 100,
-    },
-};
-
-const spinnerDefaults: TokenGroup = {
-    size: {
-        key: "spinner-size",
-        label: "spinner-size",
-        min: 16,
-        max: 96,
-        step: 2,
-        unit: "px",
-        value: 48,
-    },
-    border: {
-        key: "spinner-border",
-        label: "spinner-border",
-        min: 1,
-        max: 12,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    containerP: {
-        key: "spinner-container-p",
-        label: "spinner-container-p",
-        min: 0,
-        max: 96,
-        step: 4,
-        unit: "px",
-        value: 48,
-    },
-};
-
-const emptyDefaults: TokenGroup = {
-    gap: {
-        key: "empty-gap",
-        label: "empty-gap",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-    px: {
-        key: "empty-px",
-        label: "empty-px",
-        min: 0,
-        max: 64,
-        step: 2,
-        unit: "px",
-        value: 32,
-    },
-    py: {
-        key: "empty-py",
-        label: "empty-py",
-        min: 0,
-        max: 96,
-        step: 2,
-        unit: "px",
-        value: 48,
-    },
-};
-
-const listDefaults: TokenGroup = {
-    cardP: {
-        key: "list-card-p",
-        label: "list-card-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 24,
-    },
-    cardGap: {
-        key: "list-card-gap",
-        label: "list-card-gap",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-    itemPy: {
-        key: "list-item-py",
-        label: "list-item-py",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    itemGap: {
-        key: "list-item-gap",
-        label: "list-item-gap",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const timelineDefaults: TokenGroup = {
-    iconSize: {
-        key: "timeline-icon-size",
-        label: "timeline-icon-size",
-        min: 24,
-        max: 80,
-        step: 2,
-        unit: "px",
-        value: 48,
-    },
-    connectorW: {
-        key: "timeline-connector-w",
-        label: "timeline-connector-w",
-        min: 1,
-        max: 8,
-        step: 1,
-        unit: "px",
-        value: 2,
-    },
-    itemPb: {
-        key: "timeline-item-pb",
-        label: "timeline-item-pb",
-        min: 16,
-        max: 96,
-        step: 4,
-        unit: "px",
-        value: 48,
-    },
-    rightGap: {
-        key: "timeline-right-gap",
-        label: "timeline-right-gap",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 24,
-    },
-};
-
-const stepDefaults: TokenGroup = {
-    size: {
-        key: "step-size",
-        label: "step-size",
-        min: 24,
-        max: 72,
-        step: 1,
-        unit: "px",
-        value: 40,
-    },
-    iconSize: {
-        key: "step-icon-size",
-        label: "step-icon-size",
-        min: 12,
-        max: 48,
-        step: 1,
-        unit: "px",
-        value: 24,
-    },
-    gap: {
-        key: "step-gap",
-        label: "step-gap",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const tabsDefaults: TokenGroup = {
-    itemPx: {
-        key: "tabs-item-px",
-        label: "tabs-item-px",
-        min: 0,
-        max: 64,
-        step: 2,
-        unit: "px",
-        value: 40,
-    },
-    itemPy: {
-        key: "tabs-item-py",
-        label: "tabs-item-py",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    headerMb: {
-        key: "tabs-header-mb",
-        label: "tabs-header-mb",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-};
-
-const shortcutDefaults: TokenGroup = {
-    gap: {
-        key: "shortcut-gap",
-        label: "shortcut-gap",
-        min: 0,
-        max: 16,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    text: {
-        key: "shortcut-text",
-        label: "shortcut-text",
-        min: 10,
-        max: 20,
-        step: 1,
-        unit: "px",
-        value: 14,
-    },
-};
-
-const toolbarDefaults: TokenGroup = {
-    bottom: {
-        key: "toolbar-bottom",
-        label: "toolbar-bottom",
-        min: 0,
-        max: 64,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    radius: {
-        key: "toolbar-radius",
-        label: "toolbar-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    p: {
-        key: "toolbar-p",
-        label: "toolbar-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const wizardDefaults: TokenGroup = {
-    w: {
-        key: "wizard-w",
-        label: "wizard-w",
-        min: 200,
-        max: 480,
-        step: 8,
-        unit: "px",
-        value: 320,
-    },
-    gap: {
-        key: "wizard-gap",
-        label: "wizard-gap",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-    radius: {
-        key: "wizard-radius",
-        label: "wizard-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    p: {
-        key: "wizard-p",
-        label: "wizard-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const infoDefaults: TokenGroup = {
-    gap: {
-        key: "info-gap",
-        label: "info-gap",
-        min: 0,
-        max: 16,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    labelText: {
-        key: "info-label-text",
-        label: "info-label-text",
-        min: 10,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 14,
-    },
-    valueText: {
-        key: "info-value-text",
-        label: "info-value-text",
-        min: 12,
-        max: 28,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    secondaryText: {
-        key: "info-secondary-text",
-        label: "info-secondary-text",
-        min: 12,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 18,
-    },
-};
-
-const pageCalendarDefaults: TokenGroup = {
-    badgeSize: {
-        key: "page-calendar-badge-size",
-        label: "page-calendar-badge-size",
-        min: 24,
-        max: 80,
-        step: 2,
-        unit: "px",
-        value: 48,
-    },
-    cellMinH: {
-        key: "page-calendar-cell-min-h",
-        label: "page-calendar-cell-min-h",
-        min: 64,
-        max: 240,
-        step: 4,
-        unit: "px",
-        value: 128,
-    },
-    gutterW: {
-        key: "page-calendar-gutter-w",
-        label: "page-calendar-gutter-w",
-        min: 32,
-        max: 120,
-        step: 2,
-        unit: "px",
-        value: 60,
-    },
-    pillRadius: {
-        key: "page-calendar-pill-radius",
-        label: "page-calendar-pill-radius",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    weekdayText: {
-        key: "page-calendar-weekday-text",
-        label: "page-calendar-weekday-text",
-        min: 10,
-        max: 20,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-};
-
-const cardStatsDefaults: TokenGroup = {
-    iconColW: {
-        key: "card-stats-icon-col-w",
-        label: "card-stats-icon-col-w",
-        min: 48,
-        max: 160,
-        step: 4,
-        unit: "px",
-        value: 80,
-    },
-    iconColP: {
-        key: "card-stats-icon-col-p",
-        label: "card-stats-icon-col-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const buttonDefaults: TokenGroup = {
-    radius: {
-        key: "button-radius",
-        label: "button-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 9,
-    },
-    height: {
-        key: "button-height",
-        label: "button-height",
-        min: 24,
-        max: 64,
-        step: 1,
-        unit: "px",
-        value: 40,
-    },
-    paddingX: {
-        key: "button-padding-x",
-        label: "button-padding-x",
-        min: 0,
-        max: 48,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    gap: {
-        key: "button-gap",
-        label: "button-gap",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 6,
-    },
-};
-
-const cardDefaults: TokenGroup = {
-    radius: {
-        key: "card-radius",
-        label: "card-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    paddingX: {
-        key: "card-padding-x",
-        label: "card-padding-x",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 24,
-    },
-    paddingY: {
-        key: "card-padding-y",
-        label: "card-padding-y",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 12,
-    },
-    gap: {
-        key: "card-gap",
-        label: "card-gap",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-};
-
-const modalDefaults: TokenGroup = {
-    radius: {
-        key: "modal-radius",
-        label: "modal-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    paddingX: {
-        key: "modal-padding-x",
-        label: "modal-padding-x",
-        min: 0,
-        max: 64,
-        step: 2,
-        unit: "px",
-        value: 32,
-    },
-    paddingY: {
-        key: "modal-padding-y",
-        label: "modal-padding-y",
-        min: 0,
-        max: 48,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    footerGap: {
-        key: "modal-footer-gap",
-        label: "modal-footer-gap",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-};
-
-const dropdownDefaults: TokenGroup = {
-    radius: {
-        key: "dropdown-radius",
-        label: "dropdown-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    p: {
-        key: "dropdown-p",
-        label: "dropdown-p",
-        min: 0,
-        max: 48,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    headerMb: {
-        key: "dropdown-header-mb",
-        label: "dropdown-header-mb",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-};
-
-const tooltipDefaults: TokenGroup = {
-    radius: {
-        key: "tooltip-radius",
-        label: "tooltip-radius",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    p: {
-        key: "tooltip-p",
-        label: "tooltip-p",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-};
-
-const menuDefaults: TokenGroup = {
-    radius: {
-        key: "menu-radius",
-        label: "menu-radius",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    itemP: {
-        key: "menu-item-p",
-        label: "menu-item-p",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 10,
-    },
-};
-
-const notificationDefaults: TokenGroup = {
-    radius: {
-        key: "notification-radius",
-        label: "notification-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-    p: {
-        key: "notification-p",
-        label: "notification-p",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    gap: {
-        key: "notification-gap",
-        label: "notification-gap",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-};
-
-const commandDefaults: TokenGroup = {
-    radius: {
-        key: "command-radius",
-        label: "command-radius",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    itemP: {
-        key: "command-item-p",
-        label: "command-item-p",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    rowH: {
-        key: "command-row-h",
-        label: "command-row-h",
-        min: 24,
-        max: 64,
-        step: 1,
-        unit: "px",
-        value: 40,
-    },
-};
-
-const calendarDefaults: TokenGroup = {
-    daySize: {
-        key: "calendar-day-size",
-        label: "calendar-day-size",
-        min: 24,
-        max: 56,
-        step: 1,
-        unit: "px",
-        value: 36,
-    },
-    cellP: {
-        key: "calendar-cell-p",
-        label: "calendar-cell-p",
-        min: 0,
-        max: 16,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-    weekdayPy: {
-        key: "calendar-weekday-py",
-        label: "calendar-weekday-py",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-};
-
-const tableDefaults: TokenGroup = {
-    radius: {
-        key: "table-radius",
-        label: "table-radius",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    cellPx: {
-        key: "table-cell-px",
-        label: "table-cell-px",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    cellPadding: {
-        key: "table-cell-padding",
-        label: "table-cell-padding",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 12,
-    },
-    rowGap: {
-        key: "table-row-gap",
-        label: "table-row-gap",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 4,
-    },
-};
-
-const radioboxDefaults: TokenGroup = {
-    size: {
-        key: "radiobox-size",
-        label: "radiobox-size",
-        min: 12,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 16,
-    },
-    gap: {
-        key: "radiobox-gap",
-        label: "radiobox-gap",
-        min: 0,
-        max: 24,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-};
-
-const sliderDefaults: TokenGroup = {
-    controlH: {
-        key: "slider-control-h",
-        label: "slider-control-h",
-        min: 12,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 20,
-    },
-    trackH: {
-        key: "slider-track-h",
-        label: "slider-track-h",
-        min: 2,
-        max: 16,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    thumbSize: {
-        key: "slider-thumb-size",
-        label: "slider-thumb-size",
-        min: 12,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 20,
-    },
-};
-
-const fileUploadDefaults: TokenGroup = {
-    p: {
-        key: "file-upload-p",
-        label: "file-upload-p",
-        min: 0,
-        max: 48,
-        step: 2,
-        unit: "px",
-        value: 24,
-    },
-    radius: {
-        key: "file-upload-radius",
-        label: "file-upload-radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        unit: "px",
-        value: 8,
-    },
-    thumbSize: {
-        key: "file-upload-thumb-size",
-        label: "file-upload-thumb-size",
-        min: 32,
-        max: 96,
-        step: 2,
-        unit: "px",
-        value: 64,
-    },
-};
-
-const Controls = ({ tokens, onChange }: { tokens: TokenGroup; onChange: (next: TokenGroup) => void }) => (
-    <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2">
-        {Object.entries(tokens).map(([id, c]) => (
-            <label key={id} aria-label={`--${c.label}`} className="flex flex-col gap-1 text-xs">
-                <span className="flex justify-between font-mono text-muted-foreground">
-                    <span>--{c.label}</span>
-                    <span>
-                        {c.value}
-                        {c.unit}
-                    </span>
-                </span>
-                <input
-                    type="range"
-                    min={c.min}
-                    max={c.max}
-                    step={c.step}
-                    value={c.value}
-                    onChange={(e) =>
-                        onChange({
-                            ...tokens,
-                            [id]: { ...c, value: Number(e.target.value) },
-                        })
-                    }
-                    className="w-full"
-                />
-            </label>
-        ))}
-    </div>
-);
+const alertDefaults = tokenGroupDefaults("alert");
+const statsDefaults = tokenGroupDefaults("stats");
+const typographyDefaults = tokenGroupDefaults("typography");
+const inputDefaults = tokenGroupDefaults("input");
+const selectionDefaults = mergeTokenDefaults("checkbox", "switch");
+const skeletonDefaults = tokenGroupDefaults("skeleton");
+const progressDefaults = tokenGroupDefaults("progress");
+const spinnerDefaults = tokenGroupDefaults("spinner");
+const emptyDefaults = tokenGroupDefaults("empty");
+const listDefaults = tokenGroupDefaults("list");
+const timelineDefaults = tokenGroupDefaults("timeline");
+const stepDefaults = tokenGroupDefaults("step");
+const tabsDefaults = tokenGroupDefaults("tabs");
+const shortcutDefaults = tokenGroupDefaults("shortcut");
+const toolbarDefaults = tokenGroupDefaults("toolbar");
+const wizardDefaults = tokenGroupDefaults("wizard");
+const infoDefaults = tokenGroupDefaults("info");
+const pageCalendarDefaults = tokenGroupDefaults("page-calendar");
+const cardStatsDefaults = pickTokenDefaults("card", ["stats-icon-col-w", "stats-icon-col-p", "stats-content-gap", "stats-content-py"]);
+const buttonDefaults = tokenGroupDefaults("button");
+const cardDefaults = tokenGroupDefaults("card");
+const modalDefaults = tokenGroupDefaults("modal");
+const dropdownDefaults = tokenGroupDefaults("dropdown");
+const tooltipDefaults = tokenGroupDefaults("tooltip");
+const menuDefaults = tokenGroupDefaults("menu");
+const notificationDefaults = tokenGroupDefaults("notification");
+const commandDefaults = tokenGroupDefaults("command");
+const calendarDefaults = tokenGroupDefaults("calendar");
+const tableDefaults = tokenGroupDefaults("table");
+const radioboxDefaults = tokenGroupDefaults("radiobox");
+const sliderDefaults = tokenGroupDefaults("slider");
+const fileUploadDefaults = tokenGroupDefaults("file-upload");
+const tagDefaults = tokenGroupDefaults("tag");
+const tokenStackClassName = "flex w-full flex-col gap-6";
 
 export default function DesignTokensPage() {
     const [alertTokens, setAlertTokens] = useState(alertDefaults);
@@ -1192,6 +118,7 @@ export default function DesignTokensPage() {
     const [radioboxTokens, setRadioboxTokens] = useState(radioboxDefaults);
     const [sliderTokens, setSliderTokens] = useState(sliderDefaults);
     const [fileUploadTokens, setFileUploadTokens] = useState(fileUploadDefaults);
+    const [tagTokens, setTagTokens] = useState(tagDefaults);
     const [calendarDate, setCalendarDate] = useState<Date | undefined>(new Date());
     const [sliderValue, setSliderValue] = useState(40);
 
@@ -1204,14 +131,14 @@ export default function DesignTokensPage() {
             <div className="flex flex-col gap-10">
                 <ComponentDemo
                     title="Alert tokens"
-                    description="Padding, radius and inner gap are owned by --alert-p, --alert-radius and --alert-gap. Drag the sliders to override them on this scoped container."
+                    description="Padding, radius and inner gap are owned by --alert-p, --alert-radius and --alert-gap. Use the controls to override the full alert token group on this scoped container."
                     code={`<div style={{ "--alert-p": "24px", "--alert-radius": "16px", "--alert-gap": "12px" }}>
   <Alert theme="info" title="Token override">
     <p>Padding, radius and gap come from CSS variables.</p>
   </Alert>
 </div>`}
                 >
-                    <div style={toStyle(alertTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(alertTokens)} className={tokenStackClassName}>
                         <Alert theme="info" title="Token override">
                             <p>Padding, radius and gap come from CSS variables.</p>
                         </Alert>
@@ -1226,7 +153,7 @@ export default function DesignTokensPage() {
   <Stats title="Revenue" Icon={ChartBarIcon}>$12,480</Stats>
 </div>`}
                 >
-                    <div style={toStyle(statsTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(statsTokens)} className={tokenStackClassName}>
                         <Stats
                             title="Revenue"
                             Icon={ChartBarIcon}
@@ -1247,7 +174,7 @@ export default function DesignTokensPage() {
   <h1 className="text-4xl">Display</h1>
 </div>`}
                 >
-                    <div style={toStyle(typographyTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(typographyTokens)} className={tokenStackClassName}>
                         <div className="flex flex-col gap-3">
                             <p className="text-xs text-muted-foreground">Caption / text-xs</p>
                             <p className="text-sm">Small / text-sm</p>
@@ -1268,7 +195,7 @@ export default function DesignTokensPage() {
   <Skeleton />
 </div>`}
                 >
-                    <div style={toStyle(skeletonTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(skeletonTokens)} className={tokenStackClassName}>
                         <div className="flex w-full flex-col items-center gap-skeleton-list-gap">
                             <Skeleton />
                             <Skeleton />
@@ -1285,7 +212,7 @@ export default function DesignTokensPage() {
   <Input title="Email" name="email" placeholder="you@example.com" />
 </div>`}
                 >
-                    <div style={toStyle(inputTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(inputTokens)} className={tokenStackClassName}>
                         <Input title="Email" name="email" placeholder="you@example.com" error="Override the tokens to reshape this field." />
                         <Controls tokens={inputTokens} onChange={setInputTokens} />
                     </div>
@@ -1293,13 +220,13 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Selection tokens"
-                    description="Checkbox and switch geometry come from --checkbox-size, --switch-track-w and --switch-thumb-size. Slide to re-skin the controls live."
+                    description="Checkbox and switch geometry, plus checkbox control colors, come from editable CSS variables. Use the controls to re-skin them live."
                     code={`<div style={{ "--checkbox-size": "20px", "--switch-track-w": "56px" }}>
   <Checkbox>Subscribe</Checkbox>
   <Switch>Notifications</Switch>
 </div>`}
                 >
-                    <div style={toStyle(selectionTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(selectionTokens)} className={tokenStackClassName}>
                         <div className="flex flex-col gap-3">
                             <Checkbox>Subscribe to updates</Checkbox>
                             <Switch>Notifications</Switch>
@@ -1315,7 +242,7 @@ export default function DesignTokensPage() {
   <Progress value={60} />
 </div>`}
                 >
-                    <div style={toStyle(progressTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(progressTokens)} className={tokenStackClassName}>
                         <Progress value={60} />
                         <Controls tokens={progressTokens} onChange={setProgressTokens} />
                     </div>
@@ -1328,7 +255,7 @@ export default function DesignTokensPage() {
   <Loading />
 </div>`}
                 >
-                    <div style={toStyle(spinnerTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(spinnerTokens)} className={tokenStackClassName}>
                         <div className="flex w-full items-center justify-center">
                             <Spinner />
                         </div>
@@ -1344,7 +271,7 @@ export default function DesignTokensPage() {
   <Empty Icon={ListBulletsIcon} message="Nothing here yet" />
 </div>`}
                 >
-                    <div style={toStyle(emptyTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(emptyTokens)} className={tokenStackClassName}>
                         <Empty Icon={ListBulletsIcon} message="Nothing here yet" />
                         <Controls tokens={emptyTokens} onChange={setEmptyTokens} />
                     </div>
@@ -1359,7 +286,7 @@ export default function DesignTokensPage() {
   </AnimatedList>
 </div>`}
                 >
-                    <div style={toStyle(listTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(listTokens)} className={tokenStackClassName}>
                         <AnimatedList>
                             <AnimatedListItem title="Quarterly review" description="Open the card to read the full agenda.">
                                 Body content goes here when expanded.
@@ -1381,7 +308,7 @@ export default function DesignTokensPage() {
   </Timeline>
 </div>`}
                 >
-                    <div style={toStyle(timelineTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(timelineTokens)} className={tokenStackClassName}>
                         <Timeline>
                             <TimelineItem>
                                 <div className="flex flex-col">
@@ -1409,7 +336,7 @@ export default function DesignTokensPage() {
   </Steps>
 </div>`}
                 >
-                    <div style={toStyle(stepTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(stepTokens)} className={tokenStackClassName}>
                         <Steps steps={3} currentStep={2}>
                             <Step step={1} currentStep={2} title="Plan" />
                             <Step step={2} currentStep={2} title="Build" />
@@ -1426,7 +353,7 @@ export default function DesignTokensPage() {
   <Tabs active="one"><Tab id="one" title="One">Content</Tab></Tabs>
 </div>`}
                 >
-                    <div style={toStyle(tabsTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(tabsTokens)} className={tokenStackClassName}>
                         <Tabs active="overview">
                             <Tab id="overview" title="Overview">
                                 <p>Overview panel.</p>
@@ -1449,7 +376,7 @@ export default function DesignTokensPage() {
   <Shortcut value="ctrl+k" />
 </div>`}
                 >
-                    <div style={toStyle(shortcutTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(shortcutTokens)} className={tokenStackClassName}>
                         <div className="flex flex-wrap items-center gap-4">
                             <Shortcut value="ctrl+k" />
                             <Shortcut value="shift+enter" />
@@ -1466,7 +393,7 @@ export default function DesignTokensPage() {
   <Toolbar><button>Action</button></Toolbar>
 </div>`}
                 >
-                    <div style={toStyle(toolbarTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(toolbarTokens)} className={tokenStackClassName}>
                         <div className="relative h-48 w-full overflow-hidden rounded-md border border-card-border">
                             <Toolbar>
                                 <button type="button" className="text-typography-sm rounded-md bg-primary px-3 py-1.5 text-primary-foreground">
@@ -1510,12 +437,12 @@ export default function DesignTokensPage() {
                     title="Info tokens"
                     description="Label/value/secondary text and inner gap resolve through --info-gap, --info-label-text, --info-value-text and --info-secondary-text."
                     code={`<div style={{ "--info-label-text": "1rem" }}>
-  <Info label="Name">Allan</Info>
+  <Info label="Name">Fulano</Info>
 </div>`}
                 >
-                    <div style={toStyle(infoTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(infoTokens)} className={tokenStackClassName}>
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <Info label="Customer">Allan Garcez</Info>
+                            <Info label="Customer">Fulano</Info>
                             <Info row label="Plan">
                                 Enterprise
                             </Info>
@@ -1532,12 +459,12 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Page calendar tokens"
-                    description="Full-page calendar surface — badges, cells, gutter and pills resolve through --page-calendar-* tokens. Five most-visual sliders shown below; the full group covers ~30 keys."
+                    description="Full-page calendar surface — badges, cells, gutter and pills resolve through the complete --page-calendar-* token group."
                     code={`<div style={{ "--page-calendar-cell-min-h": "10rem" }}>
   <PageCalendar events={events} />
 </div>`}
                 >
-                    <div style={toStyle(pageCalendarTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(pageCalendarTokens)} className={tokenStackClassName}>
                         <PageCalendar
                             events={[
                                 {
@@ -1563,7 +490,7 @@ export default function DesignTokensPage() {
   <StatsCard title="Revenue" Icon={ChartBarIcon}>$12,480</StatsCard>
 </div>`}
                 >
-                    <div style={toStyle(cardStatsTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(cardStatsTokens)} className={tokenStackClassName}>
                         <StatsCard title="Revenue" Icon={ChartBarIcon} value="$12,480" />
                         <Controls tokens={cardStatsTokens} onChange={setCardStatsTokens} />
                     </div>
@@ -1576,7 +503,7 @@ export default function DesignTokensPage() {
   <Button theme="primary">Save changes</Button>
 </div>`}
                 >
-                    <div style={toStyle(buttonTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(buttonTokens)} className={tokenStackClassName}>
                         <div className="flex flex-wrap items-center gap-4">
                             <Button theme="primary">Primary</Button>
                             <Button theme="secondary">Secondary</Button>
@@ -1597,7 +524,7 @@ export default function DesignTokensPage() {
   <Card title="Workspace"><p>Body</p></Card>
 </div>`}
                 >
-                    <div style={toStyle(cardTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(cardTokens)} className={tokenStackClassName}>
                         <Card title="Workspace">
                             <p className="text-typography-sm text-muted-foreground">Card padding, radius and stack gap come from CSS variables.</p>
                         </Card>
@@ -1756,7 +683,7 @@ export default function DesignTokensPage() {
   <Table cols={cols} rows={rows} />
 </div>`}
                 >
-                    <div style={toStyle(tableTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(tableTokens)} className={tokenStackClassName}>
                         <div className="overflow-hidden rounded-table-radius border border-table-border bg-table-background shadow-shadow-table">
                             <table className="w-full border-collapse">
                                 <thead className="bg-table-header">
@@ -1768,12 +695,12 @@ export default function DesignTokensPage() {
                                 </thead>
                                 <tbody>
                                     <tr className="border-t border-table-border">
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Allan</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Fulano</td>
                                         <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Owner</td>
                                         <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Active</td>
                                     </tr>
                                     <tr className="border-t border-table-border">
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Marina</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Ciclano</td>
                                         <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Member</td>
                                         <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Invited</td>
                                     </tr>
@@ -1791,7 +718,7 @@ export default function DesignTokensPage() {
   <Radiobox name="plan" value="pro">Pro</Radiobox>
 </div>`}
                 >
-                    <div style={toStyle(radioboxTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(radioboxTokens)} className={tokenStackClassName}>
                         <div className="flex flex-col gap-2">
                             <Radiobox name="dt-plan" value="free" defaultChecked>
                                 Free
@@ -1814,7 +741,7 @@ export default function DesignTokensPage() {
   <Slider value={[40]} />
 </div>`}
                 >
-                    <div style={toStyle(sliderTokens)} className="flex w-full flex-col gap-6">
+                    <div style={toStyle(sliderTokens)} className={tokenStackClassName}>
                         <Slider value={[sliderValue]} onValueChange={(v) => setSliderValue(Array.isArray(v) ? Number(v[0]) : Number(v))} />
                         <Controls tokens={sliderTokens} onChange={setSliderTokens} />
                     </div>
@@ -1822,15 +749,18 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="File upload tokens"
-                    description="Dropzone geometry resolves through --file-upload-p, --file-upload-radius, --file-upload-thumb-size and friends."
-                    code={`<div style={{ "--file-upload-radius": "1rem" }}>
+                    description="Dropzone geometry resolves through --file-upload-p, --file-upload-radius, --file-upload-thumb-size, --file-upload-thumb-radius, --file-upload-thumb-icon-size and friends."
+                    code={`<div style={{ "--file-upload-thumb-icon-size": "2rem" }}>
   <FileUpload onDrop={...} />
 </div>`}
                 >
                     <div style={toStyle(fileUploadTokens)} className="flex w-full flex-col items-center gap-6">
                         <div className="flex w-full flex-col items-center gap-file-upload-gap rounded-file-upload-radius border-2 border-dashed border-input-border bg-card-background p-file-upload-p text-center">
-                            <span className="flex size-file-upload-thumb-size items-center justify-center rounded-full bg-muted text-muted-foreground">
-                                <UploadIcon size={28} aria-hidden />
+                            <span
+                                className="flex size-file-upload-thumb-size items-center justify-center bg-muted text-muted-foreground"
+                                style={{ borderRadius: "var(--file-upload-thumb-radius)" }}
+                            >
+                                <UploadIcon className="__file-upload__thumb-icon" aria-hidden />
                             </span>
                             <strong className="text-file-upload-text-name">Drop files here</strong>
                             <span className="text-file-upload-text-size text-muted-foreground">PNG, JPG or PDF up to 10 MB</span>
@@ -1840,25 +770,20 @@ export default function DesignTokensPage() {
                 </ComponentDemo>
 
                 <ComponentDemo
-                    title="Tag size tokens"
-                    description="Tag size variants are now token-backed: --tag-height(-big/-small/-tiny) and matching padding-x/padding-y per size. Same component, same variant — different geometry by overriding a single variable."
+                    title="Tag tokens"
+                    description="Tag size variants are token-backed: --tag-height(-big/-small/-tiny), matching padding, gap, radius and indicator size all respond to scoped overrides."
                     code={`<div style={{ "--tag-height": "3rem", "--tag-padding-x": "1.5rem" }}>
   <Tag>Default</Tag>
 </div>`}
                 >
-                    <div className="flex w-full flex-wrap items-center justify-center gap-4">
-                        <Tag size="tiny">tiny</Tag>
-                        <Tag size="small">small</Tag>
-                        <Tag>default</Tag>
-                        <Tag size="big">big</Tag>
-                        <div
-                            style={{
-                                ["--tag-height" as never]: "3.5rem",
-                                ["--tag-padding-x" as never]: "2rem",
-                            }}
-                        >
-                            <Tag>overridden</Tag>
+                    <div style={toStyle(tagTokens)} className={tokenStackClassName}>
+                        <div className="flex w-full flex-wrap items-center justify-center gap-4">
+                            <Tag size="tiny">tiny</Tag>
+                            <Tag size="small">small</Tag>
+                            <Tag>default</Tag>
+                            <Tag size="big">big</Tag>
                         </div>
+                        <Controls tokens={tagTokens} onChange={setTagTokens} />
                     </div>
                 </ComponentDemo>
             </div>

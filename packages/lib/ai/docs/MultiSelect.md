@@ -146,8 +146,8 @@ export default function TagInput() {
 ## Don't
 
 - Don't use `MultiSelect` when only a single selection is needed — use `Select` or `Autocomplete` instead.
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `color-mix()` in className or style props for theming.
 
 ## Accessibility

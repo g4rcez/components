@@ -1,26 +1,17 @@
-import React, { ComponentProps, ElementType, PropsWithChildren } from "react";
+import React, { type ComponentProps, type ElementType, type PropsWithChildren } from "react";
 import { css } from "../../lib/dom";
-import { Polymorph, PolymorphicProps } from "../core/polymorph";
+import { Polymorph, type PolymorphicProps } from "../core/polymorph";
 
 export const TimelineItem = (props: PropsWithChildren) => (
-    <li data-component="timeline-item" className="relative pb-timeline-item-pb" role="listitem">
-        <span
-            aria-hidden="true"
-            className="absolute left-timeline-connector-left top-timeline-connector-top -ml-px h-full w-timeline-connector-w bg-card-border"
-        />
-        <div className="relative flex items-stretch justify-start space-x-3">{props.children}</div>
+    <li data-component="timeline-item" className="__display-timeline__tw-1" role="listitem">
+        <span aria-hidden="true" className="__display-timeline__tw-2" />
+        <div className="__display-timeline__tw-3">{props.children}</div>
     </li>
 );
 
 TimelineItem.Icon = function TimelineIcon(props: PropsWithChildren<ComponentProps<"header">>) {
     return (
-        <header
-            {...props}
-            className={css(
-                "flex size-timeline-icon-size items-center justify-center rounded-full bg-primary p-timeline-icon-p text-warn-foreground",
-                props.className
-            )}
-        >
+        <header {...props} className={css("__display-timeline__tw-4", props.className)}>
             {props.children}
         </header>
     );
@@ -28,7 +19,7 @@ TimelineItem.Icon = function TimelineIcon(props: PropsWithChildren<ComponentProp
 
 TimelineItem.Body = function TimelineItemBody<T extends ElementType = "section">(props: PropsWithChildren<PolymorphicProps<object, T>>) {
     return (
-        <Polymorph {...props} className={css("min-w-0 flex-1", props.className)}>
+        <Polymorph {...props} className={css("__display-timeline__tw-5", props.className)}>
             {props.children}
         </Polymorph>
     );
@@ -36,14 +27,14 @@ TimelineItem.Body = function TimelineItemBody<T extends ElementType = "section">
 
 TimelineItem.Right = function TimelineItemRight<T extends ElementType = "button">(props: PolymorphicProps<object, T>) {
     return (
-        <footer className="flex gap-timeline-right-gap self-stretch px-timeline-right-px align-baseline">
+        <footer className="__display-timeline__tw-6">
             <Polymorph {...props} type="button" />
         </footer>
     );
 };
 
 export const Timeline = (props: PropsWithChildren) => (
-    <ul data-component="timeline" role="list" className="flow-root [&>li:last-child>span[aria-hidden=true]]:hidden">
+    <ul data-component="timeline" role="list" className="__display-timeline__tw-final-1 __display-timeline__last-connector-hidden">
         {props.children}
     </ul>
 );

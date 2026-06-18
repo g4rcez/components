@@ -70,7 +70,7 @@ export function PageCalendar<T extends CalendarEventBase>({
         <section
             aria-label={t.pageCalendarLabel}
             data-component="page-calendar"
-            className="flex h-full w-full flex-grow flex-col gap-page-calendar-gap"
+            className="__page-calendar-page-calendar__tw-1 __page-calendar-page-calendar__tw-extra-1"
         >
             <CalendarHeader
                 filters={internalFilters}

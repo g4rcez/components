@@ -1,14 +1,15 @@
 "use client";
-import { AnimatePresence, motion, PanInfo, Reorder } from "motion/react";
+import { AnimatePresence, motion, type PanInfo, Reorder } from "motion/react";
 import { Order } from "linq-arrays";
 import { PlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
-import React, { Fragment, useCallback, useRef } from "react";
+import type React from "react";
+import { Fragment, useCallback, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
 import { Dropdown } from "../floating/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
-import { Col, getLabel, TableOperationProps, useWidthControl } from "./table-lib";
+import { type Col, getLabel, type TableOperationProps, useWidthControl } from "./table-lib";
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 
@@ -78,34 +79,32 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`typography relative min-w-0 cursor-grab overflow-clip border-r-table-cell-border border-table-border bg-table-header font-medium first:rounded-tl-table-radius last:rounded-tr-table-radius last:border-r-transparent md:h-14 ${props.header.thProps?.className ?? ""}`}
+            className={`typography __table-thead__tw-1 ${props.header.thProps?.className ?? ""}`}
         >
-            <span
-                className={`flex h-full items-center justify-between bg-table-header p-table-cell-padding ${props.isLast ? "rounded-tr-table-radius" : ""} ${props.index === 0 ? "rounded-tl-table-radius" : ""}`}
-            >
-                <span className="flex items-center gap-table-inline-gap-tight">
+            <span className={`__table-thead__tw-2 ${props.isLast ? "__table-thead__tw-3" : ""} ${props.index === 0 ? "__table-thead__tw-4" : ""}`}>
+                <span className="__table-thead__tw-5">
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
                             arrow
                             trigger={
                                 <span>
-                                    <span id={`${props.header.id}-filter-dropdown-button`} className="sr-only">
+                                    <span id={`${props.header.id}-filter-dropdown-button`} className="__table-thead__tw-6">
                                         {translation.tableFilterDropdownTitleUnique} {label}
                                     </span>
-                                    <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} size={14} />
+                                    <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} className="__table-head__filter-icon" />
                                 </span>
                             }
                             title={
-                                <span className="text-typography-lg">
-                                    {translation.tableFilterDropdownTitleUnique} <span className="font-medium">{label}</span>
+                                <span className="__table-thead__tw-7">
+                                    {translation.tableFilterDropdownTitleUnique} <span className="__table-thead__tw-8">{label}</span>
                                 </span>
                             }
                         >
-                            <ul className="font-medium">
+                            <ul className="__table-thead__tw-8">
                                 {ownFilters.length === 0 ? null : (
                                     <Fragment>
                                         {ownFilters.map((filter) => (
-                                            <li key={`thead-filter-${filter.id}`} className="my-1">
+                                            <li key={`thead-filter-${filter.id}`} className="__table-thead__tw-9">
                                                 <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
                                             </li>
                                         ))}
@@ -114,20 +113,20 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 <li>
                                     <button
                                         type="button"
-                                        className="flex items-center gap-table-inline-gap-tight text-primary"
+                                        className="__table-thead__tw-10"
                                         onClick={() =>
                                             props.setFilters((prev) =>
                                                 prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
                                             )
                                         }
                                     >
-                                        <PlusIcon size={14} /> {translation.tableFilterNewFilter}
+                                        <PlusIcon className="__table-head__add-icon" /> {translation.tableFilterNewFilter}
                                     </button>
                                 </li>
                             </ul>
                         </Dropdown>
                     ) : null}
-                    <span className="text-typography-base pointer-events-auto text-balance">{props.header.thead}</span>
+                    <span className="__table-thead__tw-11">{props.header.thead}</span>
                     {props.inlineSorter && defaultAllowSort ? (
                         <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
                     ) : null}
@@ -149,7 +148,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="absolute -right-[0.5px] top-0 z-calendar block h-full w-table-divider-w cursor-col-resize bg-transparent hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
+                    className="__table-thead__tw-12"
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => void e.currentTarget.focus()}
                     onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {

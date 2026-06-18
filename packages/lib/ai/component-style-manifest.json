@@ -1,0 +1,1008 @@
+{
+  "tag": {
+    "import": "@g4rcez/components/tag",
+    "css": "@g4rcez/components/tag.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__tag",
+      "variants": {
+        "size": {
+          "icon": "__tag--size-icon",
+          "big": "__tag--size-big",
+          "default": "__tag--size-default",
+          "tiny": "__tag--size-tiny",
+          "small": "__tag--size-small"
+        },
+        "theme": {
+          "custom": "__tag--theme-custom",
+          "info": "__tag--theme-info",
+          "warn": "__tag--theme-warn",
+          "muted": "__tag--theme-muted",
+          "danger": "__tag--theme-danger",
+          "disabled": "__tag--theme-disabled",
+          "primary": "__tag--theme-primary",
+          "success": "__tag--theme-success",
+          "neutral": "__tag--theme-neutral",
+          "secondary": "__tag--theme-secondary",
+          "loading": "__tag--theme-loading"
+        }
+      },
+      "slots": {
+        "indicator": "__tag__indicator"
+      },
+      "compounds": []
+    }
+  },
+  "form": {
+    "import": "@g4rcez/components/form",
+    "css": "@g4rcez/components/form.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__form",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "input": {
+    "import": "@g4rcez/components/input",
+    "css": "@g4rcez/components/input.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__input",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "select": {
+    "import": "@g4rcez/components/select",
+    "css": "@g4rcez/components/select.css",
+    "dependencies": [
+      "input-field",
+      "polymorph",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__select",
+      "variants": {},
+      "slots": {
+        "field": "__select__field",
+        "trigger": "__select__trigger",
+        "trigger-icon": "__select__trigger-icon",
+        "trigger-label": "__select__trigger-label",
+        "control": "__select__control"
+      },
+      "compounds": []
+    }
+  },
+  "slider": {
+    "import": "@g4rcez/components/slider",
+    "css": "@g4rcez/components/slider.css",
+    "dependencies": [
+      "polymorph",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__slider",
+      "variants": {},
+      "slots": {
+        "thumb": "__slider__thumb"
+      },
+      "compounds": []
+    }
+  },
+  "switch": {
+    "import": "@g4rcez/components/switch",
+    "css": "@g4rcez/components/switch.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__switch",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "table": {
+    "import": "@g4rcez/components/table",
+    "css": "@g4rcez/components/table.css",
+    "dependencies": [
+      "button",
+      "dropdown",
+      "empty",
+      "input",
+      "input-field",
+      "polymorph",
+      "select",
+      "table-filter",
+      "table-group",
+      "table-head",
+      "table-inner-table",
+      "table-metadata",
+      "table-pagination",
+      "table-root",
+      "table-row",
+      "table-sort",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "card": {
+    "import": "@g4rcez/components/card",
+    "css": "@g4rcez/components/card.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__card",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "list": {
+    "import": "@g4rcez/components/list",
+    "css": "@g4rcez/components/list.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__list",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "step": {
+    "import": "@g4rcez/components/step",
+    "css": "@g4rcez/components/step.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__step",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "tabs": {
+    "import": "@g4rcez/components/tabs",
+    "css": "@g4rcez/components/tabs.css",
+    "dependencies": [
+      "card",
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__tabs",
+      "variants": {},
+      "slots": {
+        "tab": "__tabs__tab"
+      },
+      "compounds": []
+    }
+  },
+  "alert": {
+    "import": "@g4rcez/components/alert",
+    "css": "@g4rcez/components/alert.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__alert",
+      "variants": {},
+      "slots": {
+        "icon": "__alert__icon",
+        "close-icon": "__alert__close-icon"
+      },
+      "compounds": []
+    }
+  },
+  "empty": {
+    "import": "@g4rcez/components/empty",
+    "css": "@g4rcez/components/empty.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__empty",
+      "variants": {},
+      "slots": {
+        "icon": "__empty__icon",
+        "message": "__empty__message"
+      },
+      "compounds": []
+    }
+  },
+  "stats": {
+    "import": "@g4rcez/components/stats",
+    "css": "@g4rcez/components/stats.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__stats",
+      "variants": {},
+      "slots": {
+        "header": "__stats__header",
+        "icon": "__stats__icon",
+        "icon-svg": "__stats__icon-svg",
+        "content": "__stats__content",
+        "title": "__stats__title",
+        "value": "__stats__value",
+        "footer": "__stats__footer"
+      },
+      "compounds": []
+    }
+  },
+  "menu": {
+    "import": "@g4rcez/components/menu",
+    "css": "@g4rcez/components/menu.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__menu",
+      "variants": {},
+      "slots": {
+        "nested-indicator": "__menu__nested-indicator",
+        "nested-icon": "__menu__nested-icon",
+        "item-icon": "__menu__item-icon",
+        "sr-label": "__menu__sr-label"
+      },
+      "compounds": []
+    }
+  },
+  "checkbox": {
+    "import": "@g4rcez/components/checkbox",
+    "css": "@g4rcez/components/checkbox.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__checkbox",
+      "variants": {
+        "task": {
+          "true": "__checkbox--task-true",
+          "false": "__checkbox--task-false"
+        }
+      },
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "radiobox": {
+    "import": "@g4rcez/components/radiobox",
+    "css": "@g4rcez/components/radiobox.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__radiobox",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "textarea": {
+    "import": "@g4rcez/components/textarea",
+    "css": "@g4rcez/components/textarea.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__textarea",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "page-calendar": {
+    "import": "@g4rcez/components/page-calendar",
+    "css": "@g4rcez/components/page-calendar.css",
+    "dependencies": [
+      "button",
+      "page-calendar-day-view",
+      "page-calendar-event-pill",
+      "page-calendar-header",
+      "page-calendar-month-view",
+      "page-calendar-week-view",
+      "polymorph",
+      "tag"
+    ],
+    "classes": {
+      "base": "__page-calendar",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "polymorph": {
+    "import": "@g4rcez/components/polymorph",
+    "css": "@g4rcez/components/polymorph.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__polymorph",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "modal": {
+    "import": "@g4rcez/components/modal",
+    "css": "@g4rcez/components/modal.css",
+    "dependencies": [
+      "button"
+    ],
+    "classes": {
+      "base": "__modal",
+      "variants": {},
+      "slots": {
+        "close-icon": "__modal__close-icon"
+      },
+      "compounds": []
+    }
+  },
+  "task-list": {
+    "import": "@g4rcez/components/task-list",
+    "css": "@g4rcez/components/task-list.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__task-list",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "typography": {
+    "import": "@g4rcez/components/typography",
+    "css": "@g4rcez/components/typography.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__typography",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "masonry": {
+    "import": "@g4rcez/components/masonry",
+    "css": "@g4rcez/components/masonry.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__masonry",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "spinner": {
+    "import": "@g4rcez/components/spinner",
+    "css": "@g4rcez/components/spinner.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__spinner",
+      "variants": {},
+      "slots": {
+        "container": "__spinner__container"
+      },
+      "compounds": []
+    }
+  },
+  "expand": {
+    "import": "@g4rcez/components/expand",
+    "css": "@g4rcez/components/expand.css",
+    "dependencies": [
+      "button"
+    ],
+    "classes": {
+      "base": "__expand",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "wizard": {
+    "import": "@g4rcez/components/wizard",
+    "css": "@g4rcez/components/wizard.css",
+    "dependencies": [
+      "button"
+    ],
+    "classes": {
+      "base": "__wizard",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "calendar": {
+    "import": "@g4rcez/components/calendar",
+    "css": "@g4rcez/components/calendar.css",
+    "dependencies": [
+      "input"
+    ],
+    "classes": {
+      "base": "__calendar",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "progress": {
+    "import": "@g4rcez/components/progress",
+    "css": "@g4rcez/components/progress.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__progress",
+      "variants": {},
+      "slots": {
+        "indicator": "__progress__indicator",
+        "label": "__progress__label"
+      },
+      "compounds": []
+    }
+  },
+  "timeline": {
+    "import": "@g4rcez/components/timeline",
+    "css": "@g4rcez/components/timeline.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__timeline",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "toolbar": {
+    "import": "@g4rcez/components/toolbar",
+    "css": "@g4rcez/components/toolbar.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__toolbar",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "tooltip": {
+    "import": "@g4rcez/components/tooltip",
+    "css": "@g4rcez/components/tooltip.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__tooltip",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "date-picker": {
+    "import": "@g4rcez/components/date-picker",
+    "css": "@g4rcez/components/date-picker.css",
+    "dependencies": [
+      "calendar",
+      "dropdown",
+      "input"
+    ],
+    "classes": {
+      "base": "__date-picker",
+      "variants": {},
+      "slots": {
+        "calendar-icon": "__date-picker__calendar-icon"
+      },
+      "compounds": []
+    }
+  },
+  "file-upload": {
+    "import": "@g4rcez/components/file-upload",
+    "css": "@g4rcez/components/file-upload.css",
+    "dependencies": [
+      "button",
+      "modal"
+    ],
+    "classes": {
+      "base": "__file-upload",
+      "variants": {},
+      "slots": {
+        "file-icon": "__file-upload__file-icon",
+        "remove-icon": "__file-upload__remove-icon",
+        "idle-icon": "__file-upload__idle-icon"
+      },
+      "compounds": []
+    }
+  },
+  "input-field": {
+    "import": "@g4rcez/components/input-field",
+    "css": "@g4rcez/components/input-field.css",
+    "dependencies": [
+      "polymorph",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__input-field",
+      "variants": {},
+      "slots": {
+        "feedback-icon": "__input-field__feedback-icon",
+        "status-icon": "__input-field__status-icon",
+        "tooltip-content": "__input-field__tooltip-content",
+        "optional-text": "__input-field__optional-text",
+        "error": "__input-field__error"
+      },
+      "compounds": []
+    }
+  },
+  "dropdown": {
+    "import": "@g4rcez/components/dropdown",
+    "css": "@g4rcez/components/dropdown.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__dropdown",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "autocomplete": {
+    "import": "@g4rcez/components/autocomplete",
+    "css": "@g4rcez/components/autocomplete.css",
+    "dependencies": [
+      "input-field",
+      "polymorph",
+      "select",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__autocomplete",
+      "variants": {},
+      "slots": {
+        "caret-icon": "__autocomplete__caret-icon"
+      },
+      "compounds": []
+    }
+  },
+  "multi-select": {
+    "import": "@g4rcez/components/multi-select",
+    "css": "@g4rcez/components/multi-select.css",
+    "dependencies": [
+      "input-field",
+      "polymorph",
+      "select",
+      "tag",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__multi-select",
+      "variants": {},
+      "slots": {
+        "tag-remove-icon": "__multi-select__tag-remove-icon",
+        "caret-icon": "__multi-select__caret-icon",
+        "sr-label": "__multi-select__sr-label"
+      },
+      "compounds": []
+    }
+  },
+  "render-on-view": {
+    "import": "@g4rcez/components/render-on-view",
+    "css": "@g4rcez/components/render-on-view.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__render-on-view",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "notifications": {
+    "import": "@g4rcez/components/notifications",
+    "css": "@g4rcez/components/notifications.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__notifications",
+      "variants": {},
+      "slots": {
+        "close": "__notifications__close"
+      },
+      "compounds": []
+    }
+  },
+  "command-palette": {
+    "import": "@g4rcez/components/command-palette",
+    "css": "@g4rcez/components/command-palette.css",
+    "dependencies": [
+      "button",
+      "modal"
+    ],
+    "classes": {
+      "base": "__command-palette",
+      "variants": {},
+      "slots": {
+        "search-icon": "__command-palette__search-icon"
+      },
+      "compounds": []
+    }
+  },
+  "button": {
+    "import": "@g4rcez/components/button",
+    "css": "@g4rcez/components/button.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__button",
+      "variants": {
+        "size": {
+          "icon": "__button--size-icon",
+          "big": "__button--size-big",
+          "default": "__button--size-default",
+          "min": "__button--size-min",
+          "tiny": "__button--size-tiny",
+          "small": "__button--size-small"
+        },
+        "rounded": {
+          "rough": "__button--rounded-rough",
+          "squared": "__button--rounded-squared",
+          "default": "__button--rounded-default",
+          "circle": "__button--rounded-circle"
+        },
+        "theme": {
+          "raw": "__button--theme-raw",
+          "disabled": "__button--theme-disabled",
+          "loading": "__button--theme-loading",
+          "main": "__button--theme-main",
+          "info": "__button--theme-info",
+          "warn": "__button--theme-warn",
+          "muted": "__button--theme-muted",
+          "danger": "__button--theme-danger",
+          "neutral": "__button--theme-neutral",
+          "outlined": "__button--theme-outlined",
+          "primary": "__button--theme-primary",
+          "success": "__button--theme-success",
+          "secondary": "__button--theme-secondary",
+          "ghost-info": "__button--theme-ghost-info",
+          "ghost-warn": "__button--theme-ghost-warn",
+          "ghost-danger": "__button--theme-ghost-danger",
+          "ghost-primary": "__button--theme-ghost-primary",
+          "ghost-success": "__button--theme-ghost-success",
+          "ghost-secondary": "__button--theme-ghost-secondary",
+          "ghost-muted": "__button--theme-ghost-muted",
+          "ghost-neutral": "__button--theme-ghost-neutral"
+        }
+      },
+      "slots": {
+        "icon": "__button__icon"
+      },
+      "compounds": []
+    }
+  },
+  "heading": {
+    "import": "@g4rcez/components/heading",
+    "css": "@g4rcez/components/heading.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__heading",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "resizable": {
+    "import": "@g4rcez/components/resizable",
+    "css": "@g4rcez/components/resizable.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__resizable",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "shortcut": {
+    "import": "@g4rcez/components/shortcut",
+    "css": "@g4rcez/components/shortcut.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__shortcut",
+      "variants": {},
+      "slots": {
+        "icon": "__shortcut__icon"
+      },
+      "compounds": []
+    }
+  },
+  "skeleton": {
+    "import": "@g4rcez/components/skeleton",
+    "css": "@g4rcez/components/skeleton.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__skeleton",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "free-text": {
+    "import": "@g4rcez/components/free-text",
+    "css": "@g4rcez/components/free-text.css",
+    "dependencies": [
+      "input-field",
+      "polymorph",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__free-text",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "page-calendar-header": {
+    "import": "@g4rcez/components/page-calendar-header",
+    "css": "@g4rcez/components/page-calendar-header.css",
+    "dependencies": [
+      "button",
+      "polymorph",
+      "tag"
+    ],
+    "classes": {
+      "base": "__page-calendar-header",
+      "variants": {},
+      "slots": {
+        "nav-icon": "__page-calendar-header__nav-icon",
+        "add-icon": "__page-calendar-header__add-icon",
+        "filter-icon": "__page-calendar-header__filter-icon"
+      },
+      "compounds": []
+    }
+  },
+  "page-calendar-day-view": {
+    "import": "@g4rcez/components/page-calendar-day-view",
+    "css": "@g4rcez/components/page-calendar-day-view.css",
+    "dependencies": [
+      "button",
+      "page-calendar-event-pill",
+      "polymorph",
+      "tag"
+    ],
+    "classes": {
+      "base": "__page-calendar-day-view",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "page-calendar-event-pill": {
+    "import": "@g4rcez/components/page-calendar-event-pill",
+    "css": "@g4rcez/components/page-calendar-event-pill.css",
+    "dependencies": [
+      "button"
+    ],
+    "classes": {
+      "base": "__page-calendar-event-pill",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "page-calendar-month-view": {
+    "import": "@g4rcez/components/page-calendar-month-view",
+    "css": "@g4rcez/components/page-calendar-month-view.css",
+    "dependencies": [
+      "button",
+      "page-calendar-event-pill"
+    ],
+    "classes": {
+      "base": "__page-calendar-month-view",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "page-calendar-week-view": {
+    "import": "@g4rcez/components/page-calendar-week-view",
+    "css": "@g4rcez/components/page-calendar-week-view.css",
+    "dependencies": [
+      "button",
+      "page-calendar-event-pill"
+    ],
+    "classes": {
+      "base": "__page-calendar-week-view",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "table-filter": {
+    "import": "@g4rcez/components/table-filter",
+    "css": "@g4rcez/components/table-filter.css",
+    "dependencies": [
+      "dropdown",
+      "input",
+      "input-field",
+      "polymorph",
+      "select",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-filter",
+      "variants": {},
+      "slots": {
+        "trigger-icon": "__table-filter__trigger-icon",
+        "add-icon": "__table-filter__add-icon",
+        "delete-icon": "__table-filter__delete-icon"
+      },
+      "compounds": []
+    }
+  },
+  "table-group": {
+    "import": "@g4rcez/components/table-group",
+    "css": "@g4rcez/components/table-group.css",
+    "dependencies": [
+      "button",
+      "dropdown",
+      "input-field",
+      "polymorph",
+      "select",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-group",
+      "variants": {},
+      "slots": {
+        "drag-icon": "__table-group__drag-icon",
+        "trigger-icon": "__table-group__trigger-icon",
+        "delete-icon": "__table-group__delete-icon"
+      },
+      "compounds": []
+    }
+  },
+  "table-root": {
+    "import": "@g4rcez/components/table-root",
+    "css": "@g4rcez/components/table-root.css",
+    "dependencies": [
+      "button",
+      "dropdown",
+      "empty",
+      "input",
+      "input-field",
+      "polymorph",
+      "select",
+      "table-filter",
+      "table-group",
+      "table-head",
+      "table-inner-table",
+      "table-metadata",
+      "table-pagination",
+      "table-row",
+      "table-sort",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-root",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "table-inner-table": {
+    "import": "@g4rcez/components/table-inner-table",
+    "css": "@g4rcez/components/table-inner-table.css",
+    "dependencies": [
+      "dropdown",
+      "empty",
+      "input",
+      "input-field",
+      "polymorph",
+      "select",
+      "table-filter",
+      "table-head",
+      "table-pagination",
+      "table-row",
+      "table-sort",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-inner-table",
+      "variants": {},
+      "slots": {
+        "body": "__table-inner-table__body",
+        "row": "__table-inner-table__row"
+      },
+      "compounds": []
+    }
+  },
+  "table-metadata": {
+    "import": "@g4rcez/components/table-metadata",
+    "css": "@g4rcez/components/table-metadata.css",
+    "dependencies": [
+      "button",
+      "dropdown",
+      "input",
+      "input-field",
+      "polymorph",
+      "select",
+      "table-filter",
+      "table-group",
+      "table-sort",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-metadata",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "table-pagination": {
+    "import": "@g4rcez/components/table-pagination",
+    "css": "@g4rcez/components/table-pagination.css",
+    "dependencies": [
+      "polymorph"
+    ],
+    "classes": {
+      "base": "__table-pagination",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "table-row": {
+    "import": "@g4rcez/components/table-row",
+    "css": "@g4rcez/components/table-row.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__table-row",
+      "variants": {},
+      "slots": {
+        "aside": "__table-row__aside",
+        "cell": "__table-row__cell",
+        "cell-content": "__table-row__cell-content"
+      },
+      "compounds": []
+    }
+  },
+  "table-sort": {
+    "import": "@g4rcez/components/table-sort",
+    "css": "@g4rcez/components/table-sort.css",
+    "dependencies": [
+      "dropdown",
+      "input-field",
+      "polymorph",
+      "select",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-sort",
+      "variants": {},
+      "slots": {
+        "trigger-icon": "__table-sort__trigger-icon",
+        "delete-icon": "__table-sort__delete-icon",
+        "add-icon": "__table-sort__add-icon",
+        "head-icon": "__table-sort__head-icon"
+      },
+      "compounds": []
+    }
+  },
+  "table-head": {
+    "import": "@g4rcez/components/table-head",
+    "css": "@g4rcez/components/table-head.css",
+    "dependencies": [
+      "dropdown",
+      "input",
+      "input-field",
+      "polymorph",
+      "select",
+      "table-filter",
+      "table-sort",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__table-head",
+      "variants": {},
+      "slots": {
+        "filter-icon": "__table-head__filter-icon",
+        "add-icon": "__table-head__add-icon"
+      },
+      "compounds": []
+    }
+  }
+}

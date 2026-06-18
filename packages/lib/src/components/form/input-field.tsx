@@ -22,12 +22,18 @@ export type FeedbackProps = React.PropsWithChildren<
 >;
 
 export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, info, children, title }: FeedbackProps) => (
-    <span className={css("w-full justify-between", hideLeft && children === null ? "hidden" : "flex", className)}>
+    <span
+        className={css(
+            "__form-input-field__tw-1",
+            hideLeft && children === null ? "__form-input-field__tw-2" : "__form-input-field__tw-3",
+            className
+        )}
+    >
         {hideLeft ? null : (
-            <span className="flex items-center gap-1 transition-colors group-focus-within:text-primary group-hover:text-primary group-disabled:!text-disabled group-error:text-danger">
+            <span className="__form-input-field__tw-4 __form-input-field__tw-state-1 __form-input-field__tw-state-9">
                 <span id={id ? `${id}-label` : undefined}>{title}</span>
                 {reportStatus || info ? (
-                    <span className="flex items-center justify-center gap-1">
+                    <span className="__form-input-field__tw-5">
                         {info ? (
                             <Tooltip
                                 as="button"
@@ -35,28 +41,28 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                                 aria-label={typeof info === "string" ? info : undefined}
                                 aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}` : undefined}
                                 title={
-                                    <span className="cursor-help">
-                                        <span className="flex aspect-square size-3 items-center justify-center">
-                                            <InfoIcon aria-hidden="true" size={16} />
+                                    <span className="__form-input-field__tw-6">
+                                        <span className="__form-input-field__tw-7">
+                                            <InfoIcon aria-hidden="true" className="__input-field__feedback-icon" />
                                         </span>
                                     </span>
                                 }
                             >
                                 <div
                                     id={id ? `tooltip-info-content-${id}` : undefined}
-                                    className="w-full max-w-48 whitespace-break-spaces break-words"
+                                    className="__form-input-field__tw-8 __input-field__tooltip-content"
                                 >
                                     {info}
                                 </div>
                             </Tooltip>
                         ) : null}
                         {reportStatus ? (
-                            <span className="flex h-3 min-w-6 items-center">
-                                <span className="hidden aspect-square size-3 opacity-0 transition-opacity group-assert:block group-assert:text-success group-assert:opacity-100">
-                                    <CheckCircleIcon aria-hidden="true" size={16} />
+                            <span className="__form-input-field__tw-9">
+                                <span className="__form-input-field__tw-10 __form-input-field__tw-state-2">
+                                    <CheckCircleIcon aria-hidden="true" className="__input-field__status-icon" />
                                 </span>
-                                <span className="hidden aspect-square size-3 opacity-0 transition-opacity group-error:block group-error:opacity-100">
-                                    <XCircleIcon aria-hidden="true" size={16} />
+                                <span className="__form-input-field__tw-10 __form-input-field__tw-state-3">
+                                    <XCircleIcon aria-hidden="true" className="__input-field__status-icon" />
                                 </span>
                             </span>
                         ) : null}
@@ -137,17 +143,15 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                 aria-disabled={disabled}
                 data-component={componentName}
                 data-interactive={!!interactive}
-                className={css("group flex min-h-0 min-w-0 max-w-full flex-col items-start", container)}
+                className={css("__form-input-field__tw-11 __form-input-field__tw-extra-1", container)}
             >
                 <label
                     form={form}
                     htmlFor={ID}
-                    className={css(
-                        "relative inline-flex w-full max-w-full cursor-text flex-row flex-wrap justify-between gap-input-label-mb text-input-label-text transition-colors empty:hidden group-disabled:cursor-not-allowed group-error:text-danger"
-                    )}
+                    className={css("__form-input-field__tw-12 __form-input-field__tw-extra-2 __form-input-field__tw-state-4")}
                 >
                     {hiddenLabel ? (
-                        <span className="sr-only">
+                        <span className="__form-input-field__tw-13">
                             <InputFeedback
                                 id={ID}
                                 info={info}
@@ -171,7 +175,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                                     {!required ? (
                                         <span
                                             aria-disabled={disabled}
-                                            className="text-opacity-70 transition-colors group-focus-within:text-primary group-hover:text-primary aria-disabled:!text-disabled"
+                                            className="__form-input-field__tw-14 __form-input-field__tw-state-5 __input-field__optional-text"
                                         >
                                             {optionalText}
                                         </span>
@@ -183,26 +187,23 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     )}
                     <div
                         className={css(
-                            "group relative flex w-full flex-row flex-nowrap items-center gap-x-input-gap gap-y-input-inline rounded-input-radius border border-input-border bg-transparent transition-colors group-hover:border-primary group-disabled:!border-disabled group-error:border-danger",
+                            "__form-input-field__border __form-input-field__tw-15 __form-input-field__tw-extra-3 __form-input-field__tw-state-6 __form-input-field__tw-state-10",
                             labelClassName
                         )}
                     >
-                        {left ? <span className="flex flex-nowrap gap-input-slot-gap whitespace-nowrap pl-input-slot-pl">{left}</span> : null}
+                        {left ? <span className="__form-input-field__tw-16 __form-input-field__tw-extra-4">{left}</span> : null}
                         {children}
-                        {right ? <span className="flex flex-nowrap gap-input-slot-gap whitespace-nowrap pr-input-slot-pr">{right}</span> : null}
+                        {right ? <span className="__form-input-field__tw-17 __form-input-field__tw-extra-4">{right}</span> : null}
                     </div>
                 </label>
                 <p
                     id={ID ? `${ID}-error` : undefined}
                     role="alert"
-                    className="mt-input-hint-mt hidden whitespace-pre-wrap text-wrap text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):invalid[data-initialized=true]]:flex group-error:flex group-error:text-danger"
+                    className="__form-input-field__tw-18 __form-input-field__tw-state-7 __input-field__error"
                 >
                     {error}
                 </p>
-                <p
-                    id={ID ? `${ID}-feedback` : undefined}
-                    className="mt-input-hint-mt text-input-hint-text empty:mt-0 empty:hidden group-has-[input:not(:focus):valid[data-initialized=true]]:block group-assert:block group-error:hidden"
-                >
+                <p id={ID ? `${ID}-feedback` : undefined} className="__form-input-field__tw-19 __form-input-field__tw-state-8">
                     {feedback}
                 </p>
             </fieldset>

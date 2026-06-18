@@ -1,58 +1,12 @@
-import { cva } from "class-variance-authority";
-import React, { forwardRef, PropsWithChildren } from "react";
+import type React from "react";
+import { forwardRef, type PropsWithChildren } from "react";
+import type { ComponentStyleProps } from "../../lib/component-styles";
 import { css } from "../../lib/dom";
-import { CvaVariants, type Label } from "../../types";
-import { Polymorph, PolymorphicProps } from "./polymorph";
+import type { Label } from "../../types";
+import { buttonStyles } from "./button.styles";
+import { Polymorph, type PolymorphicProps } from "./polymorph";
 
-const variants = {
-    size: {
-        icon: "p-button-padding-icon text-button-text-icon",
-        big: "h-button-height-big px-button-padding-x-big py-button-padding-y-big text-button-text-big",
-        default: "h-button-height px-button-padding-x py-button-padding-y text-button-text",
-        min: "h-button-height-min px-button-padding-x-min py-button-padding-y-min text-button-text-min",
-        tiny: "h-button-height-tiny px-button-padding-x-tiny py-button-padding-y-tiny text-button-text-tiny",
-        small: "h-button-height-small px-button-padding-x-small py-button-padding-y-small text-button-text-small",
-    },
-    rounded: {
-        rough: "rounded-button-radius-rough",
-        squared: "rounded-button-radius-squared",
-        default: "rounded-button-radius",
-        circle: "rounded-full aspect-square",
-    },
-    theme: {
-        raw: "",
-        disabled: "bg-disabled opacity-70",
-        loading: "animate-pulse bg-disabled",
-        main: "bg-button-primary-bg text-button-primary-text",
-        info: "bg-button-info-bg text-button-info-text",
-        warn: "bg-button-warn-bg text-button-warn-text",
-        muted: "bg-button-muted-bg text-button-muted-text",
-        danger: "bg-button-danger-bg text-button-danger-text",
-        neutral: "bg-transparent border-1 border-card-border",
-        primary: "bg-button-primary-bg text-button-primary-text",
-        success: "bg-button-success-bg text-button-success-text",
-        secondary: "bg-button-secondary-bg text-button-secondary-text",
-
-        "ghost-info": "bg-transparent hover:bg-info/20 border-0 border-transparent text-info",
-        "ghost-warn": "bg-transparent hover:bg-warn/20 border-0 border-transparent text-warn",
-        "ghost-danger": "bg-transparent hover:bg-danger/20 border-0 border-transparent text-danger",
-        "ghost-primary": "bg-transparent hover:bg-primary/20 border-0 border-transparent text-primary",
-        "ghost-success": "bg-transparent hover:bg-success/20 border-0 border-transparent text-success",
-        "ghost-secondary": "bg-transparent hover:bg-secondary/20 border-0 border-transparent text-secondary",
-        "ghost-muted": "bg-transparent hover:bg-muted/20 border-0 border-transparent text-muted-foreground",
-        "ghost-neutral": "bg-transparent border-0 border-card-border",
-    },
-};
-
-const buttonVariants = cva(
-    "relative inline-flex cursor-pointer items-center justify-center gap-button-gap overflow-hidden whitespace-nowrap align-middle font-medium transition-colors duration-300 ease-linear focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring enabled:hover:bg-opacity-70 enabled:focus:bg-opacity-70 disabled:cursor-not-allowed disabled:bg-opacity-40 disabled:text-opacity-80 data-[loading=true]:animate-pulse data-[loading=true]:opacity-30",
-    {
-        variants,
-        defaultVariants: { theme: "main", size: "default", rounded: "default" },
-    }
-);
-
-type Variants = CvaVariants<typeof variants>;
+type Variants = ComponentStyleProps<typeof buttonStyles>;
 
 export type ButtonProps<T extends React.ElementType = "button"> = PropsWithChildren<
     PolymorphicProps<
@@ -103,17 +57,16 @@ export const Button: <T extends React.ElementType = "button">(_: ButtonProps<T>)
             {...props}
             ref={ref}
             type={type}
-            data-theme={theme}
             disabled={disabled}
-            data-loading={loading}
+            data-loading={loading ? "true" : undefined}
             data-component="button"
             aria-disabled={disabled}
             as={props.as ?? "button"}
             aria-busy={loading}
             onClick={disabled ? undefined : props.onClick}
-            className={css(buttonVariants({ size, rounded, theme }), className)}
+            className={css(buttonStyles.className({ size, rounded, theme }), className)}
         >
-            {icon}
+            {icon ? <span className={buttonStyles.slots.icon}>{icon}</span> : null}
             {props.children}
         </Polymorph>
     );

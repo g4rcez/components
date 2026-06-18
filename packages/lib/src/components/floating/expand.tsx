@@ -41,7 +41,7 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
     const { getFloatingProps, getReferenceProps } = useInteractions([click, role, dismiss]);
 
     return (
-        <div className="relative inline-flex items-center justify-center" ref={root}>
+        <div className="__floating-expand__tw-1" ref={root}>
             <Button
                 {...getReferenceProps(props as never)}
                 as={motion.button}
@@ -56,7 +56,7 @@ export const Expand = (props: PropsWithChildren<ExpandProps>) => {
                 {open ? (
                     <FloatingPortal root={root}>
                         <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
-                            <motion.div {...getFloatingProps()} ref={refs.setFloating} layoutId={wrapperId} className="absolute -left-1/4 -top-3/4">
+                            <motion.div {...getFloatingProps()} ref={refs.setFloating} layoutId={wrapperId} className="__floating-expand__tw-2">
                                 {props.children}
                             </motion.div>
                         </FloatingFocusManager>

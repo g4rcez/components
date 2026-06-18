@@ -162,7 +162,7 @@ const MasonryInner = <T extends React.ElementType = "ul">(
             onLoad={scheduleMeasure}
             onError={scheduleMeasure}
             style={{ ...style, height: layout.height }}
-            className={css("relative m-0 w-full list-none p-0", className)}
+            className={css("__display-masonry__tw-1", className)}
         >
             {childrenArray.map((child, index) => {
                 const item = layout.items[index];
@@ -179,7 +179,7 @@ const MasonryInner = <T extends React.ElementType = "ul">(
                     <Item
                         style={itemStyle}
                         data-component="masonry-item"
-                        className={css("box-border block", itemClassName)}
+                        className={css("box-border __display-masonry__tw-2", itemClassName)}
                         key={typeof child === "object" && "key" in child ? child.key : index}
                         ref={(node: HTMLElement | null) => {
                             itemRefs.current[index] = node;

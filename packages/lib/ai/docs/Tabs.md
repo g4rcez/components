@@ -170,8 +170,8 @@ function DynamicTabs() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-50`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-blue-50`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block.
 - Don't use more than 6–8 tabs; prefer sidebar navigation for larger sets.
 - Don't use tabs for content that needs to be compared side-by-side.
 - Don't use tabs for primary page-level navigation; use a nav bar instead.

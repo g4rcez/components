@@ -1,0 +1,77 @@
+.__table-group {
+    box-sizing: border-box;
+}
+
+.__table-group__drag-icon,
+.__table-group__trigger-icon {
+    inline-size: var(--var-table-group-icon-size, 0.875rem);
+    block-size: var(--var-table-group-icon-size, 0.875rem);
+}
+
+.__table-group__delete-icon {
+    inline-size: var(--var-table-group-delete-icon-size, 1rem);
+    block-size: var(--var-table-group-delete-icon-size, 1rem);
+}
+
+/* @generated component utility migration start */
+.__table-group__tw-1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem
+}
+
+.__table-group__tw-2 {
+  cursor: grab
+}
+
+.__table-group__tw-3 {
+  display: flex;
+  align-items: center;
+  gap: var(--table-inline-gap-tight)
+}
+
+.__table-group__tw-4 {
+  display: flex;
+  align-items: center
+}
+
+.__table-group__tw-5 {
+  margin-top: var(--table-groups-mt)
+}
+
+.__table-group__tw-6 {
+  --tw-text-opacity: 1;
+  color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity))
+}
+
+.__table-group__tw-7 {
+  margin-top: var(--table-groups-my);
+  margin-bottom: var(--table-groups-my)
+}
+
+.__table-group__tw-8 {
+  font-size: var(--typography-xl);
+  font-weight: 500
+}
+
+.__table-group__tw-9 {
+  position: relative
+}
+
+.__table-group__tw-9 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse))
+}
+.__table-group__tw-extra-1 {
+  flex-direction: row
+}
+
+.__table-group__tw-extra-2 {
+  flex-wrap: nowrap
+}
+.__table-group__tw-final-1 {
+  --tw-numeric-spacing: proportional-nums;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)
+}
+/* @generated component utility migration end */

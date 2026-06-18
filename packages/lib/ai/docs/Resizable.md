@@ -137,8 +137,8 @@ const AsyncCard = ({ data }: { data: string[] | null }) => (
 
 - Don't use `Resizable` on content that changes height at very high frequency (e.g., per-frame updates) — it may cause performance issues
 - Don't wrap large, stable sections of a page — keep the observed area small
-- Don't pass raw Tailwind color classes (`bg-white`, `border-gray-200`) inside `Resizable` wrappers — use design tokens
-- Don't use arbitrary Tailwind values (`bg-[#fff]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`bg-white`, `border-gray-200`) inside `Resizable` wrappers — use design tokens
+- Don't use arbitrary utility values (`bg-[#fff]`) — override CSS variables in your `@theme` block
 
 ## Accessibility
 

@@ -4,15 +4,15 @@ import { isMac } from "../../lib/combi-keys";
 
 const remap = (x: string) => {
     x = x.trim();
-    if (x === "Alt") return isMac() ? <OptionIcon aria-label="Option" size={12} /> : "Alt";
-    if (x === "Mod") return isMac() ? <CommandIcon aria-label="Command" size={12} /> : "Ctrl";
+    if (x === "Alt") return isMac() ? <OptionIcon aria-label="Option" className="__shortcut__icon" /> : "Alt";
+    if (x === "Mod") return isMac() ? <CommandIcon aria-label="Command" className="__shortcut__icon" /> : "Ctrl";
     return x;
 };
 
 export const Shortcut = (props: { value: string }) => {
     const p = props.value.trim().split("+");
     return (
-        <span className="flex items-center gap-shortcut-gap text-shortcut-text">
+        <span className="__display-shortcut__tw-1">
             {p.map((x, i) => {
                 const isLast = p.length - 1 === i;
                 return (

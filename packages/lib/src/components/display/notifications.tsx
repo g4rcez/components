@@ -6,25 +6,22 @@ import { AnimatePresence, motion } from "motion/react";
 import { createContext, type PropsWithChildren, useCallback, useContext, useRef } from "react";
 import { useHover } from "../../hooks/use-hover";
 import { css } from "../../lib/dom";
-import { Label } from "../../types";
+import type { Label } from "../../types";
 
-const variants = cva(
-    "shadow-notification text-typography-sm relative isolate z-tooltip flex w-full flex-col overflow-hidden rounded-notification-radius border bg-card-background backdrop-blur-md transition-all duration-300",
-    {
-        variants: {
-            theme: {
-                default: "border-card-border text-foreground shadow-black/5",
-                info: "border-alert-info-border bg-alert-info-bg text-alert-info-text",
-                warn: "border-alert-warn-border bg-alert-warn-bg text-alert-warn-text",
-                muted: "border-alert-muted-border bg-alert-muted-bg text-alert-muted-text",
-                danger: "border-alert-danger-border bg-alert-danger-bg text-alert-danger-text",
-                success: "border-alert-success-border bg-alert-success-bg text-alert-success-text",
-                secondary: "border-alert-secondary-border bg-alert-secondary-bg text-alert-secondary-text",
-            },
+const variants = cva("__display-notifications__border __display-notifications__tw-1 __display-notifications__tw-extra-1", {
+    variants: {
+        theme: {
+            default: "__display-notifications__tw-2",
+            info: "__display-notifications__tw-3",
+            warn: "__display-notifications__tw-4",
+            muted: "__display-notifications__tw-5",
+            danger: "__display-notifications__tw-6",
+            success: "__display-notifications__tw-7",
+            secondary: "__display-notifications__tw-8",
         },
-        defaultVariants: { theme: "default" },
-    }
-);
+    },
+    defaultVariants: { theme: "default" },
+});
 
 const themeIcons = {
     default: InfoIcon,
@@ -84,22 +81,22 @@ function Notification(props: NotificationItemProps) {
                     damping: 25,
                     stiffness: 300,
                 }}
-                className="pointer-events-auto w-full list-none"
+                className="__display-notifications__tw-9"
             >
                 <Base.Content className={className}>
-                    <div className="flex items-start gap-notification-gap p-notification-p">
-                        <div className={css("mt-0.5 flex size-4 shrink-0 items-center justify-center opacity-80", loading && "animate-spin")}>
+                    <div className="__display-notifications__tw-10">
+                        <div className={css("__display-notifications__tw-11", loading && "__display-notifications__tw-12")}>
                             <Icon aria-hidden="true" />
                         </div>
 
-                        <div className="flex flex-1 flex-col gap-notification-inner-gap overflow-hidden">
-                            {props.toast.title ? <Base.Title className="select-text truncate font-semibold leading-tight tracking-tight" /> : null}
-                            <Base.Description className="text-typography-xs line-clamp-2 select-text font-medium leading-relaxed opacity-90" />
+                        <div className="__display-notifications__tw-13 __display-notifications__tw-extra-1">
+                            {props.toast.title ? <Base.Title className="__display-notifications__tw-14" /> : null}
+                            <Base.Description className="line-clamp-2 __display-notifications__tw-15" />
                         </div>
 
                         {closable && !loading ? (
-                            <Base.Close className="-mr-1 -mt-1 shrink-0 rounded-notification-close-radius p-notification-close-p text-foreground/40 transition hover:bg-foreground/10 hover:text-foreground">
-                                <span className="flex size-3.5 items-center justify-center">
+                            <Base.Close className="__notifications__close __display-notifications__tw-16">
+                                <span className="__display-notifications__tw-17">
                                     <XIcon aria-hidden="true" />
                                 </span>
                             </Base.Close>
@@ -122,10 +119,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
     const hiddenCount = allToasts.length - visibleToasts.length;
 
     return (
-        <Base.Viewport
-            ref={ref}
-            className="pointer-events-none fixed left-1/2 top-notification-list-top z-floating flex w-full max-w-notification-list-max-w -translate-x-1/2 flex-col gap-notification-list-gap overflow-visible outline-none"
-        >
+        <Base.Viewport ref={ref} className="__display-notifications__tw-18 __display-notifications__tw-extra-1">
             <AnimatePresence mode="popLayout" initial={false}>
                 {visibleToasts.map((toast) => (
                     <Notification key={toast.id} toast={toast} />
@@ -138,7 +132,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="shadow-notification pointer-events-auto cursor-default self-center rounded-full border border-card-border bg-card-background/80 px-notification-badge-px py-notification-badge-py text-notification-badge-text font-bold uppercase tracking-wider text-foreground/50 backdrop-blur transition-all hover:bg-card-background hover:text-foreground/80"
+                    className="__display-notifications__border __display-notifications__tw-19"
                 >
                     +{hiddenCount} more
                 </motion.div>

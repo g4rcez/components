@@ -149,8 +149,8 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
     const hasPrevious = index > 0;
     return (
         <FloatingPortal>
-            <div className="pointer-events-none fixed inset-0 z-wizard">
-                <svg className="absolute inset-0 h-full w-full fill-current text-floating-overlay/70" xmlns="http://www.w3.org/2000/svg">
+            <div className="__floating-wizard__tw-1">
+                <svg className="__floating-wizard__tw-2" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <mask id="driver-mask">
                             <rect x="0" y="0" width="100%" height="100%" fill="white" />
@@ -173,7 +173,7 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                             />
                         </mask>
                     </defs>
-                    <rect x="0" y="0" width="100%" height="100%" mask="url(#driver-mask)" className="pointer-events-auto" />
+                    <rect x="0" y="0" width="100%" height="100%" mask="url(#driver-mask)" className="__floating-wizard__tw-3" />
                 </svg>
                 <AnimatePresence mode="wait">
                     {currentStep && isOverlayReady && (
@@ -190,30 +190,23 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                           transform: "translate(-50%, -50%)",
                                       }
                             }
-                            className="pointer-events-auto outline-none"
+                            className="__floating-wizard__tw-4"
                         >
                             <motion.div
                                 transition={{ duration: 0.2 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 initial={{ opacity: 0, scale: 0.9 }}
-                                className="flex w-wizard-w max-w-sm flex-col gap-wizard-gap rounded-wizard-radius border border-floating-border bg-floating-background p-wizard-p shadow-shadow-floating"
+                                className="__floating-wizard__border __floating-wizard__tw-5 __floating-wizard__tw-extra-1"
                             >
-                                {element && (
-                                    <FloatingArrow ref={arrowRef} context={context} className="fill-floating-background stroke-floating-border" />
-                                )}
+                                {element && <FloatingArrow ref={arrowRef} context={context} className="__floating-wizard__tw-6" />}
                                 {currentStep.title && <h3>{currentStep.title}</h3>}
                                 {currentStep.description && <Fragment>{currentStep.description}</Fragment>}
-                                <div className="mt-wizard-footer-pt flex items-center justify-between border-t border-floating-border pt-wizard-footer-pt">
-                                    <Button
-                                        theme="raw"
-                                        size="small"
-                                        onClick={onClose}
-                                        className="text-wizard-label-text text-muted-foreground hover:text-foreground"
-                                    >
+                                <div className="__floating-wizard__tw-7">
+                                    <Button theme="raw" size="small" onClick={onClose} className="__floating-wizard__tw-8">
                                         {labels.skip}
                                     </Button>
-                                    <div className="flex gap-wizard-actions-gap">
+                                    <div className="__floating-wizard__tw-9">
                                         {hasPrevious && (
                                             <Button size="small" theme="ghost-muted" onClick={handlePrevious}>
                                                 {labels.previous}
@@ -224,7 +217,7 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="absolute right-wizard-counter-right top-wizard-counter-top text-wizard-label-text text-muted-foreground">
+                                <div className="__floating-wizard__tw-10">
                                     {index + 1} / {steps.length}
                                 </div>
                             </motion.div>

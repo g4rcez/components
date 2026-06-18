@@ -50,11 +50,11 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => {
                             animate={{ opacity: 1 }}
                             initial={{ opacity: 0 }}
                             transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
-                            className="pointer-events-none fixed inset-0 top-0 z-overlay h-screen w-screen bg-floating-overlay/70"
+                            className="__display-list__tw-1"
                         />
                     ) : null}
                     {item ? (
-                        <FloatingOverlay key="card" lockScroll className="absolute inset-0 z-floating flex items-center justify-center">
+                        <FloatingOverlay key="card" lockScroll className="__display-list__tw-2">
                             <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
                                 <motion.div
                                     layout
@@ -62,23 +62,23 @@ const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => {
                                     initial={{ opacity: 0.6, scale: 0.98 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.98 }}
-                                    className="relative flex h-min w-min min-w-xs flex-col gap-list-card-gap rounded-list-radius border border-card-border bg-card-background p-list-card-p py-list-card-py pb-list-card-pb shadow-shadow-card"
+                                    className="__display-list__border __display-list__tw-3 __display-list__tw-extra-1"
                                     ref={refs.setFloating}
                                     {...get()}
                                 >
-                                    <nav className="absolute right-4 top-1 lg:right-2">
+                                    <nav className="__display-list__tw-4">
                                         <button
                                             type="button"
                                             onClick={setter}
                                             aria-label={translations.listCloseDetails}
-                                            className="p-list-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger"
+                                            className="__display-list__tw-5"
                                         >
                                             <XIcon />
                                         </button>
                                     </nav>
-                                    <motion.header layout className="flex w-full flex-wrap items-center justify-between gap-list-header-gap">
-                                        <h3 className="min-w-full text-balance text-list-title-text font-medium">{item.title}</h3>
-                                        <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
+                                    <motion.header layout className="__display-list__tw-6 __display-list__tw-extra-2">
+                                        <h3 className="__display-list__tw-7">{item.title}</h3>
+                                        <p className="__display-list__tw-8">{item.description}</p>
                                     </motion.header>
                                     <motion.div layout>{item.children}</motion.div>
                                 </motion.div>
@@ -125,39 +125,34 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                     const setter = () => setSelected({ ...item, id: innerId });
                     const Leading = item.leading;
                     return (
-                        <motion.li
-                            layout
-                            key={innerId}
-                            layoutId={`item-${innerId}`}
-                            className={`border-b border-card-border py-list-item-py last:border-transparent`}
-                        >
-                            <motion.div layoutId={`toast-${innerId}`} className="relative">
-                                <div className="relative flex items-start space-x-3">
+                        <motion.li layout key={innerId} layoutId={`item-${innerId}`} className={`__display-list__tw-9`}>
+                            <motion.div layoutId={`toast-${innerId}`} className="__display-list__tw-10">
+                                <div className="__display-list__tw-11">
                                     <Fragment>
                                         {item.avatar ? (
                                             <div>
-                                                <div className="relative px-list-avatar-px">
+                                                <div className="__display-list__tw-12">
                                                     <button
                                                         type="button"
                                                         onClick={setter}
                                                         aria-label={translations.listOpenDetails(String(item.title))}
-                                                        className="flex size-10 items-center justify-center ring-primary"
+                                                        className="__display-list__tw-13"
                                                     >
                                                         {item.avatar}
                                                     </button>
                                                 </div>
                                             </div>
                                         ) : null}
-                                        <div className="min-w-0 flex-1 py-list-body-py text-foreground">
-                                            <div className="flex flex-row flex-nowrap justify-between gap-list-item-gap">
+                                        <div className="__display-list__tw-14">
+                                            <div className="__display-list__tw-15 __display-list__tw-extra-3">
                                                 <button
                                                     type="button"
                                                     onClick={setter}
                                                     aria-label={translations.listOpenDetails(String(item.title))}
-                                                    className="cursor-pointer text-left transition-all ease-out hover:text-primary"
+                                                    className="__display-list__tw-16"
                                                 >
                                                     <h3>{item.title}</h3>
-                                                    <p className="text-typography-sm leading-snug text-secondary">{item.description}</p>
+                                                    <p className="__display-list__tw-8">{item.description}</p>
                                                 </button>
                                                 {Leading ? <Leading open={setter} /> : null}
                                             </div>

@@ -118,14 +118,9 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                             {...getFloatingProps()}
                             style={floatingStyles}
                             ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
-                            className="isolate z-tooltip rounded-tooltip-radius border border-tooltip-border bg-tooltip-background p-tooltip-p text-tooltip-foreground shadow-shadow-floating"
+                            className="__floating-tooltip__border __floating-tooltip__tw-1"
                         >
-                            <FloatingArrow
-                                ref={arrowRef}
-                                context={context}
-                                strokeWidth={0.1}
-                                className="fill-tooltip-background stroke-tooltip-border"
-                            />
+                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="__floating-tooltip__tw-2" />
                             {children}
                         </Polymorph>
                     </FloatingPortal>

@@ -52,7 +52,7 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & ContextProp<unknown>>(
     ({ context: _context, className = "", ...props }, ref) => (
-        <tbody {...props} role="rowgroup" className={`divide-y divide-table-border ${className}`} ref={ref}>
+        <tbody {...props} role="rowgroup" className={`__table-inner-table__body ${className}`} ref={ref}>
             <AnimatePresence>{props.children}</AnimatePresence>
         </tbody>
     )
@@ -66,7 +66,7 @@ const VirtualTable = React.forwardRef<HTMLTableElement, VirtualTableProps>(({ co
         role="table"
         ref={ref}
         style={{ ...props.style, "--table-cell-padding": "0.75rem" } as CSSProperties}
-        className={`table w-full table-fixed border-separate border-spacing-0 text-left ${className ?? ""}`}
+        className={`table __table-inner-table__tw-1 ${className ?? ""}`}
     />
 ));
 
@@ -78,7 +78,7 @@ const Thead = React.forwardRef<HTMLTableSectionElement, TheadProps>(({ context: 
         ...props.style,
         top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
     };
-    return <thead {...props} ref={ref} style={style} role="rowgroup" className="group:sticky top-0 hidden bg-transparent md:table-header-group" />;
+    return <thead {...props} ref={ref} style={style} role="rowgroup" className="group:sticky __table-inner-table__tw-2" />;
 });
 
 type TRowProps = ItemProps<VirtuosoData> & ContextProp<VirtuosoCtx> & { className?: string };
@@ -91,7 +91,7 @@ const TRow = React.forwardRef<HTMLTableRowElement, TRowProps>(({ context, item, 
             {...(innerProps as React.HTMLAttributes<HTMLTableRowElement>)}
             role="row"
             ref={ref}
-            className={`group-table-row flex h-fit flex-col flex-wrap justify-center gap-table-row-gap pb-table-row-pb md:table-row ${[className, contextProps?.className].filter(Boolean).join(" ")}`}
+            className={`__table-inner-table__row __table-inner-table__tw-3 __table-inner-table__tw-extra-1 ${[className, contextProps?.className].filter(Boolean).join(" ")}`}
         />
     );
 });
@@ -101,10 +101,10 @@ type TFootProps = Pick<React.ComponentProps<"tfoot">, "children" | "style"> & Co
 const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, ...props }, ref) => {
     if (context?.loadingMore) {
         return (
-            <tfoot {...props} ref={ref} className="bg-card-background">
-                <tr role="row" className="bg-card-background">
-                    <td colSpan={999} className="h-table-loading-h bg-card-background px-table-cell-px">
-                        <span className="block h-table-loading-bar-h w-full animate-pulse rounded-table-loading-bar-radius bg-foreground opacity-60" />
+            <tfoot {...props} ref={ref} className="__table-inner-table__tw-4">
+                <tr role="row" className="__table-inner-table__tw-4">
+                    <td colSpan={999} className="__table-inner-table__tw-5">
+                        <span className="__table-inner-table__tw-6" />
                     </td>
                 </tr>
             </tfoot>
@@ -123,9 +123,7 @@ const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-const EmptyContent = (props: { loading?: boolean }) => (
-    <div className="flex h-table-empty-h w-full items-center justify-center px-table-cell-px">{props.loading ? SkeletonCell : <Empty />}</div>
-);
+const EmptyContent = (props: { loading?: boolean }) => <div className="__table-inner-table__tw-7">{props.loading ? SkeletonCell : <Empty />}</div>;
 
 const EmptyCell = () => <Fragment />;
 
@@ -189,7 +187,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
     };
 
     return (
-        <div className="group relative flex w-full flex-col whitespace-nowrap rounded-table-radius bg-table-background">
+        <div className="__table-inner-table__tw-8 __table-inner-table__tw-extra-2">
             <TableVirtuoso
                 components={components}
                 context={context as VirtuosoCtx}
@@ -213,7 +211,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
                 )}
             />
             {empty ? <EmptyContent loading={props.loading} /> : null}
-            <div aria-hidden="true" ref={ref} className="h-0.5 w-full" />
+            <div aria-hidden="true" ref={ref} className="__table-inner-table__tw-9" />
             {pagination !== null ? <Pagination {...pagination} /> : null}
         </div>
     );

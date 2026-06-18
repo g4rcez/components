@@ -89,11 +89,26 @@ pnpm add @g4rcez/components
 
 ### CSS Import
 
-Import the component styles in your app:
+The v6 styling model is plain CSS first. Import CSS from an app stylesheet, not from component JS modules.
 
-```tsx
-import "@g4rcez/components/index.css";
+```css
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
 ```
+
+`foundation.css` is required before component CSS. For convenience, `@g4rcez/components/index.css` bundles the foundation plus every public component stylesheet.
+
+Migration status: every public component now has a stable CSS chunk, style contract sidecar, and manifest entry. Button is fully ported to handwritten v6 CSS; other components keep their generated CSS chunks and legacy utility class names until their visual rules are hand-ported.
+
+### Auto-import used component CSS
+
+Run the packaged CLI to scan your source files and keep a managed CSS import block in your app stylesheet:
+
+```bash
+pnpm exec g4rcez-components styles --css src/app.css
+```
+
+Use `--check` in CI to fail when the stylesheet is out of date.
 
 ## 🚀 Quick Start
 
@@ -103,27 +118,28 @@ import "@g4rcez/components/index.css";
 import { Button, Input, Modal } from "@g4rcez/components";
 
 function App() {
-  return (
-    <div>
-      <Button variant="primary">Click me</Button>
-      <Input placeholder="Enter text..." />
-    </div>
-  );
+    return (
+        <div>
+            <Button variant="primary">Click me</Button>
+            <Input placeholder="Enter text..." />
+        </div>
+    );
 }
 ```
 
-### With Provider (Recommended)
+### With Provider (Optional)
+
+`ComponentsProvider` configures behavior such as translations, locale-aware masks, icon defaults, and modal helpers. It is not required for styling.
 
 ```tsx
 import { ComponentsProvider } from "@g4rcez/components";
-import "@g4rcez/components/index.css";
 
 function App() {
-  return (
-    <ComponentsProvider>
-      <YourApp />
-    </ComponentsProvider>
-  );
+    return (
+        <ComponentsProvider>
+            <YourApp />
+        </ComponentsProvider>
+    );
 }
 ```
 
@@ -180,48 +196,68 @@ function App() {
 
 ### Theme System
 
-The library includes a comprehensive theme system with design tokens:
+Themes are runtime CSS variables. Defaults ship in `tokens.css`: light variables on `:root`, and dark variables on `[data-g4-theme="dark"]`.
 
 ```tsx
-import { ComponentsProvider } from "@g4rcez/components";
+import { applyTheme, registerTheme } from "@g4rcez/components/theme";
 
-// Custom theme
-const customTheme = {
-  colors: {
-    primary: "#your-color",
-    // ... other colors
-  },
-  // ... other theme properties
-};
+applyTheme(document.documentElement, {
+    colors: {
+        primary: { DEFAULT: "oklch(62.8% 0.257 29.23)" },
+    },
+    components: {
+        button: { rounded: "0.75rem" },
+    },
+});
 
-function App() {
-  return (
-    <ComponentsProvider theme={customTheme}>
-      <YourApp />
-    </ComponentsProvider>
-  );
+registerTheme("brand", {
+    colors: {
+        primary: { DEFAULT: "rebeccapurple" },
+    },
+});
+```
+
+You can also override variables directly in CSS:
+
+```css
+:root {
+    --var-color-primary: rebeccapurple;
+    --var-button-rounded: 0.75rem;
 }
 ```
 
-### Tailwind Integration
+### Public CSS Contract
 
-Use the provided Tailwind preset:
+Components expose semver-protected selectors:
 
-```js
-// tailwind.config.js
-module.exports = {
-  presets: [require("@g4rcez/components/preset.tailwind")],
-  // ... your config
-};
+```css
+.__button {
+}
+.__button--theme-primary {
+}
+.__button--size-small {
+}
+.__button__icon {
+}
 ```
 
-### Design Tokens
+Use semantic `--var-*` tokens for durable customization; use selectors for advanced overrides.
 
-Access design tokens programmatically:
+### Why Tailwind CSS was removed
 
-```tsx
-import { designTokens } from "@g4rcez/components/styles";
+Earlier versions used Tailwind as both the authoring API and token distribution mechanism. That made component styling depend on consumer Tailwind configuration, made theme maintenance harder, and polluted component internals with long utility strings.
+
+The v6 model removes Tailwind from the library foundation in favor of plain CSS, stable selectors, and runtime CSS variables. The package no longer exports Tailwind preset or plugin entrypoints.
+
+### Style Manifest
+
+The package publishes a machine-readable style manifest for CLIs and AI agents:
+
+```ts
+import { componentStyleManifest } from "@g4rcez/components/style-manifest";
 ```
+
+The same data is available as JSON at `@g4rcez/components/style-manifest.json` and in `ai/component-style-manifest.json`.
 
 ## 🛠️ Development
 

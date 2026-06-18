@@ -1,5 +1,6 @@
 "use client";
-import React, { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { css } from "../../lib/dom";
 
@@ -48,11 +49,11 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
         return (
             <fieldset
-                className={css("flex flex-col flex-wrap justify-center", container)}
+                className={css("__form-switch__tw-1 __form-switch__tw-extra-1", container)}
                 data-component="switch"
                 disabled={props.disabled || loading}
             >
-                <span className="flex flex-row flex-wrap items-center">
+                <span className="__form-switch__tw-2 __form-switch__tw-extra-2">
                     <input
                         {...props}
                         hidden
@@ -84,19 +85,15 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                         data-checked={checked}
                         aria-labelledby={`${id}-label`}
                         disabled={props.disabled || loading}
-                        className="relative inline-flex h-switch-track-h w-switch-track-w flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 data-[checked=false]:bg-input-switch-bg data-[checked=true]:bg-primary"
+                        className="__form-switch__tw-3 __form-switch__tw-extra-3"
                     >
-                        <span
-                            aria-hidden="true"
-                            data-checked={checked}
-                            className="inline-block aspect-square size-switch-thumb-size transform rounded-full shadow ring-0 transition duration-300 ease-in-out data-[checked=false]:translate-x-0 data-[checked=true]:translate-x-5 data-[checked=false]:bg-disabled data-[checked=true]:bg-input-switch"
-                        />
+                        <span aria-hidden="true" data-checked={checked} className="__form-switch__tw-4" />
                     </button>
-                    <label htmlFor={props.id || id} className="ml-switch-gap inline-block text-switch-label-text" id={`${id}-label`}>
-                        <span className="font-medium text-foreground">{children}</span>
+                    <label htmlFor={props.id || id} className="__form-switch__tw-5" id={`${id}-label`}>
+                        <span className="__form-switch__tw-6">{children}</span>
                     </label>
                 </span>
-                <span id={errorId} className="mt-switch-hint-mt flex-1 whitespace-nowrap text-switch-hint-text text-danger empty:mt-0 empty:hidden">
+                <span id={errorId} className="__form-switch__tw-7">
                     {error}
                 </span>
             </fieldset>

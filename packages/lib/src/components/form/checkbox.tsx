@@ -1,6 +1,8 @@
-import React, { forwardRef, useId } from "react";
+import type React from "react";
+import { forwardRef, useId } from "react";
 import { css } from "../../lib/dom";
-import { Override } from "../../types";
+import type { Override } from "../../types";
+import { checkboxStyles } from "./checkbox.styles";
 
 export type CheckboxProps = Override<
     React.PropsWithChildren<React.ComponentProps<"input">>,
@@ -30,8 +32,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                     data-task={asTask}
                     data-component="checkbox"
                     className={css(
-                        "group flex w-fit flex-wrap items-center font-normal data-[disabled=true]:cursor-not-allowed",
-                        asTask ? "group-checkbox-checked:line-through" : "",
+                        checkboxStyles.className({ task: asTask ? "true" : "false" }),
+                        "__form-checkbox__tw-1 __form-checkbox__tw-extra-1",
                         container
                     )}
                 >
@@ -52,18 +54,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                                 event.currentTarget.click();
                             }
                         }}
-                        className={css(
-                            "form-checkbox mr-checkbox-gap inline-block size-checkbox-size appearance-none rounded-checkbox-radius border-card-border bg-origin-border text-primary focus:ring-primary disabled:opacity-70 group-aria-disabled:cursor-not-allowed",
-                            className
-                        )}
+                        className={css("__form-checkbox__tw-2 __form-checkbox__tw-state-1", className)}
                     />
                     {children}
                 </label>
-                <span
-                    id={errorId}
-                    data-name="checkbox-label"
-                    className={css("min-w-full flex-1 text-checkbox-hint-text text-danger empty:mt-0 empty:hidden", labelClassName)}
-                >
+                <span id={errorId} data-name="checkbox-label" className={css("__form-checkbox__tw-3", labelClassName)}>
                     {error}
                 </span>
             </>

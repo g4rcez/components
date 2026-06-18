@@ -1,12 +1,13 @@
 "use client";
 import { cva } from "class-variance-authority";
-import { HTMLMotionProps, motion, type Transition } from "motion/react";
+import { type HTMLMotionProps, motion, type Transition } from "motion/react";
 import { CheckCircleIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
-import React, { forwardRef, PropsWithChildren } from "react";
+import type React from "react";
+import { forwardRef, type PropsWithChildren } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
-import { CvaVariants } from "../../types";
-import { Polymorph, PolymorphicProps } from "../core/polymorph";
+import type { CvaVariants } from "../../types";
+import { Polymorph, type PolymorphicProps } from "../core/polymorph";
 import { Resizable } from "../core/resizable";
 
 const transition: Transition = {
@@ -25,7 +26,7 @@ export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
         transition={transition}
         aria-hidden={!props.open}
         data-component="collapse"
-        className={css("aria-hidden:pointer-events-none", props.className)}
+        className={css("__display-alert__collapse", props.className)}
     >
         <Resizable open={props.open} destroyOnUnmount>
             {props.children}
@@ -35,17 +36,18 @@ export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
 
 const themeVariants = {
     theme: {
-        primary: "bg-alert-primary-bg text-alert-primary-text border-alert-primary-border",
-        danger: "bg-alert-danger-bg text-alert-danger-text border-alert-danger-border",
-        info: "bg-alert-info-bg text-alert-info-text border-alert-info-border",
-        success: "bg-alert-success-bg text-alert-success-text border-alert-success-border",
-        secondary: "bg-alert-secondary-bg text-alert-secondary-text border-alert-secondary-border",
-        warn: "bg-alert-warn-bg text-alert-warn-text border-alert-warn-border",
-        neutral: "bg-transparent border border-card-border text-alert-primary-text",
+        primary: "__display-alert--theme-primary",
+        danger: "__display-alert--theme-danger",
+        info: "__display-alert--theme-info",
+        success: "__display-alert--theme-success",
+        secondary: "__display-alert--theme-secondary",
+        warn: "__display-alert--theme-warn",
+        muted: "__display-alert--theme-muted",
+        neutral: "__display-alert--theme-neutral",
     },
 };
 
-const alertVariants = cva("text-typography-sm relative block w-full rounded-alert-radius border p-alert-p", {
+const alertVariants = cva("__display-alert__border __display-alert__tw-1", {
     variants: themeVariants,
     defaultVariants: { theme: "neutral" },
 });
@@ -74,7 +76,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
             data-open={!!open}
             aria-hidden={!open}
             data-component="alert"
-            className={css("isolate w-full", open ? "pointer-events-auto" : "pointer-events-none")}
+            className={css("__display-alert__tw-2", open ? "__display-alert__tw-3" : "__display-alert__tw-4")}
         >
             <Collapse open={!!open}>
                 <Polymorph
@@ -85,29 +87,24 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                     as={props.as || "div"}
                     className={css(alertVariants({ theme }), className)}
                 >
-                    <div className="flex flex-col gap-alert-gap">
+                    <div className="__display-alert__tw-5 __display-alert__tw-extra-1">
                         {onClose !== undefined ? (
-                            <button
-                                type="button"
-                                onClick={close}
-                                aria-label={t.closeButton}
-                                className="absolute right-alert-close-right top-alert-close-top text-foreground transition-colors duration-300 ease-in-out hover:text-danger"
-                            >
-                                <XIcon size={20} aria-hidden="true" />
+                            <button type="button" onClick={close} aria-label={t.closeButton} className="__display-alert__tw-6">
+                                <XIcon aria-hidden="true" className="__alert__close-icon" />
                             </button>
                         ) : null}
-                        <div className="flex items-center gap-alert-gap">
-                            {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" size={20} /> : null}
-                            {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" size={20} /> : null}
-                            {!Icon && theme === "danger" ? <WarningIcon aria-hidden="true" size={20} /> : null}
+                        <div className="__display-alert__tw-7">
+                            {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" className="__alert__icon" /> : null}
+                            {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" className="__alert__icon" /> : null}
+                            {!Icon && theme === "danger" ? <WarningIcon aria-hidden="true" className="__alert__icon" /> : null}
                             {Icon}
                             {props.title ? (
-                                <h4 className="tracking-3 text-typography-lg text-balance font-semibold">{props.title}</h4>
+                                <h4 className="__display-alert__tw-8">{props.title}</h4>
                             ) : (
-                                <div className="w-full">{props.children}</div>
+                                <div className="__display-alert__tw-9">{props.children}</div>
                             )}
                         </div>
-                        {props.title ? <div className="w-full">{props.children}</div> : null}
+                        {props.title ? <div className="__display-alert__tw-9">{props.children}</div> : null}
                     </div>
                 </Polymorph>
             </Collapse>

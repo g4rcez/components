@@ -26,7 +26,7 @@ describe("createTokenStyles component tokens", () => {
         expect(css).toContain("--modal-padding-x: 2rem");
     });
 
-    it("emits typography defaults that fill Tailwind gaps", () => {
+    it("emits typography defaults", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--typography-xs: 0.75rem");
         expect(css).toContain("--typography-2xl: 1.5rem");
@@ -54,6 +54,8 @@ describe("createTokenStyles component tokens", () => {
         expect(css).toContain("--switch-track-w: 2.75rem");
         expect(css).toContain("--slider-track-h: 0.5rem");
         expect(css).toContain("--file-upload-p: 1.5rem");
+        expect(css).toContain("--file-upload-thumb-radius: 50%");
+        expect(css).toContain("--file-upload-thumb-icon-size: 1.75rem");
     });
 
     it("honors input token overrides", () => {
@@ -138,6 +140,7 @@ describe("createTokenStyles component tokens", () => {
     it("emits per-component text-size tokens (Bucket B additions)", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--card-title-text: 2.25rem");
+        expect(css).toContain("--stats-title-text: 1rem");
         expect(css).toContain("--stats-value-text: 2.25rem");
         expect(css).toContain("--list-title-text: 1.5rem");
         expect(css).toContain("--modal-title-text: 1.875rem");
@@ -146,6 +149,7 @@ describe("createTokenStyles component tokens", () => {
     it("emits per-component dimension tokens (Bucket B additions)", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--tabs-divider-h: 1px");
+        expect(css).toContain("--tabs-divider-active-h: 2px");
         expect(css).toContain("--step-connector-h: 2px");
         expect(css).toContain("--calendar-weekday-text: 0.75rem");
         expect(css).toContain("--calendar-cell-text: 0.75rem");
@@ -257,6 +261,8 @@ describe("createTokenStyles component tokens", () => {
         expect(css).toContain("--tag-padding-y: 0.5rem");
         expect(css).toContain("--tag-height-small: 1.5rem");
         expect(css).toContain("--tag-height-tiny: 1.25rem");
+        expect(css).toContain("--tag-text-small: 0.875rem");
+        expect(css).toContain("--tag-text-tiny: 0.75rem");
         expect(css).toContain("--tag-indicator-size: 0.5rem");
     });
 

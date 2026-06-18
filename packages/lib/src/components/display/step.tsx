@@ -134,27 +134,25 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
 
     return (
         <Fragment>
-            <div
-                className={`hidden h-step-connector-h w-full bg-card-border first:hidden xl:block ${innerStatus === "active" || innerStatus === "complete" ? "bg-success" : ""}`}
-            />
+            <div className={`__display-step__tw-1 ${innerStatus === "active" || innerStatus === "complete" ? "__display-step__tw-2" : ""}`} />
             <motion.button
                 {...(props as unknown as HTMLMotionProps<"button">)}
                 type="button"
                 aria-current={innerStatus === "active" ? "step" : undefined}
                 data-step={step}
                 animate={innerStatus}
-                className="relative flex w-auto items-center justify-center text-center"
+                className="__display-step__tw-3"
             >
                 <motion.div
                     variants={variants}
                     transition={transitions}
-                    className={`absolute inset-0 hidden rounded-full text-center xl:block ${innerStatus === "error" ? "bg-danger" : ""}`}
+                    className={`__display-step__tw-4 ${innerStatus === "error" ? "__display-step__tw-5" : ""}`}
                 />
                 <motion.div
                     initial={false}
                     animate={innerStatus}
                     transition={transition}
-                    className="relative flex aspect-square size-step-size items-center justify-center rounded-full font-medium"
+                    className="__display-step__tw-6"
                     variants={{
                         error: {
                             color: parser("var(--danger-foreground)"),
@@ -181,11 +179,11 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                         },
                     }}
                 >
-                    <div className="flex items-center justify-center">
+                    <div className="__display-step__tw-7">
                         {innerStatus === "complete" ? (
-                            <CheckIcon className="size-step-icon-size text-primary-foreground" />
+                            <CheckIcon className="__display-step__tw-8" />
                         ) : innerStatus === "error" ? (
-                            <ErrorIcon className="size-step-icon-size text-danger-foreground" />
+                            <ErrorIcon className="__display-step__tw-9" />
                         ) : (
                             <Fragment>
                                 <span>{step}</span>
@@ -193,8 +191,8 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                         )}
                     </div>
                 </motion.div>
-                <div className="flex flex-col items-start justify-start px-step-label-px">
-                    <h3 className={`flex h-full items-center whitespace-nowrap font-normal ${titleClassName}`}>{title}</h3>
+                <div className="__display-step__tw-10 __display-step__tw-extra-1">
+                    <h3 className={`__display-step__tw-11 ${titleClassName}`}>{title}</h3>
                 </div>
             </motion.button>
         </Fragment>
@@ -222,9 +220,7 @@ export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: num
 
     return (
         <StepContext.Provider value={contextValue}>
-            <div className="relative flex w-full flex-col items-start justify-center gap-step-gap lg:flex-row lg:items-center lg:justify-between">
-                {props.children}
-            </div>
+            <div className="__display-step__tw-12 __display-step__tw-extra-2">{props.children}</div>
         </StepContext.Provider>
     );
 };

@@ -116,8 +116,8 @@ function BatchToolbar({ selectedCount }: { selectedCount: number }) {
 
 - Don't use `Toolbar` for secondary or rarely used actions — keep the surface focused.
 - Don't cram too many items into the toolbar; it will wrap awkwardly on narrow viewports.
-- Don't pass raw Tailwind color classes (`bg-gray-100`, `border-gray-300`) — use design-token classes.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-gray-100`, `border-gray-300`) — use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 
 ## Accessibility
 

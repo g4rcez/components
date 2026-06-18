@@ -25,7 +25,7 @@ describe("Modal focus management", () => {
         const closeButton = await screen.findByRole("button", { name: /close/i });
         expect(closeButton).toBeInTheDocument();
         expect(closeButton).not.toHaveAttribute("tabindex", "-1");
-        expect(closeButton).toHaveClass("focus-visible:ring-2");
+        expect(closeButton).toHaveClass("__floating-modal__tw-23");
     });
 
     it("close button click calls onChange with false", async () => {

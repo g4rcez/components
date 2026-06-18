@@ -1,14 +1,14 @@
 "use client";
-import React from "react";
-import { Any } from "../../types";
-import { createFreeText, FreeTextProps } from "./free-text";
+import type React from "react";
+import type { Any } from "../../types";
+import { createFreeText, type FreeTextProps } from "./free-text";
 
 export type TextareaProps = FreeTextProps<"textarea", React.ComponentProps<"textarea">>;
 
 export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTMLTextAreaElement, Any>(
     "textarea",
     "textarea",
-    { container: "w-full" },
+    { container: "__textarea" },
     (textarea: HTMLTextAreaElement) => {
         const hasRows = textarea.hasAttribute("rows");
         const computeMinHeight = (): number => {

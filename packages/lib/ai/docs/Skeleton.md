@@ -140,8 +140,8 @@ function UserRowSkeleton() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-gray-200`, `bg-slate-300`) as `className` — use `bg-muted` or other design-token classes instead.
-- Don't use arbitrary Tailwind values (`bg-[#ddd]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-gray-200`, `bg-slate-300`) as `className` — use `bg-muted` or other design-token classes instead.
+- Don't use arbitrary utility values (`bg-[#ddd]`) — override CSS variables in your `@theme` block.
 - Don't show skeletons for very short loading states (under ~300 ms) — it causes visual flicker.
 - Don't make skeletons too detailed; simple geometric shapes are most effective.
 - Don't use skeletons for error states — show `Empty` or `Alert` instead.

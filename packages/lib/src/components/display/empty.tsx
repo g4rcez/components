@@ -8,11 +8,13 @@ export const Empty = (props: EmptyProps) => {
     const Icon = props.Icon ?? FileIcon;
     const translate = useTranslations();
     return (
-        <div className="flex w-full flex-col items-center justify-center gap-empty-gap px-empty-px py-empty-py">
-            <span className="text-disabled">
-                <Icon size={64} aria-hidden="true" />
+        <div data-component="empty" className="__empty">
+            <span data-slot="icon" className="__empty__icon">
+                <Icon aria-hidden="true" />
             </span>
-            <p className="text-disabled">{props.message ?? translate.emptyDataMessage}</p>
+            <p data-slot="message" className="__empty__message">
+                {props.message ?? translate.emptyDataMessage}
+            </p>
         </div>
     );
 };

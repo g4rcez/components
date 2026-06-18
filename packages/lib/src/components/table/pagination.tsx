@@ -32,7 +32,7 @@ export const Pagination = (pagination: TablePagination) => {
     const Link: React.ElementType = pagination.asLink ?? "button";
 
     return (
-        <footer className="text-typography-sm flex flex-wrap items-center justify-center gap-table-pag-gap border-t-muted p-table-pag-p lg:flex-nowrap lg:justify-between">
+        <footer className="__table-pagination__tw-1 __table-pagination__tw-extra-1">
             <p>
                 <translation.tablePaginationFooter
                     {...pagination}
@@ -44,7 +44,7 @@ export const Pagination = (pagination: TablePagination) => {
                                 <select
                                     id={id}
                                     value={pagination.size}
-                                    className="cursor-pointer bg-transparent"
+                                    className="__table-pagination__tw-2"
                                     onChange={(e) => {
                                         pagination.onChangeSize?.(Number(e.target.value));
                                     }}
@@ -61,7 +61,7 @@ export const Pagination = (pagination: TablePagination) => {
                 />
             </p>
             <nav>
-                <ul className="flex items-center gap-table-pag-items-gap">
+                <ul className="__table-pagination__tw-3">
                     {pagination.current > 1 ? (
                         <li>
                             <Polymorph as={Link} href="previous" className="">
@@ -80,7 +80,7 @@ export const Pagination = (pagination: TablePagination) => {
                                         <Polymorph
                                             href={x}
                                             as={Link}
-                                            className={`cursor-pointer border-b-2 px-table-pag-item-px py-table-pag-item-py proportional-nums transition-colors hover:border-primary-subtle hover:text-primary-subtle ${x === pagination.current ? "border-primary text-primary" : "border-transparent"}`}
+                                            className={`__table-pagination__tw-4 __table-pagination__tw-final-1${x === pagination.current ? "__table-pagination__tw-5" : "__table-pagination__tw-6"}`}
                                         >
                                             {x}
                                         </Polymorph>

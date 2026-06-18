@@ -1,0 +1,69 @@
+.__timeline {
+    box-sizing: border-box;
+}
+
+/* @generated component utility migration start */
+.__display-timeline__tw-1 {
+    position: relative;
+    padding-bottom: var(--timeline-item-pb);
+}
+
+.__display-timeline__tw-2 {
+    position: absolute;
+    left: var(--timeline-connector-left);
+    top: var(--timeline-connector-top);
+    margin-left: -1px;
+    height: 100%;
+    width: var(--timeline-connector-w);
+    --tw-bg-opacity: 1;
+    background-color: hsla(var(--card-border), var(--tw-bg-opacity));
+}
+
+.__display-timeline__tw-3 {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.__display-timeline__tw-3 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.__display-timeline__tw-4 {
+    display: flex;
+    width: var(--timeline-icon-size);
+    height: var(--timeline-icon-size);
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--full);
+    --tw-bg-opacity: 1;
+    background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity));
+    padding: var(--timeline-icon-p);
+    --tw-text-opacity: 1;
+    color: hsla(var(--warn-foreground), var(--tw-text-opacity));
+}
+
+.__display-timeline__tw-5 {
+    min-width: 0px;
+    flex: 1 1 0%;
+}
+
+.__display-timeline__tw-6 {
+    display: flex;
+    gap: var(--timeline-right-gap);
+    align-self: stretch;
+    padding-left: var(--timeline-right-px);
+    padding-right: var(--timeline-right-px);
+    vertical-align: baseline;
+}
+.__display-timeline__tw-final-1 {
+    display: flow-root;
+}
+
+.__display-timeline__last-connector-hidden > li:last-child > span[aria-hidden="true"] {
+    display: none;
+}
+/* @generated component utility migration end */

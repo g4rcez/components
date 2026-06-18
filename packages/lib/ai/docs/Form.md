@@ -98,8 +98,8 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `Form` — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `Form` — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 - Don't use `Form` when you need a traditional server-rendered full-page reload; use a plain `<form>` with `action` and `method` instead.
 
 ## Accessibility

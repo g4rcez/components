@@ -6,8 +6,8 @@ import { defineConfig } from "vitest/config";
 
 const componentsRoot = "src/components";
 const componentEntryExtensions = new Set([".ts", ".tsx"]);
-const ignoredComponentEntries = [/\.types\.ts$/, /\.utils\.ts$/, /\.context\.tsx$/];
-const externalPackages = new Set(["react", "react-dom", "tailwindcss", "use-sync-external-store"]);
+const ignoredComponentEntries = [/\.types\.ts$/, /\.utils\.ts$/, /\.styles\.ts$/, /\.context\.tsx$/];
+const externalPackages = new Set(["react", "react-dom", "use-sync-external-store"]);
 
 function isExternalDependency(id: string) {
     return externalPackages.has(id) || [...externalPackages].some((pkg) => id.startsWith(`${pkg}/`));
@@ -59,6 +59,9 @@ export default defineConfig({
                 index: "./src/index.ts",
                 "styles/theme": "./src/styles/theme.ts",
                 "styles/design-tokens": "./src/styles/design-tokens.ts",
+                "styles/theme-runtime": "./src/styles/theme-runtime.ts",
+                "styles/tokens": "./src/styles/tokens.ts",
+                "styles/style-manifest": "./src/styles/style-manifest.ts",
                 ...getComponentEntries(),
             },
             formats: ["es"],

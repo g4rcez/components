@@ -12,26 +12,11 @@ import {
     SquaresFourIcon,
     UsersThreeIcon,
 } from "@phosphor-icons/react";
-import { CSSProperties, useMemo, useState } from "react";
-import {
-    Alert,
-    Button,
-    Card,
-    Empty,
-    Stats,
-    StatsCard,
-    Step,
-    Steps,
-    Tab,
-    Tabs,
-    Tag,
-    Timeline,
-    TimelineItem,
-    createCssProperties,
-    defaultDarkTheme,
-    defaultLightTheme,
-    type DesignTokens,
-} from "../../../../../lib/src";
+import { type CSSProperties, useMemo, useState } from "react";
+import { Alert, Button, Card, Empty, Stats, StatsCard, Step, Steps, Tab, Tabs, Tag, Timeline, TimelineItem } from "../../../../../lib/src";
+import { createCssProperties } from "../../../../../lib/src/styles/design-tokens";
+import { defaultDarkTheme, defaultLightTheme } from "../../../../../lib/src/styles/theme";
+import type { DesignTokens } from "../../../../../lib/src/styles/theme.types";
 import { Checkbox } from "../../../../../lib/src/components/form/checkbox";
 import { Input } from "../../../../../lib/src/components/form/input";
 import { Progress } from "../../../../../lib/src/components/display/progress";
@@ -69,7 +54,6 @@ export const ${constName}: DesignTokens = ${JSON.stringify(theme, null, 2)};
 
 const tailwindSnippet = `import type { Config } from "tailwindcss";
 import { createDesignTokens, parsers } from "@g4rcez/components";
-import preset from "@g4rcez/components/preset.tailwind";
 import { LIGHT_THEME } from "./theme/light";
 
 const COLORS = createDesignTokens(
@@ -78,7 +62,6 @@ const COLORS = createDesignTokens(
 );
 
 const config: Config = {
-  presets: [preset],
   content: ["./src/**/*.{ts,tsx}"],
   theme: { extend: { colors: COLORS } },
 };

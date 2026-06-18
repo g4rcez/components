@@ -64,24 +64,20 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
     };
 
     return (
-        <div className="flex h-full flex-1 flex-col">
-            <div role="grid" aria-label={t.pageCalendarMonthGrid} className="flex flex-1 flex-col">
-                <div role="row" className="grid grid-cols-7 border-b border-border">
+        <div className="__page-calendar-month-view__tw-1 __page-calendar-month-view__tw-extra-1">
+            <div role="grid" aria-label={t.pageCalendarMonthGrid} className="__page-calendar-month-view__tw-2 __page-calendar-month-view__tw-extra-1">
+                <div role="row" className="__page-calendar-month-view__tw-3 __page-calendar-month-view__tw-extra-2">
                     {WEEKDAY_LABELS.map((date) => {
                         const day = formatWeekDay(date, locale);
                         return (
-                            <div
-                                role="columnheader"
-                                key={day}
-                                className="py-page-calendar-weekday-py text-center text-page-calendar-weekday-text font-medium text-muted-foreground"
-                            >
+                            <div role="columnheader" key={day} className="__page-calendar-month-view__tw-4">
                                 {day}
                             </div>
                         );
                     })}
                 </div>
                 {weeks.map((week, weekIndex) => (
-                    <div role="row" key={toDateKey(week[0])} className="grid flex-1 grid-cols-7">
+                    <div role="row" key={toDateKey(week[0])} className="__page-calendar-month-view__tw-5 __page-calendar-month-view__tw-extra-2">
                         {week.map((day, dayIndexInWeek) => {
                             const dayIndex = weekIndex * daysInWeek + dayIndexInWeek;
                             const key = toDateKey(day);
@@ -95,8 +91,8 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                     role="gridcell"
                                     aria-selected={isSelected ? true : undefined}
                                     className={css(
-                                        "group flex min-h-page-calendar-cell-min-h flex-col gap-page-calendar-cell-gap border-b border-r border-border p-page-calendar-cell-p transition-colors hover:bg-muted hover:bg-opacity-20",
-                                        !isCurrentMonth && "opacity-50"
+                                        "__page-calendar-month-view__tw-6 __page-calendar-month-view__tw-extra-3",
+                                        !isCurrentMonth && "__page-calendar-month-view__tw-7"
                                     )}
                                 >
                                     <button
@@ -110,22 +106,19 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                         onClick={() => onDayClick(day)}
                                         aria-current={isCurrentDay ? "date" : undefined}
                                         aria-label={`${formatFullDate(day, locale)}${events.length > 0 ? `, ${t.pageCalendarEventCount(events.length)}` : ""}`}
-                                        className="flex w-full cursor-pointer items-center justify-between text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                                        className="__page-calendar-month-view__tw-8"
                                     >
                                         <span
-                                            className={`flex size-page-calendar-month-badge-size items-center justify-center rounded-full text-page-calendar-month-badge-text font-medium ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
+                                            className={`__page-calendar-month-view__tw-9 ${isCurrentDay ? "__page-calendar-month-view__tw-10" : "__page-calendar-month-view__tw-11"}`}
                                         >
                                             {formatDay(day, locale)}
                                         </span>
-                                        <span
-                                            aria-hidden="true"
-                                            className="text-page-calendar-overflow-text leading-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-40"
-                                        >
+                                        <span aria-hidden="true" className="__page-calendar-month-view__tw-12">
                                             +
                                         </span>
                                     </button>
-                                    <div className="min-h-0 flex-1 overflow-y-auto">
-                                        <div className="flex flex-col gap-page-calendar-cell-gap-tight">
+                                    <div className="__page-calendar-month-view__tw-13">
+                                        <div className="__page-calendar-month-view__tw-14 __page-calendar-month-view__tw-extra-1">
                                             {events.map((event) => (
                                                 <div
                                                     key={event.id}

@@ -128,9 +128,9 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         inlineSorter={props.inlineSorter ?? true}
                     />
                 ) : (
-                    <div className="flex flex-wrap gap-table-groups-gap">
+                    <div className="__table-root__tw-1 __table-root__tw-extra-1">
                         {state.groups.map((group, index) => (
-                            <div className="min-w-full" key={`group-${group.groupId}`}>
+                            <div className="__table-root__tw-2" key={`group-${group.groupId}`}>
                                 <InnerTable
                                     {...props}
                                     group={group}

@@ -4,7 +4,7 @@ const css = String.raw;
 
 const plugin = withOptions(
     () => {
-        return function ({ addVariant }) {
+        return ({ addVariant }) => {
             addVariant("hocus", ["&:hover", "&:focus"]);
             addVariant("link", ["&:hover", "&:active"]);
             addVariant("group-assert", [css`:merge(.group):valid:has(.input:valid:not(:placeholder-shown)) &`]);

@@ -15,8 +15,7 @@ describe("free text focus treatment", () => {
         await user.click(input);
 
         expect(document.activeElement).toBe(input);
-        expect(input).not.toHaveClass("focus:ring-2");
-        expect(input.parentElement).toHaveClass("focus-within:border-primary");
+        expect(input.parentElement).toHaveClass("__form-free-text__tw-1");
     });
 
     it("highlights the field border when Textarea is focused", async () => {
@@ -28,7 +27,6 @@ describe("free text focus treatment", () => {
         await user.click(textarea);
 
         expect(document.activeElement).toBe(textarea);
-        expect(textarea).not.toHaveClass("focus:ring-2");
-        expect(textarea.parentElement).toHaveClass("focus-within:border-primary");
+        expect(textarea.parentElement).toHaveClass("__form-free-text__tw-1");
     });
 });

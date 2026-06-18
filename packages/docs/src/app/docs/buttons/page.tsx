@@ -1,6 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
+import { ArrowRightIcon, CheckCircleIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button, Card } from "../../../../../lib/src";
 
 export default function Buttons() {
@@ -20,6 +21,7 @@ function ButtonThemes() {
       <Button theme="danger">danger</Button>
       <Button theme="info">info</Button>
       <Button theme="neutral">neutral</Button>
+      <Button theme="outlined">outlined</Button>
       <Button theme="secondary">secondary</Button>
       <Button theme="success">success</Button>
       <Button theme="warn">warn</Button>
@@ -34,10 +36,41 @@ function ButtonThemes() {
                     <Button theme="danger">danger</Button>
                     <Button theme="info">info</Button>
                     <Button theme="neutral">neutral</Button>
+                    <Button theme="outlined">outlined</Button>
                     <Button theme="secondary">secondary</Button>
                     <Button theme="success">success</Button>
                     <Button theme="warn">warn</Button>
                     <Button theme="muted">muted</Button>
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Buttons With Icons"
+                description="Use the icon prop for leading icons or pair it with the icon size for compact icon-only actions."
+                code={`"use client";
+import { Button } from "@g4rcez/components";
+import { ArrowRightIcon, CheckCircleIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
+
+function ButtonsWithIcons() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Button icon={<PlusIcon aria-hidden />}>Create</Button>
+      <Button theme="success" icon={<CheckCircleIcon aria-hidden />}>Approve</Button>
+      <Button theme="danger" icon={<TrashIcon aria-hidden />}>Delete</Button>
+      <Button size="icon" icon={<ArrowRightIcon aria-hidden />} aria-label="Next" />
+    </div>
+  );
+}`}
+            >
+                <Card title="Icon buttons" className="flex flex-wrap gap-4">
+                    <Button icon={<PlusIcon aria-hidden />}>Create</Button>
+                    <Button theme="success" icon={<CheckCircleIcon aria-hidden />}>
+                        Approve
+                    </Button>
+                    <Button theme="danger" icon={<TrashIcon aria-hidden />}>
+                        Delete
+                    </Button>
+                    <Button size="icon" icon={<ArrowRightIcon aria-hidden />} aria-label="Next" />
                 </Card>
             </ComponentDemo>
 
@@ -54,6 +87,7 @@ function SmallButtons() {
       <Button size="small" theme="danger">danger</Button>
       <Button size="small" theme="info">info</Button>
       <Button size="small" theme="neutral">neutral</Button>
+      <Button size="small" theme="outlined">outlined</Button>
       <Button size="small" theme="secondary">secondary</Button>
       <Button size="small" theme="success">success</Button>
       <Button size="small" theme="muted">muted</Button>
@@ -72,6 +106,9 @@ function SmallButtons() {
                     </Button>
                     <Button size="small" theme="neutral">
                         neutral
+                    </Button>
+                    <Button size="small" theme="outlined">
+                        outlined
                     </Button>
                     <Button size="small" theme="secondary">
                         secondary
@@ -101,6 +138,7 @@ function MinimalButtons() {
       <Button size="min" theme="danger">danger</Button>
       <Button size="min" theme="info">info</Button>
       <Button size="min" theme="neutral">neutral</Button>
+      <Button size="min" theme="outlined">outlined</Button>
       <Button size="min" theme="secondary">secondary</Button>
       <Button size="min" theme="success">success</Button>
       <Button size="min" theme="warn">warn</Button>
@@ -118,6 +156,9 @@ function MinimalButtons() {
                     </Button>
                     <Button size="min" theme="neutral">
                         neutral
+                    </Button>
+                    <Button size="min" theme="outlined">
+                        outlined
                     </Button>
                     <Button size="min" theme="secondary">
                         secondary

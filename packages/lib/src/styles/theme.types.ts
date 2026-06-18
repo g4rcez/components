@@ -40,6 +40,7 @@ export type CardTokens = {
     "title-mb": string;
     "stats-icon-col-w": string;
     "stats-icon-col-p": string;
+    "stats-icon-size": string;
     "stats-content-gap": string;
     "stats-content-py": string;
     "title-text": string;
@@ -142,6 +143,7 @@ export type StatsTokens = {
     "inner-gap": string;
     "footer-px": string;
     "footer-py": string;
+    "title-text": string;
     "value-text": string;
 };
 
@@ -196,6 +198,8 @@ export type TagTokens = {
     "padding-x-tiny": string;
     "padding-y-tiny": string;
     "padding-icon": string;
+    "text-small": string;
+    "text-tiny": string;
     "indicator-size": string;
 };
 
@@ -325,6 +329,8 @@ export type FileUploadTokens = {
     radius: string;
     gap: string;
     "thumb-size": string;
+    "thumb-radius": string;
+    "thumb-icon-size": string;
     "text-name": string;
     "text-size": string;
     "delete-py": string;
@@ -389,6 +395,7 @@ export type TabsTokens = {
     "item-px": string;
     "item-py": string;
     "divider-h": string;
+    "divider-active-h": string;
 };
 
 export type ShortcutTokens = {

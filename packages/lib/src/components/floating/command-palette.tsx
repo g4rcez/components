@@ -53,7 +53,7 @@ type ItemProps = {
 };
 
 const Group = (props: { item: CommandGroupItem; text: string }) => (
-    <span className="text-typography-sm flex h-full items-center text-left font-medium text-secondary">
+    <span className="__floating-command-palette__tw-1">
         {isReactFC(props.item.title) ? <props.item.title text={props.text} /> : props.item.title}
     </span>
 );
@@ -62,7 +62,7 @@ const Item = forwardRef<HTMLDivElement, Omit<ItemProps, "onChangeVisibility"> & 
     ({ active, id, item, text, ...props }, ref) => {
         if (item.type === "group")
             return (
-                <div id={id} role="presentation" className="h-command-row-h px-command-group-px pb-command-group-pb pt-command-group-pt">
+                <div id={id} role="presentation" className="__floating-command-palette__tw-2">
                     <Group text={text} item={item} />
                 </div>
             );
@@ -80,12 +80,9 @@ const Item = forwardRef<HTMLDivElement, Omit<ItemProps, "onChangeVisibility"> & 
                     props.onMouseDown?.(event);
                     if (!event.defaultPrevented) event.preventDefault();
                 }}
-                className={css(
-                    "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-floating-hover",
-                    active ? "bg-floating-hover" : ""
-                )}
+                className={css("__floating-command-palette__tw-3", active ? "__floating-command-palette__tw-4" : "")}
             >
-                <span className="flex items-center gap-command-item-gap">
+                <span className="__floating-command-palette__tw-5">
                     {item.Icon ? item.Icon : null}
                     <span>{isReactFC(item.title) ? <item.title text={text} /> : item.title}</span>
                 </span>
@@ -246,14 +243,18 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 overlayClickClose
                 initialFocus={searchInputRef}
                 ariaTitle={translations.commandPaletteTitle}
-                bodyClassName="px-0 py-0 pt-0"
+                bodyClassName="__floating-command-palette__body"
                 data-component="command-palette"
                 onChange={props.onChangeVisibility}
-                className="container relative overflow-clip py-0 md:max-w-screen-sm lg:max-w-screen-md"
+                className="__floating-command-palette__container __floating-command-palette__tw-6"
             >
-                <header className="sticky top-0 isolate z-floating flex h-command-header-h w-full items-center overflow-clip border-b border-floating-border bg-floating-background">
-                    <div className="flex size-command-icon-size items-center justify-center">
-                        {props.Icon ? <Icon Default={FunnelIcon} text={text} size={16} /> : <FunnelIcon size={16} />}
+                <header className="__floating-command-palette__tw-7">
+                    <div className="__floating-command-palette__tw-8">
+                        {props.Icon ? (
+                            <Icon Default={FunnelIcon} text={text} className="__command-palette__search-icon" />
+                        ) : (
+                            <FunnelIcon className="__command-palette__search-icon" />
+                        )}
                     </div>
                     <input
                         {...(getReferenceProps({
@@ -300,36 +301,29 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         data-combikeysbypass="true"
                         placeholder={translations.commandPaletteSearchPlaceholder}
                         onChange={(e) => setText(e.target.value)}
-                        className="text-typography-lg h-command-header-h w-full items-center bg-transparent px-command-input-px py-command-input-py pb-command-input-py text-left outline-none"
+                        className="__floating-command-palette__tw-9"
                     />
                 </header>
                 {props.loading ? (
-                    <div
-                        data-component="command-palette-list"
-                        className="my-command-list-my flex max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-group-px"
-                    >
-                        <div className="h-command-row-h px-command-group-px pb-command-group-pb pt-command-group-pt">
-                            {translations.commandPaletteLoading}
-                        </div>
+                    <div data-component="command-palette-list" className="__floating-command-palette__tw-10 __floating-command-palette__tw-extra-1">
+                        <div className="__floating-command-palette__tw-2">{translations.commandPaletteLoading}</div>
                         {loadingSkeleton.map((_, i) => (
-                            <div
-                                key={`${id}-${i}-skeleton-index`}
-                                className={css(
-                                    "flex h-command-row-h items-center justify-between rounded-command-radius p-command-item-p hover:bg-primary hover:text-primary-foreground"
-                                )}
-                            >
+                            <div key={`${id}-${i}-skeleton-index`} className={css("__floating-command-palette__tw-11")}>
                                 {SkeletonCell}
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="flex min-w-full flex-row flex-nowrap" data-component="command-palette-container">
+                    <div
+                        className="__floating-command-palette__tw-12 __floating-command-palette__tw-extra-2"
+                        data-component="command-palette-container"
+                    >
                         <div
                             role="listbox"
                             id={listboxId}
                             ref={scrollContainerRef}
                             data-component="command-palette-list"
-                            className="my-command-list-my flex h-fit max-h-command-list-max-h w-full origin-[top_center] flex-col gap-command-list-gap overflow-y-auto px-command-list-px"
+                            className="__floating-command-palette__tw-13 __floating-command-palette__tw-extra-1"
                         >
                             {displayItems.map((item, index) => (
                                 <Item
@@ -358,7 +352,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                 />
                             ))}
                             {displayItems.length === 1 ? (
-                                <div className={css("flex items-center justify-between rounded-command-radius p-command-item-p text-secondary")}>
+                                <div className={css("__floating-command-palette__tw-14")}>
                                     {translations.commandPaletteEmpty ?? props.emptyMessage}
                                 </div>
                             ) : null}
@@ -366,11 +360,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}
                     </div>
                 )}
-                {props.footer ? (
-                    <footer className="flex h-command-footer-h items-center rounded-b-command-radius border-t border-floating-border p-command-footer-p">
-                        {props.footer}
-                    </footer>
-                ) : null}
+                {props.footer ? <footer className="__floating-command-palette__tw-15">{props.footer}</footer> : null}
             </Modal>
         </Fragment>
     );

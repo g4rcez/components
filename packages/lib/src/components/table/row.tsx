@@ -1,8 +1,9 @@
-import React, { Fragment, PropsWithChildren, useRef, useState } from "react";
+import type React from "react";
+import { Fragment, type PropsWithChildren, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { path } from "../../lib/fns";
 import { SkeletonCell } from "../display/skeleton";
-import { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
+import type { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
 
 type ItemContentContext<T extends Record<string, unknown>> = {
     cols: Col<T>[];
@@ -14,10 +15,10 @@ type ItemContentContext<T extends Record<string, unknown>> = {
 const RowAside = (props: PropsWithChildren) => {
     const parentRef = useRef<HTMLDivElement>(null);
     const ref = useRef<HTMLDivElement>(null);
-    const [className, setClassName] = useState("opacity-0");
-    const ariaHidden = className === "opacity-0";
+    const [className, setClassName] = useState("__table-row__aside-hidden");
+    const ariaHidden = className === "__table-row__aside-hidden";
 
-    const onLeave = () => setClassName("opacity-0");
+    const onLeave = () => setClassName("__table-row__aside-hidden");
 
     const onEnter = () => {
         const child = ref.current;
@@ -25,7 +26,7 @@ const RowAside = (props: PropsWithChildren) => {
         if (child !== null && parent !== null) {
             parent.style.left = `-${child.getBoundingClientRect().width + 4}px`;
         }
-        setClassName("opacity-100");
+        setClassName("__table-row__aside-visible");
     };
 
     return (
@@ -36,9 +37,9 @@ const RowAside = (props: PropsWithChildren) => {
             data-component="cell-aside"
             inert={ariaHidden ? true : undefined}
             tabIndex={ariaHidden ? -1 : undefined}
-            className={`group-table-cell-aside absolute inset-0 top-0 flex h-full w-full items-stretch transition-opacity duration-300 ease-in-out ${className}`}
+            className={`__table-row__aside __table-row__tw-1 ${className}`}
         >
-            <div ref={ref} className="isolate block">
+            <div ref={ref} className="__table-row__tw-2">
                 {props.children}
             </div>
         </div>
@@ -63,15 +64,15 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`typography group-table-cell flex border-collapse flex-col whitespace-pre-wrap border border-y border-b border-table-border p-table-cell-padding md:table-cell md:border-b-0 md:border-r md:border-l-transparent md:last:border-r-transparent ${className}`}
+                        className={`typography __table-row__cell __table-row__border __table-row__tw-3 __table-row__tw-extra-1 __table-row__cell-content ${className}`}
                     >
                         {exposeAside ? (
                             <RowAside>
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className="text-typography-sm block font-bold leading-tight md:hidden">{col.thead}</span>
-                        <span className="relative">
+                        <span className="__table-row__tw-4">{col.thead}</span>
+                        <span className="__table-row__tw-5">
                             {loading ? (
                                 SkeletonCell
                             ) : Component ? (

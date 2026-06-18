@@ -12,6 +12,7 @@ export * from "./lib/dict";
 export * from "./lib/fns";
 export * from "./styles/design-tokens";
 export * from "./styles/theme";
+export * from "./styles/theme-runtime";
 export * from "./styles/theme.types";
 export type * from "./types";
 export { ComponentsProvider } from "./hooks/use-components-provider";

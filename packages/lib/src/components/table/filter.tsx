@@ -1,14 +1,15 @@
-import { Symbols } from "linq-arrays";
+import type { Symbols } from "linq-arrays";
 import { FunnelIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
-import React, { Fragment, useMemo } from "react";
-import { AllPaths } from "sidekicker";
+import type React from "react";
+import { Fragment, useMemo } from "react";
+import type { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
-import { Any, Label } from "../../types";
+import type { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown";
-import { Input, InputTypes } from "../form/input";
-import { OptionProps, Select } from "../form/select";
-import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
+import { Input, type InputTypes } from "../form/input";
+import { type OptionProps, Select } from "../form/select";
+import { type Col, ColType, getLabel, type TableConfiguration, valueFromType } from "./table-lib";
 
 type Operators = {
     value: string;
@@ -185,17 +186,17 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="flex items-center gap-table-inline-gap-tight proportional-nums">
-                        <FunnelIcon size={14} />
+                    <span className="__table-filter__tw-1 __table-filter__tw-final-1">
+                        <FunnelIcon className="__table-filter__trigger-icon" />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
             >
-                <ul className="mt-table-filter-list-mt space-y-2">
+                <ul className="__table-filter__tw-2">
                     {props.filters.map((filter) => {
                         const options = operators.options[filter.type]!;
                         return (
-                            <li key={`filter-select-${filter.id}`} className="flex flex-nowrap gap-table-filter-row-gap">
+                            <li key={`filter-select-${filter.id}`} className="__table-filter__tw-3 __table-filter__tw-extra-1">
                                 <Select
                                     options={props.options}
                                     title={translation.tableFilterColumnTitle}
@@ -221,15 +222,15 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     title={translation.tableFilterValueTitle}
                                     placeholder={translation.tableFilterValuePlaceholder}
                                 />
-                                <div className="mt-5 flex items-center justify-center">
+                                <div className="__table-filter__tw-4">
                                     <button
                                         data-id={filter.id}
                                         type="button"
                                         onClick={onDelete}
                                         aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
                                     >
-                                        <span className="text-danger">
-                                            <TrashIcon aria-hidden="true" size={16} />
+                                        <span className="__table-filter__tw-5">
+                                            <TrashIcon aria-hidden="true" className="__table-filter__delete-icon" />
                                         </span>
                                     </button>
                                 </div>
@@ -237,8 +238,8 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="flex items-center gap-table-inline-gap-tight text-primary">
-                            <PlusIcon size={14} /> {translation.tableFilterNewFilter}
+                        <button type="button" onClick={onAddFilter} className="__table-filter__tw-6">
+                            <PlusIcon className="__table-filter__add-icon" /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
                 </ul>
@@ -279,7 +280,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="flex flex-nowrap items-center gap-table-filter-inline-gap py-table-filter-inline-py">
+        <div className="__table-filter__tw-7 __table-filter__tw-extra-1">
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}
@@ -301,11 +302,11 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 onClick={onDelete}
                 data-id={filter.id}
                 type="button"
-                className="mt-4"
+                className="__table-filter__tw-8"
                 aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
             >
-                <span className="text-danger">
-                    <TrashIcon aria-hidden="true" size={14} />
+                <span className="__table-filter__tw-5">
+                    <TrashIcon aria-hidden="true" className="__table-filter__delete-icon __table-filter__delete-icon--sm" />
                 </span>
             </button>
         </div>

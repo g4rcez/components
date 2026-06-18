@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { PropsWithChildren } from "react";
-import { Tweaks } from "../../../lib/src";
+import type { PropsWithChildren } from "react";
+import type { Tweaks } from "../../../lib/src";
 import { Notifications } from "../../../lib/src/components/display/notifications";
 import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
 import { createTokenStyles, type TokenRemap } from "../../../lib/src/styles/design-tokens";
@@ -32,7 +32,7 @@ export const RootLayout = (props: PropsWithChildren) => {
     });
 
     return (
-        <html lang="en" className="dark scroll-smooth bg-background proportional-nums text-foreground antialiased">
+        <html lang="en" className="dark scroll-smooth bg-background proportional-nums text-foreground antialiased" data-g4-theme="dark">
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />

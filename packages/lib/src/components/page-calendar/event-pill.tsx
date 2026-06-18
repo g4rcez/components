@@ -20,10 +20,7 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             height: "1.25rem",
             borderRadius: "0.25rem",
         } as CSSProperties,
-        className: css(
-            "w-full border-0 justify-start rounded-page-calendar-pill-radius text-page-calendar-pill-text truncate text-ellipsis overflow-hidden border leading-tight",
-            event.className
-        ),
+        className: css("__page-calendar-event-pill__border __page-calendar-event-pill__tw-1", event.className),
     };
     if (compact) {
         return (
@@ -49,8 +46,8 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             aria-label={t.pageCalendarEventAt(event.title, formatEventTime(event.date))}
             theme={event.className ? "raw" : "primary"}
         >
-            <div className="truncate font-medium">{event.title}</div>
-            <div className="text-page-calendar-pill-text opacity-60">{formatEventTime(event.date)}</div>
+            <div className="__page-calendar-event-pill__tw-2">{event.title}</div>
+            <div className="__page-calendar-event-pill__tw-3">{formatEventTime(event.date)}</div>
         </Button>
     );
 }

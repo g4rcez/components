@@ -189,8 +189,8 @@ import { WarningCircleIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-green-500`, `text-red-600`) for icon backgrounds — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-green-500`, `text-red-600`) for icon backgrounds — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't cram too much information into a single `TimelineItem`; link to detail pages.
 - Don't use `Timeline` for non-sequential data — use `List` or `Table` for unordered collections.
 

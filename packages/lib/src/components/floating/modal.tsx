@@ -108,24 +108,21 @@ const animations: Animations = {
     },
 };
 
-const variants = cva(
-    "z-floating flex min-w-xs appearance-none flex-col flex-nowrap gap-modal-gap border border-floating-border bg-floating-background outline-0 ring-0",
-    {
-        variants: {
-            type: {
-                drawer: "absolute h-screen max-h-screen min-h-0 w-fit max-w-modal-dialog-max-w-mobile",
-                dialog: "container relative h-min max-h-modal-sheet-max-h-lvh rounded-modal-radius py-modal-padding-y",
-                sheet: "absolute bottom-0 h-screen max-h-modal-sheet-max-h-svh w-screen rounded-t-modal-radius pb-modal-sheet-pb pt-modal-sheet-pt",
-            },
-            position: {
-                none: "",
-                right: "absolute right-0 top-0 rounded-l-modal-radius py-modal-padding-y",
-                left: "absolute left-0 top-0 rounded-r-modal-radius py-modal-padding-y",
-            },
+const variants = cva("__floating-modal__border __floating-modal__tw-1 __floating-modal__tw-extra-1", {
+    variants: {
+        type: {
+            drawer: "__floating-modal__tw-2",
+            dialog: "container __floating-modal__tw-3",
+            sheet: "__floating-modal__tw-4",
         },
-        defaultVariants: { position: "right", type: "dialog" },
-    }
-);
+        position: {
+            none: "",
+            right: "__floating-modal__tw-5",
+            left: "__floating-modal__tw-6",
+        },
+    },
+    defaultVariants: { position: "right", type: "dialog" },
+});
 
 type ModalAccessibleNameProps = { title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label };
 
@@ -265,16 +262,12 @@ const Draggable = (props: DraggableProps) => {
             aria-describedby={props.instructionsId}
             aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
             className={css(
-                "absolute isolate z-calendar rounded-modal-resizer-radius focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
-                props.sheet ? "cursor-row-resize" : "cursor-col-resize bg-floating-border",
-                props.sheet
-                    ? "top-1 flex h-modal-sheet-handle-h w-full justify-center py-modal-sheet-handle-py"
-                    : props.position === "left"
-                      ? "right-5 top-1/2 h-modal-drawer-resizer-h w-modal-drawer-resizer-w"
-                      : "left-2 top-1/2 h-modal-drawer-resizer-h w-modal-drawer-resizer-w"
+                "__floating-modal__tw-7",
+                props.sheet ? "__floating-modal__tw-8" : "__floating-modal__tw-9",
+                props.sheet ? "__floating-modal__tw-10" : props.position === "left" ? "__floating-modal__tw-11" : "__floating-modal__tw-12"
             )}
         >
-            {props.sheet ? <div className="h-modal-sheet-pill-h w-modal-sheet-pill-w rounded-modal-sheet-pill-radius bg-floating-border" /> : null}
+            {props.sheet ? <div className="__floating-modal__tw-13" /> : null}
         </motion.button>
     );
 };
@@ -456,11 +449,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                 <FloatingOverlay
                                     lockScroll
                                     data-component="overlay"
-                                    className={css(
-                                        "inset-0 isolate z-overlay flex h-modal-overlay-h !overflow-clip bg-floating-overlay/80",
-                                        type === "drawer" ? "" : "items-start justify-center pt-modal-overlay-pt lg:p-modal-overlay-p",
-                                        overlayClassName
-                                    )}
+                                    className={css("__floating-modal__tw-14", type === "drawer" ? "" : "__floating-modal__tw-15", overlayClassName)}
                                 >
                                     <FloatingFocusManager
                                         modal
@@ -475,7 +464,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 {...interactions.getFloatingProps({
                                                     id: modalId,
                                                     "aria-modal": open,
-                                                    className: css(variants({ position, type }), className, "isolate overscroll-contain"),
+                                                    className: css(variants({ position, type }), className, "__floating-modal__tw-16"),
                                                 })}
                                                 ref={setModalRef}
                                                 {...(title ? { "aria-labelledby": headingId } : { "aria-label": ariaTitle })}
@@ -491,7 +480,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                             >
                                                 {useResizer && resizer ? (
                                                     <>
-                                                        <span id={resizeDescriptionId} className="sr-only">
+                                                        <span id={resizeDescriptionId} className="__floating-modal__tw-17">
                                                             {t.dialogResizeInstructions}
                                                         </span>
                                                         <Draggable
@@ -506,29 +495,23 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     </>
                                                 ) : null}
                                                 {title ? (
-                                                    <motion.header {...draggableMotionProps} className="relative isolate w-full">
+                                                    <motion.header {...draggableMotionProps} className="__floating-modal__tw-18">
                                                         {title ? (
-                                                            <h2
-                                                                id={headingId}
-                                                                className="block select-text border-b border-floating-border px-modal-padding-x pb-modal-title-pb text-modal-title-text font-medium leading-relaxed"
-                                                            >
+                                                            <h2 id={headingId} className="__floating-modal__tw-19">
                                                                 {title}
                                                             </h2>
                                                         ) : null}
                                                     </motion.header>
                                                 ) : null}
                                                 {ariaDescription ? (
-                                                    <span id={descriptionId} className="sr-only">
+                                                    <span id={descriptionId} className="__floating-modal__tw-17">
                                                         {ariaDescription}
                                                     </span>
                                                 ) : null}
                                                 <motion.section
                                                     ref={innerContent}
                                                     data-component="modal-body"
-                                                    className={css(
-                                                        "flex-1 select-text overflow-y-auto px-modal-padding-x py-modal-body-py",
-                                                        bodyClassName
-                                                    )}
+                                                    className={css("__floating-modal__tw-20", bodyClassName)}
                                                     onTouchEnd={async () => {
                                                         scroll.set(undefined);
                                                         scrollInitial.set(undefined);
@@ -582,20 +565,16 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 >
                                                     {children}
                                                 </motion.section>
-                                                {footer ? (
-                                                    <footer className="w-full select-text border-t border-floating-border px-modal-padding-x pt-modal-footer-pt">
-                                                        {footer}
-                                                    </footer>
-                                                ) : null}
+                                                {footer ? <footer className="__floating-modal__tw-21">{footer}</footer> : null}
                                                 {closable ? (
-                                                    <div className="absolute right-modal-close-right top-modal-close-top z-floating">
+                                                    <div className="__floating-modal__tw-22">
                                                         <button
                                                             type="button"
                                                             onClick={onClose}
                                                             aria-label={t.closeButton}
-                                                            className="rounded-button-radius p-modal-close-p opacity-70 transition-colors hover:text-danger hover:opacity-100 focus:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                                            className="__floating-modal__tw-23"
                                                         >
-                                                            <XIcon size={20} aria-hidden="true" />
+                                                            <XIcon aria-hidden="true" className="__modal__close-icon" />
                                                         </button>
                                                     </div>
                                                 ) : null}
@@ -683,9 +662,9 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                 ariaDescription={typeof options.description === "string" ? options.description : undefined}
                 overlayClickClose={false}
                 title={options.title || translations.modalConfirmTitle}
-                className="container max-w-dialog lg:max-w-96"
+                className="container __floating-modal__tw-24"
                 footer={
-                    <div className="flex justify-end gap-modal-footer-gap">
+                    <div className="__floating-modal__tw-25">
                         <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
                             {options.cancel?.text || translations.modalConfirmCancel}
                         </Button>
@@ -695,7 +674,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                     </div>
                 }
             >
-                <div className="py-modal-confirm-py text-foreground">{options.description}</div>
+                <div className="__floating-modal__tw-26">{options.description}</div>
             </Modal>
         </ConfirmContext.Provider>
     );

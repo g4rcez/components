@@ -1,14 +1,15 @@
 "use client";
 import { format, isValid, parse, startOfDay } from "date-fns";
 import { CalendarIcon } from "@phosphor-icons/react";
-import React, { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react";
+import type React from "react";
+import { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react";
 import { Is } from "sidekicker";
 import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
-import { Override } from "../../types";
-import { Calendar, CalendarProps } from "../display/calendar";
+import type { Override } from "../../types";
+import { Calendar, type CalendarProps } from "../display/calendar";
 import { Dropdown } from "../floating/dropdown";
-import { Input, InputProps } from "./input";
+import { Input, type InputProps } from "./input";
 
 export type DatePickerProps = Omit<
     Override<
@@ -187,10 +188,10 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                                     buttonProps={{ "aria-describedby": labelId }}
                                     trigger={
                                         <span aria-labelledby={labelId}>
-                                            <span id={labelId} className="sr-only">
+                                            <span id={labelId} className="__form-date-picker__tw-1">
                                                 {translation.datePickerCalendarButtonLabel}
                                             </span>
-                                            <CalendarIcon size={16} />
+                                            <CalendarIcon aria-hidden="true" className="__date-picker__calendar-icon" />
                                         </span>
                                     }
                                 >

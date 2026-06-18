@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "5.0.6",
+    "version": "5.0.7",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -10,8 +10,7 @@
         "components",
         "design-system",
         "react",
-        "skill",
-        "tailwindcss"
+        "skill"
     ],
     "homepage": "https://github.com/g4rcez/components#readme",
     "bugs": {
@@ -27,11 +26,17 @@
         "type": "git",
         "url": "https://github.com/g4rcez/components"
     },
+    "bin": {
+        "csscomponents": "./bin/g4rcez-components.mjs",
+        "g4rcez-components": "./bin/g4rcez-components.mjs",
+        "g4rcez-components-styles": "./bin/g4rcez-components.mjs"
+    },
     "source": "./src/index.ts",
     "files": [
         "dist",
         "dist/index.css",
-        "ai"
+        "ai",
+        "bin"
     ],
     "sideEffects": false,
     "main": "./dist/index.mjs",
@@ -44,17 +49,10 @@
             "default": "./dist/index.mjs"
         },
         "./index.css": "./dist/index.css",
-        "./dist/index.css": "./dist/index.css",
-        "./themes": {
-            "types": "./dist/styles/theme.d.ts",
-            "import": "./dist/styles/theme.mjs",
-            "default": "./dist/styles/theme.mjs"
-        },
-        "./styles": {
-            "types": "./dist/styles/design-tokens.d.ts",
-            "import": "./dist/styles/design-tokens.mjs",
-            "default": "./dist/styles/design-tokens.mjs"
-        },
+        "./foundation.css": "./dist/foundation.css",
+        "./tokens.css": "./dist/tokens.css",
+        "./base.css": "./dist/base.css",
+        "./button.css": "./dist/button.css",
         "./plugin.tailwind": {
             "types": "./dist/preset/plugin.tailwind.d.ts",
             "import": "./dist/preset/plugin.tailwind.js",
@@ -66,6 +64,44 @@
             "import": "./dist/preset/preset.tailwind.js",
             "require": "./dist/preset/preset.tailwind.js",
             "default": "./dist/preset/preset.tailwind.js"
+        },
+        "./tailwind/plugin": {
+            "types": "./dist/preset/plugin.tailwind.d.ts",
+            "import": "./dist/preset/plugin.tailwind.js",
+            "require": "./dist/preset/plugin.tailwind.js",
+            "default": "./dist/preset/plugin.tailwind.js"
+        },
+        "./tailwind/preset": {
+            "types": "./dist/preset/preset.tailwind.d.ts",
+            "import": "./dist/preset/preset.tailwind.js",
+            "require": "./dist/preset/preset.tailwind.js",
+            "default": "./dist/preset/preset.tailwind.js"
+        },
+        "./style-manifest.json": "./dist/style-manifest.json",
+        "./style-manifest": {
+            "types": "./dist/styles/style-manifest.d.ts",
+            "import": "./dist/styles/style-manifest.mjs",
+            "default": "./dist/styles/style-manifest.mjs"
+        },
+        "./themes": {
+            "types": "./dist/styles/theme.d.ts",
+            "import": "./dist/styles/theme.mjs",
+            "default": "./dist/styles/theme.mjs"
+        },
+        "./styles": {
+            "types": "./dist/styles/design-tokens.d.ts",
+            "import": "./dist/styles/design-tokens.mjs",
+            "default": "./dist/styles/design-tokens.mjs"
+        },
+        "./theme": {
+            "types": "./dist/styles/theme-runtime.d.ts",
+            "import": "./dist/styles/theme-runtime.mjs",
+            "default": "./dist/styles/theme-runtime.mjs"
+        },
+        "./tokens": {
+            "types": "./dist/styles/tokens.d.ts",
+            "import": "./dist/styles/tokens.mjs",
+            "default": "./dist/styles/tokens.mjs"
         },
         "./components/*": {
             "types": "./dist/components/*.d.ts",
@@ -207,20 +243,157 @@
             "import": "./dist/components/display/alert.mjs",
             "default": "./dist/components/display/alert.mjs"
         },
-        "./ai/*": "./ai/*"
+        "./ai/*": "./ai/*",
+        "./tag.css": "./dist/tag.css",
+        "./form.css": "./dist/form.css",
+        "./input.css": "./dist/input.css",
+        "./select.css": "./dist/select.css",
+        "./slider.css": "./dist/slider.css",
+        "./slider": {
+            "types": "./dist/components/form/slider.d.ts",
+            "import": "./dist/components/form/slider.mjs",
+            "default": "./dist/components/form/slider.mjs"
+        },
+        "./switch.css": "./dist/switch.css",
+        "./table.css": "./dist/table.css",
+        "./card.css": "./dist/card.css",
+        "./list.css": "./dist/list.css",
+        "./step.css": "./dist/step.css",
+        "./step": {
+            "types": "./dist/components/display/step.d.ts",
+            "import": "./dist/components/display/step.mjs",
+            "default": "./dist/components/display/step.mjs"
+        },
+        "./tabs.css": "./dist/tabs.css",
+        "./alert.css": "./dist/alert.css",
+        "./empty.css": "./dist/empty.css",
+        "./empty": {
+            "types": "./dist/components/display/empty.d.ts",
+            "import": "./dist/components/display/empty.mjs",
+            "default": "./dist/components/display/empty.mjs"
+        },
+        "./stats.css": "./dist/stats.css",
+        "./menu.css": "./dist/menu.css",
+        "./checkbox.css": "./dist/checkbox.css",
+        "./radiobox.css": "./dist/radiobox.css",
+        "./textarea.css": "./dist/textarea.css",
+        "./textarea": {
+            "types": "./dist/components/form/textarea.d.ts",
+            "import": "./dist/components/form/textarea.mjs",
+            "default": "./dist/components/form/textarea.mjs"
+        },
+        "./page-calendar.css": "./dist/page-calendar.css",
+        "./page-calendar": {
+            "types": "./dist/components/page-calendar/index.d.ts",
+            "import": "./dist/components/page-calendar/index.mjs",
+            "default": "./dist/components/page-calendar/index.mjs"
+        },
+        "./polymorph.css": "./dist/polymorph.css",
+        "./polymorph": {
+            "types": "./dist/components/core/polymorph.d.ts",
+            "import": "./dist/components/core/polymorph.mjs",
+            "default": "./dist/components/core/polymorph.mjs"
+        },
+        "./modal.css": "./dist/modal.css",
+        "./task-list.css": "./dist/task-list.css",
+        "./typography.css": "./dist/typography.css",
+        "./typography": {
+            "types": "./dist/components/core/typography.d.ts",
+            "import": "./dist/components/core/typography.mjs",
+            "default": "./dist/components/core/typography.mjs"
+        },
+        "./masonry.css": "./dist/masonry.css",
+        "./spinner.css": "./dist/spinner.css",
+        "./spinner": {
+            "types": "./dist/components/display/spinner.d.ts",
+            "import": "./dist/components/display/spinner.mjs",
+            "default": "./dist/components/display/spinner.mjs"
+        },
+        "./expand.css": "./dist/expand.css",
+        "./wizard.css": "./dist/wizard.css",
+        "./wizard": {
+            "types": "./dist/components/floating/wizard.d.ts",
+            "import": "./dist/components/floating/wizard.mjs",
+            "default": "./dist/components/floating/wizard.mjs"
+        },
+        "./calendar.css": "./dist/calendar.css",
+        "./progress.css": "./dist/progress.css",
+        "./progress": {
+            "types": "./dist/components/display/progress.d.ts",
+            "import": "./dist/components/display/progress.mjs",
+            "default": "./dist/components/display/progress.mjs"
+        },
+        "./timeline.css": "./dist/timeline.css",
+        "./toolbar.css": "./dist/toolbar.css",
+        "./toolbar": {
+            "types": "./dist/components/floating/toolbar.d.ts",
+            "import": "./dist/components/floating/toolbar.mjs",
+            "default": "./dist/components/floating/toolbar.mjs"
+        },
+        "./tooltip.css": "./dist/tooltip.css",
+        "./date-picker.css": "./dist/date-picker.css",
+        "./file-upload.css": "./dist/file-upload.css",
+        "./input-field.css": "./dist/input-field.css",
+        "./input-field": {
+            "types": "./dist/components/form/input-field.d.ts",
+            "import": "./dist/components/form/input-field.mjs",
+            "default": "./dist/components/form/input-field.mjs"
+        },
+        "./dropdown.css": "./dist/dropdown.css",
+        "./autocomplete.css": "./dist/autocomplete.css",
+        "./multi-select.css": "./dist/multi-select.css",
+        "./multi-select": {
+            "types": "./dist/components/form/multi-select.d.ts",
+            "import": "./dist/components/form/multi-select.mjs",
+            "default": "./dist/components/form/multi-select.mjs"
+        },
+        "./render-on-view.css": "./dist/render-on-view.css",
+        "./render-on-view": {
+            "types": "./dist/components/core/render-on-view.d.ts",
+            "import": "./dist/components/core/render-on-view.mjs",
+            "default": "./dist/components/core/render-on-view.mjs"
+        },
+        "./notifications.css": "./dist/notifications.css",
+        "./command-palette.css": "./dist/command-palette.css",
+        "./command-palette": {
+            "types": "./dist/components/floating/command-palette.d.ts",
+            "import": "./dist/components/floating/command-palette.mjs",
+            "default": "./dist/components/floating/command-palette.mjs"
+        },
+        "./heading.css": "./dist/heading.css",
+        "./resizable.css": "./dist/resizable.css",
+        "./shortcut.css": "./dist/shortcut.css",
+        "./skeleton.css": "./dist/skeleton.css",
+        "./free-text.css": "./dist/free-text.css",
+        "./page-calendar-header.css": "./dist/page-calendar-header.css",
+        "./page-calendar-day-view.css": "./dist/page-calendar-day-view.css",
+        "./page-calendar-event-pill.css": "./dist/page-calendar-event-pill.css",
+        "./page-calendar-month-view.css": "./dist/page-calendar-month-view.css",
+        "./page-calendar-week-view.css": "./dist/page-calendar-week-view.css",
+        "./table-filter.css": "./dist/table-filter.css",
+        "./table-group.css": "./dist/table-group.css",
+        "./table-root.css": "./dist/table-root.css",
+        "./table-inner-table.css": "./dist/table-inner-table.css",
+        "./table-metadata.css": "./dist/table-metadata.css",
+        "./table-pagination.css": "./dist/table-pagination.css",
+        "./table-row.css": "./dist/table-row.css",
+        "./table-sort.css": "./dist/table-sort.css",
+        "./table-head.css": "./dist/table-head.css"
     },
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css",
+        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css:v6; npm run lib:style-manifest",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
-        "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
         "lib:types": "tsc -p tsconfig.lib.json",
         "preset": "tsc -p tsconfig.styles.json && tsc -p tsconfig.tailwind.json",
         "test": "vitest run",
-        "test:watch": "vitest watch"
+        "test:watch": "vitest watch",
+        "styles:imports": "node ./bin/g4rcez-components.mjs",
+        "lib:css:v6": "vite build --config vite.css.config.mts && node ./scripts/write-css-sourcemaps.mjs",
+        "lib:style-manifest": "node ./scripts/build-style-manifest.mjs"
     },
     "dependencies": {
         "@base-ui/react": "1.5.0",
@@ -238,7 +411,6 @@
         "react-virtuoso": "4.18.7",
         "sidekicker": "0.1.10",
         "storage-manager-js": "4.2.6-5",
-        "tailwind-merge": "3.4.0",
         "the-mask-input": "3.3.14",
         "use-sync-external-store": "1.6.0",
         "use-typed-reducer": "4.3.0",

@@ -42,7 +42,7 @@ describe("Modal resize a11y", () => {
         expect(resizeHandle).toHaveAccessibleDescription("Use arrow keys to resize the modal");
         expect(resizeHandle).toHaveAttribute("aria-controls", dialog.id);
         expect(resizeHandle).toHaveAttribute("aria-keyshortcuts", "ArrowUp ArrowDown ArrowLeft ArrowRight");
-        expect(resizeHandle).toHaveClass("cursor-col-resize");
+        expect(resizeHandle).toHaveClass("__floating-modal__tw-9");
         expect((await axe(container)).violations).toHaveLength(0);
     });
 

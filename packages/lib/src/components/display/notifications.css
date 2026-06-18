@@ -1,0 +1,239 @@
+.__notifications {
+    box-sizing: border-box;
+}
+
+.__notifications__close {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* @generated component utility migration start */
+.__display-notifications__tw-1 {
+  position: relative;
+  isolation: isolate;
+  z-index: var(--z-tooltip);
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--notification-radius);
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--card-background), var(--tw-bg-opacity));
+  font-size: var(--typography-sm);
+  --tw-shadow: var(--shadow-notification);
+  --tw-shadow-colored: var(--shadow-notification);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-backdrop-blur: blur(12px);
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0,0,.58,1);
+  transition-duration: 300ms
+}
+
+.__display-notifications__tw-2 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--card-border), var(--tw-border-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--foreground), var(--tw-text-opacity));
+  --tw-shadow-color: rgb(0 0 0 / 0.05);
+  --tw-shadow: var(--tw-shadow-colored)
+}
+
+.__display-notifications__tw-3 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--alert-info-border), var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--alert-info-bg), var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--alert-info-text), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-4 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--alert-warn-border), var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--alert-warn-bg), var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--alert-warn-text), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-5 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--alert-muted-border), var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--alert-muted-bg), var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--alert-muted-text), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-6 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--alert-danger-border), var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--alert-danger-bg), var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--alert-danger-text), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-7 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--alert-success-border), var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--alert-success-bg), var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--alert-success-text), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-8 {
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--alert-secondary-border), var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--alert-secondary-bg), var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsla(var(--alert-secondary-text), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-9 {
+  pointer-events: auto;
+  width: 100%;
+  list-style-type: none
+}
+
+.__display-notifications__tw-10 {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--notification-gap);
+  padding: var(--notification-p)
+}
+
+.__display-notifications__tw-11 {
+  margin-top: 0.125rem;
+  display: flex;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg)
+  }
+}
+
+.__display-notifications__tw-12 {
+  animation: spin 1s linear infinite
+}
+
+.__display-notifications__tw-13 {
+  display: flex;
+  flex: 1 1 0%;
+  gap: var(--notification-inner-gap);
+  overflow: hidden
+}
+
+.__display-notifications__tw-14 {
+  -webkit-user-select: text;
+     -moz-user-select: text;
+          user-select: text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em
+}
+
+.__display-notifications__tw-15 {
+  -webkit-user-select: text;
+     -moz-user-select: text;
+          user-select: text;
+  font-size: var(--typography-xs);
+  font-weight: 500;
+  line-height: 1.625;
+  opacity: 0.9
+}
+
+.__display-notifications__tw-16 {
+  margin-right: -0.25rem;
+  margin-top: -0.25rem;
+  flex-shrink: 0;
+  border-radius: var(--notification-close-radius);
+  padding: var(--notification-close-p);
+  color: hsla(var(--foreground), 0.4)
+}
+
+.__display-notifications__tw-16:hover {
+  background-color: hsla(var(--foreground), 0.1);
+  --tw-text-opacity: 1;
+  color: hsla(var(--foreground), var(--tw-text-opacity))
+}
+
+.__display-notifications__tw-17 {
+  display: flex;
+  width: 0.875rem;
+  height: 0.875rem;
+  align-items: center;
+  justify-content: center
+}
+
+.__display-notifications__tw-18 {
+  pointer-events: none;
+  position: fixed;
+  left: 50%;
+  top: var(--notification-list-top);
+  z-index: var(--z-floating);
+  display: flex;
+  width: 100%;
+  max-width: var(--notification-list-max-w);
+  --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  gap: var(--notification-list-gap);
+  overflow: visible;
+  outline: 2px solid transparent;
+  outline-offset: 2px
+}
+
+.__display-notifications__tw-19 {
+  pointer-events: auto;
+  cursor: default;
+  align-self: center;
+  border-radius: var(--full);
+  --tw-border-opacity: 1;
+  border-color: hsla(var(--card-border), var(--tw-border-opacity));
+  background-color: hsla(var(--card-background), 0.8);
+  padding-left: var(--notification-badge-px);
+  padding-right: var(--notification-badge-px);
+  padding-top: var(--notification-badge-py);
+  padding-bottom: var(--notification-badge-py);
+  font-size: var(--notification-badge-text);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsla(var(--foreground), 0.5);
+  --tw-shadow: var(--shadow-notification);
+  --tw-shadow-colored: var(--shadow-notification);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-backdrop-blur: blur(8px);
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0,0,.58,1);
+  transition-duration: 375ms
+}
+
+.__display-notifications__tw-19:hover {
+  --tw-bg-opacity: 1;
+  background-color: hsla(var(--card-background), var(--tw-bg-opacity));
+  color: hsla(var(--foreground), 0.8)
+}
+.__display-notifications__tw-extra-1 {
+  flex-direction: column
+}
+.__display-notifications__border {
+  border-width: 1px
+}
+/* @generated component utility migration end */

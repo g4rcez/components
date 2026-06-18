@@ -51,13 +51,7 @@ const transitionStyles = {
 
 const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: string }>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.div
-            {...props}
-            ref={ref}
-            role="listbox"
-            id={context?.listboxId}
-            className="max-h-dropdown-max-h w-full overscroll-contain rounded-dropdown-radius"
-        >
+        <motion.div {...props} ref={ref} role="listbox" id={context?.listboxId} className="__form-autocomplete__tw-1">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.div>
     );
@@ -67,7 +61,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps<AutocompleteItemProps> & Conte
     { item: _item, context: _context, ...props },
     ref
 ) {
-    return <motion.div {...props} ref={ref} role="presentation" className="first:rounded-t-dropdown-radius last:rounded-t-dropdown-radius" />;
+    return <motion.div {...props} ref={ref} role="presentation" className="__form-autocomplete__tw-2" />;
 });
 
 const components = { List, Item };
@@ -100,11 +94,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     ) => {
         const scroller = useRef<HTMLElement | null>(null);
         const fieldset = useRef<HTMLFieldSetElement>(null);
+        const hiddenInput = useRef<HTMLInputElement | null>(null);
+        const suppressNextFocusOpen = useRef(false);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
         const generatedId = useId();
+        const isControlled = props.value !== undefined;
         const [open, setOpen] = useState(false);
+        const [insideModal, setInsideModal] = useState(false);
         const [shadow, setShadow] = useState("");
         const [value, setValue] = useState(defaults);
         const [label, setLabel] = useState(() => options.find((x) => x.value === defaults)?.label ?? defaults);
@@ -196,14 +194,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         ]);
 
         useEffect(() => {
-            if (props.value) {
-                const item = options.find((x) => x.value === props.value);
-                if (item) {
-                    setLabel(item.label ?? item.value);
-                    setValue(props.value);
-                }
-            }
-        }, [props.value, options]);
+            if (!isControlled) return;
+            const nextValue = props.value ?? "";
+            const item = options.find((x) => x.value === nextValue);
+            setLabel(item?.label ?? nextValue);
+            setValue(nextValue);
+            if (hiddenInput.current) hiddenInput.current.value = nextValue;
+        }, [isControlled, props.value, options]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -213,6 +210,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         useEffect(() => {
             if (!open) return;
+            setInsideModal(Boolean(fieldset.current?.closest('[data-component="modal"]')));
             const id = requestAnimationFrame(() => tick((n) => n + 1));
             return () => cancelAnimationFrame(id);
         }, [open]);
@@ -229,18 +227,25 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const onSelect = (opt: AutocompleteItemProps, i: number) => {
             setValue(opt.value);
             const input = refs.reference.current as HTMLInputElement;
-            if (!input) return;
-            input?.setAttribute("data-value", opt.value);
+            const origin = hiddenInput.current ?? input;
+            if (!input || !origin) return;
+            input.setAttribute("data-value", opt.value);
             input.value = opt.value;
+            origin.value = opt.value;
+            origin.setAttribute("data-value", opt.value);
             const event = new Event("change", { bubbles: false, cancelable: true });
-            input.dispatchEvent(event);
-            if (props.onChange) props.onChange(synthesizeChangeEvent(input));
-            setLabel(opt.label ?? "");
+            origin.dispatchEvent(event);
+            if (props.onChange) props.onChange(synthesizeChangeEvent(origin));
+            setLabel(opt.label ?? opt.value);
             setClosed();
             setShadow("");
             setIndex(i);
+            suppressNextFocusOpen.current = true;
             requestAnimationFrame(() => {
                 if (input.isConnected) input.focus();
+                requestAnimationFrame(() => {
+                    suppressNextFocusOpen.current = false;
+                });
             });
         };
 
@@ -261,6 +266,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const onFocus = () => {
             if (props.disabled) return;
+            if (suppressNextFocusOpen.current) {
+                suppressNextFocusOpen.current = false;
+                return;
+            }
             setIndex((prev) => (prev === null ? 0 : prev));
             openDropdown();
             setShadow("");
@@ -268,11 +277,18 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const onClose = () => {
             if (props.disabled) return;
-            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "");
+            const input = refs.reference.current as HTMLInputElement;
+            const origin = hiddenInput.current ?? input;
+            input?.setAttribute("data-value", "");
+            if (input) input.value = "";
+            if (origin) {
+                origin.value = "";
+                origin.setAttribute("data-value", "");
+            }
             setShadow("");
             setValue("");
             setLabel("");
-            dispatchInput(refs.reference.current as HTMLInputElement);
+            dispatchInput(origin);
             setClosed();
         };
 
@@ -286,6 +302,53 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const isTopPlacement = placement === "top" || placement === "top-start";
 
         const activeOptionId = open && index !== null && displayList[index] ? `${shadowId}-option-${index}` : undefined;
+
+        const setScrollElement = (node: HTMLElement | null) => {
+            scroller.current = node;
+            removeScrollRef.current = node;
+        };
+
+        const scrollOptionIntoView = (next: number) => {
+            if (insideModal) {
+                listRef.current[next]?.scrollIntoView({ block: "nearest" });
+                return;
+            }
+            virtuoso.current?.scrollIntoView({ index: next });
+        };
+
+        const renderOption = (i: number, option: AutocompleteItemProps) => {
+            const Label = option.Render ?? Frag;
+            const active = value === option.value || value === option.label;
+            const selected = index === i;
+            const children = option.label ?? option.value;
+            return (
+                <div
+                    id={`${shadowId}-option-${i}`}
+                    data-value={option.value}
+                    {...getItemProps({
+                        ref: (node: HTMLElement | null) => {
+                            listRef.current[i] = node;
+                        },
+                        role: "option",
+                        "aria-selected": active,
+                        "aria-disabled": option.disabled,
+                        tabIndex: -1,
+                        onClick: () => {
+                            if (!option.disabled) onSelect(option, i);
+                        },
+                        className: css(
+                            "__form-autocomplete__tw-3",
+                            active ? "__form-autocomplete__tw-4" : "",
+                            selected ? "__form-autocomplete__tw-5" : ""
+                        ),
+                    })}
+                >
+                    <Label {...option} ref={undefined} label={option.label} value={option.value}>
+                        {children}
+                    </Label>
+                </div>
+            );
+        };
 
         return (
             <InputField
@@ -305,27 +368,24 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 optionalText={optionalText}
                 componentName="autocomplete"
                 labelClassName={css(
-                    !props.disabled && "focus-within:border-primary",
-                    props.disabled && "group-disabled:!border-disabled",
+                    !props.disabled && "__form-autocomplete__tw-6",
+                    props.disabled && "__form-autocomplete__disabled-border",
                     labelClassName
                 )}
                 placeholder={props.placeholder}
                 ref={fieldset as unknown as Ref<HTMLInputElement>}
                 feedback={open && isTopPlacement ? props.title : feedback}
                 right={
-                    <span className="flex items-center gap-0.5">
+                    <span className="__form-autocomplete__tw-7">
                         {right}
                         <button
                             type="button"
                             disabled={props.disabled}
-                            className={css(
-                                "p-input-gap transition-colors disabled:cursor-not-allowed disabled:text-disabled md:p-1",
-                                !props.disabled && "link:text-primary"
-                            )}
+                            className={css("__form-autocomplete__tw-8", !props.disabled && "link:text-primary")}
                             onClick={onCaretDownClick}
                         >
-                            <CaretDownIcon size={20} />
-                            <span className="sr-only">{translation.inputCaretDown}</span>
+                            <CaretDownIcon aria-hidden="true" className="__autocomplete__caret-icon" />
+                            <span className="__form-autocomplete__tw-9">{translation.inputCaretDown}</span>
                         </button>
                         {value ? (
                             <button
@@ -333,10 +393,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 onClick={onClose}
                                 disabled={props.disabled}
                                 aria-label={translation.inputCloseValue}
-                                className={css(
-                                    "p-input-gap transition-colors disabled:cursor-not-allowed disabled:text-disabled md:p-1",
-                                    !props.disabled && "link:text-danger"
-                                )}
+                                className={css("__form-autocomplete__tw-8", !props.disabled && "link:text-danger")}
                             >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -374,14 +431,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 event.preventDefault();
                                 let next = Is.number(index) ? index + 1 : 0;
                                 if (next > displayList.length - 1) next = 0;
-                                virtuoso.current?.scrollIntoView({ index: next });
+                                scrollOptionIntoView(next);
                                 return setIndex(next);
                             }
                             if (event.key === "ArrowUp") {
                                 event.preventDefault();
                                 let next = Is.number(index) ? index! - 1 : displayList.length - 1;
                                 if (next < 0) next = displayList.length - 1;
-                                virtuoso.current?.scrollIntoView({ index: next });
+                                scrollOptionIntoView(next);
                                 return setIndex(next);
                             }
                             if (event.key === "Enter") {
@@ -411,12 +468,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     aria-labelledby={`${shadowId}-label`}
                     autoComplete="off"
                     className={css(
-                        "input placeholder-input-mask group h-input-height w-full flex-1",
-                        "rounded-input-radius bg-transparent px-input-padding-x py-input-padding-y text-foreground",
-                        "outline-none transition-colors disabled:cursor-not-allowed disabled:text-disabled",
-                        "group-error:text-danger group-error:placeholder-input-mask-error",
-                        "text-input-text",
-                        !props.disabled && "group-focus-within:border-primary group-hover:border-primary",
+                        "input __form-autocomplete__tw-10 __form-autocomplete__tw-extra-1 __form-autocomplete__tw-state-1",
+                        "__form-autocomplete__tw-11",
+                        "__form-autocomplete__tw-12",
+                        "__form-autocomplete__tw-state-2",
+                        "__form-autocomplete__tw-13",
+                        !props.disabled && "__form-autocomplete__tw-14 __form-autocomplete__tw-state-3",
                         props.className
                     )}
                 />
@@ -425,9 +482,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     name={id}
                     type="hidden"
                     data-origin={id}
-                    ref={externalRef}
+                    ref={(node) => {
+                        hiddenInput.current = node;
+                        if (typeof externalRef === "function") externalRef(node);
+                        else if (externalRef) externalRef.current = node;
+                    }}
                     required={required}
-                    defaultValue={props.value || value || undefined}
+                    value={value}
+                    readOnly
                 />
                 <FloatingPortal preserveTabOrder>
                     {open && !props.disabled ? (
@@ -456,66 +518,46 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     flushSync(() => setH(Math.min(320, sum + 2)));
                                 }}
                                 className={css(
-                                    "shadow-floating isolate z-floating m-0 max-h-80 origin-[top_center] list-none overscroll-contain rounded-dropdown-radius border border-floating-border bg-floating-background p-0 text-foreground ease-in-out",
-                                    isTopPlacement ? "origin-[bottom_center]" : "origin-[top_center]"
+                                    "__form-autocomplete__border __form-autocomplete__tw-15",
+                                    isTopPlacement ? "__form-autocomplete__tw-16" : "__form-autocomplete__tw-17"
                                 )}
                             >
                                 {isEmpty ? (
-                                    <div className="w-full border-b border-tooltip-border">
-                                        <span className="flex w-full justify-between p-menu-item-p text-left text-disabled">
-                                            {emptyMessage || translation.autocompleteEmpty}
-                                        </span>
+                                    <div className="__form-autocomplete__tw-18">
+                                        <span className="__form-autocomplete__tw-19">{emptyMessage || translation.autocompleteEmpty}</span>
                                     </div>
                                 ) : null}
-                                <Virtuoso
-                                    overscan={40}
-                                    ref={virtuoso}
-                                    hidden={isEmpty}
-                                    data={displayList}
-                                    context={{ listboxId }}
-                                    style={{ height: h }}
-                                    initialItemCount={displayList.length}
-                                    defaultItemHeight={MIN_SIZE}
-                                    components={components as never}
-                                    scrollerRef={(e) => {
-                                        scroller.current = e as HTMLElement;
-                                        removeScrollRef.current = e as HTMLElement;
-                                    }}
-                                    className="border-floating max-h-full overscroll-contain rounded-dropdown-radius bg-floating-background p-0 text-foreground"
-                                    itemContent={(i, option) => {
-                                        const Label = option.Render ?? Frag;
-                                        const active = value === option.value || value === option.label;
-                                        const selected = index === i;
-                                        const children = option.label ?? option.value;
-                                        return (
-                                            <div
-                                                id={`${shadowId}-option-${i}`}
-                                                data-value={option.value}
-                                                {...getItemProps({
-                                                    ref: (node: HTMLElement | null) => {
-                                                        listRef.current[i] = node;
-                                                    },
-                                                    role: "option",
-                                                    "aria-selected": active,
-                                                    "aria-disabled": option.disabled,
-                                                    tabIndex: -1,
-                                                    onClick: () => {
-                                                        if (!option.disabled) onSelect(option, i);
-                                                    },
-                                                    className: css(
-                                                        "min-h-10 w-full cursor-pointer p-menu-item-p text-left hover:bg-floating-hover",
-                                                        active ? "bg-primary-hover text-primary-foreground" : "",
-                                                        selected ? "bg-floating-hover text-floating-foreground" : ""
-                                                    ),
-                                                })}
-                                            >
-                                                <Label {...option} ref={undefined} label={option.label} value={option.value}>
-                                                    {children}
-                                                </Label>
-                                            </div>
-                                        );
-                                    }}
-                                />
+                                {insideModal ? (
+                                    <ul
+                                        id={listboxId}
+                                        role="listbox"
+                                        ref={setScrollElement}
+                                        hidden={isEmpty}
+                                        style={{ maxHeight: h, overflowY: "auto" }}
+                                        className="__form-autocomplete__tw-20"
+                                    >
+                                        {displayList.map((option, i) => (
+                                            <li key={`${option.value}-${i}`} role="presentation">
+                                                {renderOption(i, option)}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <Virtuoso
+                                        overscan={40}
+                                        ref={virtuoso}
+                                        hidden={isEmpty}
+                                        data={displayList}
+                                        context={{ listboxId }}
+                                        style={{ height: h }}
+                                        initialItemCount={displayList.length}
+                                        defaultItemHeight={MIN_SIZE}
+                                        components={components as never}
+                                        scrollerRef={(e) => setScrollElement(e as HTMLElement)}
+                                        className="__form-autocomplete__tw-20"
+                                        itemContent={(i, option) => renderOption(i, option)}
+                                    />
+                                )}
                             </motion.div>
                         </FloatingFocusManager>
                     ) : null}

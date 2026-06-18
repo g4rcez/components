@@ -1,13 +1,13 @@
 "use client";
-import React, { createContext, PropsWithChildren, useContext, useEffect, useRef } from "react";
-import { Is, Nullable } from "sidekicker";
+import React, { createContext, type PropsWithChildren, useContext, useEffect, useRef } from "react";
+import { Is, type Nullable } from "sidekicker";
 import { useReactive } from "../../hooks/use-reactive";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { css } from "../../lib/dom";
 import { keyboardKeys } from "../../lib/keyboard-area";
-import { Label } from "../../types";
+import type { Label } from "../../types";
 import { Polymorph } from "../core/polymorph";
-import { Card, CardProps } from "./card";
+import { Card, type CardProps } from "./card";
 
 export type TabsProps = Omit<CardProps<"div">, "onChange"> & {
     active: string;
@@ -107,12 +107,12 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
         <Context.Provider value={active}>
             <Card
                 className={props.className}
-                container={css("pt-0 max-w-full w-full min-w-0", props.container)}
+                container={css("__display-tabs__tw-1", props.container)}
                 header={
-                    <header className="relative mb-tabs-header-mb overflow-x-auto">
-                        <div className="absolute bottom-0 h-tabs-divider-h w-full bg-card-border" />
-                        <nav className="min-w-0">
-                            <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="flex w-0 min-w-full flex-1 justify-start overflow-x-auto">
+                    <header className="__display-tabs__tw-2">
+                        <div className="__display-tabs__tw-3" />
+                        <nav className="__display-tabs__tw-4">
+                            <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="__display-tabs__tw-5">
                                 {items.map((x: React.ReactElement<TabProps>) => {
                                     const inner = x.props;
                                     const current = active === inner.id;
@@ -122,9 +122,9 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                             data-active={current}
                                             key={`tab-header-${inner.id}`}
                                             className={css(
-                                                "relative w-fit border-b border-transparent transition-all",
-                                                current ? "border-primary font-medium text-primary" : "",
-                                                inner.disabled ? "aria-disabled:text-disabled" : ""
+                                                "__display-tabs__tw-6",
+                                                current ? "__display-tabs__tw-7" : "",
+                                                inner.disabled ? "__tabs__tab--disabled" : ""
                                             )}
                                         >
                                             <Polymorph
@@ -138,7 +138,7 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                                                 tabIndex={current ? 0 : -1}
                                                 aria-controls={`${inner.id}-panel`}
                                                 onClick={inner.disabled ? undefined : onClick}
-                                                className="block w-full whitespace-nowrap px-tabs-item-px py-tabs-item-py disabled:cursor-not-allowed"
+                                                className="__display-tabs__tw-8"
                                             >
                                                 {inner.title as React.ReactNode}
                                             </Polymorph>

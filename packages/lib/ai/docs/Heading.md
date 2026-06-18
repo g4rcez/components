@@ -65,8 +65,8 @@ import { Polymorph } from "@g4rcez/components";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`text-gray-900`, `text-black`) — use `text-foreground` instead
-- Don't use arbitrary Tailwind values (`text-[#333]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`text-gray-900`, `text-black`) — use `text-foreground` instead
+- Don't use arbitrary utility values (`text-[#333]`) — override CSS variables in your `@theme` block
 - Don't skip heading hierarchy — if you need `h1` or `h3`, use `Polymorph as="h1"` rather than misusing `Heading`
 - Don't use `Heading` for non-heading content purely for visual sizing
 

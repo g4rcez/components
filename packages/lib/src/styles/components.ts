@@ -1,4 +1,4 @@
-import { ComponentTokens } from "./theme.types";
+import type { ComponentTokens } from "./theme.types";
 
 export const components: ComponentTokens = {
     card: {
@@ -10,6 +10,7 @@ export const components: ComponentTokens = {
         "title-mb": "0.5rem",
         "stats-icon-col-w": "5rem",
         "stats-icon-col-p": "1rem",
+        "stats-icon-size": "3rem",
         "stats-content-gap": "0.5rem",
         "stats-content-py": "0.5rem",
         "title-text": "2.25rem",
@@ -103,9 +104,10 @@ export const components: ComponentTokens = {
         "icon-size": "2.5rem",
         "icon-p": "2rem",
         "inner-gap": "0.25rem",
+        "title-text": "1rem",
+        "value-text": "2.25rem",
         "footer-px": "1.5rem",
         "footer-py": "0.5rem",
-        "value-text": "2.25rem",
     },
     notification: {
         radius: "0.75rem",
@@ -157,6 +159,8 @@ export const components: ComponentTokens = {
         "padding-y-tiny": "0.25rem",
         "padding-icon": "0.25rem",
         "indicator-size": "0.5rem",
+        "text-small": "0.875rem",
+        "text-tiny": "0.75rem",
     },
     calendar: {
         "cell-p": "0.25rem",
@@ -275,6 +279,8 @@ export const components: ComponentTokens = {
         radius: "0.5rem",
         gap: "1rem",
         "thumb-size": "4rem",
+        "thumb-radius": "50%",
+        "thumb-icon-size": "1.75rem",
         "text-name": "1.125rem",
         "text-size": "0.875rem",
         "delete-py": "1rem",
@@ -331,6 +337,7 @@ export const components: ComponentTokens = {
         "header-mb": "0.5rem",
         "item-px": "2.5rem",
         "item-py": "1rem",
+        "divider-active-h": "2px",
         "divider-h": "1px",
     },
     shortcut: {

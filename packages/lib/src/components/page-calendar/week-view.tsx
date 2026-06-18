@@ -35,20 +35,16 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
     }, []);
 
     return (
-        <div className="flex flex-1 flex-col overflow-hidden">
-            <div className="flex flex-shrink-0 border-b border-border">
-                <div className="w-page-calendar-gutter-w flex-shrink-0" />
+        <div className="__page-calendar-week-view__tw-1 __page-calendar-week-view__tw-extra-1">
+            <div className="__page-calendar-week-view__tw-2 __page-calendar-week-view__tw-extra-2">
+                <div className="__page-calendar-week-view__tw-3 __page-calendar-week-view__tw-extra-2" />
                 {days.map((day, idx) => {
                     const isCurrentDay = isToday(day);
                     return (
-                        <div
-                            key={idx}
-                            aria-label={formatFullDate(day, locale)}
-                            className="flex-1 py-page-calendar-weekday-py text-center text-page-calendar-weekday-text font-medium text-muted-foreground"
-                        >
-                            <span className="block">{formatWeekdayShort(day, locale)}</span>
+                        <div key={idx} aria-label={formatFullDate(day, locale)} className="__page-calendar-week-view__tw-4">
+                            <span className="__page-calendar-week-view__tw-5">{formatWeekdayShort(day, locale)}</span>
                             <span
-                                className={`inline-flex size-page-calendar-week-badge-size items-center justify-center rounded-full text-page-calendar-week-badge-text font-bold ${isCurrentDay ? "bg-primary text-primary-foreground" : "text-foreground"}`}
+                                className={`__page-calendar-week-view__tw-6 ${isCurrentDay ? "__page-calendar-week-view__tw-7" : "__page-calendar-week-view__tw-8"}`}
                             >
                                 {formatDay(day, locale)}
                             </span>
@@ -56,13 +52,11 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                     );
                 })}
             </div>
-            <div ref={scrollBodyRef} className="flex flex-1 items-start overflow-y-auto">
-                <div className="w-page-calendar-gutter-w flex-shrink-0">
+            <div ref={scrollBodyRef} className="__page-calendar-week-view__tw-9">
+                <div className="__page-calendar-week-view__tw-3 __page-calendar-week-view__tw-extra-2">
                     {hours.map((hour) => (
-                        <div key={hour} className="relative" style={{ height: HOUR_HEIGHT }}>
-                            <span className="absolute -top-2.5 right-2 text-page-calendar-hour-text text-muted-foreground">
-                                {hour === 0 ? "" : formatHourLabel(hour, locale)}
-                            </span>
+                        <div key={hour} className="__page-calendar-week-view__tw-10" style={{ height: HOUR_HEIGHT }}>
+                            <span className="__page-calendar-week-view__tw-11">{hour === 0 ? "" : formatHourLabel(hour, locale)}</span>
                             {hour === new Date().getHours() && <div ref={currentHourRef} />}
                         </div>
                     ))}
@@ -71,7 +65,7 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                     const key = toDateKey(day);
                     const events = eventsByDate.get(key) || [];
                     return (
-                        <div key={dayIdx} className="relative flex-1 border-l border-card-border">
+                        <div key={dayIdx} className="__page-calendar-week-view__tw-12">
                             {hours.map((hour) => {
                                 const slotDate = new Date(day);
                                 slotDate.setHours(hour, 0, 0, 0);
@@ -80,7 +74,7 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                         key={hour}
                                         type="button"
                                         aria-label={formatHourLabel(hour, locale)}
-                                        className="w-full cursor-pointer border-b border-border/50 hover:bg-muted/20"
+                                        className="__page-calendar-week-view__tw-13"
                                         style={{ height: HOUR_HEIGHT }}
                                         onClick={() => onSlotClick?.(slotDate)}
                                     />
@@ -90,7 +84,7 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                 <div
                                     key={event.id}
                                     role="presentation"
-                                    className="absolute"
+                                    className="__page-calendar-week-view__tw-14"
                                     style={{
                                         top: getTopOffset(event),
                                         height: HOUR_HEIGHT,

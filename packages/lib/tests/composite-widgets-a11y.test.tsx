@@ -78,10 +78,7 @@ describe("composite widget a11y", () => {
 
         await waitFor(() => expect(onChange).toHaveBeenCalled());
         await waitFor(() => expect(document.activeElement).toBe(combobox));
-        expect(combobox).not.toHaveClass("focus:ring-2");
-        expect(combobox).not.toHaveClass("focus:ring-inset");
-        expect(combobox).not.toHaveClass("focus:ring-primary");
-        expect(combobox.parentElement).toHaveClass("focus-within:border-primary");
+        expect(combobox.parentElement).toHaveClass("__form-autocomplete__tw-6");
         expect(combobox).toHaveAttribute("data-value", "alpha");
         expect((await axe(container)).violations).toHaveLength(0);
     });
@@ -99,10 +96,10 @@ describe("composite widget a11y", () => {
         const caretButton = container.querySelector("button");
 
         expect(combobox).toBeDisabled();
-        expect(combobox).toHaveClass("disabled:cursor-not-allowed");
+        expect(combobox).toHaveClass("__form-autocomplete__tw-12");
         expect(caretButton).toBeDisabled();
-        expect(caretButton).toHaveClass("disabled:cursor-not-allowed");
-        expect(combobox.parentElement).toHaveClass("group-disabled:!border-disabled");
+        expect(caretButton).toHaveClass("__form-autocomplete__tw-8");
+        expect(combobox.parentElement).toHaveClass("__form-autocomplete__disabled-border");
 
         await user.click(combobox);
         if (caretButton) await user.click(caretButton);

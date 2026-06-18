@@ -1,15 +1,29 @@
 import forms from "@tailwindcss/forms";
-import { Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 import { createDesignTokens, parsers } from "./src/styles/design-tokens";
 import { components } from "./src/styles/components";
 import { defaultLightTheme as theme } from "./src/styles/theme";
 import customPlugins from "./plugin.tailwind";
 
 const COLORS = createDesignTokens(theme.colors, parsers.formatWithVar("hsla"));
+const cardColors = COLORS.card as Record<string, string> | undefined;
+const floatingColors = COLORS.floating as Record<string, string> | undefined;
+if (cardColors) cardColors.DEFAULT = cardColors.background;
+if (floatingColors) floatingColors.DEFAULT = floatingColors.border;
 
 const spacing = createDesignTokens(theme.spacing, parsers.cssVariable);
 
 const shadows = createDesignTokens(theme.shadow, parsers.cssVariable);
+const shadowAliases = Object.fromEntries(
+    Object.entries(shadows).flatMap(([key, value]) =>
+        key.startsWith("shadow-")
+            ? [
+                  [key, value],
+                  [key.replace(/^shadow-/, ""), value],
+              ]
+            : [[key, value]]
+    )
+);
 
 const componentBorderRadius: Record<string, string> = {};
 const componentBorderWidth: Record<string, string> = {};
@@ -20,6 +34,7 @@ for (const [component, attrs] of Object.entries(components)) {
     if (component === "typography") {
         for (const attr of Object.keys(attrs)) {
             componentFontSize[attr] = `var(--typography-${attr})`;
+            componentFontSize[`typography-${attr}`] = `var(--typography-${attr})`;
         }
         continue;
     }
@@ -45,8 +60,8 @@ const config: Partial<Config> = {
             },
             fill: COLORS,
             colors: COLORS,
-            boxShadow: shadows,
-            dropShadow: shadows,
+            boxShadow: shadowAliases,
+            dropShadow: shadowAliases,
             placeholderColor: COLORS,
             lineHeight: { typography: "1.45" },
             letterSpacing: { typography: "0.0175" },
@@ -56,7 +71,7 @@ const config: Partial<Config> = {
             spacing: { ...spacing, ...componentSpacing },
             fontSize: { ...spacing, ...componentFontSize },
             maxHeight: { ...spacing, ...componentSpacing },
-            borderColors: { ...COLORS, DEFAULT: COLORS.card.border },
+            borderColor: { ...COLORS, DEFAULT: COLORS.card.border },
             borderRadius: {
                 ...createDesignTokens(theme.rounded, parsers.cssVariable),
                 ...componentBorderRadius,

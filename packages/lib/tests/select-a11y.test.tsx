@@ -73,7 +73,7 @@ describe("Select a11y", () => {
         expect(select).not.toHaveClass("focus:ring-2");
         expect(select).not.toHaveClass("focus:ring-inset");
         expect(select).not.toHaveClass("focus:ring-primary");
-        expect(select.parentElement).toHaveClass("focus-within:border-primary");
+        expect(select.parentElement).toHaveClass("__select__field");
     });
 
     it("disables select interactions and uses not-allowed affordances", () => {
@@ -83,9 +83,9 @@ describe("Select a11y", () => {
         const caretButton = screen.getByRole("button");
 
         expect(select).toBeDisabled();
-        expect(select).toHaveClass("disabled:cursor-not-allowed");
+        expect(select).toHaveClass("__select__control");
         expect(caretButton).toBeDisabled();
-        expect(caretButton).toHaveClass("disabled:cursor-not-allowed");
-        expect(select.parentElement).toHaveClass("group-disabled:!border-disabled");
+        expect(caretButton).toHaveClass("__select__trigger");
+        expect(select.parentElement).toHaveClass("__select__field");
     });
 });

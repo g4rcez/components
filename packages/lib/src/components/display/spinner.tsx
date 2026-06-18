@@ -4,21 +4,13 @@ import { css } from "../../lib/dom";
 export const Spinner = (props: { className?: string }) => {
     const t = useTranslations();
     return (
-        <span
-            role="status"
-            aria-live="polite"
-            aria-label={t.spinnerLoading}
-            className={css(
-                "box-border inline-block aspect-square size-spinner-size animate-spin rounded-full border-spinner-border border-background border-b-primary",
-                props.className
-            )}
-        />
+        <span role="status" aria-live="polite" aria-label={t.spinnerLoading} data-component="spinner" className={css("__spinner", props.className)} />
     );
 };
 
 export const Loading = () => {
     return (
-        <div className="flex h-full w-full items-center justify-center p-spinner-container-p">
+        <div data-component="spinner" data-slot="container" className="__spinner__container">
             <Spinner />
         </div>
     );

@@ -63,9 +63,7 @@ export function DayView<T extends CalendarEventBase>({
         const hasEvents = (eventsByDate.get(key) || []).length > 0;
         const isSelected = toDateKey(date) === toDateKey(currentDate);
         if (!hasEvents || isSelected) return null;
-        return (
-            <span className="absolute bottom-page-calendar-dot-bottom left-1/2 size-page-calendar-dot-size -translate-x-1/2 rounded-full bg-primary" />
-        );
+        return <span className="__page-calendar-day-view__tw-1" />;
     };
 
     const handleEventClick = (event: CalendarEvent<T>) => {
@@ -74,34 +72,29 @@ export function DayView<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="flex min-w-full flex-1">
-            <div className="flex w-full flex-1 flex-col">
-                <div
-                    aria-label={formatFullDate(currentDate, locale)}
-                    className="flex flex-shrink-0 items-center gap-page-calendar-day-header-gap border-b border-border px-page-calendar-day-header-px py-page-calendar-day-header-py"
-                >
+        <div className="__page-calendar-day-view__tw-2">
+            <div className="__page-calendar-day-view__tw-3 __page-calendar-day-view__tw-extra-1">
+                <div aria-label={formatFullDate(currentDate, locale)} className="__page-calendar-day-view__tw-4 __page-calendar-day-view__tw-extra-2">
                     <span
-                        className={`inline-flex size-page-calendar-day-badge-size items-center justify-center rounded-full font-bold ${isToday(currentDate) ? "bg-primary text-primary-foreground" : "text-foreground"}`}
+                        className={`__page-calendar-day-view__tw-5 ${isToday(currentDate) ? "__page-calendar-day-view__tw-6" : "__page-calendar-day-view__tw-7"}`}
                     >
                         {formatDay(currentDate, locale)}
                     </span>
                     <div>
-                        <div className="font-semibold">{formatWeekdayLong(currentDate, locale)}</div>
-                        <div className="text-typography-xs text-muted-foreground">{formatMonthYear(currentDate, locale)}</div>
+                        <div className="__page-calendar-day-view__tw-8">{formatWeekdayLong(currentDate, locale)}</div>
+                        <div className="__page-calendar-day-view__tw-9">{formatMonthYear(currentDate, locale)}</div>
                     </div>
                 </div>
-                <div ref={scrollBodyRef} className="flex flex-1 items-start overflow-y-auto">
-                    <div className="w-page-calendar-gutter-w flex-shrink-0">
+                <div ref={scrollBodyRef} className="__page-calendar-day-view__tw-10">
+                    <div className="__page-calendar-day-view__tw-11 __page-calendar-day-view__tw-extra-2">
                         {hours.map((hour) => (
-                            <div key={hour} className="relative" style={{ height: HOUR_HEIGHT }}>
-                                <span className="absolute -top-2.5 right-2 text-page-calendar-hour-text text-muted-foreground">
-                                    {hour === 0 ? "" : formatHourLabel(hour, locale)}
-                                </span>
+                            <div key={hour} className="__page-calendar-day-view__tw-12" style={{ height: HOUR_HEIGHT }}>
+                                <span className="__page-calendar-day-view__tw-13">{hour === 0 ? "" : formatHourLabel(hour, locale)}</span>
                                 {hour === new Date().getHours() && <div ref={currentHourRef} />}
                             </div>
                         ))}
                     </div>
-                    <div className="relative flex-1 border-l border-card-border">
+                    <div className="__page-calendar-day-view__tw-14">
                         {hours.map((hour) => {
                             const slotDate = new Date(currentDate);
                             slotDate.setHours(hour, 0, 0, 0);
@@ -110,7 +103,7 @@ export function DayView<T extends CalendarEventBase>({
                                     key={hour}
                                     type="button"
                                     aria-label={formatHourLabel(hour, locale)}
-                                    className="w-full cursor-pointer border-b border-border/50 hover:bg-muted/20"
+                                    className="__page-calendar-day-view__tw-15"
                                     style={{ height: HOUR_HEIGHT }}
                                     onClick={() => onSlotClick?.(slotDate)}
                                 />
@@ -120,7 +113,7 @@ export function DayView<T extends CalendarEventBase>({
                             <div
                                 key={event.id}
                                 role="presentation"
-                                className="absolute"
+                                className="__page-calendar-day-view__tw-16"
                                 style={{
                                     top: getTopOffset(event),
                                     height: HOUR_HEIGHT,
@@ -136,7 +129,7 @@ export function DayView<T extends CalendarEventBase>({
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col overflow-y-auto border-l border-card-border px-page-calendar-side-px">
+            <div className="__page-calendar-day-view__tw-17 __page-calendar-day-view__tw-extra-1">
                 <Calendar
                     date={currentDate}
                     markToday
@@ -145,18 +138,18 @@ export function DayView<T extends CalendarEventBase>({
                     onChange={(d: Date | undefined) => d && onDateChange(d)}
                 />
                 {selectedEvent && (
-                    <div className="flex flex-col gap-page-calendar-detail-gap border-t p-page-calendar-detail-p">
+                    <div className="__page-calendar-day-view__tw-18 __page-calendar-day-view__tw-extra-1">
                         {renderEvent ? (
                             renderEvent(selectedEvent)
                         ) : (
                             <>
-                                <div className="text-typography-sm truncate font-semibold">{selectedEvent.title}</div>
-                                <div className="text-typography-xs text-muted-foreground">{formatFullDate(selectedEvent.date, locale)}</div>
-                                <div className="text-typography-xs text-muted-foreground">{formatTime(selectedEvent.date, locale)}</div>
+                                <div className="__page-calendar-day-view__tw-19">{selectedEvent.title}</div>
+                                <div className="__page-calendar-day-view__tw-9">{formatFullDate(selectedEvent.date, locale)}</div>
+                                <div className="__page-calendar-day-view__tw-9">{formatTime(selectedEvent.date, locale)}</div>
                                 <Tag
                                     theme={selectedEvent.className ? "custom" : "primary"}
                                     size="small"
-                                    className={`self-start${selectedEvent.className ? ` ${selectedEvent.className}` : ""}`}
+                                    className={`__page-calendar-day-view__tw-20 ${selectedEvent.className ? ` ${selectedEvent.className}` : ""}`}
                                 />
                             </>
                         )}

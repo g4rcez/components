@@ -2,8 +2,8 @@
 import { Is } from "sidekicker";
 import { Progress as RadixProgress } from "@base-ui/react/progress";
 import { css } from "../../lib/dom";
-import { PropsWithoutRef } from "react";
-import { Label } from "../../types";
+import type { PropsWithoutRef } from "react";
+import type { Label } from "../../types";
 
 type ProgressProps = {
     min?: number;
@@ -33,16 +33,12 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
             max={max}
             value={hasValue ? rawValue! : null}
             style={{ transform: "translateZ(0)" }}
-            className={css("relative h-progress-track-h w-full overflow-hidden rounded-progress-radius bg-background", props.container)}
+            data-component="progress"
+            className={css("__progress", props.container)}
         >
-            <RadixProgress.Indicator className={css("h-full bg-primary transition-[width] duration-500 ease-in-out", props.className)} />
+            <RadixProgress.Indicator data-slot="indicator" className={css("__progress__indicator", props.className)} />
             {percent !== null ? (
-                <p
-                    className={css(
-                        "absolute inset-0 flex w-full items-center justify-center font-semibold tabular-nums text-primary-foreground",
-                        props.textClassName
-                    )}
-                >
+                <p data-slot="label" className={css("__progress__label", props.textClassName)}>
                     {props.label ? props.label : `${Math.round(percent)} %`}
                 </p>
             ) : null}

@@ -92,23 +92,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 interactive={interactive}
                 id={id}
                 optionalText={optionalText}
-                labelClassName={css(
-                    !props.disabled && "focus-within:border-primary",
-                    props.disabled && "group-disabled:!border-disabled",
-                    labelClassName
-                )}
+                labelClassName={css("__select__field", labelClassName)}
                 placeholder={props.placeholder}
                 right={
                     <span>
                         {right}
-                        <button
-                            disabled={props.disabled}
-                            onClick={onClickLabel}
-                            type="button"
-                            className="mt-2 transition-colors enabled:hover:text-primary disabled:cursor-not-allowed disabled:text-disabled"
-                        >
-                            <CaretDownIcon size={20} />
-                            <span className="sr-only">{translation.inputCaretDown}</span>
+                        <button disabled={props.disabled} onClick={onClickLabel} type="button" className="__select__trigger">
+                            <CaretDownIcon aria-hidden="true" className="__select__trigger-icon" />
+                            <span className="__select__trigger-label">{translation.inputCaretDown}</span>
                         </button>
                     </span>
                 }
@@ -124,13 +115,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     aria-describedby={describedBy}
                     data-selected={!!props.value || false}
                     title={typeof props.title === "string" ? props.title : undefined}
-                    className={css(
-                        "input select group h-input-height w-full flex-1 appearance-none rounded-input-radius text-input-text",
-                        "bg-transparent px-input-padding-x py-input-padding-y text-foreground placeholder-input-placeholder",
-                        "outline-none transition-colors group-error:text-danger group-error:placeholder-input-mask-error",
-                        "data-[selected=false]:text-input-placeholder disabled:cursor-not-allowed disabled:text-disabled",
-                        props.className
-                    )}
+                    className={css("input select __select__control", props.className)}
                 >
                     <option value="" disabled hidden>
                         {props.placeholder}

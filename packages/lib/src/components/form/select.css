@@ -1,0 +1,91 @@
+.__select {
+    box-sizing: border-box;
+}
+
+.__select__field:focus-within,
+.__select__field:hover {
+    border-color: var(--var-color-primary);
+}
+
+.__select__field:where([aria-disabled="true"], :disabled),
+fieldset:disabled .__select__field {
+    border-color: var(--var-color-disabled) !important;
+}
+
+.__select__trigger {
+    margin-block-start: 0.5rem;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    transition-property: color;
+    transition-duration: 150ms;
+    transition-timing-function: ease;
+    cursor: pointer;
+}
+
+.__select__trigger:enabled:hover {
+    color: var(--var-color-primary);
+}
+
+.__select__trigger:disabled {
+    color: var(--var-color-disabled);
+    cursor: not-allowed;
+}
+
+.__select__trigger-icon {
+    inline-size: var(--var-select-trigger-icon-size, 1.25rem);
+    block-size: var(--var-select-trigger-icon-size, 1.25rem);
+}
+
+.__select__trigger-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.__select__control {
+    flex: 1 1 0%;
+    inline-size: 100%;
+    block-size: var(--var-input-height);
+    appearance: none;
+    border: 0;
+    border-radius: var(--var-input-rounded, var(--var-button-rounded));
+    background: transparent;
+    padding-block: var(--var-input-py, 0.25rem);
+    padding-inline: var(--var-input-px, 0.5rem);
+    color: var(--var-color-foreground);
+    font: inherit;
+    font-size: var(--var-input-font-size, 1rem);
+    outline: none;
+    transition-property: color, border-color, background-color;
+    transition-duration: 150ms;
+    transition-timing-function: ease;
+}
+
+.__select__control::placeholder {
+    color: var(--var-input-placeholder-foreground, var(--var-color-muted-foreground));
+}
+
+.__select__control:disabled {
+    color: var(--var-color-disabled);
+    cursor: not-allowed;
+}
+
+.__select__control[data-selected="false"] {
+    color: var(--var-input-placeholder-foreground, var(--var-color-muted-foreground));
+}
+
+fieldset[data-error="true"] .__select__control {
+    color: var(--var-color-danger);
+}
+
+fieldset[data-error="true"] .__select__control::placeholder {
+    color: var(--var-input-mask-error-background, var(--var-color-danger-subtle));
+}

@@ -1,0 +1,22 @@
+.__date-picker {
+    box-sizing: border-box;
+}
+
+.__date-picker__calendar-icon {
+    inline-size: var(--var-date-picker-calendar-icon-size, 1rem);
+    block-size: var(--var-date-picker-calendar-icon-size, 1rem);
+}
+
+/* @generated component utility migration start */
+.__form-date-picker__tw-1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0
+}
+/* @generated component utility migration end */

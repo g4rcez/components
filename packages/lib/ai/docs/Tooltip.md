@@ -215,8 +215,8 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 
 - Don't put essential information only in a tooltip — users on touch devices may never see it.
 - Don't use tooltips for long text or complex layouts — use `Modal` or `Dropdown` instead.
-- Don't pass raw Tailwind color classes (`bg-gray-900`, `text-white`) inside tooltip content — use design-token classes.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-gray-900`, `text-white`) inside tooltip content — use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
 - Don't use tooltips on elements that are already self-explanatory.
 
 ## Accessibility

@@ -1,72 +1,45 @@
 {
-  "$schema": "https://unpkg.com/knip@6/schema.json",
-  "workspaces": {
-    ".": {
-      "entry": [
-        "scripts/skills.mjs"
-      ],
-      "project": [
-        "scripts/**/*.{js,mjs,cjs,ts,tsx}",
-        "*.{js,mjs,cjs,ts,tsx}",
-        "*.config.{js,mjs,cjs,ts,mts,cts}"
-      ]
+    "$schema": "https://unpkg.com/knip@6/schema.json",
+    "workspaces": {
+        ".": {
+            "entry": ["scripts/skills.mjs"],
+            "project": ["scripts/**/*.{js,mjs,cjs,ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "*.config.{js,mjs,cjs,ts,mts,cts}"],
+        },
+        "packages/lib": {
+            "entry": [
+                "src/index.ts",
+                "src/components/index.ts",
+                "src/components/**/*.{ts,tsx}",
+                "src/styles/**/*.{ts,tsx}",
+                "vite.config.mts",
+                "ai/SKILL.md",
+                "ai/docs/**/*.md",
+                "docs/**/*.{md,mdx,yml,yaml,json,ts,tsx}",
+            ],
+            "vite": false,
+            "project": [
+                "src/**/*.{ts,tsx}",
+                "tests/**/*.{ts,tsx}",
+                "vite.config.mts",
+                "tsconfig*.json",
+                "ai/**/*.{md,mdx}",
+                "docs/**/*.{md,mdx,yml,yaml,json,ts,tsx}",
+            ],
+        },
+        "packages/docs": {
+            "entry": [
+                "src/app/**/*.{ts,tsx}",
+                "src/components/**/*.{ts,tsx}",
+                "src/config/navigation.ts",
+                "next.config.mjs",
+                "tailwind.config.ts",
+                "postcss.config.mjs",
+            ],
+            "project": ["src/**/*.{ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "next.config.mjs", "tailwind.config.ts", "postcss.config.mjs", "tsconfig.json"],
+        },
+        "packages/tailwindcss-v4": {
+            "entry": ["src/app/**/*.{ts,tsx}", "next.config.ts", "postcss.config.mjs"],
+            "project": ["src/**/*.{ts,tsx,css}", "*.{js,mjs,cjs,ts,tsx}", "next.config.ts", "postcss.config.mjs", "tsconfig.json"],
+        },
     },
-    "packages/lib": {
-      "entry": [
-        "src/index.ts",
-        "src/components/index.ts",
-        "src/components/**/*.{ts,tsx}",
-        "src/styles/**/*.{ts,tsx}",
-        "vite.config.mts",
-        "preset.tailwind.ts",
-        "ai/SKILL.md",
-        "ai/docs/**/*.md",
-        "docs/**/*.{md,mdx,yml,yaml,json,ts,tsx}"
-      ],
-      "vite": false,
-      "project": [
-        "src/**/*.{ts,tsx}",
-        "tests/**/*.{ts,tsx}",
-        "vite.config.mts",
-        "tailwind.config.ts",
-        "postcss.config.mjs",
-        "preset.tailwind.ts",
-        "tsconfig*.json",
-        "ai/**/*.{md,mdx}",
-        "docs/**/*.{md,mdx,yml,yaml,json,ts,tsx}"
-      ]
-    },
-    "packages/docs": {
-      "entry": [
-        "src/app/**/*.{ts,tsx}",
-        "src/components/**/*.{ts,tsx}",
-        "src/config/navigation.ts",
-        "next.config.mjs",
-        "tailwind.config.ts",
-        "postcss.config.mjs"
-      ],
-      "project": [
-        "src/**/*.{ts,tsx}",
-        "*.{js,mjs,cjs,ts,tsx}",
-        "next.config.mjs",
-        "tailwind.config.ts",
-        "postcss.config.mjs",
-        "tsconfig.json"
-      ]
-    },
-    "packages/tailwindcss-v4": {
-      "entry": [
-        "src/app/**/*.{ts,tsx}",
-        "next.config.ts",
-        "postcss.config.mjs"
-      ],
-      "project": [
-        "src/**/*.{ts,tsx,css}",
-        "*.{js,mjs,cjs,ts,tsx}",
-        "next.config.ts",
-        "postcss.config.mjs",
-        "tsconfig.json"
-      ]
-    }
-  }
 }

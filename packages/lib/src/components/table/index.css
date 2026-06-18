@@ -1,0 +1,17 @@
+.__table-root {
+    box-sizing: border-box;
+}
+
+/* @generated component utility migration start */
+.__table-root__tw-1 {
+  display: flex;
+  gap: var(--table-groups-gap)
+}
+
+.__table-root__tw-2 {
+  min-width: 100%
+}
+.__table-root__tw-extra-1 {
+  flex-wrap: wrap
+}
+/* @generated component utility migration end */

@@ -85,7 +85,7 @@ const createDays = (month: Date) => {
 
 const formatMonth = (d: Date, locale?: Locales) => d.toLocaleDateString(locale, { month: "long" });
 
-const getOptionsMonth = (id: string, date: Date, locale?: Locales) =>
+const getOptionsMonth = (id: string, _date: Date, locale?: Locales) =>
     Array.from({ length: 12 }).map((_, i) => {
         const month = startOfMonth(new Date(1970, i, 1).setMonth(i));
         const label = formatMonth(month, locale);
@@ -142,6 +142,7 @@ type CalendarBodyProps = {
     RenderOnDay?: React.FC<{ date: Date }>;
     disabledDate?: (date: Date) => boolean;
     labelRange?: { to: string; from: string };
+    locale?: Locales;
 };
 
 const CalendarBody = (props: CalendarBodyProps) => {
@@ -162,12 +163,18 @@ const CalendarBody = (props: CalendarBodyProps) => {
                             const sameMonth = isSameMonth(day, props.stateDate);
                             const disableDate = !sameMonth || disabledByFn;
                             const isInRange = props.rangeMode ? inRange(props.range?.from, day, props.range?.to) : false;
+                            const dayLabel = day.toLocaleDateString(props.locale, {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            });
                             return (
                                 <td
                                     key={key}
                                     align="center"
                                     className={css(
-                                        "relative p-calendar-cell-p",
+                                        "__display-calendar__tw-1",
                                         Is.function(props.styles?.dayFrame) ? props.styles?.dayFrame(day) : props.styles?.dayFrame
                                     )}
                                 >
@@ -177,28 +184,35 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                         disabled={disabledByFn}
                                         data-samemonth={sameMonth}
                                         data-range={props.rangeMode}
+                                        data-today={today || undefined}
+                                        aria-label={dayLabel}
+                                        aria-current={today ? "date" : undefined}
+                                        aria-pressed={isSelected || undefined}
+                                        data-selected={isSelected || undefined}
+                                        data-in-range={(isInRange && props.markRange) || undefined}
                                         onClick={props.dispatch.onSelectDate}
                                         data-view={props.stateDate.getMonth().toString()}
                                         className={css(
-                                            `relative flex size-calendar-day-size items-center justify-center rounded-full proportional-nums disabled:cursor-not-allowed ${today ? "text-emphasis" : ""} ${disableDate ? "text-disabled" : ""} ${isSelected ? "bg-primary text-primary-foreground" : ""}`,
-                                            isInRange && props.markRange ? "size-calendar-day-size border border-dashed border-card-border" : "",
+                                            "__display-calendar__tw-2 __display-calendar__tw-final-1",
+                                            today ? "__display-calendar__tw-3" : "",
+                                            disableDate ? "__display-calendar__tw-4" : "",
+                                            isSelected ? "__display-calendar__tw-5" : "",
+                                            isInRange && props.markRange ? "__display-calendar__border __display-calendar__tw-6" : "",
                                             Is.function(props.styles?.day) ? props.styles?.day(day) : props.styles?.day
                                         )}
                                     >
                                         <div></div>
                                         {day.getDate()}
                                         {isSelected && props.stateRange.from?.toISOString() === key ? (
-                                            <span className="absolute -top-2 left-0 h-full w-full">
-                                                <span className="text-calendar-cell-text text-foreground">
+                                            <span className="__display-calendar__tw-7">
+                                                <span className="__display-calendar__tw-8">
                                                     {props.labelRange?.from ?? translate.calendarFromDate}
                                                 </span>
                                             </span>
                                         ) : null}
                                         {isSelected && props.stateRange.to?.toISOString() === key ? (
-                                            <span className="absolute -top-2 left-0 h-full w-full">
-                                                <span className="text-calendar-cell-text text-foreground">
-                                                    {props.labelRange?.to ?? translate.calendarToDate}
-                                                </span>
+                                            <span className="__display-calendar__tw-7">
+                                                <span className="__display-calendar__tw-8">{props.labelRange?.to ?? translate.calendarToDate}</span>
                                             </span>
                                         ) : null}
                                     </button>
@@ -399,38 +413,34 @@ export const Calendar = ({
             <div
                 ref={root}
                 data-component="calendar"
+                data-layout={styles ? "custom" : "default"}
                 onTouchEnd={swipe.onTouchEnd}
                 onTouchStart={swipe.onTouchStart}
-                className={css("relative overflow-hidden", Is.function(styles?.calendar) ? styles?.calendar(allDaysOfMonth) : styles?.calendar)}
+                className={css("__display-calendar__tw-9", Is.function(styles?.calendar) ? styles?.calendar(allDaysOfMonth) : styles?.calendar)}
             >
-                <div className="flex flex-col justify-center rounded-calendar-header-radius text-center">
+                <div className="__display-calendar__tw-10 __display-calendar__tw-extra-1">
                     <AnimatePresence initial={false} mode="popLayout" custom={state.direction} onExitComplete={dispatch.onExitComplete}>
                         <motion.div key={monthString} initial="enter" animate="middle" exit="exit">
-                            <header className="relative grid grid-cols-7 items-center">
+                            <header className="__display-calendar__tw-11 __display-calendar__tw-extra-2">
                                 <button
                                     type="button"
                                     data-focustrap="prev"
                                     onClick={dispatch.previousMonth}
                                     title={translations.calendarBackMonth}
-                                    className="z-calendar col-start-1 justify-self-center rounded-full p-calendar-nav-p hover:text-primary"
+                                    className="__display-calendar__tw-12"
                                 >
-                                    <span className="inline-flex size-calendar-icon-size items-center justify-center">
+                                    <span className="__display-calendar__tw-13">
                                         <CaretLeftIcon aria-hidden="true" />
                                     </span>
                                 </button>
-                                <motion.span
-                                    layout
-                                    variants={variants}
-                                    custom={state.direction}
-                                    className="absolute inset-0 isolate z-normal flex items-center justify-center font-semibold"
-                                >
-                                    <span className="flex w-fit items-center justify-center gap-calendar-nav-gap py-calendar-nav-py">
+                                <motion.span layout variants={variants} custom={state.direction} className="__display-calendar__tw-14">
+                                    <span className="__display-calendar__tw-15">
                                         <select
                                             value={monthString}
                                             onChange={dispatch.onChangeMonth}
                                             aria-label={translations.calendarMonthLabel}
                                             style={{ width: `${monthString.length + 1}ch` }}
-                                            className="cursor-pointer appearance-none bg-transparent capitalize proportional-nums hover:text-primary"
+                                            className="__display-calendar__tw-16 __display-calendar__tw-final-1"
                                         >
                                             {state.months}
                                         </select>
@@ -441,7 +451,7 @@ export const Calendar = ({
                                             value={state.year}
                                             onChange={internalOnChangeYear}
                                             style={{ width: `${state.year.length}ch` }}
-                                            className="w-calendar-year-w cursor-pointer appearance-none bg-transparent hover:text-primary"
+                                            className="__display-calendar__tw-17"
                                         />
                                     </span>
                                 </motion.span>
@@ -450,14 +460,14 @@ export const Calendar = ({
                                     data-focustrap="next"
                                     onClick={dispatch.nextMonth}
                                     title={translations.calendarNextMonth}
-                                    className="z-calendar col-start-7 justify-self-center rounded-full p-calendar-nav-p hover:text-primary"
+                                    className="__display-calendar__tw-18"
                                 >
-                                    <span className="inline-flex size-calendar-icon-size items-center justify-center">
+                                    <span className="__display-calendar__tw-13">
                                         <CaretRightIcon aria-hidden="true" />
                                     </span>
                                 </button>
                             </header>
-                            <motion.table className="mt-calendar-table-mt table min-w-full table-auto border-0">
+                            <motion.table className="__display-calendar__tw-19 table">
                                 <thead>
                                     <tr>
                                         {state.week.map((dayOfWeek) => (
@@ -465,7 +475,7 @@ export const Calendar = ({
                                                 role="columnheader"
                                                 key={dayOfWeek.toString()}
                                                 className={css(
-                                                    "py-calendar-weekday-py text-typography-sm font-medium capitalize",
+                                                    "__display-calendar__tw-20",
                                                     Is.function(styles?.weekDay) ? styles.weekDay(dayOfWeek) : styles?.weekDay
                                                 )}
                                             >
@@ -489,6 +499,7 @@ export const Calendar = ({
                                     labelRange={labelRange}
                                     stateRange={state.range}
                                     RenderOnDay={RenderOnDay}
+                                    locale={currentLocale}
                                     direction={state.direction}
                                     disabledDate={disabledDate}
                                     onKeyDown={dispatch.onKeyDown}
@@ -498,12 +509,12 @@ export const Calendar = ({
                     </AnimatePresence>
                 </div>
                 {type === "datetime" ? (
-                    <section className="my-calendar-datetime-my grid items-center">
+                    <section className="__display-calendar__tw-21">
                         <Input
                             info={null}
                             mask="time"
                             optionalText=" "
-                            container="w-full"
+                            container="__display-calendar__time-input"
                             reportStatus={false}
                             defaultValue={date ? format(date, "HH:mm") : undefined}
                             title={datetimeTitle || translations.calendarDatetimeTitle}
@@ -524,8 +535,8 @@ export const Calendar = ({
                         />
                     </section>
                 ) : null}
-                <footer className="mt-calendar-footer-mt text-center text-primary">
-                    <button type="button" onClick={onSetToday} className="transition-transform duration-300 hover:scale-105">
+                <footer className="__display-calendar__tw-22">
+                    <button type="button" onClick={onSetToday} className="__display-calendar__tw-23">
                         {translations.calendarToday}
                     </button>
                 </footer>

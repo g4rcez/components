@@ -15,10 +15,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
             ref={ref}
             role="toolbar"
             data-component="toolbar"
-            className={css(
-                "sticky bottom-toolbar-bottom flex items-center justify-center rounded-toolbar-radius border border-card-border bg-background p-toolbar-p",
-                className
-            )}
+            className={css("__floating-toolbar__border __floating-toolbar__tw-1", className)}
         >
             {children}
         </motion.div>

@@ -1,0 +1,25 @@
+.__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    gap: var(--var-empty-gap);
+    padding-block: var(--var-empty-py);
+    padding-inline: var(--var-empty-px);
+}
+
+.__empty__icon,
+.__empty__message {
+    color: var(--var-empty-foreground);
+}
+
+.__empty__icon svg {
+    inline-size: var(--var-empty-icon-size, 4rem);
+    block-size: var(--var-empty-icon-size, 4rem);
+}
+
+.__empty__message {
+    margin: 0;
+}

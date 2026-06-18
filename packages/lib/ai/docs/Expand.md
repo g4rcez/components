@@ -111,8 +111,8 @@ function ControlledExpand() {
 
 - Don't use `Expand` when a standard `Dropdown` or `Modal` would feel more familiar to the user — the animation is distinctive and should be reserved for intentional moments.
 - Don't nest multiple `Expand` components inside each other; layout animations can conflict.
-- Don't pass raw Tailwind color classes (`bg-gray-50`, `border-gray-200`) inside the expanded content — use design-token classes.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `shadow-[--my-shadow]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-gray-50`, `border-gray-200`) inside the expanded content — use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`, `shadow-[--my-shadow]`) — override CSS variables in your `@theme` block.
 
 ## Accessibility
 

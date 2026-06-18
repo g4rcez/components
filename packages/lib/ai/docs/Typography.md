@@ -169,8 +169,8 @@ import { Button } from "@g4rcez/components/button";
 ## Don't
 
 - Don't use `PageTitle` more than once per page — it represents the page's main topic
-- Don't pass raw Tailwind color classes (`text-gray-500`, `text-black`) — use `text-secondary` or `text-foreground`
-- Don't use arbitrary Tailwind values (`text-[#555]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`text-gray-500`, `text-black`) — use `text-secondary` or `text-foreground`
+- Don't use arbitrary utility values (`text-[#555]`) — override CSS variables in your `@theme` block
 - Don't use `Info` for long-form content — it is designed for short labeled values
 
 ## Accessibility

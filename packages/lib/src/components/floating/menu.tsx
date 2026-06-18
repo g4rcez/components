@@ -32,11 +32,11 @@ import type { Override } from "../../types";
 
 const menuItemClassName = (highlight: string = "") =>
     css(
-        "w-full min-w-36 outline-none p-menu-item-p items-center flex justify-between text-left",
-        "hover:bg-primary focus:bg-primary aria-expanded:opacity-80",
-        "focus:text-primary-foreground hover:text-primary-foreground",
+        "__floating-menu__tw-1",
+        "aria-expanded:opacity-80 __floating-menu__tw-2",
+        "__floating-menu__tw-3",
         "first-of-type:rounded-t-menu-radius last-of-type:rounded-b-menu-radius",
-        "disabled:opacity-40 disabled:cursor-not-allowed",
+        "__floating-menu__tw-4",
         highlight
     );
 
@@ -210,9 +210,9 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                         >
                             {label}
                             {isNested && (
-                                <span style={{ marginLeft: 10, fontSize: 10 }}>
-                                    <span className="sr-only">Next menu</span>
-                                    <CaretRightIcon size={14} />
+                                <span className="__menu__nested-indicator">
+                                    <span className="__menu__sr-label">Next menu</span>
+                                    <CaretRightIcon className="__menu__nested-icon" />
                                 </span>
                             )}
                         </button>
@@ -241,7 +241,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                         ref={refs.setFloating}
                                         style={{ ...props.style, ...floatingStyles }}
                                         className={css(
-                                            "isolate z-tooltip flex max-h-menu-max-h flex-col items-start overflow-y-auto rounded-menu-radius border border-floating-border bg-floating-background text-left shadow-shadow-floating outline-none",
+                                            "__floating-menu__border __floating-menu__tw-5 __floating-menu__tw-extra-1",
                                             floatingClassName
                                         )}
                                     >
@@ -276,7 +276,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 data-open={menu.isOpen}
                 tabIndex={isActive ? 0 : -1}
                 ref={mergeRefs(item.ref, forwardedRef)}
-                className={menuItemClassName(`${props.className ?? ""} ${isActive ? "bg-primary text-primary-foreground" : ""}`)}
+                className={menuItemClassName(`${props.className ?? ""} ${isActive ? "__floating-menu__tw-6" : ""}`)}
                 {...menu.getItemProps({
                     onClick(event: React.MouseEvent<HTMLButtonElement>) {
                         props.onClick?.(event);
@@ -289,7 +289,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 })}
             >
                 {children}
-                {Right ? <Right size={16} /> : null}
+                {Right ? <Right className="__menu__item-icon" /> : null}
             </button>
         );
     }
