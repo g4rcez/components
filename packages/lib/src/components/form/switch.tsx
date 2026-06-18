@@ -49,11 +49,11 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
         return (
             <fieldset
-                className={css("__form-switch__tw-1 __form-switch__tw-extra-1", container)}
+                className={css("__switch __switch__fieldset", container)}
                 data-component="switch"
                 disabled={props.disabled || loading}
             >
-                <span className="__form-switch__tw-2 __form-switch__tw-extra-2">
+                <span className="__switch__row">
                     <input
                         {...props}
                         hidden
@@ -85,15 +85,15 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                         data-checked={checked}
                         aria-labelledby={`${id}-label`}
                         disabled={props.disabled || loading}
-                        className="__form-switch__tw-3 __form-switch__tw-extra-3"
+                        className="__switch__track"
                     >
-                        <span aria-hidden="true" data-checked={checked} className="__form-switch__tw-4" />
+                        <span aria-hidden="true" data-checked={checked} className="__switch__thumb" />
                     </button>
-                    <label htmlFor={props.id || id} className="__form-switch__tw-5" id={`${id}-label`}>
-                        <span className="__form-switch__tw-6">{children}</span>
+                    <label htmlFor={props.id || id} className="__switch__label" id={`${id}-label`}>
+                        <span className="__switch__label-text">{children}</span>
                     </label>
                 </span>
-                <span id={errorId} className="__form-switch__tw-7">
+                <span id={errorId} className="__switch__error">
                     {error}
                 </span>
             </fieldset>

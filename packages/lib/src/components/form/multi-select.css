@@ -24,55 +24,54 @@
     border: 0;
 }
 
-/* @generated component utility migration start */
-.__form-multi-select__tw-1:last-child {
+.__multi-select__list:last-child {
   border-top-left-radius: var(--dropdown-radius);
   border-top-right-radius: var(--dropdown-radius);
 }
 
-.__form-multi-select__tw-2 {
+.__multi-select__item {
   width: 100%;
 }
 
-.__form-multi-select__tw-3 {
+.__multi-select__tags {
   display: flex;
   -moz-column-gap: 0.5rem;
        column-gap: 0.5rem;
 }
 
-.__form-multi-select__tw-4 {
+.__multi-select__tag-remove {
   color: currentColor;
 }
 
-.__form-multi-select__tw-4:hover {
+.__multi-select__tag-remove:hover {
   --tw-text-opacity: 1;
   color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-4:focus {
+.__multi-select__tag-remove:focus {
   --tw-text-opacity: 1;
   color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-5 {
+.__multi-select__actions {
   display: flex;
   align-items: center;
   gap: 0.125rem;
 }
 
-.__form-multi-select__tw-6 {
+.__multi-select__action {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0,0,.58,1);
   transition-duration: 375ms;
 }
 
-.__form-multi-select__tw-7 {
+.__multi-select__input {
   height: var(--input-height);
   width: 100%;
   font-size: var(--input-text);
 }
 
-.__form-multi-select__tw-8 {
+.__multi-select__surface {
   border-radius: var(--input-radius);
   background-color: transparent;
   padding-left: var(--input-padding-x);
@@ -83,7 +82,7 @@
   color: hsla(var(--foreground), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-9 {
+.__multi-select__transition {
   outline: 2px solid transparent;
   outline-offset: 2px;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -91,7 +90,7 @@
   transition-duration: 375ms;
 }
 
-.__form-multi-select__tw-9:focus {
+.__multi-select__transition:focus {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
@@ -100,12 +99,12 @@
   --tw-ring-color: hsla(var(--primary-DEFAULT), var(--tw-ring-opacity));
 }
 
-.group:hover .__form-multi-select__tw-10 {
+.group:hover .__multi-select__control-state {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
 
-.__form-multi-select__tw-11 {
+.__multi-select__value {
   display: flex;
   align-items: center;
   gap: var(--input-gap);
@@ -113,7 +112,7 @@
   text-align: left;
 }
 
-.__form-multi-select__tw-12 {
+.__multi-select__overflow {
   max-width: 100%;
   overflow-x: auto;
   overflow: hidden;
@@ -121,16 +120,16 @@
   text-overflow: ellipsis;
 }
 
-.__form-multi-select__tw-13 {
+.__multi-select__placeholder-text {
   --tw-text-opacity: 1;
   color: hsla(var(--input-placeholder), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-14 {
+.__multi-select__overlay {
   z-index: var(--z-floating);
 }
 
-.__form-multi-select__tw-15 {
+.__multi-select__panel {
   position: relative;
   isolation: isolate;
   z-index: var(--z-floating);
@@ -155,15 +154,15 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.__form-multi-select__tw-16 {
+.__multi-select__panel-top {
   transform-origin: bottom center;
 }
 
-.__form-multi-select__tw-17 {
+.__multi-select__panel-bottom {
   transform-origin: top center;
 }
 
-.__form-multi-select__tw-18 {
+.__multi-select__search {
   margin-bottom: 0.25rem;
   height: var(--input-height);
   width: 100%;
@@ -184,23 +183,23 @@
   transition-duration: 375ms;
 }
 
-.__form-multi-select__tw-18:focus {
+.__multi-select__search:focus {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
 
-.__form-multi-select__tw-19 {
+.__multi-select__empty {
   width: 100%;
   border-bottom-width: 1px;
   --tw-border-opacity: 1;
   border-color: hsla(var(--tooltip-border), var(--tw-border-opacity));
 }
 
-.__form-multi-select__tw-19:last-child {
+.__multi-select__empty:last-child {
   border-color: transparent;
 }
 
-.__form-multi-select__tw-20 {
+.__multi-select__empty-text {
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -210,13 +209,13 @@
   color: hsla(var(--disabled), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-21 {
+.__multi-select__results {
   max-height: 18rem;
   width: 100%;
   overscroll-behavior: contain;
 }
 
-.__form-multi-select__tw-22 {
+.__multi-select__scroll {
   max-height: 18rem;
   --tw-border-opacity: 1;
   border-color: hsla(var(--floating-border), var(--tw-border-opacity));
@@ -227,7 +226,7 @@
   color: hsla(var(--foreground), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-23 {
+.__multi-select__option {
   display: flex;
   width: 100%;
   max-width: 100%;
@@ -238,24 +237,24 @@
   text-align: left;
 }
 
-.__form-multi-select__tw-23:hover {
+.__multi-select__option:hover {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--floating-hover), var(--tw-bg-opacity));
 }
 
-.__form-multi-select__tw-23:focus {
+.__multi-select__option:focus {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--floating-hover), var(--tw-bg-opacity));
 }
 
-.__form-multi-select__tw-24 {
+.__multi-select__option-selected {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--floating-hover), var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: hsla(var(--floating-foreground), var(--tw-text-opacity));
 }
 
-.__form-multi-select__tw-25 {
+.__multi-select__checkbox {
   margin-right: var(--checkbox-gap);
   display: inline-block;
   width: var(--checkbox-size);
@@ -265,12 +264,12 @@
   border-color: hsla(var(--card-border), var(--tw-border-opacity));
 }
 
-.__form-multi-select__tw-25[data-selected="true"] {
+.__multi-select__checkbox[data-selected="true"] {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity));
 }
 
-.__form-multi-select__tw-26 {
+.__multi-select__footer {
   gap: var(--menu-item-gap, 0.5rem);
   position: sticky;
   bottom: 0px;
@@ -284,40 +283,39 @@
   background-color: hsla(var(--floating-background), var(--tw-bg-opacity));
   padding: var(--menu-item-p);
 }
-.__form-multi-select__tw-extra-1 {
+.__multi-select__tags-row {
   flex-wrap: nowrap
 }
 
-.__form-multi-select__tw-extra-3 {
+.__multi-select__value-row {
   flex-direction: row
 }
-.__form-multi-select__tw-extra-2 {}
+.__multi-select {}
 .__form-multi-select__border {
   border-width: 1px
 }
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):invalid:has(.input:not(:focus):invalid[data-initialized=true]) .__form-multi-select__tw-state-2 {
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):invalid:has(.input:not(:focus):invalid[data-initialized=true]) .__multi-select__invalid {
   --tw-text-opacity: 1;
   color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity))
 }
 
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):invalid:has(.input:not(:focus):invalid[data-initialized=true]) .__form-multi-select__tw-state-2::-moz-placeholder {
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):invalid:has(.input:not(:focus):invalid[data-initialized=true]) .__multi-select__invalid::-moz-placeholder {
   --tw-placeholder-opacity: 1;
   color: hsla(var(--input-mask-error), var(--tw-placeholder-opacity))
 }
 
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):invalid:has(.input:not(:focus):invalid[data-initialized=true]) .__form-multi-select__tw-state-2::placeholder {
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):invalid:has(.input:not(:focus):invalid[data-initialized=true]) .__multi-select__invalid::placeholder {
   --tw-placeholder-opacity: 1;
   color: hsla(var(--input-mask-error), var(--tw-placeholder-opacity))
 }
 
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):focus-within .__form-multi-select__tw-state-3 {
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):focus-within .__multi-select__control-state {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity))
 }
 
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):hover .__form-multi-select__tw-state-3 {
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2):hover .__multi-select__control-state {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity))
 }
-.__form-multi-select__tw-state-1::placeholder { color: var(--input-placeholder); }
-/* @generated component utility migration end */
+.__multi-select__placeholder::placeholder { color: var(--input-placeholder); }

@@ -2,18 +2,17 @@
         box-sizing: border-box;
     }
 
-/* @generated component utility migration start */
-.__form-switch__tw-1 {
+.__switch__fieldset {
   display: flex;
   justify-content: center
 }
 
-.__form-switch__tw-2 {
+.__switch__row {
   display: flex;
   align-items: center
 }
 
-.__form-switch__tw-3 {
+.__switch__track {
   position: relative;
   display: inline-flex;
   height: var(--switch-track-h);
@@ -28,7 +27,7 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
 }
 
-.__form-switch__tw-3:focus {
+.__switch__track:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
@@ -39,17 +38,17 @@
   --tw-ring-offset-width: 2px
 }
 
-.__form-switch__tw-3[data-checked="false"] {
+.__switch__track[data-checked="false"] {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--input-switch-bg), var(--tw-bg-opacity))
 }
 
-.__form-switch__tw-3[data-checked="true"] {
+.__switch__track[data-checked="true"] {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
 }
 
-.__form-switch__tw-4 {
+.__switch__thumb {
   display: inline-block;
   aspect-ratio: 1 / 1;
   width: var(--switch-thumb-size);
@@ -62,39 +61,39 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
 }
 
-.__form-switch__tw-4[data-checked="false"] {
+.__switch__thumb[data-checked="false"] {
   --tw-translate-x: 0px;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
-.__form-switch__tw-4[data-checked="true"] {
+.__switch__thumb[data-checked="true"] {
   --tw-translate-x: 1.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
-.__form-switch__tw-4[data-checked="false"] {
+.__switch__thumb[data-checked="false"] {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--disabled), var(--tw-bg-opacity))
 }
 
-.__form-switch__tw-4[data-checked="true"] {
+.__switch__thumb[data-checked="true"] {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--input-switch), var(--tw-bg-opacity))
 }
 
-.__form-switch__tw-5 {
+.__switch__label {
   margin-left: var(--switch-gap);
   display: inline-block;
   font-size: var(--switch-label-text)
 }
 
-.__form-switch__tw-6 {
+.__switch__label-text {
   font-weight: 500;
   --tw-text-opacity: 1;
   color: hsla(var(--foreground), var(--tw-text-opacity))
 }
 
-.__form-switch__tw-7 {
+.__switch__error {
   margin-top: var(--switch-hint-mt);
   flex: 1 1 0%;
   white-space: nowrap;
@@ -103,21 +102,20 @@
   color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity))
 }
 
-.__form-switch__tw-7:empty {
+.__switch__error:empty {
   margin-top: 0px;
   display: none
 }
-.__form-switch__tw-extra-1 {
+.__switch__fieldset {
   flex-direction: column;
   flex-wrap: wrap
 }
 
-.__form-switch__tw-extra-2 {
+.__switch__row {
   flex-direction: row;
   flex-wrap: wrap
 }
 
-.__form-switch__tw-extra-3 {
+.__switch__track {
   flex-shrink: 0
 }
-/* @generated component utility migration end */

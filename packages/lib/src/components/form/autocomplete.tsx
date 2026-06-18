@@ -51,7 +51,7 @@ const transitionStyles = {
 
 const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: string }>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.div {...props} ref={ref} role="listbox" id={context?.listboxId} className="__form-autocomplete__tw-1">
+        <motion.div {...props} ref={ref} role="listbox" id={context?.listboxId} className="__autocomplete__list">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.div>
     );
@@ -61,7 +61,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps<AutocompleteItemProps> & Conte
     { item: _item, context: _context, ...props },
     ref
 ) {
-    return <motion.div {...props} ref={ref} role="presentation" className="__form-autocomplete__tw-2" />;
+    return <motion.div {...props} ref={ref} role="presentation" className="__autocomplete__item" />;
 });
 
 const components = { List, Item };
@@ -337,9 +337,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             if (!option.disabled) onSelect(option, i);
                         },
                         className: css(
-                            "__form-autocomplete__tw-3",
-                            active ? "__form-autocomplete__tw-4" : "",
-                            selected ? "__form-autocomplete__tw-5" : ""
+                            "__autocomplete__option",
+                            active ? "__autocomplete__option-active" : "",
+                            selected ? "__autocomplete__option-selected" : ""
                         ),
                     })}
                 >
@@ -368,7 +368,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 optionalText={optionalText}
                 componentName="autocomplete"
                 labelClassName={css(
-                    !props.disabled && "__form-autocomplete__tw-6",
+                    !props.disabled && "__autocomplete__field-state",
                     props.disabled && "__form-autocomplete__disabled-border",
                     labelClassName
                 )}
@@ -376,16 +376,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 ref={fieldset as unknown as Ref<HTMLInputElement>}
                 feedback={open && isTopPlacement ? props.title : feedback}
                 right={
-                    <span className="__form-autocomplete__tw-7">
+                    <span className="__autocomplete__actions">
                         {right}
                         <button
                             type="button"
                             disabled={props.disabled}
-                            className={css("__form-autocomplete__tw-8", !props.disabled && "link:text-primary")}
+                            className={css("__autocomplete__action", !props.disabled && "link:text-primary")}
                             onClick={onCaretDownClick}
                         >
                             <CaretDownIcon aria-hidden="true" className="__autocomplete__caret-icon" />
-                            <span className="__form-autocomplete__tw-9">{translation.inputCaretDown}</span>
+                            <span className="__autocomplete__sr-label">{translation.inputCaretDown}</span>
                         </button>
                         {value ? (
                             <button
@@ -393,7 +393,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 onClick={onClose}
                                 disabled={props.disabled}
                                 aria-label={translation.inputCloseValue}
-                                className={css("__form-autocomplete__tw-8", !props.disabled && "link:text-danger")}
+                                className={css("__autocomplete__action", !props.disabled && "link:text-danger")}
                             >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -468,12 +468,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     aria-labelledby={`${shadowId}-label`}
                     autoComplete="off"
                     className={css(
-                        "input __form-autocomplete__tw-10 __form-autocomplete__tw-extra-1 __form-autocomplete__tw-state-1",
-                        "__form-autocomplete__tw-11",
-                        "__form-autocomplete__tw-12",
-                        "__form-autocomplete__tw-state-2",
-                        "__form-autocomplete__tw-13",
-                        !props.disabled && "__form-autocomplete__tw-14 __form-autocomplete__tw-state-3",
+                        "input __autocomplete __autocomplete__input __autocomplete__placeholder",
+                        "__autocomplete__surface",
+                        "__autocomplete__transition",
+                        "__autocomplete__invalid",
+                        "__autocomplete__text",
+                        !props.disabled && "__autocomplete__control-state",
                         props.className
                     )}
                 />
@@ -518,13 +518,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     flushSync(() => setH(Math.min(320, sum + 2)));
                                 }}
                                 className={css(
-                                    "__form-autocomplete__border __form-autocomplete__tw-15",
-                                    isTopPlacement ? "__form-autocomplete__tw-16" : "__form-autocomplete__tw-17"
+                                    "__form-autocomplete__border __autocomplete__panel",
+                                    isTopPlacement ? "__autocomplete__panel-top" : "__autocomplete__panel-bottom"
                                 )}
                             >
                                 {isEmpty ? (
-                                    <div className="__form-autocomplete__tw-18">
-                                        <span className="__form-autocomplete__tw-19">{emptyMessage || translation.autocompleteEmpty}</span>
+                                    <div className="__autocomplete__empty">
+                                        <span className="__autocomplete__empty-text">{emptyMessage || translation.autocompleteEmpty}</span>
                                     </div>
                                 ) : null}
                                 {insideModal ? (
@@ -534,7 +534,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         ref={setScrollElement}
                                         hidden={isEmpty}
                                         style={{ maxHeight: h, overflowY: "auto" }}
-                                        className="__form-autocomplete__tw-20"
+                                        className="__autocomplete__scroll"
                                     >
                                         {displayList.map((option, i) => (
                                             <li key={`${option.value}-${i}`} role="presentation">
@@ -554,7 +554,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         defaultItemHeight={MIN_SIZE}
                                         components={components as never}
                                         scrollerRef={(e) => setScrollElement(e as HTMLElement)}
-                                        className="__form-autocomplete__tw-20"
+                                        className="__autocomplete__scroll"
                                         itemContent={(i, option) => renderOption(i, option)}
                                     />
                                 )}

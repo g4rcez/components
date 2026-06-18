@@ -188,7 +188,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                                     buttonProps={{ "aria-describedby": labelId }}
                                     trigger={
                                         <span aria-labelledby={labelId}>
-                                            <span id={labelId} className="__form-date-picker__tw-1">
+                                            <span id={labelId} className="__date-picker__sr-label">
                                                 {translation.datePickerCalendarButtonLabel}
                                             </span>
                                             <CalendarIcon aria-hidden="true" className="__date-picker__calendar-icon" />

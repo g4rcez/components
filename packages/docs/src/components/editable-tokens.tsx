@@ -150,6 +150,8 @@ const runtimeTokenAliases: Partial<Record<ComponentTokenName, Record<string, Css
     },
 };
 
+const internalTokenPattern = /(^__|__|(^|-)tw-(\d+|extra-\d+|final-\d+)(-|$))/;
+
 const cssVariablesFor = (name: ComponentTokenName, attr: string, key: string): CssCustomProperty[] => [
     `--${key}`,
     ...(runtimeTokenAliases[name]?.[attr] ?? []),
@@ -158,6 +160,50 @@ const cssVariablesFor = (name: ComponentTokenName, attr: string, key: string): C
 const labelFor = (key: string) => key;
 
 const idFor = (name: string, attr: string) => `${name}-${attr}`.replace(/[^a-zA-Z0-9]+/g, "_");
+
+const featuredTokenIdsByGroup: Partial<Record<ComponentTokenName, string[]>> = {
+    button: ["height", "padding-x", "padding-y", "gap", "radius", "text"].map((attr) => idFor("button", attr)),
+};
+
+const groupDescriptions: Partial<Record<ComponentTokenName, string>> = {
+    button: "Buttons expose stable public CSS variables for geometry. Generated selectors such as __*__tw-* stay internal and are intentionally excluded from this view.",
+};
+
+const snippetExamplesByGroup: Partial<Record<ComponentTokenName, string>> = {
+    button: `<Button theme="primary">Save changes</Button>`,
+    checkbox: `<Checkbox defaultChecked>Subscribe</Checkbox>`,
+    input: `<Input title="Email" placeholder="you@example.com" />`,
+    radiobox: `<Radiobox defaultChecked value="pro">Pro</Radiobox>`,
+    switch: `<Switch defaultChecked>Notifications</Switch>`,
+    tabs: `<Tabs active="overview">...</Tabs>`,
+};
+
+const isPublicTokenAttribute = (attr: string) => !internalTokenPattern.test(attr);
+
+const primaryCssVariable = (token: TokenControl) => token.cssVariables[0];
+
+const componentTagNameFor = (name: ComponentTokenName) =>
+    name
+        .split("-")
+        .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+        .join("");
+
+const defaultFeaturedTokenIds = (tokens: TokenGroup) => Object.keys(tokens).slice(0, 6);
+
+const descriptionForGroup = (group: ComponentTokenName) =>
+    groupDescriptions[group] ??
+    `${groupTitle(group)} exposes stable public CSS variables for its token surface. Generated selectors such as __*__tw-* stay internal and are intentionally excluded from this view.`;
+
+const snippetExampleForGroup = (group: ComponentTokenName) => snippetExamplesByGroup[group] ?? `<${componentTagNameFor(group)} />`;
+
+const tokenOverrideSnippet = (tokens: TokenGroup, ids: string[], group: ComponentTokenName) => {
+    const lines = ids.flatMap((id) => {
+        const token = tokens[id];
+        return token ? [`    "${primaryCssVariable(token)}": "${token.value}",`] : [];
+    });
+
+    return [`<div`, `  style={{`, ...lines, `  }}`, `>`, `  ${snippetExampleForGroup(group)}`, `</div>`].join("\n");
+};
 
 const groupTitle = (name: ComponentTokenName) =>
     name
@@ -206,10 +252,12 @@ const tokenControl = (name: ComponentTokenName, attr: string, defaultValue: stri
 };
 
 export const tokenGroupDefaults = (name: ComponentTokenName): TokenGroup =>
-    Object.entries({ ...componentTokens[name], ...extraComponentTokens[name] }).reduce<TokenGroup>((acc, [attr, value]) => {
-        acc[idFor(name, attr)] = tokenControl(name, attr, `${value}`);
-        return acc;
-    }, {});
+    Object.entries({ ...componentTokens[name], ...extraComponentTokens[name] })
+        .filter(([attr]) => isPublicTokenAttribute(attr))
+        .reduce<TokenGroup>((acc, [attr, value]) => {
+            acc[idFor(name, attr)] = tokenControl(name, attr, `${value}`);
+            return acc;
+        }, {});
 
 export const pickTokenDefaults = (name: ComponentTokenName, attrs: string[]): TokenGroup => {
     const group = tokenGroupDefaults(name);
@@ -743,10 +791,46 @@ export const EditableTokensSection = ({
                 <div className="grid gap-6">
                     {groups.map((group) => {
                         const groupTokens = scopedTokenGroup(group, tokens);
+                        const featuredTokenIds = featuredTokenIdsByGroup[group] ?? defaultFeaturedTokenIds(groupTokens);
+                        const featuredTokens = featuredTokenIds.flatMap((id) => {
+                            const token = groupTokens[id];
+                            return token ? [token] : [];
+                        });
+                        const groupDescription = descriptionForGroup(group);
+                        const overrideSnippet = tokenOverrideSnippet(groupTokens, featuredTokenIds, group);
 
                         return (
                             <div key={group} className="rounded-xl border border-border/40 bg-background/40 p-4">
                                 <h4 className="mb-3 text-typography-sm font-semibold text-foreground">{groupTitle(group)}</h4>
+                                {groupDescription || featuredTokens.length > 0 ? (
+                                    <div className="mb-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)]">
+                                        <div className="rounded-xl border border-border/40 bg-background/70 p-4">
+                                            {groupDescription ? <p className="text-typography-sm text-muted-foreground">{groupDescription}</p> : null}
+                                            {featuredTokens.length > 0 ? (
+                                                <div className="mt-4 flex flex-wrap gap-2">
+                                                    {featuredTokens.map((token) => (
+                                                        <span
+                                                            key={token.key}
+                                                            className="rounded-full border border-border/40 bg-card-background px-3 py-1 font-mono text-[11px] text-foreground"
+                                                        >
+                                                            {primaryCssVariable(token)}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            ) : null}
+                                        </div>
+                                        {overrideSnippet ? (
+                                            <div className="overflow-hidden rounded-xl border border-border/40 bg-zinc-950">
+                                                <div className="border-b border-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-400">
+                                                    Stable override snippet
+                                                </div>
+                                                <pre className="overflow-x-auto p-4 text-[12px] leading-6 text-zinc-100">
+                                                    <code>{overrideSnippet}</code>
+                                                </pre>
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                ) : null}
                                 <div className="mb-5 rounded-xl border border-border/40 bg-background/70 p-4">
                                     <TokenPreview group={group} />
                                 </div>

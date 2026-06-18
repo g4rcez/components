@@ -1,20 +1,29 @@
 .__radiobox {
-        box-sizing: border-box;
-    }
+    --radiobox-control-color: var(--primary-DEFAULT);
+    --radiobox-control-background: var(--background);
+    --radiobox-control-border-color: var(--card-border);
+    --radiobox-control-mark-color: 0, 0%, 100%;
+    --radiobox-control-ring-color: var(--radiobox-control-color);
+    --radiobox-control-ring-offset-color: var(--radiobox-control-background);
+    --radiobox-control-border-width: 1px;
+    --radiobox-control-mark-size: calc(var(--radiobox-size) * 0.375);
 
-/* @generated component utility migration start */
-.__form-radiobox__tw-1 {
+    box-sizing: border-box;
+}
+
+.__radiobox__label {
   display: flex;
+  width: fit-content;
   align-items: center;
   gap: var(--radiobox-gap);
-  font-weight: 400
+  font-weight: 400;
 }
 
-.__form-radiobox__tw-1[data-disabled="true"] {
-  cursor: not-allowed
+.__radiobox__label[data-disabled="true"] {
+  cursor: not-allowed;
 }
 
-.__form-radiobox__tw-2 {
+.__radiobox__control {
   display: inline-block;
   width: var(--radiobox-size);
   height: var(--radiobox-size);
@@ -22,81 +31,97 @@
      -moz-appearance: none;
           appearance: none;
   border-radius: var(--full);
-  --tw-border-opacity: 1;
-  border-color: hsla(var(--card-border), var(--tw-border-opacity));
+  border-color: hsla(var(--radiobox-control-border-color), 1);
   background-origin: border-box;
-  --tw-text-opacity: 1;
-  color: hsla(var(--primary-DEFAULT), var(--tw-text-opacity))
+  color: hsla(var(--radiobox-control-color), 1);
 }
 
-.__form-radiobox__tw-2:focus {
+.__radiobox__control:focus {
   --tw-ring-opacity: 1;
-  --tw-ring-color: hsla(var(--primary-DEFAULT), var(--tw-ring-opacity))
+  --tw-ring-color: hsla(var(--radiobox-control-ring-color), var(--tw-ring-opacity));
 }
 
-.__form-radiobox__tw-2:disabled {
-  opacity: 0.7
+.__radiobox__control:disabled {
+  opacity: 0.7;
 }
-.__form-radiobox__tw-extra-1 {}
-.__form-radiobox__tw-state-1 {
+
+.__radiobox__control-state {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   padding: 0;
   -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
-  display: inline-block;
+  display: inline-grid;
+  place-content: center;
   vertical-align: middle;
   background-origin: border-box;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
   flex-shrink: 0;
-  height: 1rem;
-  width: 1rem;
-  color: #2563eb;
-  background-color: #fff;
-  border-color: #6b7280;
-  border-width: 1px;
+  height: var(--radiobox-size);
+  width: var(--radiobox-size);
+  color: hsla(var(--radiobox-control-color), 1);
+  background-color: hsla(var(--radiobox-control-background), 1);
+  border-color: hsla(var(--radiobox-control-border-color), 1);
+  border-width: var(--radiobox-control-border-width);
   --tw-shadow: 0 0 #0000;
-  border-radius: 100%
+  border-radius: var(--full);
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 150ms;
 }
 
-.__form-radiobox__tw-state-1:focus {
+.__radiobox__control-state::before {
+  content: "";
+  width: var(--radiobox-control-mark-size);
+  height: var(--radiobox-control-mark-size);
+  border-radius: var(--full);
+  background-color: hsla(var(--radiobox-control-mark-color), 1);
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 150ms ease-in-out;
+}
+
+.__radiobox__control-state:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
   --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
   --tw-ring-offset-width: 2px;
-  --tw-ring-offset-color: #fff;
-  --tw-ring-color: #2563eb;
+  --tw-ring-offset-color: hsla(var(--radiobox-control-ring-offset-color), 1);
+  --tw-ring-color: hsla(var(--radiobox-control-ring-color), 1);
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
 
-.__form-radiobox__tw-state-1:checked {
+.__radiobox__control-state:checked {
   border-color: transparent;
   background-color: currentColor;
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e")
+  background-image: none;
+}
+
+.__radiobox__control-state:checked::before {
+  transform: scale(1);
 }
 
 @media (forced-colors: active)  {
-  .__form-radiobox__tw-state-1:checked {
+  .__radiobox__control-state:checked {
     -webkit-appearance: auto;
        -moz-appearance: auto;
-            appearance: auto
+            appearance: auto;
+  }
+
+  .__radiobox__control-state::before {
+    content: none;
   }
 }
 
-.__form-radiobox__tw-state-1:checked:hover,.__form-radiobox__tw-state-1:checked:focus {
+.__radiobox__control-state:checked:hover,.__radiobox__control-state:checked:focus {
   border-color: transparent;
-  background-color: currentColor
+  background-color: currentColor;
 }
 
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2)[aria-disabled="true"] .__form-radiobox__tw-state-1 {
-  cursor: not-allowed
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2)[aria-disabled="true"] .__radiobox__control-state {
+  cursor: not-allowed;
 }
-/* @generated component utility migration end */

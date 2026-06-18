@@ -24,16 +24,16 @@ export type FeedbackProps = React.PropsWithChildren<
 export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <span
         className={css(
-            "__form-input-field__tw-1",
-            hideLeft && children === null ? "__form-input-field__tw-2" : "__form-input-field__tw-3",
+            "__input-field__feedback",
+            hideLeft && children === null ? "__input-field__feedback-hidden" : "__input-field__feedback-body",
             className
         )}
     >
         {hideLeft ? null : (
-            <span className="__form-input-field__tw-4 __form-input-field__tw-state-1 __form-input-field__tw-state-9">
+            <span className="__input-field__label-row __input-field__label-active __input-field__label-disabled">
                 <span id={id ? `${id}-label` : undefined}>{title}</span>
                 {reportStatus || info ? (
-                    <span className="__form-input-field__tw-5">
+                    <span className="__input-field__label-meta">
                         {info ? (
                             <Tooltip
                                 as="button"
@@ -41,8 +41,8 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                                 aria-label={typeof info === "string" ? info : undefined}
                                 aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}` : undefined}
                                 title={
-                                    <span className="__form-input-field__tw-6">
-                                        <span className="__form-input-field__tw-7">
+                                    <span className="__input-field__tooltip-trigger">
+                                        <span className="__input-field__tooltip-icon">
                                             <InfoIcon aria-hidden="true" className="__input-field__feedback-icon" />
                                         </span>
                                     </span>
@@ -50,18 +50,18 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                             >
                                 <div
                                     id={id ? `tooltip-info-content-${id}` : undefined}
-                                    className="__form-input-field__tw-8 __input-field__tooltip-content"
+                                    className="__input-field__tooltip-body __input-field__tooltip-content"
                                 >
                                     {info}
                                 </div>
                             </Tooltip>
                         ) : null}
                         {reportStatus ? (
-                            <span className="__form-input-field__tw-9">
-                                <span className="__form-input-field__tw-10 __form-input-field__tw-state-2">
+                            <span className="__input-field__status">
+                                <span className="__input-field__status-indicator __input-field__status-success">
                                     <CheckCircleIcon aria-hidden="true" className="__input-field__status-icon" />
                                 </span>
-                                <span className="__form-input-field__tw-10 __form-input-field__tw-state-3">
+                                <span className="__input-field__status-indicator __input-field__status-error">
                                     <XCircleIcon aria-hidden="true" className="__input-field__status-icon" />
                                 </span>
                             </span>
@@ -143,15 +143,11 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                 aria-disabled={disabled}
                 data-component={componentName}
                 data-interactive={!!interactive}
-                className={css("__form-input-field__tw-11 __form-input-field__tw-extra-1", container)}
+                className={css("__input-field__fieldset __input-field", container)}
             >
-                <label
-                    form={form}
-                    htmlFor={ID}
-                    className={css("__form-input-field__tw-12 __form-input-field__tw-extra-2 __form-input-field__tw-state-4")}
-                >
+                <label form={form} htmlFor={ID} className={css("__input-field__label __input-field__label-layout __input-field__label-state")}>
                     {hiddenLabel ? (
-                        <span className="__form-input-field__tw-13">
+                        <span className="__input-field__sr-only">
                             <InputFeedback
                                 id={ID}
                                 info={info}
@@ -175,7 +171,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                                     {!required ? (
                                         <span
                                             aria-disabled={disabled}
-                                            className="__form-input-field__tw-14 __form-input-field__tw-state-5 __input-field__optional-text"
+                                            className="__input-field__optional __input-field__optional-state __input-field__optional-text"
                                         >
                                             {optionalText}
                                         </span>
@@ -187,23 +183,23 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     )}
                     <div
                         className={css(
-                            "__form-input-field__border __form-input-field__tw-15 __form-input-field__tw-extra-3 __form-input-field__tw-state-6 __form-input-field__tw-state-10",
+                            "__input-field__border __input-field__control __input-field__control-surface __input-field__control-state __input-field__control-disabled",
                             labelClassName
                         )}
                     >
-                        {left ? <span className="__form-input-field__tw-16 __form-input-field__tw-extra-4">{left}</span> : null}
+                        {left ? <span className="__input-field__slot-start __input-field__slot">{left}</span> : null}
                         {children}
-                        {right ? <span className="__form-input-field__tw-17 __form-input-field__tw-extra-4">{right}</span> : null}
+                        {right ? <span className="__input-field__slot-end __input-field__slot">{right}</span> : null}
                     </div>
                 </label>
                 <p
                     id={ID ? `${ID}-error` : undefined}
                     role="alert"
-                    className="__form-input-field__tw-18 __form-input-field__tw-state-7 __input-field__error"
+                    className="__input-field__error-text __input-field__error-state __input-field__error"
                 >
                     {error}
                 </p>
-                <p id={ID ? `${ID}-feedback` : undefined} className="__form-input-field__tw-19 __form-input-field__tw-state-8">
+                <p id={ID ? `${ID}-feedback` : undefined} className="__input-field__feedback-text __input-field__feedback-state">
                     {feedback}
                 </p>
             </fieldset>

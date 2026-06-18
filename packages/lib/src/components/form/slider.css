@@ -8,8 +8,7 @@
     transform: scale(1.05);
 }
 
-/* @generated component utility migration start */
-.__form-slider__tw-1 {
+.__slider__thumb {
   display: block;
   width: var(--slider-thumb-size);
   height: var(--slider-thumb-size);
@@ -25,16 +24,16 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
 }
 
-.__form-slider__tw-1:focus-within {
+.__slider__thumb:focus-within {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity))
 }
 
-.__form-slider__tw-1:active {
+.__slider__thumb:active {
   cursor: grabbing
 }
 
-.__form-slider__tw-2 {
+.__slider__control {
   position: relative;
   display: flex;
   height: var(--slider-control-h);
@@ -45,7 +44,7 @@
   align-items: center
 }
 
-.__form-slider__tw-3 {
+.__slider__track {
   position: relative;
   height: var(--slider-track-h);
   flex-grow: 1;
@@ -54,11 +53,10 @@
   background-color: hsla(var(--background), var(--tw-bg-opacity))
 }
 
-.__form-slider__tw-4 {
+.__slider__indicator {
   position: absolute;
   height: 100%;
   border-radius: var(--full);
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
 }
-/* @generated component utility migration end */

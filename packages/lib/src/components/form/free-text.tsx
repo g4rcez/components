@@ -94,7 +94,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                     id={props.name || props.id}
                     optionalText={optionalText}
                     labelClassName={css(
-                        !props.disabled && "__form-free-text__tw-1",
+                        !props.disabled && "__free-text__field-state",
                         props.disabled && "__form-free-text__disabled-border",
                         labelClassName
                     )}
@@ -115,12 +115,12 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         aria-describedby={error ? `${id}-error` : undefined}
                         ref={mergeRefs(ref, inputRef) as unknown as React.Ref<Html>}
                         className={css(
-                            "input __form-free-text__tw-2 __form-free-text__tw-extra-1 __form-free-text__tw-state-1",
-                            "__form-free-text__tw-3",
-                            "__form-free-text__tw-4",
-                            "__form-free-text__tw-state-2",
-                            "__form-free-text__tw-5",
-                            "__form-free-text__tw-6",
+                            "input __free-text __free-text__input __free-text__placeholder",
+                            "__free-text__surface",
+                            "__free-text__transition",
+                            "__free-text__invalid",
+                            "__free-text__resizable",
+                            "__free-text__input-state",
                             props.className
                         )}
                     />

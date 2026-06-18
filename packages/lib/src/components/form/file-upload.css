@@ -22,14 +22,13 @@
     block-size: var(--file-upload-thumb-icon-size, 1.75rem);
 }
 
-/* @generated component utility migration start */
-.__form-file-upload__tw-1 {
+.__file-upload__preview-image {
     width: 100%;
     -o-object-fit: contain;
     object-fit: contain;
 }
 
-.__form-file-upload__tw-2 {
+.__file-upload__item {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -39,22 +38,22 @@
     border-color: hsla(var(--card-border), var(--tw-border-opacity));
 }
 
-.__form-file-upload__tw-2:last-child {
+.__file-upload__item:last-child {
     border-bottom-color: transparent;
 }
 
-.__form-file-upload__tw-3 {
+.__file-upload__stack {
     display: flex;
     gap: var(--file-upload-gap);
 }
 
-.__form-file-upload__tw-4 {
+.__file-upload__file-row {
     display: flex;
     align-items: center;
     gap: var(--file-upload-gap);
 }
 
-.__form-file-upload__tw-5 {
+.__file-upload__preview-button {
     margin: 0.5rem;
     display: flex;
     width: var(--file-upload-thumb-size);
@@ -65,24 +64,24 @@
     border-radius: var(--file-upload-thumb-radius);
 }
 
-.__form-file-upload__tw-6 {
+.__file-upload__file-details {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     text-align: left;
 }
 
-.__form-file-upload__tw-7 {
+.__file-upload__size {
     font-size: var(--file-upload-text-size);
     font-style: italic;
 }
 
-.__form-file-upload__tw-8 {
+.__file-upload__aside {
     min-width: 100%;
     flex: 1 1 0%;
 }
 
-.__form-file-upload__tw-9 {
+.__file-upload__actions {
     align-items: flex-start;
     display: flex;
     justify-content: flex-start;
@@ -94,12 +93,12 @@
     transition-timing-function: linear;
 }
 
-.__form-file-upload__tw-9:hover {
+.__file-upload__actions:hover {
     --tw-text-opacity: 1;
     color: hsla(var(--danger-hover), var(--tw-text-opacity));
 }
 
-.__form-file-upload__tw-10 {
+.__file-upload__remove-button {
     display: flex;
     width: 1.5rem;
     height: 1.5rem;
@@ -107,35 +106,35 @@
     justify-content: center;
 }
 
-.__form-file-upload__tw-11 {
+.__file-upload__list {
     width: 100%;
 }
 
-.__form-file-upload__tw-11 > :not([hidden]) ~ :not([hidden]) {
+.__file-upload__list > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 
-.__form-file-upload__tw-12 {
+.__file-upload__idle {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.__form-file-upload__tw-13 {
+.__file-upload__idle-icon-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--file-upload-inner-gap);
 }
 
-.__form-file-upload__tw-14 {
+.__file-upload__accent {
     --tw-text-opacity: 1;
     color: hsla(var(--primary-DEFAULT), var(--tw-text-opacity));
 }
 
-.__form-file-upload__tw-15 {
+.__file-upload__idle-copy {
     margin-top: var(--file-upload-thumb-my);
     margin-bottom: var(--file-upload-thumb-my);
     display: flex;
@@ -143,35 +142,35 @@
     gap: var(--file-upload-thumb-gap);
 }
 
-.__form-file-upload__tw-16 {
+.__file-upload__viewer-name {
     font-size: var(--file-upload-text-name);
     font-weight: 500;
 }
 
-.__form-file-upload__tw-17 {
+.__file-upload__viewer-size {
     font-size: var(--file-upload-text-size);
 }
 
-.__form-file-upload__tw-18 {
+.__file-upload__viewer-image {
     display: inline-block;
     width: 100%;
     max-width: 24rem;
 }
 
-.__form-file-upload__tw-19 {
+.__file-upload__viewer-video {
     display: block;
     width: 100%;
     max-width: 24rem;
 }
-.__form-file-upload__tw-extra-1 {
+.__file-upload__row {
     flex-direction: row;
 }
 
-.__form-file-upload__tw-extra-2 {
+.__file-upload__column {
     flex-direction: column;
 }
 
-.__form-file-upload__dropzone {
+.__file-upload__dropzone {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -182,13 +181,12 @@
     color: hsla(var(--foreground), 1);
 }
 
-.__form-file-upload__dropzone[data-active="true"] {
+.__file-upload__dropzone[data-active="true"] {
     border-style: solid;
     border-color: transparent;
     background-color: hsla(var(--card-background), 1);
 }
 
-.__form-file-upload__dropzone[data-active="false"] {
+.__file-upload__dropzone[data-active="false"] {
     border-style: dashed;
 }
-/* @generated component utility migration end */

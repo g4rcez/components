@@ -7,25 +7,24 @@
     block-size: var(--var-autocomplete-caret-icon-size, 0.25rem);
 }
 
-/* @generated component utility migration start */
-.__form-autocomplete__tw-1 {
+.__autocomplete__list {
     max-height: var(--dropdown-max-h);
     width: 100%;
     overscroll-behavior: contain;
     border-radius: var(--dropdown-radius);
 }
 
-.__form-autocomplete__tw-2:first-child {
+.__autocomplete__item:first-child {
     border-top-left-radius: var(--dropdown-radius);
     border-top-right-radius: var(--dropdown-radius);
 }
 
-.__form-autocomplete__tw-2:last-child {
+.__autocomplete__item:last-child {
     border-top-left-radius: var(--dropdown-radius);
     border-top-right-radius: var(--dropdown-radius);
 }
 
-.__form-autocomplete__tw-3 {
+.__autocomplete__option {
     min-height: 2.5rem;
     width: 100%;
     cursor: pointer;
@@ -33,56 +32,56 @@
     text-align: left;
 }
 
-.__form-autocomplete__tw-3:hover {
+.__autocomplete__option:hover {
     --tw-bg-opacity: 1;
     background-color: hsla(var(--floating-hover), var(--tw-bg-opacity));
 }
 
-.__form-autocomplete__tw-4 {
+.__autocomplete__option-active {
     --tw-bg-opacity: 1;
     background-color: hsla(var(--primary-hover), var(--tw-bg-opacity));
     --tw-text-opacity: 1;
     color: hsla(var(--primary-foreground), var(--tw-text-opacity));
 }
 
-.__form-autocomplete__tw-5 {
+.__autocomplete__option-selected {
     --tw-bg-opacity: 1;
     background-color: hsla(var(--floating-hover), var(--tw-bg-opacity));
     --tw-text-opacity: 1;
     color: hsla(var(--floating-foreground), var(--tw-text-opacity));
 }
 
-.__form-autocomplete__tw-6:focus-within {
+.__autocomplete__field-state:focus-within {
     --tw-border-opacity: 1;
     border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
 
-.__form-autocomplete__tw-7 {
+.__autocomplete__actions {
     display: flex;
     align-items: center;
     gap: 0.125rem;
 }
 
-.__form-autocomplete__tw-8 {
+.__autocomplete__action {
     padding: var(--input-gap);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0, 0, 0.58, 1);
     transition-duration: 375ms;
 }
 
-.__form-autocomplete__tw-8:disabled {
+.__autocomplete__action:disabled {
     cursor: not-allowed;
     --tw-text-opacity: 1;
     color: hsla(var(--disabled), var(--tw-text-opacity));
 }
 
 @media (min-width: 768px) {
-    .__form-autocomplete__tw-8 {
+    .__autocomplete__action {
         padding: 0.25rem;
     }
 }
 
-.__form-autocomplete__tw-9 {
+.__autocomplete__sr-label {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -94,13 +93,13 @@
     border-width: 0;
 }
 
-.__form-autocomplete__tw-10 {
+.__autocomplete__input {
     height: var(--input-height);
     width: 100%;
     flex: 1 1 0%;
 }
 
-.__form-autocomplete__tw-11 {
+.__autocomplete__surface {
     border-radius: var(--input-radius);
     background-color: transparent;
     padding-left: var(--input-padding-x);
@@ -111,7 +110,7 @@
     color: hsla(var(--foreground), var(--tw-text-opacity));
 }
 
-.__form-autocomplete__tw-12 {
+.__autocomplete__transition {
     outline: 2px solid transparent;
     outline-offset: 2px;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -119,22 +118,22 @@
     transition-duration: 375ms;
 }
 
-.__form-autocomplete__tw-12:disabled {
+.__autocomplete__transition:disabled {
     cursor: not-allowed;
     --tw-text-opacity: 1;
     color: hsla(var(--disabled), var(--tw-text-opacity));
 }
 
-.__form-autocomplete__tw-13 {
+.__autocomplete__text {
     font-size: var(--input-text);
 }
 
-.group:hover .__form-autocomplete__tw-14 {
+.group:hover .__autocomplete__control-state {
     --tw-border-opacity: 1;
     border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
 
-.__form-autocomplete__tw-15 {
+.__autocomplete__panel {
     isolation: isolate;
     z-index: var(--z-floating);
     margin: 0px;
@@ -158,22 +157,22 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.__form-autocomplete__tw-16 {
+.__autocomplete__panel-top {
     transform-origin: bottom center;
 }
 
-.__form-autocomplete__tw-17 {
+.__autocomplete__panel-bottom {
     transform-origin: top center;
 }
 
-.__form-autocomplete__tw-18 {
+.__autocomplete__empty {
     width: 100%;
     border-bottom-width: 1px;
     --tw-border-opacity: 1;
     border-color: hsla(var(--tooltip-border), var(--tw-border-opacity));
 }
 
-.__form-autocomplete__tw-19 {
+.__autocomplete__empty-text {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -183,7 +182,7 @@
     color: hsla(var(--disabled), var(--tw-text-opacity));
 }
 
-.__form-autocomplete__tw-20 {
+.__autocomplete__scroll {
     max-height: 100%;
     overscroll-behavior: contain;
     border-radius: var(--dropdown-radius);
@@ -195,94 +194,93 @@
     --tw-text-opacity: 1;
     color: hsla(var(--foreground), var(--tw-text-opacity));
 }
-.__form-autocomplete__tw-extra-1 {
+.__autocomplete {
 }
 .__form-autocomplete__border {
     border-width: 1px;
 }
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):invalid:has(.input:not(:focus):invalid[data-initialized="true"])
-    .__form-autocomplete__tw-state-2 {
+    .__autocomplete__invalid {
     --tw-text-opacity: 1;
     color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity));
 }
 
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):invalid:has(.input:not(:focus):invalid[data-initialized="true"])
-    .__form-autocomplete__tw-state-2::-moz-placeholder {
+    .__autocomplete__invalid::-moz-placeholder {
     --tw-placeholder-opacity: 1;
     color: hsla(var(--input-mask-error), var(--tw-placeholder-opacity));
 }
 
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):invalid:has(.input:not(:focus):invalid[data-initialized="true"])
-    .__form-autocomplete__tw-state-2::placeholder {
+    .__autocomplete__invalid::placeholder {
     --tw-placeholder-opacity: 1;
     color: hsla(var(--input-mask-error), var(--tw-placeholder-opacity));
 }
 
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):focus-within
-    .__form-autocomplete__tw-state-3 {
+    .__autocomplete__control-state {
     --tw-border-opacity: 1;
     border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
 
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):hover
-    .__form-autocomplete__tw-state-3 {
+    .__autocomplete__control-state {
     --tw-border-opacity: 1;
     border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
-.__form-autocomplete__tw-state-1::placeholder {
+.__autocomplete__placeholder::placeholder {
     color: hsla(var(--input-placeholder), 1);
 }
 .__form-autocomplete__disabled-border {
     border-color: hsla(var(--disabled), 1) !important;
 }
-/* @generated component utility migration end */

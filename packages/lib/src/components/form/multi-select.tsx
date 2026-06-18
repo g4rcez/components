@@ -61,7 +61,7 @@ const EMPTY_NODES: Array<HTMLElement | null> = [];
 const EMPTY_VALUES: string[] = [];
 
 const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: string }>>(function VirtualList({ context, ...props }, ref) {
-    return <motion.div {...props} id={context?.listboxId} ref={ref} role="listbox" className="__form-multi-select__tw-1" />;
+    return <motion.div {...props} id={context?.listboxId} ref={ref} role="listbox" className="__multi-select__list" />;
 });
 
 const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & ContextProp<unknown>>(function VirtualList(
@@ -69,7 +69,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & Contex
     ref
 ) {
     return (
-        <motion.div {...props} ref={ref as never} role="presentation" className="__form-multi-select__tw-2">
+        <motion.div {...props} ref={ref as never} role="presentation" className="__multi-select__item">
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.div>
     );
@@ -94,7 +94,7 @@ const OverflowControl = (props: PropsWithChildren<{ label?: string }>) => {
     }, [countable]);
 
     return (
-        <span ref={ref} className="__form-multi-select__tw-3 __form-multi-select__tw-extra-1">
+        <span ref={ref} className="__multi-select__tags __multi-select__tags-row">
             {!normalView ? (
                 props.children
             ) : (
@@ -319,7 +319,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     <button
                         type="button"
                         aria-label={`Remove ${x.label ?? x.value}`}
-                        className="__form-multi-select__tw-4"
+                        className="__multi-select__tag-remove"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -355,9 +355,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 labelClassName={labelClassName}
                 placeholder={props.placeholder}
                 right={
-                    <span className="__form-multi-select__tw-5">
+                    <span className="__multi-select__actions">
                         {right}
-                        <button type="button" className="link:text-primary __form-multi-select__tw-6" onClick={onCaretDownClick}>
+                        <button type="button" className="link:text-primary __multi-select__action" onClick={onCaretDownClick}>
                             <CaretDownIcon aria-hidden="true" className="__multi-select__caret-icon" />
                             <span className="__multi-select__sr-label">{translation.inputCaretDown}</span>
                         </button>
@@ -366,7 +366,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                 type="button"
                                 onClick={onClose}
                                 aria-label={translation.inputCloseValue}
-                                className="link:text-danger __form-multi-select__tw-6"
+                                className="link:text-danger __multi-select__action"
                             >
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -402,17 +402,17 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     data-error={!!error}
                     data-value={values.join(",")}
                     className={css(
-                        "input __form-multi-select__tw-7 __form-multi-select__tw-extra-2 __form-multi-select__tw-state-1",
-                        "__form-multi-select__tw-8",
-                        "__form-multi-select__tw-9",
-                        "__form-multi-select__tw-state-2",
-                        "__form-multi-select__tw-10 __form-multi-select__tw-state-3",
-                        "__form-multi-select__tw-11 __form-multi-select__tw-extra-3",
-                        "__form-multi-select__tw-12",
+                        "input __multi-select __multi-select__input __multi-select__placeholder",
+                        "__multi-select__surface",
+                        "__multi-select__transition",
+                        "__multi-select__invalid",
+                        "__multi-select__control-state",
+                        "__multi-select__value __multi-select__value-row",
+                        "__multi-select__overflow",
                         props.className
                     )}
                 >
-                    {values.length > 0 ? null : <span className="__form-multi-select__tw-13">{props.placeholder}</span>}
+                    {values.length > 0 ? null : <span className="__multi-select__placeholder-text">{props.placeholder}</span>}
                     <OverflowControl label={selectedLabel}>{tags}</OverflowControl>
                 </div>
                 <input
@@ -426,7 +426,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
-                        <FloatingOverlay lockScroll className="__form-multi-select__tw-14">
+                        <FloatingOverlay lockScroll className="__multi-select__overlay">
                             <FloatingFocusManager
                                 modal
                                 guards
@@ -447,8 +447,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     })}
                                     data-floating="true"
                                     className={css(
-                                        "__form-multi-select__border __form-multi-select__tw-15",
-                                        isTopPlacement ? "__form-multi-select__tw-16" : "__form-multi-select__tw-17"
+                                        "__form-multi-select__border __multi-select__panel",
+                                        isTopPlacement ? "__multi-select__panel-top" : "__multi-select__panel-bottom"
                                     )}
                                 >
                                     <input
@@ -465,7 +465,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                         aria-labelledby={`${id}-label`}
                                         autoComplete="off"
                                         placeholder={translation.multiSelectInnerPlaceholder}
-                                        className="input __form-multi-select__tw-18 __form-multi-select__tw-extra-2 __form-multi-select__tw-state-1"
+                                        className="input __multi-select __multi-select__search __multi-select__placeholder"
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                                             if (event.key === "ArrowDown") {
                                                 event.preventDefault();
@@ -498,15 +498,15 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                         }}
                                     />
                                     {isEmpty ? (
-                                        <li className="__form-multi-select__tw-19">
-                                            <span className="__form-multi-select__tw-20">{emptyMessage || translation.autocompleteEmpty}</span>
+                                        <li className="__multi-select__empty">
+                                            <span className="__multi-select__empty-text">{emptyMessage || translation.autocompleteEmpty}</span>
                                         </li>
                                     ) : null}
                                     {isEmpty ? null : (
                                         <motion.div
                                             initial={false}
                                             animate={{ height: isEmpty ? "auto" : h }}
-                                            className="__form-multi-select__tw-21"
+                                            className="__multi-select__results"
                                             onAnimationComplete={() => {
                                                 if (!open) {
                                                     setH(0);
@@ -532,7 +532,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                     scroller.current = e as HTMLElement;
                                                     removeScrollRef.current = e as HTMLElement;
                                                 }}
-                                                className="__form-multi-select__tw-22"
+                                                className="__multi-select__scroll"
                                                 itemContent={(i, option) => {
                                                     const Label = option.Render ?? Frag;
                                                     const active = value.has(option.value) || value.has(option.label ?? "");
@@ -555,14 +555,14 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                                 },
                                                             })}
                                                             className={css(
-                                                                "__form-multi-select__tw-23",
-                                                                active || selected ? "__form-multi-select__tw-24" : ""
+                                                                "__multi-select__option",
+                                                                active || selected ? "__multi-select__option-selected" : ""
                                                             )}
                                                         >
                                                             <span
                                                                 aria-hidden="true"
                                                                 data-selected={active}
-                                                                className="__form-multi-select__border __form-multi-select__tw-25"
+                                                                className="__form-multi-select__border __multi-select__checkbox"
                                                             />
                                                             <Label {...option} label={option.label} value={option.value}>
                                                                 {children}
@@ -573,7 +573,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                             />
                                         </motion.div>
                                     )}
-                                    <div className="__form-multi-select__tw-26 __form-multi-select__tw-extra-1">
+                                    <div className="__multi-select__footer __multi-select__tags-row">
                                         {value.size === 0 ? (
                                             <Tag theme="muted" size="small">
                                                 {translation.autocompleteEmpty}

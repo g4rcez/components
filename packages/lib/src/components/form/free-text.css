@@ -2,19 +2,18 @@
     box-sizing: border-box;
 }
 
-/* @generated component utility migration start */
-.__form-free-text__tw-1:focus-within {
+.__free-text__field-state:focus-within {
     --tw-border-opacity: 1;
     border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
 }
 
-.__form-free-text__tw-2 {
+.__free-text__input {
     height: var(--input-height);
     width: 100%;
     flex: 1 1 0%;
 }
 
-.__form-free-text__tw-3 {
+.__free-text__surface {
     border-radius: var(--input-radius);
     background-color: transparent;
     padding-left: var(--input-padding-x);
@@ -26,7 +25,7 @@
     color: hsla(var(--foreground), var(--tw-text-opacity));
 }
 
-.__form-free-text__tw-4 {
+.__free-text__transition {
     outline: 2px solid transparent;
     outline-offset: 2px;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -34,68 +33,65 @@
     transition-duration: 375ms;
 }
 
-.__form-free-text__tw-5 {
+.__free-text__resizable {
     resize: vertical;
 }
 
-.__form-free-text__tw-6:disabled {
+.__free-text__input-state:disabled {
     cursor: not-allowed;
     --tw-text-opacity: 1;
     color: hsla(var(--disabled), var(--tw-text-opacity));
 }
-.__form-free-text__tw-extra-1 {
-}
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):invalid:has(.input:not(:focus):invalid[data-initialized="true"])
-    .__form-free-text__tw-state-2 {
+    .__free-text__invalid {
     --tw-text-opacity: 1;
     color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity));
 }
 
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):invalid:has(.input:not(:focus):invalid[data-initialized="true"])
-    .__form-free-text__tw-state-2::-moz-placeholder {
+    .__free-text__invalid::-moz-placeholder {
     --tw-placeholder-opacity: 1;
     color: hsla(var(--input-mask-error), var(--tw-placeholder-opacity));
 }
 
 :where(
-        .__form-radiobox__tw-extra-1,
-        .__form-input-field__tw-extra-1,
-        .__form-input-field__tw-extra-3,
-        .__form-checkbox__tw-extra-1,
-        .__form-free-text__tw-extra-1,
-        .__form-autocomplete__tw-extra-1,
-        .__form-multi-select__tw-extra-2,
+        .__radiobox,
+        .__input-field,
+        .__input-field__control-surface,
+        .__checkbox,
+        .__free-text,
+        .__autocomplete,
+        .__multi-select,
         .__page-calendar-month-view__tw-extra-3,
         .__table-inner-table__tw-extra-2
     ):invalid:has(.input:not(:focus):invalid[data-initialized="true"])
-    .__form-free-text__tw-state-2::placeholder {
+    .__free-text__invalid::placeholder {
     --tw-placeholder-opacity: 1;
     color: hsla(var(--input-mask-error), var(--tw-placeholder-opacity));
 }
-.__form-free-text__tw-state-1::placeholder {
+.__free-text__placeholder::placeholder {
     color: hsla(var(--input-placeholder), 1);
 }
 .__form-free-text__disabled-border {
     border-color: hsla(var(--disabled), 1) !important;
 }
-/* @generated component utility migration end */

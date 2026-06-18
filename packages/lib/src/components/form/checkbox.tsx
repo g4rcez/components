@@ -33,7 +33,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                     data-component="checkbox"
                     className={css(
                         checkboxStyles.className({ task: asTask ? "true" : "false" }),
-                        "__form-checkbox__tw-1 __form-checkbox__tw-extra-1",
+                        "__checkbox__label",
                         container
                     )}
                 >
@@ -54,11 +54,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                                 event.currentTarget.click();
                             }
                         }}
-                        className={css("__form-checkbox__tw-2 __form-checkbox__tw-state-1", className)}
+                        className={css("__checkbox__control __checkbox__control-state", className)}
                     />
                     {children}
                 </label>
-                <span id={errorId} data-name="checkbox-label" className={css("__form-checkbox__tw-3", labelClassName)}>
+                <span id={errorId} data-name="checkbox-label" className={css("__checkbox__error", labelClassName)}>
                     {error}
                 </span>
             </>

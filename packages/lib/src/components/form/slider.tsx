@@ -32,7 +32,7 @@ const Thumb = (props: { tooltip: boolean }) => {
     }, []);
 
     return (
-        <Tooltip title="" ref={ref} as={Base.Thumb} enabled={props.tooltip} className="__form-slider__tw-1 __slider__thumb">
+        <Tooltip title="" ref={ref} as={Base.Thumb} enabled={props.tooltip} className="__slider__thumb">
             {float}
         </Tooltip>
     );
@@ -45,10 +45,10 @@ export const Slider = (props: SliderProps) => {
     const locale = useLocale();
 
     return (
-        <Base.Root {...restProps} value={value} locale={locale} defaultValue={defaultValue}>
-            <Base.Control className={css("touch-none __form-slider__tw-2", className)}>
-                <Base.Track className="__form-slider__tw-3">
-                    <Base.Indicator className="__form-slider__tw-4" />
+        <Base.Root {...restProps} className="__slider" value={value} locale={locale} defaultValue={defaultValue}>
+            <Base.Control className={css("touch-none __slider__control", className)}>
+                <Base.Track className="__slider__track">
+                    <Base.Indicator className="__slider__indicator" />
                 </Base.Track>
                 {Array.isArray(array) ? array.map((_, i) => <Thumb tooltip={tooltip ?? false} key={`${id.current}-${i}`} />) : null}
             </Base.Control>

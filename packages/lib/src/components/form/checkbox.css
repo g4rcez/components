@@ -15,8 +15,11 @@
     text-decoration-line: line-through;
 }
 
-/* @generated component utility migration start */
-.__form-checkbox__tw-1 {
+.__checkbox__label {
+  flex-wrap: wrap
+}
+
+.__checkbox__label {
   display: flex;
   width: -moz-fit-content;
   width: fit-content;
@@ -24,11 +27,11 @@
   font-weight: 400
 }
 
-.__form-checkbox__tw-1[data-disabled="true"] {
+.__checkbox__label[data-disabled="true"] {
   cursor: not-allowed
 }
 
-.__form-checkbox__tw-2 {
+.__checkbox__control {
   margin-right: var(--checkbox-gap);
   display: inline-block;
   width: var(--checkbox-size);
@@ -44,16 +47,16 @@
   color: hsla(var(--primary-DEFAULT), var(--tw-text-opacity))
 }
 
-.__form-checkbox__tw-2:focus {
+.__checkbox__control:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: hsla(var(--primary-DEFAULT), var(--tw-ring-opacity))
 }
 
-.__form-checkbox__tw-2:disabled {
+.__checkbox__control:disabled {
   opacity: 0.7
 }
 
-.__form-checkbox__tw-3 {
+.__checkbox__error {
   min-width: 100%;
   flex: 1 1 0%;
   font-size: var(--checkbox-hint-text);
@@ -61,14 +64,11 @@
   color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity))
 }
 
-.__form-checkbox__tw-3:empty {
+.__checkbox__error:empty {
   margin-top: 0px;
   display: none
 }
-.__form-checkbox__tw-extra-1 {
-  flex-wrap: wrap
-}
-.__form-checkbox__tw-state-1 {
+.__checkbox__control-state {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -95,7 +95,7 @@
   transition-duration: 150ms;
 }
 
-.__form-checkbox__tw-state-1::before {
+.__checkbox__control-state::before {
   content: "";
   width: calc(var(--checkbox-size) * 0.35);
   height: calc(var(--checkbox-size) * 0.6);
@@ -107,7 +107,7 @@
   transition: transform 150ms ease-in-out;
 }
 
-.__form-checkbox__tw-state-1:focus {
+.__checkbox__control-state:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
   --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
@@ -119,40 +119,40 @@
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
 
-.__form-checkbox__tw-state-1:checked {
+.__checkbox__control-state:checked {
   border-color: transparent;
   background-color: currentColor;
   background-image: none;
 }
 
-.__form-checkbox__tw-state-1:checked::before {
+.__checkbox__control-state:checked::before {
   transform: rotate(45deg) scale(1);
 }
 
 @media (forced-colors: active)  {
-  .__form-checkbox__tw-state-1:checked {
+  .__checkbox__control-state:checked {
     -webkit-appearance: auto;
        -moz-appearance: auto;
             appearance: auto;
   }
 
-  .__form-checkbox__tw-state-1::before {
+  .__checkbox__control-state::before {
     content: none;
   }
 }
 
-.__form-checkbox__tw-state-1:checked:hover,.__form-checkbox__tw-state-1:checked:focus {
+.__checkbox__control-state:checked:hover,.__checkbox__control-state:checked:focus {
   border-color: transparent;
   background-color: currentColor;
 }
 
-.__form-checkbox__tw-state-1:indeterminate {
+.__checkbox__control-state:indeterminate {
   border-color: transparent;
   background-color: currentColor;
   background-image: none;
 }
 
-.__form-checkbox__tw-state-1:indeterminate::before {
+.__checkbox__control-state:indeterminate::before {
   width: calc(var(--checkbox-size) * 0.55);
   height: var(--checkbox-control-mark-width);
   border: 0;
@@ -161,19 +161,18 @@
 }
 
 @media (forced-colors: active)  {
-  .__form-checkbox__tw-state-1:indeterminate {
+  .__checkbox__control-state:indeterminate {
     -webkit-appearance: auto;
        -moz-appearance: auto;
             appearance: auto;
   }
 }
 
-.__form-checkbox__tw-state-1:indeterminate:hover,.__form-checkbox__tw-state-1:indeterminate:focus {
+.__checkbox__control-state:indeterminate:hover,.__checkbox__control-state:indeterminate:focus {
   border-color: transparent;
   background-color: currentColor;
 }
 
-:where(.__form-radiobox__tw-extra-1, .__form-input-field__tw-extra-1, .__form-input-field__tw-extra-3, .__form-checkbox__tw-extra-1, .__form-free-text__tw-extra-1, .__form-autocomplete__tw-extra-1, .__form-multi-select__tw-extra-2, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2)[aria-disabled="true"] .__form-checkbox__tw-state-1 {
+:where(.__radiobox, .__input-field, .__input-field__control-surface, .__checkbox, .__free-text, .__autocomplete, .__multi-select, .__page-calendar-month-view__tw-extra-3, .__table-inner-table__tw-extra-2)[aria-disabled="true"] .__checkbox__control-state {
   cursor: not-allowed;
 }
-/* @generated component utility migration end */

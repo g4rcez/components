@@ -1,6 +1,8 @@
-import React from "react";
+import type React from "react";
+import { forwardRef } from "react";
 import { css } from "../../lib/dom";
-import { Override } from "../../types";
+import type { Override } from "../../types";
+import { radioboxStyles } from "./radiobox.styles";
 
 export type RadioboxProps = Override<
     React.PropsWithChildren<React.ComponentProps<"input">>,
@@ -9,14 +11,19 @@ export type RadioboxProps = Override<
     }
 >;
 
-export const Radiobox = ({ children, className = "", size: _size, ...props }: RadioboxProps) => (
-    <label
-        data-component="radiobox"
-        data-disabled={props.disabled}
-        aria-disabled={props.disabled}
-        className={css("__form-radiobox__tw-1 __form-radiobox__tw-extra-1")}
-    >
-        <input {...props} type="radio" className={css("app __form-radiobox__tw-2 __form-radiobox__tw-state-1", className)} />
-        {children}
-    </label>
-);
+export const Radiobox = forwardRef<HTMLInputElement, RadioboxProps>(function Radiobox(
+    { children, className = "", size: _size, ...props }: RadioboxProps,
+    ref
+) {
+    return (
+        <label
+            data-component="radiobox"
+            data-disabled={props.disabled}
+            aria-disabled={props.disabled}
+            className={css(radioboxStyles.className(), "__radiobox__label")}
+        >
+            <input {...props} ref={ref} type="radio" className={css("__radiobox__control __radiobox__control-state", className)} />
+            {children}
+        </label>
+    );
+});

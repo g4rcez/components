@@ -85,40 +85,40 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 
     const Element =
         info.type === "img" ? (
-            <img src={info.url} className="__form-file-upload__tw-1" alt={props.file.name} />
+            <img src={info.url} className="__file-upload__preview-image" alt={props.file.name} />
         ) : (
             <Icon className="__file-upload__file-icon" />
         );
 
     return (
-        <li className="__form-file-upload__tw-2 __form-file-upload__tw-extra-1">
-            <div className="__form-file-upload__tw-3 __form-file-upload__tw-extra-2">
-                <div className="__form-file-upload__tw-4 __form-file-upload__tw-extra-1">
+        <li className="__file-upload__item __file-upload__row">
+            <div className="__file-upload__stack __file-upload__column">
+                <div className="__file-upload__file-row __file-upload__row">
                     <button
                         type="button"
                         onClick={onViewFile}
                         aria-label={translations.fileUploadViewFile(fileName)}
-                        className="__form-file-upload__tw-5"
+                        className="__file-upload__preview-button"
                     >
                         {Element}
                     </button>
-                    <div className="__form-file-upload__tw-6 __form-file-upload__tw-extra-2">
+                    <div className="__file-upload__file-details __file-upload__column">
                         <span>{props.file.name}</span>
-                        <span className="__form-file-upload__tw-7">{info.size}</span>
+                        <span className="__file-upload__size">{info.size}</span>
                     </div>
                 </div>
                 {props.File ? (
-                    <div className="__form-file-upload__tw-8">
+                    <div className="__file-upload__aside">
                         <props.File file={props.file} />
                     </div>
                 ) : null}
             </div>
-            <div className="__form-file-upload__tw-9">
+            <div className="__file-upload__actions">
                 <button
                     onClick={onDeleteFile}
                     type="button"
                     aria-label={translations.fileUploadRemoveFile(fileName)}
-                    className="__form-file-upload__tw-10"
+                    className="__file-upload__remove-button"
                 >
                     <XIcon aria-hidden="true" className="__file-upload__remove-icon" />
                 </button>
@@ -128,7 +128,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 };
 
 const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => (
-    <ul className="__form-file-upload__tw-11">
+    <ul className="__file-upload__list">
         {props.files.map((file) => {
             return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} key={file.name} file={file} />;
         })}
@@ -157,16 +157,16 @@ const Idle = (props: IdleProps) => {
     };
 
     return (
-        <div className="__form-file-upload__tw-12 __form-file-upload__tw-extra-2">
-            <div className="__form-file-upload__tw-13 __form-file-upload__tw-extra-2">
-                <span className="__form-file-upload__tw-14">
+        <div className="__file-upload__idle __file-upload__column">
+            <div className="__file-upload__idle-icon-wrap __file-upload__column">
+                <span className="__file-upload__accent">
                     <Icon aria-hidden="true" className="__file-upload__idle-icon" />
                 </span>
             </div>
-            <div className="__form-file-upload__tw-15 __form-file-upload__tw-extra-2">
+            <div className="__file-upload__idle-copy __file-upload__column">
                 <p>{t.uploadIdle}</p>
                 <button
-                    className="__form-file-upload__tw-14 underline"
+                    className="__file-upload__accent underline"
                     type="button"
                     aria-label={t.fileUploadUploadButtonLabel(t.uploadIdleButton)}
                     onClick={onUpload}
@@ -202,13 +202,13 @@ const FileViewer = (props: { item: ContextItem }) => {
     const file = props.item.file;
     const type = props.item.type;
     return (
-        <div className="__form-file-upload__tw-3 __form-file-upload__tw-extra-2">
-            <p className="__form-file-upload__tw-16">{props.item.file.name}</p>
-            <p className="__form-file-upload__tw-17">{props.item.size}</p>
+        <div className="__file-upload__stack __file-upload__column">
+            <p className="__file-upload__viewer-name">{props.item.file.name}</p>
+            <p className="__file-upload__viewer-size">{props.item.size}</p>
             {type === "img" ? (
-                <img className="__form-file-upload__tw-18 container" src={props.item.url} alt={file.name} />
+                <img className="__file-upload__viewer-image container" src={props.item.url} alt={file.name} />
             ) : type === "video" ? (
-                <video className="__form-file-upload__tw-19 container" src={props.item.url} controls muted />
+                <video className="__file-upload__viewer-video container" src={props.item.url} controls muted />
             ) : type === "audio" ? (
                 <figure>
                     <audio controls src={props.item.url}>
@@ -251,7 +251,7 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {...getRootProps({
                     "aria-label": t.fileUploadZoneLabel,
                     "data-active": items ? items.length > 0 : false,
-                    className: "__form-file-upload__dropzone",
+                    className: "__file-upload __file-upload__dropzone",
                 })}
             >
                 <input {...getInputProps()} aria-label={t.fileUploadZoneLabel} name={props.name} id={props.name} />
