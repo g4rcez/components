@@ -65,6 +65,30 @@ Rules for agents and tools:
 
 The library styling model does not require consumer utility generation, framework-specific preset configuration, or generated utility classes.
 
+### Component CSS mental model
+
+- React components emit stable class contracts: `__component`, `__component--variant-value`, and `__component__slot`.
+- CSS chunks own visual rules and target those stable selectors.
+- Tokens are CSS variables; overriding the variable changes the component live without changing classes.
+- Manifests (`dist/style-manifest.json`, `ai/component-style-manifest.json`, `ai/docs/style-dependencies.md`) describe which CSS files, dependencies, variants, and slots belong to each component.
+- Generated migration selectors such as `__component__tw-17`, `__component__tw-extra-1`, or `__component__tw-state-1` are private cleanup artifacts. Never depend on them in examples, docs, tests, or app code.
+
+### Token customization mental model
+
+Customize by overriding variables at the narrowest useful scope:
+
+```tsx
+<div style={{ "--radiobox-size": "1.5rem", "--radiobox-gap": "0.75rem" } as React.CSSProperties}>
+    <Radiobox name="plan" value="pro">
+        Pro
+    </Radiobox>
+</div>
+```
+
+Use scoped wrapper variables for demos and token playgrounds. Use `createTokenStyles()`/`createCssProperties()` for app-wide themes. Do not customize by targeting generated selectors or by adding hardcoded colors/sizes.
+
+New handwritten v6 CSS uses the `--var-*` namespace (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Some migrated CSS still reads direct component variables (`--radiobox-size`, `--checkbox-gap`); preserve that public variable contract until the component is fully ported.
+
 ---
 
 ## 3 — Theme scope
@@ -72,7 +96,7 @@ The library styling model does not require consumer utility generation, framewor
 Defaults render light variables on `:root`. Apply a named theme scope to switch variables at runtime:
 
 ```tsx
-<html data-g4-theme="dark">...</html>
+<html data-theme="dark">...</html>
 ```
 
 ### ComponentsProvider (optional)

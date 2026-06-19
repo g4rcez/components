@@ -6,7 +6,7 @@ import type React from "react";
 import { Fragment, useCallback, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
-import { Dropdown } from "../floating/dropdown";
+import { Dropdown } from "../floating/dropdown/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
 import { type Col, getLabel, type TableOperationProps, useWidthControl } from "./table-lib";
@@ -79,32 +79,34 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`typography __table-thead__tw-1 ${props.header.thProps?.className ?? ""}`}
+            className={`typography __table-thead__slot-1 ${props.header.thProps?.className ?? ""}`}
         >
-            <span className={`__table-thead__tw-2 ${props.isLast ? "__table-thead__tw-3" : ""} ${props.index === 0 ? "__table-thead__tw-4" : ""}`}>
-                <span className="__table-thead__tw-5">
+            <span
+                className={`__table-thead__slot-2 ${props.isLast ? "__table-thead__slot-3" : ""} ${props.index === 0 ? "__table-thead__slot-4" : ""}`}
+            >
+                <span className="__table-thead__slot-5">
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
                             arrow
                             trigger={
                                 <span>
-                                    <span id={`${props.header.id}-filter-dropdown-button`} className="__table-thead__tw-6">
+                                    <span id={`${props.header.id}-filter-dropdown-button`} className="__table-thead__slot-6">
                                         {translation.tableFilterDropdownTitleUnique} {label}
                                     </span>
                                     <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} className="__table-head__filter-icon" />
                                 </span>
                             }
                             title={
-                                <span className="__table-thead__tw-7">
-                                    {translation.tableFilterDropdownTitleUnique} <span className="__table-thead__tw-8">{label}</span>
+                                <span className="__table-thead__slot-7">
+                                    {translation.tableFilterDropdownTitleUnique} <span className="__table-thead__slot-8">{label}</span>
                                 </span>
                             }
                         >
-                            <ul className="__table-thead__tw-8">
+                            <ul className="__table-thead__slot-8">
                                 {ownFilters.length === 0 ? null : (
                                     <Fragment>
                                         {ownFilters.map((filter) => (
-                                            <li key={`thead-filter-${filter.id}`} className="__table-thead__tw-9">
+                                            <li key={`thead-filter-${filter.id}`} className="__table-thead__slot-9">
                                                 <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
                                             </li>
                                         ))}
@@ -113,7 +115,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 <li>
                                     <button
                                         type="button"
-                                        className="__table-thead__tw-10"
+                                        className="__table-thead__slot-10"
                                         onClick={() =>
                                             props.setFilters((prev) =>
                                                 prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
@@ -126,7 +128,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                             </ul>
                         </Dropdown>
                     ) : null}
-                    <span className="__table-thead__tw-11">{props.header.thead}</span>
+                    <span className="__table-thead__slot-11">{props.header.thead}</span>
                     {props.inlineSorter && defaultAllowSort ? (
                         <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
                     ) : null}
@@ -148,7 +150,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="__table-thead__tw-12"
+                    className="__table-thead__slot-12"
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => void e.currentTarget.focus()}
                     onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {

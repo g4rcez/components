@@ -23,22 +23,19 @@ function componentEntryName(path: string) {
 
 function getComponentEntries(directory = componentsRoot): Record<string, string> {
     const entries: Record<string, string> = {};
-
     for (const file of readdirSync(directory, { withFileTypes: true })) {
         const path = toPosixPath(join(directory, file.name));
-
         if (file.isDirectory()) {
             Object.assign(entries, getComponentEntries(path));
             continue;
         }
-
         if (path === `${componentsRoot}/index.ts`) continue;
         if (!componentEntryExtensions.has(extname(path))) continue;
         if (ignoredComponentEntries.some((pattern) => pattern.test(path))) continue;
-
-        entries[componentEntryName(path)] = `./${path}`;
+        const key = componentEntryName(path);
+        console.log({ key, directory, path });
+        entries[key] = `./${path}`;
     }
-
     return entries;
 }
 

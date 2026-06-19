@@ -2,8 +2,7 @@
     box-sizing: border-box;
 }
 
-/* @generated component utility migration start */
-.__page-calendar-event-pill__tw-1 {
+.__page-calendar-event-pill__slot-1 {
   width: 100%;
   justify-content: flex-start;
   overflow: hidden;
@@ -15,18 +14,17 @@
   line-height: 1.25
 }
 
-.__page-calendar-event-pill__tw-2 {
+.__page-calendar-event-pill__slot-2 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 500
 }
 
-.__page-calendar-event-pill__tw-3 {
+.__page-calendar-event-pill__slot-3 {
   font-size: var(--page-calendar-pill-text);
   opacity: 0.6
 }
 .__page-calendar-event-pill__border {
   border-width: 1px
 }
-/* @generated component utility migration end */

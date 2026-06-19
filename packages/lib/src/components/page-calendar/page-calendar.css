@@ -2,15 +2,13 @@
         box-sizing: border-box;
     }
 
-/* @generated component utility migration start */
-.__page-calendar-page-calendar__tw-1 {
+.__page-calendar-page-calendar__slot-1 {
   display: flex;
   height: 100%;
   width: 100%;
   gap: var(--page-calendar-gap)
 }
-.__page-calendar-page-calendar__tw-extra-1 {
+.__page-calendar-page-calendar__slot-extra-1 {
   flex-grow: 1;
   flex-direction: column
 }
-/* @generated component utility migration end */

@@ -31,7 +31,7 @@ describe("component CSS cascade contract", () => {
         const componentTokens = readSourceCss("src/styles/components.ts");
 
         expect(cardCss).toContain("inline-size: var(--card-stats-icon-size);");
-        expect(cardCss).toContain(".__display-card__tw-15 > svg");
+        expect(cardCss).toContain(".__display-card__slot-15 > svg");
         expect(componentTokens).toContain('"stats-icon-size": "3rem"');
     });
 

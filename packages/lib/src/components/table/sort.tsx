@@ -5,8 +5,8 @@ import { Fragment, useState } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
 import type { Any, Label } from "../../types";
-import { Dropdown } from "../floating/dropdown";
-import { type OptionProps, Select } from "../form/select";
+import { Dropdown } from "../floating/dropdown/dropdown";
+import { type OptionProps, Select } from "../form/select/select";
 import { type Col, getLabel, type TableConfiguration, type TableOperationProps } from "./table-lib";
 
 type Keyof<T extends Any> = keyof T extends infer R extends string ? R : never;
@@ -17,7 +17,12 @@ enum Order {
     Undefined = "undefined",
 }
 
-export type Sorter<T extends Any> = { value: Keyof<T>; type: Order; label: Label; id: string };
+export type Sorter<T extends Any> = {
+    value: Keyof<T>;
+    type: Order;
+    label: Label;
+    id: string;
+};
 
 const createSorterFn =
     <T extends Any>(fields: Sorter<T>[]) =>
@@ -85,16 +90,16 @@ export const Sort = <T extends Any>(props: Props<T>) => {
             <Dropdown
                 title={translation.tableSortDropdownTitle}
                 trigger={
-                    <span className="__table-sort__tw-1 __table-sort__tw-final-1">
+                    <span className="__table-sort__slot-1 __table-sort__tw-final-1">
                         <CaretUpDownIcon className="__table-sort__trigger-icon" />
                         {translation.tableSortOrderByLabel} {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
                     </span>
                 }
             >
-                <ul className="__table-sort__tw-2">
+                <ul className="__table-sort__slot-2">
                     {props.sorters.map((sorter) => {
                         return (
-                            <li key={`sorter-select-${sorter.id}`} className="__table-sort__tw-3 __table-sort__tw-extra-1">
+                            <li key={`sorter-select-${sorter.id}`} className="__table-sort__slot-3 __table-sort__slot-extra-1">
                                 <Select
                                     options={props.options}
                                     value={sorter.value as string}
@@ -109,8 +114,8 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                                     title={translation.tableSortTypeInputTitle}
                                     placeholder={translation.tableSortTypeInputPlaceholder}
                                 />
-                                <button className="__table-sort__tw-4" data-id={sorter.id} onClick={onDelete}>
-                                    <span className="__table-sort__tw-5">
+                                <button className="__table-sort__slot-4" data-id={sorter.id} onClick={onDelete}>
+                                    <span className="__table-sort__slot-5">
                                         <TrashIcon aria-hidden="true" className="__table-sort__delete-icon" />
                                     </span>
                                 </button>
@@ -118,7 +123,7 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddSorter} className="__table-sort__tw-6">
+                        <button type="button" onClick={onAddSorter} className="__table-sort__slot-6">
                             <PlusIcon className="__table-sort__add-icon" /> {translation.tableSortAddButton}
                         </button>
                     </li>
@@ -155,8 +160,8 @@ export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
     const label = getLabel(props.col);
 
     return (
-        <button aria-labelledby={labelId} className="__table-sort__tw-7" onClick={onClick} type="button">
-            <span id={labelId} className="__table-sort__tw-8">
+        <button aria-labelledby={labelId} className="__table-sort__slot-7" onClick={onClick} type="button">
+            <span id={labelId} className="__table-sort__slot-8">
                 {translations.tableSortDropdownTitle} {label}
             </span>
             {status === Order.Asc ? <SortAscendingIcon className="__table-sort__head-icon" /> : null}

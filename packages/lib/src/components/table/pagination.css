@@ -2,8 +2,7 @@
     box-sizing: border-box;
 }
 
-/* @generated component utility migration start */
-.__table-pagination__tw-1 {
+.__table-pagination__slot-1 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,23 +14,23 @@
 }
 
 @media (min-width: 1024px) {
-  .__table-pagination__tw-1 {
+  .__table-pagination__slot-1 {
     justify-content: space-between
   }
 }
 
-.__table-pagination__tw-2 {
+.__table-pagination__slot-2 {
   cursor: pointer;
   background-color: transparent
 }
 
-.__table-pagination__tw-3 {
+.__table-pagination__slot-3 {
   display: flex;
   align-items: center;
   gap: var(--table-pag-items-gap)
 }
 
-.__table-pagination__tw-4 {
+.__table-pagination__slot-4 {
   cursor: pointer;
   border-bottom-width: 2px;
   padding-left: var(--table-pag-item-px);
@@ -43,29 +42,29 @@
   transition-duration: 375ms
 }
 
-.__table-pagination__tw-4:hover {
+.__table-pagination__slot-4:hover {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-subtle), var(--tw-border-opacity));
   --tw-text-opacity: 1;
   color: hsla(var(--primary-subtle), var(--tw-text-opacity))
 }
 
-.__table-pagination__tw-5 {
+.__table-pagination__slot-5 {
   --tw-border-opacity: 1;
   border-color: hsla(var(--primary-DEFAULT), var(--tw-border-opacity));
   --tw-text-opacity: 1;
   color: hsla(var(--primary-DEFAULT), var(--tw-text-opacity))
 }
 
-.__table-pagination__tw-6 {
+.__table-pagination__slot-6 {
   border-color: transparent
 }
-.__table-pagination__tw-extra-1 {
+.__table-pagination__slot-extra-1 {
   flex-wrap: wrap
 }
 
 @media (min-width: 1024px) {
-  .__table-pagination__tw-extra-1 {
+  .__table-pagination__slot-extra-1 {
     flex-wrap: nowrap
   }
 }
@@ -73,4 +72,3 @@
   --tw-numeric-spacing: proportional-nums;
   font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)
 }
-/* @generated component utility migration end */

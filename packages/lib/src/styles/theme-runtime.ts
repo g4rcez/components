@@ -26,7 +26,7 @@ export type ThemeStyleElementOptions = ThemeCssOptions &
 
 export type ThemeCssProperties = Record<`--var-${string}`, string>;
 
-const THEME_ATTRIBUTE = "data-g4-theme";
+const THEME_ATTRIBUTE = "data-theme";
 
 export const defaultLightThemeTokens = {
     colors: {

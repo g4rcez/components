@@ -215,17 +215,30 @@ const resolveComponentOrder = (used, manifest) => {
 
 const findSourceCss = (libraryRoot, name) => {
     const filename = `${name}.css`;
-    const candidates = [];
+    const exactMatches = [];
+    const styleSidecarMatches = [];
+    const styleNamePattern = new RegExp(`name:\\s*["']${escapeRegExp(name)}["']`);
+
     const visit = (directory) => {
         if (!existsSync(directory)) return;
         for (const item of readdirSync(directory, { withFileTypes: true })) {
             const path = resolve(directory, item.name);
-            if (item.isDirectory()) visit(path);
-            else if (item.name === filename) candidates.push(path);
+            if (item.isDirectory()) {
+                visit(path);
+                continue;
+            }
+
+            if (item.name === filename) exactMatches.push(path);
+            if (!item.name.endsWith(".styles.ts")) continue;
+            if (!styleNamePattern.test(readFileSync(path, "utf8"))) continue;
+
+            const cssPath = path.replace(/\.styles\.ts$/u, ".css");
+            if (existsSync(cssPath)) styleSidecarMatches.push(cssPath);
         }
     };
+
     visit(resolve(libraryRoot, "src/components"));
-    return candidates[0];
+    return styleSidecarMatches[0] ?? exactMatches[0];
 };
 
 const createImportPlan = ({ cssFile, libraryRoot, manifest, packageName, used }) => {
@@ -237,11 +250,14 @@ const createImportPlan = ({ cssFile, libraryRoot, manifest, packageName, used })
     if (libraryRoot) {
         const foundation = resolve(libraryRoot, "src/styles/foundation.css");
         const index = resolve(libraryRoot, "src/styles/index.v6.css");
+        const legacyIndex = resolve(libraryRoot, "src/index.css");
         const foundationImport = `@import "${toCssImportPath(cssFile, foundation)}";`;
         const indexImport = `@import "${toCssImportPath(cssFile, index)}";`;
+        const legacyIndexImport = `@import "${toCssImportPath(cssFile, legacyIndex)}";`;
         imports.push(foundationImport);
         removableImports.add(foundationImport);
         removableImports.add(indexImport);
+        removableImports.add(legacyIndexImport);
 
         for (const name of Object.keys(manifest)) {
             const sourceCss = findSourceCss(libraryRoot, name);
@@ -283,7 +299,7 @@ const removeImportLines = (content, imports) => {
 const insertImportBlock = (content, imports) => {
     const lines = content.replace(/^\n+/u, "").split("\n");
     let insertAt = 0;
-    while (insertAt < lines.length && /^@(charset|import)\b/u.test(lines[insertAt].trim())) insertAt += 1;
+    while (insertAt < lines.length && /^@(charset|config|import)\b/u.test(lines[insertAt].trim())) insertAt += 1;
 
     lines.splice(insertAt, 0, ...imports);
     return `${lines

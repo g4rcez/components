@@ -2,8 +2,7 @@
     box-sizing: border-box;
 }
 
-/* @generated component utility migration start */
-.__page-calendar-day-view__tw-1 {
+.__page-calendar-day-view__slot-1 {
   position: absolute;
   bottom: var(--page-calendar-dot-bottom);
   left: 50%;
@@ -16,19 +15,19 @@
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
 }
 
-.__page-calendar-day-view__tw-2 {
+.__page-calendar-day-view__slot-2 {
   display: flex;
   min-width: 100%;
   flex: 1 1 0%
 }
 
-.__page-calendar-day-view__tw-3 {
+.__page-calendar-day-view__slot-3 {
   display: flex;
   width: 100%;
   flex: 1 1 0%
 }
 
-.__page-calendar-day-view__tw-4 {
+.__page-calendar-day-view__slot-4 {
   display: flex;
   align-items: center;
   gap: var(--page-calendar-day-header-gap);
@@ -41,7 +40,7 @@
   padding-bottom: var(--page-calendar-day-header-py)
 }
 
-.__page-calendar-day-view__tw-5 {
+.__page-calendar-day-view__slot-5 {
   display: inline-flex;
   width: var(--page-calendar-day-badge-size);
   height: var(--page-calendar-day-badge-size);
@@ -51,44 +50,44 @@
   font-weight: 700
 }
 
-.__page-calendar-day-view__tw-6 {
+.__page-calendar-day-view__slot-6 {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: hsla(var(--primary-foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-day-view__tw-7 {
+.__page-calendar-day-view__slot-7 {
   --tw-text-opacity: 1;
   color: hsla(var(--foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-day-view__tw-8 {
+.__page-calendar-day-view__slot-8 {
   font-weight: 600
 }
 
-.__page-calendar-day-view__tw-9 {
+.__page-calendar-day-view__slot-9 {
   font-size: var(--typography-xs);
   --tw-text-opacity: 1;
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-day-view__tw-10 {
+.__page-calendar-day-view__slot-10 {
   display: flex;
   flex: 1 1 0%;
   align-items: flex-start;
   overflow-y: auto
 }
 
-.__page-calendar-day-view__tw-11 {
+.__page-calendar-day-view__slot-11 {
   width: var(--page-calendar-gutter-w)
 }
 
-.__page-calendar-day-view__tw-12 {
+.__page-calendar-day-view__slot-12 {
   position: relative
 }
 
-.__page-calendar-day-view__tw-13 {
+.__page-calendar-day-view__slot-13 {
   position: absolute;
   top: -0.625rem;
   right: 0.5rem;
@@ -97,7 +96,7 @@
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-day-view__tw-14 {
+.__page-calendar-day-view__slot-14 {
   position: relative;
   flex: 1 1 0%;
   border-left-width: 1px;
@@ -105,22 +104,22 @@
   border-color: hsla(var(--card-border), var(--tw-border-opacity))
 }
 
-.__page-calendar-day-view__tw-15 {
+.__page-calendar-day-view__slot-15 {
   width: 100%;
   cursor: pointer;
   border-bottom-width: 1px;
   border-color: hsla(var(--border), 0.5)
 }
 
-.__page-calendar-day-view__tw-15:hover {
+.__page-calendar-day-view__slot-15:hover {
   background-color: hsla(var(--muted-DEFAULT), 0.2)
 }
 
-.__page-calendar-day-view__tw-16 {
+.__page-calendar-day-view__slot-16 {
   position: absolute
 }
 
-.__page-calendar-day-view__tw-17 {
+.__page-calendar-day-view__slot-17 {
   display: flex;
   overflow-y: auto;
   border-left-width: 1px;
@@ -130,14 +129,14 @@
   padding-right: var(--page-calendar-side-px)
 }
 
-.__page-calendar-day-view__tw-18 {
+.__page-calendar-day-view__slot-18 {
   display: flex;
   gap: var(--page-calendar-detail-gap);
   border-top-width: 1px;
   padding: var(--page-calendar-detail-p)
 }
 
-.__page-calendar-day-view__tw-19 {
+.__page-calendar-day-view__slot-19 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -145,14 +144,13 @@
   font-weight: 600
 }
 
-.__page-calendar-day-view__tw-20 {
+.__page-calendar-day-view__slot-20 {
   align-self: flex-start
 }
-.__page-calendar-day-view__tw-extra-1 {
+.__page-calendar-day-view__slot-extra-1 {
   flex-direction: column
 }
 
-.__page-calendar-day-view__tw-extra-2 {
+.__page-calendar-day-view__slot-extra-2 {
   flex-shrink: 0
 }
-/* @generated component utility migration end */

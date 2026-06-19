@@ -6,9 +6,9 @@ import type { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
 import type { Any, Label } from "../../types";
-import { Dropdown } from "../floating/dropdown";
-import { Input, type InputTypes } from "../form/input";
-import { type OptionProps, Select } from "../form/select";
+import { Dropdown } from "../floating/dropdown/dropdown";
+import { Input, type InputTypes } from "../form/input/input";
+import { type OptionProps, Select } from "../form/select/select";
 import { type Col, ColType, getLabel, type TableConfiguration, valueFromType } from "./table-lib";
 
 type Operators = {
@@ -186,17 +186,17 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="__table-filter__tw-1 __table-filter__tw-final-1">
+                    <span className="__table-filter__slot-1 __table-filter__tw-final-1">
                         <FunnelIcon className="__table-filter__trigger-icon" />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
             >
-                <ul className="__table-filter__tw-2">
+                <ul className="__table-filter__slot-2">
                     {props.filters.map((filter) => {
                         const options = operators.options[filter.type]!;
                         return (
-                            <li key={`filter-select-${filter.id}`} className="__table-filter__tw-3 __table-filter__tw-extra-1">
+                            <li key={`filter-select-${filter.id}`} className="__table-filter__slot-3 __table-filter__slot-extra-1">
                                 <Select
                                     options={props.options}
                                     title={translation.tableFilterColumnTitle}
@@ -222,14 +222,14 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     title={translation.tableFilterValueTitle}
                                     placeholder={translation.tableFilterValuePlaceholder}
                                 />
-                                <div className="__table-filter__tw-4">
+                                <div className="__table-filter__slot-4">
                                     <button
                                         data-id={filter.id}
                                         type="button"
                                         onClick={onDelete}
                                         aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
                                     >
-                                        <span className="__table-filter__tw-5">
+                                        <span className="__table-filter__slot-5">
                                             <TrashIcon aria-hidden="true" className="__table-filter__delete-icon" />
                                         </span>
                                     </button>
@@ -238,7 +238,7 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="__table-filter__tw-6">
+                        <button type="button" onClick={onAddFilter} className="__table-filter__slot-6">
                             <PlusIcon className="__table-filter__add-icon" /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
@@ -280,7 +280,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="__table-filter__tw-7 __table-filter__tw-extra-1">
+        <div className="__table-filter__slot-7 __table-filter__slot-extra-1">
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}
@@ -302,10 +302,10 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 onClick={onDelete}
                 data-id={filter.id}
                 type="button"
-                className="__table-filter__tw-8"
+                className="__table-filter__slot-8"
                 aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
             >
-                <span className="__table-filter__tw-5">
+                <span className="__table-filter__slot-5">
                     <TrashIcon aria-hidden="true" className="__table-filter__delete-icon __table-filter__delete-icon--sm" />
                 </span>
             </button>

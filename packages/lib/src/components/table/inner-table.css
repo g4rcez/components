@@ -8,8 +8,7 @@
     border-block-start-color: var(--var-table-border-color, var(--var-color-border));
 }
 
-/* @generated component utility migration start */
-.__table-inner-table__tw-1 {
+.__table-inner-table__slot-1 {
   width: 100%;
   table-layout: fixed;
   border-collapse: separate;
@@ -19,19 +18,19 @@
   text-align: left
 }
 
-.__table-inner-table__tw-2 {
+.__table-inner-table__slot-2 {
   top: 0px;
   display: none;
   background-color: transparent
 }
 
 @media (min-width: 768px) {
-  .__table-inner-table__tw-2 {
+  .__table-inner-table__slot-2 {
     display: table-header-group
   }
 }
 
-.__table-inner-table__tw-3 {
+.__table-inner-table__slot-3 {
   display: flex;
   height: -moz-fit-content;
   height: fit-content;
@@ -41,17 +40,17 @@
 }
 
 @media (min-width: 768px) {
-  .__table-inner-table__tw-3 {
+  .__table-inner-table__slot-3 {
     display: table-row
   }
 }
 
-.__table-inner-table__tw-4 {
+.__table-inner-table__slot-4 {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--card-background), var(--tw-bg-opacity))
 }
 
-.__table-inner-table__tw-5 {
+.__table-inner-table__slot-5 {
   height: var(--table-loading-h);
   --tw-bg-opacity: 1;
   background-color: hsla(var(--card-background), var(--tw-bg-opacity));
@@ -59,7 +58,7 @@
   padding-right: var(--table-cell-px)
 }
 
-.__table-inner-table__tw-6 {
+.__table-inner-table__slot-6 {
   display: block;
   height: var(--table-loading-bar-h);
   width: 100%
@@ -71,7 +70,7 @@
   }
 }
 
-.__table-inner-table__tw-6 {
+.__table-inner-table__slot-6 {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   border-radius: var(--table-loading-bar-radius);
   --tw-bg-opacity: 1;
@@ -79,7 +78,7 @@
   opacity: 0.6
 }
 
-.__table-inner-table__tw-7 {
+.__table-inner-table__slot-7 {
   display: flex;
   height: var(--table-empty-h);
   width: 100%;
@@ -89,7 +88,7 @@
   padding-right: var(--table-cell-px)
 }
 
-.__table-inner-table__tw-8 {
+.__table-inner-table__slot-8 {
   position: relative;
   display: flex;
   width: 100%;
@@ -99,16 +98,15 @@
   background-color: hsla(var(--table-background), var(--tw-bg-opacity))
 }
 
-.__table-inner-table__tw-9 {
+.__table-inner-table__slot-9 {
   height: 0.125rem;
   width: 100%
 }
-.__table-inner-table__tw-extra-1 {
+.__table-inner-table__slot-extra-1 {
   flex-direction: column;
   flex-wrap: wrap
 }
 
-.__table-inner-table__tw-extra-2 {
+.__table-inner-table__slot-extra-2 {
   flex-direction: column
 }
-/* @generated component utility migration end */

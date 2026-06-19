@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -7,6 +7,24 @@ const testsDir = dirname(fileURLToPath(import.meta.url));
 const formDir = resolve(testsDir, "../src/components/form");
 
 const readFormFile = (name: string) => readFileSync(resolve(formDir, name), "utf8");
+
+const listSourceFiles = (directory: string): string[] =>
+    readdirSync(directory).flatMap((name) => {
+        const filePath = resolve(directory, name);
+        if (statSync(filePath).isDirectory()) return listSourceFiles(filePath);
+        return /\.(css|tsx?)$/.test(name) ? [filePath] : [];
+    });
+
+describe("component stable class contracts", () => {
+    it("does not expose generated tw selector contracts", () => {
+        for (const filePath of listSourceFiles(resolve(testsDir, "../src/components"))) {
+            const content = readFileSync(filePath, "utf8");
+
+            expect(content, filePath).not.toMatch(/__[A-Za-z0-9_-]+__tw-(?:extra-|state-)?\d+/);
+            expect(content, filePath).not.toContain("@generated component utility migration");
+        }
+    });
+});
 
 describe("InputField stable class contract", () => {
     const source = readFormFile("input-field.tsx");

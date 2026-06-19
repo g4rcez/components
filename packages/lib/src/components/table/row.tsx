@@ -2,7 +2,7 @@ import type React from "react";
 import { Fragment, type PropsWithChildren, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { path } from "../../lib/fns";
-import { SkeletonCell } from "../display/skeleton";
+import { SkeletonCell } from "../display/skeleton/skeleton";
 import type { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
 
 type ItemContentContext<T extends Record<string, unknown>> = {
@@ -37,9 +37,9 @@ const RowAside = (props: PropsWithChildren) => {
             data-component="cell-aside"
             inert={ariaHidden ? true : undefined}
             tabIndex={ariaHidden ? -1 : undefined}
-            className={`__table-row__aside __table-row__tw-1 ${className}`}
+            className={`__table-row__aside __table-row__slot-1 ${className}`}
         >
-            <div ref={ref} className="__table-row__tw-2">
+            <div ref={ref} className="__table-row__slot-2">
                 {props.children}
             </div>
         </div>
@@ -64,15 +64,15 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`typography __table-row__cell __table-row__border __table-row__tw-3 __table-row__tw-extra-1 __table-row__cell-content ${className}`}
+                        className={`typography __table-row__cell __table-row__border __table-row__slot-3 __table-row__slot-extra-1 __table-row__cell-content ${className}`}
                     >
                         {exposeAside ? (
                             <RowAside>
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className="__table-row__tw-4">{col.thead}</span>
-                        <span className="__table-row__tw-5">
+                        <span className="__table-row__slot-4">{col.thead}</span>
+                        <span className="__table-row__slot-5">
                             {loading ? (
                                 SkeletonCell
                             ) : Component ? (

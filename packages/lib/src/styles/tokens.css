@@ -177,7 +177,7 @@
     --var-stats-icon-foreground: var(--var-color-primary-foreground);
 }
 
-[data-g4-theme="dark"],
+[data-theme="dark"],
 html.dark {
     color-scheme: dark;
 

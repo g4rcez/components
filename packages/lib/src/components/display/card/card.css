@@ -1,0 +1,203 @@
+.__card {
+    box-sizing: border-box;
+}
+
+.__display-card__slot-1 {
+    display: flex;
+    width: 100%;
+    gap: var(--card-gap);
+    border-radius: var(--card-radius);
+    --tw-border-opacity: 1;
+    border-color: hsla(var(--card-border), var(--tw-border-opacity));
+    --tw-bg-opacity: 1;
+    background-color: hsla(var(--card-background), var(--tw-bg-opacity));
+    padding-top: var(--card-padding-y);
+    padding-bottom: var(--card-padding-y);
+    --tw-shadow: var(--shadow-card);
+    --tw-shadow-colored: var(--shadow-card);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.__display-card__slot-2 {
+    margin-bottom: var(--card-title-mb);
+    width: 100%;
+    border-bottom-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: hsla(var(--card-border), var(--tw-border-opacity));
+    padding-left: var(--card-padding-x);
+    padding-right: var(--card-padding-x);
+    padding-bottom: var(--card-title-pb);
+    font-size: var(--typography-xl);
+    font-weight: 500;
+}
+
+.__display-card__slot-3 {
+    min-width: 100%;
+    padding-left: var(--card-padding-x);
+    padding-right: var(--card-padding-x);
+}
+
+.__display-card__slot-4 {
+    display: flex;
+    gap: var(--card-gap);
+}
+
+.__display-card__slot-5 {
+    width: 100%;
+}
+
+.__display-card__slot-6 {
+    width: 66.666667%;
+}
+
+.__display-card__slot-7 {
+    width: 83.333333%;
+}
+
+.__display-card__slot-8 {
+    width: 50%;
+}
+
+.__display-card__slot-9 {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--base);
+}
+
+@media (min-width: 640px) {
+    .__display-card__slot-9 {
+        align-items: center;
+    }
+}
+
+.__display-card__slot-10 {
+    font-weight: 600;
+}
+
+.__display-card__slot-11 {
+    gap: 1rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+@media (min-width: 640px) {
+    .__display-card__slot-11 {
+        align-items: center;
+        justify-content: flex-end;
+    }
+}
+
+.__display-card__slot-12 {
+    display: flex;
+    align-items: center;
+    gap: var(--card-gap);
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.__display-card__slot-13 {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: var(--card-gap);
+    border-radius: var(--card-radius);
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+@media (min-width: 1024px) {
+    .__display-card__slot-13 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
+.__display-card__slot-14 {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0, 0, 0.58, 1);
+    transition-duration: 300ms;
+    transition-timing-function: linear;
+}
+
+.__display-card__slot-14:hover {
+    background-color: hsla(var(--primary-hover), 0.1);
+}
+
+.__display-card__slot-15 {
+    display: flex;
+    width: var(--card-stats-icon-col-w);
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    border-top-left-radius: var(--card-radius);
+    border-bottom-left-radius: var(--card-radius);
+    --tw-bg-opacity: 1;
+    background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity));
+    padding: var(--card-stats-icon-col-p);
+    --tw-text-opacity: 1;
+    color: hsla(var(--primary-foreground), var(--tw-text-opacity));
+}
+
+.__display-card__slot-15 > svg {
+    flex: 0 0 auto;
+    width: var(--card-stats-icon-size);
+    height: var(--card-stats-icon-size);
+    inline-size: var(--card-stats-icon-size);
+    block-size: var(--card-stats-icon-size);
+}
+
+.__display-card__slot-16 {
+    display: flex;
+    justify-content: center;
+    gap: var(--card-stats-content-gap);
+    padding-top: var(--card-stats-content-py);
+    padding-bottom: var(--card-stats-content-py);
+}
+
+.__display-card__slot-17 {
+    font-size: var(--typography-lg);
+}
+
+.__display-card__slot-18 {
+    height: 2.5rem;
+}
+
+.__display-card__slot-19 {
+    font-size: var(--card-title-text);
+    font-weight: 700;
+    letter-spacing: 0.025em;
+}
+.__display-card__slot-extra-1 {
+    flex-direction: column;
+}
+
+.__display-card__slot-extra-2 {
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 640px) {
+    .__display-card__slot-extra-2 {
+        flex-direction: row;
+    }
+}
+
+.__display-card__slot-extra-3 {
+    flex-direction: column;
+}
+
+@media (min-width: 640px) {
+    .__display-card__slot-extra-3 {
+        flex-direction: row;
+    }
+}
+
+.__display-card__stats-container {
+    padding: 0;
+}
+.__display-card__border {
+    border-width: 1px;
+}

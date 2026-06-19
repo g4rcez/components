@@ -1,10 +1,10 @@
 import { isToday } from "date-fns";
 import { useEffect, useRef, useState } from "react";
-import { Tag } from "../core/tag";
+import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
 import type { CalendarEvent, CalendarEventBase } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
-import { Calendar } from "../display/calendar";
+import { Calendar } from "../display/calendar/calendar";
 import {
     getHourSlots,
     toDateKey,
@@ -63,7 +63,7 @@ export function DayView<T extends CalendarEventBase>({
         const hasEvents = (eventsByDate.get(key) || []).length > 0;
         const isSelected = toDateKey(date) === toDateKey(currentDate);
         if (!hasEvents || isSelected) return null;
-        return <span className="__page-calendar-day-view__tw-1" />;
+        return <span className="__page-calendar-day-view__slot-1" />;
     };
 
     const handleEventClick = (event: CalendarEvent<T>) => {
@@ -72,29 +72,32 @@ export function DayView<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="__page-calendar-day-view__tw-2">
-            <div className="__page-calendar-day-view__tw-3 __page-calendar-day-view__tw-extra-1">
-                <div aria-label={formatFullDate(currentDate, locale)} className="__page-calendar-day-view__tw-4 __page-calendar-day-view__tw-extra-2">
+        <div className="__page-calendar-day-view__slot-2">
+            <div className="__page-calendar-day-view__slot-3 __page-calendar-day-view__slot-extra-1">
+                <div
+                    aria-label={formatFullDate(currentDate, locale)}
+                    className="__page-calendar-day-view__slot-4 __page-calendar-day-view__slot-extra-2"
+                >
                     <span
-                        className={`__page-calendar-day-view__tw-5 ${isToday(currentDate) ? "__page-calendar-day-view__tw-6" : "__page-calendar-day-view__tw-7"}`}
+                        className={`__page-calendar-day-view__slot-5 ${isToday(currentDate) ? "__page-calendar-day-view__slot-6" : "__page-calendar-day-view__slot-7"}`}
                     >
                         {formatDay(currentDate, locale)}
                     </span>
                     <div>
-                        <div className="__page-calendar-day-view__tw-8">{formatWeekdayLong(currentDate, locale)}</div>
-                        <div className="__page-calendar-day-view__tw-9">{formatMonthYear(currentDate, locale)}</div>
+                        <div className="__page-calendar-day-view__slot-8">{formatWeekdayLong(currentDate, locale)}</div>
+                        <div className="__page-calendar-day-view__slot-9">{formatMonthYear(currentDate, locale)}</div>
                     </div>
                 </div>
-                <div ref={scrollBodyRef} className="__page-calendar-day-view__tw-10">
-                    <div className="__page-calendar-day-view__tw-11 __page-calendar-day-view__tw-extra-2">
+                <div ref={scrollBodyRef} className="__page-calendar-day-view__slot-10">
+                    <div className="__page-calendar-day-view__slot-11 __page-calendar-day-view__slot-extra-2">
                         {hours.map((hour) => (
-                            <div key={hour} className="__page-calendar-day-view__tw-12" style={{ height: HOUR_HEIGHT }}>
-                                <span className="__page-calendar-day-view__tw-13">{hour === 0 ? "" : formatHourLabel(hour, locale)}</span>
+                            <div key={hour} className="__page-calendar-day-view__slot-12" style={{ height: HOUR_HEIGHT }}>
+                                <span className="__page-calendar-day-view__slot-13">{hour === 0 ? "" : formatHourLabel(hour, locale)}</span>
                                 {hour === new Date().getHours() && <div ref={currentHourRef} />}
                             </div>
                         ))}
                     </div>
-                    <div className="__page-calendar-day-view__tw-14">
+                    <div className="__page-calendar-day-view__slot-14">
                         {hours.map((hour) => {
                             const slotDate = new Date(currentDate);
                             slotDate.setHours(hour, 0, 0, 0);
@@ -103,7 +106,7 @@ export function DayView<T extends CalendarEventBase>({
                                     key={hour}
                                     type="button"
                                     aria-label={formatHourLabel(hour, locale)}
-                                    className="__page-calendar-day-view__tw-15"
+                                    className="__page-calendar-day-view__slot-15"
                                     style={{ height: HOUR_HEIGHT }}
                                     onClick={() => onSlotClick?.(slotDate)}
                                 />
@@ -113,7 +116,7 @@ export function DayView<T extends CalendarEventBase>({
                             <div
                                 key={event.id}
                                 role="presentation"
-                                className="__page-calendar-day-view__tw-16"
+                                className="__page-calendar-day-view__slot-16"
                                 style={{
                                     top: getTopOffset(event),
                                     height: HOUR_HEIGHT,
@@ -129,7 +132,7 @@ export function DayView<T extends CalendarEventBase>({
                     </div>
                 </div>
             </div>
-            <div className="__page-calendar-day-view__tw-17 __page-calendar-day-view__tw-extra-1">
+            <div className="__page-calendar-day-view__slot-17 __page-calendar-day-view__slot-extra-1">
                 <Calendar
                     date={currentDate}
                     markToday
@@ -138,18 +141,18 @@ export function DayView<T extends CalendarEventBase>({
                     onChange={(d: Date | undefined) => d && onDateChange(d)}
                 />
                 {selectedEvent && (
-                    <div className="__page-calendar-day-view__tw-18 __page-calendar-day-view__tw-extra-1">
+                    <div className="__page-calendar-day-view__slot-18 __page-calendar-day-view__slot-extra-1">
                         {renderEvent ? (
                             renderEvent(selectedEvent)
                         ) : (
                             <>
-                                <div className="__page-calendar-day-view__tw-19">{selectedEvent.title}</div>
-                                <div className="__page-calendar-day-view__tw-9">{formatFullDate(selectedEvent.date, locale)}</div>
-                                <div className="__page-calendar-day-view__tw-9">{formatTime(selectedEvent.date, locale)}</div>
+                                <div className="__page-calendar-day-view__slot-19">{selectedEvent.title}</div>
+                                <div className="__page-calendar-day-view__slot-9">{formatFullDate(selectedEvent.date, locale)}</div>
+                                <div className="__page-calendar-day-view__slot-9">{formatTime(selectedEvent.date, locale)}</div>
                                 <Tag
                                     theme={selectedEvent.className ? "custom" : "primary"}
                                     size="small"
-                                    className={`__page-calendar-day-view__tw-20 ${selectedEvent.className ? ` ${selectedEvent.className}` : ""}`}
+                                    className={`__page-calendar-day-view__slot-20 ${selectedEvent.className ? ` ${selectedEvent.className}` : ""}`}
                                 />
                             </>
                         )}

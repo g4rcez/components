@@ -64,20 +64,24 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
     };
 
     return (
-        <div className="__page-calendar-month-view__tw-1 __page-calendar-month-view__tw-extra-1">
-            <div role="grid" aria-label={t.pageCalendarMonthGrid} className="__page-calendar-month-view__tw-2 __page-calendar-month-view__tw-extra-1">
-                <div role="row" className="__page-calendar-month-view__tw-3 __page-calendar-month-view__tw-extra-2">
+        <div className="__page-calendar-month-view__slot-1 __page-calendar-month-view__slot-extra-1">
+            <div
+                role="grid"
+                aria-label={t.pageCalendarMonthGrid}
+                className="__page-calendar-month-view__slot-2 __page-calendar-month-view__slot-extra-1"
+            >
+                <div role="row" className="__page-calendar-month-view__slot-3 __page-calendar-month-view__slot-extra-2">
                     {WEEKDAY_LABELS.map((date) => {
                         const day = formatWeekDay(date, locale);
                         return (
-                            <div role="columnheader" key={day} className="__page-calendar-month-view__tw-4">
+                            <div role="columnheader" key={day} className="__page-calendar-month-view__slot-4">
                                 {day}
                             </div>
                         );
                     })}
                 </div>
                 {weeks.map((week, weekIndex) => (
-                    <div role="row" key={toDateKey(week[0])} className="__page-calendar-month-view__tw-5 __page-calendar-month-view__tw-extra-2">
+                    <div role="row" key={toDateKey(week[0])} className="__page-calendar-month-view__slot-5 __page-calendar-month-view__slot-extra-2">
                         {week.map((day, dayIndexInWeek) => {
                             const dayIndex = weekIndex * daysInWeek + dayIndexInWeek;
                             const key = toDateKey(day);
@@ -91,8 +95,8 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                     role="gridcell"
                                     aria-selected={isSelected ? true : undefined}
                                     className={css(
-                                        "__page-calendar-month-view__tw-6 __page-calendar-month-view__tw-extra-3",
-                                        !isCurrentMonth && "__page-calendar-month-view__tw-7"
+                                        "__page-calendar-month-view__slot-6 __page-calendar-month-view__slot-extra-3",
+                                        !isCurrentMonth && "__page-calendar-month-view__slot-7"
                                     )}
                                 >
                                     <button
@@ -106,19 +110,19 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                         onClick={() => onDayClick(day)}
                                         aria-current={isCurrentDay ? "date" : undefined}
                                         aria-label={`${formatFullDate(day, locale)}${events.length > 0 ? `, ${t.pageCalendarEventCount(events.length)}` : ""}`}
-                                        className="__page-calendar-month-view__tw-8"
+                                        className="__page-calendar-month-view__slot-8"
                                     >
                                         <span
-                                            className={`__page-calendar-month-view__tw-9 ${isCurrentDay ? "__page-calendar-month-view__tw-10" : "__page-calendar-month-view__tw-11"}`}
+                                            className={`__page-calendar-month-view__slot-9 ${isCurrentDay ? "__page-calendar-month-view__slot-10" : "__page-calendar-month-view__slot-11"}`}
                                         >
                                             {formatDay(day, locale)}
                                         </span>
-                                        <span aria-hidden="true" className="__page-calendar-month-view__tw-12">
+                                        <span aria-hidden="true" className="__page-calendar-month-view__slot-12">
                                             +
                                         </span>
                                     </button>
-                                    <div className="__page-calendar-month-view__tw-13">
-                                        <div className="__page-calendar-month-view__tw-14 __page-calendar-month-view__tw-extra-1">
+                                    <div className="__page-calendar-month-view__slot-13">
+                                        <div className="__page-calendar-month-view__slot-14 __page-calendar-month-view__slot-extra-1">
                                             {events.map((event) => (
                                                 <div
                                                     key={event.id}

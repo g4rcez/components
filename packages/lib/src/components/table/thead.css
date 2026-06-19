@@ -8,8 +8,7 @@
     block-size: var(--var-table-head-icon-size, 0.875rem);
 }
 
-/* @generated component utility migration start */
-.__table-thead__tw-1 {
+.__table-thead__slot-1 {
   position: relative;
   min-width: 0px;
   cursor: grab;
@@ -22,22 +21,22 @@
   font-weight: 500
 }
 
-.__table-thead__tw-1:first-child {
+.__table-thead__slot-1:first-child {
   border-top-left-radius: var(--table-radius)
 }
 
-.__table-thead__tw-1:last-child {
+.__table-thead__slot-1:last-child {
   border-top-right-radius: var(--table-radius);
   border-right-color: transparent
 }
 
 @media (min-width: 768px) {
-  .__table-thead__tw-1 {
+  .__table-thead__slot-1 {
     height: 3.5rem
   }
 }
 
-.__table-thead__tw-2 {
+.__table-thead__slot-2 {
   display: flex;
   height: 100%;
   align-items: center;
@@ -47,21 +46,21 @@
   padding: var(--table-cell-padding)
 }
 
-.__table-thead__tw-3 {
+.__table-thead__slot-3 {
   border-top-right-radius: var(--table-radius)
 }
 
-.__table-thead__tw-4 {
+.__table-thead__slot-4 {
   border-top-left-radius: var(--table-radius)
 }
 
-.__table-thead__tw-5 {
+.__table-thead__slot-5 {
   display: flex;
   align-items: center;
   gap: var(--table-inline-gap-tight)
 }
 
-.__table-thead__tw-6 {
+.__table-thead__slot-6 {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -73,20 +72,20 @@
   border-width: 0
 }
 
-.__table-thead__tw-7 {
+.__table-thead__slot-7 {
   font-size: var(--typography-lg)
 }
 
-.__table-thead__tw-8 {
+.__table-thead__slot-8 {
   font-weight: 500
 }
 
-.__table-thead__tw-9 {
+.__table-thead__slot-9 {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem
 }
 
-.__table-thead__tw-10 {
+.__table-thead__slot-10 {
   display: flex;
   align-items: center;
   gap: var(--table-inline-gap-tight);
@@ -94,13 +93,13 @@
   color: hsla(var(--primary-DEFAULT), var(--tw-text-opacity))
 }
 
-.__table-thead__tw-11 {
+.__table-thead__slot-11 {
   pointer-events: auto;
   text-wrap: balance;
   font-size: var(--typography-base)
 }
 
-.__table-thead__tw-12 {
+.__table-thead__slot-12 {
   position: absolute;
   right: -0.5px;
   top: 0px;
@@ -112,15 +111,14 @@
   background-color: transparent
 }
 
-.__table-thead__tw-12:hover {
+.__table-thead__slot-12:hover {
   width: 0.375rem;
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
 }
 
-.__table-thead__tw-12:active {
+.__table-thead__slot-12:active {
   width: 0.375rem;
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
 }
-/* @generated component utility migration end */

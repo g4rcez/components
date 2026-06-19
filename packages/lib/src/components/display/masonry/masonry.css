@@ -1,0 +1,15 @@
+.__masonry {
+        box-sizing: border-box;
+    }
+
+.__display-masonry__slot-1 {
+  position: relative;
+  margin: 0px;
+  width: 100%;
+  list-style-type: none;
+  padding: 0px
+}
+
+.__display-masonry__slot-2 {
+  display: block
+}

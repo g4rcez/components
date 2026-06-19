@@ -196,7 +196,7 @@ function App() {
 
 ### Theme System
 
-Themes are runtime CSS variables. Defaults ship in `tokens.css`: light variables on `:root`, and dark variables on `[data-g4-theme="dark"]`.
+Themes are runtime CSS variables. Defaults ship in `tokens.css`: light variables on `:root`, and dark variables on `[data-theme="dark"]`.
 
 ```tsx
 import { applyTheme, registerTheme } from "@g4rcez/components/theme";

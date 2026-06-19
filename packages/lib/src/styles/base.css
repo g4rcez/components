@@ -9,7 +9,7 @@ html {
     color-scheme: light;
 }
 
-[data-g4-theme="dark"],
+[data-theme="dark"],
 html.dark {
     color-scheme: dark;
 }

@@ -13,26 +13,25 @@
     block-size: var(--var-page-calendar-header-icon-size, 0.875rem);
 }
 
-/* @generated component utility migration start */
-.__page-calendar-calendar-header__tw-1 {
+.__page-calendar-calendar-header__slot-1 {
   display: flex;
   gap: var(--page-calendar-header-gap)
 }
 
-.__page-calendar-calendar-header__tw-2 {
+.__page-calendar-calendar-header__slot-2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--page-calendar-header-gap)
 }
 
-.__page-calendar-calendar-header__tw-3 {
+.__page-calendar-calendar-header__slot-3 {
   display: flex;
   align-items: center;
   gap: var(--page-calendar-date-gap)
 }
 
-.__page-calendar-calendar-header__tw-4 {
+.__page-calendar-calendar-header__slot-4 {
   display: flex;
   width: var(--page-calendar-badge-size);
   height: var(--page-calendar-badge-size);
@@ -43,57 +42,57 @@
   font-size: var(--page-calendar-week-label-text)
 }
 
-.__page-calendar-calendar-header__tw-5 {
+.__page-calendar-calendar-header__slot-5 {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: hsla(var(--primary-foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-calendar-header__tw-6 {
+.__page-calendar-calendar-header__slot-6 {
   --tw-bg-opacity: 1;
   background-color: hsla(var(--card-background), var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: hsla(var(--foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-calendar-header__tw-7 {
+.__page-calendar-calendar-header__slot-7 {
   font-weight: 300;
   text-transform: uppercase;
   line-height: 1
 }
 
-.__page-calendar-calendar-header__tw-8 {
+.__page-calendar-calendar-header__slot-8 {
   font-size: var(--page-calendar-title-text);
   font-weight: 500;
   line-height: 1
 }
 
-.__page-calendar-calendar-header__tw-9 {
+.__page-calendar-calendar-header__slot-9 {
   font-size: var(--page-calendar-title-text);
   font-weight: 700;
   line-height: 1.25
 }
 
-.__page-calendar-calendar-header__tw-10 {
+.__page-calendar-calendar-header__slot-10 {
   font-size: var(--page-calendar-week-label-text);
   --tw-text-opacity: 1;
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-calendar-header__tw-11 {
+.__page-calendar-calendar-header__slot-11 {
   display: flex;
   align-items: center;
   gap: var(--page-calendar-nav-gap)
 }
 
-.__page-calendar-calendar-header__tw-12 {
+.__page-calendar-calendar-header__slot-12 {
   display: flex;
   align-items: center;
   gap: var(--page-calendar-nav-btn-gap)
 }
 
-.__page-calendar-calendar-header__tw-13 {
+.__page-calendar-calendar-header__slot-13 {
   border-radius: var(--page-calendar-today-radius);
   padding-left: var(--page-calendar-today-px);
   padding-right: var(--page-calendar-today-px);
@@ -105,47 +104,46 @@
   transition-duration: 375ms
 }
 
-.__page-calendar-calendar-header__tw-13:hover {
+.__page-calendar-calendar-header__slot-13:hover {
   background-color: hsla(var(--muted-DEFAULT), 0.5)
 }
 
-.__page-calendar-calendar-header__tw-14 {
+.__page-calendar-calendar-header__slot-14 {
   display: flex;
   border-radius: var(--page-calendar-view-switch-radius)
 }
 
-.__page-calendar-calendar-header__tw-15:first-child {
+.__page-calendar-calendar-header__slot-15:first-child {
   border-top-left-radius: var(--button-radius);
   border-bottom-left-radius: var(--button-radius)
 }
 
-.__page-calendar-calendar-header__tw-15:last-child {
+.__page-calendar-calendar-header__slot-15:last-child {
   border-top-right-radius: var(--button-radius);
   border-bottom-right-radius: var(--button-radius)
 }
 
-.__page-calendar-calendar-header__tw-16 {
+.__page-calendar-calendar-header__slot-16 {
   display: flex;
   align-items: center;
   gap: var(--page-calendar-filter-gap)
 }
 
-.__page-calendar-calendar-header__tw-17 {
+.__page-calendar-calendar-header__slot-17 {
   --tw-text-opacity: 1;
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }
 
-.__page-calendar-calendar-header__tw-18 {
+.__page-calendar-calendar-header__slot-18 {
   margin-right: var(--page-calendar-nav-mr);
   font-size: var(--page-calendar-filter-text);
   --tw-text-opacity: 1;
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }
-.__page-calendar-calendar-header__tw-extra-1 {
+.__page-calendar-calendar-header__slot-extra-1 {
   flex-direction: column
 }
 
-.__page-calendar-calendar-header__tw-extra-2 {
+.__page-calendar-calendar-header__slot-extra-2 {
   flex-wrap: wrap
 }
-/* @generated component utility migration end */

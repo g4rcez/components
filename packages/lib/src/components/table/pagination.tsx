@@ -1,6 +1,6 @@
 import React, { Fragment, useId, useMemo } from "react";
 import { useTranslations } from "../../hooks/use-translations";
-import { Polymorph } from "../core/polymorph";
+import { Polymorph } from "../core/polymorph/polymorph";
 import { TablePagination } from "./table-lib";
 
 export function createPaginationItems(current: number, max: number) {
@@ -32,7 +32,7 @@ export const Pagination = (pagination: TablePagination) => {
     const Link: React.ElementType = pagination.asLink ?? "button";
 
     return (
-        <footer className="__table-pagination__tw-1 __table-pagination__tw-extra-1">
+        <footer className="__table-pagination__slot-1 __table-pagination__slot-extra-1">
             <p>
                 <translation.tablePaginationFooter
                     {...pagination}
@@ -44,7 +44,7 @@ export const Pagination = (pagination: TablePagination) => {
                                 <select
                                     id={id}
                                     value={pagination.size}
-                                    className="__table-pagination__tw-2"
+                                    className="__table-pagination__slot-2"
                                     onChange={(e) => {
                                         pagination.onChangeSize?.(Number(e.target.value));
                                     }}
@@ -61,7 +61,7 @@ export const Pagination = (pagination: TablePagination) => {
                 />
             </p>
             <nav>
-                <ul className="__table-pagination__tw-3">
+                <ul className="__table-pagination__slot-3">
                     {pagination.current > 1 ? (
                         <li>
                             <Polymorph as={Link} href="previous" className="">
@@ -80,7 +80,7 @@ export const Pagination = (pagination: TablePagination) => {
                                         <Polymorph
                                             href={x}
                                             as={Link}
-                                            className={`__table-pagination__tw-4 __table-pagination__tw-final-1${x === pagination.current ? "__table-pagination__tw-5" : "__table-pagination__tw-6"}`}
+                                            className={`__table-pagination__slot-4 __table-pagination__tw-final-1${x === pagination.current ? "__table-pagination__slot-5" : "__table-pagination__slot-6"}`}
                                         >
                                             {x}
                                         </Polymorph>

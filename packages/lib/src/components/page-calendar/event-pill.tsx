@@ -1,4 +1,4 @@
-import { Button } from "../core/button";
+import { Button } from "../core/button/button";
 import { css } from "../../lib/dom";
 import { useTranslations } from "../../hooks/use-translations";
 import type { CalendarEvent } from "./page-calendar.types";
@@ -20,7 +20,7 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             height: "1.25rem",
             borderRadius: "0.25rem",
         } as CSSProperties,
-        className: css("__page-calendar-event-pill__border __page-calendar-event-pill__tw-1", event.className),
+        className: css("__page-calendar-event-pill__border __page-calendar-event-pill__slot-1", event.className),
     };
     if (compact) {
         return (
@@ -46,8 +46,8 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             aria-label={t.pageCalendarEventAt(event.title, formatEventTime(event.date))}
             theme={event.className ? "raw" : "primary"}
         >
-            <div className="__page-calendar-event-pill__tw-2">{event.title}</div>
-            <div className="__page-calendar-event-pill__tw-3">{formatEventTime(event.date)}</div>
+            <div className="__page-calendar-event-pill__slot-2">{event.title}</div>
+            <div className="__page-calendar-event-pill__slot-3">{formatEventTime(event.date)}</div>
         </Button>
     );
 }

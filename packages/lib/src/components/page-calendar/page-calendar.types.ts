@@ -1,4 +1,4 @@
-import type { TagProps } from "../core/tag";
+import type { TagProps } from "../core/tag/tag";
 
 export type ViewMode = "month" | "week" | "day";
 

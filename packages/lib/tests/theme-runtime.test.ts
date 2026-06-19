@@ -34,7 +34,7 @@ describe("theme runtime helpers", () => {
         const css = createThemeCss({ colors: { primary: { DEFAULT: "red" } } }, { name: "brand" });
 
         expect(css).not.toContain("@layer var.tokens");
-        expect(css).toContain('[data-g4-theme="brand"]');
+        expect(css).toContain('[data-theme="brand"]');
         expect(css).toContain("--var-color-primary: red;");
     });
 
@@ -42,7 +42,7 @@ describe("theme runtime helpers", () => {
         const css = createThemeCss({ colors: { primary: { DEFAULT: "red" } } }, { layer: true, name: "brand" });
 
         expect(css).toContain("@layer var.tokens");
-        expect(css).toContain('[data-g4-theme="brand"]');
+        expect(css).toContain('[data-theme="brand"]');
         expect(css).toContain("--var-color-primary: red;");
     });
 
@@ -56,7 +56,7 @@ describe("theme runtime helpers", () => {
         const css = registerTheme("brand", { colors: { primary: { DEFAULT: "green" } } });
         const style = document.getElementById("g4rcez-theme-brand");
 
-        expect(css).toContain('[data-g4-theme="brand"]');
+        expect(css).toContain('[data-theme="brand"]');
         expect(style).toBeInstanceOf(HTMLStyleElement);
         expect(style?.textContent).toContain("--var-color-primary: green;");
     });

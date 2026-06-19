@@ -1,0 +1,15 @@
+.__shortcut {
+    box-sizing: border-box;
+}
+
+.__shortcut__icon {
+    inline-size: var(--var-shortcut-icon-size, 0.75rem);
+    block-size: var(--var-shortcut-icon-size, 0.75rem);
+}
+
+.__display-shortcut__slot-1 {
+  display: flex;
+  align-items: center;
+  gap: var(--shortcut-gap);
+  font-size: var(--shortcut-text)
+}

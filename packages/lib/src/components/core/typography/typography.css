@@ -1,0 +1,90 @@
+.__typography {
+        box-sizing: border-box;
+    }
+
+.__core-typography__slot-1 {
+  font-size: var(--typography-base);
+  line-height: 1.375;
+}
+
+.__core-typography__slot-2 {
+  margin-bottom: 1rem;
+  font-size: var(--typography-sm);
+  --tw-text-opacity: 1;
+  color: hsla(var(--secondary-DEFAULT), var(--tw-text-opacity));
+}
+
+.__core-typography__slot-3 {
+  display: flex;
+}
+
+.__core-typography__slot-4 {
+  gap: var(--info-gap);
+}
+
+.__core-typography__slot-5 {
+  align-items: center;
+}
+
+.__core-typography__slot-6 {
+  font-size: var(--info-label-text);
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+.__core-typography__slot-7 {
+  --tw-text-opacity: 1;
+  color: hsla(var(--disabled), var(--tw-text-opacity));
+}
+
+.__core-typography__slot-8 {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: var(--info-value-text);
+}
+
+.__core-typography__slot-9 {
+  width: 100%;
+  font-size: var(--info-secondary-text);
+}
+
+.__core-typography__slot-10 {
+  font-size: var(--typography-3xl);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+}
+
+.__core-typography__slot-11 {
+  --tw-text-opacity: 1;
+  color: hsla(var(--secondary-DEFAULT), var(--tw-text-opacity));
+}
+
+.__core-typography__slot-12 {
+  gap: 1.5rem;
+  display: flex;
+  min-width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.__core-typography__slot-13 {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+}
+.__core-typography__slot-extra-1 {
+  flex-direction: row
+}
+
+.__core-typography__slot-extra-2 {
+  flex-direction: column
+}
+
+.__core-typography__slot-extra-3 {
+  flex-direction: row;
+  flex-wrap: wrap
+}
+
+.__core-typography__slot-extra-4 {
+  flex-wrap: wrap
+}

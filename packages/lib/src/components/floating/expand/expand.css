@@ -1,0 +1,16 @@
+.__expand {
+        box-sizing: border-box;
+    }
+
+.__floating-expand__slot-1 {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center
+}
+
+.__floating-expand__slot-2 {
+  position: absolute;
+  left: -25%;
+  top: -75%
+}

@@ -7,9 +7,9 @@ import { Fragment, useState } from "react";
 import { keys } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
-import { Button } from "../core/button";
-import { Dropdown } from "../floating/dropdown";
-import { Select } from "../form/select";
+import { Button } from "../core/button/button";
+import { Dropdown } from "../floating/dropdown/dropdown";
+import { Select } from "../form/select/select";
 import { type Col, createOptionCols, type TableConfiguration } from "./table-lib";
 
 export type GroupItem<T extends object> = Col<T> & {
@@ -35,12 +35,12 @@ const Item = <T extends object>({ item, onPointerDown }: { item: GroupItem<T>; o
         <Reorder.Item
             onPointerDown={onPointerDown}
             id={item.groupId}
-            className="__table-group__tw-1 __table-group__tw-extra-1"
+            className="__table-group__slot-1 __table-group__slot-extra-1"
             key={item.groupId}
             value={item}
             style={{ y }}
         >
-            <button type="button" className="__table-group__tw-2">
+            <button type="button" className="__table-group__slot-2">
                 <DotsSixVerticalIcon className="__table-group__drag-icon" />
             </button>
             <span>{item.groupName}</span>
@@ -85,14 +85,14 @@ export const Group = <T extends object>(props: Props<T>) => {
                 arrow={false}
                 title={translations.tableGroupLabel}
                 trigger={
-                    <span className="__table-group__tw-3 __table-group__tw-final-1">
+                    <span className="__table-group__slot-3 __table-group__tw-final-1">
                         <StackMinusIcon className="__table-group__trigger-icon" />
                         {translations.tableGroupLabelWithCount}
                         {props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
                     </span>
                 }
             >
-                <div className="__table-group__tw-4 __table-group__tw-extra-2">
+                <div className="__table-group__slot-4 __table-group__slot-extra-2">
                     <Select
                         value={group}
                         title={translations.tableGroupTypeTitle}
@@ -100,21 +100,21 @@ export const Group = <T extends object>(props: Props<T>) => {
                         options={options}
                         placeholder={translations.tableGroupPlaceholder}
                     />
-                    <Button className="__table-group__tw-5" onClick={onDelete} theme="raw" data-id={group}>
-                        <span className="__table-group__tw-6">
+                    <Button className="__table-group__slot-5" onClick={onDelete} theme="raw" data-id={group}>
+                        <span className="__table-group__slot-6">
                             <TrashIcon aria-hidden="true" className="__table-group__delete-icon" />
                         </span>
                     </Button>
                 </div>
                 {props.groups.length > 0 ? (
-                    <section className="__table-group__tw-7">
+                    <section className="__table-group__slot-7">
                         <header>
-                            <h2 className="__table-group__tw-8">{translations.tableGroupOrderTitle}</h2>
+                            <h2 className="__table-group__slot-8">{translations.tableGroupOrderTitle}</h2>
                         </header>
                         <LayoutGroup>
                             <Reorder.Group
                                 axis="y"
-                                className="__table-group__tw-9"
+                                className="__table-group__slot-9"
                                 drag
                                 dragControls={controls}
                                 dragListener={false}

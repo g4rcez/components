@@ -15,7 +15,7 @@ describe("free text focus treatment", () => {
         await user.click(input);
 
         expect(document.activeElement).toBe(input);
-        expect(input.parentElement).toHaveClass("__form-free-text__tw-1");
+        expect(input.parentElement).toHaveClass("__free-text__field-state");
     });
 
     it("highlights the field border when Textarea is focused", async () => {
@@ -27,6 +27,6 @@ describe("free text focus treatment", () => {
         await user.click(textarea);
 
         expect(document.activeElement).toBe(textarea);
-        expect(textarea.parentElement).toHaveClass("__form-free-text__tw-1");
+        expect(textarea.parentElement).toHaveClass("__free-text__field-state");
     });
 });

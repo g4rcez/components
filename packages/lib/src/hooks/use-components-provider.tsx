@@ -6,7 +6,7 @@ import { parsers } from "../styles/design-tokens";
 import { Context, ContextProps } from "../config/context";
 import { defaultTranslations, Translations } from "../config/default-translations";
 import { defaultTweaks, Tweaks } from "../config/default-tweaks";
-import { ModalConfirmProvider } from "../components/floating/modal";
+import { ModalConfirmProvider } from "../components/floating/modal/modal";
 
 export type ContextType = Partial<{
     tweaks: Tweaks;
