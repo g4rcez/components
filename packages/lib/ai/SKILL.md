@@ -1,5 +1,5 @@
 ---
-name: g4rcez-components
+name: csscomponents
 description: >
     Use when: setting up @g4rcez/components in a new project, migrating native
     HTML elements or hand-rolled UI to this design system, building any React UI
@@ -30,9 +30,9 @@ pnpm add @g4rcez/components
 The package ships:
 
 - `dist/` — compiled JS/TS and CSS
-- `dist/index.css` — convenience bundle with foundation + all component CSS
-- `dist/foundation.css` — required token/base foundation for component CSS
-- `dist/*.css` — per-component CSS chunks such as `button.css`
+- `dist/css/index.css` — convenience bundle with foundation + all component CSS
+- `dist/css/foundation.css` — required token/base foundation for component CSS
+- `dist/css/*.css` — per-component CSS chunks such as `button.css`
 - `dist/style-manifest.json` — machine-readable CSS dependency and selector manifest
 - `ai/SKILL.md` — this file
 - `ai/component-style-manifest.json` — AI/CLI-readable copy of the style manifest
@@ -55,7 +55,7 @@ Rules for agents and tools:
 
 - Always include `foundation.css` before component CSS.
 - Prefer per-component CSS imports for production apps.
-- Use `g4rcez-components styles --css <stylesheet>` to detect used components and maintain the CSS import block automatically.
+- Use `csscomponents styles --css <stylesheet>` to detect used components and maintain the CSS import block automatically. The same runner is exportable from `@g4rcez/components/cli` for tooling integrations.
 - `index.css` is a convenience bundle that includes foundation + all component CSS.
 - Every public component has a CSS chunk, style contract sidecar, and manifest entry.
 - Button is fully ported to handwritten v6 CSS; remaining component chunks preserve the stable selector surface while legacy utility class names are retired component-by-component.

@@ -249,7 +249,7 @@ const createImportPlan = ({ cssFile, libraryRoot, manifest, packageName, used })
 
     if (libraryRoot) {
         const foundation = resolve(libraryRoot, "src/styles/foundation.css");
-        const index = resolve(libraryRoot, "src/styles/index.v6.css");
+        const index = resolve(libraryRoot, "src/styles/index.css");
         const legacyIndex = resolve(libraryRoot, "src/index.css");
         const foundationImport = `@import "${toCssImportPath(cssFile, foundation)}";`;
         const indexImport = `@import "${toCssImportPath(cssFile, index)}";`;
@@ -374,4 +374,7 @@ const main = () => {
     }
 };
 
-main();
+export { createImportPlan, detectUsedComponents, parseArgs, runStyles, updateStylesheet };
+
+const isEntrypoint = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+if (isEntrypoint) main();

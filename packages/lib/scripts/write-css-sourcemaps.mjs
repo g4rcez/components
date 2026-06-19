@@ -1,158 +1,54 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { glob } from "glob";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
+function toPosixPath(path) {
+    return path.replaceAll("\\", "/");
+}
+
+function toSourcePath(path, from = root) {
+    return toPosixPath(relative(from, path));
+}
+
+async function getComponentEntries(directory) {
+    const components = (await glob(join(directory, "**", "*.css"))).sort();
+    return components.reduce((acc, el) => {
+        const key = `${basename(toPosixPath(el), ".css")}.css`;
+        return { ...acc, [key]: [toSourcePath(el)] };
+    }, {});
+}
+
+const componentEntries = await getComponentEntries(resolve(root, "src/components"));
+const componentSources = Object.values(componentEntries).flat();
+
 const entries = {
+    ...componentEntries,
     "tokens.css": ["src/styles/tokens.css"],
     "base.css": ["src/styles/base.css"],
     "foundation.css": ["src/styles/foundation.css", "src/styles/tokens.css", "src/styles/base.css"],
-    "tag.css": ["src/components/core/tag.css"],
-    "form.css": ["src/components/form/form.css"],
-    "input.css": ["src/components/form/input.css"],
-    "select.css": ["src/components/form/select.css"],
-    "slider.css": ["src/components/form/slider.css"],
-    "switch.css": ["src/components/form/switch.css"],
-    "table.css": ["src/components/table/table.css"],
-    "card.css": ["src/components/display/card.css"],
-    "list.css": ["src/components/display/list.css"],
-    "step.css": ["src/components/display/step.css"],
-    "tabs.css": ["src/components/display/tabs.css"],
-    "alert.css": ["src/components/display/alert.css"],
-    "empty.css": ["src/components/display/empty.css"],
-    "stats.css": ["src/components/display/stats.css"],
-    "menu.css": ["src/components/floating/menu.css"],
-    "checkbox.css": ["src/components/form/checkbox.css"],
-    "radiobox.css": ["src/components/form/radiobox.css"],
-    "textarea.css": ["src/components/form/textarea.css"],
-    "page-calendar.css": ["src/components/page-calendar/page-calendar.css"],
-    "polymorph.css": ["src/components/core/polymorph.css"],
-    "modal.css": ["src/components/floating/modal.css"],
-    "task-list.css": ["src/components/form/task-list.css"],
-    "typography.css": ["src/components/core/typography.css"],
-    "masonry.css": ["src/components/display/masonry.css"],
-    "spinner.css": ["src/components/display/spinner.css"],
-    "expand.css": ["src/components/floating/expand.css"],
-    "wizard.css": ["src/components/floating/wizard.css"],
-    "calendar.css": ["src/components/display/calendar.css"],
-    "progress.css": ["src/components/display/progress.css"],
-    "timeline.css": ["src/components/display/timeline.css"],
-    "toolbar.css": ["src/components/floating/toolbar.css"],
-    "tooltip.css": ["src/components/floating/tooltip.css"],
-    "date-picker.css": ["src/components/form/date-picker.css"],
-    "file-upload.css": ["src/components/form/file-upload.css"],
-    "input-field.css": ["src/components/form/input-field.css"],
-    "dropdown.css": ["src/components/floating/dropdown.css"],
-    "autocomplete.css": ["src/components/form/autocomplete.css"],
-    "multi-select.css": ["src/components/form/multi-select.css"],
-    "render-on-view.css": ["src/components/core/render-on-view.css"],
-    "notifications.css": ["src/components/display/notifications.css"],
-    "command-palette.css": ["src/components/floating/command-palette.css"],
-    "button.css": ["src/components/core/button.css"],
-    "heading.css": ["src/components/core/heading.css"],
-    "resizable.css": ["src/components/core/resizable.css"],
-    "shortcut.css": ["src/components/display/shortcut.css"],
-    "skeleton.css": ["src/components/display/skeleton.css"],
-    "free-text.css": ["src/components/form/free-text.css"],
-    "page-calendar-header.css": ["src/components/page-calendar/calendar-header.css"],
-    "page-calendar-day-view.css": ["src/components/page-calendar/day-view.css"],
-    "page-calendar-event-pill.css": ["src/components/page-calendar/event-pill.css"],
-    "page-calendar-month-view.css": ["src/components/page-calendar/month-view.css"],
-    "page-calendar-week-view.css": ["src/components/page-calendar/week-view.css"],
-    "table-filter.css": ["src/components/table/filter.css"],
-    "table-group.css": ["src/components/table/group.css"],
-    "table-root.css": ["src/components/table/index.css"],
-    "table-inner-table.css": ["src/components/table/inner-table.css"],
-    "table-metadata.css": ["src/components/table/metadata.css"],
-    "table-pagination.css": ["src/components/table/pagination.css"],
-    "table-row.css": ["src/components/table/row.css"],
-    "table-sort.css": ["src/components/table/sort.css"],
-    "table-head.css": ["src/components/table/thead.css"],
-    "index.css": [
-        "src/styles/index.v6.css",
-        "src/styles/foundation.css",
-        "src/styles/tokens.css",
-        "src/styles/base.css",
-        "src/components/core/tag.css",
-        "src/components/form/form.css",
-        "src/components/form/input.css",
-        "src/components/form/select.css",
-        "src/components/form/slider.css",
-        "src/components/form/switch.css",
-        "src/components/table/table.css",
-        "src/components/display/card.css",
-        "src/components/display/list.css",
-        "src/components/display/step.css",
-        "src/components/display/tabs.css",
-        "src/components/display/alert.css",
-        "src/components/display/empty.css",
-        "src/components/display/stats.css",
-        "src/components/floating/menu.css",
-        "src/components/form/checkbox.css",
-        "src/components/form/radiobox.css",
-        "src/components/form/textarea.css",
-        "src/components/page-calendar/page-calendar.css",
-        "src/components/core/polymorph.css",
-        "src/components/floating/modal.css",
-        "src/components/form/task-list.css",
-        "src/components/core/typography.css",
-        "src/components/display/masonry.css",
-        "src/components/display/spinner.css",
-        "src/components/floating/expand.css",
-        "src/components/floating/wizard.css",
-        "src/components/display/calendar.css",
-        "src/components/display/progress.css",
-        "src/components/display/timeline.css",
-        "src/components/floating/toolbar.css",
-        "src/components/floating/tooltip.css",
-        "src/components/form/date-picker.css",
-        "src/components/form/file-upload.css",
-        "src/components/form/input-field.css",
-        "src/components/floating/dropdown.css",
-        "src/components/form/autocomplete.css",
-        "src/components/form/multi-select.css",
-        "src/components/core/render-on-view.css",
-        "src/components/display/notifications.css",
-        "src/components/floating/command-palette.css",
-        "src/components/core/button.css",
-        "src/components/core/heading.css",
-        "src/components/core/resizable.css",
-        "src/components/display/shortcut.css",
-        "src/components/display/skeleton.css",
-        "src/components/form/free-text.css",
-        "src/components/page-calendar/calendar-header.css",
-        "src/components/page-calendar/day-view.css",
-        "src/components/page-calendar/event-pill.css",
-        "src/components/page-calendar/month-view.css",
-        "src/components/page-calendar/week-view.css",
-        "src/components/table/filter.css",
-        "src/components/table/group.css",
-        "src/components/table/index.css",
-        "src/components/table/inner-table.css",
-        "src/components/table/metadata.css",
-        "src/components/table/pagination.css",
-        "src/components/table/row.css",
-        "src/components/table/sort.css",
-        "src/components/table/thead.css",
-    ],
+    "index.css": ["src/styles/index.css", "src/styles/foundation.css", "src/styles/tokens.css", "src/styles/base.css", ...componentSources],
 };
 
 for (const [file, sources] of Object.entries(entries)) {
-    const cssPath = resolve(root, "dist", file);
+    const cssPath = resolve(root, "dist/css", file);
     if (!existsSync(cssPath)) continue;
 
     const mapFile = `${file}.map`;
+    const mapPath = resolve(root, "dist/css", mapFile);
+    const mapDirectory = dirname(mapPath);
     const css = readFileSync(cssPath, "utf8").replace(/\/\*# sourceMappingURL=.*?\*\/\s*$/u, "");
     const sourceMap = {
         version: 3,
         file,
-        sources,
+        sources: sources.map((source) => toSourcePath(resolve(root, source), mapDirectory)),
         sourcesContent: sources.map((source) => readFileSync(resolve(root, source), "utf8")),
         names: [],
         mappings: "",
     };
 
-    writeFileSync(resolve(root, "dist", mapFile), `${JSON.stringify(sourceMap)}\n`);
+    writeFileSync(mapPath, `${JSON.stringify(sourceMap)}\n`);
     writeFileSync(cssPath, `${css}\n/*# sourceMappingURL=${mapFile} */\n`);
 }

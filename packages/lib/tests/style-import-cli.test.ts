@@ -4,9 +4,10 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 
-const cli = resolve(__dirname, "../bin/g4rcez-components.mjs");
+const cli = resolve(__dirname, "../bin/csscomponents.mjs");
 const manifest = resolve(__dirname, "../ai/component-style-manifest.json");
 
 const createProject = () => {
@@ -24,6 +25,16 @@ export const App = () => <Button>Save</Button>;
 };
 
 describe("csscomponents CLI", () => {
+    it("exports the styles runner without executing the CLI", async () => {
+        const module = await import(pathToFileURL(cli).href);
+
+        expect(module).toMatchObject({
+            detectUsedComponents: expect.any(Function),
+            runStyles: expect.any(Function),
+            updateStylesheet: expect.any(Function),
+        });
+    });
+
     it("auto-detects the stylesheet and writes package CSS imports", () => {
         const root = createProject();
 
@@ -44,7 +55,7 @@ describe("csscomponents CLI", () => {
         mkdirSync(resolve(libraryRoot, "src/styles"), { recursive: true });
         mkdirSync(resolve(libraryRoot, "src/components/core"), { recursive: true });
         writeFileSync(resolve(libraryRoot, "src/styles/foundation.css"), "");
-        writeFileSync(resolve(libraryRoot, "src/styles/index.v6.css"), "");
+        writeFileSync(resolve(libraryRoot, "src/styles/index.css"), "");
         writeFileSync(resolve(libraryRoot, "src/components/core/button.css"), "");
 
         execFileSync(process.execPath, [

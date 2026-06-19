@@ -4,8 +4,8 @@ import { FloatingAction } from "@/components/floating-action";
 import { Footer } from "@/components/footer";
 import { ArrowRightIcon, PaletteIcon, ShieldCheckIcon, LightningIcon } from "@phosphor-icons/react";
 import Link from "next/link";
-import { Button } from "../../../lib/src/components/core/button/button";
-import { Tag } from "../../../lib/src/components/core/tag";
+import { Button } from "@g4rcez/components/button";
+import { Tag } from "@g4rcez/components/tag";
 
 export default function LandingPage() {
     return (
