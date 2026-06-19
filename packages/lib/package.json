@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "5.0.7",
+    "version": "5.0.8-3-beta",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -280,7 +280,7 @@
         "./menu.css": "./dist/css/menu.css",
         "./checkbox.css": "./dist/css/checkbox.css",
         "./radiobox.css": "./dist/css/radiobox.css",
-        "./textarea.css": "./dist/css/textarea.css",
+        "./textarea.css": "./dist/css/input.css",
         "./textarea": {
             "types": "./dist/components/form/textarea.d.ts",
             "import": "./dist/components/form/textarea.mjs",
@@ -337,7 +337,7 @@
         "./tooltip.css": "./dist/css/tooltip.css",
         "./date-picker.css": "./dist/css/date-picker.css",
         "./file-upload.css": "./dist/css/file-upload.css",
-        "./input-field.css": "./dist/css/input-field.css",
+        "./input-field.css": "./dist/css/input.css",
         "./input-field": {
             "types": "./dist/components/form/input-field.d.ts",
             "import": "./dist/components/form/input-field.mjs",
@@ -367,22 +367,27 @@
         "./heading.css": "./dist/css/heading.css",
         "./resizable.css": "./dist/css/resizable.css",
         "./shortcut.css": "./dist/css/shortcut.css",
+        "./shortcut": {
+            "types": "./dist/components/display/shortcut/shortcut.d.ts",
+            "import": "./dist/shortcut.mjs",
+            "default": "./dist/shortcut.mjs"
+        },
         "./skeleton.css": "./dist/css/skeleton.css",
-        "./free-text.css": "./dist/css/free-text.css",
-        "./page-calendar-header.css": "./dist/css/page-calendar-header.css",
-        "./page-calendar-day-view.css": "./dist/css/page-calendar-day-view.css",
-        "./page-calendar-event-pill.css": "./dist/css/page-calendar-event-pill.css",
-        "./page-calendar-month-view.css": "./dist/css/page-calendar-month-view.css",
-        "./page-calendar-week-view.css": "./dist/css/page-calendar-week-view.css",
-        "./table-filter.css": "./dist/css/table-filter.css",
-        "./table-group.css": "./dist/css/table-group.css",
-        "./table-root.css": "./dist/css/table-root.css",
-        "./table-inner-table.css": "./dist/css/table-inner-table.css",
-        "./table-metadata.css": "./dist/css/table-metadata.css",
-        "./table-pagination.css": "./dist/css/table-pagination.css",
-        "./table-row.css": "./dist/css/table-row.css",
-        "./table-sort.css": "./dist/css/table-sort.css",
-        "./table-head.css": "./dist/css/table-head.css"
+        "./free-text.css": "./dist/css/input.css",
+        "./page-calendar-header.css": "./dist/css/page-calendar.css",
+        "./page-calendar-day-view.css": "./dist/css/page-calendar.css",
+        "./page-calendar-event-pill.css": "./dist/css/page-calendar.css",
+        "./page-calendar-month-view.css": "./dist/css/page-calendar.css",
+        "./page-calendar-week-view.css": "./dist/css/page-calendar.css",
+        "./table-filter.css": "./dist/css/table.css",
+        "./table-group.css": "./dist/css/table.css",
+        "./table-root.css": "./dist/css/table.css",
+        "./table-inner-table.css": "./dist/css/table.css",
+        "./table-metadata.css": "./dist/css/table.css",
+        "./table-pagination.css": "./dist/css/table.css",
+        "./table-row.css": "./dist/css/table.css",
+        "./table-sort.css": "./dist/css/table.css",
+        "./table-head.css": "./dist/css/table.css"
     },
     "scripts": {
         "watch": "vite build --watch --minify false",

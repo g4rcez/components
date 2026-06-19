@@ -279,7 +279,7 @@
   },
   "textarea": {
     "import": "@g4rcez/components/textarea",
-    "css": "@g4rcez/components/textarea.css",
+    "css": "@g4rcez/components/input.css",
     "dependencies": [],
     "classes": {
       "base": "__textarea",
@@ -509,7 +509,7 @@
   },
   "input-field": {
     "import": "@g4rcez/components/input-field",
-    "css": "@g4rcez/components/input-field.css",
+    "css": "@g4rcez/components/input.css",
     "dependencies": [
       "polymorph",
       "tooltip"
@@ -722,7 +722,7 @@
   },
   "free-text": {
     "import": "@g4rcez/components/free-text",
-    "css": "@g4rcez/components/free-text.css",
+    "css": "@g4rcez/components/input.css",
     "dependencies": [
       "input-field",
       "polymorph",
@@ -737,7 +737,7 @@
   },
   "page-calendar-header": {
     "import": "@g4rcez/components/page-calendar-header",
-    "css": "@g4rcez/components/page-calendar-header.css",
+    "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button",
       "polymorph",
@@ -756,7 +756,7 @@
   },
   "page-calendar-day-view": {
     "import": "@g4rcez/components/page-calendar-day-view",
-    "css": "@g4rcez/components/page-calendar-day-view.css",
+    "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button",
       "page-calendar-event-pill",
@@ -772,7 +772,7 @@
   },
   "page-calendar-event-pill": {
     "import": "@g4rcez/components/page-calendar-event-pill",
-    "css": "@g4rcez/components/page-calendar-event-pill.css",
+    "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button"
     ],
@@ -785,7 +785,7 @@
   },
   "page-calendar-month-view": {
     "import": "@g4rcez/components/page-calendar-month-view",
-    "css": "@g4rcez/components/page-calendar-month-view.css",
+    "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button",
       "page-calendar-event-pill"
@@ -799,7 +799,7 @@
   },
   "page-calendar-week-view": {
     "import": "@g4rcez/components/page-calendar-week-view",
-    "css": "@g4rcez/components/page-calendar-week-view.css",
+    "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button",
       "page-calendar-event-pill"
@@ -813,7 +813,7 @@
   },
   "table-filter": {
     "import": "@g4rcez/components/table-filter",
-    "css": "@g4rcez/components/table-filter.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
       "input",
@@ -835,7 +835,7 @@
   },
   "table-group": {
     "import": "@g4rcez/components/table-group",
-    "css": "@g4rcez/components/table-group.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "button",
       "dropdown",
@@ -857,7 +857,7 @@
   },
   "table-root": {
     "import": "@g4rcez/components/table-root",
-    "css": "@g4rcez/components/table-root.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "button",
       "dropdown",
@@ -885,7 +885,7 @@
   },
   "table-inner-table": {
     "import": "@g4rcez/components/table-inner-table",
-    "css": "@g4rcez/components/table-inner-table.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
       "empty",
@@ -912,7 +912,7 @@
   },
   "table-metadata": {
     "import": "@g4rcez/components/table-metadata",
-    "css": "@g4rcez/components/table-metadata.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "button",
       "dropdown",
@@ -934,7 +934,7 @@
   },
   "table-pagination": {
     "import": "@g4rcez/components/table-pagination",
-    "css": "@g4rcez/components/table-pagination.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "polymorph"
     ],
@@ -947,7 +947,7 @@
   },
   "table-row": {
     "import": "@g4rcez/components/table-row",
-    "css": "@g4rcez/components/table-row.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [],
     "classes": {
       "base": "__table-row",
@@ -962,7 +962,7 @@
   },
   "table-sort": {
     "import": "@g4rcez/components/table-sort",
-    "css": "@g4rcez/components/table-sort.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
       "input-field",
@@ -984,7 +984,7 @@
   },
   "table-head": {
     "import": "@g4rcez/components/table-head",
-    "css": "@g4rcez/components/table-head.css",
+    "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
       "input",

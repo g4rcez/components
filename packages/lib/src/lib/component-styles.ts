@@ -32,6 +32,7 @@ type ComponentStylesConfig<TName extends string, TVariants extends VariantValues
     };
     slots?: TSlots;
     dependencies?: readonly string[];
+    css?: `@g4rcez/components/${string}.css`;
     compoundVariants?: readonly CompoundVariant<TName, TVariants>[];
 };
 
@@ -40,7 +41,7 @@ type ComponentStyles<TName extends string, TVariants extends VariantValues, TSlo
     "slots"
 > & {
     base: `__${TName}`;
-    css: `@g4rcez/components/${TName}.css`;
+    css: `@g4rcez/components/${string}.css`;
     slotNames: TSlots;
     slots: SlotClassMap<TName, TSlots>;
     classes: {
@@ -79,7 +80,7 @@ const matchesCompound = <TVariants extends VariantValues>(
         return Array.isArray(expected) ? expected.includes(current) : expected === current;
     });
 
-export const defineComponentStyles = <TName extends string, TVariants extends VariantValues, const TSlots extends SlotValues = []>(
+export const defineComponentStyles = <const TName extends string, const TVariants extends VariantValues, const TSlots extends SlotValues = []>(
     config: ComponentStylesConfig<TName, TVariants, TSlots>
 ): ComponentStyles<TName, TVariants, TSlots> => {
     const base = `__${config.name}` as const;
@@ -99,7 +100,7 @@ export const defineComponentStyles = <TName extends string, TVariants extends Va
         dependencies: config.dependencies,
         compoundVariants: config.compoundVariants,
         base,
-        css: `@g4rcez/components/${config.name}.css`,
+        css: (config.css ?? `@g4rcez/components/${config.name}.css`) as `@g4rcez/components/${string}.css`,
         slotNames,
         slots,
         classes: {

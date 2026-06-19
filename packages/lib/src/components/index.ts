@@ -11,6 +11,7 @@ export * from "./display/list/list";
 export * from "./display/masonry/masonry";
 export * from "./display/notifications/notifications";
 export * from "./display/progress/progress";
+export * from "./display/shortcut/shortcut";
 export * from "./display/spinner/spinner";
 export * from "./display/stats/stats";
 export * from "./display/step/step";

@@ -16,10 +16,13 @@ function toPosixPath(path: string) {
 
 async function getComponentEntries(directory: string): Promise<Record<string, string>> {
     const components = await glob(join(directory, "**", "*.tsx"));
-    return components.reduce<Record<string, string>>((acc, el) => {
-        const key = basename(toPosixPath(el), ".tsx");
-        return { ...acc, [key]: el };
-    }, {});
+    const entries = components
+        .toSorted((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+        .reduce<Record<string, string>>((acc, el) => {
+            const key = basename(toPosixPath(el), ".tsx");
+            return { ...acc, [key]: el };
+        }, {});
+    return entries;
 }
 
 export default defineConfig(
@@ -37,13 +40,13 @@ export default defineConfig(
             emptyOutDir: false,
             lib: {
                 entry: {
+                    ...(await getComponentEntries("src/components")),
                     index: "./src/index.ts",
                     "styles/theme": "./src/styles/theme.ts",
+                    "styles/tokens": "./src/styles/tokens.ts",
                     "styles/design-tokens": "./src/styles/design-tokens.ts",
                     "styles/theme-runtime": "./src/styles/theme-runtime.ts",
-                    "styles/tokens": "./src/styles/tokens.ts",
                     "styles/style-manifest": "./src/styles/style-manifest.ts",
-                    ...(await getComponentEntries("src/components")),
                 },
                 formats: ["es"],
             },
