@@ -11,7 +11,6 @@ type Item = {
 
 export default function TimelinePage() {
     const [state, setState] = useState<Item | null>(null);
-
     return (
         <DocsLayout title="Timeline" section="Display" description="View items in sequence of events, like a chronological timeline.">
             <Modal type="drawer" title={state?.name} open={state !== null} onChange={() => setState(null)}>
@@ -114,7 +113,7 @@ function BasicTimeline() {
                             return (
                                 <TimelineItem key={i}>
                                     <TimelineItem.Icon className={i % 2 === 0 ? "bg-warn" : i % 3 === 0 ? "bg-info" : ""}>
-                                        <ClockIcon />
+                                        <ClockIcon size={28} />
                                     </TimelineItem.Icon>
                                     <TimelineItem.Body className="flex flex-col gap-2">
                                         <span className="flex flex-col gap-1">

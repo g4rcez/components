@@ -1,27 +1,29 @@
 .__progress {
-    position: relative;
-    overflow: hidden;
-    inline-size: 100%;
-    block-size: var(--var-progress-track-h);
-    border-radius: var(--var-progress-rounded);
-    background: var(--var-progress-track-background);
+  position: relative;
+  overflow: hidden;
+  inline-size: 100%;
+  block-size: var(--var-progress-track-block-size);
+  border-radius: var(--var-progress-track-radius);
+  background: var(--var-color-background);
 }
 
 .__progress__indicator {
-    block-size: 100%;
-    background: var(--var-progress-indicator-background);
-    transition: width 500ms ease-in-out;
+  block-size: 100%;
+  background: var(--var-color-primary);
+  transition-property: width;
+  transition-duration: var(--var-progress-indicator-transition-duration);
+  transition-timing-function: var(--var-progress-indicator-transition-timing);
 }
 
 .__progress__label {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    inline-size: 100%;
-    margin: 0;
-    color: var(--var-progress-label-foreground);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  margin: 0;
+  color: var(--var-color-primary-foreground);
+  font-weight: var(--var-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
 }

@@ -1,15 +1,16 @@
 "use client";
 import { AnimatePresence } from "motion/react";
-import { ComponentProps, useEffect, useMemo } from "react";
+import { type ComponentProps, useEffect, useMemo } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
-import { FilterConfig } from "./filter";
-import { GroupItem } from "./group";
-import { InnerTable, InnerTableProps } from "./inner-table";
+import type { FilterConfig } from "./filter";
+import type { GroupItem } from "./group";
+import { InnerTable, type InnerTableProps } from "./inner-table";
 import { Metadata } from "./metadata";
-import { Sorter } from "./sort";
-import { Col, createOptionCols, TableGetters, TableOperationProps } from "./table-lib";
-import { TableContextProps, TableProvider } from "./table.context";
+import type { Sorter } from "./sort";
+import { type Col, createOptionCols, type TableGetters, type TableOperationProps } from "./table-lib";
+import { type TableContextProps, TableProvider } from "./table.context";
+import { tableRootStyles } from "./index.styles";
 
 export type TableProps<T extends Record<string, unknown>> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
@@ -128,9 +129,9 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         inlineSorter={props.inlineSorter ?? true}
                     />
                 ) : (
-                    <div className="__table-root__slot-1 __table-root__slot-extra-1">
+                    <div className={tableRootStyles.slots.groups}>
                         {state.groups.map((group, index) => (
-                            <div className="__table-root__slot-2" key={`group-${group.groupId}`}>
+                            <div className={tableRootStyles.slots.group} key={`group-${group.groupId}`}>
                                 <InnerTable
                                     {...props}
                                     group={group}

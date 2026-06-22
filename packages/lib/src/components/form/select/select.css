@@ -53,7 +53,7 @@ fieldset:disabled .__select__field {
 .__select__control {
     flex: 1 1 0%;
     inline-size: 100%;
-    block-size: var(--var-input-height);
+    block-size: var(--var-input-height, var(--input-height));
     appearance: none;
     border: 0;
     border-radius: var(--var-input-rounded, var(--var-button-rounded));

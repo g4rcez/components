@@ -32,14 +32,14 @@ import {
     Timeline,
     TimelineItem,
     Toolbar,
+    Shortcut,
+    Checkbox,
+    Input,
+    Radiobox,
+    Slider,
+    Switch,
+    Skeleton,
 } from "../../../../../lib/src";
-import { Shortcut } from "../../../../../lib/src/components/display/shortcut";
-import { Checkbox } from "../../../../../lib/src/components/form/checkbox";
-import { Input } from "../../../../../lib/src/components/form/input";
-import { Radiobox } from "../../../../../lib/src/components/form/radiobox";
-import { Slider } from "../../../../../lib/src/components/form/slider";
-import { Switch } from "../../../../../lib/src/components/form/switch";
-import { Skeleton } from "../../../../../lib/src/components/display/skeleton";
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
 import {
@@ -250,8 +250,8 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Spinner tokens"
-                    description="--spinner-size, --spinner-border and --spinner-container-p drive the spinner geometry and the Loading wrapper padding."
-                    code={`<div style={{ "--spinner-size": "5rem", "--spinner-border": "0.5rem" }}>
+                    description="--var-spinner-indicator-size, --var-spinner-indicator-border-width and --var-spinner-container-padding drive the spinner geometry and the Loading wrapper padding."
+                    code={`<div style={{ "--var-spinner-indicator-size": "5rem", "--var-spinner-indicator-border-width": "0.5rem" }}>
   <Loading />
 </div>`}
                 >
@@ -301,8 +301,8 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Timeline tokens"
-                    description="Item rhythm, connector width and icon dimensions resolve through --timeline-item-pb, --timeline-connector-w, --timeline-icon-size and --timeline-right-gap."
-                    code={`<div style={{ "--timeline-icon-size": "4rem" }}>
+                    description="Item rhythm, connector placement, connector width and icon dimensions resolve through semantic timeline tokens."
+                    code={`<div style={{ "--timeline-icon-size": "4rem", "--timeline-content-gap": "1rem" }}>
   <Timeline>
     <TimelineItem>Event</TimelineItem>
   </Timeline>
@@ -348,8 +348,8 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Tabs tokens"
-                    description="Tab header rhythm comes from --tabs-item-px, --tabs-item-py and --tabs-header-mb."
-                    code={`<div style={{ "--tabs-item-px": "4rem" }}>
+                    description="Tab header rhythm comes from semantic tab padding, divider, and header margin tokens."
+                    code={`<div style={{ "--tabs-tab-padding-inline": "4rem" }}>
   <Tabs active="one"><Tab id="one" title="One">Content</Tab></Tabs>
 </div>`}
                 >
@@ -460,7 +460,7 @@ export default function DesignTokensPage() {
                 <ComponentDemo
                     title="Page calendar tokens"
                     description="Full-page calendar surface — badges, cells, gutter and pills resolve through the complete --page-calendar-* token group."
-                    code={`<div style={{ "--page-calendar-cell-min-h": "10rem" }}>
+                    code={`<div style={{ "--page-calendar-cell-min-block-size": "10rem" }}>
   <PageCalendar events={events} />
 </div>`}
                 >
@@ -534,18 +534,19 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Modal tokens"
-                    description="Modal surface geometry resolves through --modal-radius, --modal-padding-x, --modal-padding-y and --modal-footer-gap. The demo shows a static surface using the same skin classes."
-                    code={`<div style={{ "--modal-radius": "1rem", "--modal-padding-x": "2.5rem" }}>
+                    description="Modal surface geometry resolves through --modal-surface-radius, --modal-content-padding-inline, --modal-surface-padding-block and --modal-confirm-actions-gap. The demo shows a static surface using the same skin classes."
+                    code={`<div style={{ "--modal-surface-radius": "1rem", "--modal-content-padding-inline": "2.5rem" }}>
   <Modal type="dialog" trigger={<button>Open</button>}>...</Modal>
 </div>`}
                 >
                     <div style={toStyle(modalTokens)} className="flex w-full flex-col items-center gap-6">
-                        <div className="w-full max-w-dialog rounded-modal-radius border border-floating-border bg-floating-background px-modal-padding-x py-modal-padding-y shadow-shadow-floating">
-                            <header className="text-typography-xl pb-modal-title-pb font-semibold">Confirm deployment</header>
-                            <p className="text-typography-sm py-modal-body-py text-muted-foreground">
-                                Override `--modal-radius` and `--modal-padding-x` on a scoped container to reshape every Modal surface.
+                        <div className="w-full max-w-dialog rounded-modal-surface-radius border border-floating-border bg-floating-background px-modal-content-padding-inline py-modal-surface-padding-block shadow-shadow-floating">
+                            <header className="pb-modal-title-padding-block-end text-typography-xl font-semibold">Confirm deployment</header>
+                            <p className="text-typography-sm py-modal-body-padding-block text-muted-foreground">
+                                Override `--modal-surface-radius` and `--modal-content-padding-inline` on a scoped container to reshape every Modal
+                                surface.
                             </p>
-                            <footer className="flex justify-end gap-modal-footer-gap pt-modal-footer-pt">
+                            <footer className="flex justify-end gap-modal-confirm-actions-gap pt-modal-footer-padding-block-start">
                                 <button type="button" className="text-typography-sm rounded-button-radius border border-card-border px-3 py-1.5">
                                     Cancel
                                 </button>
@@ -563,14 +564,14 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Dropdown tokens"
-                    description="Floating dropdown surface uses --dropdown-radius, --dropdown-p and --dropdown-header-mb."
-                    code={`<div style={{ "--dropdown-radius": "0.75rem" }}>
+                    description="Floating dropdown surface uses --dropdown-surface-radius, --dropdown-surface-padding and --dropdown-header-margin-block-end."
+                    code={`<div style={{ "--dropdown-surface-radius": "0.75rem" }}>
   <Dropdown header="Header">...</Dropdown>
 </div>`}
                 >
                     <div style={toStyle(dropdownTokens)} className="flex w-full flex-col items-center gap-6">
-                        <div className="w-full max-w-xs rounded-dropdown-radius border border-floating-border bg-floating-background p-dropdown-p shadow-shadow-floating">
-                            <header className="text-typography-sm mb-dropdown-header-mb font-semibold">Account</header>
+                        <div className="w-full max-w-xs rounded-dropdown-surface-radius border border-dropdown-surface-border bg-dropdown-surface-background p-dropdown-surface-padding text-dropdown-surface-foreground shadow-shadow-floating">
+                            <header className="text-typography-sm mb-dropdown-header-margin-block-end font-semibold">Account</header>
                             <ul className="text-typography-sm flex flex-col gap-1">
                                 <li>Profile</li>
                                 <li>Workspace settings</li>
@@ -583,13 +584,13 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Tooltip tokens"
-                    description="Tooltip surface resolves through --tooltip-radius and --tooltip-p."
-                    code={`<div style={{ "--tooltip-radius": "0.75rem", "--tooltip-p": "1rem" }}>
+                    description="Tooltip surface resolves through --tooltip-surface-radius and --tooltip-surface-padding."
+                    code={`<div style={{ "--tooltip-surface-radius": "0.75rem", "--tooltip-surface-padding": "1rem" }}>
   <Tooltip title="Tip">Hover me</Tooltip>
 </div>`}
                 >
                     <div style={toStyle(tooltipTokens)} className="flex w-full flex-col items-center gap-6">
-                        <div className="rounded-tooltip-radius bg-tooltip-background p-tooltip-p text-tooltip-foreground shadow-shadow-floating">
+                        <div className="rounded-tooltip-surface-radius bg-tooltip-surface-background p-tooltip-surface-padding text-tooltip-surface-foreground shadow-shadow-floating">
                             <p className="text-typography-sm">Override the tokens to reshape every tooltip.</p>
                         </div>
                         <Controls tokens={tooltipTokens} onChange={setTooltipTokens} />
@@ -598,17 +599,23 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Menu tokens"
-                    description="Floating Menu surface uses --menu-radius and --menu-item-p."
-                    code={`<div style={{ "--menu-radius": "1rem" }}>
+                    description="Floating Menu surface uses --menu-surface-radius and --menu-item-padding."
+                    code={`<div style={{ "--menu-surface-radius": "1rem" }}>
   <Menu options={[{ label: "Item" }]}>Open</Menu>
 </div>`}
                 >
                     <div style={toStyle(menuTokens)} className="flex w-full flex-col items-center gap-6">
-                        <div className="w-full max-w-xs rounded-menu-radius border border-floating-border bg-floating-background shadow-shadow-floating">
+                        <div className="w-full max-w-xs rounded-menu-surface-radius border border-menu-surface-border bg-menu-surface-background text-menu-surface-foreground shadow-shadow-floating">
                             <ul className="flex flex-col">
-                                <li className="text-typography-sm p-menu-item-p hover:bg-floating-hover">Duplicate</li>
-                                <li className="text-typography-sm p-menu-item-p hover:bg-floating-hover">Archive</li>
-                                <li className="text-typography-sm p-menu-item-p text-danger hover:bg-floating-hover">Delete</li>
+                                <li className="text-typography-sm p-menu-item-padding hover:bg-menu-item-active-background hover:text-menu-item-active-foreground">
+                                    Duplicate
+                                </li>
+                                <li className="text-typography-sm p-menu-item-padding hover:bg-menu-item-active-background hover:text-menu-item-active-foreground">
+                                    Archive
+                                </li>
+                                <li className="text-typography-sm p-menu-item-padding text-danger hover:bg-menu-item-active-background hover:text-menu-item-active-foreground">
+                                    Delete
+                                </li>
                             </ul>
                         </div>
                         <Controls tokens={menuTokens} onChange={setMenuTokens} />
@@ -678,13 +685,13 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Table tokens"
-                    description="Table geometry resolves through --table-radius, --table-cell-px, --table-cell-padding and --table-row-gap."
-                    code={`<div style={{ "--table-radius": "1rem" }}>
+                    description="Table geometry resolves through semantic table radius, cell padding, row rhythm, metadata and pagination tokens."
+                    code={`<div style={{ "--table-rounded": "1rem", "--table-cell-padding": "1rem" }}>
   <Table cols={cols} rows={rows} />
 </div>`}
                 >
                     <div style={toStyle(tableTokens)} className={tokenStackClassName}>
-                        <div className="overflow-hidden rounded-table-radius border border-table-border bg-table-background shadow-shadow-table">
+                        <div className="overflow-hidden rounded-table-rounded border border-table-border bg-table-background shadow-shadow-table">
                             <table className="w-full border-collapse">
                                 <thead className="bg-table-header">
                                     <tr>
@@ -695,14 +702,14 @@ export default function DesignTokensPage() {
                                 </thead>
                                 <tbody>
                                     <tr className="border-t border-table-border">
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Fulano</td>
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Owner</td>
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Active</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-padding-inline">Fulano</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-padding-inline">Owner</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-padding-inline">Active</td>
                                     </tr>
                                     <tr className="border-t border-table-border">
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Ciclano</td>
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Member</td>
-                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-px">Invited</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-padding-inline">Ciclano</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-padding-inline">Member</td>
+                                        <td className="text-typography-sm p-table-cell-padding px-table-cell-padding-inline">Invited</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -771,8 +778,8 @@ export default function DesignTokensPage() {
 
                 <ComponentDemo
                     title="Tag tokens"
-                    description="Tag size variants are token-backed: --tag-height(-big/-small/-tiny), matching padding, gap, radius and indicator size all respond to scoped overrides."
-                    code={`<div style={{ "--tag-height": "3rem", "--tag-padding-x": "1.5rem" }}>
+                    description="Tag size variants are token-backed by semantic surface, padding, typography and indicator tokens that respond to scoped overrides."
+                    code={`<div style={{ "--tag-default-min-block-size": "3rem", "--tag-default-padding-inline": "1.5rem" }}>
   <Tag>Default</Tag>
 </div>`}
                 >

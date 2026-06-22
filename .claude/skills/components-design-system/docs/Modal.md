@@ -243,8 +243,8 @@ function DeleteButton() {
 ## Don't
 
 - Don't pass custom `z-*`, `rounded-*`, or `p-*` overrides directly — use `type` to control layout variants.
-- Don't use raw Tailwind color classes (`bg-blue-500`, `text-white`, `bg-gray-100`) — use design-token classes.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
+- Don't use raw utility color classes (`bg-blue-500`, `text-white`, `bg-gray-100`) — use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
 - Don't use `color-mix()` in `className` or `style` props.
 - Don't nest modals inside each other — it creates broken focus and z-index behavior.
 - Don't hide a modal's only close affordance (`closable={false}`) without providing another way to close.

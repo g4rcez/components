@@ -29,16 +29,10 @@ import React, { createContext, Fragment, useContext, useEffect, useRef, useState
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../../constants";
 import { css, mergeRefs } from "../../../lib/dom";
 import type { Override } from "../../../types";
+import { menuStyles } from "./menu.styles";
 
-const menuItemClassName = (highlight: string = "") =>
-    css(
-        "__floating-menu__slot-1",
-        "aria-expanded:opacity-80 __floating-menu__slot-2",
-        "__floating-menu__slot-3",
-        "first-of-type:rounded-t-menu-radius last-of-type:rounded-b-menu-radius",
-        "__floating-menu__slot-4",
-        highlight
-    );
+const menuItemActiveClassName = `${menuStyles.slots.item}--active`;
+const menuItemClassName = (highlight: string = "") => css(menuStyles.slots.item, highlight);
 
 type FloatingInteractionPropsGetter = ReturnType<typeof useInteractions>["getItemProps"];
 
@@ -210,9 +204,9 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                         >
                             {label}
                             {isNested && (
-                                <span className="__menu__nested-indicator">
-                                    <span className="__menu__sr-label">Next menu</span>
-                                    <CaretRightIcon className="__menu__nested-icon" />
+                                <span className={menuStyles.slots["nested-indicator"]}>
+                                    <span className={menuStyles.slots["sr-label"]}>Next menu</span>
+                                    <CaretRightIcon className={menuStyles.slots["nested-icon"]} />
                                 </span>
                             )}
                         </button>
@@ -240,10 +234,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                         {...getFloatingProps()}
                                         ref={refs.setFloating}
                                         style={{ ...props.style, ...floatingStyles }}
-                                        className={css(
-                                            "__floating-menu__border __floating-menu__slot-5 __floating-menu__slot-extra-1",
-                                            floatingClassName
-                                        )}
+                                        className={css(menuStyles.slots.floating, floatingClassName)}
                                     >
                                         {children}
                                     </FloatingComponent>
@@ -276,7 +267,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 data-open={menu.isOpen}
                 tabIndex={isActive ? 0 : -1}
                 ref={mergeRefs(item.ref, forwardedRef)}
-                className={menuItemClassName(`${props.className ?? ""} ${isActive ? "__floating-menu__slot-6" : ""}`)}
+                className={menuItemClassName(css(props.className, isActive ? menuItemActiveClassName : undefined))}
                 {...menu.getItemProps({
                     onClick(event: React.MouseEvent<HTMLButtonElement>) {
                         props.onClick?.(event);
@@ -289,7 +280,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 })}
             >
                 {children}
-                {Right ? <Right className="__menu__item-icon" /> : null}
+                {Right ? <Right className={menuStyles.slots["item-icon"]} /> : null}
             </button>
         );
     }

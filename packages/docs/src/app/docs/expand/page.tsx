@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { QuestionIcon } from "@phosphor-icons/react";
-import { Card, Expand, Tag } from "../../../../../lib/src";
+import { Card, Expand, Tag } from "@g4rcez/components";
 
 export default function ExpandPage() {
     return (

@@ -1,53 +1,28 @@
 "use client";
 import { CheckCircleIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
-import { type HTMLMotionProps, motion, type Transition } from "motion/react";
 import type React from "react";
-import { forwardRef, type PropsWithChildren } from "react";
+import { forwardRef } from "react";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import type { CvaVariants } from "../../../types";
 import { Polymorph, type PolymorphicProps } from "../../core/polymorph/polymorph";
-import { Resizable } from "../../core/resizable/resizable";
-
-const transition: Transition = {
-    type: "tween",
-    duration: 0.35,
-    ease: [0.04, 0.62, 0.23, 0.98],
-};
-
-type CollapseProps = HTMLMotionProps<"section"> & { open: boolean };
-
-export const Collapse = (props: PropsWithChildren<CollapseProps>) => (
-    <motion.div
-        {...(props as unknown as HTMLMotionProps<"div">)}
-        initial={false}
-        animate={{ opacity: props.open ? 1 : 0 }}
-        transition={transition}
-        aria-hidden={!props.open}
-        data-component="collapse"
-        className={css("__display-alert__collapse", props.className)}
-    >
-        <Resizable open={props.open} destroyOnUnmount>
-            {props.children}
-        </Resizable>
-    </motion.div>
-);
+import { Collapse } from "../collapse/collapse";
 
 const themeVariants = {
     theme: {
-        primary: "__display-alert--theme-primary",
-        danger: "__display-alert--theme-danger",
-        info: "__display-alert--theme-info",
-        success: "__display-alert--theme-success",
-        secondary: "__display-alert--theme-secondary",
-        warn: "__display-alert--theme-warn",
-        muted: "__display-alert--theme-muted",
-        neutral: "__display-alert--theme-neutral",
+        primary: "__alert--theme-primary",
+        danger: "__alert--theme-danger",
+        info: "__alert--theme-info",
+        success: "__alert--theme-success",
+        secondary: "__alert--theme-secondary",
+        warn: "__alert--theme-warn",
+        muted: "__alert--theme-muted",
+        neutral: "__alert--theme-neutral",
     },
 };
 
-const alertVariants = cva("__display-alert__border __display-alert__slot-1", {
+const alertVariants = cva("__alert", {
     variants: themeVariants,
     defaultVariants: { theme: "neutral" },
 });
@@ -76,7 +51,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
             data-open={!!open}
             aria-hidden={!open}
             data-component="alert"
-            className={css("__display-alert__slot-2", open ? "__display-alert__slot-3" : "__display-alert__slot-4")}
+            className={css("__alert__container", open ? "__alert__container--open" : "__alert__container--closed")}
         >
             <Collapse open={!!open}>
                 <Polymorph
@@ -87,24 +62,20 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                     as={props.as || "div"}
                     className={css(alertVariants({ theme }), className)}
                 >
-                    <div className="__display-alert__slot-5 __display-alert__slot-extra-1">
+                    <div className="__alert__content">
                         {onClose !== undefined ? (
-                            <button type="button" onClick={close} aria-label={t.closeButton} className="__display-alert__slot-6">
+                            <button type="button" onClick={close} aria-label={t.closeButton} className="__alert__close-button">
                                 <XIcon aria-hidden="true" className="__alert__close-icon" />
                             </button>
                         ) : null}
-                        <div className="__display-alert__slot-7">
+                        <div className="__alert__header">
                             {!Icon && theme === "success" ? <CheckCircleIcon aria-hidden="true" className="__alert__icon" /> : null}
                             {!Icon && theme === "info" ? <InfoIcon aria-hidden="true" className="__alert__icon" /> : null}
                             {!Icon && theme === "danger" ? <WarningIcon aria-hidden="true" className="__alert__icon" /> : null}
                             {Icon}
-                            {props.title ? (
-                                <h4 className="__display-alert__slot-8">{props.title}</h4>
-                            ) : (
-                                <div className="__display-alert__slot-9">{props.children}</div>
-                            )}
+                            {props.title ? <h4 className="__alert__title">{props.title}</h4> : <div className="__alert__body">{props.children}</div>}
                         </div>
-                        {props.title ? <div className="__display-alert__slot-9">{props.children}</div> : null}
+                        {props.title ? <div className="__alert__body">{props.children}</div> : null}
                     </div>
                 </Polymorph>
             </Collapse>

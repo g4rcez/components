@@ -4,6 +4,6 @@ export const masonryStyles = defineComponentStyles({
     name: "masonry",
     variants: {},
     defaults: {},
-    slots: [],
+    slots: ["item"],
     dependencies: ["polymorph"],
 });

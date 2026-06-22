@@ -1,18 +1,19 @@
 import { CommandIcon, OptionIcon } from "@phosphor-icons/react";
 import { Fragment } from "react";
 import { isMac } from "../../../lib/combi-keys";
+import { shortcutStyles } from "./shortcut.styles";
 
 const remap = (x: string) => {
     x = x.trim();
-    if (x === "Alt") return isMac() ? <OptionIcon aria-label="Option" className="__shortcut__icon" /> : "Alt";
-    if (x === "Mod") return isMac() ? <CommandIcon aria-label="Command" className="__shortcut__icon" /> : "Ctrl";
+    if (x === "Alt") return isMac() ? <OptionIcon aria-label="Option" className={shortcutStyles.slots.icon} /> : "Alt";
+    if (x === "Mod") return isMac() ? <CommandIcon aria-label="Command" className={shortcutStyles.slots.icon} /> : "Ctrl";
     return x;
 };
 
 export const Shortcut = (props: { value: string }) => {
     const p = props.value.trim().split("+");
     return (
-        <span className="__display-shortcut__slot-1">
+        <span className={shortcutStyles.className({})}>
             {p.map((x, i) => {
                 const isLast = p.length - 1 === i;
                 return (

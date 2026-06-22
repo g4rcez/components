@@ -2,6 +2,13 @@ import { defineComponentStyles } from "../../../lib/component-styles";
 
 export const buttonStyles = defineComponentStyles({
     name: "button",
+    slots: ["icon"],
+    dependencies: [],
+    defaults: {
+        size: "default",
+        theme: "primary",
+        rounded: "default",
+    },
     variants: {
         size: ["icon", "big", "default", "min", "tiny", "small"],
         rounded: ["rough", "squared", "default", "circle"],
@@ -29,11 +36,4 @@ export const buttonStyles = defineComponentStyles({
             "ghost-neutral",
         ],
     },
-    defaults: {
-        theme: "main",
-        size: "default",
-        rounded: "default",
-    },
-    slots: ["icon"],
-    dependencies: [],
 });

@@ -5,6 +5,6 @@ export const tableRowStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/table.css",
     defaults: {},
-    slots: ["aside", "cell", "cell-content"],
+    slots: ["aside", "aside-overlay", "aside-content", "cell", "cell-label", "cell-frame", "cell-content"],
     dependencies: [],
 });

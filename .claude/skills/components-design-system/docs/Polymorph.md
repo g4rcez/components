@@ -120,8 +120,8 @@ const Card = <T extends React.ElementType = "div">({ as, variant = "default", cl
 ## Don't
 
 - Don't use `Polymorph` when the element type is fixed and will never change — use the native element directly
-- Don't pass raw Tailwind color classes (`text-gray-800`, `bg-blue-500`) when building styled wrappers
-- Don't use arbitrary Tailwind values (`text-[#333]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`text-gray-800`, `bg-blue-500`) when building styled wrappers
+- Don't use arbitrary utility values (`text-[#333]`) — override CSS variables in your `@theme` block
 - Don't pass props that are invalid for the target element (TypeScript will flag these at compile time)
 
 ## Accessibility

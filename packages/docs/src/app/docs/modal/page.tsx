@@ -1,8 +1,8 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import React, { Fragment, useState } from "react";
-import { Autocomplete, Button, DatePicker, Modal, Tooltip, uuid } from "../../../../../lib/src";
+import { Fragment, useState } from "react";
+import { Autocomplete, Button, DatePicker, Modal, Tooltip, uuid } from "@g4rcez/components";
 
 const ItemContent = () => (
     <Fragment>

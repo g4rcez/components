@@ -1,5 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useTranslations } from "../../hooks/use-translations";
+import { pageCalendarStyles } from "./page-calendar.styles";
 import type { CalendarEvent, CalendarEventBase, CalendarFilter, ViewMode } from "./page-calendar.types";
 import { groupEventsByDate, getMonthDays, getWeekDays } from "./page-calendar.utils";
 import { CalendarHeader } from "./calendar-header";
@@ -67,11 +68,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     };
 
     return (
-        <section
-            aria-label={t.pageCalendarLabel}
-            data-component="page-calendar"
-            className="__page-calendar-page-calendar__slot-1 __page-calendar-page-calendar__slot-extra-1"
-        >
+        <section aria-label={t.pageCalendarLabel} data-component="page-calendar" className={pageCalendarStyles.className({})}>
             <CalendarHeader
                 filters={internalFilters}
                 filterArea={filterArea}

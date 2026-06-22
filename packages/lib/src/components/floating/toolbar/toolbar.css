@@ -4,16 +4,16 @@
 
 .__floating-toolbar__slot-1 {
   position: sticky;
-  bottom: var(--toolbar-bottom);
+  bottom: var(--var-toolbar-bottom, var(--toolbar-bottom));
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--toolbar-radius);
+  border-radius: var(--var-toolbar-rounded, var(--toolbar-radius));
   --tw-border-opacity: 1;
   border-color: hsla(var(--card-border), var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: hsla(var(--background), var(--tw-bg-opacity));
-  padding: var(--toolbar-p)
+  padding: var(--var-toolbar-p, var(--toolbar-p))
 }
 .__floating-toolbar__border {
   border-width: 1px

@@ -4,6 +4,6 @@ export const alertStyles = defineComponentStyles({
     name: "alert",
     variants: {},
     defaults: {},
-    slots: ["icon", "close-icon"],
+    slots: ["container", "collapse", "content", "close-button", "close-icon", "header", "icon", "title", "body"],
     dependencies: ["polymorph"],
 });

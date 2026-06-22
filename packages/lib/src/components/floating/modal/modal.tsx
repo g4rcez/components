@@ -12,7 +12,6 @@ import {
     useRole,
 } from "@floating-ui/react";
 import { XIcon } from "@phosphor-icons/react";
-import { cva } from "class-variance-authority";
 import {
     animate,
     AnimatePresence,
@@ -43,6 +42,7 @@ import { css } from "../../../lib/dom";
 import type { Label, Nil, Override } from "../../../types";
 import { Button, type ButtonProps } from "../../core/button/button";
 import { Slot } from "../../core/slot/slot";
+import { modalStyles } from "./modal.styles";
 
 type AnimationLabels = "initial" | "enter" | "exit";
 
@@ -107,22 +107,6 @@ const animations: Animations = {
         },
     },
 };
-
-const variants = cva("__floating-modal__border __floating-modal__slot-1 __floating-modal__slot-extra-1", {
-    variants: {
-        type: {
-            drawer: "__floating-modal__slot-2",
-            dialog: "container __floating-modal__slot-3",
-            sheet: "__floating-modal__slot-4",
-        },
-        position: {
-            none: "",
-            right: "__floating-modal__slot-5",
-            left: "__floating-modal__slot-6",
-        },
-    },
-    defaultVariants: { position: "right", type: "dialog" },
-});
 
 type ModalAccessibleNameProps = { title: Label; ariaTitle?: string } | { ariaTitle: string; title?: Label };
 
@@ -262,12 +246,16 @@ const Draggable = (props: DraggableProps) => {
             aria-describedby={props.instructionsId}
             aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
             className={css(
-                "__floating-modal__slot-7",
-                props.sheet ? "__floating-modal__slot-8" : "__floating-modal__slot-9",
-                props.sheet ? "__floating-modal__slot-10" : props.position === "left" ? "__floating-modal__slot-11" : "__floating-modal__slot-12"
+                modalStyles.slots.resizer,
+                props.sheet ? `${modalStyles.slots.resizer}--sheet` : `${modalStyles.slots.resizer}--drawer`,
+                props.sheet
+                    ? `${modalStyles.slots.resizer}--sheet-handle`
+                    : props.position === "left"
+                      ? `${modalStyles.slots.resizer}--drawer-left`
+                      : `${modalStyles.slots.resizer}--drawer-right`
             )}
         >
-            {props.sheet ? <div className="__floating-modal__slot-13" /> : null}
+            {props.sheet ? <div className={modalStyles.slots["sheet-pill"]} /> : null}
         </motion.button>
     );
 };
@@ -454,8 +442,8 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                     lockScroll
                                     data-component="overlay"
                                     className={css(
-                                        "__floating-modal__slot-14",
-                                        type === "drawer" ? "" : "__floating-modal__slot-15",
+                                        modalStyles.slots.overlay,
+                                        type === "drawer" ? "" : `${modalStyles.slots.overlay}--centered`,
                                         overlayClassName
                                     )}
                                 >
@@ -472,7 +460,12 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 {...interactions.getFloatingProps({
                                                     id: modalId,
                                                     "aria-modal": open,
-                                                    className: css(variants({ position, type }), className, "__floating-modal__slot-16"),
+                                                    className: css(
+                                                        modalStyles.className({ position, type }),
+                                                        type === "dialog" ? "container" : undefined,
+                                                        className,
+                                                        modalStyles.slots.content
+                                                    ),
                                                 })}
                                                 ref={setModalRef}
                                                 {...(title ? { "aria-labelledby": headingId } : { "aria-label": ariaTitle })}
@@ -488,7 +481,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                             >
                                                 {useResizer && resizer ? (
                                                     <>
-                                                        <span id={resizeDescriptionId} className="__floating-modal__slot-17">
+                                                        <span id={resizeDescriptionId} className={modalStyles.slots["sr-description"]}>
                                                             {t.dialogResizeInstructions}
                                                         </span>
                                                         <Draggable
@@ -503,23 +496,23 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     </>
                                                 ) : null}
                                                 {title ? (
-                                                    <motion.header {...draggableMotionProps} className="__floating-modal__slot-18">
+                                                    <motion.header {...draggableMotionProps} className={modalStyles.slots.header}>
                                                         {title ? (
-                                                            <h2 id={headingId} className="__floating-modal__slot-19">
+                                                            <h2 id={headingId} className={modalStyles.slots.title}>
                                                                 {title}
                                                             </h2>
                                                         ) : null}
                                                     </motion.header>
                                                 ) : null}
                                                 {ariaDescription ? (
-                                                    <span id={descriptionId} className="__floating-modal__slot-17">
+                                                    <span id={descriptionId} className={modalStyles.slots["sr-description"]}>
                                                         {ariaDescription}
                                                     </span>
                                                 ) : null}
                                                 <motion.section
                                                     ref={innerContent}
                                                     data-component="modal-body"
-                                                    className={css("__floating-modal__slot-20", bodyClassName)}
+                                                    className={css(modalStyles.slots.body, bodyClassName)}
                                                     onTouchEnd={async () => {
                                                         scroll.set(undefined);
                                                         scrollInitial.set(undefined);
@@ -573,16 +566,16 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 >
                                                     {children}
                                                 </motion.section>
-                                                {footer ? <footer className="__floating-modal__slot-21">{footer}</footer> : null}
+                                                {footer ? <footer className={modalStyles.slots.footer}>{footer}</footer> : null}
                                                 {closable ? (
-                                                    <div className="__floating-modal__slot-22">
+                                                    <div className={modalStyles.slots["close-control"]}>
                                                         <button
                                                             type="button"
                                                             onClick={onClose}
                                                             aria-label={t.closeButton}
-                                                            className="__floating-modal__slot-23"
+                                                            className={modalStyles.slots["close-button"]}
                                                         >
-                                                            <XIcon aria-hidden="true" className="__modal__close-icon" />
+                                                            <XIcon aria-hidden="true" className={modalStyles.slots["close-icon"]} />
                                                         </button>
                                                     </div>
                                                 ) : null}
@@ -670,9 +663,9 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                 ariaDescription={typeof options.description === "string" ? options.description : undefined}
                 overlayClickClose={false}
                 title={options.title || translations.modalConfirmTitle}
-                className="container __floating-modal__slot-24"
+                className={css("container", modalStyles.slots["confirm-dialog"])}
                 footer={
-                    <div className="__floating-modal__slot-25">
+                    <div className={modalStyles.slots["confirm-actions"]}>
                         <Button theme={options.cancel?.theme || "ghost-muted"} onClick={onCancel}>
                             {options.cancel?.text || translations.modalConfirmCancel}
                         </Button>
@@ -682,7 +675,7 @@ export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }
                     </div>
                 }
             >
-                <div className="__floating-modal__slot-26">{options.description}</div>
+                <div className={modalStyles.slots["confirm-description"]}>{options.description}</div>
             </Modal>
         </ConfirmContext.Provider>
     );

@@ -10,17 +10,17 @@
 
 .__slider__thumb {
   display: block;
-  width: var(--slider-thumb-size);
-  height: var(--slider-thumb-size);
+  width: var(--var-slider-thumb-size, var(--slider-thumb-size));
+  height: var(--var-slider-thumb-size, var(--slider-thumb-size));
   cursor: grab;
-  border-radius: var(--full);
+  border-radius: var(--var-rounded-full, var(--full));
   border-width: 2px;
   --tw-border-opacity: 1;
   border-color: hsla(var(--input-border), var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: hsla(var(--input-switch), var(--tw-bg-opacity));
-  --tw-shadow: var(--shadow-floating);
-  --tw-shadow-colored: var(--shadow-floating);
+  --tw-shadow: var(--var-shadow-floating, var(--shadow-floating));
+  --tw-shadow-colored: var(--var-shadow-floating, var(--shadow-floating));
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
 }
 
@@ -36,7 +36,7 @@
 .__slider__control {
   position: relative;
   display: flex;
-  height: var(--slider-control-h);
+  height: var(--var-slider-control-h, var(--slider-control-h));
   width: 100%;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -46,9 +46,9 @@
 
 .__slider__track {
   position: relative;
-  height: var(--slider-track-h);
+  height: var(--var-slider-track-h, var(--slider-track-h));
   flex-grow: 1;
-  border-radius: var(--full);
+  border-radius: var(--var-rounded-full, var(--full));
   --tw-bg-opacity: 1;
   background-color: hsla(var(--background), var(--tw-bg-opacity))
 }
@@ -56,7 +56,7 @@
 .__slider__indicator {
   position: absolute;
   height: 100%;
-  border-radius: var(--full);
+  border-radius: var(--var-rounded-full, var(--full));
   --tw-bg-opacity: 1;
   background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
 }

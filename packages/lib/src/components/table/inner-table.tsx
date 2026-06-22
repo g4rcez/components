@@ -1,22 +1,24 @@
-import Linq from "linq-arrays";
 import type { Symbols } from "linq-arrays";
+import Linq from "linq-arrays";
 import { AnimatePresence } from "motion/react";
 import React, { type ComponentProps, type CSSProperties, Fragment, type HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
 import { type ContextProp, type ItemProps, type TableBodyProps, type TableComponents, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
+import { useTableTweaks, useTweaks } from "../../hooks/use-tweaks";
+import { css } from "../../lib/dom";
+import type { Any } from "../../types";
 import { Empty } from "../display/empty/empty";
 import { SkeletonCell } from "../display/skeleton/skeleton";
 import type { OptionProps } from "../form/select/select";
 import type { FilterConfig } from "./filter";
 import type { GroupItem } from "./group";
+import { tableInnerTableStyles } from "./inner-table.styles";
 import { Pagination } from "./pagination";
 import { Row } from "./row";
 import { multiSort, type Sorter } from "./sort";
 import type { CellAsideElement, Col, TableOperationProps } from "./table-lib";
-import { useTable } from "./table.context";
 import { TableHeader } from "./thead";
-import type { Any } from "../../types";
 
 type VirtuosoCtx = {
     cols: Col<Record<string, unknown>>[];
@@ -52,7 +54,7 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & ContextProp<unknown>>(
     ({ context: _context, className = "", ...props }, ref) => (
-        <tbody {...props} role="rowgroup" className={`__table-inner-table__body ${className}`} ref={ref}>
+        <tbody {...props} role="rowgroup" className={css(tableInnerTableStyles.slots.body, className)} ref={ref}>
             <AnimatePresence>{props.children}</AnimatePresence>
         </tbody>
     )
@@ -61,24 +63,20 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & Con
 type VirtualTableProps = Pick<React.ComponentProps<"table">, "children" | "style" | "className"> & ContextProp<unknown>;
 
 const VirtualTable = React.forwardRef<HTMLTableElement, VirtualTableProps>(({ context: _context, className = "", ...props }, ref) => (
-    <table
-        {...props}
-        role="table"
-        ref={ref}
-        style={{ ...props.style, "--table-cell-padding": "0.75rem" } as CSSProperties}
-        className={`table __table-inner-table__slot-1 ${className ?? ""}`}
-    />
+    <table {...props} role="table" ref={ref} style={props.style as CSSProperties} className={css(tableInnerTableStyles.slots.table, className)} />
 ));
 
-type TheadProps = Pick<React.ComponentProps<"thead">, "children" | "style"> & ContextProp<unknown>;
+type TheadProps = Pick<React.ComponentProps<"thead">, "children" | "style"> & ContextProp<{ sticky?: number }>;
 
-const Thead = React.forwardRef<HTMLTableSectionElement, TheadProps>(({ context: _context, ...props }, ref) => {
-    const ctx = useTable();
-    const style = {
+const Thead = React.forwardRef<HTMLTableSectionElement, TheadProps>(({ context, ...props }, ref) => {
+    const stickyOffset = Is.number(context.sticky) ? `${context.sticky}px` : undefined;
+    console.log(context);
+    const style: CSSProperties = {
         ...props.style,
-        top: Is.number(ctx.sticky) ? `${ctx.sticky}px` : undefined,
+        top: stickyOffset,
+        insetBlockStart: stickyOffset,
     };
-    return <thead {...props} ref={ref} style={style} role="rowgroup" className="group:sticky __table-inner-table__slot-2" />;
+    return <thead {...props} ref={ref} style={style} role="rowgroup" className={tableInnerTableStyles.slots.head} />;
 });
 
 type TRowProps = ItemProps<VirtuosoData> & ContextProp<VirtuosoCtx> & { className?: string };
@@ -91,7 +89,7 @@ const TRow = React.forwardRef<HTMLTableRowElement, TRowProps>(({ context, item, 
             {...(innerProps as React.HTMLAttributes<HTMLTableRowElement>)}
             role="row"
             ref={ref}
-            className={`__table-inner-table__row __table-inner-table__slot-3 __table-inner-table__slot-extra-1 ${[className, contextProps?.className].filter(Boolean).join(" ")}`}
+            className={css(tableInnerTableStyles.slots.row, className, contextProps?.className)}
         />
     );
 });
@@ -101,10 +99,10 @@ type TFootProps = Pick<React.ComponentProps<"tfoot">, "children" | "style"> & Co
 const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, ...props }, ref) => {
     if (context?.loadingMore) {
         return (
-            <tfoot {...props} ref={ref} className="__table-inner-table__slot-4">
-                <tr role="row" className="__table-inner-table__slot-4">
-                    <td colSpan={999} className="__table-inner-table__slot-5">
-                        <span className="__table-inner-table__slot-6" />
+            <tfoot {...props} ref={ref} className={tableInnerTableStyles.slots.footer}>
+                <tr role="row" className={tableInnerTableStyles.slots["footer-row"]}>
+                    <td colSpan={999} className={tableInnerTableStyles.slots["loading-cell"]}>
+                        <span className={tableInnerTableStyles.slots["loading-bar"]} />
                     </td>
                 </tr>
             </tfoot>
@@ -115,15 +113,17 @@ const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, 
 
 const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
     TableRow: TRow,
+    Table: VirtualTable,
     TableFoot: TFoot as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableFoot"],
     TableHead: Thead as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableHead"],
-    Table: VirtualTable,
     TableBody: TableBody as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableBody"],
 };
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-const EmptyContent = (props: { loading?: boolean }) => <div className="__table-inner-table__slot-7">{props.loading ? SkeletonCell : <Empty />}</div>;
+const EmptyContent = (props: { loading?: boolean }) => (
+    <div className={tableInnerTableStyles.slots.empty}>{props.loading ? SkeletonCell : <Empty />}</div>
+);
 
 const EmptyCell = () => <Fragment />;
 
@@ -143,6 +143,9 @@ export const InnerTable = <T extends Record<string, unknown>>({
     ...props
 }: InnerTableProps<T>) => {
     const ref = useRef<HTMLDivElement | null>(null);
+    const t = useTweaks();
+    const tweaks = useTableTweaks();
+    console.log({ t, tweaks });
     const [, setShowLoadingFooter] = useState(false);
     const onScrollEndRef = useStableRef(onScrollEnd);
     const loadingMoreRef = useStableRef(props.loadingMore);
@@ -181,19 +184,20 @@ export const InnerTable = <T extends Record<string, unknown>>({
     const context = {
         cols: cols,
         Aside: props.Aside,
+        sticky: tweaks.sticky,
         loading: props.loading,
         getRowProps: props.getRowProps,
         loadingMore: props.loadingMore,
     };
 
     return (
-        <div className="__table-inner-table__slot-8 __table-inner-table__slot-extra-2">
+        <div className={tableInnerTableStyles.slots.viewport}>
             <TableVirtuoso
                 components={components}
-                context={context as VirtuosoCtx}
                 totalCount={rows.length}
-                itemContent={empty ? EmptyCell : Row}
                 data={empty ? emptyRows : rows}
+                context={context as VirtuosoCtx}
+                itemContent={empty ? EmptyCell : Row}
                 useWindowScroll={getScrollRef ? false : true}
                 customScrollParent={getScrollRef ? getScrollRef() : undefined}
                 fixedHeaderContent={() => (
@@ -211,7 +215,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
                 )}
             />
             {empty ? <EmptyContent loading={props.loading} /> : null}
-            <div aria-hidden="true" ref={ref} className="__table-inner-table__slot-9" />
+            <div aria-hidden="true" ref={ref} className={tableInnerTableStyles.slots.sentinel} />
             {pagination !== null ? <Pagination {...pagination} /> : null}
         </div>
     );

@@ -5,6 +5,6 @@ export const tableInnerTableStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/table.css",
     defaults: {},
-    slots: ["body", "row"],
+    slots: ["body", "table", "head", "row", "footer", "footer-row", "loading-cell", "loading-bar", "empty", "viewport", "sentinel"],
     dependencies: ["empty", "table-head", "table-pagination", "table-row"],
 });

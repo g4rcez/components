@@ -12,27 +12,27 @@
     height: 100%;
     align-items: center;
     text-align: left;
-    font-size: var(--typography-sm);
+    font-size: var(--var-typography-sm, var(--typography-sm));
     font-weight: 500;
     --tw-text-opacity: 1;
     color: hsla(var(--secondary-DEFAULT), var(--tw-text-opacity));
 }
 
 .__floating-command-palette__slot-2 {
-    height: var(--command-row-h);
-    padding-left: var(--command-group-px);
-    padding-right: var(--command-group-px);
-    padding-bottom: var(--command-group-pb);
-    padding-top: var(--command-group-pt);
+    height: var(--var-command-row-h, var(--command-row-h));
+    padding-left: var(--var-command-group-px, var(--command-group-px));
+    padding-right: var(--var-command-group-px, var(--command-group-px));
+    padding-bottom: var(--var-command-group-pb, var(--command-group-pb));
+    padding-top: var(--var-command-group-pt, var(--command-group-pt));
 }
 
 .__floating-command-palette__slot-3 {
     display: flex;
-    height: var(--command-row-h);
+    height: var(--var-command-row-h, var(--command-row-h));
     align-items: center;
     justify-content: space-between;
-    border-radius: var(--command-radius);
-    padding: var(--command-item-p);
+    border-radius: var(--var-command-rounded, var(--command-radius));
+    padding: var(--var-command-item-p, var(--command-item-p));
 }
 
 .__floating-command-palette__slot-3:hover {
@@ -48,7 +48,7 @@
 .__floating-command-palette__slot-5 {
     display: flex;
     align-items: center;
-    gap: var(--command-item-gap);
+    gap: var(--var-command-item-gap, var(--command-item-gap));
 }
 
 .__floating-command-palette__slot-6 {
@@ -74,9 +74,9 @@
     position: sticky;
     top: 0px;
     isolation: isolate;
-    z-index: var(--z-floating);
+    z-index: var(--var-layer-floating, var(--z-floating));
     display: flex;
-    height: var(--command-header-h);
+    height: var(--var-command-header-h, var(--command-header-h));
     width: 100%;
     align-items: center;
     overflow: clip;
@@ -89,47 +89,47 @@
 
 .__floating-command-palette__slot-8 {
     display: flex;
-    width: var(--command-icon-size);
-    height: var(--command-icon-size);
+    width: var(--var-command-icon-size, var(--command-icon-size));
+    height: var(--var-command-icon-size, var(--command-icon-size));
     align-items: center;
     justify-content: center;
 }
 
 .__floating-command-palette__slot-9 {
-    height: var(--command-header-h);
+    height: var(--var-command-header-h, var(--command-header-h));
     width: 100%;
     align-items: center;
     background-color: transparent;
-    padding-left: var(--command-input-px);
-    padding-right: var(--command-input-px);
-    padding-top: var(--command-input-py);
-    padding-bottom: var(--command-input-py);
+    padding-left: var(--var-command-input-px, var(--command-input-px));
+    padding-right: var(--var-command-input-px, var(--command-input-px));
+    padding-top: var(--var-command-input-py, var(--command-input-py));
+    padding-bottom: var(--var-command-input-py, var(--command-input-py));
     text-align: left;
-    font-size: var(--typography-lg);
+    font-size: var(--var-typography-lg, var(--typography-lg));
     outline: 2px solid transparent;
     outline-offset: 2px;
 }
 
 .__floating-command-palette__slot-10 {
-    margin-top: var(--command-list-my);
-    margin-bottom: var(--command-list-my);
+    margin-top: var(--var-command-list-my, var(--command-list-my));
+    margin-bottom: var(--var-command-list-my, var(--command-list-my));
     display: flex;
-    max-height: var(--command-list-max-h);
+    max-height: var(--var-command-list-max-h, var(--command-list-max-h));
     width: 100%;
     transform-origin: top center;
-    gap: var(--command-list-gap);
+    gap: var(--var-command-list-gap, var(--command-list-gap));
     overflow-y: auto;
-    padding-left: var(--command-group-px);
-    padding-right: var(--command-group-px);
+    padding-left: var(--var-command-group-px, var(--command-group-px));
+    padding-right: var(--var-command-group-px, var(--command-group-px));
 }
 
 .__floating-command-palette__slot-11 {
     display: flex;
-    height: var(--command-row-h);
+    height: var(--var-command-row-h, var(--command-row-h));
     align-items: center;
     justify-content: space-between;
-    border-radius: var(--command-radius);
-    padding: var(--command-item-p);
+    border-radius: var(--var-command-rounded, var(--command-radius));
+    padding: var(--var-command-item-p, var(--command-item-p));
 }
 
 .__floating-command-palette__slot-11:hover {
@@ -145,40 +145,40 @@
 }
 
 .__floating-command-palette__slot-13 {
-    margin-top: var(--command-list-my);
-    margin-bottom: var(--command-list-my);
+    margin-top: var(--var-command-list-my, var(--command-list-my));
+    margin-bottom: var(--var-command-list-my, var(--command-list-my));
     display: flex;
     height: -moz-fit-content;
     height: fit-content;
-    max-height: var(--command-list-max-h);
+    max-height: var(--var-command-list-max-h, var(--command-list-max-h));
     width: 100%;
     transform-origin: top center;
-    gap: var(--command-list-gap);
+    gap: var(--var-command-list-gap, var(--command-list-gap));
     overflow-y: auto;
-    padding-left: var(--command-list-px);
-    padding-right: var(--command-list-px);
+    padding-left: var(--var-command-list-px, var(--command-list-px));
+    padding-right: var(--var-command-list-px, var(--command-list-px));
 }
 
 .__floating-command-palette__slot-14 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: var(--command-radius);
-    padding: var(--command-item-p);
+    border-radius: var(--var-command-rounded, var(--command-radius));
+    padding: var(--var-command-item-p, var(--command-item-p));
     --tw-text-opacity: 1;
     color: hsla(var(--secondary-DEFAULT), var(--tw-text-opacity));
 }
 
 .__floating-command-palette__slot-15 {
     display: flex;
-    height: var(--command-footer-h);
+    height: var(--var-command-footer-h, var(--command-footer-h));
     align-items: center;
-    border-bottom-right-radius: var(--command-radius);
-    border-bottom-left-radius: var(--command-radius);
+    border-bottom-right-radius: var(--var-command-rounded, var(--command-radius));
+    border-bottom-left-radius: var(--var-command-rounded, var(--command-radius));
     border-top-width: 1px;
     --tw-border-opacity: 1;
     border-color: hsla(var(--floating-border), var(--tw-border-opacity));
-    padding: var(--command-footer-p);
+    padding: var(--var-command-footer-p, var(--command-footer-p));
 }
 .__floating-command-palette__slot-extra-1 {
     flex-direction: column;

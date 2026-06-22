@@ -25,8 +25,8 @@
 }
 
 .__multi-select__list:last-child {
-  border-top-left-radius: var(--dropdown-radius);
-  border-top-right-radius: var(--dropdown-radius);
+  border-top-left-radius: var(--var-dropdown-surface-radius);
+  border-top-right-radius: var(--var-dropdown-surface-radius);
 }
 
 .__multi-select__item {
@@ -66,18 +66,18 @@
 }
 
 .__multi-select__input {
-  height: var(--input-height);
+  height: var(--var-input-height, var(--input-height));
   width: 100%;
-  font-size: var(--input-text);
+  font-size: var(--var-input-font-size, var(--input-text));
 }
 
 .__multi-select__surface {
-  border-radius: var(--input-radius);
+  border-radius: var(--var-input-rounded, var(--input-radius));
   background-color: transparent;
-  padding-left: var(--input-padding-x);
-  padding-right: var(--input-padding-x);
-  padding-top: var(--input-padding-y);
-  padding-bottom: var(--input-padding-y);
+  padding-left: var(--var-input-px, var(--input-padding-x));
+  padding-right: var(--var-input-px, var(--input-padding-x));
+  padding-top: var(--var-input-py, var(--input-padding-y));
+  padding-bottom: var(--var-input-py, var(--input-padding-y));
   --tw-text-opacity: 1;
   color: hsla(var(--foreground), var(--tw-text-opacity));
 }
@@ -107,7 +107,7 @@
 .__multi-select__value {
   display: flex;
   align-items: center;
-  gap: var(--input-gap);
+  gap: var(--var-input-gap, var(--input-gap));
   white-space: nowrap;
   text-align: left;
 }
@@ -126,19 +126,19 @@
 }
 
 .__multi-select__overlay {
-  z-index: var(--z-floating);
+  z-index: var(--var-layer-floating, var(--z-floating));
 }
 
 .__multi-select__panel {
   position: relative;
   isolation: isolate;
-  z-index: var(--z-floating);
+  z-index: var(--var-layer-floating, var(--z-floating));
   margin: 0px;
-  max-height: var(--dropdown-max-h);
+  max-height: var(--var-dropdown-list-max-block-size);
   list-style-type: none;
   overflow: clip;
   overscroll-behavior: contain;
-  border-radius: var(--dropdown-radius);
+  border-radius: var(--var-dropdown-surface-radius);
   --tw-border-opacity: 1;
   border-color: hsla(var(--floating-border), var(--tw-border-opacity));
   --tw-bg-opacity: 1;
@@ -146,8 +146,8 @@
   padding: 0px;
   --tw-text-opacity: 1;
   color: hsla(var(--foreground), var(--tw-text-opacity));
-  --tw-shadow: var(--shadow-floating);
-  --tw-shadow-colored: var(--shadow-floating);
+  --tw-shadow: var(--var-shadow-floating, var(--shadow-floating));
+  --tw-shadow-colored: var(--var-shadow-floating, var(--shadow-floating));
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   --tw-shadow-color: hsla(var(--floating-border), 1);
   --tw-shadow: var(--tw-shadow-colored);
@@ -164,7 +164,7 @@
 
 .__multi-select__search {
   margin-bottom: 0.25rem;
-  height: var(--input-height);
+  height: var(--var-input-height, var(--input-height));
   width: 100%;
   flex: 1 1 0%;
   border-radius: 0px;
@@ -172,10 +172,10 @@
   --tw-border-opacity: 1;
   border-color: hsla(var(--input-border), var(--tw-border-opacity));
   background-color: transparent;
-  padding-left: var(--input-padding-x);
-  padding-right: var(--input-padding-x);
-  padding-top: var(--input-padding-y);
-  padding-bottom: var(--input-padding-y);
+  padding-left: var(--var-input-px, var(--input-padding-x));
+  padding-right: var(--var-input-px, var(--input-padding-x));
+  padding-top: var(--var-input-py, var(--input-padding-y));
+  padding-bottom: var(--var-input-py, var(--input-padding-y));
   outline: 2px solid transparent;
   outline-offset: 2px;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -203,7 +203,7 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding: var(--menu-item-p);
+  padding: var(--var-menu-item-p, var(--menu-item-p));
   text-align: left;
   --tw-text-opacity: 1;
   color: hsla(var(--disabled), var(--tw-text-opacity));
@@ -233,7 +233,7 @@
   cursor: pointer;
   align-items: center;
   justify-content: flex-start;
-  padding: var(--menu-item-p);
+  padding: var(--var-menu-item-p, var(--menu-item-p));
   text-align: left;
 }
 
@@ -255,11 +255,11 @@
 }
 
 .__multi-select__checkbox {
-  margin-right: var(--checkbox-gap);
+  margin-right: var(--var-checkbox-gap, var(--checkbox-gap));
   display: inline-block;
-  width: var(--checkbox-size);
-  height: var(--checkbox-size);
-  border-radius: var(--checkbox-radius);
+  width: var(--var-checkbox-size, var(--checkbox-size));
+  height: var(--var-checkbox-size, var(--checkbox-size));
+  border-radius: var(--var-checkbox-rounded, var(--checkbox-radius));
   --tw-border-opacity: 1;
   border-color: hsla(var(--card-border), var(--tw-border-opacity));
 }
@@ -270,18 +270,18 @@
 }
 
 .__multi-select__footer {
-  gap: var(--menu-item-gap, 0.5rem);
+  gap: var(--var-menu-item-gap, var(--menu-item-gap, 0.5rem));
   position: sticky;
   bottom: 0px;
   display: flex;
   width: 100%;
   align-items: center;
   overflow-x: auto;
-  border-bottom-right-radius: var(--dropdown-radius);
-  border-bottom-left-radius: var(--dropdown-radius);
+  border-bottom-right-radius: var(--var-dropdown-surface-radius);
+  border-bottom-left-radius: var(--var-dropdown-surface-radius);
   --tw-bg-opacity: 1;
   background-color: hsla(var(--floating-background), var(--tw-bg-opacity));
-  padding: var(--menu-item-p);
+  padding: var(--var-menu-item-p, var(--menu-item-p));
 }
 .__multi-select__tags-row {
   flex-wrap: nowrap

@@ -5,6 +5,6 @@ export const tablePaginationStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/table.css",
     defaults: {},
-    slots: [],
+    slots: ["root", "size-select", "items", "page-link"],
     dependencies: ["polymorph"],
 });

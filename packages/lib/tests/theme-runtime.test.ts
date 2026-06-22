@@ -12,8 +12,8 @@ describe("theme runtime helpers", () => {
             colors: { primary: { DEFAULT: "rebeccapurple" } },
             components: {
                 button: { rounded: "0.75rem" },
-                tag: { rounded: "1rem" },
-                spinner: { size: "2rem" },
+                tag: { "surface-radius": "1rem" },
+                spinner: { "indicator-size": "2rem" },
                 progress: { rounded: "2px" },
                 stats: { rounded: "4px" },
             },
@@ -22,8 +22,8 @@ describe("theme runtime helpers", () => {
 
         expect(properties["--var-color-primary"]).toBe("rebeccapurple");
         expect(properties["--var-button-rounded"]).toBe("0.75rem");
-        expect(properties["--var-tag-rounded"]).toBe("1rem");
-        expect(properties["--var-spinner-size"]).toBe("2rem");
+        expect(properties["--var-tag-surface-radius"]).toBe("1rem");
+        expect(properties["--var-spinner-indicator-size"]).toBe("2rem");
         expect(properties["--var-progress-rounded"]).toBe("2px");
         expect(properties["--var-stats-rounded"]).toBe("4px");
         expect(properties["--var-layer-overlay"]).toBe("100");

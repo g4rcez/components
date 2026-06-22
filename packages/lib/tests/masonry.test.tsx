@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Masonry, type MasonryLayout } from "../src/components/display/masonry";
+import { Masonry, type MasonryLayout } from "../src/components/display/masonry/masonry";
 
 const createRect = (width: number, height: number): DOMRect =>
     ({
@@ -109,9 +109,13 @@ describe("Masonry", () => {
 
         expect(root).toHaveAttribute("data-component", "masonry");
         expect(root).not.toHaveAttribute("role", "grid");
+        expect(root).toHaveStyle({ position: "relative", width: "100%" });
         expect(items).toHaveLength(3);
         expect(items.map((item) => item.textContent)).toEqual(["Alpha", "Beta", "Gamma"]);
-        items.forEach((item) => expect(item).toHaveAttribute("data-component", "masonry-item"));
+        items.forEach((item) => {
+            expect(item).toHaveAttribute("data-component", "masonry-item");
+            expect(item).toHaveStyle({ position: "absolute", boxSizing: "border-box" });
+        });
     });
 
     it("reports measured layout after resize", async () => {
@@ -163,6 +167,27 @@ describe("Masonry", () => {
 
         await waitFor(() => expect(onLayoutChange).toHaveBeenCalledTimes(2));
         expect(onLayoutChange.mock.calls.at(-1)?.[0].height).toBe(140);
+    });
+
+    it("remeasures when an item changes height", async () => {
+        const onLayoutChange = vi.fn();
+
+        render(
+            <Masonry columns={2} gutter={10} onLayoutChange={onLayoutChange}>
+                <article>Alpha</article>
+                <article>Beta</article>
+                <article>Gamma</article>
+            </Masonry>
+        );
+
+        MockResizeObserver.instances.forEach((observer) => observer.trigger());
+        await waitFor(() => expect(onLayoutChange).toHaveBeenCalledTimes(1));
+
+        itemHeights.set("Gamma", 140);
+        MockResizeObserver.instances.forEach((observer) => observer.trigger());
+
+        await waitFor(() => expect(onLayoutChange).toHaveBeenCalledTimes(2));
+        expect(onLayoutChange.mock.calls.at(-1)?.[0].height).toBe(230);
     });
 
     it("does not re-emit equal layouts when consumers store layout state", async () => {

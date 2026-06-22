@@ -19,12 +19,14 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
-import React, { forwardRef, Fragment, useEffect, useRef, useState } from "react";
-import { Polymorph, PolymorphicProps } from "../../../components/core/polymorph/polymorph";
+import type React from "react";
+import { forwardRef, Fragment, useEffect, useRef, useState } from "react";
+import { Polymorph, type PolymorphicProps } from "../../../components/core/polymorph/polymorph";
 import { FLOATING_DELAY } from "../../../constants";
 import { mergeRefs } from "../../../lib/dom";
 import { noop } from "../../../lib/fns";
-import { ComponentLike, Label } from "../../../types";
+import { tooltipStyles } from "./tooltip.styles";
+import type { ComponentLike, Label } from "../../../types";
 
 export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProps<
     {
@@ -118,9 +120,9 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                             {...getFloatingProps()}
                             style={floatingStyles}
                             ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
-                            className="__floating-tooltip__border __floating-tooltip__slot-1"
+                            className={tooltipStyles.className({})}
                         >
-                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="__floating-tooltip__slot-2" />
+                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={tooltipStyles.slots.arrow} />
                             {children}
                         </Polymorph>
                     </FloatingPortal>

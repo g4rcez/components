@@ -1,68 +1,32 @@
-import { cva } from "class-variance-authority";
 import type React from "react";
 import { forwardRef } from "react";
+import type { ComponentStyleProps } from "../../../lib/component-styles";
 import { css } from "../../../lib/dom";
-import type { CvaVariants, Label } from "../../../types";
+import type { Label } from "../../../types";
 import { Polymorph, type PolymorphicProps } from "../polymorph/polymorph";
+import { tagStyles } from "./tag.styles";
 
-const variants = {
-    size: {
-        icon: "__tag--size-icon",
-        big: "__tag--size-big",
-        default: "__tag--size-default",
-        tiny: "__tag--size-tiny",
-        small: "__tag--size-small",
-    },
-    theme: {
-        custom: "__tag--theme-custom",
-        info: "__tag--theme-info",
-        warn: "__tag--theme-warn",
-        muted: "__tag--theme-muted",
-        danger: "__tag--theme-danger",
-        disabled: "__tag--theme-disabled",
-        primary: "__tag--theme-primary",
-        success: "__tag--theme-success",
-        neutral: "__tag--theme-neutral",
-        secondary: "__tag--theme-secondary",
-        loading: "__tag--theme-loading",
-    },
-};
-
-type Variants = CvaVariants<typeof variants>;
+type Variants = ComponentStyleProps<typeof tagStyles>;
 
 type Themes = NonNullable<Variants["theme"]>;
 
-const indicatorVariant = cva("__tag__indicator", {
-    variants: {
-        theme: {
-            custom: "",
-            info: "__tag__indicator--theme-info",
-            warn: "__tag__indicator--theme-warn",
-            muted: "__tag__indicator--theme-muted",
-            danger: "__tag__indicator--theme-danger",
-            disabled: "__tag__indicator--theme-muted",
-            neutral: "__tag__indicator--theme-neutral",
-            primary: "__tag__indicator--theme-primary",
-            success: "__tag__indicator--theme-success",
-            secondary: "__tag__indicator--theme-secondary",
-            loading: "__tag__indicator--theme-muted",
-        } as Record<Themes, string>,
-    },
-});
-
-const tagVariants = cva("__tag", {
-    variants,
-    defaultVariants: { theme: "primary", size: "default" },
-});
+const indicatorThemeClass = (theme: Themes) => {
+    if (theme === "custom") return undefined;
+    if (theme === "disabled" || theme === "loading") return `${tagStyles.slots.indicator}--theme-muted`;
+    return `${tagStyles.slots.indicator}--theme-${theme}`;
+};
 
 export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
-    CvaVariants<typeof variants> & Partial<{ icon: Label; loading: boolean; indicator: Themes | true }>,
+    Variants & Partial<{ icon: Label; loading: boolean; indicator: Themes | true }>,
     T
 >;
 
 export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => React.ReactNode = forwardRef(function Tag<
     T extends React.ElementType = "span",
 >({ className, indicator = undefined, icon, loading, theme, size, ...props }: TagProps<T>, ref: React.Ref<HTMLElement>) {
+    const resolvedTheme = loading ? "loading" : theme;
+    const resolvedIndicatorTheme = (indicator === true ? (theme ?? "primary") : indicator) as Themes | undefined;
+
     return (
         <Polymorph
             {...props}
@@ -71,15 +35,10 @@ export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => Reac
             data-loading={loading ? true : undefined}
             data-component="tag"
             as={props.as ?? "span"}
-            className={css(tagVariants({ size, theme: loading ? "loading" : theme }), className)}
+            className={css(tagStyles.className({ size, theme: resolvedTheme }), className)}
         >
-            {indicator ? (
-                <span
-                    aria-hidden="true"
-                    className={indicatorVariant({
-                        theme: indicator === true ? (theme ?? "primary") : indicator,
-                    })}
-                />
+            {resolvedIndicatorTheme ? (
+                <span aria-hidden="true" className={css(tagStyles.slots.indicator, indicatorThemeClass(resolvedIndicatorTheme))} />
             ) : null}
             {icon}
             {props.children}

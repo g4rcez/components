@@ -1,26 +1,17 @@
 "use client";
-import {
-    FloatingContext,
-    FloatingFocusManager,
-    FloatingOverlay,
-    FloatingPortal,
-    useClick,
-    useDismiss,
-    useFloating,
-    useInteractions,
-    useRole,
-} from "@floating-ui/react";
-import { AnimatePresence, motion, MotionConfig } from "motion/react";
-import { XIcon } from "@phosphor-icons/react";
-import React, { Fragment, PropsWithChildren, useCallback, useId, useState } from "react";
+import { motion } from "motion/react";
+import React, { Fragment, useCallback, useId, useState, type PropsWithChildren } from "react";
 import { useTranslations } from "../../../hooks/use-translations";
-import { Label } from "../../../types";
+import { css } from "../../../lib/dom";
+import type { Label } from "../../../types";
+import { Modal } from "../../floating/modal/modal";
+import { listStyles } from "./list.styles";
 
 type AnimatedItemProps = {
     title: Label;
-    description: Label;
-    children: Label;
     avatar?: Label;
+    children: Label;
+    description: Label;
     leading?: React.FC<{ open: () => void }>;
 };
 
@@ -30,64 +21,40 @@ type AnimatedListProps = object;
 
 type FloatItemProps = {
     setter: () => void;
-    context: FloatingContext;
     item: IdAnimatedItem | null;
-    refs: { setFloating: (node: HTMLElement | null) => void };
-    get: ReturnType<typeof useInteractions>["getFloatingProps"];
 };
 
-const FloatItem = ({ item, context, setter, get, refs }: FloatItemProps) => {
+const FloatItem = ({ item, setter }: FloatItemProps) => {
     const translations = useTranslations();
+    const detailContentClassName = listStyles.slots["item-content"];
+    const headerClassName = listStyles.slots.header;
+    const ariaDescription = typeof item?.description === "string" ? item.description : undefined;
+    const title = item ? String(item.title) : translations.listCloseDetails;
 
     return (
-        <FloatingPortal>
-            <MotionConfig reducedMotion="user" transition={{ type: "spring", damping: 30, stiffness: 350 }}>
-                <AnimatePresence mode="wait" presenceAffectsLayout>
-                    {item ? (
-                        <motion.div
-                            key="overlay"
-                            exit={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            initial={{ opacity: 0 }}
-                            transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
-                            className="__display-list__slot-1"
-                        />
-                    ) : null}
-                    {item ? (
-                        <FloatingOverlay key="card" lockScroll className="__display-list__slot-2">
-                            <FloatingFocusManager visuallyHiddenDismiss modal closeOnFocusOut context={context}>
-                                <motion.div
-                                    layout
-                                    layoutId={`item-${item.id}`}
-                                    initial={{ opacity: 0.6, scale: 0.98 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.98 }}
-                                    className="__display-list__border __display-list__slot-3 __display-list__slot-extra-1"
-                                    ref={refs.setFloating}
-                                    {...get()}
-                                >
-                                    <nav className="__display-list__slot-4">
-                                        <button
-                                            type="button"
-                                            onClick={setter}
-                                            aria-label={translations.listCloseDetails}
-                                            className="__display-list__slot-5"
-                                        >
-                                            <XIcon />
-                                        </button>
-                                    </nav>
-                                    <motion.header layout className="__display-list__slot-6 __display-list__slot-extra-2">
-                                        <h3 className="__display-list__slot-7">{item.title}</h3>
-                                        <p className="__display-list__slot-8">{item.description}</p>
-                                    </motion.header>
-                                    <motion.div layout>{item.children}</motion.div>
-                                </motion.div>
-                            </FloatingFocusManager>
-                        </FloatingOverlay>
-                    ) : null}
-                </AnimatePresence>
-            </MotionConfig>
-        </FloatingPortal>
+        <Modal
+            title={title}
+            closeOnFocusOut
+            closable={false}
+            ariaTitle={title}
+            overlayClickClose
+            open={item !== null}
+            ariaDescription={ariaDescription}
+            layoutId={item ? `item-${item.id}` : undefined}
+            onChange={(open) => {
+                if (!open) setter();
+            }}
+        >
+            {item ? (
+                <motion.div layout className={css(detailContentClassName, `${detailContentClassName}--column`)}>
+                    <motion.header layout className={css(headerClassName, `${headerClassName}--wrap`)}>
+                        <h3 className={listStyles.slots.title}>{item.title}</h3>
+                        <p className={listStyles.slots.description}>{item.description}</p>
+                    </motion.header>
+                    <motion.div layout>{item.children}</motion.div>
+                </motion.div>
+            ) : null}
+        </Modal>
     );
 };
 
@@ -95,19 +62,7 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
     const translations = useTranslations();
     const [selected, setSelected] = useState<IdAnimatedItem | null>(null);
     const id = useId();
-    const { context, refs } = useFloating({
-        open: selected !== null,
-        transform: true,
-        onOpenChange: (open) => (open ? undefined : setSelected(null)),
-    });
-    const click = useClick(context);
-    const role = useRole(context, { role: "dialog" });
-    const dismiss = useDismiss(context, {
-        escapeKey: true,
-        referencePress: true,
-        outsidePress: true,
-    });
-    const { getFloatingProps } = useInteractions([click, role, dismiss]);
+    const itemContentClassName = listStyles.slots["item-content"];
 
     const clear = useCallback(() => {
         setSelected(null);
@@ -117,42 +72,42 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
 
     return (
         <Fragment>
-            <FloatItem refs={refs} context={context} get={getFloatingProps} item={selected} setter={clear} />
-            <ul role="list">
+            <FloatItem item={selected} setter={clear} />
+            <ul role="list" className={listStyles.className({})}>
                 {items.map((x, index) => {
                     const item = (x as React.ReactElement<AnimatedItemProps>).props;
                     const innerId = `${id}-${index}`;
                     const setter = () => setSelected({ ...item, id: innerId });
                     const Leading = item.leading;
                     return (
-                        <motion.li layout key={innerId} layoutId={`item-${innerId}`} className={`__display-list__slot-9`}>
-                            <motion.div layoutId={`toast-${innerId}`} className="__display-list__slot-10">
-                                <div className="__display-list__slot-11">
+                        <motion.li layout key={innerId} layoutId={`item-${innerId}`} className={listStyles.slots.item}>
+                            <motion.div layoutId={`toast-${innerId}`} className={listStyles.slots["item-shell"]}>
+                                <div className={listStyles.slots["item-row"]}>
                                     <Fragment>
                                         {item.avatar ? (
                                             <div>
-                                                <div className="__display-list__slot-12">
+                                                <div className={listStyles.slots["avatar-frame"]}>
                                                     <button
                                                         type="button"
                                                         onClick={setter}
                                                         aria-label={translations.listOpenDetails(String(item.title))}
-                                                        className="__display-list__slot-13"
+                                                        className={listStyles.slots["avatar-button"]}
                                                     >
                                                         {item.avatar}
                                                     </button>
                                                 </div>
                                             </div>
                                         ) : null}
-                                        <div className="__display-list__slot-14">
-                                            <div className="__display-list__slot-15 __display-list__slot-extra-3">
+                                        <div className={listStyles.slots["item-body"]}>
+                                            <div className={css(itemContentClassName, `${itemContentClassName}--row`)}>
                                                 <button
                                                     type="button"
                                                     onClick={setter}
                                                     aria-label={translations.listOpenDetails(String(item.title))}
-                                                    className="__display-list__slot-16"
+                                                    className={listStyles.slots["item-action"]}
                                                 >
                                                     <h3>{item.title}</h3>
-                                                    <p className="__display-list__slot-8">{item.description}</p>
+                                                    <p className={listStyles.slots.description}>{item.description}</p>
                                                 </button>
                                                 {Leading ? <Leading open={setter} /> : null}
                                             </div>

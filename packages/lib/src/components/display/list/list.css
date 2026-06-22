@@ -1,187 +1,156 @@
 .__list {
-        box-sizing: border-box;
-    }
-
-.__display-list__slot-1 {
-  pointer-events: none;
-  position: fixed;
-  inset: 0px;
-  top: 0px;
-  z-index: var(--z-overlay);
-  height: 100vh;
-  width: 100vw;
-  background-color: hsla(var(--floating-overlay), 0.7)
+    box-sizing: border-box;
 }
 
-.__display-list__slot-2 {
-  position: absolute;
-  inset: 0px;
-  z-index: var(--z-floating);
-  display: flex;
-  align-items: center;
-  justify-content: center
+.__list__overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: var(--var-layer-overlay);
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--var-list-overlay-background);
 }
 
-.__display-list__slot-3 {
-  position: relative;
-  display: flex;
-  height: -moz-min-content;
-  height: min-content;
-  width: -moz-min-content;
-  width: min-content;
-  min-width: 20rem;
-  gap: var(--list-card-gap);
-  border-radius: var(--list-radius);
-  --tw-border-opacity: 1;
-  border-color: hsla(var(--card-border), var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: hsla(var(--card-background), var(--tw-bg-opacity));
-  padding: var(--list-card-p);
-  padding-top: var(--list-card-py);
-  padding-bottom: var(--list-card-py);
-  padding-bottom: var(--list-card-pb);
-  --tw-shadow: var(--shadow-card);
-  --tw-shadow-colored: var(--shadow-card);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+.__list__floating-layer {
+    position: absolute;
+    inset: 0;
+    z-index: var(--var-layer-floating);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.__display-list__slot-4 {
-  position: absolute;
-  right: 1rem;
-  top: 0.25rem
+.__list__detail-card {
+    position: relative;
+    display: flex;
+    height: min-content;
+    width: min-content;
+    min-width: var(--var-list-detail-card-min-inline-size);
+    gap: var(--var-list-detail-card-gap);
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-color-border);
+    border-radius: var(--var-list-detail-card-radius);
+    background-color: var(--var-color-background);
+    padding: var(--var-list-detail-card-padding);
+    padding-block: var(--var-list-detail-card-padding-block);
+    padding-bottom: var(--var-list-detail-card-padding-block-end);
+    box-shadow: var(--var-shadow-card);
 }
 
-@media (min-width: 1024px) {
-  .__display-list__slot-4 {
-    right: 0.5rem
-  }
+.__list__detail-card--column {
+    flex-direction: column;
 }
 
-.__display-list__slot-5 {
-  padding: var(--list-close-p);
-  opacity: 0.7;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0,0,.58,1);
-  transition-duration: 375ms
+.__list__close-nav {
+    position: absolute;
+    right: var(--var-list-close-inset-inline-end);
+    top: var(--var-list-close-inset-block-start);
 }
 
-.__display-list__slot-5:hover {
-  --tw-text-opacity: 1;
-  color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity));
-  opacity: 1
+.__list__close-button {
+    padding: var(--var-list-close-button-padding);
+    opacity: var(--var-list-close-button-opacity);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-duration: var(--var-list-transition-duration);
+    transition-timing-function: var(--var-list-transition-timing);
 }
 
-.__display-list__slot-5:focus {
-  --tw-text-opacity: 1;
-  color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity))
+.__list__close-button:hover,
+.__list__close-button:focus {
+    color: var(--var-color-danger);
+    opacity: 1;
 }
 
-.__display-list__slot-6 {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--list-header-gap)
+.__list__header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--var-list-header-gap);
 }
 
-.__display-list__slot-7 {
-  min-width: 100%;
-  text-wrap: balance;
-  font-size: var(--list-title-text);
-  font-weight: 500
+.__list__header--wrap {
+    flex-wrap: wrap;
 }
 
-.__display-list__slot-8 {
-  font-size: var(--typography-sm);
-  line-height: 1.375;
-  --tw-text-opacity: 1;
-  color: hsla(var(--secondary-DEFAULT), var(--tw-text-opacity))
+.__list__title {
+    min-width: 100%;
+    text-wrap: balance;
+    font-size: var(--var-list-title-font-size);
+    font-weight: var(--var-font-weight-medium);
 }
 
-.__display-list__slot-9 {
-  border-bottom-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: hsla(var(--card-border), var(--tw-border-opacity));
-  padding-top: var(--list-item-py);
-  padding-bottom: var(--list-item-py)
+.__list__description {
+    color: var(--var-color-muted-foreground);
+    font-size: var(--var-typography-sm);
+    line-height: var(--var-list-description-line-height);
 }
 
-.__display-list__slot-9:last-child {
-  border-color: transparent
+.__list__item {
+    border-bottom-width: var(--var-border-hairline);
+    border-color: var(--var-color-border);
+    padding-block: var(--var-list-item-padding-block);
 }
 
-.__display-list__slot-10 {
-  position: relative
+.__list__item:last-child {
+    border-color: transparent;
 }
 
-.__display-list__slot-11 {
-  position: relative;
-  display: flex;
-  align-items: flex-start
+.__list__item-shell {
+    position: relative;
 }
 
-.__display-list__slot-11 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
-  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))
+.__list__item-row {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--var-list-item-media-gap);
 }
 
-.__display-list__slot-12 {
-  position: relative;
-  padding-left: var(--list-avatar-px);
-  padding-right: var(--list-avatar-px)
+.__list__avatar-frame {
+    position: relative;
+    padding-inline: var(--var-list-avatar-frame-padding-inline);
 }
 
-.__display-list__slot-13 {
-  display: flex;
-  width: 2.5rem;
-  height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  --tw-ring-opacity: 1;
-  --tw-ring-color: hsla(var(--primary-DEFAULT), var(--tw-ring-opacity))
+.__list__avatar-button {
+    display: flex;
+    width: var(--var-list-avatar-button-size);
+    height: var(--var-list-avatar-button-size);
+    align-items: center;
+    justify-content: center;
 }
 
-.__display-list__slot-14 {
-  min-width: 0px;
-  flex: 1 1 0%;
-  padding-top: var(--list-body-py);
-  padding-bottom: var(--list-body-py);
-  --tw-text-opacity: 1;
-  color: hsla(var(--foreground), var(--tw-text-opacity))
+.__list__item-body {
+    min-width: 0;
+    flex: 1 1 0%;
+    padding-block: var(--var-list-item-body-padding-block);
+    color: var(--var-color-foreground);
 }
 
-.__display-list__slot-15 {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--list-item-gap)
+.__list__item-content {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--var-list-item-content-gap);
 }
 
-.__display-list__slot-16 {
-  cursor: pointer;
-  text-align: left;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0,0,.58,1);
-  transition-duration: 375ms;
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1)
+.__list__item-content--row {
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
 
-.__display-list__slot-16:hover {
-  --tw-text-opacity: 1;
-  color: hsla(var(--primary-DEFAULT), var(--tw-text-opacity))
-}
-.__display-list__slot-extra-1 {
-  flex-direction: column
+.__list__item-content--column {
+    flex-direction: column;
 }
 
-.__display-list__slot-extra-2 {
-  flex-wrap: wrap
+.__list__item-action {
+    cursor: pointer;
+    text-align: left;
+    transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+    transition-duration: var(--var-list-transition-duration);
+    transition-timing-function: var(--var-list-transition-timing);
 }
 
-.__display-list__slot-extra-3 {
-  flex-direction: row;
-  flex-wrap: nowrap
-}
-.__display-list__border {
-  border-width: 1px
+.__list__item-action:hover {
+    color: var(--var-color-primary);
 }

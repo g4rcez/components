@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it, vi } from "vitest";
 
-import { Modal } from "../src/components/floating/modal";
+import { Modal } from "../src/components/floating/modal/modal";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 
 const modalRect = {
@@ -42,7 +42,7 @@ describe("Modal resize a11y", () => {
         expect(resizeHandle).toHaveAccessibleDescription("Use arrow keys to resize the modal");
         expect(resizeHandle).toHaveAttribute("aria-controls", dialog.id);
         expect(resizeHandle).toHaveAttribute("aria-keyshortcuts", "ArrowUp ArrowDown ArrowLeft ArrowRight");
-        expect(resizeHandle).toHaveClass("__floating-modal__slot-9");
+        expect(resizeHandle).toHaveClass("__modal__resizer");
         expect((await axe(container)).violations).toHaveLength(0);
     });
 

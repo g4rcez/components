@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Button, useNotification } from "../../../../../lib/src";
+import { Button, useNotification } from "@g4rcez/components";
 
 const themes = ["default", "info", "warn", "muted", "danger", "success", "secondary"] as const;
 

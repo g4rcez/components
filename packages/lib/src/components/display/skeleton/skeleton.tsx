@@ -1,9 +1,12 @@
-import { CSSProperties, useRef, type ElementType } from "react";
+import { useRef, type CSSProperties, type ElementType } from "react";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import { Polymorph } from "../../core/polymorph/polymorph";
+import { skeletonStyles } from "./skeleton.styles";
 
-export const SkeletonCell = <div role="status" aria-busy="true" aria-label="Loading content" className="__display-skeleton__slot-1" />;
+export const SkeletonCell = (
+    <div role="status" aria-busy="true" aria-label="Loading content" className={css(skeletonStyles.className({}), skeletonStyles.slots.cell)} />
+);
 
 export const Skeleton = (props: { className?: string; as?: ElementType; style?: CSSProperties }) => {
     const t = useTranslations();
@@ -12,9 +15,9 @@ export const Skeleton = (props: { className?: string; as?: ElementType; style?: 
             {...props}
             role="status"
             aria-busy="true"
-            aria-label={t.skeletonLoading}
             as={props.as || "span"}
-            className={css("__display-skeleton__slot-2", props.className)}
+            aria-label={t.skeletonLoading}
+            className={css(skeletonStyles.className({}), skeletonStyles.slots.block, props.className)}
         />
     );
 };
@@ -28,12 +31,7 @@ export const SkeletonList = (props: { className?: string; rows: number }) => {
         })
     );
     return (
-        <ul
-            role="status"
-            aria-busy="true"
-            aria-label={t.skeletonLoading}
-            className={css("__display-skeleton__slot-3 __display-skeleton__slot-extra-1", props.className)}
-        >
+        <ul role="status" aria-busy="true" aria-label={t.skeletonLoading} className={css(skeletonStyles.slots.list, props.className)}>
             {items.current}
         </ul>
     );

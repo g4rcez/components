@@ -5,6 +5,6 @@ export const tableMetadataStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/table.css",
     defaults: {},
-    slots: [],
+    slots: ["root", "container", "operations", "active-filters", "pill", "dot", "value-frame", "ghost-value", "input"],
     dependencies: ["table-filter", "table-group", "table-sort"],
 });

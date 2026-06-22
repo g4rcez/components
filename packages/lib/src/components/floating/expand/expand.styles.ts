@@ -1,9 +1,10 @@
 import { defineComponentStyles } from "../../../lib/component-styles";
 
 export const expandStyles = defineComponentStyles({
-    name: "expand",
-    variants: {},
     defaults: {},
-    slots: [],
+    variants: {},
+    name: "expand",
+    slots: ["content"],
     dependencies: ["button"],
+    css: "@g4rcez/components/expand.css",
 });

@@ -39,10 +39,10 @@ import {
     Timeline,
     TimelineItem,
     Toolbar,
-} from "../../../lib/src";
-import { Shortcut } from "../../../lib/src/components/display/shortcut";
-import { Skeleton } from "../../../lib/src/components/display/skeleton";
-import { components as componentTokens } from "../../../lib/src/styles/components";
+    Shortcut,
+    Skeleton,
+    components as componentTokens,
+} from "@g4rcez/components";
 
 type ComponentTokenName = keyof typeof componentTokens;
 type CssCustomProperty = `--${string}`;
@@ -104,17 +104,18 @@ const runtimeTokenAliases: Partial<Record<ComponentTokenName, Record<string, Css
         "text-tiny": ["--var-button-tiny-font-size"],
         gap: ["--var-button-gap"],
         height: ["--var-button-height"],
-        radius: ["--var-button-rounded"],
+        rounded: ["--var-button-rounded"],
         text: ["--var-button-font-size"],
     },
     progress: {
         "track-h": ["--var-progress-track-h"],
-        radius: ["--var-progress-rounded"],
+        rounded: ["--var-progress-rounded"],
     },
     spinner: {
-        border: ["--var-spinner-border-width"],
-        "container-p": ["--var-spinner-container-p"],
-        size: ["--var-spinner-size"],
+        "container-padding": ["--var-spinner-container-padding"],
+        "indicator-border-width": ["--var-spinner-indicator-border-width"],
+        "indicator-size": ["--var-spinner-indicator-size"],
+        "spin-duration": ["--var-spinner-spin-duration"],
     },
     stats: {
         gap: ["--var-stats-gap"],
@@ -124,29 +125,130 @@ const runtimeTokenAliases: Partial<Record<ComponentTokenName, Record<string, Css
         "icon-size": ["--var-stats-icon-size"],
         "inner-gap": ["--var-stats-inner-gap"],
         p: ["--var-stats-p"],
-        radius: ["--var-stats-rounded"],
+        rounded: ["--var-stats-rounded"],
         "title-text": ["--var-stats-title-font-size"],
         "value-text": ["--var-stats-value-font-size"],
     },
     tag: {
-        gap: ["--var-tag-gap"],
-        height: ["--var-tag-height"],
-        "height-big": ["--var-tag-big-height"],
-        "height-small": ["--var-tag-small-height"],
-        "height-tiny": ["--var-tag-tiny-height"],
+        "big-min-block-size": ["--var-tag-big-min-block-size"],
+        "big-padding-block": ["--var-tag-big-padding-block"],
+        "big-padding-inline": ["--var-tag-big-padding-inline"],
+        "default-min-block-size": ["--var-tag-default-min-block-size"],
+        "default-padding-block": ["--var-tag-default-padding-block"],
+        "default-padding-inline": ["--var-tag-default-padding-inline"],
+        "icon-padding": ["--var-tag-icon-padding"],
         "indicator-size": ["--var-tag-indicator-size"],
-        "padding-icon": ["--var-tag-icon-p"],
-        "padding-x": ["--var-tag-px"],
-        "padding-x-big": ["--var-tag-big-px"],
-        "padding-x-small": ["--var-tag-small-px"],
-        "padding-x-tiny": ["--var-tag-tiny-px"],
-        "padding-y": ["--var-tag-py"],
-        "padding-y-big": ["--var-tag-big-py"],
-        "padding-y-small": ["--var-tag-small-py"],
-        "padding-y-tiny": ["--var-tag-tiny-py"],
-        radius: ["--var-tag-rounded"],
-        "text-small": ["--var-tag-small-font-size"],
-        "text-tiny": ["--var-tag-tiny-font-size"],
+        "small-font-size": ["--var-tag-small-font-size"],
+        "small-min-block-size": ["--var-tag-small-min-block-size"],
+        "small-padding-block": ["--var-tag-small-padding-block"],
+        "small-padding-inline": ["--var-tag-small-padding-inline"],
+        "surface-gap": ["--var-tag-surface-gap"],
+        "surface-radius": ["--var-tag-surface-radius"],
+        "tiny-font-size": ["--var-tag-tiny-font-size"],
+        "tiny-min-block-size": ["--var-tag-tiny-min-block-size"],
+        "tiny-padding-block": ["--var-tag-tiny-padding-block"],
+        "tiny-padding-inline": ["--var-tag-tiny-padding-inline"],
+    },
+    tabs: {
+        "active-divider-block-size": ["--var-tabs-active-divider-block-size"],
+        "divider-block-size": ["--var-tabs-divider-block-size"],
+        "header-margin-block-end": ["--var-tabs-header-margin-block-end"],
+        "item-transition-duration": ["--var-tabs-item-transition-duration"],
+        "tab-padding-block": ["--var-tabs-tab-padding-block"],
+        "tab-padding-inline": ["--var-tabs-tab-padding-inline"],
+    },
+    timeline: {
+        "actions-gap": ["--var-timeline-actions-gap"],
+        "actions-padding-inline": ["--var-timeline-actions-padding-inline"],
+        "connector-inline-size": ["--var-timeline-connector-inline-size"],
+        "connector-inset-block-start": ["--var-timeline-connector-inset-block-start"],
+        "connector-inset-inline-start": ["--var-timeline-connector-inset-inline-start"],
+        "content-gap": ["--var-timeline-content-gap"],
+        "icon-padding": ["--var-timeline-icon-padding"],
+        "icon-size": ["--var-timeline-icon-size"],
+        "item-padding-block-end": ["--var-timeline-item-padding-block-end"],
+    },
+    "page-calendar": {
+        "badge-radius": ["--var-page-calendar-badge-radius"],
+        "badge-size": ["--var-page-calendar-badge-size"],
+        "cell-gap": ["--var-page-calendar-cell-gap"],
+        "cell-gap-tight": ["--var-page-calendar-cell-gap-tight"],
+        "cell-min-block-size": ["--var-page-calendar-cell-min-block-size"],
+        "cell-padding": ["--var-page-calendar-cell-padding"],
+        "date-gap": ["--var-page-calendar-date-gap"],
+        "day-badge-size": ["--var-page-calendar-day-badge-size"],
+        "day-header-gap": ["--var-page-calendar-day-header-gap"],
+        "day-header-padding-block": ["--var-page-calendar-day-header-padding-block"],
+        "day-header-padding-inline": ["--var-page-calendar-day-header-padding-inline"],
+        "detail-gap": ["--var-page-calendar-detail-gap"],
+        "detail-padding": ["--var-page-calendar-detail-padding"],
+        "dot-bottom": ["--var-page-calendar-dot-bottom"],
+        "dot-size": ["--var-page-calendar-dot-size"],
+        "filter-font-size": ["--var-page-calendar-filter-font-size"],
+        "filter-gap": ["--var-page-calendar-filter-gap"],
+        "filter-label-margin-inline-end": ["--var-page-calendar-filter-label-margin-inline-end"],
+        gap: ["--var-page-calendar-gap"],
+        "gutter-width": ["--var-page-calendar-gutter-width"],
+        "header-gap": ["--var-page-calendar-header-gap"],
+        "hour-font-size": ["--var-page-calendar-hour-font-size"],
+        "month-badge-font-size": ["--var-page-calendar-month-badge-font-size"],
+        "month-badge-size": ["--var-page-calendar-month-badge-size"],
+        "nav-button-gap": ["--var-page-calendar-nav-button-gap"],
+        "nav-gap": ["--var-page-calendar-nav-gap"],
+        "overflow-font-size": ["--var-page-calendar-overflow-font-size"],
+        "pill-font-size": ["--var-page-calendar-pill-font-size"],
+        "pill-radius": ["--var-page-calendar-pill-radius"],
+        "side-padding-inline": ["--var-page-calendar-side-padding-inline"],
+        "title-text": ["--var-page-calendar-title-text"],
+        "today-font-size": ["--var-page-calendar-today-font-size"],
+        "today-padding-block": ["--var-page-calendar-today-padding-block"],
+        "today-padding-inline": ["--var-page-calendar-today-padding-inline"],
+        "today-radius": ["--var-page-calendar-today-radius"],
+        "view-switch-radius": ["--var-page-calendar-view-switch-radius"],
+        "week-badge-font-size": ["--var-page-calendar-week-badge-font-size"],
+        "week-badge-size": ["--var-page-calendar-week-badge-size"],
+        "week-label-text": ["--var-page-calendar-week-label-text"],
+        "weekday-font-size": ["--var-page-calendar-weekday-font-size"],
+        "weekday-padding-block": ["--var-page-calendar-weekday-padding-block"],
+    },
+    table: {
+        "cell-border": ["--var-table-cell-border"],
+        "cell-padding": ["--var-table-cell-padding"],
+        "cell-padding-inline": ["--var-table-cell-padding-inline"],
+        "divider-width": ["--var-table-divider-width"],
+        "empty-block-size": ["--var-table-empty-block-size"],
+        "filter-dot-margin-inline-end": ["--var-table-filter-dot-margin-inline-end"],
+        "filter-dot-size": ["--var-table-filter-dot-size"],
+        "filter-gap": ["--var-table-filter-gap"],
+        "filter-inline-gap": ["--var-table-filter-inline-gap"],
+        "filter-inline-padding-block": ["--var-table-filter-inline-padding-block"],
+        "filter-list-margin-block-start": ["--var-table-filter-list-margin-block-start"],
+        "filter-row-gap": ["--var-table-filter-row-gap"],
+        "groups-gap": ["--var-table-groups-gap"],
+        "groups-margin-block": ["--var-table-groups-margin-block"],
+        "groups-margin-block-start": ["--var-table-groups-margin-block-start"],
+        "head-cell-block-size": ["--var-table-head-cell-block-size"],
+        "inline-gap-tight": ["--var-table-inline-gap-tight"],
+        "loading-bar-block-size": ["--var-table-loading-bar-block-size"],
+        "loading-bar-radius": ["--var-table-loading-bar-radius"],
+        "loading-block-size": ["--var-table-loading-block-size"],
+        "metadata-gap-block": ["--var-table-metadata-gap-block"],
+        "metadata-gap-inline": ["--var-table-metadata-gap-inline"],
+        "metadata-margin-block-end": ["--var-table-metadata-margin-block-end"],
+        "metadata-min-inline-size": ["--var-table-metadata-min-inline-size"],
+        "operations-gap": ["--var-table-operations-gap"],
+        "operations-padding-block": ["--var-table-operations-padding-block"],
+        "pagination-gap": ["--var-table-pagination-gap"],
+        "pagination-item-padding-block": ["--var-table-pagination-item-padding-block"],
+        "pagination-item-padding-inline": ["--var-table-pagination-item-padding-inline"],
+        "pagination-items-gap": ["--var-table-pagination-items-gap"],
+        "pagination-padding": ["--var-table-pagination-padding"],
+        "pill-padding-block": ["--var-table-pill-padding-block"],
+        "pill-padding-inline": ["--var-table-pill-padding-inline"],
+        "pill-radius": ["--var-table-pill-radius"],
+        rounded: ["--var-table-rounded"],
+        "row-gap": ["--var-table-row-gap"],
+        "row-padding-block-end": ["--var-table-row-padding-block-end"],
     },
 };
 
@@ -215,7 +317,12 @@ const rangeFor = (_key: string, value: number, unit: string | undefined): Pick<T
     if (unit === "%" || unit === "vh" || unit === "dvh" || unit === "svh" || unit === "lvh") return { min: 0, max: 100, step: 1 };
     if (unit === "ch") return { min: 0, max: Math.max(16, Math.ceil(value * 3)), step: 1 };
     if (unit === "px") return { min: 0, max: Math.max(16, Math.ceil((value || 1) * 4)), step: 1 };
-    if (unit === "rem") return { min: 0, max: Math.max(4, Math.ceil((value || 1) * 3)), step: 0.0625 };
+    if (unit === "rem")
+        return {
+            min: 0,
+            max: Math.max(4, Math.ceil((value || 1) * 3)),
+            step: 0.0625,
+        };
     return { min: 0, max: Math.max(10, Math.ceil((value || 1) * 4)), step: 1 };
 };
 
@@ -389,12 +496,12 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
             );
         case "modal":
             return (
-                <div className="mx-auto w-full max-w-dialog rounded-modal-radius border border-floating-border bg-floating-background px-modal-padding-x py-modal-padding-y shadow-shadow-floating">
-                    <header className="text-modal-title-text pb-modal-title-pb font-semibold">Confirm deployment</header>
-                    <p className="text-typography-sm py-modal-body-py text-muted-foreground">
+                <div className="mx-auto w-full max-w-dialog rounded-modal-surface-radius border border-floating-border bg-floating-background px-modal-content-padding-inline py-modal-surface-padding-block shadow-shadow-floating">
+                    <header className="pb-modal-title-padding-block-end text-modal-title-font-size font-semibold">Confirm deployment</header>
+                    <p className="text-typography-sm py-modal-body-padding-block text-muted-foreground">
                         This static dialog surface uses the same modal tokens.
                     </p>
-                    <footer className="flex justify-end gap-modal-footer-gap pt-modal-footer-pt">
+                    <footer className="flex justify-end gap-modal-confirm-actions-gap pt-modal-footer-padding-block-start">
                         <Button theme="muted" size="small">
                             Cancel
                         </Button>
@@ -406,8 +513,8 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
             );
         case "dropdown":
             return (
-                <div className="mx-auto w-full max-w-xs rounded-dropdown-radius border border-floating-border bg-floating-background p-dropdown-p shadow-shadow-floating">
-                    <header className="text-typography-sm mb-dropdown-header-mb font-semibold">Workspace</header>
+                <div className="mx-auto w-full max-w-xs rounded-dropdown-surface-radius border border-dropdown-surface-border bg-dropdown-surface-background p-dropdown-surface-padding text-dropdown-surface-foreground shadow-shadow-floating">
+                    <header className="text-typography-sm mb-dropdown-header-margin-block-end font-semibold">Workspace</header>
                     <div className="flex flex-col gap-2 text-typography-sm text-muted-foreground">
                         <span>Profile</span>
                         <span>Settings</span>
@@ -417,16 +524,22 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
             );
         case "tooltip":
             return (
-                <div className="mx-auto max-w-xs rounded-tooltip-radius border border-tooltip-border bg-tooltip-background p-tooltip-p text-tooltip-foreground shadow-shadow-floating">
+                <div className="mx-auto max-w-xs rounded-tooltip-surface-radius border border-tooltip-surface-border bg-tooltip-surface-background p-tooltip-surface-padding text-tooltip-surface-foreground shadow-shadow-floating">
                     <p className="text-typography-sm">Tooltip surface preview</p>
                 </div>
             );
         case "menu":
             return (
-                <div className="mx-auto w-full max-w-xs overflow-hidden rounded-menu-radius border border-floating-border bg-floating-background shadow-shadow-floating">
-                    <div className="p-menu-item-p text-typography-sm hover:bg-floating-hover">Duplicate</div>
-                    <div className="p-menu-item-p text-typography-sm hover:bg-floating-hover">Archive</div>
-                    <div className="p-menu-item-p text-typography-sm text-danger hover:bg-floating-hover">Delete</div>
+                <div className="mx-auto w-full max-w-xs overflow-hidden rounded-menu-surface-radius border border-menu-surface-border bg-menu-surface-background text-menu-surface-foreground shadow-shadow-floating">
+                    <div className="p-menu-item-padding text-typography-sm hover:bg-menu-item-active-background hover:text-menu-item-active-foreground">
+                        Duplicate
+                    </div>
+                    <div className="p-menu-item-padding text-typography-sm hover:bg-menu-item-active-background hover:text-menu-item-active-foreground">
+                        Archive
+                    </div>
+                    <div className="p-menu-item-padding text-typography-sm text-danger hover:bg-menu-item-active-background hover:text-menu-item-active-foreground">
+                        Delete
+                    </div>
                 </div>
             );
         case "stats":
@@ -679,7 +792,11 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
                 <PageCalendar
                     events={[
                         { id: "kickoff", title: "Kickoff", date: previewDate },
-                        { id: "review", title: "Quarterly review", date: new Date(2026, 0, 16) },
+                        {
+                            id: "review",
+                            title: "Quarterly review",
+                            date: new Date(2026, 0, 16),
+                        },
                     ]}
                 />
             );
@@ -766,23 +883,16 @@ export const EditableTokensSection = ({
     if (!groups) return null;
 
     return (
-        <section className="not-prose mb-12 rounded-2xl border border-border/50 bg-card-background p-card-padding-x shadow-shadow-card">
-            <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div className="flex flex-col gap-2">
-                    <h3 id="editable-tokens" className="scroll-mt-24 text-2xl font-bold text-foreground">
-                        Editable tokens
-                    </h3>
-                    <p className="max-w-3xl text-typography-sm text-muted-foreground">
-                        Override these CSS variables on any parent container to reshape this component without changing its markup or classes. The
-                        preview and page examples update as you move each control.
-                    </p>
-                </div>
-                {groups.length > 0 ? (
-                    <Button type="button" size="small" theme="muted" onClick={() => onChange(tokenDefaultsForPath(pathname) ?? {})}>
-                        Reset tokens
-                    </Button>
-                ) : null}
-            </div>
+        <Card title="Editable tokens" className="flex flex-col gap-4" container="mb-4">
+            <p className="max-w-3xl text-typography-sm text-muted-foreground">
+                Override these CSS variables on any parent container to reshape this component without changing its markup or classes. The preview and
+                page examples update as you move each control.
+            </p>
+            {groups.length > 0 ? (
+                <Button type="button" size="small" theme="muted" onClick={() => onChange(tokenDefaultsForPath(pathname) ?? {})}>
+                    Reset tokens
+                </Button>
+            ) : null}
             {groups.length === 0 ? (
                 <div className="rounded-xl border border-border/40 bg-background/40 p-4 text-typography-sm text-muted-foreground">
                     This component does not expose component-specific editable CSS variables yet.
@@ -840,6 +950,6 @@ export const EditableTokensSection = ({
                     })}
                 </div>
             )}
-        </section>
+        </Card>
     );
 };

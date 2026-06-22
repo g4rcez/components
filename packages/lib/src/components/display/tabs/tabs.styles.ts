@@ -4,6 +4,6 @@ export const tabsStyles = defineComponentStyles({
     name: "tabs",
     variants: {},
     defaults: {},
-    slots: ["tab"],
+    slots: ["container", "header", "divider", "nav", "list", "item", "tab", "indicator"],
     dependencies: ["card", "polymorph"],
 });

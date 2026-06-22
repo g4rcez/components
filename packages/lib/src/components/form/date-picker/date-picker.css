@@ -1,20 +1,21 @@
 .__date-picker {
     box-sizing: border-box;
+    color: inherit;
 }
 
 .__date-picker__calendar-icon {
-    inline-size: var(--var-date-picker-calendar-icon-size, 1rem);
-    block-size: var(--var-date-picker-calendar-icon-size, 1rem);
+    inline-size: var(--var-date-picker-calendar-icon-size, var(--date-picker-calendar-icon-size, 1rem));
+    block-size: var(--var-date-picker-calendar-icon-size, var(--date-picker-calendar-icon-size, 1rem));
 }
 
 .__date-picker__sr-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }

@@ -4,6 +4,6 @@ export const skeletonStyles = defineComponentStyles({
     name: "skeleton",
     variants: {},
     defaults: {},
-    slots: [],
+    slots: ["cell", "block", "list"],
     dependencies: ["polymorph"],
 });

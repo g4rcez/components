@@ -1,15 +1,14 @@
 .__masonry {
-        box-sizing: border-box;
-    }
-
-.__display-masonry__slot-1 {
-  position: relative;
-  margin: 0px;
-  width: 100%;
-  list-style-type: none;
-  padding: 0px
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    list-style-type: none;
 }
 
-.__display-masonry__slot-2 {
-  display: block
+.__masonry__item {
+    display: block;
+    box-sizing: border-box;
 }

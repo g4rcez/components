@@ -4,11 +4,13 @@ import type React from "react";
 import { Fragment, useMemo } from "react";
 import type { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
+import { css } from "../../lib/dom";
 import { uuid } from "../../lib/fns";
 import type { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown/dropdown";
 import { Input, type InputTypes } from "../form/input/input";
 import { type OptionProps, Select } from "../form/select/select";
+import { tableFilterStyles } from "./filter.styles";
 import { type Col, ColType, getLabel, type TableConfiguration, valueFromType } from "./table-lib";
 
 type Operators = {
@@ -186,17 +188,17 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="__table-filter__slot-1 __table-filter__tw-final-1">
-                        <FunnelIcon className="__table-filter__trigger-icon" />
+                    <span className={tableFilterStyles.slots["trigger-label"]}>
+                        <FunnelIcon className={tableFilterStyles.slots["trigger-icon"]} />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
             >
-                <ul className="__table-filter__slot-2">
+                <ul className={tableFilterStyles.slots.list}>
                     {props.filters.map((filter) => {
                         const options = operators.options[filter.type]!;
                         return (
-                            <li key={`filter-select-${filter.id}`} className="__table-filter__slot-3 __table-filter__slot-extra-1">
+                            <li key={`filter-select-${filter.id}`} className={tableFilterStyles.slots.row}>
                                 <Select
                                     options={props.options}
                                     title={translation.tableFilterColumnTitle}
@@ -222,15 +224,15 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     title={translation.tableFilterValueTitle}
                                     placeholder={translation.tableFilterValuePlaceholder}
                                 />
-                                <div className="__table-filter__slot-4">
+                                <div className={tableFilterStyles.slots["delete-control"]}>
                                     <button
                                         data-id={filter.id}
                                         type="button"
                                         onClick={onDelete}
                                         aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
                                     >
-                                        <span className="__table-filter__slot-5">
-                                            <TrashIcon aria-hidden="true" className="__table-filter__delete-icon" />
+                                        <span className={tableFilterStyles.slots["danger-icon"]}>
+                                            <TrashIcon aria-hidden="true" className={tableFilterStyles.slots["delete-icon"]} />
                                         </span>
                                     </button>
                                 </div>
@@ -238,8 +240,8 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="__table-filter__slot-6">
-                            <PlusIcon className="__table-filter__add-icon" /> {translation.tableFilterNewFilter}
+                        <button type="button" onClick={onAddFilter} className={tableFilterStyles.slots["add-button"]}>
+                            <PlusIcon className={tableFilterStyles.slots["add-icon"]} /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
                 </ul>
@@ -280,7 +282,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="__table-filter__slot-7 __table-filter__slot-extra-1">
+        <div className={tableFilterStyles.slots["inline-row"]}>
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}
@@ -302,11 +304,14 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 onClick={onDelete}
                 data-id={filter.id}
                 type="button"
-                className="__table-filter__slot-8"
+                className={tableFilterStyles.slots["inline-delete-button"]}
                 aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
             >
-                <span className="__table-filter__slot-5">
-                    <TrashIcon aria-hidden="true" className="__table-filter__delete-icon __table-filter__delete-icon--sm" />
+                <span className={tableFilterStyles.slots["danger-icon"]}>
+                    <TrashIcon
+                        aria-hidden="true"
+                        className={css(tableFilterStyles.slots["delete-icon"], `${tableFilterStyles.slots["delete-icon"]}--sm`)}
+                    />
                 </span>
             </button>
         </div>

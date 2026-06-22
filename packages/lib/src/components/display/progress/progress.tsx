@@ -4,6 +4,7 @@ import { Progress as RadixProgress } from "@base-ui/react/progress";
 import { css } from "../../../lib/dom";
 import type { PropsWithoutRef } from "react";
 import type { Label } from "../../../types";
+import { progressStyles } from "./progress.styles";
 
 type ProgressProps = {
     min?: number;
@@ -34,11 +35,11 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
             value={hasValue ? rawValue! : null}
             style={{ transform: "translateZ(0)" }}
             data-component="progress"
-            className={css("__progress", props.container)}
+            className={css(progressStyles.className({}), props.container)}
         >
-            <RadixProgress.Indicator data-slot="indicator" className={css("__progress__indicator", props.className)} />
+            <RadixProgress.Indicator data-slot="indicator" className={css(progressStyles.slots.indicator, props.className)} />
             {percent !== null ? (
-                <p data-slot="label" className={css("__progress__label", props.textClassName)}>
+                <p data-slot="label" className={css(progressStyles.slots.label, props.textClassName)}>
                     {props.label ? props.label : `${Math.round(percent)} %`}
                 </p>
             ) : null}

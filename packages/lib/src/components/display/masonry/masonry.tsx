@@ -1,7 +1,18 @@
 "use client";
-import React, { CSSProperties, forwardRef, PropsWithChildren, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import React, {
+    type CSSProperties,
+    forwardRef,
+    type PropsWithChildren,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { css } from "../../../lib/dom";
-import { Polymorph, PolymorphicProps } from "../../core/polymorph/polymorph";
+import { Polymorph, type PolymorphicProps } from "../../core/polymorph/polymorph";
+import { masonryStyles } from "./masonry.styles";
 
 export type MasonryLayoutItem = {
     index: number;
@@ -35,7 +46,8 @@ const clampColumns = (columns: number) => Math.max(1, Math.floor(columns));
 const createLayout = (heights: number[], columnCount: number, gutter: number, width: number): MasonryLayout => {
     const columns = clampColumns(columnCount);
     const safeGutter = Math.max(0, gutter);
-    const itemWidth = columns === 1 ? width : (width - safeGutter * (columns - 1)) / columns;
+    const availableWidth = Math.max(0, width);
+    const itemWidth = columns === 1 ? availableWidth : Math.max(0, (availableWidth - safeGutter * (columns - 1)) / columns);
     const columnHeights = Array.from({ length: columns }, () => 0);
     const items = heights.map<MasonryLayoutItem>((height, index) => {
         let column = 0;
@@ -137,21 +149,42 @@ const MasonryInner = <T extends React.ElementType = "ul">(
         const root = rootRef.current;
         if (!root) return;
         scheduleMeasure();
-        if (typeof ResizeObserver === "undefined") return;
-        const observer = new ResizeObserver(scheduleMeasure);
-        observer.observe(root);
-        return () => {
-            observer.disconnect();
+
+        const cleanupFrame = () => {
             if (frameRef.current !== null) {
                 cancelAnimationFrame(frameRef.current);
                 frameRef.current = null;
             }
         };
-    }, [scheduleMeasure]);
+
+        if (typeof ResizeObserver === "undefined") return cleanupFrame;
+
+        const observer = new ResizeObserver(scheduleMeasure);
+        observer.observe(root);
+        itemRefs.current.slice(0, childrenArray.length).forEach((item) => {
+            if (item) observer.observe(item);
+        });
+
+        return () => {
+            observer.disconnect();
+            cleanupFrame();
+        };
+    }, [childrenArray.length, scheduleMeasure]);
 
     useEffect(() => {
         scheduleMeasure();
     }, [fresh, scheduleMeasure]);
+
+    const rootStyle: CSSProperties = {
+        ...style,
+        boxSizing: "border-box",
+        height: layout.height,
+        listStyleType: style?.listStyleType ?? "none",
+        margin: style?.margin ?? 0,
+        padding: style?.padding ?? 0,
+        position: "relative",
+        width: style?.width ?? "100%",
+    };
 
     return (
         <Polymorph
@@ -159,21 +192,25 @@ const MasonryInner = <T extends React.ElementType = "ul">(
             ref={rootRef}
             as={as ?? "ul"}
             data-component="masonry"
-            onLoad={scheduleMeasure}
-            onError={scheduleMeasure}
-            style={{ ...style, height: layout.height }}
-            className={css("__display-masonry__slot-1", className)}
+            onLoadCapture={scheduleMeasure}
+            onErrorCapture={scheduleMeasure}
+            style={rootStyle}
+            className={css(masonryStyles.className({}), className)}
         >
             {childrenArray.map((child, index) => {
                 const item = layout.items[index];
                 const itemStyle: CSSProperties = item
                     ? {
+                          boxSizing: "border-box" as const,
+                          display: "block" as const,
                           left: item.left,
                           position: "absolute" as const,
                           top: item.top,
                           width: item.width,
                       }
                     : {
+                          boxSizing: "border-box" as const,
+                          display: "block" as const,
                           left: 0,
                           position: "absolute" as const,
                           top: 0,
@@ -184,7 +221,7 @@ const MasonryInner = <T extends React.ElementType = "ul">(
                     <Item
                         style={itemStyle}
                         data-component="masonry-item"
-                        className={css("box-border __display-masonry__slot-2", itemClassName)}
+                        className={css(masonryStyles.slots.item, itemClassName)}
                         key={typeof child === "object" && "key" in child ? child.key : index}
                         ref={(node: HTMLElement | null) => {
                             itemRefs.current[index] = node;

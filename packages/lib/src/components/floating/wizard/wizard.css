@@ -6,7 +6,7 @@
   pointer-events: none;
   position: fixed;
   inset: 0px;
-  z-index: var(--z-wizard)
+  z-index: var(--var-layer-wizard, var(--z-wizard))
 }
 
 .__floating-wizard__slot-2 {
@@ -30,17 +30,17 @@
 
 .__floating-wizard__slot-5 {
   display: flex;
-  width: var(--wizard-w);
+  width: var(--var-wizard-w, var(--wizard-w));
   max-width: 24rem;
-  gap: var(--wizard-gap);
-  border-radius: var(--wizard-radius);
+  gap: var(--var-wizard-gap, var(--wizard-gap));
+  border-radius: var(--var-wizard-rounded, var(--wizard-radius));
   --tw-border-opacity: 1;
   border-color: hsla(var(--floating-border), var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: hsla(var(--floating-background), var(--tw-bg-opacity));
-  padding: var(--wizard-p);
-  --tw-shadow: var(--shadow-floating);
-  --tw-shadow-colored: var(--shadow-floating);
+  padding: var(--var-wizard-p, var(--wizard-p));
+  --tw-shadow: var(--var-shadow-floating, var(--shadow-floating));
+  --tw-shadow-colored: var(--var-shadow-floating, var(--shadow-floating));
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
 }
 
@@ -50,18 +50,18 @@
 }
 
 .__floating-wizard__slot-7 {
-  margin-top: var(--wizard-footer-pt);
+  margin-top: var(--var-wizard-footer-pt, var(--wizard-footer-pt));
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-top-width: 1px;
   --tw-border-opacity: 1;
   border-color: hsla(var(--floating-border), var(--tw-border-opacity));
-  padding-top: var(--wizard-footer-pt)
+  padding-top: var(--var-wizard-footer-pt, var(--wizard-footer-pt))
 }
 
 .__floating-wizard__slot-8 {
-  font-size: var(--wizard-label-text);
+  font-size: var(--var-wizard-label-text, var(--wizard-label-text));
   --tw-text-opacity: 1;
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }
@@ -73,14 +73,14 @@
 
 .__floating-wizard__slot-9 {
   display: flex;
-  gap: var(--wizard-actions-gap)
+  gap: var(--var-wizard-actions-gap, var(--wizard-actions-gap))
 }
 
 .__floating-wizard__slot-10 {
   position: absolute;
-  right: var(--wizard-counter-right);
-  top: var(--wizard-counter-top);
-  font-size: var(--wizard-label-text);
+  right: var(--var-wizard-counter-right, var(--wizard-counter-right));
+  top: var(--var-wizard-counter-top, var(--wizard-counter-top));
+  font-size: var(--var-wizard-label-text, var(--wizard-label-text));
   --tw-text-opacity: 1;
   color: hsla(var(--muted-foreground), var(--tw-text-opacity))
 }

@@ -194,8 +194,8 @@ function SubmissionForm() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't rely solely on client-side `maxSize`/`accept` — validate files server-side as well.
 - Don't skip `onDeleteFile` when `files` is controlled — without it, users cannot remove files they added.
 

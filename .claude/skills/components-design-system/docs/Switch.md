@@ -131,8 +131,8 @@ export default function PrivacySettings() {
 
 - Don't use `Switch` for selecting multiple items from a list — use `Checkbox` or `MultiSelect`.
 - Don't use `Switch` when the action involves a long or complex process without additional loading feedback.
-- Don't pass raw Tailwind color classes (`bg-green-500`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-green-500`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 

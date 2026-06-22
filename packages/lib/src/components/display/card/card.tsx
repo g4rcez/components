@@ -6,6 +6,7 @@ import { css } from "../../../lib/dom";
 import type { Label } from "../../../types";
 import { Polymorph, type PolymorphicProps } from "../../core/polymorph/polymorph";
 import { Skeleton } from "../skeleton/skeleton";
+import { cardStyles } from "./card.styles";
 
 export type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<
     {
@@ -19,42 +20,47 @@ export type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<
 >;
 
 export const Card = <T extends React.ElementType = "div">({
+    as,
     title,
     loading,
     children,
-    as,
     header = null,
     container = "",
     titleClassName = "",
     ...props
-}: PropsWithChildren<CardProps<T>>) => (
-    <Polymorph
-        {...props}
-        as={as || "div"}
-        data-component="card"
-        className={css("__display-card__border __display-card__slot-1 __display-card__slot-extra-1", container)}
-    >
-        {title ? (
-            <header data-component="card-title" className={css("__display-card__slot-2", titleClassName)}>
-                {title}
-            </header>
-        ) : (
-            header
-        )}
-        <div data-component="card-body" className={css("__display-card__slot-3", props.className)}>
-            {loading ? (
-                <div className="__display-card__slot-4 __display-card__slot-extra-1">
-                    <Skeleton className="__display-card__slot-5" />
-                    <Skeleton className="__display-card__slot-6" />
-                    <Skeleton className="__display-card__slot-7" />
-                    <Skeleton className="__display-card__slot-8" />
-                </div>
+}: PropsWithChildren<CardProps<T>>) => {
+    const bodyColumnClassName = `${cardStyles.slots.body}--column`;
+    const skeletonLineClassName = cardStyles.slots["skeleton-line"];
+
+    return (
+        <Polymorph
+            {...props}
+            as={as || "div"}
+            data-component="card"
+            className={css(cardStyles.className({}), cardStyles.slots.border, cardStyles.slots.body, bodyColumnClassName, container)}
+        >
+            {title ? (
+                <header data-component="card-title" className={css(cardStyles.slots.title, titleClassName)}>
+                    {title}
+                </header>
             ) : (
-                children
+                header
             )}
-        </div>
-    </Polymorph>
-);
+            <div data-component="card-body" className={css(cardStyles.slots.content, props.className)}>
+                {loading ? (
+                    <div className={cardStyles.slots.skeleton}>
+                        <Skeleton className={skeletonLineClassName} />
+                        <Skeleton className={css(skeletonLineClassName, `${skeletonLineClassName}--medium`)} />
+                        <Skeleton className={css(skeletonLineClassName, `${skeletonLineClassName}--long`)} />
+                        <Skeleton className={css(skeletonLineClassName, `${skeletonLineClassName}--short`)} />
+                    </div>
+                ) : (
+                    children
+                )}
+            </div>
+        </Polymorph>
+    );
+};
 
 export type CardHeaderTitleProps<T extends React.ElementType = "div"> = PolymorphicProps<
     {
@@ -70,13 +76,9 @@ Card.Title = ({ as, titleTag, navTag, children, ...props }: PropsWithChildren<Ca
     const Title = (titleTag || "h2") as React.ElementType;
     const Nav = (navTag || "nav") as React.ElementType;
     return (
-        <Component
-            {...props}
-            title={Is.string(props.title) ? props.title : undefined}
-            className={css("__display-card__slot-9 __display-card__slot-extra-2", props.className)}
-        >
-            <Title className="__display-card__slot-10">{props.title}</Title>
-            {children ? <Nav className="__display-card__slot-11 __display-card__slot-extra-3">{children}</Nav> : null}
+        <Component {...props} title={Is.string(props.title) ? props.title : undefined} className={css(cardStyles.slots.header, props.className)}>
+            <Title className={cardStyles.slots.heading}>{props.title}</Title>
+            {children ? <Nav className={cardStyles.slots.actions}>{children}</Nav> : null}
         </Component>
     );
 };
@@ -92,13 +94,19 @@ export type StatsCardProps = CardProps<React.ElementType> & {
 export const StatsCard = (props: StatsCardProps) => {
     const interactive = props.interactive ?? true;
     const Icon = props.Icon ?? InfoIcon;
+    const statsPanelClassName = cardStyles.slots["stats-panel"];
+
     return (
-        <Card {...props} title={null} loading={undefined} container="__display-card__stats-container" className="__display-card__slot-12">
-            <div className={`__display-card__slot-13 ${interactive ? "__display-card__slot-14" : ""}`}>
-                <div className={css("__display-card__slot-15", props.mark)}>{<Icon aria-hidden />}</div>
-                <div className="__display-card__slot-16 __display-card__slot-extra-1">
-                    <p className="__display-card__slot-17">{props.title}</p>
-                    {props.loading ? <Skeleton className="__display-card__slot-18" /> : <p className="__display-card__slot-19">{props.value}</p>}
+        <Card {...props} title={null} loading={undefined} container={cardStyles.slots["stats-container"]} className={cardStyles.slots["stats-body"]}>
+            <div className={css(statsPanelClassName, interactive ? `${statsPanelClassName}--interactive` : undefined)}>
+                <div className={css(cardStyles.slots["stats-icon"], props.mark)}>{<Icon aria-hidden />}</div>
+                <div className={cardStyles.slots["stats-content"]}>
+                    <p className={cardStyles.slots["stats-title"]}>{props.title}</p>
+                    {props.loading ? (
+                        <Skeleton className={cardStyles.slots["stats-loading"]} />
+                    ) : (
+                        <p className={cardStyles.slots["stats-value"]}>{props.value}</p>
+                    )}
                 </div>
             </div>
         </Card>

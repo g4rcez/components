@@ -4,6 +4,6 @@ export const resizableStyles = defineComponentStyles({
     name: "resizable",
     variants: {},
     defaults: {},
-    slots: [],
+    slots: ["content"],
     dependencies: [],
 });

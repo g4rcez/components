@@ -256,8 +256,8 @@ import { TrashIcon, PencilIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't render `<Table>` without a `name` — preferences and DOM ids rely on it.
 - Don't put heavy rendering logic directly inside `rows` array transformation; use `Element` cells instead so virtualization can skip off-screen rows.
 - Don't use `Table` for single-row or trivial datasets — a plain list or card layout is more appropriate.

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import React, { useState } from "react";
-import { Modal } from "../src/components/floating/modal";
+import { Modal } from "../src/components/floating/modal/modal";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 
 describe("Modal focus management", () => {
@@ -25,7 +25,7 @@ describe("Modal focus management", () => {
         const closeButton = await screen.findByRole("button", { name: /close/i });
         expect(closeButton).toBeInTheDocument();
         expect(closeButton).not.toHaveAttribute("tabindex", "-1");
-        expect(closeButton).toHaveClass("__floating-modal__slot-23");
+        expect(closeButton).toHaveClass("__modal__close-button");
     });
 
     it("close button click calls onChange with false", async () => {

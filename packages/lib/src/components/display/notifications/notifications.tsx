@@ -1,27 +1,15 @@
 "use client";
 import { Toast as Base } from "@base-ui/react/toast";
 import { CheckCircleIcon, CircleNotchIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
-import { cva, type VariantProps } from "class-variance-authority";
 import { AnimatePresence, motion } from "motion/react";
 import { createContext, type PropsWithChildren, useCallback, useContext, useRef } from "react";
 import { useHover } from "../../../hooks/use-hover";
+import type { ComponentStyleProps } from "../../../lib/component-styles";
 import { css } from "../../../lib/dom";
 import type { Label } from "../../../types";
+import { notificationsStyles } from "./notifications.styles";
 
-const variants = cva("__display-notifications__border __display-notifications__slot-1 __display-notifications__slot-extra-1", {
-    variants: {
-        theme: {
-            default: "__display-notifications__slot-2",
-            info: "__display-notifications__slot-3",
-            warn: "__display-notifications__slot-4",
-            muted: "__display-notifications__slot-5",
-            danger: "__display-notifications__slot-6",
-            success: "__display-notifications__slot-7",
-            secondary: "__display-notifications__slot-8",
-        },
-    },
-    defaultVariants: { theme: "default" },
-});
+type NotificationStyleProps = ComponentStyleProps<typeof notificationsStyles>;
 
 const themeIcons = {
     default: InfoIcon,
@@ -39,7 +27,7 @@ type NotificationOptions = Partial<{
     timeout: number;
     closable: boolean;
     loading: boolean;
-    theme: VariantProps<typeof variants>["theme"];
+    theme: NotificationStyleProps["theme"];
 }>;
 
 type NotificationData = {
@@ -66,7 +54,8 @@ function Notification(props: NotificationItemProps) {
     const closable = props.toast.data?.closable ?? true;
     const loading = props.toast.data?.loading ?? false;
     const theme = props.toast.data?.theme || "default";
-    const className = variants({ theme });
+    const className = notificationsStyles.className({ theme });
+    const iconClassName = notificationsStyles.slots.icon;
     const Icon = loading ? CircleNotchIcon : themeIcons[theme] || InfoIcon;
 
     return (
@@ -81,22 +70,22 @@ function Notification(props: NotificationItemProps) {
                     damping: 25,
                     stiffness: 300,
                 }}
-                className="__display-notifications__slot-9"
+                className={notificationsStyles.slots.item}
             >
                 <Base.Content className={className}>
-                    <div className="__display-notifications__slot-10">
-                        <div className={css("__display-notifications__slot-11", loading && "__display-notifications__slot-12")}>
+                    <div className={notificationsStyles.slots.content}>
+                        <div className={css(iconClassName, loading && `${iconClassName}--loading`)}>
                             <Icon aria-hidden="true" />
                         </div>
 
-                        <div className="__display-notifications__slot-13 __display-notifications__slot-extra-1">
-                            {props.toast.title ? <Base.Title className="__display-notifications__slot-14" /> : null}
-                            <Base.Description className="line-clamp-2 __display-notifications__slot-15" />
+                        <div className={notificationsStyles.slots.text}>
+                            {props.toast.title ? <Base.Title className={notificationsStyles.slots.title} /> : null}
+                            <Base.Description className={css("line-clamp-2", notificationsStyles.slots.description)} />
                         </div>
 
                         {closable && !loading ? (
-                            <Base.Close className="__notifications__close __display-notifications__slot-16">
-                                <span className="__display-notifications__slot-17">
+                            <Base.Close className={notificationsStyles.slots.close}>
+                                <span className={notificationsStyles.slots["close-icon"]}>
                                     <XIcon aria-hidden="true" />
                                 </span>
                             </Base.Close>
@@ -119,7 +108,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
     const hiddenCount = allToasts.length - visibleToasts.length;
 
     return (
-        <Base.Viewport ref={ref} className="__display-notifications__slot-18 __display-notifications__slot-extra-1">
+        <Base.Viewport ref={ref} className={notificationsStyles.slots.viewport}>
             <AnimatePresence mode="popLayout" initial={false}>
                 {visibleToasts.map((toast) => (
                     <Notification key={toast.id} toast={toast} />
@@ -132,7 +121,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="__display-notifications__border __display-notifications__slot-19"
+                    className={notificationsStyles.slots.badge}
                 >
                     +{hiddenCount} more
                 </motion.div>

@@ -1,3 +1,9 @@
 .__resizable {
     box-sizing: border-box;
+    overflow: hidden;
+    color: inherit;
+}
+
+.__resizable__content {
+    box-sizing: border-box;
 }

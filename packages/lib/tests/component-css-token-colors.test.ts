@@ -73,22 +73,23 @@ describe("component CSS color tokens", () => {
     });
 
     it("uses valid alert theme color declarations", () => {
-        const alertCss = readFileSync(join(componentsRoot, "display", "alert.css"), "utf8");
+        const alertCss = readFileSync(join(componentsRoot, "display", "alert", "alert.css"), "utf8");
 
-        expect(alertCss).toContain(".__display-alert--theme-muted");
-        expect(alertCss).toContain("color: hsla(var(--alert-danger-text), 1);");
-        expect(alertCss).toContain("border-color: hsla(var(--alert-danger-border), 1);");
-        expect(alertCss).toContain("background-color: hsla(var(--alert-danger-bg), 1);");
-        expect(alertCss).toContain("color: hsla(var(--alert-neutral-text), 1);");
+        expect(alertCss).toContain(".__alert--theme-muted");
+        expect(alertCss).toContain("color: var(--var-alert-danger-foreground);");
+        expect(alertCss).toContain("border-color: var(--var-alert-danger-border);");
+        expect(alertCss).toContain("background-color: var(--var-alert-danger-background);");
+        expect(alertCss).toContain("color: var(--var-color-foreground);");
+        expect(alertCss).not.toContain("hsla(var(--alert-");
         expect(alertCss).not.toContain("color: var(--alert-");
         expect(alertCss).not.toContain("background: var(--alert-");
         expect(alertCss).not.toContain("border-color: var(--alert-");
     });
 
     it("exposes checkbox control colors as CSS variables with primary as the default", () => {
-        const checkboxCss = readFileSync(join(componentsRoot, "form", "checkbox.css"), "utf8");
+        const checkboxCss = readFileSync(join(componentsRoot, "form", "checkbox", "checkbox.css"), "utf8");
 
-        expect(checkboxCss).toContain("--checkbox-control-color: var(--primary-DEFAULT);");
+        expect(checkboxCss).toContain("--checkbox-control-color: var(--var-checkbox-control-color, var(--primary-DEFAULT));");
         expect(checkboxCss).toContain("color: hsla(var(--checkbox-control-color), 1);");
         expect(checkboxCss).toContain("--tw-ring-color: hsla(var(--checkbox-control-ring-color), 1);");
         expect(checkboxCss).not.toContain("#2563eb");

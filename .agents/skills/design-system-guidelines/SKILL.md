@@ -1,6 +1,6 @@
 ---
 name: design-system-guidelines
-description: ALWAYS use this skill when creating new components, modifying existing components, adding styling, working with design tokens, or doing anything related to this component library. Use this before writing any component code.
+description: ALWAYS use this skill when creating new components, modifying existing components, adding styling, working with design tokens, migrating CSS, or doing anything related to this component library. Use this before writing any component code. Enforce the token-first design system: prioritize `packages/lib/src/styles/tokens.css`, follow the simplified CSS-variable usage pattern from `packages/lib/src/components/display/card/card.css`, derive component tokens from base tokens with `calc()`, avoid two-level variable alias/fallback chains, never use `color-mix()`, prefer broadly supported `hsla()` color tokens, and preserve the shadcn/ui mindset of semantic tokens that are easy to theme rather than hardcoded values.
 ---
 
 # Design System Guidelines
@@ -160,6 +160,50 @@ The library styling contract has four layers. Keep them separate:
 
 ## Design Token Rules
 
+### Token source of truth
+
+Treat `packages/lib/src/styles/tokens.css` as the base token source for new CSS. Component CSS should consume a single semantic `--var-*` token when the value is component-specific, or consume a global semantic/base token directly when the component does not need its own meaning. Derive component sizes from base tokens with `calc()` instead of inventing new literal values.
+
+Use this simplified pattern from `card.css`:
+
+```css
+/* tokens.css */
+:root {
+    --var-card-gap: calc(var(--var-spacing-base) * 1);
+    --var-card-padding-inline: calc(var(--var-spacing-base) * 1.5);
+    --var-card-title-padding-block-end: calc(var(--var-spacing-base) / 2);
+}
+
+/* component CSS */
+.__card__body {
+    gap: var(--var-card-gap);
+    border-color: var(--var-color-border);
+    padding-inline: var(--var-card-padding-inline);
+}
+```
+
+Token hierarchy rules:
+
+1. **No two-level variable aliases.** Do not define a component token whose value is only a fallback/alias to another token, then consume that alias in CSS. For example, avoid `--var-card-border-color: var(--var-card-border, var(--var-color-border))` if the component can read `--var-color-border` directly. Avoid `--var-input-padding: var(--var-input-spacing, var(--var-spacing))` if the component can read `--var-spacing` directly.
+2. **Component tokens must earn their name.** Create `--var-component-slot-property` only when the value represents a real semantic part of the component/DOM, or when consumers should customize that part independently. Otherwise use the global semantic/base token directly.
+3. **Derived component tokens use base-token math.** Prefer `--var-card-title-padding-block-end: calc(var(--var-spacing-base) / 2)` over literal deltas like `0.5rem`.
+4. **CSS usage stays shallow.** Component CSS should read one variable per declaration (`padding-inline: var(--var-card-padding-inline);`) instead of nested fallback chains.
+5. **Legacy fallbacks are temporary migration code.** If an existing component still needs old `--component-*` support, keep that compatibility close to the old CSS while migrating, but do not introduce new alias/fallback chains in `tokens.css`.
+6. **Avoid modern color-computation functions.** Never use `color-mix()` in tokens or component CSS. Prefer explicit semantic color tokens whose default values are broadly supported `hsla(...)` colors.
+7. Literal values are allowed only when they represent browser primitives, structural resets, math constants, or token primitive defaults (`0`, `1`, `100%`, `transparent`, `currentColor`, `inherit`, `none`, `linear`, `hsla(...)`, etc.).
+
+### Shadcn-style semantic token mindset
+
+Follow the shadcn/ui token philosophy without copying names blindly: components should depend on semantic CSS variables (`background`, `foreground`, `border`, `primary`, `muted`, `card`, `button`) that can be remapped by themes. Do not bind component intent to raw color families, one-off spacing, or visual adjectives like “blue card” or “large 24px gap.” Prefer tokens that describe role and relationship, then derive variants from those tokens.
+
+Variable names must describe the semantic DOM role, not implementation mechanics or visual coincidence. Prefer `--var-card-title-padding-block-end`, `--var-card-stats-icon-size`, and `--var-input-field-padding-inline`; avoid vague aliases like `--var-card-border-color` when the semantic value is just the global border, or generic names like `--var-input-spacing` when the DOM role is input field padding/gap.
+
+### Color tokens and legacy browser support
+
+Define color primitives and semantic color tokens as explicit `hsla(...)` values in `tokens.css` or theme files. Component CSS should consume those tokens directly with `color: var(--var-color-...)`, `background-color: var(--var-...-background)`, or `border-color: var(--var-...-border)`.
+
+Do not use `color-mix()`, relative color syntax, `oklch()`, `lab()`, or other modern color math for defaults. They make theming harder to reason about and reduce legacy browser compatibility. If a lighter/darker/subtle state is needed, add an explicit semantic token such as `--var-alert-danger-background: hsla(...)` or reuse an existing token like `--var-color-danger-subtle`.
+
 ### Core Rule: NEVER hardcode values
 
 No `text-[#fff]`, `rounded-[8px]`, `z-[9999]`, `p-[12px]`, `color: #2563eb`, or `height: 1rem` inside component styling. Use design-token CSS variables or token utilities only.
@@ -317,10 +361,16 @@ export const Badge: <T extends React.ElementType = "span">(_: BadgeProps<T>) => 
 
 ## Component-Specific Rules
 
-### Card (`/packages/lib/src/components/display/card.tsx`)
+### Card (`/packages/lib/src/components/display/card/card.css`)
 
-- DO NOT add custom `rounded-*`, `p-*`, `shadow-*`, `border-*` overrides
-- Use tokens: `rounded-card-radius`, `shadow-shadow-card`, `border-card-border`, `bg-card-background`
+Use `card.css` as a reference implementation for token migration and fallback order.
+
+- Prefer direct global tokens for shared meanings: `--var-color-background`, `--var-color-border`, `--var-color-primary`, `--var-color-primary-foreground`, `--var-shadow-card`.
+- Add `--var-card-*` tokens only for card-specific DOM semantics such as body gap, title padding, stats icon size, or stats value typography.
+- Do not create card aliases like `--var-card-border-color: var(--var-card-border, var(--var-color-border))`; use `--var-color-border` directly in `card.css` unless card border needs independent semantics.
+- Derive secondary card metrics with `calc(var(--var-spacing-base) / 2)` or similar base-token math.
+- DO NOT add custom `rounded-*`, `p-*`, `shadow-*`, `border-*` overrides.
+- Tailwind-era token utilities, when present in TSX examples, should map to card tokens: `rounded-card-radius`, `shadow-shadow-card`, `border-card-border`, `bg-card-background`.
 
 ```tsx
 <Card container="custom-layout-class" />  // OK
@@ -346,9 +396,14 @@ When creating or reviewing component code:
 - [ ] No generated `tw-*` selector contracts (`__component__tw-17`, `tw-extra-*`, `tw-state-*`)
 - [ ] Component TSX emits stable base/variant/slot classes from `defineComponentStyles()` or semantic slots
 - [ ] Component CSS targets stable selectors and keeps visual rules out of TSX utility strings
-- [ ] No hardcoded color values (`#3B82F6`, `rgb(...)`, `text-blue-500`)
+- [ ] No hardcoded color values (`#3B82F6`, `rgb(...)`, `text-blue-500`) in component CSS; color defaults live as semantic `hsla(...)` tokens
 - [ ] No hardcoded spacing/sizing (`p-[12px]`, `gap-[8px]`, `height: 1rem`)
 - [ ] No arbitrary Tailwind values (`rounded-[8px]`, `z-[9999]`)
+- [ ] Component CSS reads a single semantic `--var-*` token per declaration instead of nested fallback chains
+- [ ] `tokens.css` does not introduce two-level aliases such as `--var-card-border-color: var(--var-card-border, var(--var-color-border))`
+- [ ] `tokens.css` and component CSS do not use `color-mix()` or modern color math; use explicit semantic `hsla(...)` tokens instead
+- [ ] Component-specific token names describe the semantic DOM role/property, not a vague alias or implementation detail
+- [ ] Related token variants are derived from base tokens with `calc()` rather than hardcoded literal sizes
 - [ ] Component CSS reads design-token variables (`var(--...)`) for geometry, color, radii, focus rings, and motion-sensitive values
 - [ ] Primary color uses `primary` token, not "blue"
 - [ ] Card: no custom `rounded-*`, `p-*`, `shadow-*` — use `rounded-card-radius`
@@ -371,6 +426,7 @@ When creating or reviewing component code:
 
 | Concern                                                | File                                             |
 | ------------------------------------------------------ | ------------------------------------------------ |
+| Base CSS variable tokens                               | `packages/lib/src/styles/tokens.css`             |
 | Colors                                                 | `packages/lib/src/styles/light.ts` / `dark.ts`   |
 | Component tokens (sizing, radius, spacing, font sizes) | `packages/lib/src/styles/components.ts`          |
 | Global spacing / Rounded / Z-Index                     | `packages/lib/src/styles/common.ts`              |

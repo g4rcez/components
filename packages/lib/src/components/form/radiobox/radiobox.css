@@ -1,12 +1,12 @@
 .__radiobox {
-    --radiobox-control-color: var(--primary-DEFAULT);
-    --radiobox-control-background: var(--background);
-    --radiobox-control-border-color: var(--card-border);
-    --radiobox-control-mark-color: 0, 0%, 100%;
-    --radiobox-control-ring-color: var(--radiobox-control-color);
-    --radiobox-control-ring-offset-color: var(--radiobox-control-background);
-    --radiobox-control-border-width: 1px;
-    --radiobox-control-mark-size: calc(var(--radiobox-size) * 0.375);
+    --radiobox-control-color: var(--var-radiobox-control-color, var(--primary-DEFAULT));
+    --radiobox-control-background: var(--var-radiobox-control-background, var(--background));
+    --radiobox-control-border-color: var(--var-radiobox-control-border-color, var(--card-border));
+    --radiobox-control-mark-color: var(--var-radiobox-control-mark-color, 0, 0%, 100%);
+    --radiobox-control-ring-color: var(--var-radiobox-control-ring-color, var(--radiobox-control-color));
+    --radiobox-control-ring-offset-color: var(--var-radiobox-control-ring-offset-color, var(--radiobox-control-background));
+    --radiobox-control-border-width: var(--var-radiobox-control-border-width, 1px);
+    --radiobox-control-mark-size: var(--var-radiobox-control-mark-size, calc(var(--var-radiobox-size, var(--radiobox-size)) * 0.375));
 
     box-sizing: border-box;
 }
@@ -15,7 +15,7 @@
   display: flex;
   width: fit-content;
   align-items: center;
-  gap: var(--radiobox-gap);
+  gap: var(--var-radiobox-gap, var(--radiobox-gap));
   font-weight: 400;
 }
 
@@ -25,12 +25,12 @@
 
 .__radiobox__control {
   display: inline-block;
-  width: var(--radiobox-size);
-  height: var(--radiobox-size);
+  width: var(--var-radiobox-size, var(--radiobox-size));
+  height: var(--var-radiobox-size, var(--radiobox-size));
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border-radius: var(--full);
+  border-radius: var(--var-rounded-full, var(--full));
   border-color: hsla(var(--radiobox-control-border-color), 1);
   background-origin: border-box;
   color: hsla(var(--radiobox-control-color), 1);
@@ -60,14 +60,14 @@
      -moz-user-select: none;
           user-select: none;
   flex-shrink: 0;
-  height: var(--radiobox-size);
-  width: var(--radiobox-size);
+  height: var(--var-radiobox-size, var(--radiobox-size));
+  width: var(--var-radiobox-size, var(--radiobox-size));
   color: hsla(var(--radiobox-control-color), 1);
   background-color: hsla(var(--radiobox-control-background), 1);
   border-color: hsla(var(--radiobox-control-border-color), 1);
   border-width: var(--radiobox-control-border-width);
   --tw-shadow: 0 0 #0000;
-  border-radius: var(--full);
+  border-radius: var(--var-rounded-full, var(--full));
   transition-property: color, background-color, border-color, box-shadow;
   transition-duration: 150ms;
 }
@@ -76,7 +76,7 @@
   content: "";
   width: var(--radiobox-control-mark-size);
   height: var(--radiobox-control-mark-size);
-  border-radius: var(--full);
+  border-radius: var(--var-rounded-full, var(--full));
   background-color: hsla(var(--radiobox-control-mark-color), 1);
   transform: scale(0);
   transform-origin: center;

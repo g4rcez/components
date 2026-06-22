@@ -149,8 +149,8 @@ Both handlers are called when both the `Slot` and the child define the same even
 
 - Don't pass multiple direct children to `Slot` without using `Slottable` — `Slot` expects a single valid element
 - Don't use `Slot` when the element type is fixed and will never change
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) in `Slot` className — use design tokens
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) in `Slot` className — use design tokens
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block
 
 ## Accessibility
 

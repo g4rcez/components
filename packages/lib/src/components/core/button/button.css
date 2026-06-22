@@ -10,18 +10,18 @@
     white-space: nowrap;
     vertical-align: middle;
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--var-font-weight-medium);
     line-height: 1;
     text-decoration: none;
     cursor: pointer;
     outline: 0;
     transition-property: color, background-color, border-color, opacity, box-shadow;
-    transition-duration: 300ms;
-    transition-timing-function: linear;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-linear);
 }
 
 .__button:focus-visible {
-    box-shadow: 0 0 0 4px var(--var-color-ring);
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width) var(--var-color-ring);
 }
 
 .__button:disabled,
@@ -40,15 +40,15 @@
     flex: 0 0 auto;
     align-items: center;
     justify-content: center;
-    inline-size: var(--button-text-icon, var(--var-button-icon-font-size));
-    block-size: var(--button-text-icon, var(--var-button-icon-font-size));
-    font-size: var(--button-text-icon, var(--var-button-icon-font-size));
+    inline-size: var(--var-button-icon-font-size);
+    block-size: var(--var-button-icon-font-size);
+    font-size: var(--var-button-icon-font-size);
     line-height: 1;
 }
 
 .__button__icon > svg {
-    inline-size: var(--button-text-icon, var(--var-button-icon-font-size));
-    block-size: var(--button-text-icon, var(--var-button-icon-font-size));
+    inline-size: var(--var-button-icon-font-size);
+    block-size: var(--var-button-icon-font-size);
 }
 
 .__button--size-default {
@@ -116,33 +116,33 @@
 
 .__button--theme-main,
 .__button--theme-primary {
-    color: var(--var-button-primary-foreground);
-    background: var(--var-button-primary-background);
+    color: var(--var-color-primary-foreground);
+    background: var(--var-color-primary);
 }
 
 .__button--theme-info {
-    color: var(--var-button-info-foreground);
-    background: var(--var-button-info-background);
+    color: var(--var-color-info-foreground);
+    background: var(--var-color-info);
 }
 
 .__button--theme-warn {
-    color: var(--var-button-warn-foreground);
-    background: var(--var-button-warn-background);
+    color: var(--var-color-warn-foreground);
+    background: var(--var-color-warn);
 }
 
 .__button--theme-muted {
-    color: var(--var-button-muted-foreground);
-    background: var(--var-button-muted-background);
+    color: var(--var-color-muted-foreground);
+    background: var(--var-color-muted);
 }
 
 .__button--theme-danger {
-    color: var(--var-button-danger-foreground);
-    background: var(--var-button-danger-background);
+    color: var(--var-color-danger-foreground);
+    background: var(--var-color-danger);
 }
 
 .__button--theme-success {
-    color: var(--var-button-success-foreground);
-    background: var(--var-button-success-background);
+    color: var(--var-color-success-foreground);
+    background: var(--var-color-success);
 }
 
 .__button--theme-secondary {
@@ -163,16 +163,16 @@
 
 .__button--theme-neutral,
 .__button--theme-ghost-neutral {
-    color: var(--var-button-neutral-foreground);
-    border-width: 1px;
-    border-color: var(--var-button-neutral-border);
-    background: var(--var-button-neutral-background);
+    color: var(--var-color-foreground);
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-color-border);
+    background: transparent;
 }
 
 .__button--theme-outlined {
-    color: var(--var-button-neutral-foreground);
-    border-width: 1px;
-    border-color: var(--var-button-neutral-border);
+    color: var(--var-color-foreground);
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-color-border);
     background: transparent;
 }
 

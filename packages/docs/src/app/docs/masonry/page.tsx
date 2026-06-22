@@ -1,9 +1,8 @@
 "use client";
-
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
 import { useState } from "react";
-import { Button, Card, Masonry, type MasonryLayout } from "../../../../../lib/src";
+import { Button, Card, Masonry, type MasonryLayout } from "@g4rcez/components";
 
 const cards = [
     {

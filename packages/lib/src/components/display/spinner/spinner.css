@@ -1,14 +1,14 @@
 .__spinner {
     display: inline-block;
     box-sizing: border-box;
-    inline-size: var(--spinner-size, var(--var-spinner-size));
-    block-size: var(--spinner-size, var(--var-spinner-size));
+    inline-size: var(--var-spinner-indicator-size);
+    block-size: var(--var-spinner-indicator-size);
     border-style: solid;
-    border-width: var(--spinner-border, var(--var-spinner-border-width));
-    border-color: var(--var-spinner-track-color);
-    border-block-end-color: var(--var-spinner-indicator-color);
+    border-width: var(--var-spinner-indicator-border-width);
+    border-color: var(--var-color-background);
+    border-block-end-color: var(--var-color-primary);
     border-radius: var(--var-rounded-full);
-    animation: var-spinner-spin 1s linear infinite;
+    animation: var-spinner-spin var(--var-spinner-spin-duration) var(--var-motion-timing-linear) infinite;
 }
 
 .__spinner__container {
@@ -17,7 +17,7 @@
     justify-content: center;
     inline-size: 100%;
     block-size: 100%;
-    padding: var(--spinner-container-p, var(--var-spinner-container-p));
+    padding: var(--var-spinner-container-padding);
 }
 
 @keyframes var-spinner-spin {

@@ -19,7 +19,7 @@ function BasicProgressBar() {
 }`}
             >
                 <Card>
-                    <Progress min={0} max={100} value={50} className="bg-gradient-to-r from-primary-hover to-primary" container="h-4 text-sm" />
+                    <Progress min={0} max={100} value={61} className="bg-gradient-to-r from-primary-hover to-primary" container="h-4 text-sm" />
                 </Card>
             </ComponentDemo>
             <ComponentDemo

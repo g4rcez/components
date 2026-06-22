@@ -1,11 +1,16 @@
-import type { PropsWithChildren } from "react";
-import React, { type ComponentProps } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
+import type React from "react";
 import { css } from "../../../lib/dom";
-import { Label } from "../../../types";
+import type { Label } from "../../../types";
+import { typographyStyles } from "./typography.styles";
 
-export const Paragraph = (props: ComponentProps<"p">) => <p {...props} className={css("__core-typography__slot-1", props.className)} />;
+export const Paragraph = (props: ComponentProps<"p">) => (
+    <p {...props} className={css(typographyStyles.className({}), typographyStyles.slots.paragraph, props.className)} />
+);
 
-export const Description = (props: ComponentProps<"p">) => <p {...props} className={css("__core-typography__slot-2", props.className)} />;
+export const Description = (props: ComponentProps<"p">) => (
+    <p {...props} className={css(typographyStyles.className({}), typographyStyles.slots.description, props.className)} />
+);
 
 export type InfoProps = {
     info?: Label;
@@ -16,26 +21,37 @@ export type InfoProps = {
     infoDescription?: string;
 };
 
-export const Info = (props: React.PropsWithChildren<InfoProps>) => (
-    <div
-        className={css(
-            `__core-typography__slot-3 ${props.row ? "__core-typography__slot-5 __core-typography__slot-extra-1" : "__core-typography__slot-extra-2"} __core-typography__slot-4`,
-            props.className
-        )}
-    >
-        <span className="__core-typography__slot-6">{props.row ? `${props.label}:` : props.label}</span>
-        <span
-            className={css(props.disabled ? "__core-typography__slot-7" : "", props.row ? "__core-typography__slot-8" : "__core-typography__slot-9")}
+export const Info = (props: React.PropsWithChildren<InfoProps>) => {
+    const infoClassName = typographyStyles.slots.info;
+    const valueClassName = typographyStyles.slots["info-value"];
+
+    return (
+        <div
+            className={css(
+                typographyStyles.className({}),
+                infoClassName,
+                props.row ? `${infoClassName}--row` : `${infoClassName}--column`,
+                props.className
+            )}
         >
-            {props.children}
-        </span>
-    </div>
-);
+            <span className={typographyStyles.slots["info-label"]}>{props.row ? `${props.label}:` : props.label}</span>
+            <span
+                className={css(
+                    valueClassName,
+                    props.disabled ? `${valueClassName}--disabled` : undefined,
+                    props.row ? `${valueClassName}--row` : `${valueClassName}--column`
+                )}
+            >
+                {props.children}
+            </span>
+        </div>
+    );
+};
 
 export const PageTitle = (props: PropsWithChildren<{ title: string }>) => (
-    <div>
-        <h2 className="typography __core-typography__slot-10">{props.title}</h2>
-        <p className="typography __core-typography__slot-11">{props.children}</p>
+    <div className={typographyStyles.className({})}>
+        <h2 className={typographyStyles.slots["page-title"]}>{props.title}</h2>
+        <p className={typographyStyles.slots["page-description"]}>{props.children}</p>
     </div>
 );
 
@@ -49,10 +65,10 @@ export const PageHeader = (props: PropsWithChildren<PageHeaderProps>) => {
     return (
         <header
             {...props.containerProps}
-            className={css("__core-typography__slot-12 __core-typography__slot-extra-3", props.containerProps?.className)}
+            className={css(typographyStyles.className({}), typographyStyles.slots["page-header"], props.containerProps?.className)}
         >
             <PageTitle title={props.title}>{props.description}</PageTitle>
-            <div className="__core-typography__slot-13 __core-typography__slot-extra-4">{props.children}</div>
+            <div className={typographyStyles.slots["page-header-actions"]}>{props.children}</div>
         </header>
     );
 };

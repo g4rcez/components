@@ -1,8 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card } from "../../../../../lib/src";
-import { Shortcut } from "../../../../../lib/src/components/display/shortcut";
+import { Card, Shortcut } from "@g4rcez/components";
 
 export default function ShortcutPage() {
     return (

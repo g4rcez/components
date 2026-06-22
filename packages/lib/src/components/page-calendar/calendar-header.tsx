@@ -1,4 +1,5 @@
 import { Button } from "../core/button/button";
+import { css } from "../../lib/dom";
 import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
@@ -8,6 +9,7 @@ import type { CalendarFilter, ViewMode } from "./page-calendar.types";
 import { formatDay, formatMonthShort, formatMonthYear, getWeekNumber } from "./page-calendar.utils";
 import type { SetState } from "../../types";
 import { useMemo, type ReactNode } from "react";
+import { pageCalendarHeaderStyles } from "./calendar-header.styles";
 
 type CalendarHeaderProps = {
     currentDate: Date;
@@ -62,64 +64,62 @@ export function CalendarHeader({
     const weekNum = getWeekNumber(currentDate);
 
     return (
-        <header className="__page-calendar-calendar-header__slot-1 __page-calendar-calendar-header__slot-extra-1">
-            <div className="__page-calendar-calendar-header__slot-2">
-                <div className="__page-calendar-calendar-header__slot-3">
+        <header className={pageCalendarHeaderStyles.slots.root}>
+            <div className={pageCalendarHeaderStyles.slots.toolbar}>
+                <div className={pageCalendarHeaderStyles.slots["date-summary"]}>
                     <div
                         aria-hidden="true"
-                        className={`__page-calendar-calendar-header__slot-4 __page-calendar-calendar-header__slot-extra-1 ${isDateToday ? "__page-calendar-calendar-header__slot-5" : "__page-calendar-calendar-header__slot-6"}`}
+                        className={css(
+                            pageCalendarHeaderStyles.slots["date-badge"],
+                            `${pageCalendarHeaderStyles.slots["date-badge"]}--${isDateToday ? "today" : "default"}`
+                        )}
                     >
-                        <span className="__page-calendar-calendar-header__slot-7">{formatMonthShort(currentDate, locale)}</span>
-                        <span className="__page-calendar-calendar-header__slot-8">{formatDay(currentDate, locale)}</span>
+                        <span className={pageCalendarHeaderStyles.slots["month-label"]}>{formatMonthShort(currentDate, locale)}</span>
+                        <span className={pageCalendarHeaderStyles.slots["day-number"]}>{formatDay(currentDate, locale)}</span>
                     </div>
                     <div>
-                        <h1 aria-live="polite" aria-atomic="true" className="__page-calendar-calendar-header__slot-9">
+                        <h1 aria-live="polite" aria-atomic="true" className={pageCalendarHeaderStyles.slots.title}>
                             {formatMonthYear(currentDate, locale)}
                         </h1>
-                        <span className="__page-calendar-calendar-header__slot-10">{t.pageCalendarWeekLabel(weekNum)}</span>
+                        <span className={pageCalendarHeaderStyles.slots["week-label"]}>{t.pageCalendarWeekLabel(weekNum)}</span>
                     </div>
                 </div>
-                <nav aria-label={t.pageCalendarNavigation} className="__page-calendar-calendar-header__slot-11">
-                    <div className="__page-calendar-calendar-header__slot-12">
+                <nav aria-label={t.pageCalendarNavigation} className={pageCalendarHeaderStyles.slots.nav}>
+                    <div className={pageCalendarHeaderStyles.slots["nav-buttons"]}>
                         <Button
-                            size="small"
-                            title={t.pageCalendarPrevious}
-                            aria-label={t.pageCalendarPrevious}
+                            size="tiny"
                             theme="ghost-muted"
                             onClick={handlePrev}
+                            title={t.pageCalendarPrevious}
+                            aria-label={t.pageCalendarPrevious}
                         >
-                            <CaretLeftIcon className="__page-calendar-header__nav-icon" />
+                            <CaretLeftIcon className={pageCalendarHeaderStyles.slots["nav-icon"]} />
                         </Button>
-                        <button
-                            type="button"
-                            aria-label={t.pageCalendarToday}
-                            onClick={() => setCurrentDate(new Date())}
-                            className="__page-calendar-calendar-header__slot-13"
-                        >
+                        <Button size="tiny" theme="ghost-muted" aria-label={t.pageCalendarToday} onClick={() => setCurrentDate(new Date())}>
                             {t.pageCalendarToday}
-                        </button>
-                        <Button size="small" title={t.pageCalendarNext} aria-label={t.pageCalendarNext} theme="ghost-muted" onClick={handleNext}>
-                            <CaretRightIcon className="__page-calendar-header__nav-icon" />
+                        </Button>
+                        <Button size="tiny" onClick={handleNext} theme="ghost-muted" title={t.pageCalendarNext} aria-label={t.pageCalendarNext}>
+                            <CaretRightIcon className={pageCalendarHeaderStyles.slots["nav-icon"]} />
                         </Button>
                     </div>
-                    <div className="__page-calendar-calendar-header__slot-14">
+                    <div className={pageCalendarHeaderStyles.slots["view-switch"]}>
                         {VIEWS.map((v) => (
                             <Button
-                                size="small"
+                                size="tiny"
                                 key={v.value}
                                 rounded="squared"
                                 onClick={() => setCurrentView(v.value)}
                                 theme={currentView === v.value ? "primary" : "muted"}
                                 aria-pressed={currentView === v.value}
-                                className="__page-calendar-calendar-header__slot-15"
+                                className={pageCalendarHeaderStyles.slots["view-button"]}
                             >
                                 {v.label}
                             </Button>
                         ))}
                     </div>
                     {onAddEvent && (
-                        <Button theme="primary" size="small" onClick={onAddEvent}>
-                            <PlusCircleIcon className="__page-calendar-header__add-icon" />
+                        <Button theme="primary" size="tiny" onClick={onAddEvent}>
+                            <PlusCircleIcon className={pageCalendarHeaderStyles.slots["add-icon"]} />
                             {t.pageCalendarAddEvent}
                         </Button>
                     )}
@@ -127,26 +127,22 @@ export function CalendarHeader({
             </div>
             {filterArea ??
                 (filters.length > 0 && (
-                    <div
-                        role="group"
-                        aria-label={t.pageCalendarFilter}
-                        className="__page-calendar-calendar-header__slot-16 __page-calendar-calendar-header__slot-extra-2"
-                    >
-                        <span className="__page-calendar-calendar-header__slot-17">
-                            <CalendarIcon aria-hidden="true" className="__page-calendar-header__filter-icon" />
+                    <div role="group" aria-label={t.pageCalendarFilter} className={pageCalendarHeaderStyles.slots.filters}>
+                        <span className={pageCalendarHeaderStyles.slots["filter-icon-wrapper"]}>
+                            <CalendarIcon aria-hidden="true" className={pageCalendarHeaderStyles.slots["filter-icon"]} />
                         </span>
-                        <span className="__page-calendar-calendar-header__slot-18">{t.pageCalendarFilter}</span>
+                        <span className={pageCalendarHeaderStyles.slots["filter-label"]}>{t.pageCalendarFilter}</span>
                         {filters.map((filter) => (
                             <Tag
                                 as="button"
-                                size="small"
+                                size="tiny"
                                 type="button"
                                 key={filter.id}
                                 theme={filter.theme}
-                                indicator={filter.enabled ? filter.theme : undefined}
                                 aria-pressed={filter.enabled}
-                                aria-label={`${filter.label}, ${filter.enabled ? t.pageCalendarFilterEnabled : t.pageCalendarFilterDisabled}`}
                                 onClick={() => onToggleFilter(filter.id)}
+                                indicator={filter.enabled ? filter.theme || undefined : undefined}
+                                aria-label={`${filter.label}, ${filter.enabled ? t.pageCalendarFilterEnabled : t.pageCalendarFilterDisabled}`}
                             >
                                 {filter.label}
                             </Tag>

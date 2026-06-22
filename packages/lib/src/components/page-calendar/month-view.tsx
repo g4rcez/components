@@ -4,6 +4,7 @@ import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
+import { pageCalendarMonthViewStyles } from "./month-view.styles";
 import { toDateKey, formatDay, getWeekDays, formatWeekDay, formatFullDate } from "./page-calendar.utils";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
@@ -64,24 +65,20 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
     };
 
     return (
-        <div className="__page-calendar-month-view__slot-1 __page-calendar-month-view__slot-extra-1">
-            <div
-                role="grid"
-                aria-label={t.pageCalendarMonthGrid}
-                className="__page-calendar-month-view__slot-2 __page-calendar-month-view__slot-extra-1"
-            >
-                <div role="row" className="__page-calendar-month-view__slot-3 __page-calendar-month-view__slot-extra-2">
+        <div className={pageCalendarMonthViewStyles.slots.root}>
+            <div role="grid" aria-label={t.pageCalendarMonthGrid} className={pageCalendarMonthViewStyles.slots.grid}>
+                <div role="row" className={pageCalendarMonthViewStyles.slots["weekday-row"]}>
                     {WEEKDAY_LABELS.map((date) => {
                         const day = formatWeekDay(date, locale);
                         return (
-                            <div role="columnheader" key={day} className="__page-calendar-month-view__slot-4">
+                            <div role="columnheader" key={day} className={pageCalendarMonthViewStyles.slots.weekday}>
                                 {day}
                             </div>
                         );
                     })}
                 </div>
                 {weeks.map((week, weekIndex) => (
-                    <div role="row" key={toDateKey(week[0])} className="__page-calendar-month-view__slot-5 __page-calendar-month-view__slot-extra-2">
+                    <div role="row" key={toDateKey(week[0])} className={pageCalendarMonthViewStyles.slots["week-row"]}>
                         {week.map((day, dayIndexInWeek) => {
                             const dayIndex = weekIndex * daysInWeek + dayIndexInWeek;
                             const key = toDateKey(day);
@@ -95,8 +92,8 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                     role="gridcell"
                                     aria-selected={isSelected ? true : undefined}
                                     className={css(
-                                        "__page-calendar-month-view__slot-6 __page-calendar-month-view__slot-extra-3",
-                                        !isCurrentMonth && "__page-calendar-month-view__slot-7"
+                                        pageCalendarMonthViewStyles.slots["day-cell"],
+                                        !isCurrentMonth && `${pageCalendarMonthViewStyles.slots["day-cell"]}--outside`
                                     )}
                                 >
                                     <button
@@ -110,19 +107,22 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                         onClick={() => onDayClick(day)}
                                         aria-current={isCurrentDay ? "date" : undefined}
                                         aria-label={`${formatFullDate(day, locale)}${events.length > 0 ? `, ${t.pageCalendarEventCount(events.length)}` : ""}`}
-                                        className="__page-calendar-month-view__slot-8"
+                                        className={pageCalendarMonthViewStyles.slots["day-button"]}
                                     >
                                         <span
-                                            className={`__page-calendar-month-view__slot-9 ${isCurrentDay ? "__page-calendar-month-view__slot-10" : "__page-calendar-month-view__slot-11"}`}
+                                            className={css(
+                                                pageCalendarMonthViewStyles.slots["day-badge"],
+                                                `${pageCalendarMonthViewStyles.slots["day-badge"]}--${isCurrentDay ? "today" : "default"}`
+                                            )}
                                         >
                                             {formatDay(day, locale)}
                                         </span>
-                                        <span aria-hidden="true" className="__page-calendar-month-view__slot-12">
+                                        <span aria-hidden="true" className={pageCalendarMonthViewStyles.slots["add-indicator"]}>
                                             +
                                         </span>
                                     </button>
-                                    <div className="__page-calendar-month-view__slot-13">
-                                        <div className="__page-calendar-month-view__slot-14 __page-calendar-month-view__slot-extra-1">
+                                    <div className={pageCalendarMonthViewStyles.slots.events}>
+                                        <div className={pageCalendarMonthViewStyles.slots["event-list"]}>
                                             {events.map((event) => (
                                                 <div
                                                     key={event.id}

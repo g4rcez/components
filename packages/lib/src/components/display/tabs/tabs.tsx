@@ -1,5 +1,6 @@
 "use client";
-import React, { createContext, type PropsWithChildren, useContext, useEffect, useRef } from "react";
+import { motion, MotionConfig } from "motion/react";
+import React, { createContext, type PropsWithChildren, useContext, useEffect, useId, useRef } from "react";
 import { Is, type Nullable } from "sidekicker";
 import { useReactive } from "../../../hooks/use-reactive";
 import { useStableRef } from "../../../hooks/use-stable-ref";
@@ -8,6 +9,7 @@ import { keyboardKeys } from "../../../lib/keyboard-area";
 import type { Label } from "../../../types";
 import { Polymorph } from "../../core/polymorph/polymorph";
 import { Card, type CardProps } from "../card/card";
+import { tabsStyles } from "./tabs.styles";
 
 export type TabsProps = Omit<CardProps<"div">, "onChange"> & {
     active: string;
@@ -59,6 +61,7 @@ const actionKeys = {
 
 export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     const [active, setActive] = useReactive(props.active);
+    const indicatorId = useId();
     const ref = useRef<HTMLUListElement | null>(null);
     const onChangeRef = useStableRef(props.onChange);
 
@@ -105,53 +108,62 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
 
     return (
         <Context.Provider value={active}>
-            <Card
-                className={props.className}
-                container={css("__display-tabs__slot-1", props.container)}
-                header={
-                    <header className="__display-tabs__slot-2">
-                        <div className="__display-tabs__slot-3" />
-                        <nav className="__display-tabs__slot-4">
-                            <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className="__display-tabs__slot-5">
-                                {items.map((x: React.ReactElement<TabProps>) => {
-                                    const inner = x.props;
-                                    const current = active === inner.id;
-                                    return (
-                                        <li
-                                            data-id={inner.id}
-                                            data-active={current}
-                                            key={`tab-header-${inner.id}`}
-                                            className={css(
-                                                "__display-tabs__slot-6",
-                                                current ? "__display-tabs__slot-7" : "",
-                                                inner.disabled ? "__tabs__tab--disabled" : ""
-                                            )}
-                                        >
-                                            <Polymorph
-                                                role="tab"
-                                                as="button"
-                                                type="button"
+            <MotionConfig reducedMotion="user" transition={{ type: "spring", bounce: 0, duration: 0.32 }}>
+                <Card
+                    className={css(tabsStyles.className({}), props.className)}
+                    container={css(tabsStyles.slots.container, props.container)}
+                    header={
+                        <header className={tabsStyles.slots.header}>
+                            <div className={tabsStyles.slots.divider} />
+                            <nav className={tabsStyles.slots.nav}>
+                                <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className={tabsStyles.slots.list}>
+                                    {items.map((x: React.ReactElement<TabProps>) => {
+                                        const inner = x.props;
+                                        const current = active === inner.id;
+                                        return (
+                                            <li
                                                 data-id={inner.id}
-                                                id={`${inner.id}-tab`}
-                                                aria-selected={current}
-                                                disabled={inner.disabled}
-                                                tabIndex={current ? 0 : -1}
-                                                aria-controls={`${inner.id}-panel`}
-                                                onClick={inner.disabled ? undefined : onClick}
-                                                className="__display-tabs__slot-8"
+                                                data-active={current}
+                                                key={`tab-header-${inner.id}`}
+                                                className={css(
+                                                    tabsStyles.slots.item,
+                                                    current ? `${tabsStyles.slots.item}--active` : "",
+                                                    inner.disabled ? `${tabsStyles.slots.item}--disabled` : ""
+                                                )}
                                             >
-                                                {inner.title as React.ReactNode}
-                                            </Polymorph>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </nav>
-                    </header>
-                }
-            >
-                {props.children}
-            </Card>
+                                                <Polymorph
+                                                    role="tab"
+                                                    as="button"
+                                                    type="button"
+                                                    data-id={inner.id}
+                                                    id={`${inner.id}-tab`}
+                                                    aria-selected={current}
+                                                    disabled={inner.disabled}
+                                                    tabIndex={current ? 0 : -1}
+                                                    aria-controls={`${inner.id}-panel`}
+                                                    onClick={inner.disabled ? undefined : onClick}
+                                                    className={tabsStyles.slots.tab}
+                                                >
+                                                    {inner.title as React.ReactNode}
+                                                </Polymorph>
+                                                {current ? (
+                                                    <motion.div
+                                                        aria-hidden="true"
+                                                        layoutId={`${indicatorId}-tabs-indicator`}
+                                                        className={tabsStyles.slots.indicator}
+                                                    />
+                                                ) : null}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </nav>
+                        </header>
+                    }
+                >
+                    {props.children}
+                </Card>
+            </MotionConfig>
         </Context.Provider>
     );
 };

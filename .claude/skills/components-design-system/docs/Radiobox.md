@@ -112,8 +112,8 @@ export default function GenderSelector() {
 
 - Don't use `Radiobox` for independent toggles — use `Checkbox` instead.
 - Don't use `Radiobox` for a simple yes/no choice — consider `Switch`.
-- Don't pass raw Tailwind color classes (`text-blue-500`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`text-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`text-blue-500`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`text-[--my-var]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 

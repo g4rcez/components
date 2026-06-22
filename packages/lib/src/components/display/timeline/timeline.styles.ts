@@ -4,6 +4,6 @@ export const timelineStyles = defineComponentStyles({
     name: "timeline",
     variants: {},
     defaults: {},
-    slots: [],
+    slots: ["item", "connector", "content", "icon", "body", "actions"],
     dependencies: ["polymorph"],
 });

@@ -10,6 +10,7 @@ import { uuid } from "../../lib/fns";
 import { Button } from "../core/button/button";
 import { Dropdown } from "../floating/dropdown/dropdown";
 import { Select } from "../form/select/select";
+import { tableGroupStyles } from "./group.styles";
 import { type Col, createOptionCols, type TableConfiguration } from "./table-lib";
 
 export type GroupItem<T extends object> = Col<T> & {
@@ -35,13 +36,13 @@ const Item = <T extends object>({ item, onPointerDown }: { item: GroupItem<T>; o
         <Reorder.Item
             onPointerDown={onPointerDown}
             id={item.groupId}
-            className="__table-group__slot-1 __table-group__slot-extra-1"
+            className={tableGroupStyles.slots["draggable-item"]}
             key={item.groupId}
             value={item}
             style={{ y }}
         >
-            <button type="button" className="__table-group__slot-2">
-                <DotsSixVerticalIcon className="__table-group__drag-icon" />
+            <button type="button" className={tableGroupStyles.slots["drag-handle"]}>
+                <DotsSixVerticalIcon className={tableGroupStyles.slots["drag-icon"]} />
             </button>
             <span>{item.groupName}</span>
         </Reorder.Item>
@@ -78,6 +79,9 @@ export const Group = <T extends object>(props: Props<T>) => {
     };
 
     const onDelete = () => props.setGroups([]);
+    const orderSectionClassName = tableGroupStyles.slots["order-section"];
+    const orderTitleClassName = tableGroupStyles.slots["order-title"];
+    const orderListClassName = tableGroupStyles.slots["order-list"];
 
     return (
         <Fragment>
@@ -85,14 +89,14 @@ export const Group = <T extends object>(props: Props<T>) => {
                 arrow={false}
                 title={translations.tableGroupLabel}
                 trigger={
-                    <span className="__table-group__slot-3 __table-group__tw-final-1">
-                        <StackMinusIcon className="__table-group__trigger-icon" />
+                    <span className={tableGroupStyles.slots["trigger-label"]}>
+                        <StackMinusIcon className={tableGroupStyles.slots["trigger-icon"]} />
                         {translations.tableGroupLabelWithCount}
                         {props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
                     </span>
                 }
             >
-                <div className="__table-group__slot-4 __table-group__slot-extra-2">
+                <div className={tableGroupStyles.slots.controls}>
                     <Select
                         value={group}
                         title={translations.tableGroupTypeTitle}
@@ -100,21 +104,21 @@ export const Group = <T extends object>(props: Props<T>) => {
                         options={options}
                         placeholder={translations.tableGroupPlaceholder}
                     />
-                    <Button className="__table-group__slot-5" onClick={onDelete} theme="raw" data-id={group}>
-                        <span className="__table-group__slot-6">
-                            <TrashIcon aria-hidden="true" className="__table-group__delete-icon" />
+                    <Button className={tableGroupStyles.slots["clear-button"]} onClick={onDelete} theme="raw" data-id={group}>
+                        <span className={tableGroupStyles.slots["danger-icon"]}>
+                            <TrashIcon aria-hidden="true" className={tableGroupStyles.slots["delete-icon"]} />
                         </span>
                     </Button>
                 </div>
                 {props.groups.length > 0 ? (
-                    <section className="__table-group__slot-7">
+                    <section className={orderSectionClassName}>
                         <header>
-                            <h2 className="__table-group__slot-8">{translations.tableGroupOrderTitle}</h2>
+                            <h2 className={orderTitleClassName}>{translations.tableGroupOrderTitle}</h2>
                         </header>
                         <LayoutGroup>
                             <Reorder.Group
                                 axis="y"
-                                className="__table-group__slot-9"
+                                className={orderListClassName}
                                 drag
                                 dragControls={controls}
                                 dragListener={false}

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Button, Card, negate, Tooltip } from "../../../../../lib/src";
+import { Button, Card, negate, Tooltip } from "@g4rcez/components";
 
 const Click = () => {
     const [open, setOpen] = useState(true);

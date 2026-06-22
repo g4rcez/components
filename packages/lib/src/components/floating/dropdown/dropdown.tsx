@@ -17,6 +17,7 @@ import {
 } from "@floating-ui/react";
 import type React from "react";
 import { Fragment, type PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
+import { dropdownStyles } from "./dropdown.styles";
 
 type DropdownProps = {
     open?: boolean;
@@ -82,15 +83,15 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
                         <div
-                            className="__floating-dropdown__border __floating-dropdown__slot-1"
+                            className={dropdownStyles.className({})}
                             ref={refs.setFloating}
                             aria-labelledby={headingId}
                             style={floatingStyles as unknown as React.CSSProperties}
                             {...getFloatingProps()}
                         >
-                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className="__floating-dropdown__slot-2" />
-                            <header className="__floating-dropdown__slot-3">
-                                <h3 id={headingId} className="__floating-dropdown__slot-4">
+                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={dropdownStyles.slots.arrow} />
+                            <header className={dropdownStyles.slots.header}>
+                                <h3 id={headingId} className={dropdownStyles.slots.title}>
                                     {props.title}
                                 </h3>
                             </header>

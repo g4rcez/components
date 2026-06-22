@@ -3,7 +3,7 @@ import { components } from "./components";
 import { DesignTokens } from "./theme.types";
 
 export const LIGHT_THEME: DesignTokens = {
-    rounded,
+    rounded: rounded,
     spacing,
     components,
     name: "light",

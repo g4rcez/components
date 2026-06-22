@@ -7,6 +7,7 @@ import { uuid } from "../../lib/fns";
 import type { Any, Label } from "../../types";
 import { Dropdown } from "../floating/dropdown/dropdown";
 import { type OptionProps, Select } from "../form/select/select";
+import { tableSortStyles } from "./sort.styles";
 import { type Col, getLabel, type TableConfiguration, type TableOperationProps } from "./table-lib";
 
 type Keyof<T extends Any> = keyof T extends infer R extends string ? R : never;
@@ -90,16 +91,16 @@ export const Sort = <T extends Any>(props: Props<T>) => {
             <Dropdown
                 title={translation.tableSortDropdownTitle}
                 trigger={
-                    <span className="__table-sort__slot-1 __table-sort__tw-final-1">
-                        <CaretUpDownIcon className="__table-sort__trigger-icon" />
+                    <span className={tableSortStyles.slots["trigger-label"]}>
+                        <CaretUpDownIcon className={tableSortStyles.slots["trigger-icon"]} />
                         {translation.tableSortOrderByLabel} {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
                     </span>
                 }
             >
-                <ul className="__table-sort__slot-2">
+                <ul className={tableSortStyles.slots.list}>
                     {props.sorters.map((sorter) => {
                         return (
-                            <li key={`sorter-select-${sorter.id}`} className="__table-sort__slot-3 __table-sort__slot-extra-1">
+                            <li key={`sorter-select-${sorter.id}`} className={tableSortStyles.slots.row}>
                                 <Select
                                     options={props.options}
                                     value={sorter.value as string}
@@ -114,17 +115,17 @@ export const Sort = <T extends Any>(props: Props<T>) => {
                                     title={translation.tableSortTypeInputTitle}
                                     placeholder={translation.tableSortTypeInputPlaceholder}
                                 />
-                                <button className="__table-sort__slot-4" data-id={sorter.id} onClick={onDelete}>
-                                    <span className="__table-sort__slot-5">
-                                        <TrashIcon aria-hidden="true" className="__table-sort__delete-icon" />
+                                <button className={tableSortStyles.slots["delete-button"]} data-id={sorter.id} onClick={onDelete}>
+                                    <span className={tableSortStyles.slots["danger-icon"]}>
+                                        <TrashIcon aria-hidden="true" className={tableSortStyles.slots["delete-icon"]} />
                                     </span>
                                 </button>
                             </li>
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddSorter} className="__table-sort__slot-6">
-                            <PlusIcon className="__table-sort__add-icon" /> {translation.tableSortAddButton}
+                        <button type="button" onClick={onAddSorter} className={tableSortStyles.slots["add-button"]}>
+                            <PlusIcon className={tableSortStyles.slots["add-icon"]} /> {translation.tableSortAddButton}
                         </button>
                     </li>
                 </ul>
@@ -160,13 +161,13 @@ export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
     const label = getLabel(props.col);
 
     return (
-        <button aria-labelledby={labelId} className="__table-sort__slot-7" onClick={onClick} type="button">
-            <span id={labelId} className="__table-sort__slot-8">
+        <button aria-labelledby={labelId} className={tableSortStyles.slots["head-button"]} onClick={onClick} type="button">
+            <span id={labelId} className={tableSortStyles.slots["sr-label"]}>
                 {translations.tableSortDropdownTitle} {label}
             </span>
-            {status === Order.Asc ? <SortAscendingIcon className="__table-sort__head-icon" /> : null}
-            {status === Order.Desc ? <SortDescendingIcon className="__table-sort__head-icon" /> : null}
-            {status === Order.Undefined ? <CaretUpDownIcon className="__table-sort__head-icon" /> : null}
+            {status === Order.Asc ? <SortAscendingIcon className={tableSortStyles.slots["head-icon"]} /> : null}
+            {status === Order.Desc ? <SortDescendingIcon className={tableSortStyles.slots["head-icon"]} /> : null}
+            {status === Order.Undefined ? <CaretUpDownIcon className={tableSortStyles.slots["head-icon"]} /> : null}
         </button>
     );
 };

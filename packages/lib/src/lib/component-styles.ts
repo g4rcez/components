@@ -52,7 +52,8 @@ type ComponentStyles<TName extends string, TVariants extends VariantValues, TSlo
     className: (props?: VariantSelection<TVariants>) => string;
 };
 
-export type ComponentStyleProps<TStyles> = TStyles extends ComponentStyles<string, infer TVariants, SlotValues> ? VariantSelection<TVariants> : never;
+export type ComponentStyleProps<TStyles> =
+    TStyles extends ComponentStyles<string, infer TVariants, SlotValues> ? NonNullable<VariantSelection<TVariants>> : never;
 
 const createVariantClasses = <TName extends string, TVariants extends VariantValues>(
     name: TName,

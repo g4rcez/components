@@ -143,18 +143,56 @@
     "classes": {
       "base": "__card",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "body": "__card__body",
+        "title": "__card__title",
+        "content": "__card__content",
+        "skeleton": "__card__skeleton",
+        "skeleton-line": "__card__skeleton-line",
+        "header": "__card__header",
+        "heading": "__card__heading",
+        "actions": "__card__actions",
+        "stats-container": "__card__stats-container",
+        "stats-body": "__card__stats-body",
+        "stats-panel": "__card__stats-panel",
+        "stats-icon": "__card__stats-icon",
+        "stats-content": "__card__stats-content",
+        "stats-title": "__card__stats-title",
+        "stats-loading": "__card__stats-loading",
+        "stats-value": "__card__stats-value",
+        "border": "__card__border"
+      },
       "compounds": []
     }
   },
   "list": {
     "import": "@g4rcez/components/list",
     "css": "@g4rcez/components/list.css",
-    "dependencies": [],
+    "dependencies": [
+      "button",
+      "modal"
+    ],
     "classes": {
       "base": "__list",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "overlay": "__list__overlay",
+        "floating-layer": "__list__floating-layer",
+        "detail-card": "__list__detail-card",
+        "close-nav": "__list__close-nav",
+        "close-button": "__list__close-button",
+        "header": "__list__header",
+        "title": "__list__title",
+        "description": "__list__description",
+        "item": "__list__item",
+        "item-shell": "__list__item-shell",
+        "item-row": "__list__item-row",
+        "avatar-frame": "__list__avatar-frame",
+        "avatar-button": "__list__avatar-button",
+        "item-body": "__list__item-body",
+        "item-content": "__list__item-content",
+        "item-action": "__list__item-action"
+      },
       "compounds": []
     }
   },
@@ -180,7 +218,14 @@
       "base": "__tabs",
       "variants": {},
       "slots": {
-        "tab": "__tabs__tab"
+        "container": "__tabs__container",
+        "header": "__tabs__header",
+        "divider": "__tabs__divider",
+        "nav": "__tabs__nav",
+        "list": "__tabs__list",
+        "item": "__tabs__item",
+        "tab": "__tabs__tab",
+        "indicator": "__tabs__indicator"
       },
       "compounds": []
     }
@@ -195,8 +240,15 @@
       "base": "__alert",
       "variants": {},
       "slots": {
+        "container": "__alert__container",
+        "collapse": "__alert__collapse",
+        "content": "__alert__content",
+        "close-button": "__alert__close-button",
+        "close-icon": "__alert__close-icon",
+        "header": "__alert__header",
         "icon": "__alert__icon",
-        "close-icon": "__alert__close-icon"
+        "title": "__alert__title",
+        "body": "__alert__body"
       },
       "compounds": []
     }
@@ -242,6 +294,8 @@
       "base": "__menu",
       "variants": {},
       "slots": {
+        "item": "__menu__item",
+        "floating": "__menu__floating",
         "nested-indicator": "__menu__nested-indicator",
         "nested-icon": "__menu__nested-icon",
         "item-icon": "__menu__item-icon",
@@ -327,9 +381,34 @@
     ],
     "classes": {
       "base": "__modal",
-      "variants": {},
+      "variants": {
+        "type": {
+          "dialog": "__modal--type-dialog",
+          "drawer": "__modal--type-drawer",
+          "sheet": "__modal--type-sheet"
+        },
+        "position": {
+          "none": "__modal--position-none",
+          "right": "__modal--position-right",
+          "left": "__modal--position-left"
+        }
+      },
       "slots": {
-        "close-icon": "__modal__close-icon"
+        "resizer": "__modal__resizer",
+        "sheet-pill": "__modal__sheet-pill",
+        "overlay": "__modal__overlay",
+        "content": "__modal__content",
+        "sr-description": "__modal__sr-description",
+        "header": "__modal__header",
+        "title": "__modal__title",
+        "body": "__modal__body",
+        "footer": "__modal__footer",
+        "close-control": "__modal__close-control",
+        "close-button": "__modal__close-button",
+        "close-icon": "__modal__close-icon",
+        "confirm-dialog": "__modal__confirm-dialog",
+        "confirm-actions": "__modal__confirm-actions",
+        "confirm-description": "__modal__confirm-description"
       },
       "compounds": []
     }
@@ -352,7 +431,17 @@
     "classes": {
       "base": "__typography",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "paragraph": "__typography__paragraph",
+        "description": "__typography__description",
+        "info": "__typography__info",
+        "info-label": "__typography__info-label",
+        "info-value": "__typography__info-value",
+        "page-title": "__typography__page-title",
+        "page-description": "__typography__page-description",
+        "page-header": "__typography__page-header",
+        "page-header-actions": "__typography__page-header-actions"
+      },
       "compounds": []
     }
   },
@@ -365,7 +454,9 @@
     "classes": {
       "base": "__masonry",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "item": "__masonry__item"
+      },
       "compounds": []
     }
   },
@@ -391,7 +482,9 @@
     "classes": {
       "base": "__expand",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "content": "__expand__content"
+      },
       "compounds": []
     }
   },
@@ -417,7 +510,29 @@
     "classes": {
       "base": "__calendar",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "day-cell": "__calendar__day-cell",
+        "day-button": "__calendar__day-button",
+        "range-label": "__calendar__range-label",
+        "range-label-text": "__calendar__range-label-text",
+        "viewport": "__calendar__viewport",
+        "month-page": "__calendar__month-page",
+        "month-header": "__calendar__month-header",
+        "previous-button": "__calendar__previous-button",
+        "next-button": "__calendar__next-button",
+        "nav-icon": "__calendar__nav-icon",
+        "current-month": "__calendar__current-month",
+        "month-controls": "__calendar__month-controls",
+        "month-select": "__calendar__month-select",
+        "year-input": "__calendar__year-input",
+        "table": "__calendar__table",
+        "weekday": "__calendar__weekday",
+        "datetime": "__calendar__datetime",
+        "time-input": "__calendar__time-input",
+        "footer": "__calendar__footer",
+        "today-button": "__calendar__today-button",
+        "numeric": "__calendar__numeric"
+      },
       "compounds": []
     }
   },
@@ -444,7 +559,14 @@
     "classes": {
       "base": "__timeline",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "item": "__timeline__item",
+        "connector": "__timeline__connector",
+        "content": "__timeline__content",
+        "icon": "__timeline__icon",
+        "body": "__timeline__body",
+        "actions": "__timeline__actions"
+      },
       "compounds": []
     }
   },
@@ -468,7 +590,9 @@
     "classes": {
       "base": "__tooltip",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "arrow": "__tooltip__arrow"
+      },
       "compounds": []
     }
   },
@@ -534,7 +658,11 @@
     "classes": {
       "base": "__dropdown",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "arrow": "__dropdown__arrow",
+        "header": "__dropdown__header",
+        "title": "__dropdown__title"
+      },
       "compounds": []
     }
   },
@@ -596,9 +724,28 @@
     "dependencies": [],
     "classes": {
       "base": "__notifications",
-      "variants": {},
+      "variants": {
+        "theme": {
+          "default": "__notifications--theme-default",
+          "info": "__notifications--theme-info",
+          "warn": "__notifications--theme-warn",
+          "muted": "__notifications--theme-muted",
+          "danger": "__notifications--theme-danger",
+          "success": "__notifications--theme-success",
+          "secondary": "__notifications--theme-secondary"
+        }
+      },
       "slots": {
-        "close": "__notifications__close"
+        "item": "__notifications__item",
+        "content": "__notifications__content",
+        "icon": "__notifications__icon",
+        "text": "__notifications__text",
+        "title": "__notifications__title",
+        "description": "__notifications__description",
+        "close": "__notifications__close",
+        "close-icon": "__notifications__close-icon",
+        "viewport": "__notifications__viewport",
+        "badge": "__notifications__badge"
       },
       "compounds": []
     }
@@ -690,7 +837,9 @@
     "classes": {
       "base": "__resizable",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "content": "__resizable__content"
+      },
       "compounds": []
     }
   },
@@ -716,7 +865,11 @@
     "classes": {
       "base": "__skeleton",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "cell": "__skeleton__cell",
+        "block": "__skeleton__block",
+        "list": "__skeleton__list"
+      },
       "compounds": []
     }
   },
@@ -747,9 +900,25 @@
       "base": "__page-calendar-header",
       "variants": {},
       "slots": {
+        "root": "__page-calendar-header__root",
+        "toolbar": "__page-calendar-header__toolbar",
+        "date-summary": "__page-calendar-header__date-summary",
+        "date-badge": "__page-calendar-header__date-badge",
+        "month-label": "__page-calendar-header__month-label",
+        "day-number": "__page-calendar-header__day-number",
+        "title": "__page-calendar-header__title",
+        "week-label": "__page-calendar-header__week-label",
+        "nav": "__page-calendar-header__nav",
+        "nav-buttons": "__page-calendar-header__nav-buttons",
         "nav-icon": "__page-calendar-header__nav-icon",
+        "today-button": "__page-calendar-header__today-button",
+        "view-switch": "__page-calendar-header__view-switch",
+        "view-button": "__page-calendar-header__view-button",
         "add-icon": "__page-calendar-header__add-icon",
-        "filter-icon": "__page-calendar-header__filter-icon"
+        "filters": "__page-calendar-header__filters",
+        "filter-icon-wrapper": "__page-calendar-header__filter-icon-wrapper",
+        "filter-icon": "__page-calendar-header__filter-icon",
+        "filter-label": "__page-calendar-header__filter-label"
       },
       "compounds": []
     }
@@ -766,7 +935,27 @@
     "classes": {
       "base": "__page-calendar-day-view",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "event-dot": "__page-calendar-day-view__event-dot",
+        "root": "__page-calendar-day-view__root",
+        "main": "__page-calendar-day-view__main",
+        "header": "__page-calendar-day-view__header",
+        "day-badge": "__page-calendar-day-view__day-badge",
+        "weekday": "__page-calendar-day-view__weekday",
+        "date-label": "__page-calendar-day-view__date-label",
+        "scroll-body": "__page-calendar-day-view__scroll-body",
+        "gutter": "__page-calendar-day-view__gutter",
+        "hour-row": "__page-calendar-day-view__hour-row",
+        "hour-label": "__page-calendar-day-view__hour-label",
+        "grid": "__page-calendar-day-view__grid",
+        "time-slot": "__page-calendar-day-view__time-slot",
+        "event": "__page-calendar-day-view__event",
+        "side-panel": "__page-calendar-day-view__side-panel",
+        "detail": "__page-calendar-day-view__detail",
+        "event-title": "__page-calendar-day-view__event-title",
+        "detail-meta": "__page-calendar-day-view__detail-meta",
+        "event-tag": "__page-calendar-day-view__event-tag"
+      },
       "compounds": []
     }
   },
@@ -779,7 +968,11 @@
     "classes": {
       "base": "__page-calendar-event-pill",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "button": "__page-calendar-event-pill__button",
+        "title": "__page-calendar-event-pill__title",
+        "time": "__page-calendar-event-pill__time"
+      },
       "compounds": []
     }
   },
@@ -793,7 +986,19 @@
     "classes": {
       "base": "__page-calendar-month-view",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "root": "__page-calendar-month-view__root",
+        "grid": "__page-calendar-month-view__grid",
+        "weekday-row": "__page-calendar-month-view__weekday-row",
+        "weekday": "__page-calendar-month-view__weekday",
+        "week-row": "__page-calendar-month-view__week-row",
+        "day-cell": "__page-calendar-month-view__day-cell",
+        "day-button": "__page-calendar-month-view__day-button",
+        "day-badge": "__page-calendar-month-view__day-badge",
+        "add-indicator": "__page-calendar-month-view__add-indicator",
+        "events": "__page-calendar-month-view__events",
+        "event-list": "__page-calendar-month-view__event-list"
+      },
       "compounds": []
     }
   },
@@ -807,7 +1012,20 @@
     "classes": {
       "base": "__page-calendar-week-view",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "root": "__page-calendar-week-view__root",
+        "header": "__page-calendar-week-view__header",
+        "gutter": "__page-calendar-week-view__gutter",
+        "weekday": "__page-calendar-week-view__weekday",
+        "weekday-name": "__page-calendar-week-view__weekday-name",
+        "day-badge": "__page-calendar-week-view__day-badge",
+        "scroll-body": "__page-calendar-week-view__scroll-body",
+        "hour-row": "__page-calendar-week-view__hour-row",
+        "hour-label": "__page-calendar-week-view__hour-label",
+        "day-column": "__page-calendar-week-view__day-column",
+        "time-slot": "__page-calendar-week-view__time-slot",
+        "event": "__page-calendar-week-view__event"
+      },
       "compounds": []
     }
   },
@@ -828,7 +1046,16 @@
       "slots": {
         "trigger-icon": "__table-filter__trigger-icon",
         "add-icon": "__table-filter__add-icon",
-        "delete-icon": "__table-filter__delete-icon"
+        "delete-icon": "__table-filter__delete-icon",
+        "trigger-label": "__table-filter__trigger-label",
+        "count-label": "__table-filter__count-label",
+        "list": "__table-filter__list",
+        "row": "__table-filter__row",
+        "delete-control": "__table-filter__delete-control",
+        "danger-icon": "__table-filter__danger-icon",
+        "add-button": "__table-filter__add-button",
+        "inline-row": "__table-filter__inline-row",
+        "inline-delete-button": "__table-filter__inline-delete-button"
       },
       "compounds": []
     }
@@ -850,7 +1077,16 @@
       "slots": {
         "drag-icon": "__table-group__drag-icon",
         "trigger-icon": "__table-group__trigger-icon",
-        "delete-icon": "__table-group__delete-icon"
+        "delete-icon": "__table-group__delete-icon",
+        "draggable-item": "__table-group__draggable-item",
+        "drag-handle": "__table-group__drag-handle",
+        "trigger-label": "__table-group__trigger-label",
+        "controls": "__table-group__controls",
+        "clear-button": "__table-group__clear-button",
+        "danger-icon": "__table-group__danger-icon",
+        "order-section": "__table-group__order-section",
+        "order-title": "__table-group__order-title",
+        "order-list": "__table-group__order-list"
       },
       "compounds": []
     }
@@ -879,7 +1115,10 @@
     "classes": {
       "base": "__table-root",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "groups": "__table-root__groups",
+        "group": "__table-root__group"
+      },
       "compounds": []
     }
   },
@@ -905,7 +1144,16 @@
       "variants": {},
       "slots": {
         "body": "__table-inner-table__body",
-        "row": "__table-inner-table__row"
+        "table": "__table-inner-table__table",
+        "head": "__table-inner-table__head",
+        "row": "__table-inner-table__row",
+        "footer": "__table-inner-table__footer",
+        "footer-row": "__table-inner-table__footer-row",
+        "loading-cell": "__table-inner-table__loading-cell",
+        "loading-bar": "__table-inner-table__loading-bar",
+        "empty": "__table-inner-table__empty",
+        "viewport": "__table-inner-table__viewport",
+        "sentinel": "__table-inner-table__sentinel"
       },
       "compounds": []
     }
@@ -928,7 +1176,17 @@
     "classes": {
       "base": "__table-metadata",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "root": "__table-metadata__root",
+        "container": "__table-metadata__container",
+        "operations": "__table-metadata__operations",
+        "active-filters": "__table-metadata__active-filters",
+        "pill": "__table-metadata__pill",
+        "dot": "__table-metadata__dot",
+        "value-frame": "__table-metadata__value-frame",
+        "ghost-value": "__table-metadata__ghost-value",
+        "input": "__table-metadata__input"
+      },
       "compounds": []
     }
   },
@@ -941,7 +1199,12 @@
     "classes": {
       "base": "__table-pagination",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "root": "__table-pagination__root",
+        "size-select": "__table-pagination__size-select",
+        "items": "__table-pagination__items",
+        "page-link": "__table-pagination__page-link"
+      },
       "compounds": []
     }
   },
@@ -954,7 +1217,11 @@
       "variants": {},
       "slots": {
         "aside": "__table-row__aside",
+        "aside-overlay": "__table-row__aside-overlay",
+        "aside-content": "__table-row__aside-content",
         "cell": "__table-row__cell",
+        "cell-label": "__table-row__cell-label",
+        "cell-frame": "__table-row__cell-frame",
         "cell-content": "__table-row__cell-content"
       },
       "compounds": []
@@ -977,7 +1244,15 @@
         "trigger-icon": "__table-sort__trigger-icon",
         "delete-icon": "__table-sort__delete-icon",
         "add-icon": "__table-sort__add-icon",
-        "head-icon": "__table-sort__head-icon"
+        "head-icon": "__table-sort__head-icon",
+        "trigger-label": "__table-sort__trigger-label",
+        "list": "__table-sort__list",
+        "row": "__table-sort__row",
+        "delete-button": "__table-sort__delete-button",
+        "danger-icon": "__table-sort__danger-icon",
+        "add-button": "__table-sort__add-button",
+        "head-button": "__table-sort__head-button",
+        "sr-label": "__table-sort__sr-label"
       },
       "compounds": []
     }
@@ -1000,7 +1275,18 @@
       "variants": {},
       "slots": {
         "filter-icon": "__table-head__filter-icon",
-        "add-icon": "__table-head__add-icon"
+        "add-icon": "__table-head__add-icon",
+        "cell": "__table-head__cell",
+        "cell-content": "__table-head__cell-content",
+        "actions": "__table-head__actions",
+        "sr-label": "__table-head__sr-label",
+        "dropdown-title": "__table-head__dropdown-title",
+        "title-strong": "__table-head__title-strong",
+        "filter-list": "__table-head__filter-list",
+        "filter-item": "__table-head__filter-item",
+        "add-filter-button": "__table-head__add-filter-button",
+        "label": "__table-head__label",
+        "resizer": "__table-head__resizer"
       },
       "compounds": []
     }

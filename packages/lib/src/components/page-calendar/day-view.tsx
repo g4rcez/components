@@ -1,10 +1,12 @@
 import { isToday } from "date-fns";
+import { css } from "../../lib/dom";
 import { useEffect, useRef, useState } from "react";
 import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
 import type { CalendarEvent, CalendarEventBase } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
 import { Calendar } from "../display/calendar/calendar";
+import { pageCalendarDayViewStyles } from "./day-view.styles";
 import {
     getHourSlots,
     toDateKey,
@@ -63,7 +65,7 @@ export function DayView<T extends CalendarEventBase>({
         const hasEvents = (eventsByDate.get(key) || []).length > 0;
         const isSelected = toDateKey(date) === toDateKey(currentDate);
         if (!hasEvents || isSelected) return null;
-        return <span className="__page-calendar-day-view__slot-1" />;
+        return <span className={pageCalendarDayViewStyles.slots["event-dot"]} />;
     };
 
     const handleEventClick = (event: CalendarEvent<T>) => {
@@ -72,32 +74,34 @@ export function DayView<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="__page-calendar-day-view__slot-2">
-            <div className="__page-calendar-day-view__slot-3 __page-calendar-day-view__slot-extra-1">
-                <div
-                    aria-label={formatFullDate(currentDate, locale)}
-                    className="__page-calendar-day-view__slot-4 __page-calendar-day-view__slot-extra-2"
-                >
+        <div className={pageCalendarDayViewStyles.slots.root}>
+            <div className={pageCalendarDayViewStyles.slots.main}>
+                <div aria-label={formatFullDate(currentDate, locale)} className={pageCalendarDayViewStyles.slots.header}>
                     <span
-                        className={`__page-calendar-day-view__slot-5 ${isToday(currentDate) ? "__page-calendar-day-view__slot-6" : "__page-calendar-day-view__slot-7"}`}
+                        className={css(
+                            pageCalendarDayViewStyles.slots["day-badge"],
+                            `${pageCalendarDayViewStyles.slots["day-badge"]}--${isToday(currentDate) ? "today" : "default"}`
+                        )}
                     >
                         {formatDay(currentDate, locale)}
                     </span>
                     <div>
-                        <div className="__page-calendar-day-view__slot-8">{formatWeekdayLong(currentDate, locale)}</div>
-                        <div className="__page-calendar-day-view__slot-9">{formatMonthYear(currentDate, locale)}</div>
+                        <div className={pageCalendarDayViewStyles.slots.weekday}>{formatWeekdayLong(currentDate, locale)}</div>
+                        <div className={pageCalendarDayViewStyles.slots["date-label"]}>{formatMonthYear(currentDate, locale)}</div>
                     </div>
                 </div>
-                <div ref={scrollBodyRef} className="__page-calendar-day-view__slot-10">
-                    <div className="__page-calendar-day-view__slot-11 __page-calendar-day-view__slot-extra-2">
+                <div ref={scrollBodyRef} className={pageCalendarDayViewStyles.slots["scroll-body"]}>
+                    <div className={pageCalendarDayViewStyles.slots.gutter}>
                         {hours.map((hour) => (
-                            <div key={hour} className="__page-calendar-day-view__slot-12" style={{ height: HOUR_HEIGHT }}>
-                                <span className="__page-calendar-day-view__slot-13">{hour === 0 ? "" : formatHourLabel(hour, locale)}</span>
+                            <div key={hour} className={pageCalendarDayViewStyles.slots["hour-row"]} style={{ height: HOUR_HEIGHT }}>
+                                <span className={pageCalendarDayViewStyles.slots["hour-label"]}>
+                                    {hour === 0 ? "" : formatHourLabel(hour, locale)}
+                                </span>
                                 {hour === new Date().getHours() && <div ref={currentHourRef} />}
                             </div>
                         ))}
                     </div>
-                    <div className="__page-calendar-day-view__slot-14">
+                    <div className={pageCalendarDayViewStyles.slots.grid}>
                         {hours.map((hour) => {
                             const slotDate = new Date(currentDate);
                             slotDate.setHours(hour, 0, 0, 0);
@@ -106,7 +110,7 @@ export function DayView<T extends CalendarEventBase>({
                                     key={hour}
                                     type="button"
                                     aria-label={formatHourLabel(hour, locale)}
-                                    className="__page-calendar-day-view__slot-15"
+                                    className={pageCalendarDayViewStyles.slots["time-slot"]}
                                     style={{ height: HOUR_HEIGHT }}
                                     onClick={() => onSlotClick?.(slotDate)}
                                 />
@@ -116,7 +120,7 @@ export function DayView<T extends CalendarEventBase>({
                             <div
                                 key={event.id}
                                 role="presentation"
-                                className="__page-calendar-day-view__slot-16"
+                                className={pageCalendarDayViewStyles.slots.event}
                                 style={{
                                     top: getTopOffset(event),
                                     height: HOUR_HEIGHT,
@@ -132,7 +136,7 @@ export function DayView<T extends CalendarEventBase>({
                     </div>
                 </div>
             </div>
-            <div className="__page-calendar-day-view__slot-17 __page-calendar-day-view__slot-extra-1">
+            <div className={pageCalendarDayViewStyles.slots["side-panel"]}>
                 <Calendar
                     date={currentDate}
                     markToday
@@ -141,18 +145,18 @@ export function DayView<T extends CalendarEventBase>({
                     onChange={(d: Date | undefined) => d && onDateChange(d)}
                 />
                 {selectedEvent && (
-                    <div className="__page-calendar-day-view__slot-18 __page-calendar-day-view__slot-extra-1">
+                    <div className={pageCalendarDayViewStyles.slots.detail}>
                         {renderEvent ? (
                             renderEvent(selectedEvent)
                         ) : (
                             <>
-                                <div className="__page-calendar-day-view__slot-19">{selectedEvent.title}</div>
-                                <div className="__page-calendar-day-view__slot-9">{formatFullDate(selectedEvent.date, locale)}</div>
-                                <div className="__page-calendar-day-view__slot-9">{formatTime(selectedEvent.date, locale)}</div>
+                                <div className={pageCalendarDayViewStyles.slots["event-title"]}>{selectedEvent.title}</div>
+                                <div className={pageCalendarDayViewStyles.slots["detail-meta"]}>{formatFullDate(selectedEvent.date, locale)}</div>
+                                <div className={pageCalendarDayViewStyles.slots["detail-meta"]}>{formatTime(selectedEvent.date, locale)}</div>
                                 <Tag
                                     theme={selectedEvent.className ? "custom" : "primary"}
                                     size="small"
-                                    className={`__page-calendar-day-view__slot-20 ${selectedEvent.className ? ` ${selectedEvent.className}` : ""}`}
+                                    className={css(pageCalendarDayViewStyles.slots["event-tag"], selectedEvent.className)}
                                 />
                             </>
                         )}

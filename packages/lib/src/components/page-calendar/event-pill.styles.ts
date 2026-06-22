@@ -5,6 +5,6 @@ export const pageCalendarEventPillStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/page-calendar.css",
     defaults: {},
-    slots: [],
+    slots: ["button", "title", "time"],
     dependencies: ["button"],
 });

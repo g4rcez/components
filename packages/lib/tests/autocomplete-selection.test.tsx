@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { type ReactElement, useState } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Autocomplete } from "../src/components/form/autocomplete";
+import { Autocomplete } from "../src/components/form/autocomplete/autocomplete";
+import { ComponentsProvider } from "../src/hooks/use-components-provider";
+
+const renderWithProvider = (ui: ReactElement) => render(<ComponentsProvider>{ui}</ComponentsProvider>);
 
 const languages = [
     { value: "pt-BR", label: "Portuguese" },
@@ -39,7 +42,7 @@ describe("Autocomplete selection", () => {
         const user = userEvent.setup();
         const onChange = vi.fn();
 
-        const { container } = render(
+        const { container } = renderWithProvider(
             <form>
                 <Autocomplete name="language" title="Language" options={languages} onChange={onChange} />
             </form>
@@ -56,7 +59,7 @@ describe("Autocomplete selection", () => {
 
     it("keeps controlled state after clicking an item", async () => {
         const user = userEvent.setup();
-        const { container } = render(<ControlledAutocomplete />);
+        const { container } = renderWithProvider(<ControlledAutocomplete />);
 
         await user.click(screen.getByRole("combobox", { name: /language/i }));
         await user.click(await screen.findByRole("option", { name: "Spanish" }));
@@ -68,7 +71,7 @@ describe("Autocomplete selection", () => {
 
     it("renders every option when nested inside a modal", async () => {
         const user = userEvent.setup();
-        render(
+        renderWithProvider(
             <div data-component="modal">
                 <Autocomplete id="modal-language" title="Language" options={modalLanguages} />
             </div>

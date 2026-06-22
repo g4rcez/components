@@ -1,9 +1,12 @@
 export * from "./core/button/button";
 export * from "./core/polymorph/polymorph";
+export * from "./core/heading/heading";
+export * from "./core/resizable/resizable";
 export * from "./core/render-on-view/render-on-view";
 export * from "./core/tag/tag";
 export * from "./core/typography/typography";
 export * from "./display/alert/alert";
+export * from "./display/collapse/collapse";
 export * from "./display/calendar/calendar";
 export * from "./display/card/card";
 export * from "./display/empty/empty";
@@ -43,4 +46,5 @@ export * from "./form/switch/switch";
 export * from "./form/task-list/task-list";
 export * from "./page-calendar";
 export * from "./table/index";
+export * from "./display/skeleton/skeleton";
 export { createColumns, createOptionCols, useTablePreferences, type ColType, type TablePagination } from "./table/table-lib";

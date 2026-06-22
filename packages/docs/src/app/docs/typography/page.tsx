@@ -1,9 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card } from "../../../../../lib/src";
-import { Paragraph, Description, Info, PageTitle, PageHeader } from "../../../../../lib/src/components/core/typography";
-import { Button } from "../../../../../lib/src";
+import { Card, Button, Paragraph, Description, Info, PageTitle, PageHeader } from "@g4rcez/components";
 
 export default function TypographyPage() {
     return (
