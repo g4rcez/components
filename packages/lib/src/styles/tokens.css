@@ -148,6 +148,35 @@
     --var-menu-nested-icon-size: calc(var(--var-fontsize) * 0.875);
     --var-menu-item-icon-size: calc(var(--var-fontsize) * 1);
 
+    --var-command-surface-background: hsla(0, 0%, 100%);
+    --var-command-surface-foreground: hsla(240, 10%, 4%);
+    --var-command-surface-border: hsla(240, 6%, 90%);
+    --var-command-dialog-max-inline-size-md: calc(var(--var-spacing-base) * 40);
+    --var-command-dialog-max-inline-size-lg: calc(var(--var-spacing-base) * 48);
+    --var-command-row-block-size: calc(var(--var-spacing-base) * 2.5);
+    --var-command-header-block-size: calc(var(--var-spacing-base) * 3);
+    --var-command-footer-block-size: calc(var(--var-spacing-base) * 2);
+    --var-command-footer-padding: calc(var(--var-spacing-base) * 0.5);
+    --var-command-list-max-block-size: calc(var(--var-spacing-base) * 24);
+    --var-command-list-gap: calc(var(--var-spacing-base) * 0.25);
+    --var-command-list-margin-block: calc(var(--var-spacing-base) * 0.5);
+    --var-command-list-padding-inline: calc(var(--var-spacing-base) * 0.5);
+    --var-command-group-padding-inline: calc(var(--var-spacing-base) * 0.5);
+    --var-command-group-padding-block-start: calc(var(--var-spacing-base) * 0.5);
+    --var-command-group-padding-block-end: calc(var(--var-spacing-base) * 0.25);
+    --var-command-group-label-foreground: hsla(240, 6%, 10%);
+    --var-command-item-radius: calc(var(--var-radius) + calc(var(--var-spacing-base) / 2));
+    --var-command-item-padding: calc(var(--var-spacing-base) * 0.5);
+    --var-command-item-content-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-command-item-background-hover: hsla(240, 5%, 96%);
+    --var-command-search-icon-frame-size: calc(var(--var-spacing-base) * 2.5);
+    --var-command-search-icon-size: calc(var(--var-fontsize) * 1);
+    --var-command-input-padding-inline: calc(var(--var-spacing-base) * 0.5);
+    --var-command-input-padding-block: calc(var(--var-spacing-base) * 0.5);
+    --var-command-input-outline-width: calc(var(--var-spacing-base) * 0.125);
+    --var-command-input-outline-offset: calc(var(--var-spacing-base) * 0.125);
+    --var-command-empty-foreground: hsla(240, 6%, 10%);
+
     --var-tooltip-surface-radius: calc(var(--var-radius) + calc(var(--var-spacing-base) / 2));
     --var-tooltip-surface-padding: calc(var(--var-spacing-base) * 0.75);
     --var-tooltip-surface-background: hsla(240, 10%, 4%);
@@ -212,9 +241,10 @@
     --var-modal-surface-gap: calc(var(--var-spacing-base) * 1);
     --var-modal-dialog-max-inline-size-mobile: calc(var(--var-spacing-base) * 20);
     --var-modal-dialog-max-block-size: calc(var(--var-spacing-base) * 40);
+    --var-modal-drawer-max-inline-size: 90vw;
     --var-modal-surface-radius: calc(var(--var-radius) * 1.333333);
     --var-modal-surface-padding-block: calc(var(--var-spacing-base) * 1.5);
-    --var-modal-sheet-max-block-size: calc(var(--var-spacing-base) * 40);
+    --var-modal-sheet-max-block-size: 90svh;
     --var-modal-sheet-padding-block-start: calc(var(--var-spacing-base) * 1.5);
     --var-modal-sheet-padding-block-end: calc(var(--var-spacing-base) * 1.5);
     --var-modal-resizer-radius: calc(var(--var-radius) * 0.666667);
@@ -425,6 +455,25 @@
     --var-shortcut-content-font-size: calc(var(--var-fontsize) * 0.875);
     --var-shortcut-icon-size: calc(var(--var-fontsize) * 0.75);
 
+    --var-wizard-surface-inline-size: calc(var(--var-spacing-base) * 20);
+    --var-wizard-surface-max-inline-size: calc(var(--var-spacing-base) * 24);
+    --var-wizard-surface-gap: calc(var(--var-spacing-base) * 0.75);
+    --var-wizard-surface-radius: calc(var(--var-radius) + calc(var(--var-spacing-base) / 2));
+    --var-wizard-surface-padding: calc(var(--var-spacing-base) * 1);
+    --var-wizard-surface-background: hsla(0, 0%, 100%);
+    --var-wizard-surface-foreground: hsla(240, 10%, 4%);
+    --var-wizard-surface-border: hsla(240, 6%, 90%);
+    --var-wizard-overlay-background: hsla(240, 10%, 4%, 0.7);
+    --var-wizard-footer-padding-block-start: calc(var(--var-spacing-base) * 0.5);
+    --var-wizard-label-font-size: calc(var(--var-fontsize) * 0.75);
+    --var-wizard-label-foreground: hsla(240, 4%, 46%);
+    --var-wizard-label-foreground-hover: hsla(221, 15%, 23%);
+    --var-wizard-actions-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-wizard-counter-inset-inline-end: calc(var(--var-spacing-base) * 0.5);
+    --var-wizard-counter-inset-block-start: calc(var(--var-spacing-base) * 0.5);
+    --var-wizard-focus-outline-width: calc(var(--var-spacing-base) * 0.125);
+    --var-wizard-focus-outline-offset: calc(var(--var-spacing-base) * 0.125);
+
     --var-skeleton-radius: calc(var(--var-radius) / 3);
     --var-skeleton-cell-block-size: calc(var(--var-spacing-base) * 1.5);
     --var-skeleton-cell-inline-size: calc(100% * 0.833333);
@@ -616,6 +665,20 @@ html.dark {
     --var-menu-surface-border: hsla(240, 4%, 16%);
     --var-menu-item-active-background: hsla(201, 49%, 54%);
     --var-menu-item-active-foreground: hsla(240, 6%, 10%);
+
+    --var-wizard-surface-background: hsla(240, 10%, 8%);
+    --var-wizard-surface-foreground: hsla(240, 5%, 96%);
+    --var-wizard-surface-border: hsla(240, 4%, 16%);
+    --var-wizard-overlay-background: hsla(0, 0%, 0%, 0.7);
+    --var-wizard-label-foreground: hsla(240, 5%, 65%);
+    --var-wizard-label-foreground-hover: hsla(240, 5%, 96%);
+
+    --var-command-surface-background: hsla(240, 10%, 8%);
+    --var-command-surface-foreground: hsla(240, 5%, 96%);
+    --var-command-surface-border: hsla(240, 4%, 16%);
+    --var-command-group-label-foreground: hsla(240, 5%, 96%);
+    --var-command-item-background-hover: hsla(240, 4%, 16%);
+    --var-command-empty-foreground: hsla(240, 5%, 96%);
 
     --var-tooltip-surface-background: hsla(0, 0%, 100%);
     --var-tooltip-surface-foreground: hsla(240, 10%, 4%);

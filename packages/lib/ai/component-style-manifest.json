@@ -497,7 +497,17 @@
     "classes": {
       "base": "__wizard",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "overlay": "__wizard__overlay",
+        "spotlight": "__wizard__spotlight",
+        "floating": "__wizard__floating",
+        "surface": "__wizard__surface",
+        "arrow": "__wizard__arrow",
+        "footer": "__wizard__footer",
+        "skip-button": "__wizard__skip-button",
+        "actions": "__wizard__actions",
+        "counter": "__wizard__counter"
+      },
       "compounds": []
     }
   },
@@ -761,7 +771,21 @@
       "base": "__command-palette",
       "variants": {},
       "slots": {
-        "search-icon": "__command-palette__search-icon"
+        "body": "__command-palette__body",
+        "group-label": "__command-palette__group-label",
+        "group-row": "__command-palette__group-row",
+        "item": "__command-palette__item",
+        "item-content": "__command-palette__item-content",
+        "loading-row": "__command-palette__loading-row",
+        "header": "__command-palette__header",
+        "search-icon-frame": "__command-palette__search-icon-frame",
+        "search-icon": "__command-palette__search-icon",
+        "input": "__command-palette__input",
+        "loading-list": "__command-palette__loading-list",
+        "content": "__command-palette__content",
+        "list": "__command-palette__list",
+        "empty": "__command-palette__empty",
+        "footer": "__command-palette__footer"
       },
       "compounds": []
     }

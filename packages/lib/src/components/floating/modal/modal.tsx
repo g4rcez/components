@@ -44,6 +44,8 @@ import { Button, type ButtonProps } from "../../core/button/button";
 import { Slot } from "../../core/slot/slot";
 import { modalStyles } from "./modal.styles";
 
+const MotionFloatingOverlay = motion.create(FloatingOverlay);
+
 type AnimationLabels = "initial" | "enter" | "exit";
 
 const ConfirmContext = React.createContext<(options: ConfirmOptions) => Promise<boolean>>(async () => false);
@@ -54,56 +56,83 @@ export type ModalType = "dialog" | "drawer" | "sheet";
 
 export type DrawerPosition = "left" | "right";
 
+type ModalAnimation = Record<AnimationLabels, TargetAndTransition>;
+
 type Animations = {
-    sheet: Record<AnimationLabels, TargetAndTransition>;
-    dialog: Record<AnimationLabels, TargetAndTransition>;
-    drawer: (type: DrawerPosition) => Record<AnimationLabels, TargetAndTransition>;
+    sheet: ModalAnimation;
+    dialog: ModalAnimation;
+    drawer: (type: DrawerPosition) => ModalAnimation;
 };
 
-const animationDuration = "500ms";
+const modalEaseOut: [number, number, number, number] = [0.23, 1, 0.32, 1];
 
-const drawerLeft: Record<string, TargetAndTransition> = {
-    exit: { x: ["0%", "-30%"], opacity: 0, animationDuration },
-    enter: { x: ["-30%", "0%"], opacity: 1, animationDuration },
-    initial: { x: ["-30%", "0%"], opacity: 0.8, animationDuration },
+const overlayAnimation: ModalAnimation = {
+    initial: { opacity: 0 },
+    enter: { opacity: 1, transition: { duration: 0.18, ease: modalEaseOut } },
+    exit: { opacity: 0, transition: { duration: 0.14, ease: modalEaseOut } },
 };
 
-const drawerRight: Record<string, TargetAndTransition> = {
-    enter: { x: "0%", opacity: 1, animationDuration },
-    exit: { x: ["0%", "30%"], opacity: 0, animationDuration },
-    initial: { x: ["30%", "0%"], opacity: 0.8, animationDuration },
-};
+const drawerAnimation = (closedTransform: string, transformOrigin: string): ModalAnimation => ({
+    initial: {
+        opacity: 0.96,
+        transform: closedTransform,
+        transformOrigin,
+    },
+    enter: {
+        opacity: 1,
+        transform: "translate3d(0, 0, 0)",
+        transformOrigin,
+        transition: { duration: 0.26, ease: modalEaseOut },
+    },
+    exit: {
+        opacity: 0.96,
+        transform: closedTransform,
+        transformOrigin,
+        transition: { duration: 0.18, ease: modalEaseOut },
+    },
+});
+
+const drawerLeft = drawerAnimation("translate3d(-100%, 0, 0)", "left center");
+const drawerRight = drawerAnimation("translate3d(100%, 0, 0)", "right center");
 
 const animations: Animations = {
     drawer: (type) => (type === "left" ? drawerLeft : drawerRight),
     sheet: {
+        initial: {
+            opacity: 1,
+            y: "100%",
+            transformOrigin: "bottom center",
+        },
         enter: {
             opacity: 1,
             y: "0%",
-            animationDuration,
-            transformOrigin: "bottom",
+            transformOrigin: "bottom center",
+            transition: { type: "spring", duration: 0.34, bounce: 0.08 },
         },
         exit: {
-            opacity: 0.4,
-            y: "10%",
-            animationDuration,
-            transformOrigin: "bottom",
-        },
-        initial: {
-            opacity: 0.7,
-            y: "10%",
-            animationDuration,
-            transformOrigin: "bottom",
+            opacity: 1,
+            y: "100%",
+            transformOrigin: "bottom center",
+            transition: { duration: 0.2, ease: modalEaseOut },
         },
     },
     dialog: {
-        exit: { opacity: 0, scale: 0.95, animationDuration },
-        enter: { opacity: 1, scale: [1.05, 1], animationDuration },
         initial: {
-            opacity: 0.5,
-            scale: 0.95,
-            animationDuration,
-            transition: { duration: 0.5, ease: "easeInOut" },
+            opacity: 0,
+            transform: "translate3d(0, 8px, 0) scale(0.96)",
+            transformOrigin: "center",
+        },
+        enter: {
+            opacity: 1,
+            transform: "translate3d(0, 0, 0) scale(1)",
+            transformOrigin: "center",
+            transition: { type: "spring", duration: 0.28, bounce: 0.08 },
+        },
+        exit: {
+            opacity: 0,
+            transform: "translate3d(0, 4px, 0) scale(0.98)",
+            transformOrigin: "center",
+            transition: { duration: 0.16, ease: modalEaseOut },
         },
     },
 };
@@ -154,10 +183,19 @@ type DraggableProps = {
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
 
 const keyboardResizeStep = 32;
+const modalMaxViewportRatio = 0.9;
 
 const calculateClose = (n: number) => n * 0.6;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const getViewportSize = (axis: "inline" | "block", fallback: number) => {
+    const viewport = axis === "inline" ? window.innerWidth : window.innerHeight;
+    const documentSize = axis === "inline" ? document.documentElement.clientWidth : document.documentElement.clientHeight;
+    return viewport || documentSize || fallback;
+};
+
+const getModalMaxSize = (axis: "inline" | "block", fallback: number) => getViewportSize(axis, fallback) * modalMaxViewportRatio;
 
 const Draggable = (props: DraggableProps) => {
     const translations = useTranslations();
@@ -170,11 +208,11 @@ const Draggable = (props: DraggableProps) => {
         const current = props.value.get() || (props.sheet ? rect.height : rect.width);
 
         if (props.sheet) {
-            const max = window.outerHeight || rect.height || current;
+            const max = getModalMaxSize("block", rect.height || current);
             return clamp(current + delta, calculateClose(max), max);
         }
 
-        const max = window.outerWidth || rect.width || current;
+        const max = getModalMaxSize("inline", rect.width || current);
         return clamp(current + delta, 0, max);
     };
 
@@ -207,9 +245,9 @@ const Draggable = (props: DraggableProps) => {
                 const rect = div.getBoundingClientRect();
                 const v = props.value.get() || rect.height;
                 const result = Math.abs(v - info.delta.y);
-                const max = window.outerHeight;
+                const max = getModalMaxSize("block", rect.height || v);
                 const screenHeightToClose = calculateClose(max);
-                if (result >= screenHeightToClose) return props.value.set(result);
+                if (result >= screenHeightToClose) return props.value.set(clamp(result, screenHeightToClose, max));
                 if (document.activeElement instanceof HTMLElement) {
                     document.activeElement?.blur();
                 }
@@ -219,8 +257,9 @@ const Draggable = (props: DraggableProps) => {
             const div = props.parent.current as HTMLElement;
             const v = props.value.get() || div.getBoundingClientRect().width;
             const delta = props.position === "right" ? -info.delta.x : info.delta.x;
+            const max = getModalMaxSize("inline", div.getBoundingClientRect().width || v);
             const value = Math.abs(v + delta);
-            return props.value.set(value);
+            return props.value.set(clamp(value, 0, max));
         }
     };
 
@@ -251,8 +290,8 @@ const Draggable = (props: DraggableProps) => {
                 props.sheet
                     ? `${modalStyles.slots.resizer}--sheet-handle`
                     : props.position === "left"
-                      ? `${modalStyles.slots.resizer}--drawer-left`
-                      : `${modalStyles.slots.resizer}--drawer-right`
+                      ? `${modalStyles.slots.resizer}--drawer-right`
+                      : `${modalStyles.slots.resizer}--drawer-left`
             )}
         >
             {props.sheet ? <div className={modalStyles.slots["sheet-pill"]} /> : null}
@@ -264,7 +303,8 @@ const positions = { drawer: "right", sheet: "none", dialog: "none" } as const;
 
 const fetchPosition = (isDesktop: Nil<boolean>, forceType: Nil<boolean>, propsType: Nil<ModalType>, propsPosition: Nil<DrawerPosition>) => {
     const type = propsType || "dialog";
-    if (isDesktop) return propsType === "drawer" ? (propsPosition ?? positions.drawer) : positions[type];
+    if (propsType === "drawer" && (isDesktop || forceType)) return propsPosition ?? positions.drawer;
+    if (isDesktop) return positions[type];
     return forceType ? positions[type] : positions.sheet;
 };
 
@@ -438,8 +478,12 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                     <FloatingPortal preserveTabOrder root={root}>
                         <AnimatePresence mode="wait" propagate>
                             {open ? (
-                                <FloatingOverlay
+                                <MotionFloatingOverlay
                                     lockScroll
+                                    exit="exit"
+                                    animate="enter"
+                                    initial="initial"
+                                    variants={overlayAnimation}
                                     data-component="overlay"
                                     className={css(
                                         modalStyles.slots.overlay,
@@ -477,7 +521,13 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 layoutId={layoutId}
                                                 variants={animation}
                                                 data-component="modal"
-                                                style={type === "drawer" ? { width: floatingSize } : { height: floatingSize, y: sheetY }}
+                                                style={
+                                                    type === "drawer"
+                                                        ? { width: floatingSize }
+                                                        : type === "sheet"
+                                                          ? { height: floatingSize, y: sheetY }
+                                                          : undefined
+                                                }
                                             >
                                                 {useResizer && resizer ? (
                                                     <>
@@ -522,8 +572,10 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             const threshold = window.innerHeight * 0.2;
                                                             const sheetYNumeric = sheetY as MotionValue<number>;
                                                             if (currentY > threshold) {
-                                                                await animate(sheetYNumeric, window.innerHeight, { duration: 0.2, ease: "easeIn" })
-                                                                    .finished;
+                                                                await animate(sheetYNumeric, window.innerHeight, {
+                                                                    duration: 0.18,
+                                                                    ease: modalEaseOut,
+                                                                }).finished;
                                                                 onChange(false);
                                                             } else {
                                                                 animate(sheetYNumeric, 0, {
@@ -582,7 +634,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                             </motion.div>
                                         </AnimatePresence>
                                     </FloatingFocusManager>
-                                </FloatingOverlay>
+                                </MotionFloatingOverlay>
                             ) : null}
                         </AnimatePresence>
                     </FloatingPortal>

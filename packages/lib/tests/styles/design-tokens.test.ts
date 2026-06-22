@@ -90,7 +90,8 @@ describe("createTokenStyles component tokens", () => {
         expect(css).toContain("--tabs-tab-padding-inline: 2.5rem");
         expect(css).toContain("--shortcut-gap: 0.25rem");
         expect(css).toContain("--toolbar-rounded: 0.5rem");
-        expect(css).toContain("--wizard-w: 20rem");
+        expect(css).toContain("--wizard-surface-inline-size: 20rem");
+        expect(css).toContain("--wizard-surface-padding: 1rem");
         expect(css).toContain("--info-gap: 0.25rem");
         expect(css).toContain("--page-calendar-badge-size: 3rem");
         expect(css).toContain("--page-calendar-cell-min-block-size: 8rem");
@@ -187,9 +188,12 @@ describe("createTokenStyles component tokens", () => {
         expect(css).toContain("--page-calendar-filter-label-margin-inline-end: 0.25rem");
     });
 
-    it("emits command list-px token", () => {
+    it("emits command palette semantic tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--command-list-px: 0.5rem");
+        expect(css).toContain("--command-surface-background: hsla(0, 0%, 100%)");
+        expect(css).toContain("--command-list-padding-inline: 0.5rem");
+        expect(css).toContain("--command-row-block-size: 2.5rem");
+        expect(css).toContain("--command-search-icon-size: 1rem");
     });
 
     it("button radius-squared emits canonical 0px (not 0rem)", () => {

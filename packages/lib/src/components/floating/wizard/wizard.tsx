@@ -6,19 +6,21 @@ import {
     FloatingArrow,
     FloatingPortal,
     offset,
-    Placement,
+    type Placement,
     shift,
     useFloating,
     useInteractions,
     useRole,
 } from "@floating-ui/react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { CSSProperties, Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import type React from "react";
+import { type CSSProperties, Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useResizeObserver } from "../../../hooks/use-resize-observer";
 import { useTranslations } from "../../../hooks/use-translations";
 import { useWindowSize } from "../../../hooks/use-window-size";
 import { noop } from "../../../lib/fns";
 import { Button } from "../../core/button/button";
+import { wizardStyles } from "./wizard.styles";
 
 export type WizardStep = {
     side?: Placement;
@@ -149,8 +151,8 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
     const hasPrevious = index > 0;
     return (
         <FloatingPortal>
-            <div className="__floating-wizard__slot-1">
-                <svg className="__floating-wizard__slot-2" xmlns="http://www.w3.org/2000/svg">
+            <div className={wizardStyles.className({})}>
+                <svg className={wizardStyles.slots.overlay} xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <mask id="driver-mask">
                             <rect x="0" y="0" width="100%" height="100%" fill="white" />
@@ -173,7 +175,7 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                             />
                         </mask>
                     </defs>
-                    <rect x="0" y="0" width="100%" height="100%" mask="url(#driver-mask)" className="__floating-wizard__slot-3" />
+                    <rect x="0" y="0" width="100%" height="100%" mask="url(#driver-mask)" className={wizardStyles.slots.spotlight} />
                 </svg>
                 <AnimatePresence mode="wait">
                     {currentStep && isOverlayReady && (
@@ -190,23 +192,23 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                           transform: "translate(-50%, -50%)",
                                       }
                             }
-                            className="__floating-wizard__slot-4"
+                            className={wizardStyles.slots.floating}
                         >
                             <motion.div
                                 transition={{ duration: 0.2 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 initial={{ opacity: 0, scale: 0.9 }}
-                                className="__floating-wizard__border __floating-wizard__slot-5 __floating-wizard__slot-extra-1"
+                                className={wizardStyles.slots.surface}
                             >
-                                {element && <FloatingArrow ref={arrowRef} context={context} className="__floating-wizard__slot-6" />}
+                                {element && <FloatingArrow ref={arrowRef} context={context} className={wizardStyles.slots.arrow} />}
                                 {currentStep.title && <h3>{currentStep.title}</h3>}
                                 {currentStep.description && <Fragment>{currentStep.description}</Fragment>}
-                                <div className="__floating-wizard__slot-7">
-                                    <Button theme="raw" size="small" onClick={onClose} className="__floating-wizard__slot-8">
+                                <div className={wizardStyles.slots.footer}>
+                                    <Button theme="raw" size="small" onClick={onClose} className={wizardStyles.slots["skip-button"]}>
                                         {labels.skip}
                                     </Button>
-                                    <div className="__floating-wizard__slot-9">
+                                    <div className={wizardStyles.slots.actions}>
                                         {hasPrevious && (
                                             <Button size="small" theme="ghost-muted" onClick={handlePrevious}>
                                                 {labels.previous}
@@ -217,7 +219,7 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="__floating-wizard__slot-10">
+                                <div className={wizardStyles.slots.counter}>
                                     {index + 1} / {steps.length}
                                 </div>
                             </motion.div>

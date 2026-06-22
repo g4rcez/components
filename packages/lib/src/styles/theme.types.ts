@@ -198,23 +198,34 @@ export type NotificationTokens = {
 };
 
 export type CommandTokens = {
-    rounded: string;
-    "item-p": string;
-    "item-gap": string;
-    "row-h": string;
-    "header-h": string;
-    "footer-h": string;
-    "footer-p": string;
-    "list-max-h": string;
+    "surface-background": string;
+    "surface-border": string;
+    "surface-foreground": string;
+    "dialog-max-inline-size-md": string;
+    "dialog-max-inline-size-lg": string;
+    "row-block-size": string;
+    "header-block-size": string;
+    "footer-block-size": string;
+    "footer-padding": string;
+    "list-max-block-size": string;
     "list-gap": string;
-    "list-my": string;
-    "group-px": string;
-    "group-pt": string;
-    "group-pb": string;
-    "icon-size": string;
-    "input-px": string;
-    "input-py": string;
-    "list-px": string;
+    "list-margin-block": string;
+    "list-padding-inline": string;
+    "group-padding-inline": string;
+    "group-padding-block-start": string;
+    "group-padding-block-end": string;
+    "group-label-foreground": string;
+    "item-radius": string;
+    "item-padding": string;
+    "item-content-gap": string;
+    "item-background-hover": string;
+    "search-icon-frame-size": string;
+    "search-icon-size": string;
+    "input-padding-inline": string;
+    "input-padding-block": string;
+    "input-outline-width": string;
+    "input-outline-offset": string;
+    "empty-foreground": string;
 };
 
 export type TagTokens = {
@@ -449,15 +460,24 @@ export type ToolbarTokens = {
 };
 
 export type WizardTokens = {
-    w: string;
-    gap: string;
-    rounded: string;
-    p: string;
-    "footer-pt": string;
+    "surface-inline-size": string;
+    "surface-max-inline-size": string;
+    "surface-gap": string;
+    "surface-radius": string;
+    "surface-padding": string;
+    "surface-background": string;
+    "surface-border": string;
+    "surface-foreground": string;
+    "overlay-background": string;
+    "footer-padding-block-start": string;
+    "label-font-size": string;
+    "label-foreground": string;
+    "label-foreground-hover": string;
     "actions-gap": string;
-    "counter-right": string;
-    "counter-top": string;
-    "label-text": string;
+    "counter-inset-inline-end": string;
+    "counter-inset-block-start": string;
+    "focus-outline-width": string;
+    "focus-outline-offset": string;
 };
 
 export type InfoTokens = {

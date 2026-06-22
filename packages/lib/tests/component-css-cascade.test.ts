@@ -79,6 +79,28 @@ describe("component CSS cascade contract", () => {
         expect(componentTokens).toContain('"item-min-inline-size": "9rem"');
     });
 
+    it("wires command palette layout and item styles to semantic component tokens", () => {
+        const commandCss = readSourceCss("src/components/floating/command-palette/command-palette.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(commandCss).toContain("max-inline-size: var(--var-command-dialog-max-inline-size-md);");
+        expect(commandCss).toContain("block-size: var(--var-command-row-block-size);");
+        expect(commandCss).toContain("padding: var(--var-command-item-padding);");
+        expect(commandCss).toContain("inline-size: var(--var-command-search-icon-size);");
+        expect(componentTokens).toContain('"search-icon-size": "1rem"');
+    });
+
+    it("wires wizard surface and overlay styles to semantic component tokens", () => {
+        const wizardCss = readSourceCss("src/components/floating/wizard/wizard.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(wizardCss).toContain("inline-size: var(--var-wizard-surface-inline-size);");
+        expect(wizardCss).toContain("background-color: var(--var-wizard-surface-background);");
+        expect(wizardCss).toContain("color: var(--var-wizard-overlay-background);");
+        expect(wizardCss).toContain("font-size: var(--var-wizard-label-font-size);");
+        expect(componentTokens).toContain('"surface-inline-size": "20rem"');
+    });
+
     it("wires stats geometry and typography to editable legacy tokens with runtime fallbacks", () => {
         const statsCss = readSourceCss("src/components/display/stats/stats.css");
         const componentTokens = readSourceCss("src/styles/components.ts");

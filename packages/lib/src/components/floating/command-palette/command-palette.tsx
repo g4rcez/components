@@ -14,6 +14,7 @@ import type { Label } from "../../../types";
 import { Shortcut } from "../../display/shortcut/shortcut";
 import { SkeletonCell } from "../../display/skeleton/skeleton";
 import { Modal } from "../modal/modal";
+import { commandPaletteStyles } from "./command-palette.styles";
 
 type ViewProps = { text: string };
 
@@ -52,8 +53,10 @@ type ItemProps = {
     onChangeVisibility: (next: boolean) => void;
 };
 
+const commandPaletteItemActiveClassName = `${commandPaletteStyles.slots.item}--active`;
+
 const Group = (props: { item: CommandGroupItem; text: string }) => (
-    <span className="__floating-command-palette__slot-1">
+    <span className={commandPaletteStyles.slots["group-label"]}>
         {isReactFC(props.item.title) ? <props.item.title text={props.text} /> : props.item.title}
     </span>
 );
@@ -62,7 +65,7 @@ const Item = forwardRef<HTMLDivElement, Omit<ItemProps, "onChangeVisibility"> & 
     ({ active, id, item, text, ...props }, ref) => {
         if (item.type === "group")
             return (
-                <div id={id} role="presentation" className="__floating-command-palette__slot-2">
+                <div id={id} role="presentation" className={commandPaletteStyles.slots["group-row"]}>
                     <Group text={text} item={item} />
                 </div>
             );
@@ -80,9 +83,9 @@ const Item = forwardRef<HTMLDivElement, Omit<ItemProps, "onChangeVisibility"> & 
                     props.onMouseDown?.(event);
                     if (!event.defaultPrevented) event.preventDefault();
                 }}
-                className={css("__floating-command-palette__slot-3", active ? "__floating-command-palette__slot-4" : "")}
+                className={css(commandPaletteStyles.slots.item, active ? commandPaletteItemActiveClassName : undefined)}
             >
-                <span className="__floating-command-palette__slot-5">
+                <span className={commandPaletteStyles.slots["item-content"]}>
                     {item.Icon ? item.Icon : null}
                     <span>{isReactFC(item.title) ? <item.title text={text} /> : item.title}</span>
                 </span>
@@ -243,17 +246,17 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 overlayClickClose
                 initialFocus={searchInputRef}
                 ariaTitle={translations.commandPaletteTitle}
-                bodyClassName="__floating-command-palette__body"
+                bodyClassName={commandPaletteStyles.slots.body}
                 data-component="command-palette"
                 onChange={props.onChangeVisibility}
-                className="__floating-command-palette__container __floating-command-palette__slot-6"
+                className={commandPaletteStyles.className({})}
             >
-                <header className="__floating-command-palette__slot-7">
-                    <div className="__floating-command-palette__slot-8">
+                <header className={commandPaletteStyles.slots.header}>
+                    <div className={commandPaletteStyles.slots["search-icon-frame"]}>
                         {props.Icon ? (
-                            <Icon Default={FunnelIcon} text={text} className="__command-palette__search-icon" />
+                            <Icon Default={FunnelIcon} text={text} className={commandPaletteStyles.slots["search-icon"]} />
                         ) : (
-                            <FunnelIcon className="__command-palette__search-icon" />
+                            <FunnelIcon className={commandPaletteStyles.slots["search-icon"]} />
                         )}
                     </div>
                     <input
@@ -301,32 +304,26 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         data-combikeysbypass="true"
                         placeholder={translations.commandPaletteSearchPlaceholder}
                         onChange={(e) => setText(e.target.value)}
-                        className="__floating-command-palette__slot-9"
+                        className={commandPaletteStyles.slots.input}
                     />
                 </header>
                 {props.loading ? (
-                    <div
-                        data-component="command-palette-list"
-                        className="__floating-command-palette__slot-10 __floating-command-palette__slot-extra-1"
-                    >
-                        <div className="__floating-command-palette__slot-2">{translations.commandPaletteLoading}</div>
+                    <div data-component="command-palette-list" className={commandPaletteStyles.slots["loading-list"]}>
+                        <div className={commandPaletteStyles.slots["group-row"]}>{translations.commandPaletteLoading}</div>
                         {loadingSkeleton.map((_, i) => (
-                            <div key={`${id}-${i}-skeleton-index`} className={css("__floating-command-palette__slot-11")}>
+                            <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]}>
                                 {SkeletonCell}
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div
-                        className="__floating-command-palette__slot-12 __floating-command-palette__slot-extra-2"
-                        data-component="command-palette-container"
-                    >
+                    <div className={commandPaletteStyles.slots.content} data-component="command-palette-container">
                         <div
                             role="listbox"
                             id={listboxId}
                             ref={scrollContainerRef}
                             data-component="command-palette-list"
-                            className="__floating-command-palette__slot-13 __floating-command-palette__slot-extra-1"
+                            className={commandPaletteStyles.slots.list}
                         >
                             {displayItems.map((item, index) => (
                                 <Item
@@ -355,15 +352,13 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                 />
                             ))}
                             {displayItems.length === 1 ? (
-                                <div className={css("__floating-command-palette__slot-14")}>
-                                    {translations.commandPaletteEmpty ?? props.emptyMessage}
-                                </div>
+                                <div className={commandPaletteStyles.slots.empty}>{translations.commandPaletteEmpty ?? props.emptyMessage}</div>
                             ) : null}
                         </div>
                         {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}
                     </div>
                 )}
-                {props.footer ? <footer className="__floating-command-palette__slot-15">{props.footer}</footer> : null}
+                {props.footer ? <footer className={commandPaletteStyles.slots.footer}>{props.footer}</footer> : null}
             </Modal>
         </Fragment>
     );

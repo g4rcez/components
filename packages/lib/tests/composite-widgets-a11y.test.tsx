@@ -5,9 +5,9 @@ import { axe } from "vitest-axe";
 import { describe, expect, it, vi } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
-import { Autocomplete } from "../src/components/form/autocomplete";
-import { MultiSelect } from "../src/components/form/multi-select";
-import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette";
+import { Autocomplete } from "../src/components/form/autocomplete/autocomplete";
+import { MultiSelect } from "../src/components/form/multi-select/multi-select";
+import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette/command-palette";
 
 Element.prototype.scrollIntoView = function scrollIntoView() {};
 

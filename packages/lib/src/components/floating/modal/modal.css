@@ -20,7 +20,7 @@
     max-height: 100vh;
     min-height: 0;
     width: fit-content;
-    max-width: var(--var-modal-dialog-max-inline-size-mobile);
+    max-width: var(--var-modal-drawer-max-inline-size);
 }
 
 .__modal--type-dialog {
