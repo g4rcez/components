@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import React, { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { z } from "zod";
 import {
     Autocomplete,
@@ -16,7 +16,7 @@ import {
     Switch,
     useForm,
     UseOnSubmitArgs,
-} from "../../../../../lib/src";
+} from "@g4rcez/components";
 import { add } from "date-fns";
 
 const languages: AutocompleteItemProps[] = [

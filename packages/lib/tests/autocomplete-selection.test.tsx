@@ -69,6 +69,32 @@ describe("Autocomplete selection", () => {
         expect(new FormData(screen.getByRole("form", { name: /language form/i }) as HTMLFormElement).get("language")).toBe("es-ES");
     });
 
+    it("moves the active option with repeated arrow keys before selecting", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const { container } = renderWithProvider(
+            <form>
+                <Autocomplete name="language" title="Language" options={languages} onChange={onChange} />
+            </form>
+        );
+
+        const combobox = screen.getByRole("combobox", { name: /language/i });
+        await user.click(combobox);
+        await screen.findByRole("option", { name: "Portuguese" });
+
+        await user.keyboard("[ArrowDown]");
+        expect(screen.getByRole("option", { name: "Portuguese" })).toHaveAttribute("id", combobox.getAttribute("aria-activedescendant"));
+
+        await user.keyboard("[ArrowDown]");
+        expect(screen.getByRole("option", { name: "English" })).toHaveAttribute("id", combobox.getAttribute("aria-activedescendant"));
+
+        await user.keyboard("[Enter]");
+
+        await waitFor(() => expect(screen.getByRole("combobox", { name: /language/i })).toHaveValue("English"));
+        expect(container.querySelector('input[type="hidden"][name="language"]')).toHaveValue("en-US");
+        expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ target: expect.objectContaining({ value: "en-US" }) }));
+    });
+
     it("renders every option when nested inside a modal", async () => {
         const user = userEvent.setup();
         renderWithProvider(

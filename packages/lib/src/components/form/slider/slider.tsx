@@ -6,6 +6,7 @@ import { Tooltip } from "../../floating/tooltip/tooltip";
 import { useEffect, useRef, useState } from "react";
 import { uuid } from "../../../lib/fns";
 import { useLocale } from "../../../hooks/use-locale";
+import { sliderStyles } from "./slider.styles";
 
 type SliderProps = Parameters<typeof Base.Root>[0] & {
     tooltip?: boolean;
@@ -32,7 +33,7 @@ const Thumb = (props: { tooltip: boolean }) => {
     }, []);
 
     return (
-        <Tooltip title="" ref={ref} as={Base.Thumb} enabled={props.tooltip} className="__slider__thumb">
+        <Tooltip title="" ref={ref} as={Base.Thumb} enabled={props.tooltip} className={sliderStyles.slots.thumb}>
             {float}
         </Tooltip>
     );
@@ -45,10 +46,10 @@ export const Slider = (props: SliderProps) => {
     const locale = useLocale();
 
     return (
-        <Base.Root {...restProps} className="__slider" value={value} locale={locale} defaultValue={defaultValue}>
-            <Base.Control className={css("touch-none __slider__control", className)}>
-                <Base.Track className="__slider__track">
-                    <Base.Indicator className="__slider__indicator" />
+        <Base.Root {...restProps} className={sliderStyles.className()} value={value} locale={locale} defaultValue={defaultValue}>
+            <Base.Control className={css(sliderStyles.slots.control, className)}>
+                <Base.Track className={sliderStyles.slots.track}>
+                    <Base.Indicator className={sliderStyles.slots.indicator} />
                 </Base.Track>
                 {Array.isArray(array) ? array.map((_, i) => <Thumb tooltip={tooltip ?? false} key={`${id.current}-${i}`} />) : null}
             </Base.Control>

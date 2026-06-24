@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card, DatePicker } from "../../../../../lib/src";
+import { Card, DatePicker } from "@g4rcez/components";
 
 export default function DatePickerPage() {
     const [date, setDate] = useState<Date | undefined>(undefined);

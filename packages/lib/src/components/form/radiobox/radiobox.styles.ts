@@ -2,8 +2,9 @@ import { defineComponentStyles } from "../../../lib/component-styles";
 
 export const radioboxStyles = defineComponentStyles({
     name: "radiobox",
-    variants: {},
-    defaults: {},
-    slots: [],
+    css: "@g4rcez/components/radiobox.css",
+    variants: { size: ["medium", "large"] },
+    defaults: { size: "medium" },
+    slots: ["label", "control", "control-state"],
     dependencies: [],
 });

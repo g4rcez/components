@@ -5,7 +5,9 @@ import { forwardRef, useEffect, useId, useImperativeHandle, useRef } from "react
 import { useTranslations } from "../../../hooks/use-translations";
 import { css, initializeInputDataset, mergeRefs } from "../../../lib/dom";
 import type { Override } from "../../../types";
+import { freeTextStyles } from "../input/free-text.styles";
 import { InputField, type InputFieldProps } from "../input/input-field";
+import { selectStyles } from "./select.styles";
 
 export type OptionProps = Override<
     React.ComponentProps<"option">,
@@ -38,6 +40,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             loading,
             optionalText,
             container,
+            size = "normal",
             hideLeft = false,
             right,
             left,
@@ -84,7 +87,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 hideLeft={hideLeft}
                 required={required}
                 title={props.title}
-                container={container}
+                size={size}
+                container={css(container, selectStyles.className({ size }))}
                 componentName="select"
                 rightLabel={rightLabel}
                 hiddenLabel={hiddenLabel}
@@ -92,14 +96,19 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 interactive={interactive}
                 id={id}
                 optionalText={optionalText}
-                labelClassName={css("__select__field", labelClassName)}
+                labelClassName={css(selectStyles.slots.field, labelClassName)}
                 placeholder={props.placeholder}
                 right={
                     <span>
                         {right}
-                        <button disabled={props.disabled} onClick={onClickLabel} type="button" className="__select__trigger">
-                            <CaretDownIcon aria-hidden="true" className="__select__trigger-icon" />
-                            <span className="__select__trigger-label">{translation.inputCaretDown}</span>
+                        <button
+                            disabled={props.disabled}
+                            onClick={onClickLabel}
+                            type="button"
+                            className={css(selectStyles.className({ size }), selectStyles.slots.trigger)}
+                        >
+                            <CaretDownIcon aria-hidden="true" className={selectStyles.slots["trigger-icon"]} />
+                            <span className={selectStyles.slots["trigger-label"]}>{translation.inputCaretDown}</span>
                         </button>
                     </span>
                 }
@@ -115,7 +124,18 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     aria-describedby={describedBy}
                     data-selected={!!props.value || false}
                     title={typeof props.title === "string" ? props.title : undefined}
-                    className={css("input select __select__control", props.className)}
+                    className={css(
+                        "input select",
+                        selectStyles.className({ size }),
+                        selectStyles.slots.control,
+                        freeTextStyles.className({ size }),
+                        freeTextStyles.slots.input,
+                        freeTextStyles.slots.surface,
+                        freeTextStyles.slots.transition,
+                        freeTextStyles.slots.placeholder,
+                        freeTextStyles.slots["input-state"],
+                        props.className
+                    )}
                 >
                     <option value="" disabled hidden>
                         {props.placeholder}

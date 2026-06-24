@@ -17,8 +17,10 @@ import { cloneElement, createContext, Fragment, useContext, useEffect, useState 
 import { type DropzoneOptions, type DropzoneProps, useDropzone } from "react-dropzone";
 import type { Override } from "sidekicker";
 import { useTranslations } from "../../../hooks/use-translations";
+import { css } from "../../../lib/dom";
 import type { SetState } from "../../../types";
 import { Modal } from "../../floating/modal/modal";
+import { fileUploadStyles } from "./file-upload.styles";
 
 type ContextItem = { file: File; url: string; type: string; size: string };
 
@@ -46,13 +48,13 @@ const getMimeType = (file: File) => {
 const extensionMap: Record<string, Icon> = {
     csv: TableIcon,
     xls: TableIcon,
-    mov: FileVideoIcon,
-    mp4: FileVideoIcon,
     xlsx: TableIcon,
+    mp3: WaveformIcon,
     pdf: FileTextIcon,
     txt: FileTextIcon,
     json: FileCodeIcon,
-    mp3: WaveformIcon,
+    mov: FileVideoIcon,
+    mp4: FileVideoIcon,
 };
 
 const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => {
@@ -85,42 +87,42 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 
     const Element =
         info.type === "img" ? (
-            <img src={info.url} className="__file-upload__preview-image" alt={props.file.name} />
+            <img src={info.url} className={fileUploadStyles.slots["preview-image"]} alt={props.file.name} />
         ) : (
-            <Icon className="__file-upload__file-icon" />
+            <Icon className={fileUploadStyles.slots["file-icon"]} />
         );
 
     return (
-        <li className="__file-upload__item __file-upload__row">
-            <div className="__file-upload__stack __file-upload__column">
-                <div className="__file-upload__file-row __file-upload__row">
+        <li className={css(fileUploadStyles.slots.item, fileUploadStyles.slots.row)}>
+            <div className={css(fileUploadStyles.slots.stack, fileUploadStyles.slots.column)}>
+                <div className={css(fileUploadStyles.slots["file-row"], fileUploadStyles.slots.row)}>
                     <button
                         type="button"
                         onClick={onViewFile}
                         aria-label={translations.fileUploadViewFile(fileName)}
-                        className="__file-upload__preview-button"
+                        className={fileUploadStyles.slots["preview-button"]}
                     >
                         {Element}
                     </button>
-                    <div className="__file-upload__file-details __file-upload__column">
+                    <div className={css(fileUploadStyles.slots["file-details"], fileUploadStyles.slots.column)}>
                         <span>{props.file.name}</span>
-                        <span className="__file-upload__size">{info.size}</span>
+                        <span className={fileUploadStyles.slots.size}>{info.size}</span>
                     </div>
                 </div>
                 {props.File ? (
-                    <div className="__file-upload__aside">
+                    <div className={fileUploadStyles.slots.aside}>
                         <props.File file={props.file} />
                     </div>
                 ) : null}
             </div>
-            <div className="__file-upload__actions">
+            <div className={fileUploadStyles.slots.actions}>
                 <button
                     onClick={onDeleteFile}
                     type="button"
                     aria-label={translations.fileUploadRemoveFile(fileName)}
-                    className="__file-upload__remove-button"
+                    className={fileUploadStyles.slots["remove-button"]}
                 >
-                    <XIcon aria-hidden="true" className="__file-upload__remove-icon" />
+                    <XIcon aria-hidden="true" className={fileUploadStyles.slots["remove-icon"]} />
                 </button>
             </div>
         </li>
@@ -128,7 +130,7 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 };
 
 const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => (
-    <ul className="__file-upload__list">
+    <ul className={fileUploadStyles.slots.list}>
         {props.files.map((file) => {
             return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} key={file.name} file={file} />;
         })}
@@ -157,16 +159,16 @@ const Idle = (props: IdleProps) => {
     };
 
     return (
-        <div className="__file-upload__idle __file-upload__column">
-            <div className="__file-upload__idle-icon-wrap __file-upload__column">
-                <span className="__file-upload__accent">
-                    <Icon aria-hidden="true" className="__file-upload__idle-icon" />
+        <div className={css(fileUploadStyles.slots.idle, fileUploadStyles.slots.column)}>
+            <div className={css(fileUploadStyles.slots["idle-icon-wrap"], fileUploadStyles.slots.column)}>
+                <span className={fileUploadStyles.slots.accent}>
+                    <Icon aria-hidden="true" className={fileUploadStyles.slots["idle-icon"]} />
                 </span>
             </div>
-            <div className="__file-upload__idle-copy __file-upload__column">
+            <div className={css(fileUploadStyles.slots["idle-copy"], fileUploadStyles.slots.column)}>
                 <p>{t.uploadIdle}</p>
                 <button
-                    className="__file-upload__accent underline"
+                    className={css(fileUploadStyles.slots.accent, "underline")}
                     type="button"
                     aria-label={t.fileUploadUploadButtonLabel(t.uploadIdleButton)}
                     onClick={onUpload}
@@ -202,13 +204,13 @@ const FileViewer = (props: { item: ContextItem }) => {
     const file = props.item.file;
     const type = props.item.type;
     return (
-        <div className="__file-upload__stack __file-upload__column">
-            <p className="__file-upload__viewer-name">{props.item.file.name}</p>
-            <p className="__file-upload__viewer-size">{props.item.size}</p>
+        <div className={css(fileUploadStyles.slots.stack, fileUploadStyles.slots.column)}>
+            <p className={fileUploadStyles.slots["viewer-name"]}>{props.item.file.name}</p>
+            <p className={fileUploadStyles.slots["viewer-size"]}>{props.item.size}</p>
             {type === "img" ? (
-                <img className="__file-upload__viewer-image container" src={props.item.url} alt={file.name} />
+                <img className={css(fileUploadStyles.slots["viewer-image"], "container")} src={props.item.url} alt={file.name} />
             ) : type === "video" ? (
-                <video className="__file-upload__viewer-video container" src={props.item.url} controls muted />
+                <video className={css(fileUploadStyles.slots["viewer-video"], "container")} src={props.item.url} controls muted />
             ) : type === "audio" ? (
                 <figure>
                     <audio controls src={props.item.url}>
@@ -228,6 +230,11 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
 
     const close = () => state[1](null);
 
+    const onRemoveFile = (file: File) => {
+        onDeleteFile?.(file);
+        setFiles((prev) => prev.filter((x) => x !== file));
+    };
+
     const drop = (x: File[]) => {
         onDrop?.(x);
         setFiles((prev) => prev.concat(x));
@@ -240,6 +247,7 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
         onDragLeave: props.onDragLeave,
         onDrop: drop,
     };
+
     const { getRootProps, getInputProps, isDragActive, open } = useDropzone(dropzoneOptions);
 
     return (
@@ -251,11 +259,11 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
                 {...getRootProps({
                     "aria-label": t.fileUploadZoneLabel,
                     "data-active": items ? items.length > 0 : false,
-                    className: "__file-upload __file-upload__dropzone",
+                    className: css(fileUploadStyles.className({}), fileUploadStyles.slots.dropzone),
                 })}
             >
                 <input {...getInputProps()} aria-label={t.fileUploadZoneLabel} name={props.name} id={props.name} />
-                <InteractiveArea File={File} onDeleteFile={onDeleteFile} isDragActive={isDragActive} idle={idle} files={items} onUpload={open} />
+                <InteractiveArea File={File} onDeleteFile={onRemoveFile} isDragActive={isDragActive} idle={idle} files={items} onUpload={open} />
             </div>
         </Context.Provider>
     );

@@ -4,14 +4,14 @@
 }
 
 .__date-picker__calendar-icon {
-    inline-size: var(--var-date-picker-calendar-icon-size, var(--date-picker-calendar-icon-size, 1rem));
-    block-size: var(--var-date-picker-calendar-icon-size, var(--date-picker-calendar-icon-size, 1rem));
+    inline-size: var(--var-date-picker-calendar-icon-size);
+    block-size: var(--var-date-picker-calendar-icon-size);
 }
 
 .__date-picker__sr-label {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    inline-size: 1px;
+    block-size: 1px;
     padding: 0;
     margin: -1px;
     overflow: hidden;

@@ -1,4 +1,9 @@
 .__task-list {
     box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
     color: inherit;
+    font: inherit;
 }

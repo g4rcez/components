@@ -49,7 +49,11 @@
   "input": {
     "import": "@g4rcez/components/input",
     "css": "@g4rcez/components/input.css",
-    "dependencies": [],
+    "dependencies": [
+      "input-field",
+      "polymorph",
+      "tooltip"
+    ],
     "classes": {
       "base": "__input",
       "variants": {},
@@ -61,13 +65,19 @@
     "import": "@g4rcez/components/select",
     "css": "@g4rcez/components/select.css",
     "dependencies": [
+      "free-text",
       "input-field",
       "polymorph",
       "tooltip"
     ],
     "classes": {
       "base": "__select",
-      "variants": {},
+      "variants": {
+        "size": {
+          "normal": "__select--size-normal",
+          "small": "__select--size-small"
+        }
+      },
       "slots": {
         "field": "__select__field",
         "trigger": "__select__trigger",
@@ -89,6 +99,9 @@
       "base": "__slider",
       "variants": {},
       "slots": {
+        "control": "__slider__control",
+        "track": "__slider__track",
+        "indicator": "__slider__indicator",
         "thumb": "__slider__thumb"
       },
       "compounds": []
@@ -101,7 +114,14 @@
     "classes": {
       "base": "__switch",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "row": "__switch__row",
+        "track": "__switch__track",
+        "thumb": "__switch__thumb",
+        "label": "__switch__label",
+        "label-text": "__switch__label-text",
+        "error": "__switch__error"
+      },
       "compounds": []
     }
   },
@@ -112,6 +132,7 @@
       "button",
       "dropdown",
       "empty",
+      "free-text",
       "input",
       "input-field",
       "polymorph",
@@ -203,7 +224,16 @@
     "classes": {
       "base": "__step",
       "variants": {},
-      "slots": {},
+      "slots": {
+        "connector": "__step__connector",
+        "item": "__step__item",
+        "halo": "__step__halo",
+        "marker": "__step__marker",
+        "marker-content": "__step__marker-content",
+        "status-icon": "__step__status-icon",
+        "label": "__step__label",
+        "title": "__step__title"
+      },
       "compounds": []
     }
   },
@@ -316,7 +346,12 @@
           "false": "__checkbox--task-false"
         }
       },
-      "slots": {},
+      "slots": {
+        "label": "__checkbox__label",
+        "control": "__checkbox__control",
+        "control-state": "__checkbox__control-state",
+        "error": "__checkbox__error"
+      },
       "compounds": []
     }
   },
@@ -326,15 +361,29 @@
     "dependencies": [],
     "classes": {
       "base": "__radiobox",
-      "variants": {},
-      "slots": {},
+      "variants": {
+        "size": {
+          "medium": "__radiobox--size-medium",
+          "large": "__radiobox--size-large"
+        }
+      },
+      "slots": {
+        "label": "__radiobox__label",
+        "control": "__radiobox__control",
+        "control-state": "__radiobox__control-state"
+      },
       "compounds": []
     }
   },
   "textarea": {
     "import": "@g4rcez/components/textarea",
     "css": "@g4rcez/components/input.css",
-    "dependencies": [],
+    "dependencies": [
+      "free-text",
+      "input-field",
+      "polymorph",
+      "tooltip"
+    ],
     "classes": {
       "base": "__textarea",
       "variants": {},
@@ -515,7 +564,10 @@
     "import": "@g4rcez/components/calendar",
     "css": "@g4rcez/components/calendar.css",
     "dependencies": [
-      "input"
+      "input",
+      "input-field",
+      "polymorph",
+      "tooltip"
     ],
     "classes": {
       "base": "__calendar",
@@ -612,13 +664,17 @@
     "dependencies": [
       "calendar",
       "dropdown",
-      "input"
+      "input",
+      "input-field",
+      "polymorph",
+      "tooltip"
     ],
     "classes": {
       "base": "__date-picker",
       "variants": {},
       "slots": {
-        "calendar-icon": "__date-picker__calendar-icon"
+        "calendar-icon": "__date-picker__calendar-icon",
+        "sr-label": "__date-picker__sr-label"
       },
       "compounds": []
     }
@@ -634,9 +690,32 @@
       "base": "__file-upload",
       "variants": {},
       "slots": {
+        "accent": "__file-upload__accent",
+        "actions": "__file-upload__actions",
+        "aside": "__file-upload__aside",
+        "column": "__file-upload__column",
+        "dropzone": "__file-upload__dropzone",
+        "file-details": "__file-upload__file-details",
         "file-icon": "__file-upload__file-icon",
+        "file-row": "__file-upload__file-row",
+        "idle": "__file-upload__idle",
+        "idle-copy": "__file-upload__idle-copy",
+        "idle-icon": "__file-upload__idle-icon",
+        "idle-icon-wrap": "__file-upload__idle-icon-wrap",
+        "item": "__file-upload__item",
+        "list": "__file-upload__list",
+        "preview-button": "__file-upload__preview-button",
+        "preview-image": "__file-upload__preview-image",
+        "remove-button": "__file-upload__remove-button",
         "remove-icon": "__file-upload__remove-icon",
-        "idle-icon": "__file-upload__idle-icon"
+        "row": "__file-upload__row",
+        "size": "__file-upload__size",
+        "stack": "__file-upload__stack",
+        "thumb-icon": "__file-upload__thumb-icon",
+        "viewer-image": "__file-upload__viewer-image",
+        "viewer-name": "__file-upload__viewer-name",
+        "viewer-size": "__file-upload__viewer-size",
+        "viewer-video": "__file-upload__viewer-video"
       },
       "compounds": []
     }
@@ -650,13 +729,51 @@
     ],
     "classes": {
       "base": "__input-field",
-      "variants": {},
+      "variants": {
+        "size": {
+          "normal": "__input-field--size-normal",
+          "small": "__input-field--size-small"
+        }
+      },
       "slots": {
+        "border": "__input-field__border",
+        "control": "__input-field__control",
+        "control-disabled": "__input-field__control-disabled",
+        "control-state": "__input-field__control-state",
+        "control-surface": "__input-field__control-surface",
+        "error": "__input-field__error",
+        "error-state": "__input-field__error-state",
+        "error-text": "__input-field__error-text",
+        "feedback": "__input-field__feedback",
+        "feedback-body": "__input-field__feedback-body",
+        "feedback-hidden": "__input-field__feedback-hidden",
         "feedback-icon": "__input-field__feedback-icon",
-        "status-icon": "__input-field__status-icon",
-        "tooltip-content": "__input-field__tooltip-content",
+        "feedback-state": "__input-field__feedback-state",
+        "feedback-text": "__input-field__feedback-text",
+        "fieldset": "__input-field__fieldset",
+        "label": "__input-field__label",
+        "label-active": "__input-field__label-active",
+        "label-disabled": "__input-field__label-disabled",
+        "label-layout": "__input-field__label-layout",
+        "label-meta": "__input-field__label-meta",
+        "label-row": "__input-field__label-row",
+        "label-state": "__input-field__label-state",
+        "optional": "__input-field__optional",
+        "optional-state": "__input-field__optional-state",
         "optional-text": "__input-field__optional-text",
-        "error": "__input-field__error"
+        "slot": "__input-field__slot",
+        "slot-end": "__input-field__slot-end",
+        "slot-start": "__input-field__slot-start",
+        "sr-only": "__input-field__sr-only",
+        "status": "__input-field__status",
+        "status-error": "__input-field__status-error",
+        "status-icon": "__input-field__status-icon",
+        "status-indicator": "__input-field__status-indicator",
+        "status-success": "__input-field__status-success",
+        "tooltip-body": "__input-field__tooltip-body",
+        "tooltip-content": "__input-field__tooltip-content",
+        "tooltip-icon": "__input-field__tooltip-icon",
+        "tooltip-trigger": "__input-field__tooltip-trigger"
       },
       "compounds": []
     }
@@ -680,6 +797,7 @@
     "import": "@g4rcez/components/autocomplete",
     "css": "@g4rcez/components/autocomplete.css",
     "dependencies": [
+      "free-text",
       "input-field",
       "polymorph",
       "select",
@@ -687,9 +805,28 @@
     ],
     "classes": {
       "base": "__autocomplete",
-      "variants": {},
+      "variants": {
+        "size": {
+          "normal": "__autocomplete--size-normal",
+          "small": "__autocomplete--size-small"
+        }
+      },
       "slots": {
-        "caret-icon": "__autocomplete__caret-icon"
+        "list": "__autocomplete__list",
+        "item": "__autocomplete__item",
+        "option": "__autocomplete__option",
+        "field-state": "__autocomplete__field-state",
+        "disabled-border": "__autocomplete__disabled-border",
+        "actions": "__autocomplete__actions",
+        "action": "__autocomplete__action",
+        "input-icon": "__autocomplete__input-icon",
+        "sr-label": "__autocomplete__sr-label",
+        "input": "__autocomplete__input",
+        "control-state": "__autocomplete__control-state",
+        "panel": "__autocomplete__panel",
+        "empty": "__autocomplete__empty",
+        "empty-text": "__autocomplete__empty-text",
+        "scroll": "__autocomplete__scroll"
       },
       "compounds": []
     }
@@ -698,6 +835,7 @@
     "import": "@g4rcez/components/multi-select",
     "css": "@g4rcez/components/multi-select.css",
     "dependencies": [
+      "free-text",
       "input-field",
       "polymorph",
       "select",
@@ -706,11 +844,41 @@
     ],
     "classes": {
       "base": "__multi-select",
-      "variants": {},
+      "variants": {
+        "size": {
+          "normal": "__multi-select--size-normal",
+          "small": "__multi-select--size-small"
+        }
+      },
       "slots": {
-        "tag-remove-icon": "__multi-select__tag-remove-icon",
+        "action": "__multi-select__action",
+        "actions": "__multi-select__actions",
         "caret-icon": "__multi-select__caret-icon",
-        "sr-label": "__multi-select__sr-label"
+        "checkbox": "__multi-select__checkbox",
+        "control-state": "__multi-select__control-state",
+        "empty": "__multi-select__empty",
+        "empty-text": "__multi-select__empty-text",
+        "footer": "__multi-select__footer",
+        "input": "__multi-select__input",
+        "invalid": "__multi-select__invalid",
+        "item": "__multi-select__item",
+        "list": "__multi-select__list",
+        "option": "__multi-select__option",
+        "overlay": "__multi-select__overlay",
+        "overflow": "__multi-select__overflow",
+        "panel": "__multi-select__panel",
+        "placeholder": "__multi-select__placeholder",
+        "placeholder-text": "__multi-select__placeholder-text",
+        "results": "__multi-select__results",
+        "scroll": "__multi-select__scroll",
+        "search": "__multi-select__search",
+        "sr-label": "__multi-select__sr-label",
+        "surface": "__multi-select__surface",
+        "tag-remove": "__multi-select__tag-remove",
+        "tag-remove-icon": "__multi-select__tag-remove-icon",
+        "tags": "__multi-select__tags",
+        "transition": "__multi-select__transition",
+        "value": "__multi-select__value"
       },
       "compounds": []
     }
@@ -907,8 +1075,23 @@
     ],
     "classes": {
       "base": "__free-text",
-      "variants": {},
-      "slots": {},
+      "variants": {
+        "size": {
+          "normal": "__free-text--size-normal",
+          "small": "__free-text--size-small"
+        }
+      },
+      "slots": {
+        "disabled-border": "__free-text__disabled-border",
+        "field-state": "__free-text__field-state",
+        "input": "__free-text__input",
+        "input-state": "__free-text__input-state",
+        "invalid": "__free-text__invalid",
+        "placeholder": "__free-text__placeholder",
+        "resizable": "__free-text__resizable",
+        "surface": "__free-text__surface",
+        "transition": "__free-text__transition"
+      },
       "compounds": []
     }
   },
@@ -1058,6 +1241,7 @@
     "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
+      "free-text",
       "input",
       "input-field",
       "polymorph",
@@ -1090,6 +1274,7 @@
     "dependencies": [
       "button",
       "dropdown",
+      "free-text",
       "input-field",
       "polymorph",
       "select",
@@ -1122,6 +1307,7 @@
       "button",
       "dropdown",
       "empty",
+      "free-text",
       "input",
       "input-field",
       "polymorph",
@@ -1152,6 +1338,7 @@
     "dependencies": [
       "dropdown",
       "empty",
+      "free-text",
       "input",
       "input-field",
       "polymorph",
@@ -1188,6 +1375,7 @@
     "dependencies": [
       "button",
       "dropdown",
+      "free-text",
       "input",
       "input-field",
       "polymorph",
@@ -1256,6 +1444,7 @@
     "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
+      "free-text",
       "input-field",
       "polymorph",
       "select",
@@ -1286,6 +1475,7 @@
     "css": "@g4rcez/components/table.css",
     "dependencies": [
       "dropdown",
+      "free-text",
       "input",
       "input-field",
       "polymorph",

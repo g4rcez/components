@@ -1,16 +1,11 @@
 "use client";
-import { HTMLMotionProps, motion, Transition } from "motion/react";
-import React, { ComponentProps, createContext, Fragment, PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
-import { useColorParser } from "../../../hooks/use-color-parser";
-import { Label } from "../../../types";
+import { type HTMLMotionProps, motion, type Transition } from "motion/react";
+import React, { type ComponentProps, createContext, Fragment, type PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
+import { css } from "../../../lib/dom";
+import type { Label } from "../../../types";
+import { stepStyles } from "./step.styles";
 
 const PROGRESS_BAR_DURATION = 0.3;
-
-const transition: Transition = {
-    duration: PROGRESS_BAR_DURATION,
-    type: "tween",
-    ease: "easeInOut",
-};
 
 type StepContextValue = {
     currentStep: number;
@@ -103,10 +98,11 @@ const calculateStepDelay = (step: number, currentStep: number, previousStep: num
     return ((previousStep - step) / (previousStep - currentStep)) * duration;
 };
 
+const slotModifier = (slot: string, modifier: string) => `${slot}--${modifier}`;
+
 export const useStepContext = () => useContext(StepContext);
 
-export const Step = ({ step, currentStep, status, title, titleClassName, ...props }: StepProps) => {
-    const parser = useColorParser();
+export const Step = ({ step, currentStep, status, title, titleClassName, className, ...props }: StepProps) => {
     const context = useStepContext();
     const [visualCurrentStep, setVisualCurrentStep] = useState(currentStep);
 
@@ -129,61 +125,31 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
     }, [currentStep, context, step]);
 
     const innerStatus = getCurrentStatus(step, visualCurrentStep, status);
-
-    const _widthPerStep = context?.steps ? 100 / context?.steps : undefined;
+    const connectorComplete = innerStatus === "active" || innerStatus === "complete";
 
     return (
         <Fragment>
-            <div className={`__display-step__slot-1 ${innerStatus === "active" || innerStatus === "complete" ? "__display-step__slot-2" : ""}`} />
+            <div className={css(stepStyles.slots.connector, connectorComplete && slotModifier(stepStyles.slots.connector, "complete"))} />
             <motion.button
                 {...(props as unknown as HTMLMotionProps<"button">)}
                 type="button"
                 aria-current={innerStatus === "active" ? "step" : undefined}
                 data-step={step}
+                data-status={innerStatus}
                 animate={innerStatus}
-                className="__display-step__slot-3"
+                className={css(stepStyles.slots.item, className)}
             >
                 <motion.div
                     variants={variants}
                     transition={transitions}
-                    className={`__display-step__slot-4 ${innerStatus === "error" ? "__display-step__slot-5" : ""}`}
+                    className={css(stepStyles.slots.halo, innerStatus === "error" && slotModifier(stepStyles.slots.halo, "error"))}
                 />
-                <motion.div
-                    initial={false}
-                    animate={innerStatus}
-                    transition={transition}
-                    className="__display-step__slot-6"
-                    variants={{
-                        error: {
-                            color: parser("var(--danger-foreground)"),
-                            borderColor: parser("var(--danger-hover)"),
-                            backgroundColor: parser("var(--danger-DEFAULT)"),
-                        },
-                        inactive: {
-                            transition,
-                            color: parser("var(--disabled)"),
-                            borderColor: parser("var(--card-border)"),
-                            backgroundColor: parser("var(--background)"),
-                        },
-                        active: {
-                            transition,
-                            color: parser("var(--primary-foreground)"),
-                            borderColor: parser("var(--primary-DEFAULT)"),
-                            backgroundColor: parser("var(--primary-DEFAULT)"),
-                        },
-                        complete: {
-                            transition,
-                            color: parser("var(--success-foreground)"),
-                            borderColor: parser("var(--success-DEFAULT)"),
-                            backgroundColor: parser("var(--success-DEFAULT)"),
-                        },
-                    }}
-                >
-                    <div className="__display-step__slot-7">
+                <motion.div className={css(stepStyles.slots.marker, slotModifier(stepStyles.slots.marker, `status-${innerStatus}`))}>
+                    <div className={stepStyles.slots["marker-content"]}>
                         {innerStatus === "complete" ? (
-                            <CheckIcon className="__display-step__slot-8" />
+                            <CheckIcon className={stepStyles.slots["status-icon"]} />
                         ) : innerStatus === "error" ? (
-                            <ErrorIcon className="__display-step__slot-9" />
+                            <ErrorIcon className={stepStyles.slots["status-icon"]} />
                         ) : (
                             <Fragment>
                                 <span>{step}</span>
@@ -191,8 +157,8 @@ export const Step = ({ step, currentStep, status, title, titleClassName, ...prop
                         )}
                     </div>
                 </motion.div>
-                <div className="__display-step__slot-10 __display-step__slot-extra-1">
-                    <h3 className={`__display-step__slot-11 ${titleClassName}`}>{title}</h3>
+                <div className={stepStyles.slots.label}>
+                    <h3 className={css(stepStyles.slots.title, titleClassName)}>{title}</h3>
                 </div>
             </motion.button>
         </Fragment>
@@ -220,7 +186,7 @@ export const Steps = (props: PropsWithChildren<{ steps: number; currentStep: num
 
     return (
         <StepContext.Provider value={contextValue}>
-            <div className="__display-step__slot-12 __display-step__slot-extra-2">{props.children}</div>
+            <div className={stepStyles.className()}>{props.children}</div>
         </StepContext.Provider>
     );
 };

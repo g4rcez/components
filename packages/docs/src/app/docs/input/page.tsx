@@ -2,8 +2,8 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card, Input, CurrencyCode, InputTypes } from "../../../../../lib/src";
-import { EyesIcon, EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
+import { Card, Input, type CurrencyCode, type InputTypes } from "@g4rcez/components";
+import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
 
 const Password = () => {
     const [type, setType] = useState<InputTypes>("password");
@@ -169,6 +169,26 @@ function CustomAndInteractiveMasks() {
                             </select>
                         }
                     />
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Field Sizes"
+                description="Use size=normal or size=small to match the density of your form layout."
+                code={`import { Input } from "@g4rcez/components";
+
+function InputSizes() {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Input size="normal" title="Normal input" placeholder="Default field height" />
+      <Input size="small" title="Small input" placeholder="Dense field height" />
+    </div>
+  );
+}`}
+            >
+                <Card title="Sizes" className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <Input size="normal" title="Normal input" placeholder="Default field height" />
+                    <Input size="small" title="Small input" placeholder="Dense field height" />
                 </Card>
             </ComponentDemo>
         </DocsLayout>

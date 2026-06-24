@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 import { Autocomplete } from "../src/components/form/autocomplete/autocomplete";
+import { autocompleteStyles } from "../src/components/form/autocomplete/autocomplete.styles";
 import { MultiSelect } from "../src/components/form/multi-select/multi-select";
 import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette/command-palette";
 
@@ -100,7 +101,7 @@ describe("composite widget a11y", () => {
         expect(combobox).not.toHaveClass("__autocomplete__control-state");
         expect(caretButton).toBeDisabled();
         expect(caretButton).toHaveClass("__autocomplete__action");
-        expect(combobox.parentElement).toHaveClass("__form-autocomplete__disabled-border");
+        expect(combobox.parentElement).toHaveClass(autocompleteStyles.slots["disabled-border"]);
 
         await user.click(combobox);
         if (caretButton) await user.click(caretButton);

@@ -6,10 +6,12 @@ import { forwardRef, Fragment, useEffect, useId, useMemo, useState } from "react
 import { Is } from "sidekicker";
 import { useLocale } from "../../../hooks/use-locale";
 import { useTranslations } from "../../../hooks/use-translations";
+import { css } from "../../../lib/dom";
 import type { Override } from "../../../types";
 import { Calendar, type CalendarProps } from "../../display/calendar/calendar";
 import { Dropdown } from "../../floating/dropdown/dropdown";
 import { Input, type InputProps } from "../input/input";
+import { datePickerStyles } from "./date-picker.styles";
 
 export type DatePickerProps = Omit<
     Override<
@@ -179,6 +181,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     required={props.required ?? true}
                     error={open ? undefined : props.error}
                     placeholder={props.placeholder || translation.datepickerPlaceholder(placeholder)}
+                    className={css(datePickerStyles.className({}), props.className)}
                     right={
                         floating ? (
                             <Fragment>
@@ -198,10 +201,10 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                                     buttonProps={{ "aria-describedby": labelId }}
                                     trigger={
                                         <span aria-labelledby={labelId}>
-                                            <span id={labelId} className="__date-picker__sr-label">
+                                            <span id={labelId} className={datePickerStyles.slots["sr-label"]}>
                                                 {translation.datePickerCalendarButtonLabel}
                                             </span>
-                                            <CalendarIcon aria-hidden="true" className="__date-picker__calendar-icon" />
+                                            <CalendarIcon aria-hidden="true" className={datePickerStyles.slots["calendar-icon"]} />
                                         </span>
                                     }
                                 >

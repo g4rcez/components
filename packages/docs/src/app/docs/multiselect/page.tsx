@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useEffect, useState } from "react";
-import { Card, MultiSelect } from "../../../../../lib/src";
+import { Card, MultiSelect } from "@g4rcez/components";
 
 const defaults = [
     { label: "C#", value: "csharp" },
@@ -119,6 +119,26 @@ function EmptyMultiSelect() {
                         onChangeOptions={setValue}
                         placeholder="No options to select"
                     />
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Field Sizes"
+                description="Use size=normal or size=small to control the density of the trigger, tags, and search field."
+                code={`import { MultiSelect } from "@g4rcez/components";
+
+function MultiSelectSizes() {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <MultiSelect size="normal" title="Normal multi-select" options={defaults} placeholder="Choose your languages" />
+      <MultiSelect size="small" title="Small multi-select" options={defaults} placeholder="Choose your languages" />
+    </div>
+  );
+}`}
+            >
+                <Card title="Sizes" className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <MultiSelect size="normal" title="Normal multi-select" options={defaults} placeholder="Choose your languages" />
+                    <MultiSelect size="small" title="Small multi-select" options={defaults} placeholder="Choose your languages" />
                 </Card>
             </ComponentDemo>
         </DocsLayout>

@@ -9,24 +9,24 @@ import {
     useDismiss,
     useFloating,
     useInteractions,
-    useListNavigation,
     useTransitionStyles,
 } from "@floating-ui/react";
-import { CaretDownIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { forwardRef, Fragment, type PropsWithChildren, type Ref, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
-import { Is } from "sidekicker";
 import { useRemoveScroll } from "../../../hooks/use-remove-scroll";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css, dispatchInput, getRemainingSize, initializeInputDataset, synthesizeChangeEvent } from "../../../lib/dom";
 import { safeRegex } from "../../../lib/fns";
 import { fzf } from "../../../lib/fzf";
 import type { Label } from "../../../types";
+import { freeTextStyles } from "../input/free-text.styles";
 import { InputField, type InputFieldProps } from "../input/input-field";
-import { type OptionProps } from "../select/select";
+import type { OptionProps } from "../select/select";
+import { autocompleteStyles } from "./autocomplete.styles";
 
 export type AutocompleteItemProps = OptionProps & {
     Render?: React.FC<OptionProps>;
@@ -49,9 +49,16 @@ const transitionStyles = {
     initial: { transform: "scaleY(0)", opacity: 0.2 },
 } as const;
 
+const autocompleteOptionActiveClassName = `${autocompleteStyles.slots.option}--active`;
+const autocompleteOptionSelectedClassName = `${autocompleteStyles.slots.option}--selected`;
+const autocompleteActionPrimaryClassName = `${autocompleteStyles.slots.action}--primary`;
+const autocompleteActionDangerClassName = `${autocompleteStyles.slots.action}--danger`;
+const autocompletePanelTopClassName = `${autocompleteStyles.slots.panel}--top`;
+const autocompletePanelBottomClassName = `${autocompleteStyles.slots.panel}--bottom`;
+
 const List = forwardRef<HTMLDivElement, ListProps & ContextProp<{ listboxId?: string }>>(function VirtualList({ context, ...props }, ref) {
     return (
-        <motion.div {...props} ref={ref} role="listbox" id={context?.listboxId} className="__autocomplete__list">
+        <motion.div {...props} ref={ref} role="listbox" id={context?.listboxId} className={autocompleteStyles.slots.list}>
             <AnimatePresence>{props.children}</AnimatePresence>
         </motion.div>
     );
@@ -61,7 +68,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps<AutocompleteItemProps> & Conte
     { item: _item, context: _context, ...props },
     ref
 ) {
-    return <motion.div {...props} ref={ref} role="presentation" className="__autocomplete__item" />;
+    return <motion.div {...props} ref={ref} role="presentation" className={autocompleteStyles.slots.item} />;
 });
 
 const components = { List, Item };
@@ -86,6 +93,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             labelClassName,
             feedback = null,
             hideLeft = false,
+            size: fieldSize = "normal",
             required = false,
             dynamicOption = false,
             ...props
@@ -177,21 +185,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             ],
         });
         const transitions = useTransitionStyles(context, transitionStyles);
-        const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
-            useDismiss(context),
-            useListNavigation(context, {
-                cols: 0,
-                listRef,
-                loop: true,
-                virtual: true,
-                allowEscape: true,
-                activeIndex: index,
-                selectedIndex: index,
-                focusItemOnOpen: "auto",
-                openOnArrowKeyDown: true,
-                scrollItemIntoView: true,
-            }),
-        ]);
+        const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([useDismiss(context)]);
 
         useEffect(() => {
             if (!isControlled) return;
@@ -252,6 +246,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             const value = event.target.value;
             setShadow(value);
+            setIndex(null);
             if (!open && value === "") return setOpen(true);
             event.target.name = props.name || "";
             return value ? setOpen(true) : props.onChange?.(event);
@@ -270,7 +265,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 suppressNextFocusOpen.current = false;
                 return;
             }
-            setIndex((prev) => (prev === null ? 0 : prev));
             openDropdown();
             setShadow("");
         };
@@ -316,6 +310,30 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             virtuoso.current?.scrollIntoView({ index: next });
         };
 
+        const navigateOption = (direction: 1 | -1) => {
+            if (!open) openDropdown();
+            if (displayList.length === 0) {
+                setIndex(null);
+                return;
+            }
+
+            const start = typeof index === "number" ? index : direction === 1 ? -1 : displayList.length;
+            let next = start;
+
+            for (let count = 0; count < displayList.length; count++) {
+                next += direction;
+                if (next > displayList.length - 1) next = 0;
+                if (next < 0) next = displayList.length - 1;
+                if (displayList[next]?.disabled) continue;
+
+                setIndex(next);
+                requestAnimationFrame(() => scrollOptionIntoView(next));
+                return;
+            }
+
+            setIndex(null);
+        };
+
         const renderOption = (i: number, option: AutocompleteItemProps) => {
             const Label = option.Render ?? Frag;
             const active = value === option.value || value === option.label;
@@ -337,9 +355,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             if (!option.disabled) onSelect(option, i);
                         },
                         className: css(
-                            "__autocomplete__option",
-                            active ? "__autocomplete__option-active" : "",
-                            selected ? "__autocomplete__option-selected" : ""
+                            autocompleteStyles.slots.option,
+                            active ? autocompleteOptionActiveClassName : undefined,
+                            selected ? autocompleteOptionSelectedClassName : undefined
                         ),
                     })}
                 >
@@ -362,30 +380,35 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 hideLeft={hideLeft}
                 required={required}
                 title={props.title}
-                container={container}
+                size={fieldSize}
+                container={css(container, autocompleteStyles.className({ size: fieldSize }))}
                 rightLabel={rightLabel}
                 interactive={interactive}
                 optionalText={optionalText}
                 componentName="autocomplete"
                 labelClassName={css(
-                    !props.disabled && "__autocomplete__field-state",
-                    props.disabled && "__form-autocomplete__disabled-border",
+                    !props.disabled && autocompleteStyles.slots["field-state"],
+                    props.disabled && autocompleteStyles.slots["disabled-border"],
                     labelClassName
                 )}
                 placeholder={props.placeholder}
                 ref={fieldset as unknown as Ref<HTMLInputElement>}
                 feedback={open && isTopPlacement ? props.title : feedback}
                 right={
-                    <span className="__autocomplete__actions">
+                    <span className={autocompleteStyles.slots.actions}>
                         {right}
                         <button
                             type="button"
                             disabled={props.disabled}
-                            className={css("__autocomplete__action", !props.disabled && "link:text-primary")}
                             onClick={onCaretDownClick}
+                            className={css(
+                                autocompleteStyles.className({ size: fieldSize }),
+                                autocompleteStyles.slots.action,
+                                !props.disabled && autocompleteActionPrimaryClassName
+                            )}
                         >
-                            <CaretDownIcon aria-hidden="true" className="__autocomplete__caret-icon" />
-                            <span className="__autocomplete__sr-label">{translation.inputCaretDown}</span>
+                            <CaretDownIcon aria-hidden="true" className={autocompleteStyles.slots["input-icon"]} />
+                            <span className={autocompleteStyles.slots["sr-label"]}>{translation.inputCaretDown}</span>
                         </button>
                         {value ? (
                             <button
@@ -393,16 +416,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 onClick={onClose}
                                 disabled={props.disabled}
                                 aria-label={translation.inputCloseValue}
-                                className={css("__autocomplete__action", !props.disabled && "link:text-danger")}
+                                className={css(
+                                    autocompleteStyles.className({ size: fieldSize }),
+                                    autocompleteStyles.slots.action,
+                                    !props.disabled && autocompleteActionDangerClassName
+                                )}
                             >
-                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
-                                        fill="currentColor"
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
+                                <XIcon aria-hidden="true" className={autocompleteStyles.slots["input-icon"]} />
                             </button>
                         ) : null}
                     </span>
@@ -426,27 +446,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 event.preventDefault();
                                 return setClosed();
                             }
-                            if (!open) return;
                             if (event.key === "ArrowDown") {
                                 event.preventDefault();
-                                let next = Is.number(index) ? index + 1 : 0;
-                                if (next > displayList.length - 1) next = 0;
-                                scrollOptionIntoView(next);
-                                return setIndex(next);
+                                return navigateOption(1);
                             }
                             if (event.key === "ArrowUp") {
                                 event.preventDefault();
-                                let next = Is.number(index) ? index! - 1 : displayList.length - 1;
-                                if (next < 0) next = displayList.length - 1;
-                                scrollOptionIntoView(next);
-                                return setIndex(next);
+                                return navigateOption(-1);
                             }
                             if (event.key === "Enter") {
-                                if (index !== null && displayList[index]) {
+                                const selectedIndex = index;
+                                const selected = selectedIndex !== null ? displayList[selectedIndex] : undefined;
+                                if (selectedIndex !== null && selected && !selected.disabled) {
                                     event.preventDefault();
-                                    return onSelect(displayList[index], index);
+                                    return onSelect(selected, selectedIndex);
                                 }
-                                if (displayList.length === 1) {
+                                if (displayList.length === 1 && !displayList[0]?.disabled) {
                                     event.preventDefault();
                                     return onSelect(displayList[0], 0);
                                 }
@@ -468,12 +483,16 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     aria-labelledby={`${shadowId}-label`}
                     autoComplete="off"
                     className={css(
-                        "input __autocomplete __autocomplete__input __autocomplete__placeholder",
-                        "__autocomplete__surface",
-                        "__autocomplete__transition",
-                        "__autocomplete__invalid",
-                        "__autocomplete__text",
-                        !props.disabled && "__autocomplete__control-state",
+                        "input",
+                        autocompleteStyles.className({ size: fieldSize }),
+                        autocompleteStyles.slots.input,
+                        freeTextStyles.className({ size: fieldSize }),
+                        freeTextStyles.slots.input,
+                        freeTextStyles.slots.surface,
+                        freeTextStyles.slots.transition,
+                        freeTextStyles.slots.placeholder,
+                        freeTextStyles.slots["input-state"],
+                        !props.disabled && autocompleteStyles.slots["control-state"],
                         props.className
                     )}
                 />
@@ -507,6 +526,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 })}
                                 initial={false}
                                 data-floating="true"
+                                className={css(
+                                    autocompleteStyles.className({ size: fieldSize }),
+                                    autocompleteStyles.slots.panel,
+                                    isTopPlacement ? autocompletePanelTopClassName : autocompletePanelBottomClassName
+                                )}
                                 animate={{ height: isEmpty ? "auto" : h }}
                                 onAnimationComplete={() => {
                                     if (!open) {
@@ -517,14 +541,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     const sum = (li?.getBoundingClientRect().height ?? MIN_SIZE) * displayList.length;
                                     flushSync(() => setH(Math.min(320, sum + 2)));
                                 }}
-                                className={css(
-                                    "__form-autocomplete__border __autocomplete__panel",
-                                    isTopPlacement ? "__autocomplete__panel-top" : "__autocomplete__panel-bottom"
-                                )}
                             >
                                 {isEmpty ? (
-                                    <div className="__autocomplete__empty">
-                                        <span className="__autocomplete__empty-text">{emptyMessage || translation.autocompleteEmpty}</span>
+                                    <div className={autocompleteStyles.slots.empty}>
+                                        <span className={autocompleteStyles.slots["empty-text"]}>
+                                            {emptyMessage || translation.autocompleteEmpty}
+                                        </span>
                                     </div>
                                 ) : null}
                                 {insideModal ? (
@@ -534,7 +556,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         ref={setScrollElement}
                                         hidden={isEmpty}
                                         style={{ maxHeight: h, overflowY: "auto" }}
-                                        className="__autocomplete__scroll"
+                                        className={autocompleteStyles.slots.scroll}
                                     >
                                         {displayList.map((option, i) => (
                                             <li key={`${option.value}-${i}`} role="presentation">
@@ -554,7 +576,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         defaultItemHeight={MIN_SIZE}
                                         components={components as never}
                                         scrollerRef={(e) => setScrollElement(e as HTMLElement)}
-                                        className="__autocomplete__scroll"
+                                        className={autocompleteStyles.slots.scroll}
                                         itemContent={(i, option) => renderOption(i, option)}
                                     />
                                 )}

@@ -31,7 +31,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                     data-disabled={d}
                     data-task={asTask}
                     data-component="checkbox"
-                    className={css(checkboxStyles.className({ task: asTask ? "true" : "false" }), "__checkbox__label", container)}
+                    className={css(checkboxStyles.className({ task: asTask ? "true" : "false" }), checkboxStyles.slots.label, container)}
                 >
                     <input
                         {...props}
@@ -41,6 +41,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                         data-task={asTask}
                         aria-invalid={ariaInvalid}
                         aria-describedby={describedBy}
+                        className={css(checkboxStyles.slots.control, checkboxStyles.slots["control-state"], className)}
                         onKeyDown={(event) => {
                             props.onKeyDown?.(event);
 
@@ -50,11 +51,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                                 event.currentTarget.click();
                             }
                         }}
-                        className={css("__checkbox__control __checkbox__control-state", className)}
                     />
                     {children}
                 </label>
-                <span id={errorId} data-name="checkbox-label" className={css("__checkbox__error", labelClassName)}>
+                <span id={errorId} data-name="checkbox-label" className={css(checkboxStyles.slots.error, labelClassName)}>
                     {error}
                 </span>
             </>

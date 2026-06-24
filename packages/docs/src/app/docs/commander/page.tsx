@@ -14,9 +14,7 @@ import {
     TerminalIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Button, CommandPalette } from "../../../../../lib/src";
-import type { CommandItemTypes } from "../../../../../lib/src/components/floating/command-palette";
-import { useNotification } from "../../../../../lib/src/components/display/notifications";
+import { type CommandItemTypes, useNotification, Button, CommandPalette } from "@g4rcez/components";
 
 const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({ command }) => {
     return (

@@ -1,6 +1,7 @@
 :root {
-    --var-radius: 0rem;
+    --var-radius: 0;
     --var-spacing: 0.75rem;
+    --var-spacing-base: 1rem;
     --var-fontsize: 1rem;
     --var-font-weight-medium: 500;
     --var-font-weight-semibold: 600;
@@ -119,6 +120,52 @@
     --var-layer-navbar: 22;
     --var-layer-wizard: 50;
 
+    --var-input-field-icon-size: calc(var(--var-fontsize) * 1);
+    --var-input-field-small-icon-size: calc(var(--var-fontsize) * 0.875);
+    --var-input-field-label-row-gap: calc(var(--var-spacing-base) * 0.25);
+    --var-input-field-label-meta-gap: calc(var(--var-spacing-base) * 0.25);
+    --var-input-field-tooltip-icon-size: calc(var(--var-fontsize) * 0.75);
+    --var-input-field-small-tooltip-icon-size: calc(var(--var-fontsize) * 0.6875);
+    --var-input-field-tooltip-max-inline-size: calc(var(--var-spacing-base) * 12);
+    --var-input-field-status-min-inline-size: calc(var(--var-spacing-base) * 1.5);
+    --var-input-field-small-status-min-inline-size: calc(var(--var-spacing-base) * 1.25);
+    --var-input-field-status-block-size: calc(var(--var-spacing-base) * 0.75);
+    --var-input-field-small-status-block-size: calc(var(--var-spacing-base) * 0.625);
+    --var-input-field-status-indicator-size: calc(var(--var-spacing-base) * 0.75);
+    --var-input-field-small-status-indicator-size: calc(var(--var-spacing-base) * 0.625);
+    --var-input-field-label-gap: calc(var(--var-spacing-base) * 0.25);
+    --var-input-field-label-font-size: calc(var(--var-fontsize) * 0.875);
+    --var-input-field-small-label-font-size: calc(var(--var-fontsize) * 0.75);
+    --var-input-field-optional-opacity: 0.7;
+    --var-input-field-control-column-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-input-field-small-control-column-gap: calc(var(--var-spacing-base) * 0.375);
+    --var-input-field-control-row-gap: calc(var(--var-spacing-base) * 0.25);
+    --var-input-field-small-control-row-gap: calc(var(--var-spacing-base) * 0.25);
+    /* --var-input-field-control-radius: calc(var(--var-radius) * 0.375); */
+    --var-input-field-control-radius: 0px;
+    --var-input-field-slot-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-input-field-small-slot-gap: calc(var(--var-spacing-base) * 0.375);
+    --var-input-field-slot-padding-inline-start: calc(var(--var-spacing-base) * 0.5);
+    --var-input-field-small-slot-padding-inline-start: calc(var(--var-spacing-base) * 0.375);
+    --var-input-field-slot-padding-inline-end: calc(var(--var-spacing-base) * 0.5);
+    --var-input-field-small-slot-padding-inline-end: calc(var(--var-spacing-base) * 0.375);
+    --var-input-field-hint-margin-block-start: calc(var(--var-spacing-base) * 0.3);
+    --var-input-field-hint-font-size: calc(var(--var-fontsize) * 0.75);
+    --var-input-field-small-hint-font-size: calc(var(--var-fontsize) * 0.6875);
+    --var-free-text-control-height: calc(var(--var-spacing-base) * 2.5);
+    --var-free-text-small-control-height: calc(var(--var-spacing-base) * 2);
+    --var-free-text-surface-radius: calc(var(--var-radius) * 0.375);
+    --var-free-text-surface-padding-inline: calc(var(--var-spacing-base) * 0.5);
+    --var-free-text-small-surface-padding-inline: calc(var(--var-spacing-base) * 0.375);
+    --var-free-text-surface-padding-block: calc(var(--var-spacing-base) * 0.25);
+    --var-free-text-small-surface-padding-block: calc(var(--var-spacing-base) * 0.125);
+    --var-free-text-font-size: calc(var(--var-fontsize) * 1);
+    --var-free-text-small-font-size: calc(var(--var-fontsize) * 0.875);
+    --var-free-text-outline-width: calc(var(--var-spacing-base) * 0.125);
+    --var-free-text-outline-offset: calc(var(--var-spacing-base) * 0.125);
+    --var-free-text-placeholder-foreground: hsla(240, 4%, 46%);
+    --var-free-text-error-placeholder-foreground: hsla(0, 84%, 96%);
+
     --var-dropdown-surface-radius: calc(var(--var-radius) + calc(var(--var-spacing-base) / 2));
     --var-dropdown-surface-padding: calc(var(--var-spacing-base) * 1);
     --var-dropdown-header-margin-block-end: calc(var(--var-spacing-base) / 2);
@@ -143,6 +190,120 @@
     --var-menu-item-disabled-opacity: 0.4;
     --var-menu-item-active-background: hsla(201, 49%, 36%);
     --var-menu-item-active-foreground: hsla(221, 6%, 90%);
+    --var-autocomplete-list-max-block-size: calc(var(--var-spacing-base) * 24);
+    --var-autocomplete-panel-radius: calc(var(--var-radius) + calc(var(--var-spacing-base) / 2));
+    --var-autocomplete-option-min-block-size: calc(var(--var-spacing-base) * 2.5);
+    --var-autocomplete-option-padding: calc(var(--var-spacing-base) * 0.625);
+    --var-autocomplete-option-background-hover: hsla(240, 5%, 96%);
+    --var-autocomplete-option-active-background: hsla(201, 49%, 22%);
+    --var-autocomplete-option-active-foreground: hsla(221, 6%, 90%);
+    --var-autocomplete-option-selected-background: hsla(240, 5%, 96%);
+    --var-autocomplete-option-selected-foreground: hsla(240, 10%, 4%);
+    --var-autocomplete-actions-gap: calc(var(--var-spacing-base) * 0.125);
+    --var-autocomplete-action-padding: calc(var(--var-spacing-base) * 0.5);
+    --var-autocomplete-action-padding-md: calc(var(--var-spacing-base) * 0.25);
+    --var-autocomplete-panel-max-block-size: calc(var(--var-spacing-base) * 20);
+    --var-autocomplete-panel-background: hsla(0, 0%, 100%);
+    --var-autocomplete-panel-border: hsla(240, 6%, 90%);
+    --var-autocomplete-panel-foreground: hsla(221, 15%, 23%);
+    --var-autocomplete-panel-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --var-autocomplete-empty-border: hsla(240, 10%, 4%);
+    --var-autocomplete-empty-foreground: hsla(240, 5%, 96%);
+
+    --var-multi-select-tag-remove-icon-size: calc(var(--var-fontsize) * 0.875);
+    --var-multi-select-tags-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-multi-select-actions-gap: calc(var(--var-spacing-base) * 0.125);
+    --var-multi-select-panel-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --var-multi-select-search-margin-block-end: calc(var(--var-spacing-base) * 0.25);
+    --var-multi-select-option-padding: calc(var(--var-spacing-base) * 0.625);
+    --var-multi-select-results-max-block-size: calc(var(--var-spacing-base) * 18);
+    --var-multi-select-option-background-hover: hsla(240, 5%, 96%);
+    --var-multi-select-option-selected-background: hsla(240, 5%, 96%);
+    --var-multi-select-option-selected-foreground: hsla(240, 10%, 4%);
+    --var-multi-select-checkbox-margin-inline-end: calc(var(--var-spacing-base) * 0.5);
+    --var-multi-select-footer-gap: calc(var(--var-spacing-base) * 0.5);
+
+    --var-radiobox-label-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-radiobox-label-min-block-size: calc(var(--var-spacing-base) * 1.25);
+    --var-radiobox-control-size: calc(var(--var-spacing-base) * 1);
+    --var-radiobox-large-control-size: calc(var(--var-spacing-base) * 1.25);
+    --var-radiobox-control-foreground: hsla(201, 49%, 36%);
+    --var-radiobox-control-background: hsla(0, 0%, 100%);
+    --var-radiobox-control-border: hsla(240, 6%, 90%);
+    --var-radiobox-control-border-width: calc(var(--var-spacing-base) * 0.0625);
+    --var-radiobox-mark-size: calc(var(--var-spacing-base) * 0.375);
+    --var-radiobox-large-mark-size: calc(var(--var-spacing-base) * 0.46875);
+    --var-radiobox-mark-foreground: hsla(0, 0%, 100%);
+    --var-radiobox-focus-ring: hsla(201, 49%, 36%);
+    --var-radiobox-focus-ring-width: calc(var(--var-spacing-base) * 0.125);
+    --var-radiobox-focus-ring-offset: calc(var(--var-spacing-base) * 0.125);
+    --var-radiobox-disabled-opacity: 0.7;
+    --var-radiobox-transition-duration: 180ms;
+    --var-radiobox-transition-timing: cubic-bezier(0.23, 1, 0.32, 1);
+
+    --var-checkbox-label-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-checkbox-control-size: calc(var(--var-spacing-base) * 1);
+    --var-checkbox-control-radius: calc(var(--var-radius) * 0.25);
+    --var-checkbox-control-foreground: hsla(201, 49%, 36%);
+    --var-checkbox-control-background: hsla(0, 0%, 100%);
+    --var-checkbox-control-border: hsla(240, 6%, 90%);
+    --var-checkbox-control-border-width: calc(var(--var-spacing-base) * 0.0625);
+    --var-checkbox-mark-foreground: hsla(0, 0%, 100%);
+    --var-checkbox-mark-stroke-width: calc(var(--var-spacing-base) * 0.125);
+    --var-checkbox-mark-inline-size: calc(var(--var-spacing-base) * 0.35);
+    --var-checkbox-mark-block-size: calc(var(--var-spacing-base) * 0.6);
+    --var-checkbox-indeterminate-mark-inline-size: calc(var(--var-spacing-base) * 0.55);
+    --var-checkbox-focus-ring: hsla(201, 49%, 36%);
+    --var-checkbox-focus-ring-width: calc(var(--var-spacing-base) * 0.125);
+    --var-checkbox-focus-ring-offset: calc(var(--var-spacing-base) * 0.125);
+    --var-checkbox-disabled-opacity: 0.7;
+    --var-checkbox-error-font-size: calc(var(--var-fontsize) * 0.75);
+
+    --var-switch-track-block-size: calc(var(--var-spacing-base) * 1.5);
+    --var-switch-track-inline-size: calc(var(--var-spacing-base) * 2.75);
+    --var-switch-track-border-width: calc(var(--var-border-hairline) * 2);
+    --var-switch-track-focus-ring-width: calc(var(--var-spacing-base) * 0.125);
+    --var-switch-track-focus-ring-offset: calc(var(--var-spacing-base) * 0.125);
+    --var-switch-thumb-size: calc(var(--var-spacing-base) * 1.25);
+    --var-switch-thumb-checked-translate-inline: calc(var(--var-spacing-base) * 1.25);
+    --var-switch-thumb-checked-background: hsla(0, 0%, 100%);
+    --var-switch-label-gap: calc(var(--var-spacing-base) * 0.75);
+    --var-switch-label-font-size: calc(var(--var-fontsize) * 0.875);
+    --var-switch-error-font-size: calc(var(--var-fontsize) * 0.75);
+    --var-switch-error-margin-block-start: calc(var(--var-spacing-base) * 0.25);
+
+    --var-date-picker-calendar-icon-size: calc(var(--var-fontsize) * 1);
+
+    --var-slider-control-block-size: calc(var(--var-spacing-base) * 1.25);
+    --var-slider-track-block-size: calc(var(--var-spacing-base) * 0.5);
+    --var-slider-thumb-size: calc(var(--var-spacing-base) * 1.25);
+    --var-slider-thumb-border-width: calc(var(--var-border-hairline) * 2);
+    --var-slider-thumb-focus-outline-width: calc(var(--var-spacing-base) * 0.125);
+    --var-slider-thumb-focus-outline-offset: calc(var(--var-spacing-base) * 0.125);
+    --var-slider-thumb-focus-scale: 1.05;
+    --var-slider-thumb-background: hsla(0, 0%, 100%);
+
+    --var-file-upload-surface-padding: calc(var(--var-spacing-base) * 1.5);
+    --var-file-upload-surface-radius: calc(var(--var-spacing-base) * 0.5);
+    --var-file-upload-content-gap: calc(var(--var-spacing-base) * 1);
+    --var-file-upload-thumb-size: calc(var(--var-spacing-base) * 4);
+    --var-file-upload-thumb-radius: 50%;
+    --var-file-upload-thumb-icon-size: calc(var(--var-fontsize) * 1.75);
+    --var-file-upload-file-icon-size: calc(var(--var-spacing-base) * 3);
+    --var-file-upload-remove-icon-size: calc(var(--var-fontsize) * 1);
+    --var-file-upload-idle-icon-size: calc(var(--var-spacing-base) * 5);
+    --var-file-upload-preview-button-margin: calc(var(--var-spacing-base) * 0.5);
+    --var-file-upload-item-border-width: calc(var(--var-spacing-base) * 0.0625);
+    --var-file-upload-actions-padding-block: calc(var(--var-spacing-base) * 1);
+    --var-file-upload-remove-button-size: calc(var(--var-spacing-base) * 1.5);
+    --var-file-upload-list-gap: calc(var(--var-spacing-base) * 2);
+    --var-file-upload-idle-icon-gap: calc(var(--var-spacing-base) * 0.5);
+    --var-file-upload-idle-copy-margin-block: calc(var(--var-spacing-base) * 1);
+    --var-file-upload-idle-copy-gap: calc(var(--var-spacing-base) * 0.25);
+    --var-file-upload-name-font-size: calc(var(--var-fontsize) * 1.125);
+    --var-file-upload-size-font-size: calc(var(--var-fontsize) * 0.875);
+    --var-file-upload-viewer-media-max-inline-size: calc(var(--var-spacing-base) * 24);
+
     --var-menu-nested-indicator-margin-inline-start: calc(var(--var-spacing-base) * 0.625);
     --var-menu-nested-indicator-font-size: calc(var(--var-fontsize) * 0.625);
     --var-menu-nested-icon-size: calc(var(--var-fontsize) * 0.875);
@@ -334,6 +495,12 @@
     --var-timeline-icon-padding: calc(var(--var-spacing-base) * 0.5);
     --var-timeline-actions-gap: calc(var(--var-spacing-base) * 1.5);
     --var-timeline-actions-padding-inline: calc(var(--var-spacing-base) * 1);
+
+    --var-step-marker-size: calc(var(--var-spacing-base) * 2.5);
+    --var-step-icon-size: calc(var(--var-fontsize) * 1.5);
+    --var-step-label-padding-inline: calc(var(--var-spacing-base) * 0.5);
+    --var-step-gap: calc(var(--var-spacing-base) * 1);
+    --var-step-connector-block-size: calc(var(--var-border-hairline) * 2);
 
     --var-page-calendar-gap: calc(var(--var-spacing-base) * 1);
     --var-page-calendar-header-gap: calc(var(--var-spacing-base) * 1);
@@ -665,6 +832,36 @@ html.dark {
     --var-menu-surface-border: hsla(240, 4%, 16%);
     --var-menu-item-active-background: hsla(201, 49%, 54%);
     --var-menu-item-active-foreground: hsla(240, 6%, 10%);
+
+    --var-autocomplete-option-background-hover: hsla(240, 4%, 16%);
+    --var-autocomplete-option-active-background: hsla(201, 49%, 22%);
+    --var-autocomplete-option-active-foreground: hsla(240, 6%, 10%);
+    --var-autocomplete-option-selected-background: hsla(240, 4%, 16%);
+    --var-autocomplete-option-selected-foreground: hsla(240, 5%, 96%);
+    --var-autocomplete-panel-background: hsla(240, 10%, 8%);
+    --var-autocomplete-panel-border: hsla(240, 4%, 16%);
+    --var-autocomplete-panel-foreground: hsla(240, 5%, 96%);
+
+    --var-multi-select-option-background-hover: hsla(240, 4%, 16%);
+    --var-multi-select-option-selected-background: hsla(240, 4%, 16%);
+    --var-multi-select-option-selected-foreground: hsla(240, 5%, 96%);
+
+    --var-free-text-placeholder-foreground: hsla(240, 5%, 65%);
+    --var-free-text-error-placeholder-foreground: hsla(0, 84%, 15%);
+    --var-autocomplete-empty-border: hsla(221, 10%, 17%);
+    --var-autocomplete-empty-foreground: hsla(240, 4%, 16%);
+
+    --var-radiobox-control-foreground: hsla(201, 49%, 54%);
+    --var-radiobox-control-background: hsla(240, 10%, 8%);
+    --var-radiobox-control-border: hsla(240, 4%, 16%);
+    --var-radiobox-focus-ring: hsla(201, 49%, 54%);
+
+    --var-checkbox-control-foreground: hsla(201, 49%, 54%);
+    --var-checkbox-control-background: hsla(240, 10%, 8%);
+    --var-checkbox-control-border: hsla(240, 4%, 16%);
+    --var-checkbox-focus-ring: hsla(201, 49%, 54%);
+
+    --var-slider-thumb-background: hsla(0, 0%, 100%);
 
     --var-wizard-surface-background: hsla(240, 10%, 8%);
     --var-wizard-surface-foreground: hsla(240, 5%, 96%);

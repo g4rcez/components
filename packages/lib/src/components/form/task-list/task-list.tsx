@@ -1,8 +1,10 @@
 "use client";
 import { stagger, useAnimate } from "motion/react";
-import { ComponentProps, PropsWithChildren, useEffect } from "react";
+import { type ComponentProps, type PropsWithChildren, useEffect } from "react";
+import { css } from "../../../lib/dom";
+import { taskListStyles } from "./task-list.styles";
 
-export const TaskList = (props: PropsWithChildren<ComponentProps<"fieldset">>) => {
+export const TaskList = ({ className, ...props }: PropsWithChildren<ComponentProps<"fieldset">>) => {
     const [ref, animate] = useAnimate();
 
     useEffect(() => {
@@ -28,5 +30,5 @@ export const TaskList = (props: PropsWithChildren<ComponentProps<"fieldset">>) =
         return () => container.removeEventListener("change", handler);
     }, [ref, animate]);
 
-    return <fieldset {...props} data-component="task-list" ref={ref} />;
+    return <fieldset {...props} className={css(taskListStyles.className(), className)} data-component="task-list" ref={ref} />;
 };

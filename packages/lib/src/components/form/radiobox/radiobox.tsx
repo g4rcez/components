@@ -12,7 +12,7 @@ export type RadioboxProps = Override<
 >;
 
 export const Radiobox = forwardRef<HTMLInputElement, RadioboxProps>(function Radiobox(
-    { children, className = "", size: _size, ...props }: RadioboxProps,
+    { children, className = "", size = "medium", ...props }: RadioboxProps,
     ref
 ) {
     return (
@@ -20,9 +20,14 @@ export const Radiobox = forwardRef<HTMLInputElement, RadioboxProps>(function Rad
             data-component="radiobox"
             data-disabled={props.disabled}
             aria-disabled={props.disabled}
-            className={css(radioboxStyles.className(), "__radiobox__label")}
+            className={css(radioboxStyles.className({ size }), radioboxStyles.slots.label)}
         >
-            <input {...props} ref={ref} type="radio" className={css("__radiobox__control __radiobox__control-state", className)} />
+            <input
+                {...props}
+                ref={ref}
+                type="radio"
+                className={css(radioboxStyles.slots.control, radioboxStyles.slots["control-state"], className)}
+            />
             {children}
         </label>
     );

@@ -27,9 +27,15 @@ describe("component stable class contracts", () => {
 });
 
 describe("InputField stable class contract", () => {
-    const source = readFormFile("input-field.tsx");
-    const css = readFormFile("input-field.css");
-    const dependentCssFiles = ["checkbox.css", "radiobox.css", "free-text.css", "autocomplete.css", "multi-select.css"] as const;
+    const source = readFormFile("input/input-field.tsx");
+    const css = readFormFile("input/input.css");
+    const dependentCssFiles = [
+        "checkbox/checkbox.css",
+        "radiobox/radiobox.css",
+        "input/input.css",
+        "autocomplete/autocomplete.css",
+        "multi-select/multi-select.css",
+    ] as const;
 
     it("removes generated input-field tw class names from the migrated slice", () => {
         expect(source).not.toMatch(/__form-input-field__tw-/);
@@ -42,9 +48,9 @@ describe("InputField stable class contract", () => {
     });
 
     it("uses stable semantic input-field selectors", () => {
-        expect(source).toContain("__input-field");
-        expect(source).toContain("__input-field__control");
-        expect(source).toContain("__input-field__status-indicator");
+        expect(source).toContain("inputFieldStyles.className");
+        expect(source).toContain("inputFieldStyles.slots.control");
+        expect(source).toContain('inputFieldStyles.slots["status-indicator"]');
         expect(css).toContain(".__input-field");
         expect(css).toContain(".__input-field__control");
         expect(css).toContain(".__input-field__status-indicator");
@@ -53,53 +59,62 @@ describe("InputField stable class contract", () => {
 
 describe("migrated form component class contracts", () => {
     const migratedFiles = [
-        "autocomplete.tsx",
-        "autocomplete.css",
-        "checkbox.tsx",
-        "checkbox.css",
-        "radiobox.tsx",
-        "radiobox.css",
-        "free-text.tsx",
-        "free-text.css",
-        "multi-select.tsx",
-        "multi-select.css",
-        "slider.tsx",
-        "slider.css",
-        "switch.tsx",
-        "switch.css",
-        "date-picker.tsx",
-        "date-picker.css",
-        "file-upload.tsx",
-        "file-upload.css",
+        "autocomplete/autocomplete.tsx",
+        "autocomplete/autocomplete.css",
+        "checkbox/checkbox.tsx",
+        "checkbox/checkbox.css",
+        "radiobox/radiobox.tsx",
+        "radiobox/radiobox.css",
+        "input/free-text.tsx",
+        "input/input.css",
+        "multi-select/multi-select.tsx",
+        "multi-select/multi-select.css",
+        "slider/slider.tsx",
+        "slider/slider.css",
+        "switch/switch.tsx",
+        "switch/switch.css",
+        "task-list/task-list.tsx",
+        "task-list/task-list.css",
+        "date-picker/date-picker.tsx",
+        "date-picker/date-picker.css",
+        "file-upload/file-upload.tsx",
+        "file-upload/file-upload.css",
     ] as const;
 
     it("removes generated tw class names from the migrated form batch", () => {
         for (const file of migratedFiles) {
             const content = readFormFile(file);
-            expect(content).not.toMatch(/__form-(autocomplete|checkbox|radiobox|free-text|multi-select|slider|switch|date-picker|file-upload)__tw-/);
+            expect(content).not.toMatch(
+                /__form-(autocomplete|checkbox|radiobox|free-text|multi-select|slider|switch|task-list|date-picker|file-upload)__tw-/
+            );
             expect(content).not.toContain("@generated component utility migration");
         }
     });
 
     it("uses stable semantic selectors in the migrated form batch", () => {
-        expect(readFormFile("autocomplete.tsx")).toContain("__autocomplete__panel");
-        expect(readFormFile("checkbox.tsx")).toContain("__checkbox__label");
-        expect(readFormFile("radiobox.tsx")).toContain("__radiobox__label");
-        expect(readFormFile("free-text.tsx")).toContain("__free-text__input");
-        expect(readFormFile("multi-select.tsx")).toContain("__multi-select__panel");
-        expect(readFormFile("slider.tsx")).toContain("__slider__control");
-        expect(readFormFile("switch.tsx")).toContain("__switch__track");
-        expect(readFormFile("date-picker.tsx")).toContain("__date-picker__sr-label");
-        expect(readFormFile("file-upload.tsx")).toContain("__file-upload__dropzone");
+        expect(readFormFile("autocomplete/autocomplete.tsx")).toContain("autocompleteStyles.slots.panel");
+        expect(readFormFile("checkbox/checkbox.tsx")).toContain("checkboxStyles.slots.label");
+        expect(readFormFile("radiobox/radiobox.tsx")).toContain("radioboxStyles.slots.label");
+        expect(readFormFile("radiobox/radiobox.tsx")).toContain("radioboxStyles.className({ size })");
+        expect(readFormFile("input/free-text.tsx")).toContain("freeTextStyles.slots.input");
+        expect(readFormFile("multi-select/multi-select.tsx")).toContain("multiSelectStyles.slots.panel");
+        expect(readFormFile("slider/slider.tsx")).toContain("sliderStyles.slots.control");
+        expect(readFormFile("switch/switch.tsx")).toContain("switchStyles.slots.track");
+        expect(readFormFile("task-list/task-list.tsx")).toContain("taskListStyles.className()");
+        expect(readFormFile("date-picker/date-picker.tsx")).toContain('datePickerStyles.slots["sr-label"]');
+        expect(readFormFile("file-upload/file-upload.tsx")).toContain("fileUploadStyles.slots.dropzone");
     });
 
     it("keeps radiobox control sizing and colors token-driven", () => {
-        const radioboxCss = readFormFile("radiobox.css");
+        const radioboxCss = readFormFile("radiobox/radiobox.css");
 
-        expect(radioboxCss).toContain("height: var(--radiobox-size)");
-        expect(radioboxCss).toContain("width: var(--radiobox-size)");
-        expect(radioboxCss).toContain("gap: var(--radiobox-gap)");
-        expect(radioboxCss).toContain("hsla(var(--radiobox-control-color), 1)");
+        expect(radioboxCss).toContain("block-size: var(--var-radiobox-control-size)");
+        expect(radioboxCss).toContain("inline-size: var(--var-radiobox-control-size)");
+        expect(radioboxCss).toContain("gap: var(--var-radiobox-label-gap)");
+        expect(radioboxCss).toContain("color: var(--var-radiobox-control-foreground)");
+        expect(radioboxCss).toContain("transition-duration: var(--var-radiobox-transition-duration)");
+        expect(radioboxCss).toContain("transform: scale(0.55)");
+        expect(radioboxCss).not.toContain("transform: scale(0)");
         expect(radioboxCss).not.toContain("color: #2563eb");
         expect(radioboxCss).not.toContain("background-color: #fff");
         expect(radioboxCss).not.toContain("border-color: #6b7280");

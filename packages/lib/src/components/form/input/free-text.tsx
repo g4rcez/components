@@ -6,6 +6,7 @@ import type { InputTypes } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../../lib/dom";
 import type { Any, Override, ReactComponent } from "../../../types";
 import { type FeedbackProps, InputField, type InputFieldProps } from "./input-field";
+import { freeTextStyles } from "./free-text.styles";
 
 type FreeTextTag = "input" | "textarea";
 
@@ -38,6 +39,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                 hideLeft = false,
                 loading,
                 hiddenLabel,
+                size = "normal",
                 ...props
             },
             ref
@@ -90,12 +92,13 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                     hiddenLabel={hiddenLabel}
                     interactive={interactive}
                     required={props.required}
+                    size={size}
                     componentName={elementName}
                     id={props.name || props.id}
                     optionalText={optionalText}
                     labelClassName={css(
-                        !props.disabled && "__free-text__field-state",
-                        props.disabled && "__form-free-text__disabled-border",
+                        !props.disabled && freeTextStyles.slots["field-state"],
+                        props.disabled && freeTextStyles.slots["disabled-border"],
                         labelClassName
                     )}
                     placeholder={props.placeholder}
@@ -115,12 +118,14 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         aria-describedby={error ? `${id}-error` : undefined}
                         ref={mergeRefs(ref, inputRef) as unknown as React.Ref<Html>}
                         className={css(
-                            "input __free-text __free-text__input __free-text__placeholder",
-                            "__free-text__surface",
-                            "__free-text__transition",
-                            "__free-text__invalid",
-                            "__free-text__resizable",
-                            "__free-text__input-state",
+                            freeTextStyles.className({ size }),
+                            freeTextStyles.slots.input,
+                            freeTextStyles.slots.placeholder,
+                            freeTextStyles.slots.surface,
+                            freeTextStyles.slots.transition,
+                            freeTextStyles.slots.invalid,
+                            freeTextStyles.slots.resizable,
+                            freeTextStyles.slots["input-state"],
                             props.className
                         )}
                     />

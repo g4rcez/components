@@ -3,6 +3,7 @@ import type React from "react";
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
 import { useStableRef } from "../../../hooks/use-stable-ref";
 import { css } from "../../../lib/dom";
+import { switchStyles } from "./switch.styles";
 
 export type SwitchProps = Omit<React.ComponentProps<"input">, "onKeyDown"> & {
     error?: string;
@@ -48,8 +49,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         };
 
         return (
-            <fieldset className={css("__switch __switch__fieldset", container)} data-component="switch" disabled={props.disabled || loading}>
-                <span className="__switch__row">
+            <fieldset className={css(switchStyles.className(), container)} data-component="switch" disabled={props.disabled || loading}>
+                <span className={switchStyles.slots.row}>
                     <input
                         {...props}
                         hidden
@@ -81,15 +82,15 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                         data-checked={checked}
                         aria-labelledby={`${id}-label`}
                         disabled={props.disabled || loading}
-                        className="__switch__track"
+                        className={switchStyles.slots.track}
                     >
-                        <span aria-hidden="true" data-checked={checked} className="__switch__thumb" />
+                        <span aria-hidden="true" data-checked={checked} className={switchStyles.slots.thumb} />
                     </button>
-                    <label htmlFor={props.id || id} className="__switch__label" id={`${id}-label`}>
-                        <span className="__switch__label-text">{children}</span>
+                    <label htmlFor={props.id || id} className={switchStyles.slots.label} id={`${id}-label`}>
+                        <span className={switchStyles.slots["label-text"]}>{children}</span>
                     </label>
                 </span>
-                <span id={errorId} className="__switch__error">
+                <span id={errorId} className={switchStyles.slots.error}>
                     {error}
                 </span>
             </fieldset>

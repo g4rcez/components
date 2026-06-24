@@ -4,6 +4,6 @@ export const sliderStyles = defineComponentStyles({
     name: "slider",
     variants: {},
     defaults: {},
-    slots: ["thumb"],
+    slots: ["control", "track", "indicator", "thumb"],
     dependencies: ["tooltip"],
 });

@@ -2,13 +2,16 @@
 import type React from "react";
 import type { Any } from "../../../types";
 import { createFreeText, type FreeTextProps } from "./free-text";
+import { textareaStyles } from "./textarea.styles";
 
-export type TextareaProps = FreeTextProps<"textarea", React.ComponentProps<"textarea">>;
+type WithoutNativeSize<T> = T extends object ? Omit<T, "size"> : T;
+
+export type TextareaProps = FreeTextProps<"textarea", WithoutNativeSize<React.ComponentProps<"textarea">>>;
 
 export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTMLTextAreaElement, Any>(
     "textarea",
     "textarea",
-    { container: "__textarea" },
+    { container: textareaStyles.className({}) },
     (textarea: HTMLTextAreaElement) => {
         const hasRows = textarea.hasAttribute("rows");
         const computeMinHeight = (): number => {

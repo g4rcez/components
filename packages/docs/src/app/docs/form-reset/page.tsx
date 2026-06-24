@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useRef } from "react";
-import { Button, Card, Input, Select, formReset } from "../../../../../lib/src";
+import { Button, Card, Input, Select, formReset } from "@g4rcez/components";
 
 export default function FormResetPage() {
     const formRef = useRef<HTMLFormElement>(null);

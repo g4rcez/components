@@ -1,17 +1,20 @@
 "use client";
 import MaskInput, {
-    AllMasks,
-    CurrencyCode,
-    CurrencyInputProps,
-    CurrencyMaskTypes,
-    Locales,
-    PercentInputMask,
-    PercentInputProps,
-    TheMaskProps,
+    type AllMasks,
+    type CurrencyCode,
+    type CurrencyInputProps,
+    type CurrencyMaskTypes,
+    type Locales,
+    type PercentInputMask,
+    type PercentInputProps,
+    type TheMaskProps,
 } from "the-mask-input";
-import { createFreeText, FreeTextProps } from "./free-text";
+import { createFreeText, type FreeTextProps } from "./free-text";
+import { inputStyles } from "./input.styles";
 
 export type * from "the-mask-input";
+
+type WithoutNativeSize<T> = T extends object ? Omit<T, "size"> : T;
 
 /**
  * Props for the Input component, extending FreeTextProps with mask functionality
@@ -19,21 +22,23 @@ export type * from "the-mask-input";
  */
 export type InputProps = FreeTextProps<
     "input",
-    | ({
-          mask?: CurrencyMaskTypes;
-          locale?: Locales;
-          currency?: CurrencyCode | undefined;
-      } & CurrencyInputProps)
-    | ({
-          mask?: PercentInputMask;
-          locale?: Locales;
-          currency?: undefined;
-      } & PercentInputProps)
-    | ({
-          mask?: AllMasks | Array<string | RegExp> | ((p: string) => Array<string | RegExp> | AllMasks);
-          locale?: undefined;
-          currency?: undefined;
-      } & TheMaskProps)
+    WithoutNativeSize<
+        | ({
+              mask?: CurrencyMaskTypes;
+              locale?: Locales;
+              currency?: CurrencyCode | undefined;
+          } & CurrencyInputProps)
+        | ({
+              mask?: PercentInputMask;
+              locale?: Locales;
+              currency?: undefined;
+          } & PercentInputProps)
+        | ({
+              mask?: AllMasks | Array<string | RegExp> | ((p: string) => Array<string | RegExp> | AllMasks);
+              locale?: undefined;
+              currency?: undefined;
+          } & TheMaskProps)
+    >
 >;
 
 /**
@@ -68,4 +73,5 @@ export type InputProps = FreeTextProps<
  */
 export const Input = createFreeText<"input", HTMLInputElement, InputProps>(MaskInput, "input", {
     type: "text",
+    container: inputStyles.className({}),
 });

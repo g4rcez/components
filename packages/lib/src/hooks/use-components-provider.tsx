@@ -38,7 +38,9 @@ const toTokenTree = (tokens: Record<string, unknown>): TokenTree =>
     }, {});
 
 const mergeTokenTree = (base: TokenTree, override: Record<string, unknown> | undefined): TokenTree => {
-    if (!override) return base;
+    if (!override) {
+        return base;
+    }
 
     return Object.entries(override).reduce<TokenTree>((acc, [key, value]) => {
         if (value === undefined) return acc;
@@ -159,15 +161,12 @@ const componentTokenProperties = (tokens: TokenTree): CSSProperties => {
     const directRuntimeProperties = createThemeProperties({ components: tokens }, { base: {} });
     const properties: CssVariableProperties = { ...directRuntimeProperties };
     const overridesByComponent = new Map<string, Map<string, string>>();
-
     for (const token of flattenComponentTokens(tokens)) {
         const overrides = overridesByComponent.get(token.component) ?? new Map<string, string>();
         for (const alias of legacyAttributeAliases(token.attribute)) overrides.set(alias, token.value);
         overridesByComponent.set(token.component, overrides);
-
         for (const propertyName of tokenPropertyNames(token.component, token.attribute)) properties[propertyName] = token.value;
     }
-
     for (const [component, overrides] of overridesByComponent) {
         const defaults = defaultComponentTokens[component as keyof typeof defaultComponentTokens];
         if (!isTokenRecord(defaults)) continue;
@@ -190,33 +189,32 @@ const componentTokenProperties = (tokens: TokenTree): CSSProperties => {
             for (const propertyName of tokenPropertyNames(component, attribute)) properties[propertyName] = derivedValue;
         }
     }
-
     return properties;
 };
 
 export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
-    const componentOverrides = useMemo(() => (props.components ? toTokenTree(props.components) : undefined), [props.components]);
-    const componentTokens = useMemo(
-        () => mergeTokenTree(mergeTokenTree(defaultLightThemeTokens.components, defaultComponentTokens), componentOverrides),
-        [componentOverrides]
-    );
-    const componentStyle = useMemo<CSSProperties | undefined>(
-        () => (componentOverrides ? { display: "contents", ...componentTokenProperties(componentOverrides) } : undefined),
-        [componentOverrides]
-    );
+    const css = useMemo(() => {
+        const componentOverrides = props.injectComponentTokens ? (props.components ? toTokenTree(props.components) : {}) : {};
+        const componentTokens = mergeTokenTree(mergeTokenTree(defaultLightThemeTokens.components, defaultComponentTokens), componentOverrides);
+        const styles =
+            componentOverrides && props.injectComponentTokens ? { display: "contents", ...componentTokenProperties(componentOverrides) } : undefined;
+        return { overrides: componentOverrides, tokens: componentTokens, styles };
+    }, [props.injectComponentTokens, props.components]);
+
     const memoMap = useMemo<ContextType>(
         () => ({
             locale: props.locale,
-            components: componentTokens,
+            components: css.tokens,
             floatingRef: props.rootFloating,
             parser: props.parser || parsers.hsla,
             map: { ...defaultTranslations, ...props.map },
             tweaks: { ...defaultTweaks, ...props.tweaks },
         }),
-        [props.locale, props.rootFloating, props.tweaks, props.parser, props.map, componentTokens]
+        [props.locale, props.rootFloating, props.tweaks, props.parser, props.map, css]
     );
-    const children = componentStyle ? (
-        <div data-components-provider="true" style={componentStyle}>
+
+    const children = css.styles ? (
+        <div data-components-provider="true" style={css.styles}>
             {props.children}
         </div>
     ) : (

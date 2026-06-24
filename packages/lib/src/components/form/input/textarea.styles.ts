@@ -6,5 +6,5 @@ export const textareaStyles = defineComponentStyles({
     css: "@g4rcez/components/input.css",
     defaults: {},
     slots: [],
-    dependencies: [],
+    dependencies: ["free-text"],
 });

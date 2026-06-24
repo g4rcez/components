@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card, Switch } from "../../../../../lib/src";
+import { Card, Switch } from "@g4rcez/components";
 
 export default function SwitchPage() {
     const [notifications, setNotifications] = useState(false);

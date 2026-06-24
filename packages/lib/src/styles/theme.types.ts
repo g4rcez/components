@@ -327,32 +327,128 @@ export type TypographyTokens = {
 };
 
 export type InputTokens = {
-    rounded: string;
-    height: string;
-    "padding-x": string;
-    "padding-y": string;
-    gap: string;
-    text: string;
-    "label-text": string;
-    "hint-text": string;
-    "label-mb": string;
-    "hint-mt": string;
-    inline: string;
-    "slot-gap": string;
-    "slot-pl": string;
-    "slot-pr": string;
+    "field-icon-size": string;
+    "field-small-icon-size": string;
+    "field-label-row-gap": string;
+    "field-label-meta-gap": string;
+    "field-tooltip-icon-size": string;
+    "field-small-tooltip-icon-size": string;
+    "field-tooltip-max-inline-size": string;
+    "field-status-min-inline-size": string;
+    "field-small-status-min-inline-size": string;
+    "field-status-block-size": string;
+    "field-small-status-block-size": string;
+    "field-status-indicator-size": string;
+    "field-small-status-indicator-size": string;
+    "field-label-gap": string;
+    "field-label-font-size": string;
+    "field-small-label-font-size": string;
+    "field-optional-opacity": string;
+    "field-control-column-gap": string;
+    "field-small-control-column-gap": string;
+    "field-control-row-gap": string;
+    "field-small-control-row-gap": string;
+    "field-control-radius": string;
+    "field-slot-gap": string;
+    "field-small-slot-gap": string;
+    "field-slot-padding-inline-start": string;
+    "field-small-slot-padding-inline-start": string;
+    "field-slot-padding-inline-end": string;
+    "field-small-slot-padding-inline-end": string;
+    "field-hint-margin-block-start": string;
+    "field-hint-font-size": string;
+    "field-small-hint-font-size": string;
+    "free-text-control-height": string;
+    "free-text-small-control-height": string;
+    "free-text-surface-radius": string;
+    "free-text-surface-padding-inline": string;
+    "free-text-small-surface-padding-inline": string;
+    "free-text-surface-padding-block": string;
+    "free-text-small-surface-padding-block": string;
+    "free-text-font-size": string;
+    "free-text-small-font-size": string;
+    "free-text-outline-width": string;
+    "free-text-outline-offset": string;
+    "free-text-placeholder-foreground": string;
+    "free-text-error-placeholder-foreground": string;
+};
+
+export type AutocompleteTokens = {
+    "list-max-block-size": string;
+    "panel-radius": string;
+    "option-min-block-size": string;
+    "option-padding": string;
+    "option-background-hover": string;
+    "option-active-background": string;
+    "option-active-foreground": string;
+    "option-selected-background": string;
+    "option-selected-foreground": string;
+    "actions-gap": string;
+    "action-padding": string;
+    "action-padding-md": string;
+    "panel-max-block-size": string;
+    "panel-background": string;
+    "panel-border": string;
+    "panel-foreground": string;
+    "panel-transition-timing": string;
+    "empty-border": string;
+    "empty-foreground": string;
+};
+
+export type MultiSelectTokens = {
+    "tag-remove-icon-size": string;
+    "tags-gap": string;
+    "actions-gap": string;
+    "panel-transition-timing": string;
+    "search-margin-block-end": string;
+    "option-padding": string;
+    "results-max-block-size": string;
+    "option-background-hover": string;
+    "option-selected-background": string;
+    "option-selected-foreground": string;
+    "checkbox-margin-inline-end": string;
+    "footer-gap": string;
 };
 
 export type CheckboxTokens = {
-    size: string;
-    rounded: string;
-    gap: string;
-    "hint-text": string;
+    "label-gap": string;
+    "control-size": string;
+    "control-radius": string;
+    "control-foreground": string;
+    "control-background": string;
+    "control-border": string;
+    "control-border-width": string;
+    "mark-foreground": string;
+    "mark-stroke-width": string;
+    "mark-inline-size": string;
+    "mark-block-size": string;
+    "indeterminate-mark-inline-size": string;
+    "focus-ring": string;
+    "focus-ring-width": string;
+    "focus-ring-offset": string;
+    "disabled-opacity": string;
+    "error-font-size": string;
+};
+
+export type DatePickerTokens = {
+    "calendar-icon-size": string;
 };
 
 export type RadioboxTokens = {
-    size: string;
-    gap: string;
+    "label-gap": string;
+    "control-size": string;
+    "control-foreground": string;
+    "control-background": string;
+    "control-border": string;
+    "control-border-width": string;
+    "mark-size": string;
+    "mark-foreground": string;
+    "focus-ring": string;
+    "focus-ring-width": string;
+    "focus-ring-offset": string;
+    "disabled-opacity": string;
+    "transition-duration": string;
+    "transition-timing": string;
 };
 
 export type SwitchTokens = {
@@ -372,18 +468,26 @@ export type SliderTokens = {
 };
 
 export type FileUploadTokens = {
-    p: string;
-    rounded: string;
-    gap: string;
+    "surface-padding": string;
+    "surface-radius": string;
+    "content-gap": string;
     "thumb-size": string;
     "thumb-radius": string;
     "thumb-icon-size": string;
-    "text-name": string;
-    "text-size": string;
-    "delete-py": string;
-    "inner-gap": string;
-    "thumb-my": string;
-    "thumb-gap": string;
+    "file-icon-size": string;
+    "remove-icon-size": string;
+    "idle-icon-size": string;
+    "preview-button-margin": string;
+    "item-border-width": string;
+    "actions-padding-block": string;
+    "remove-button-size": string;
+    "list-gap": string;
+    "idle-icon-gap": string;
+    "idle-copy-margin-block": string;
+    "idle-copy-gap": string;
+    "name-font-size": string;
+    "size-font-size": string;
+    "viewer-media-max-inline-size": string;
 };
 
 export type ProgressTokens = {
@@ -549,7 +653,10 @@ export type ComponentTokens = {
     skeleton: SkeletonTokens;
     typography: TypographyTokens;
     input: InputTokens;
+    autocomplete: AutocompleteTokens;
+    "multi-select": MultiSelectTokens;
     checkbox: CheckboxTokens;
+    "date-picker": DatePickerTokens;
     radiobox: RadioboxTokens;
     switch: SwitchTokens;
     slider: SliderTokens;

@@ -9,7 +9,7 @@ type ButtonTokens = typeof defaultLightThemeTokens.components.button;
 
 const ComponentTokensProbe = () => {
     const context = useContext(Context);
-    const button = context.components?.button as ButtonTokens | undefined;
+    const button = context?.components?.button as ButtonTokens | undefined;
 
     return (
         <output
@@ -38,9 +38,23 @@ describe("ComponentsProvider component tokens", () => {
         expect(probe).toHaveAttribute("data-primary-foreground", defaultLightThemeTokens.components.button.primary.foreground);
     });
 
-    it("scopes provided component tokens and calc-derived aliases as CSS variables", () => {
+    it("does not inject component token CSS variables unless explicitly enabled", () => {
         render(
             <ComponentsProvider
+                components={{ button: { height: "4rem", primary: { background: "hotpink" } }, tag: { "default-min-block-size": "3rem" } }}
+            >
+                <button type="button">Preview</button>
+            </ComponentsProvider>
+        );
+
+        expect(screen.queryByText("Preview")?.parentElement).not.toHaveAttribute("data-components-provider");
+        expect(document.querySelector('[data-components-provider="true"]')).toBeNull();
+    });
+
+    it("scopes provided component tokens and calc-derived aliases as CSS variables when javascript injection is enabled", () => {
+        render(
+            <ComponentsProvider
+                injectComponentTokens
                 components={{ button: { height: "4rem", primary: { background: "hotpink" } }, tag: { "default-min-block-size": "3rem" } }}
             >
                 <button type="button">Preview</button>

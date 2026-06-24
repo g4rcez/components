@@ -13,15 +13,19 @@ fieldset:disabled .__select__field {
 }
 
 .__select__trigger {
-    margin-block-start: 0.5rem;
-    color: inherit;
-    background: transparent;
-    border: 0;
+    margin-block-start: var(--var-free-text-surface-padding-block);
     padding: 0;
-    transition-property: color;
-    transition-duration: 150ms;
-    transition-timing-function: ease;
+    color: inherit;
+    border: 0;
+    background: transparent;
     cursor: pointer;
+    transition-property: color;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-linear);
+}
+
+.__select--size-small.__select__trigger {
+    margin-block-start: var(--var-free-text-small-surface-padding-block);
 }
 
 .__select__trigger:enabled:hover {
@@ -34,14 +38,20 @@ fieldset:disabled .__select__field {
 }
 
 .__select__trigger-icon {
-    inline-size: var(--var-select-trigger-icon-size, 1.25rem);
-    block-size: var(--var-select-trigger-icon-size, 1.25rem);
+    inline-size: var(--var-input-field-icon-size);
+    block-size: var(--var-input-field-icon-size);
+}
+
+.__select--size-small .__select__trigger-icon,
+.__select--size-small.__select__trigger-icon {
+    inline-size: var(--var-input-field-small-icon-size);
+    block-size: var(--var-input-field-small-icon-size);
 }
 
 .__select__trigger-label {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    inline-size: 1px;
+    block-size: 1px;
     padding: 0;
     margin: -1px;
     overflow: hidden;
@@ -51,26 +61,14 @@ fieldset:disabled .__select__field {
 }
 
 .__select__control {
-    flex: 1 1 0%;
-    inline-size: 100%;
-    block-size: var(--var-input-height, var(--input-height));
     appearance: none;
     border: 0;
-    border-radius: var(--var-input-rounded, var(--var-button-rounded));
     background: transparent;
-    padding-block: var(--var-input-py, 0.25rem);
-    padding-inline: var(--var-input-px, 0.5rem);
-    color: var(--var-color-foreground);
-    font: inherit;
-    font-size: var(--var-input-font-size, 1rem);
-    outline: none;
-    transition-property: color, border-color, background-color;
-    transition-duration: 150ms;
-    transition-timing-function: ease;
 }
 
-.__select__control::placeholder {
-    color: var(--var-input-placeholder-foreground, var(--var-color-muted-foreground));
+.__select__control::placeholder,
+.__select__control[data-selected="false"] {
+    color: var(--var-free-text-placeholder-foreground);
 }
 
 .__select__control:disabled {
@@ -78,14 +76,10 @@ fieldset:disabled .__select__field {
     cursor: not-allowed;
 }
 
-.__select__control[data-selected="false"] {
-    color: var(--var-input-placeholder-foreground, var(--var-color-muted-foreground));
-}
-
 fieldset[data-error="true"] .__select__control {
     color: var(--var-color-danger);
 }
 
 fieldset[data-error="true"] .__select__control::placeholder {
-    color: var(--var-input-mask-error-background, var(--var-color-danger-subtle));
+    color: var(--var-free-text-error-placeholder-foreground);
 }

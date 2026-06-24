@@ -68,6 +68,73 @@ describe("component CSS cascade contract", () => {
         expect(componentTokens).toContain('"list-max-block-size": "24rem"');
     });
 
+    it("wires checkbox control and label styles to semantic component tokens", () => {
+        const checkboxCss = readSourceCss("src/components/form/checkbox/checkbox.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(checkboxCss).toContain("gap: var(--var-checkbox-label-gap);");
+        expect(checkboxCss).toContain("inline-size: var(--var-checkbox-control-size);");
+        expect(checkboxCss).toContain("border-radius: var(--var-checkbox-control-radius);");
+        expect(checkboxCss).toContain("color: var(--var-checkbox-control-foreground);");
+        expect(checkboxCss).toContain("outline: var(--var-checkbox-focus-ring-width) solid var(--var-checkbox-focus-ring);");
+        expect(componentTokens).toContain('"control-size": "1rem"');
+    });
+
+    it("wires radiobox control and label styles to semantic component tokens", () => {
+        const radioboxCss = readSourceCss("src/components/form/radiobox/radiobox.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(radioboxCss).toContain("gap: var(--var-radiobox-label-gap);");
+        expect(radioboxCss).toContain("inline-size: var(--var-radiobox-control-size);");
+        expect(radioboxCss).toContain("color: var(--var-radiobox-control-foreground);");
+        expect(radioboxCss).toContain("outline: var(--var-radiobox-focus-ring-width) solid var(--var-radiobox-focus-ring);");
+        expect(componentTokens).toContain("radiobox: {");
+        expect(componentTokens).toContain('"mark-size": "0.375rem"');
+    });
+
+    it("wires date picker icon styles to semantic component tokens", () => {
+        const datePickerCss = readSourceCss("src/components/form/date-picker/date-picker.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(datePickerCss).toContain("inline-size: var(--var-date-picker-calendar-icon-size);");
+        expect(datePickerCss).toContain("block-size: var(--var-date-picker-calendar-icon-size);");
+        expect(componentTokens).toContain('"date-picker": {');
+        expect(componentTokens).toContain('"calendar-icon-size": "1rem"');
+    });
+
+    it("wires select trigger and control styles to shared input tokens", () => {
+        const selectCss = readSourceCss("src/components/form/select/select.css");
+        const selectSource = readSourceCss("src/components/form/select/select.tsx");
+
+        expect(selectCss).toContain("margin-block-start: var(--var-free-text-surface-padding-block);");
+        expect(selectCss).toContain("inline-size: var(--var-input-field-icon-size);");
+        expect(selectSource).toContain("freeTextStyles.slots.input");
+        expect(selectSource).toContain("freeTextStyles.slots.surface");
+    });
+
+    it("wires autocomplete input, panel, and option styles to semantic component tokens", () => {
+        const autocompleteCss = readSourceCss("src/components/form/autocomplete/autocomplete.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(autocompleteCss).toContain("inline-size: var(--var-input-field-icon-size);");
+        expect(autocompleteCss).toContain("min-block-size: var(--var-autocomplete-option-min-block-size);");
+        expect(autocompleteCss).toContain("padding: var(--var-autocomplete-option-padding);");
+        expect(autocompleteCss).toContain("background-color: var(--var-autocomplete-panel-background);");
+        expect(componentTokens).toContain('"option-padding": "0.625rem"');
+    });
+
+    it("wires multi-select panel and option styles to semantic component tokens", () => {
+        const multiSelectCss = readSourceCss("src/components/form/multi-select/multi-select.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+
+        expect(multiSelectCss).toContain("inline-size: var(--var-input-field-icon-size);");
+        expect(multiSelectCss).toContain("padding: var(--var-multi-select-option-padding);");
+        expect(multiSelectCss).toContain("max-block-size: var(--var-multi-select-results-max-block-size);");
+        expect(multiSelectCss).toContain("background-color: var(--var-multi-select-option-selected-background);");
+        expect(componentTokens).toContain('"multi-select": {');
+        expect(componentTokens).toContain('"option-padding": "0.625rem"');
+    });
+
     it("wires menu surface and item styles to semantic component tokens", () => {
         const menuCss = readSourceCss("src/components/floating/menu/menu.css");
         const componentTokens = readSourceCss("src/styles/components.ts");
@@ -124,13 +191,27 @@ describe("component CSS cascade contract", () => {
         expect(componentTokens).toContain('"small-font-size": "0.875rem"');
     });
 
-    it("wires file upload thumbnail shape and icon size to component tokens", () => {
+    it("wires input field and free text styles to semantic component tokens", () => {
+        const inputCss = readSourceCss("src/components/form/input/input.css");
+        const tokensCss = readSourceCss("src/styles/tokens.css");
+
+        expect(inputCss).toContain("gap: var(--var-input-field-label-gap);");
+        expect(inputCss).toContain("border-radius: var(--var-input-field-control-radius);");
+        expect(inputCss).toContain("block-size: var(--var-free-text-control-height);");
+        expect(inputCss).toContain("padding-inline: var(--var-free-text-surface-padding-inline);");
+        expect(tokensCss).toContain("--var-input-field-control-radius: calc(var(--var-spacing-base) * 0.375);");
+        expect(tokensCss).toContain("--var-free-text-placeholder-foreground: hsla(240, 4%, 46%);");
+    });
+
+    it("wires file upload surface, thumbnail, and list styles to semantic component tokens", () => {
         const fileUploadCss = readSourceCss("src/components/form/file-upload/file-upload.css");
         const componentTokens = readSourceCss("src/styles/components.ts");
 
-        expect(fileUploadCss).toContain("border-radius: var(--var-file-upload-thumb-radius, var(--file-upload-thumb-radius));");
-        expect(fileUploadCss).toContain("inline-size: var(--var-file-upload-thumb-icon-size, var(--file-upload-thumb-icon-size, 1.75rem));");
-        expect(componentTokens).toContain('"thumb-radius": "50%"');
+        expect(fileUploadCss).toContain("padding: var(--var-file-upload-surface-padding);");
+        expect(fileUploadCss).toContain("border-radius: var(--var-file-upload-surface-radius);");
+        expect(fileUploadCss).toContain("inline-size: var(--var-file-upload-thumb-icon-size);");
+        expect(fileUploadCss).toContain("margin-block-start: var(--var-file-upload-list-gap);");
+        expect(componentTokens).toContain('"surface-padding": "1.5rem"');
         expect(componentTokens).toContain('"thumb-icon-size": "1.75rem"');
     });
 

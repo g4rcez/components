@@ -65,20 +65,112 @@ export type TokenGroup = Record<string, TokenControl>;
 
 const numericTokenPattern = /^(-?\d*\.?\d+)([a-z%]+)?$/i;
 
-const extraComponentTokens: Partial<Record<ComponentTokenName, Record<string, string>>> = {
-    checkbox: {
-        "control-color": "var(--primary-DEFAULT)",
-        "control-background": "var(--background)",
-        "control-border-color": "var(--card-border)",
-        "control-mark-color": "0, 0%, 100%",
-        "control-ring-color": "var(--checkbox-control-color)",
-        "control-ring-offset-color": "var(--checkbox-control-background)",
-        "control-border-width": "1px",
-        "control-mark-width": "0.125rem",
-    },
-};
+const extraComponentTokens: Partial<Record<ComponentTokenName, Record<string, string>>> = {};
 
 const runtimeTokenAliases: Partial<Record<ComponentTokenName, Record<string, CssCustomProperty[]>>> = {
+    checkbox: {
+        "label-gap": ["--var-checkbox-label-gap"],
+        "control-size": ["--var-checkbox-control-size"],
+        "control-radius": ["--var-checkbox-control-radius"],
+        "control-foreground": ["--var-checkbox-control-foreground"],
+        "control-background": ["--var-checkbox-control-background"],
+        "control-border": ["--var-checkbox-control-border"],
+        "control-border-width": ["--var-checkbox-control-border-width"],
+        "mark-foreground": ["--var-checkbox-mark-foreground"],
+        "mark-stroke-width": ["--var-checkbox-mark-stroke-width"],
+        "mark-inline-size": ["--var-checkbox-mark-inline-size"],
+        "mark-block-size": ["--var-checkbox-mark-block-size"],
+        "indeterminate-mark-inline-size": ["--var-checkbox-indeterminate-mark-inline-size"],
+        "focus-ring": ["--var-checkbox-focus-ring"],
+        "focus-ring-width": ["--var-checkbox-focus-ring-width"],
+        "focus-ring-offset": ["--var-checkbox-focus-ring-offset"],
+        "disabled-opacity": ["--var-checkbox-disabled-opacity"],
+        "error-font-size": ["--var-checkbox-error-font-size"],
+    },
+    radiobox: {
+        "label-gap": ["--var-radiobox-label-gap"],
+        "control-size": ["--var-radiobox-control-size"],
+        "control-foreground": ["--var-radiobox-control-foreground"],
+        "control-background": ["--var-radiobox-control-background"],
+        "control-border": ["--var-radiobox-control-border"],
+        "control-border-width": ["--var-radiobox-control-border-width"],
+        "mark-size": ["--var-radiobox-mark-size"],
+        "mark-foreground": ["--var-radiobox-mark-foreground"],
+        "focus-ring": ["--var-radiobox-focus-ring"],
+        "focus-ring-width": ["--var-radiobox-focus-ring-width"],
+        "focus-ring-offset": ["--var-radiobox-focus-ring-offset"],
+        "disabled-opacity": ["--var-radiobox-disabled-opacity"],
+        "transition-duration": ["--var-radiobox-transition-duration"],
+        "transition-timing": ["--var-radiobox-transition-timing"],
+    },
+    input: {
+        "field-icon-size": ["--var-input-field-icon-size"],
+        "field-small-icon-size": ["--var-input-field-small-icon-size"],
+        "field-label-row-gap": ["--var-input-field-label-row-gap"],
+        "field-label-meta-gap": ["--var-input-field-label-meta-gap"],
+        "field-tooltip-icon-size": ["--var-input-field-tooltip-icon-size"],
+        "field-small-tooltip-icon-size": ["--var-input-field-small-tooltip-icon-size"],
+        "field-tooltip-max-inline-size": ["--var-input-field-tooltip-max-inline-size"],
+        "field-status-min-inline-size": ["--var-input-field-status-min-inline-size"],
+        "field-small-status-min-inline-size": ["--var-input-field-small-status-min-inline-size"],
+        "field-status-block-size": ["--var-input-field-status-block-size"],
+        "field-small-status-block-size": ["--var-input-field-small-status-block-size"],
+        "field-status-indicator-size": ["--var-input-field-status-indicator-size"],
+        "field-small-status-indicator-size": ["--var-input-field-small-status-indicator-size"],
+        "field-label-gap": ["--var-input-field-label-gap"],
+        "field-label-font-size": ["--var-input-field-label-font-size"],
+        "field-small-label-font-size": ["--var-input-field-small-label-font-size"],
+        "field-optional-opacity": ["--var-input-field-optional-opacity"],
+        "field-control-column-gap": ["--var-input-field-control-column-gap"],
+        "field-small-control-column-gap": ["--var-input-field-small-control-column-gap"],
+        "field-control-row-gap": ["--var-input-field-control-row-gap"],
+        "field-small-control-row-gap": ["--var-input-field-small-control-row-gap"],
+        "field-control-radius": ["--var-input-field-control-radius", "--var-free-text-surface-radius"],
+        "field-slot-gap": ["--var-input-field-slot-gap"],
+        "field-small-slot-gap": ["--var-input-field-small-slot-gap"],
+        "field-slot-padding-inline-start": ["--var-input-field-slot-padding-inline-start"],
+        "field-small-slot-padding-inline-start": ["--var-input-field-small-slot-padding-inline-start"],
+        "field-slot-padding-inline-end": ["--var-input-field-slot-padding-inline-end"],
+        "field-small-slot-padding-inline-end": ["--var-input-field-small-slot-padding-inline-end"],
+        "field-hint-margin-block-start": ["--var-input-field-hint-margin-block-start"],
+        "field-hint-font-size": ["--var-input-field-hint-font-size"],
+        "field-small-hint-font-size": ["--var-input-field-small-hint-font-size"],
+        "free-text-control-height": ["--var-free-text-control-height"],
+        "free-text-small-control-height": ["--var-free-text-small-control-height"],
+        "free-text-surface-radius": ["--var-free-text-surface-radius"],
+        "free-text-surface-padding-inline": ["--var-free-text-surface-padding-inline"],
+        "free-text-small-surface-padding-inline": ["--var-free-text-small-surface-padding-inline"],
+        "free-text-surface-padding-block": ["--var-free-text-surface-padding-block"],
+        "free-text-small-surface-padding-block": ["--var-free-text-small-surface-padding-block"],
+        "free-text-font-size": ["--var-free-text-font-size"],
+        "free-text-small-font-size": ["--var-free-text-small-font-size"],
+        "free-text-outline-width": ["--var-free-text-outline-width"],
+        "free-text-outline-offset": ["--var-free-text-outline-offset"],
+        "free-text-placeholder-foreground": ["--var-free-text-placeholder-foreground"],
+        "free-text-error-placeholder-foreground": ["--var-free-text-error-placeholder-foreground"],
+    },
+    "file-upload": {
+        "surface-padding": ["--var-file-upload-surface-padding"],
+        "surface-radius": ["--var-file-upload-surface-radius"],
+        "content-gap": ["--var-file-upload-content-gap"],
+        "thumb-size": ["--var-file-upload-thumb-size"],
+        "thumb-radius": ["--var-file-upload-thumb-radius"],
+        "thumb-icon-size": ["--var-file-upload-thumb-icon-size"],
+        "file-icon-size": ["--var-file-upload-file-icon-size"],
+        "remove-icon-size": ["--var-file-upload-remove-icon-size"],
+        "idle-icon-size": ["--var-file-upload-idle-icon-size"],
+        "preview-button-margin": ["--var-file-upload-preview-button-margin"],
+        "item-border-width": ["--var-file-upload-item-border-width"],
+        "actions-padding-block": ["--var-file-upload-actions-padding-block"],
+        "remove-button-size": ["--var-file-upload-remove-button-size"],
+        "list-gap": ["--var-file-upload-list-gap"],
+        "idle-icon-gap": ["--var-file-upload-idle-icon-gap"],
+        "idle-copy-margin-block": ["--var-file-upload-idle-copy-margin-block"],
+        "idle-copy-gap": ["--var-file-upload-idle-copy-gap"],
+        "name-font-size": ["--var-file-upload-name-font-size"],
+        "size-font-size": ["--var-file-upload-size-font-size"],
+        "viewer-media-max-inline-size": ["--var-file-upload-viewer-media-max-inline-size"],
+    },
     button: {
         "height-big": ["--var-button-big-height"],
         "height-min": ["--var-button-min-height"],
@@ -564,16 +656,16 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
             );
         case "command":
             return (
-                <div className="mx-auto w-full max-w-md overflow-hidden rounded-command-radius border border-floating-border bg-floating-background shadow-shadow-floating">
-                    <div className="flex h-command-header-h items-center gap-2 px-command-input-px py-command-input-py">
+                <div className="mx-auto w-full max-w-md overflow-hidden rounded-command-item-radius border border-command-surface-border bg-command-surface-background text-command-surface-foreground shadow-shadow-floating">
+                    <div className="flex h-command-header-block-size items-center gap-2 px-command-input-padding-inline py-command-input-padding-block">
                         <MagnifyingGlassIcon size={16} aria-hidden />
                         <span className="text-typography-sm text-muted-foreground">Search commands…</span>
                     </div>
-                    <div className="flex flex-col gap-command-list-gap px-command-list-px py-command-list-my">
-                        <div className="flex h-command-row-h items-center gap-command-item-gap rounded-md p-command-item-p text-typography-sm hover:bg-floating-hover">
+                    <div className="flex flex-col gap-command-list-gap px-command-list-padding-inline py-command-list-margin-block">
+                        <div className="flex h-command-row-block-size items-center gap-command-item-content-gap rounded-command-item-radius p-command-item-padding text-typography-sm hover:bg-command-item-background-hover">
                             Create deployment
                         </div>
-                        <div className="flex h-command-row-h items-center gap-command-item-gap rounded-md p-command-item-p text-typography-sm hover:bg-floating-hover">
+                        <div className="flex h-command-row-block-size items-center gap-command-item-content-gap rounded-command-item-radius p-command-item-padding text-typography-sm hover:bg-command-item-background-hover">
                             Invite teammate
                         </div>
                     </div>
@@ -681,15 +773,12 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
             return <Slider value={[40]} onValueChange={() => {}} />;
         case "file-upload":
             return (
-                <div className="flex w-full flex-col items-center gap-file-upload-gap rounded-file-upload-radius border-2 border-dashed border-input-border bg-card-background p-file-upload-p text-center">
-                    <span
-                        className="flex size-file-upload-thumb-size items-center justify-center bg-muted text-muted-foreground"
-                        style={{ borderRadius: "var(--file-upload-thumb-radius)" }}
-                    >
-                        <UploadIcon className="__file-upload__thumb-icon" aria-hidden />
+                <div className="flex w-full flex-col items-center gap-file-upload-content-gap rounded-file-upload-surface-radius border-2 border-dashed border-input-border bg-card-background p-file-upload-surface-padding text-center">
+                    <span className="flex size-file-upload-thumb-size items-center justify-center rounded-file-upload-thumb-radius bg-muted text-muted-foreground">
+                        <UploadIcon className="size-file-upload-thumb-icon-size" aria-hidden />
                     </span>
-                    <strong className="text-file-upload-text-name">Drop files here</strong>
-                    <span className="text-file-upload-text-size text-muted-foreground">PNG, JPG or PDF up to 10 MB</span>
+                    <strong className="text-file-upload-name-font-size">Drop files here</strong>
+                    <span className="text-file-upload-size-font-size text-muted-foreground">PNG, JPG or PDF up to 10 MB</span>
                 </div>
             );
         case "progress":
@@ -767,11 +856,11 @@ const TokenPreview = ({ group }: { group: ComponentTokenName }) => {
             );
         case "wizard":
             return (
-                <div className="mx-auto flex w-wizard-w flex-col gap-wizard-gap rounded-wizard-radius border border-card-border bg-card-background p-wizard-p shadow-shadow-card">
+                <div className="mx-auto flex w-wizard-surface-inline-size flex-col gap-wizard-surface-gap rounded-wizard-surface-radius border border-wizard-surface-border bg-wizard-surface-background p-wizard-surface-padding text-wizard-surface-foreground shadow-shadow-card">
                     <RocketLaunchIcon size={28} aria-hidden />
                     <h3 className="text-typography-lg font-semibold">Welcome to the workspace</h3>
                     <p className="text-typography-sm text-muted-foreground">Walk through the basics in three short steps.</p>
-                    <footer className="flex items-center justify-end gap-wizard-actions-gap pt-wizard-footer-pt">
+                    <footer className="flex items-center justify-end gap-wizard-actions-gap pt-wizard-footer-padding-block-start">
                         <Button theme="primary" size="small">
                             Next
                         </Button>

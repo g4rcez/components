@@ -4,6 +4,6 @@ export const switchStyles = defineComponentStyles({
     name: "switch",
     variants: {},
     defaults: {},
-    slots: [],
+    slots: ["row", "track", "thumb", "label", "label-text", "error"],
     dependencies: [],
 });

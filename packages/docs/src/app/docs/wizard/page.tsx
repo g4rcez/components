@@ -1,9 +1,8 @@
 "use client";
-import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
+import { DocsLayout } from "@/components/docs-layout";
+import { Button, Card, Modal, Tag, Wizard, WizardStep } from "@g4rcez/components";
 import { useRef, useState } from "react";
-import { Button, Card, Modal, Wizard, WizardStep } from "../../../../../lib/src";
-import { Tag } from "../../../../../lib/src/components/core/tag";
 
 export default function WizardPage() {
     const [active, setActive] = useState(false);
@@ -37,7 +36,7 @@ export default function WizardPage() {
             element: buttonRef,
             title: (
                 <span className="flex items-center gap-2">
-                    React Node Title <Tag size="small">New</Tag>
+                    React Node Title <Tag size="tiny">New</Tag>
                 </span>
             ),
             description: (

@@ -1,7 +1,7 @@
 "use client";
+import { ComponentsProvider, createTokenStyles, defaultDarkTheme, defaultLightTheme, type TokenRemap, type Tweaks } from "@g4rcez/components";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";
-import { type Tweaks, defaultDarkTheme, defaultLightTheme, ComponentsProvider, createTokenStyles, type TokenRemap } from "@g4rcez/components";
 import { Header } from "./header";
 import { Navigation } from "./navigation";
 
@@ -22,10 +22,7 @@ export const RootLayout = (props: PropsWithChildren) => {
     const isLandingPage = pathname === "/";
 
     const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
-    const stylesDark = createTokenStyles(defaultDarkTheme, {
-        ...tokenRemap,
-        name: "dark",
-    });
+    const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
 
     return (
         <html lang="en" className="dark scroll-smooth bg-background proportional-nums text-foreground antialiased">

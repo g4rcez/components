@@ -3,7 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "predev": "pnpm --filter @g4rcez/components preset",
         "dev": "next dev --port 10000",
+        "prebuild": "pnpm --filter @g4rcez/components preset",
         "build": "next build",
         "start": "next start --turbo",
         "components:styles": "node ../lib/bin/g4rcez-components.mjs styles --root . --content src --css src/app/index.css --library-root ../lib",

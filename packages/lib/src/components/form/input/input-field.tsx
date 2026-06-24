@@ -3,10 +3,14 @@ import { CheckCircleIcon, InfoIcon, XCircleIcon } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
 import { useTranslations } from "../../../hooks/use-translations";
 import { useTweaks } from "../../../hooks/use-tweaks";
+import type { ComponentStyleProps } from "../../../lib/component-styles";
 import { css } from "../../../lib/dom";
 import type { Label, Override } from "../../../types";
 import type { PolymorphicProps } from "../../core/polymorph/polymorph";
 import { Tooltip } from "../../floating/tooltip/tooltip";
+import { inputFieldStyles } from "./input-field.styles";
+
+export type InputFieldSize = NonNullable<ComponentStyleProps<typeof inputFieldStyles>["size"]>;
 
 export type FeedbackProps = React.PropsWithChildren<
     Partial<{
@@ -24,16 +28,18 @@ export type FeedbackProps = React.PropsWithChildren<
 export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, info, children, title }: FeedbackProps) => (
     <span
         className={css(
-            "__input-field__feedback",
-            hideLeft && children === null ? "__input-field__feedback-hidden" : "__input-field__feedback-body",
+            inputFieldStyles.slots.feedback,
+            hideLeft && children === null ? inputFieldStyles.slots["feedback-hidden"] : inputFieldStyles.slots["feedback-body"],
             className
         )}
     >
         {hideLeft ? null : (
-            <span className="__input-field__label-row __input-field__label-active __input-field__label-disabled">
+            <span
+                className={css(inputFieldStyles.slots["label-row"], inputFieldStyles.slots["label-active"], inputFieldStyles.slots["label-disabled"])}
+            >
                 <span id={id ? `${id}-label` : undefined}>{title}</span>
                 {reportStatus || info ? (
-                    <span className="__input-field__label-meta">
+                    <span className={inputFieldStyles.slots["label-meta"]}>
                         {info ? (
                             <Tooltip
                                 as="button"
@@ -41,28 +47,28 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                                 aria-label={typeof info === "string" ? info : undefined}
                                 aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}` : undefined}
                                 title={
-                                    <span className="__input-field__tooltip-trigger">
-                                        <span className="__input-field__tooltip-icon">
-                                            <InfoIcon aria-hidden="true" className="__input-field__feedback-icon" />
+                                    <span className={inputFieldStyles.slots["tooltip-trigger"]}>
+                                        <span className={inputFieldStyles.slots["tooltip-icon"]}>
+                                            <InfoIcon aria-hidden="true" className={inputFieldStyles.slots["feedback-icon"]} />
                                         </span>
                                     </span>
                                 }
                             >
                                 <div
                                     id={id ? `tooltip-info-content-${id}` : undefined}
-                                    className="__input-field__tooltip-body __input-field__tooltip-content"
+                                    className={css(inputFieldStyles.slots["tooltip-body"], inputFieldStyles.slots["tooltip-content"])}
                                 >
                                     {info}
                                 </div>
                             </Tooltip>
                         ) : null}
                         {reportStatus ? (
-                            <span className="__input-field__status">
-                                <span className="__input-field__status-indicator __input-field__status-success">
-                                    <CheckCircleIcon aria-hidden="true" className="__input-field__status-icon" />
+                            <span className={inputFieldStyles.slots.status}>
+                                <span className={css(inputFieldStyles.slots["status-indicator"], inputFieldStyles.slots["status-success"])}>
+                                    <CheckCircleIcon aria-hidden="true" className={inputFieldStyles.slots["status-icon"]} />
                                 </span>
-                                <span className="__input-field__status-indicator __input-field__status-error">
-                                    <XCircleIcon aria-hidden="true" className="__input-field__status-icon" />
+                                <span className={css(inputFieldStyles.slots["status-indicator"], inputFieldStyles.slots["status-error"])}>
+                                    <XCircleIcon aria-hidden="true" className={inputFieldStyles.slots["status-icon"]} />
                                 </span>
                             </span>
                         ) : null}
@@ -95,6 +101,7 @@ export type InputFieldProps<T extends "input" | "select" | "textarea"> = Polymor
                 optionalText: string;
                 componentName: string;
                 labelClassName: string;
+                size: InputFieldSize;
             }
         >
     >,
@@ -126,6 +133,7 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
             disabled,
             reportStatus,
             hiddenLabel,
+            size = "normal",
         }: PropsWithChildren<InputFieldProps<T>>,
         ref: React.Ref<HTMLFieldSetElement>
     ) => {
@@ -143,11 +151,15 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                 aria-disabled={disabled}
                 data-component={componentName}
                 data-interactive={!!interactive}
-                className={css("__input-field__fieldset __input-field", container)}
+                className={css(inputFieldStyles.slots.fieldset, inputFieldStyles.className({ size }), container)}
             >
-                <label form={form} htmlFor={ID} className={css("__input-field__label __input-field__label-layout __input-field__label-state")}>
+                <label
+                    form={form}
+                    htmlFor={ID}
+                    className={css(inputFieldStyles.slots.label, inputFieldStyles.slots["label-layout"], inputFieldStyles.slots["label-state"])}
+                >
                     {hiddenLabel ? (
-                        <span className="__input-field__sr-only">
+                        <span className={inputFieldStyles.slots["sr-only"]}>
                             <InputFeedback
                                 id={ID}
                                 info={info}
@@ -171,7 +183,11 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                                     {!required ? (
                                         <span
                                             aria-disabled={disabled}
-                                            className="__input-field__optional __input-field__optional-state __input-field__optional-text"
+                                            className={css(
+                                                inputFieldStyles.slots.optional,
+                                                inputFieldStyles.slots["optional-state"],
+                                                inputFieldStyles.slots["optional-text"]
+                                            )}
                                         >
                                             {optionalText}
                                         </span>
@@ -183,23 +199,30 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                     )}
                     <div
                         className={css(
-                            "__input-field__border __input-field__control __input-field__control-surface __input-field__control-state __input-field__control-disabled",
+                            inputFieldStyles.slots.border,
+                            inputFieldStyles.slots.control,
+                            inputFieldStyles.slots["control-surface"],
+                            inputFieldStyles.slots["control-state"],
+                            inputFieldStyles.slots["control-disabled"],
                             labelClassName
                         )}
                     >
-                        {left ? <span className="__input-field__slot-start __input-field__slot">{left}</span> : null}
+                        {left ? <span className={css(inputFieldStyles.slots["slot-start"], inputFieldStyles.slots.slot)}>{left}</span> : null}
                         {children}
-                        {right ? <span className="__input-field__slot-end __input-field__slot">{right}</span> : null}
+                        {right ? <span className={css(inputFieldStyles.slots["slot-end"], inputFieldStyles.slots.slot)}>{right}</span> : null}
                     </div>
                 </label>
                 <p
                     id={ID ? `${ID}-error` : undefined}
                     role="alert"
-                    className="__input-field__error-text __input-field__error-state __input-field__error"
+                    className={css(inputFieldStyles.slots["error-text"], inputFieldStyles.slots["error-state"], inputFieldStyles.slots.error)}
                 >
                     {error}
                 </p>
-                <p id={ID ? `${ID}-feedback` : undefined} className="__input-field__feedback-text __input-field__feedback-state">
+                <p
+                    id={ID ? `${ID}-feedback` : undefined}
+                    className={css(inputFieldStyles.slots["feedback-text"], inputFieldStyles.slots["feedback-state"])}
+                >
                     {feedback}
                 </p>
             </fieldset>

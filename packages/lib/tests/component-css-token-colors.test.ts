@@ -86,12 +86,13 @@ describe("component CSS color tokens", () => {
         expect(alertCss).not.toContain("border-color: var(--alert-");
     });
 
-    it("exposes checkbox control colors as CSS variables with primary as the default", () => {
+    it("wires checkbox control colors to semantic CSS variables", () => {
         const checkboxCss = readFileSync(join(componentsRoot, "form", "checkbox", "checkbox.css"), "utf8");
 
-        expect(checkboxCss).toContain("--checkbox-control-color: var(--var-checkbox-control-color, var(--primary-DEFAULT));");
-        expect(checkboxCss).toContain("color: hsla(var(--checkbox-control-color), 1);");
-        expect(checkboxCss).toContain("--tw-ring-color: hsla(var(--checkbox-control-ring-color), 1);");
+        expect(checkboxCss).toContain("color: var(--var-checkbox-control-foreground);");
+        expect(checkboxCss).toContain("background-color: var(--var-checkbox-control-background);");
+        expect(checkboxCss).toContain("border-color: var(--var-checkbox-control-border);");
+        expect(checkboxCss).toContain("border-color: var(--var-checkbox-mark-foreground);");
         expect(checkboxCss).not.toContain("#2563eb");
         expect(checkboxCss).not.toContain('background-image: url("data:image/svg+xml');
     });

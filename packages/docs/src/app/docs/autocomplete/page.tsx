@@ -1,8 +1,8 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import React, { Fragment, useEffect, useState } from "react";
-import { Autocomplete, Button, Modal } from "../../../../../lib/src";
+import { Fragment, useEffect, useState } from "react";
+import { Autocomplete, Button, Modal } from "@g4rcez/components";
 
 const defaults = [
     { label: "JavaScript", value: "javascript" },
@@ -214,6 +214,26 @@ function SelectOnModal() {
 `}
             >
                 <SelectOnModal />
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Field Sizes"
+                description="Use size=normal or size=small when you need autocomplete fields to fit different densities."
+                code={`import { Autocomplete } from "@g4rcez/components";
+
+function AutocompleteSizes() {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Autocomplete size="normal" title="Normal autocomplete" options={defaults} placeholder="Choose a language" />
+      <Autocomplete size="small" title="Small autocomplete" options={defaults} placeholder="Choose a language" />
+    </div>
+  );
+}`}
+            >
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <Autocomplete size="normal" title="Normal autocomplete" options={defaults} placeholder="Choose a language" />
+                    <Autocomplete size="small" title="Small autocomplete" options={defaults} placeholder="Choose a language" />
+                </div>
             </ComponentDemo>
         </DocsLayout>
     );

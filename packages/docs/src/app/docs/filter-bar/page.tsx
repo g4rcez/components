@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Button, DatePicker, Card, Input, Tooltip, Tag } from "../../../../../lib/src";
+import { Button, DatePicker, Card, Input, Tooltip, Tag } from "@g4rcez/components";
 import { FunnelIcon } from "@phosphor-icons/react";
 
 export default function FilterBarPage() {
@@ -19,7 +19,6 @@ function InteractiveFilterBar() {
     <div className="flex flex-nowrap gap-4 items-end">
       <Input
         required
-        className="[--input-height:32px]"
         placeholder="Text..."
         title="Search everywhere..."
       />
@@ -65,7 +64,7 @@ function InteractiveFilterBar() {
             >
                 <Card>
                     <div className="flex flex-nowrap items-end gap-4">
-                        <Input required className="[--input-height:32px]" placeholder="Text..." title="Search everywhere..." />
+                        <Input required placeholder="Text..." title="Search everywhere..." />
                         <Tooltip
                             hover={false}
                             placement="bottom"

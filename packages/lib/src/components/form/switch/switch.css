@@ -1,121 +1,91 @@
 .__switch {
-        box-sizing: border-box;
-    }
-
-.__switch__fieldset {
-  display: flex;
-  justify-content: center
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .__switch__row {
-  display: flex;
-  align-items: center
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
 }
 
 .__switch__track {
-  position: relative;
-  display: inline-flex;
-  height: var(--var-switch-track-h, var(--switch-track-h));
-  width: var(--var-switch-track-w, var(--switch-track-w));
-  cursor: pointer;
-  border-radius: var(--var-rounded-full, var(--full));
-  border-width: 2px;
-  border-color: transparent;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0,0,.58,1);
-  transition-duration: 300ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: var(--var-switch-track-inline-size);
+    block-size: var(--var-switch-track-block-size);
+    padding: 0;
+    border: var(--var-switch-track-border-width) solid transparent;
+    border-radius: var(--var-rounded-full);
+    appearance: none;
+    background-color: var(--var-color-border);
+    cursor: pointer;
+    outline: 0;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__switch__track:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-opacity: 1;
-  --tw-ring-color: hsla(var(--primary-DEFAULT), var(--tw-ring-opacity));
-  --tw-ring-offset-width: 2px
+.__switch__track:focus-visible {
+    outline: var(--var-switch-track-focus-ring-width) solid var(--var-color-ring);
+    outline-offset: var(--var-switch-track-focus-ring-offset);
+}
+
+.__switch__track:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .__switch__track[data-checked="false"] {
-  --tw-bg-opacity: 1;
-  background-color: hsla(var(--input-switch-bg), var(--tw-bg-opacity))
+    background-color: var(--var-color-border);
 }
 
 .__switch__track[data-checked="true"] {
-  --tw-bg-opacity: 1;
-  background-color: hsla(var(--primary-DEFAULT), var(--tw-bg-opacity))
+    background-color: var(--var-color-primary);
 }
 
 .__switch__thumb {
-  display: inline-block;
-  aspect-ratio: 1 / 1;
-  width: var(--var-switch-thumb-size, var(--switch-thumb-size));
-  height: var(--var-switch-thumb-size, var(--switch-thumb-size));
-  border-radius: var(--var-rounded-full, var(--full));
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  transition-duration: 300ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
-}
-
-.__switch__thumb[data-checked="false"] {
-  --tw-translate-x: 0px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+    display: inline-block;
+    inline-size: var(--var-switch-thumb-size);
+    block-size: var(--var-switch-thumb-size);
+    border-radius: var(--var-rounded-full);
+    background-color: var(--var-color-disabled);
+    box-shadow: none;
+    transform: translateX(0);
+    transition-property: background-color, transform;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-linear);
 }
 
 .__switch__thumb[data-checked="true"] {
-  --tw-translate-x: 1.25rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
-}
-
-.__switch__thumb[data-checked="false"] {
-  --tw-bg-opacity: 1;
-  background-color: hsla(var(--disabled), var(--tw-bg-opacity))
-}
-
-.__switch__thumb[data-checked="true"] {
-  --tw-bg-opacity: 1;
-  background-color: hsla(var(--input-switch), var(--tw-bg-opacity))
+    background-color: var(--var-switch-thumb-checked-background);
+    transform: translateX(var(--var-switch-thumb-checked-translate-inline));
 }
 
 .__switch__label {
-  margin-left: var(--var-switch-gap, var(--switch-gap));
-  display: inline-block;
-  font-size: var(--var-switch-label-text, var(--switch-label-text))
+    display: inline-block;
+    margin-inline-start: var(--var-switch-label-gap);
+    font-size: var(--var-switch-label-font-size);
 }
 
 .__switch__label-text {
-  font-weight: 500;
-  --tw-text-opacity: 1;
-  color: hsla(var(--foreground), var(--tw-text-opacity))
+    color: var(--var-color-foreground);
+    font-weight: var(--var-font-weight-medium);
 }
 
 .__switch__error {
-  margin-top: var(--var-switch-hint-mt, var(--switch-hint-mt));
-  flex: 1 1 0%;
-  white-space: nowrap;
-  font-size: var(--var-switch-hint-text, var(--switch-hint-text));
-  --tw-text-opacity: 1;
-  color: hsla(var(--danger-DEFAULT), var(--tw-text-opacity))
+    flex: 1 1 0%;
+    margin-block-start: var(--var-switch-error-margin-block-start);
+    color: var(--var-color-danger);
+    font-size: var(--var-switch-error-font-size);
+    white-space: nowrap;
 }
 
 .__switch__error:empty {
-  margin-top: 0px;
-  display: none
-}
-.__switch__fieldset {
-  flex-direction: column;
-  flex-wrap: wrap
-}
-
-.__switch__row {
-  flex-direction: row;
-  flex-wrap: wrap
-}
-
-.__switch__track {
-  flex-shrink: 0
+    display: none;
+    margin-block-start: 0;
 }

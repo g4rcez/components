@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Select } from "../../../../../lib/src";
+import { Card, Select } from "@g4rcez/components";
 
 const ROLES = [
     { value: "admin", label: "Admin" },
@@ -116,6 +116,26 @@ function DisabledSelect() {
                         ]}
                         required
                     />
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Field Sizes"
+                description="Use size=normal or size=small to align selects with spacious or dense forms."
+                code={`import { Select } from "@g4rcez/components";
+
+function SelectSizes() {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Select name="normal-role" size="normal" title="Normal select" placeholder="Choose a role" options={options} />
+      <Select name="small-role" size="small" title="Small select" placeholder="Choose a role" options={options} />
+    </div>
+  );
+}`}
+            >
+                <Card title="Sizes" className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <Select name="normal-role" size="normal" title="Normal select" placeholder="Choose a role" options={ROLES} />
+                    <Select name="small-role" size="small" title="Small select" placeholder="Choose a role" options={ROLES} />
                 </Card>
             </ComponentDemo>
         </DocsLayout>

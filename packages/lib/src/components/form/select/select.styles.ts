@@ -2,8 +2,13 @@ import { defineComponentStyles } from "../../../lib/component-styles";
 
 export const selectStyles = defineComponentStyles({
     name: "select",
-    variants: {},
-    defaults: {},
+    css: "@g4rcez/components/select.css",
+    variants: {
+        size: ["normal", "small"],
+    },
+    defaults: {
+        size: "normal",
+    },
     slots: ["field", "trigger", "trigger-icon", "trigger-label", "control"],
-    dependencies: ["input-field"],
+    dependencies: ["free-text"],
 });
