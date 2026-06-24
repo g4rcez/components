@@ -1,7 +1,7 @@
 :root {
     --var-radius: 0;
     --var-spacing: 0.75rem;
-    --var-spacing-base: 1rem;
+    --var-spacing-base: 1.15rem;
     --var-fontsize: 1rem;
     --var-font-weight-medium: 500;
     --var-font-weight-semibold: 600;
@@ -114,8 +114,8 @@
     --var-calendar-transition-timing: cubic-bezier(0, 0, 0.58, 1);
     --var-layer-normal: 1;
     --var-layer-calendar: 2;
-    --var-layer-tooltip: 20;
     --var-layer-overlay: 21;
+    --var-layer-tooltip: 22;
     --var-layer-floating: 22;
     --var-layer-navbar: 22;
     --var-layer-wizard: 50;
@@ -141,8 +141,7 @@
     --var-input-field-small-control-column-gap: calc(var(--var-spacing-base) * 0.375);
     --var-input-field-control-row-gap: calc(var(--var-spacing-base) * 0.25);
     --var-input-field-small-control-row-gap: calc(var(--var-spacing-base) * 0.25);
-    /* --var-input-field-control-radius: calc(var(--var-radius) * 0.375); */
-    --var-input-field-control-radius: 0px;
+    --var-input-field-control-radius: calc(var(--var-radius) * 0.375);
     --var-input-field-slot-gap: calc(var(--var-spacing-base) * 0.5);
     --var-input-field-small-slot-gap: calc(var(--var-spacing-base) * 0.375);
     --var-input-field-slot-padding-inline-start: calc(var(--var-spacing-base) * 0.5);
@@ -672,6 +671,7 @@
     --var-color-muted: hsla(240, 5%, 96%);
     --var-color-muted-foreground: hsla(240, 4%, 46%);
     --var-color-primary: hsla(201, 49%, 36%);
+    --var-ring: hsla(201, 49%, 36%);
     --var-color-primary-foreground: hsla(221, 6%, 90%);
     --var-color-primary-subtle: hsla(201, 49%, 28%);
     --var-color-primary-hover: hsla(201, 49%, 22%);
@@ -797,6 +797,7 @@ html.dark {
     --var-color-muted: hsla(240, 4%, 16%);
     --var-color-muted-foreground: hsla(240, 5%, 65%);
     --var-color-primary: hsla(201, 49%, 54%);
+    --var-ring: hsla(201, 49%, 54%);
     --var-color-primary-foreground: hsla(240, 6%, 10%);
     --var-color-primary-subtle: hsla(201, 49%, 36%);
     --var-color-primary-hover: hsla(201, 49%, 22%);

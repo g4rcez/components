@@ -51,7 +51,7 @@
   --sidebar-width: 280px;
   --content-max-width: 800px;
 
-  --var-radius: 0.8rem;
+  --var-radius: 0.75rem;
 }
 
 @layer base {
