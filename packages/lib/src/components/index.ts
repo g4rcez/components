@@ -1,4 +1,5 @@
 export * from "./core/button/button";
+export * from "./core/slot/slot";
 export * from "./core/polymorph/polymorph";
 export * from "./core/heading/heading";
 export * from "./core/resizable/resizable";

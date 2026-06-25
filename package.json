@@ -27,7 +27,7 @@
     "oxlint": "1.63.0"
   },
   "scripts": {
-    "build": "pnpm run --filter ./packages/lib lib:css; pnpm run -r build",
+    "build": "pnpm run -r build",
     "dev": "pnpm run --filter ./packages/docs dev",
     "format": "pnpm run -r format",
     "knip": "knip",

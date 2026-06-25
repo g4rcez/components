@@ -1,8 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card } from "../../../../../lib/src";
-import { Slot, createSlot } from "../../../../../lib/src/components/core/slot";
+import { Card, Slot, createSlot } from "@g4rcez/components";
 
 const ButtonSlot = createSlot("Button");
 
