@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
 import { glob } from "glob";
-import { basename, join } from "node:path";
+import { join, relative } from "node:path";
 import { defineConfig, ViteUserConfig } from "vitest/config";
 
 const externalPackages = new Set(["react", "react-dom", "use-sync-external-store"]);
@@ -14,14 +14,25 @@ function toPosixPath(path: string) {
     return path.replaceAll("\\", "/");
 }
 
+function getComponentEntryName(directory: string, file: string) {
+    const parts = toPosixPath(relative(directory, file))
+        .replace(/\.tsx$/u, "")
+        .split("/");
+    const fileName = parts.at(-1);
+    const folderName = parts.at(-2);
+
+    if (parts[0] === "display" && parts[1] === "shortcut" && fileName === "shortcut") return "shortcut";
+    if (parts[0] === "page-calendar" && fileName === "page-calendar") return "components/page-calendar/index";
+    if (parts[0] === "form" && parts[1] === "input" && fileName) return `components/form/${fileName}`;
+    if (fileName && fileName === folderName) return `components/${parts.slice(0, -1).join("/")}`;
+    return `components/${parts.join("/")}`;
+}
+
 async function getComponentEntries(directory: string): Promise<Record<string, string>> {
     const components = await glob(join(directory, "**", "*.tsx"));
     const entries = components
         .toSorted((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-        .reduce<Record<string, string>>((acc, el) => {
-            const key = basename(toPosixPath(el), ".tsx");
-            return { ...acc, [key]: el };
-        }, {});
+        .reduce<Record<string, string>>((acc, el) => ({ ...acc, [getComponentEntryName(directory, el)]: el }), {});
     return entries;
 }
 

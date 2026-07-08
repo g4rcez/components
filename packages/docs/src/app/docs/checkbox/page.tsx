@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Checkbox, TaskList } from "../../../../../lib/src";
+import { Card, Checkbox, TaskList } from "@g4rcez/components";
 
 export default function CheckboxPage() {
     return (

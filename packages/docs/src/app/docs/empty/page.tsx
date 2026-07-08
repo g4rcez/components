@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Empty } from "../../../../../lib/src";
+import { Card, Empty } from "@g4rcez/components";
 import { ArchiveIcon, UsersIcon } from "@phosphor-icons/react";
 
 export default function EmptyPage() {

@@ -18,6 +18,7 @@ export const pageCalendarHeaderStyles = defineComponentStyles({
         "nav-buttons",
         "nav-icon",
         "today-button",
+        "date-picker",
         "view-switch",
         "view-button",
         "add-icon",
@@ -26,5 +27,5 @@ export const pageCalendarHeaderStyles = defineComponentStyles({
         "filter-icon",
         "filter-label",
     ],
-    dependencies: ["button", "tag"],
+    dependencies: ["button", "date-picker", "tag"],
 });

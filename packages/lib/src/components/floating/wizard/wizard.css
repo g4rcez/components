@@ -2,7 +2,7 @@
     pointer-events: none;
     position: fixed;
     inset: 0;
-    z-index: var(--var-layer-wizard);
+    z-index: calc(var(--var-layer-wizard) + 1);
     box-sizing: border-box;
 }
 

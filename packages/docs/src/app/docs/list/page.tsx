@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { CaretRightIcon } from "@phosphor-icons/react";
-import { Button, Card, AnimatedList, AnimatedListItem } from "../../../../../lib/src";
+import { Button, Card, AnimatedList, AnimatedListItem } from "@g4rcez/components";
 
 export default function ListPage() {
     return (

@@ -1,9 +1,9 @@
 "use client";
-import { Card } from "../../../../lib/src/components/display/card";
-import { Button } from "../../../../lib/src/components/core/button";
-import { useState } from "react";
-import { Modal, ModalType } from "../../../../lib/src/components/floating/modal";
+import { Button } from "@g4rcez/components/button";
+import { Card } from "@g4rcez/components/card";
+import { Modal, type ModalType } from "@g4rcez/components/modal";
 import Link from "next/link";
+import { useState } from "react";
 
 export const ModalExample = () => {
     const [open, setOpen] = useState(false);

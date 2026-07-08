@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, StatsCard } from "../../../../../lib/src";
+import { Card, StatsCard } from "@g4rcez/components";
 
 export default function CardsPage() {
     return (

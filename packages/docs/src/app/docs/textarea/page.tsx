@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React from "react";
-import { Card, Textarea } from "../../../../../lib/src";
+import { Card, Textarea } from "@g4rcez/components";
 
 export default function TextareaPage() {
     return (

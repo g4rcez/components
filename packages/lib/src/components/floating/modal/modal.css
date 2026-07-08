@@ -33,10 +33,13 @@
 
 .__modal--type-sheet {
     position: absolute;
+    inset-inline: 0;
     bottom: 0;
     height: 100vh;
     max-height: var(--var-modal-sheet-max-block-size);
-    width: 100vw;
+    min-inline-size: 0;
+    max-inline-size: none;
+    inline-size: 100%;
     border-top-left-radius: var(--var-modal-surface-radius);
     border-top-right-radius: var(--var-modal-surface-radius);
     padding-top: var(--var-modal-sheet-padding-block-start);

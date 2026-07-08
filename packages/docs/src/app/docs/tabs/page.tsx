@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React, { useState } from "react";
-import { Alert, Tab, Tabs } from "../../../../../lib/src";
+import { Alert, Tab, Tabs } from "@g4rcez/components";
 
 export default function TabsPage() {
     const [state, setState] = useState("second");

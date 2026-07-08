@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { codeToHtml } from "shiki";
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
-import { Button, Tag } from "../../../lib/src";
+import { Button, Tag } from "@g4rcez/components";
 
 type CodeBlockProps = {
     code: string;

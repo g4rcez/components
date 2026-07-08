@@ -89,6 +89,17 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
     }, [active]);
 
     useEffect(() => {
+        if (!active) return;
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key !== "Escape") return;
+            event.preventDefault();
+            onClose();
+        };
+        document.addEventListener("keydown", closeOnEscape);
+        return () => document.removeEventListener("keydown", closeOnEscape);
+    }, [active, onClose]);
+
+    useEffect(() => {
         setIsOverlayReady(false);
     }, [index, active]);
 

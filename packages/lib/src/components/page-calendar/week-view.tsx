@@ -23,11 +23,12 @@ function getTopOffset(event: CalendarEvent): number {
     return hour * HOUR_HEIGHT + (minutes / 60) * HOUR_HEIGHT;
 }
 
-export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: WeekViewProps) {
+export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick }: WeekViewProps) {
     const locale = useLocale();
     const currentHourRef = useRef<HTMLDivElement>(null);
     const scrollBodyRef = useRef<HTMLDivElement>(null);
     const hours = getHourSlots();
+    const selectedDateKey = toDateKey(currentDate);
 
     useEffect(() => {
         if (scrollBodyRef.current && currentHourRef.current) {
@@ -42,13 +43,21 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                 <div className={pageCalendarWeekViewStyles.slots.gutter} />
                 {days.map((day, idx) => {
                     const isCurrentDay = isToday(day);
+                    const isSelectedDay = toDateKey(day) === selectedDateKey;
+                    let dayBadgeState = "default";
+                    if (isCurrentDay) {
+                        dayBadgeState = "today";
+                    }
+                    if (isSelectedDay) {
+                        dayBadgeState = "selected";
+                    }
                     return (
-                        <div key={idx} aria-label={formatFullDate(day, locale)} className={pageCalendarWeekViewStyles.slots.weekday}>
+                        <div key={idx} title={formatFullDate(day, locale)} className={pageCalendarWeekViewStyles.slots.weekday}>
                             <span className={pageCalendarWeekViewStyles.slots["weekday-name"]}>{formatWeekdayShort(day, locale)}</span>
                             <span
                                 className={css(
                                     pageCalendarWeekViewStyles.slots["day-badge"],
-                                    `${pageCalendarWeekViewStyles.slots["day-badge"]}--${isCurrentDay ? "today" : "default"}`
+                                    `${pageCalendarWeekViewStyles.slots["day-badge"]}--${dayBadgeState}`
                                 )}
                             >
                                 {formatDay(day, locale)}
@@ -96,8 +105,6 @@ export function WeekView({ days, eventsByDate, onEventClick, onSlotClick }: Week
                                         left: `calc(${(columnIndex / columnCount) * 100}% + 1px)`,
                                         width: `calc(${100 / columnCount}% - 2px)`,
                                     }}
-                                    onClick={(e) => e.stopPropagation()}
-                                    onKeyDown={(e) => e.stopPropagation()}
                                 >
                                     <EventPill event={event} onClick={() => onEventClick(event)} />
                                 </div>

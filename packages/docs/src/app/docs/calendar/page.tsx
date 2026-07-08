@@ -4,7 +4,7 @@ import { ComponentDemo } from "@/components/component-demo";
 import { add, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { Calendar, Card } from "../../../../../lib/src";
+import { Calendar, Card } from "@g4rcez/components";
 
 const d = startOfDay(new Date(1970, 0, 1));
 

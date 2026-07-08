@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Spinner, Loading } from "../../../../../lib/src";
+import { Card, Spinner, Loading } from "@g4rcez/components";
 
 export default function SpinnerPage() {
     return (

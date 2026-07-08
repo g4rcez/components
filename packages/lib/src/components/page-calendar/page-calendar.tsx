@@ -7,6 +7,7 @@ import { CalendarHeader } from "./calendar-header";
 import { MonthView } from "./month-view";
 import { WeekView } from "./week-view";
 import { DayView } from "./day-view";
+import { Loading } from "../display/spinner/spinner";
 
 type PageCalendarProps<T extends CalendarEventBase> = {
     defaultDate?: Date;
@@ -15,6 +16,7 @@ type PageCalendarProps<T extends CalendarEventBase> = {
     onAddEvent?: () => void;
     getFilterId?: () => void;
     events: CalendarEvent<T>[];
+    loading?: boolean;
     filters?: CalendarFilter[];
     onSlotClick?: (date: Date) => void;
     onEventClick?: (event: CalendarEvent) => void;
@@ -34,6 +36,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     renderEvent,
     onEventClick,
     filters = noop,
+    loading = false,
     defaultView = "month",
     onChangeFilters: onActiveFiltersChange,
 }: PageCalendarProps<T>) {
@@ -68,7 +71,12 @@ export function PageCalendar<T extends CalendarEventBase>({
     };
 
     return (
-        <section aria-label={t.pageCalendarLabel} data-component="page-calendar" className={pageCalendarStyles.className({})}>
+        <section
+            aria-label={t.pageCalendarLabel}
+            aria-busy={loading || undefined}
+            data-component="page-calendar"
+            className={pageCalendarStyles.className({})}
+        >
             <CalendarHeader
                 filters={internalFilters}
                 filterArea={filterArea}
@@ -79,33 +87,39 @@ export function PageCalendar<T extends CalendarEventBase>({
                 setCurrentView={setCurrentView}
                 onToggleFilter={toggleFilter}
             />
-            {currentView === "month" && (
-                <MonthView
-                    days={monthDays}
-                    currentDate={currentDate}
-                    eventsByDate={eventsByDate}
-                    onDayClick={handleDayClick}
-                    onEventClick={handleEventClick}
-                />
-            )}
-            {currentView === "week" && (
-                <WeekView
-                    days={weekDays}
-                    currentDate={currentDate}
-                    onSlotClick={onSlotClick}
-                    eventsByDate={eventsByDate}
-                    onEventClick={handleEventClick}
-                />
-            )}
-            {currentView === "day" && (
-                <DayView<T>
-                    currentDate={currentDate}
-                    onSlotClick={onSlotClick}
-                    renderEvent={renderEvent}
-                    eventsByDate={eventsByDate}
-                    onDateChange={setCurrentDate}
-                    onEventClick={handleEventClick}
-                />
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    {currentView === "month" && (
+                        <MonthView
+                            days={monthDays}
+                            currentDate={currentDate}
+                            eventsByDate={eventsByDate}
+                            onDayClick={handleDayClick}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
+                    {currentView === "week" && (
+                        <WeekView
+                            days={weekDays}
+                            currentDate={currentDate}
+                            onSlotClick={onSlotClick}
+                            eventsByDate={eventsByDate}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
+                    {currentView === "day" && (
+                        <DayView<T>
+                            currentDate={currentDate}
+                            onSlotClick={onSlotClick}
+                            renderEvent={renderEvent}
+                            eventsByDate={eventsByDate}
+                            onDateChange={setCurrentDate}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
+                </>
             )}
         </section>
     );

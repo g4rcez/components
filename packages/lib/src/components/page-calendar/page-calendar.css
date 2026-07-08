@@ -125,6 +125,10 @@
     background-color: var(--var-page-calendar-today-background-hover);
 }
 
+.__page-calendar-header__date-picker {
+    min-inline-size: calc(var(--var-spacing-base) * 10);
+}
+
 .__page-calendar-header__view-switch {
     display: flex;
     border-radius: var(--var-page-calendar-view-switch-radius);
@@ -143,6 +147,9 @@
 .__page-calendar-header__filters {
     flex-wrap: wrap;
     gap: var(--var-page-calendar-filter-gap);
+    margin: 0;
+    border-width: 0;
+    padding: 0;
 }
 
 .__page-calendar-header__filter-label {
@@ -420,7 +427,8 @@
 }
 
 .__page-calendar-month-view__day-badge--today,
-.__page-calendar-week-view__day-badge--today {
+.__page-calendar-week-view__day-badge--today,
+.__page-calendar-week-view__day-badge--selected {
     background-color: var(--var-color-primary);
     color: var(--var-color-primary-foreground);
 }

@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Button, Card } from "../../../../../lib/src";
+import { Button, Card } from "@g4rcez/components";
 
 export default function ButtonGroup() {
     return (

@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Progress } from "../../../../../lib/src";
+import { Card, Progress } from "@g4rcez/components";
 
 export default function ProgressPage() {
     return (

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React from "react";
-import { RenderOnView } from "../../../../../lib/src";
+import { RenderOnView } from "@g4rcez/components";
 
 export default function RenderOnViewPage() {
     return (

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { ArrowRightIcon, CheckCircleIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
-import { Button, Card } from "../../../../../lib/src";
+import { Button, Card } from "@g4rcez/components";
 
 export default function Buttons() {
     return (

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React from "react";
-import { Button, Card, Menu, MenuItem } from "../../../../../lib/src";
+import { Button, Card, Menu, MenuItem } from "@g4rcez/components";
 
 export default function MenuPage() {
     return (

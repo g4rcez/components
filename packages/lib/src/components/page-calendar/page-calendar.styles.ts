@@ -5,5 +5,5 @@ export const pageCalendarStyles = defineComponentStyles({
     variants: {},
     defaults: {},
     slots: [],
-    dependencies: ["page-calendar-header", "page-calendar-day-view", "page-calendar-month-view", "page-calendar-week-view"],
+    dependencies: ["page-calendar-header", "page-calendar-day-view", "page-calendar-month-view", "page-calendar-week-view", "spinner"],
 });

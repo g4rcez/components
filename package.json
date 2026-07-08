@@ -14,12 +14,6 @@
   "bin": {
     "components:skills": "./scripts/skills.mjs"
   },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.2.14",
-      "@types/react-dom": "19.2.3"
-    }
-  },
   "devDependencies": {
     "knip": "6.14.2",
     "lefthook": "2.1.6",

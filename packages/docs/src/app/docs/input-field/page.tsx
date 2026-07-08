@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, InputField } from "../../../../../lib/src";
+import { Card, InputField } from "@g4rcez/components";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 export default function InputFieldPage() {

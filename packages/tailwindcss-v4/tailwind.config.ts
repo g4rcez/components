@@ -1,0 +1,10 @@
+import preset from "@g4rcez/components/tailwind/preset";
+
+const config = {
+    presets: [preset],
+    darkMode: "class",
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", "../lib/src/**/*.{js,ts,jsx,tsx,mdx,css}"],
+    plugins: [],
+};
+
+export default config;

@@ -25,6 +25,7 @@ import { PageCalendar } from "@g4rcez/components";
 | `filters`         | `CalendarFilter[]`                       | `[]`         | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
 | `defaultView`     | `"month" \| "week" \| "day"`             | `"month"`    | Initial view rendered when the component mounts.                                      |
 | `defaultDate`     | `Date`                                   | `new Date()` | Initial date the calendar focuses on.                                                 |
+| `loading`         | `boolean`                                | `false`      | Shows a centered loading spinner instead of the active calendar view.                 |
 | `onEventClick`    | `(event: CalendarEvent) => void`         | —            | Called when the user clicks an event pill.                                            |
 | `onSlotClick`     | `(date: Date) => void`                   | —            | Called when the user clicks an empty time slot (week and day views).                  |
 | `onAddEvent`      | `() => void`                             | —            | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
@@ -98,11 +99,11 @@ Displays a 6-row grid of all days in the selected month. Each day cell shows eve
 
 ### Week view
 
-Displays the 7 days of the current week with an hourly time grid. Events are placed at their time position. Clicking an empty slot calls `onSlotClick`.
+Displays the 7 days of the current week with an hourly time grid and highlights the selected day. Events are placed at their time position. Clicking an empty slot calls `onSlotClick`.
 
 ### Day view
 
-Displays a single day with an hourly grid alongside a mini calendar and a detail panel. The detail panel shows a default summary or your `renderEvent` output when an event is clicked.
+Displays a single day with an hourly grid alongside a mini calendar and a detail panel. Week and day views include a date picker in the header for jumping to another day. The detail panel shows a default summary or your `renderEvent` output when an event is clicked.
 
 ## Examples
 

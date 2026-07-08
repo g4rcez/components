@@ -2,8 +2,7 @@
 import { CaretRightIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
-import { Button, Modal } from "../../../lib/src";
-import { AnimatedList, AnimatedListItem } from "../../../lib/src/components/display/list";
+import { AnimatedList, AnimatedListItem, Button, Modal } from "@g4rcez/components";
 
 type State = {
     type: "drawer" | "dialog";

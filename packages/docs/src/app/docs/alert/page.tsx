@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Alert, Button, Card } from "../../../../../lib/src";
+import { Alert, Button, Card } from "@g4rcez/components";
 
 export default function AlertPage() {
     const [state, setState] = useState(true);

@@ -3,7 +3,7 @@ import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { CaretRightIcon, ClockIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Button, Card, Timeline, Tag, TimelineItem, Modal } from "../../../../../lib/src";
+import { Button, Card, Timeline, Tag, TimelineItem, Modal } from "@g4rcez/components";
 
 type Item = {
     name: string;

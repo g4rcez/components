@@ -10,6 +10,7 @@ import { formatDay, formatMonthShort, formatMonthYear, getWeekNumber } from "./p
 import type { SetState } from "../../types";
 import { useMemo, type ReactNode } from "react";
 import { pageCalendarHeaderStyles } from "./calendar-header.styles";
+import { DatePicker } from "../form/date-picker/date-picker";
 
 type CalendarHeaderProps = {
     currentDate: Date;
@@ -102,6 +103,18 @@ export function CalendarHeader({
                             <CaretRightIcon className={pageCalendarHeaderStyles.slots["nav-icon"]} />
                         </Button>
                     </div>
+                    {currentView !== "month" && (
+                        <DatePicker
+                            date={currentDate}
+                            size="small"
+                            hiddenLabel
+                            required={false}
+                            clickToClose
+                            title={t.pageCalendarDatePicker}
+                            container={pageCalendarHeaderStyles.slots["date-picker"]}
+                            onChange={(date: Date | undefined) => date && setCurrentDate(date)}
+                        />
+                    )}
                     <div className={pageCalendarHeaderStyles.slots["view-switch"]}>
                         {VIEWS.map((v) => (
                             <Button
@@ -127,7 +140,7 @@ export function CalendarHeader({
             </div>
             {filterArea ??
                 (filters.length > 0 && (
-                    <div role="group" aria-label={t.pageCalendarFilter} className={pageCalendarHeaderStyles.slots.filters}>
+                    <fieldset aria-label={t.pageCalendarFilter} className={pageCalendarHeaderStyles.slots.filters}>
                         <span className={pageCalendarHeaderStyles.slots["filter-icon-wrapper"]}>
                             <CalendarIcon aria-hidden="true" className={pageCalendarHeaderStyles.slots["filter-icon"]} />
                         </span>
@@ -147,7 +160,7 @@ export function CalendarHeader({
                                 {filter.label}
                             </Tag>
                         ))}
-                    </div>
+                    </fieldset>
                 ))}
         </header>
     );

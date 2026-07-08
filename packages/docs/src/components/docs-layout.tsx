@@ -1,6 +1,6 @@
 "use client";
 import { type PropsWithChildren, useEffect, useState } from "react";
-import { Tag, type Label } from "../../../lib/src";
+import { Tag, type Label } from "@g4rcez/components";
 import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { sections } from "../config/navigation";

@@ -392,11 +392,11 @@
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css:v6; npm run lib:style-manifest",
+        "build": "rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
-        "lib:types": "tsc -p tsconfig.lib.json",
+        "lib:types": "tsc -p tsconfig.lib.json && node ./scripts/flatten-component-types.mjs",
         "preset": "tsc -p tsconfig.styles.json && tsc -p tsconfig.tailwind.json",
         "test": "vitest run",
         "test:watch": "vitest watch",
@@ -452,7 +452,6 @@
     "engines": {
         "node": ">=20.14.0"
     },
-    "packageManager": "pnpm@10.12.3",
     "agents": {
         "skills": [
             {

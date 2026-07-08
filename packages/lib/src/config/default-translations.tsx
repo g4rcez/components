@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import type React from "react";
+import { Fragment } from "react";
 
 export const defaultTranslations = {
     autocompleteEmpty: "Nothing here...",
@@ -21,6 +22,7 @@ export const defaultTranslations = {
     pageCalendarMoreEvents: (n: number) => `+${n} more...`,
     pageCalendarLabel: "Calendar",
     pageCalendarNavigation: "Calendar navigation",
+    pageCalendarDatePicker: "Calendar day",
     pageCalendarMonthGrid: "Calendar month",
     pageCalendarFilterEnabled: "enabled",
     pageCalendarFilterDisabled: "disabled",

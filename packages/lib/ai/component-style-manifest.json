@@ -396,13 +396,20 @@
     "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button",
+      "calendar",
+      "date-picker",
+      "dropdown",
+      "input",
+      "input-field",
       "page-calendar-day-view",
       "page-calendar-event-pill",
       "page-calendar-header",
       "page-calendar-month-view",
       "page-calendar-week-view",
       "polymorph",
-      "tag"
+      "spinner",
+      "tag",
+      "tooltip"
     ],
     "classes": {
       "base": "__page-calendar",
@@ -1100,8 +1107,14 @@
     "css": "@g4rcez/components/page-calendar.css",
     "dependencies": [
       "button",
+      "calendar",
+      "date-picker",
+      "dropdown",
+      "input",
+      "input-field",
       "polymorph",
-      "tag"
+      "tag",
+      "tooltip"
     ],
     "classes": {
       "base": "__page-calendar-header",
@@ -1119,6 +1132,7 @@
         "nav-buttons": "__page-calendar-header__nav-buttons",
         "nav-icon": "__page-calendar-header__nav-icon",
         "today-button": "__page-calendar-header__today-button",
+        "date-picker": "__page-calendar-header__date-picker",
         "view-switch": "__page-calendar-header__view-switch",
         "view-button": "__page-calendar-header__view-button",
         "add-icon": "__page-calendar-header__add-icon",

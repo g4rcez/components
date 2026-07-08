@@ -1,7 +1,7 @@
 "use client";
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
-import { Button, Card, Modal, Tag, Wizard, WizardStep } from "@g4rcez/components";
+import { Button, Card, Modal, Tag, Wizard, type WizardStep } from "@g4rcez/components";
 import { useRef, useState } from "react";
 
 export default function WizardPage() {
@@ -10,12 +10,31 @@ export default function WizardPage() {
     const [modalWizardActive, setModalWizardActive] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
 
+    const closeModalWizard = () => {
+        setModalWizardActive(false);
+        setModalOpen(false);
+    };
+
+    const changeModalOpen = (open: boolean) => {
+        setModalOpen(open);
+        if (!open) {
+            setModalWizardActive(false);
+        }
+    };
+
     const modalSteps: WizardStep[] = [
+        {
+            element: "#modal-tour-trigger",
+            title: "Start outside the modal",
+            description: "This tour starts on the page, then opens a modal for the next step.",
+            side: "bottom",
+        },
         {
             element: "#modal-step-1",
             title: "Modal Content",
-            description: "The Wizard overlay appears above the Modal thanks to proper z-index layering.",
+            description: "This step opens the modal and highlights content inside it.",
             side: "bottom",
+            onEnter: () => setModalOpen(true),
         },
         {
             element: "#modal-step-2",
@@ -169,19 +188,37 @@ function BasicPageTour() {
                 description="Demonstrates how the Wizard component integrates seamlessly with Modals, appearing above the modal's overlay with correct z-index."
                 code={`"use client";
 import { useState } from "react";
-import { Button, Modal, Wizard, WizardStep } from "@g4rcez/components";
+import { Button, Card, Modal, Wizard, WizardStep } from "@g4rcez/components";
 
 function ModalWizardIntegration() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalWizardActive, setModalWizardActive] = useState(false);
 
+  const closeModalWizard = () => {
+    setModalWizardActive(false);
+    setModalOpen(false);
+  };
+
+  const changeModalOpen = (open: boolean) => {
+    setModalOpen(open);
+    if (!open) {
+      setModalWizardActive(false);
+    }
+  };
+
   const modalSteps: WizardStep[] = [
+    {
+      element: "#modal-tour-trigger",
+      title: "Start outside the modal",
+      description: "This tour starts on the page, then opens a modal for the next step.",
+      side: "bottom",
+    },
     {
       element: "#modal-step-1",
       title: "Modal Content",
-      description:
-        "The Wizard overlay appears above the Modal thanks to proper z-index layering.",
+      description: "This step opens the modal and highlights content inside it.",
       side: "bottom",
+      onEnter: () => setModalOpen(true),
     },
     {
       element: "#modal-step-2",
@@ -194,10 +231,16 @@ function ModalWizardIntegration() {
   return (
     <Card title="Wizard + Modal Integration">
       <p className="mb-4">
-        Test the z-index integration: open the Modal, then start the Wizard tour inside it.
+        Start a tour on the page, then let the Wizard open the Modal and highlight content inside it.
       </p>
-      <Button onClick={() => setModalOpen(true)}>
-        Open Modal with Wizard
+      <Button
+        id="modal-tour-trigger"
+        onClick={() => {
+          setModalOpen(false);
+          setModalWizardActive(true);
+        }}
+      >
+        Start Tour That Opens Modal
       </Button>
       <Modal
         closable
@@ -205,7 +248,7 @@ function ModalWizardIntegration() {
         type="dialog"
         title="Modal with Wizard Tour"
         overlayClickClose
-        onChange={setModalOpen}
+        onChange={changeModalOpen}
       >
         <div className="flex flex-col gap-4">
           <p
@@ -215,13 +258,8 @@ function ModalWizardIntegration() {
             This is the modal content. The Wizard should appear above this modal overlay.
           </p>
           <div className="flex gap-2">
-            <Button
-              id="modal-step-2"
-              onClick={() => setModalWizardActive(true)}
-            >
-              Start Tour Inside Modal
-            </Button>
-            <Button theme="neutral" onClick={() => setModalOpen(false)}>
+            <Button id="modal-step-2">Confirm action</Button>
+            <Button theme="neutral" onClick={closeModalWizard}>
               Close
             </Button>
           </div>
@@ -230,9 +268,9 @@ function ModalWizardIntegration() {
       <Wizard
         steps={modalSteps}
         active={modalWizardActive}
-        onClose={() => setModalWizardActive(false)}
+        onClose={closeModalWizard}
         onFinish={() => {
-          setModalWizardActive(false);
+          closeModalWizard();
           alert("Modal tour finished!");
         }}
       />
@@ -241,18 +279,24 @@ function ModalWizardIntegration() {
 }`}
             >
                 <Card title="Wizard + Modal Integration">
-                    <p className="mb-4">Test the z-index integration: open the Modal, then start the Wizard tour inside it.</p>
-                    <Button onClick={() => setModalOpen(true)}>Open Modal with Wizard</Button>
-                    <Modal closable open={modalOpen} type="dialog" title="Modal with Wizard Tour" overlayClickClose onChange={setModalOpen}>
+                    <p className="mb-4">Start a tour on the page, then let the Wizard open the Modal and highlight content inside it.</p>
+                    <Button
+                        id="modal-tour-trigger"
+                        onClick={() => {
+                            setModalOpen(false);
+                            setModalWizardActive(true);
+                        }}
+                    >
+                        Start Tour That Opens Modal
+                    </Button>
+                    <Modal closable open={modalOpen} type="dialog" title="Modal with Wizard Tour" overlayClickClose onChange={changeModalOpen}>
                         <div className="flex flex-col gap-4">
                             <p id="modal-step-1" className="rounded-lg border border-card-border bg-card-muted p-4">
                                 This is the modal content. The Wizard should appear above this modal overlay.
                             </p>
                             <div className="flex gap-2">
-                                <Button id="modal-step-2" onClick={() => setModalWizardActive(true)}>
-                                    Start Tour Inside Modal
-                                </Button>
-                                <Button theme="neutral" onClick={() => setModalOpen(false)}>
+                                <Button id="modal-step-2">Confirm action</Button>
+                                <Button theme="neutral" onClick={closeModalWizard}>
                                     Close
                                 </Button>
                             </div>
@@ -261,9 +305,9 @@ function ModalWizardIntegration() {
                     <Wizard
                         steps={modalSteps}
                         active={modalWizardActive}
-                        onClose={() => setModalWizardActive(false)}
+                        onClose={closeModalWizard}
                         onFinish={() => {
-                            setModalWizardActive(false);
+                            closeModalWizard();
                             alert("Modal tour finished!");
                         }}
                     />

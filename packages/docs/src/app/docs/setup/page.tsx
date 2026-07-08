@@ -13,7 +13,7 @@ import {
     UsersThreeIcon,
 } from "@phosphor-icons/react";
 import { type CSSProperties, useMemo, useState } from "react";
-import { Alert, Button, Card, Empty, Stats, StatsCard, Step, Steps, Tab, Tabs, Tag, Timeline, TimelineItem } from "../../../../../lib/src";
+import { Alert, Button, Card, Empty, Stats, StatsCard, Step, Steps, Tab, Tabs, Tag, Timeline, TimelineItem } from "@g4rcez/components";
 import {
     type DesignTokens,
     createCssProperties,
