@@ -272,6 +272,16 @@
     --var-switch-error-margin-block-start: calc(var(--var-spacing-base) * 0.25);
 
     --var-date-picker-calendar-icon-size: calc(var(--var-fontsize) * 1);
+    --var-date-picker-panel-gap: calc(var(--var-spacing-base) * 1);
+    --var-date-picker-panel-padding: calc(var(--var-spacing-base) * 1);
+    --var-date-picker-presets-inline-size: calc(var(--var-spacing-base) * 13);
+    --var-date-picker-preset-padding-block: calc(var(--var-spacing-base) * 0.625);
+    --var-date-picker-preset-padding-inline: calc(var(--var-spacing-base) * 0.875);
+    --var-date-picker-preset-selected-background: var(--var-color-primary);
+    --var-date-picker-preset-selected-foreground: var(--var-color-primary-foreground);
+    --var-date-picker-preset-font-size: calc(var(--var-fontsize) * 0.875);
+    --var-date-picker-action-button-padding-block: calc(var(--var-spacing-base) * 0.625);
+    --var-date-picker-action-button-padding-inline: calc(var(--var-spacing-base) * 1);
 
     --var-slider-control-block-size: calc(var(--var-spacing-base) * 1.25);
     --var-slider-track-block-size: calc(var(--var-spacing-base) * 0.5);

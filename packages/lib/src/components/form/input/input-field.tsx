@@ -1,7 +1,6 @@
 "use client";
 import { CheckCircleIcon, InfoIcon, XCircleIcon } from "@phosphor-icons/react";
 import React, { forwardRef, Fragment, type PropsWithChildren } from "react";
-import { useTranslations } from "../../../hooks/use-translations";
 import { useTweaks } from "../../../hooks/use-tweaks";
 import type { ComponentStyleProps } from "../../../lib/component-styles";
 import { css } from "../../../lib/dom";
@@ -45,7 +44,7 @@ export const InputFeedback = ({ reportStatus, id, hideLeft = false, className, i
                                 as="button"
                                 type="button"
                                 aria-label={typeof info === "string" ? info : undefined}
-                                aria-describedby={typeof info === "string" ? undefined : id ? `tooltip-info-content-${id}` : undefined}
+                                aria-describedby={typeof info !== "string" && id ? `tooltip-info-content-${id}` : undefined}
                                 title={
                                     <span className={inputFieldStyles.slots["tooltip-trigger"]}>
                                         <span className={inputFieldStyles.slots["tooltip-icon"]}>
@@ -138,10 +137,9 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
         ref: React.Ref<HTMLFieldSetElement>
     ) => {
         const tweaks = useTweaks();
-        const reportStatusDefault = reportStatus !== undefined ? reportStatus : tweaks.input.iconFeedback;
+        const reportStatusDefault = reportStatus === undefined ? tweaks.input.iconFeedback : reportStatus;
         const ID = id ?? name;
-        const translation = useTranslations();
-        const optionalText = _optionalText ?? translation.inputOptionalLabel;
+        const optionalText = _optionalText ?? "";
         return (
             <fieldset
                 ref={ref}
@@ -178,9 +176,9 @@ export const InputField: <T extends "input" | "select" | "textarea">(props: Prop
                             placeholder={placeholder}
                             reportStatus={reportStatusDefault}
                         >
-                            {optionalText || rightLabel ? (
+                            {optionalText.trim() || rightLabel ? (
                                 <Fragment>
-                                    {!required ? (
+                                    {optionalText.trim() && !required ? (
                                         <span
                                             aria-disabled={disabled}
                                             className={css(

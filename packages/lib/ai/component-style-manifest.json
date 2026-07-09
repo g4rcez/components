@@ -681,7 +681,18 @@
       "variants": {},
       "slots": {
         "calendar-icon": "__date-picker__calendar-icon",
-        "sr-label": "__date-picker__sr-label"
+        "sr-label": "__date-picker__sr-label",
+        "panel": "__date-picker__panel",
+        "presets": "__date-picker__presets",
+        "preset-search": "__date-picker__preset-search",
+        "preset-list": "__date-picker__preset-list",
+        "preset-button": "__date-picker__preset-button",
+        "preset-check": "__date-picker__preset-check",
+        "actions": "__date-picker__actions",
+        "actions-confirm": "__date-picker__actions-confirm",
+        "today-action": "__date-picker__today-action",
+        "cancel-action": "__date-picker__cancel-action",
+        "apply-action": "__date-picker__apply-action"
       },
       "compounds": []
     }

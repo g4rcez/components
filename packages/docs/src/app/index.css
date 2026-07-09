@@ -50,8 +50,7 @@
   --header-height: 64px;
   --sidebar-width: 280px;
   --content-max-width: 800px;
-
-  --var-radius: 0.75rem;
+  --var-radius: 0.25rem;
 }
 
 @layer base {

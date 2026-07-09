@@ -63,7 +63,7 @@ type CalendarStyles = Partial<{
 
 export type CalendarProps = Partial<{
     date: Date;
-    range: Range;
+    range: Range | null;
     markRange: boolean;
     markToday: boolean;
     rangeMode: boolean;
@@ -125,7 +125,9 @@ const formatYear = (now: Date) => now.getFullYear().toString().padStart(4, "0");
 
 const inRange = (start: Date | undefined, middle: Date, end: Date | undefined) => {
     if (start === undefined || end === undefined) return false;
-    return isAfter(middle, start) && isBefore(middle, end);
+    const from = isBefore(start, end) ? start : end;
+    const to = isAfter(start, end) ? start : end;
+    return isAfter(middle, from) && isBefore(middle, to);
 };
 
 type CalendarBodyProps = {
@@ -158,14 +160,22 @@ const CalendarBody = (props: CalendarBodyProps) => {
                     <tr key={`week-${week.length}-${index}`} className={weekClassName}>
                         {week.map((day) => {
                             const key = day.toISOString();
+                            const activeRange = props.range || props.stateRange;
                             const isSelected = props.rangeMode
-                                ? key === props.range?.to?.toISOString() || key === props.range?.from?.toISOString()
+                                ? key === activeRange?.to?.toISOString() || key === activeRange?.from?.toISOString()
                                 : key === (props.date ? startOfDay(props.date).toISOString() : undefined);
                             const today = isToday(day) && props.markToday;
                             const disabledByFn = props.disabledDate?.(day) || false;
                             const sameMonth = isSameMonth(day, props.stateDate);
                             const disableDate = !sameMonth || disabledByFn;
-                            const isInRange = props.rangeMode ? inRange(props.range?.from, day, props.range?.to) : false;
+                            const isInRange = props.rangeMode ? inRange(activeRange?.from, day, activeRange?.to) : false;
+                            const isRangeConnection = !!(
+                                props.rangeMode &&
+                                props.markRange &&
+                                activeRange?.from &&
+                                activeRange?.to &&
+                                (isSelected || isInRange)
+                            );
                             const dayLabel = day.toLocaleDateString(props.locale, {
                                 weekday: "long",
                                 year: "numeric",
@@ -176,6 +186,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                 <td
                                     key={key}
                                     align="center"
+                                    data-in-range={isRangeConnection || undefined}
                                     className={css(
                                         calendarStyles.slots["day-cell"],
                                         Is.function(props.styles?.dayFrame) ? props.styles?.dayFrame(day) : props.styles?.dayFrame
@@ -316,16 +327,19 @@ export const Calendar = ({
                 const isRangeMode = e.currentTarget.dataset.range === "true";
                 const d = e.currentTarget.dataset.date || "";
                 const date = new Date(d);
+                let selectMode = state.selectMode;
+                if (selectMode !== undefined) selectMode = selectMode === "from" ? "to" : "from";
+                const range = isRangeMode
+                    ? {
+                          from: state.selectMode === "from" ? date : state.range.from,
+                          to: state.selectMode === "to" ? date : state.range.to,
+                      }
+                    : state.range;
                 return {
                     date,
                     year: formatYear(date),
-                    selectMode: state.selectMode === undefined ? undefined : state.selectMode === "from" ? "to" : "from",
-                    range: !isRangeMode
-                        ? state.range
-                        : {
-                              from: state.selectMode === "from" ? date : state.range.from,
-                              to: state.selectMode === "to" ? date : state.range.to,
-                          },
+                    selectMode,
+                    range,
                 };
             },
             onChangeMonth: (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -419,9 +433,9 @@ export const Calendar = ({
             <div
                 ref={root}
                 data-component="calendar"
-                data-layout={styles ? "custom" : "default"}
                 onTouchEnd={swipe.onTouchEnd}
                 onTouchStart={swipe.onTouchStart}
+                data-layout={styles ? "custom" : "default"}
                 className={css(calendarStyles.className({}), Is.function(styles?.calendar) ? styles?.calendar(allDaysOfMonth) : styles?.calendar)}
             >
                 <div className={calendarStyles.slots.viewport}>
@@ -490,7 +504,7 @@ export const Calendar = ({
                                     <tr>
                                         {state.week.map((dayOfWeek) => (
                                             <th
-                                                role="columnheader"
+                                                scope="col"
                                                 key={dayOfWeek.toString()}
                                                 className={css(
                                                     calendarStyles.slots.weekday,

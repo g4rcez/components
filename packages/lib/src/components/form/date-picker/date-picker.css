@@ -19,3 +19,71 @@
     white-space: nowrap;
     border-width: 0;
 }
+
+.__date-picker__panel {
+    display: grid;
+    grid-template-columns: var(--var-date-picker-presets-inline-size) max-content;
+    gap: var(--var-date-picker-panel-gap);
+    padding: var(--var-date-picker-panel-padding);
+}
+
+.__date-picker__presets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--var-date-picker-panel-gap);
+    padding-inline-end: var(--var-date-picker-panel-gap);
+    border-inline-end: var(--var-border-hairline) solid var(--var-dropdown-surface-border);
+}
+
+.__date-picker__preset-search {
+    width: 100%;
+}
+
+.__date-picker__preset-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--var-spacing-base) * 0.25);
+}
+
+.__date-picker__preset-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: var(--var-radius);
+    padding: var(--var-date-picker-preset-padding-block) var(--var-date-picker-preset-padding-inline);
+    color: var(--var-color-foreground);
+    font-size: var(--var-date-picker-preset-font-size);
+    text-align: start;
+}
+
+.__date-picker__preset-button:hover,
+.__date-picker__preset-button:focus-visible,
+.__date-picker__preset-button[data-selected="true"] {
+    background-color: var(--var-date-picker-preset-selected-background);
+    color: var(--var-date-picker-preset-selected-foreground);
+}
+
+.__date-picker__preset-check {
+    color: var(--var-color-primary);
+}
+
+.__date-picker__panel .__calendar__footer {
+    display: none;
+}
+
+.__date-picker__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--var-date-picker-panel-gap);
+    padding-block-start: var(--var-date-picker-panel-gap);
+    border-block-start: var(--var-border-hairline) solid var(--var-dropdown-surface-border);
+}
+
+.__date-picker__actions-confirm {
+    display: flex;
+    align-items: end;
+    gap: var(--var-spacing);
+}
+

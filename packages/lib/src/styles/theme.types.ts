@@ -432,6 +432,15 @@ export type CheckboxTokens = {
 
 export type DatePickerTokens = {
     "calendar-icon-size": string;
+    "panel-gap": string;
+    "panel-padding": string;
+    "presets-inline-size": string;
+    "preset-padding-block": string;
+    "preset-padding-inline": string;
+    "preset-selected-background": string;
+    "preset-font-size": string;
+    "action-button-padding-block": string;
+    "action-button-padding-inline": string;
 };
 
 export type RadioboxTokens = {

@@ -11,6 +11,13 @@
     vertical-align: middle;
 }
 
+.__calendar__day-cell[data-in-range="true"] {
+    background-color: var(--var-calendar-range-background);
+    box-shadow:
+        calc(0px - var(--var-calendar-day-cell-padding)) 0 0 var(--var-calendar-range-background),
+        var(--var-calendar-day-cell-padding) 0 0 var(--var-calendar-range-background);
+}
+
 .__calendar__day-button {
     position: relative;
     isolation: isolate;
@@ -66,13 +73,17 @@
     color: var(--var-color-primary-foreground);
 }
 
+.__calendar__day-cell[data-in-range="true"] .__calendar__day-button {
+    color: var(--var-color-primary);
+}
+
+.__calendar__day-cell[data-in-range="true"] .__calendar__day-button--selected {
+    color: var(--var-color-primary-foreground);
+}
+
 .__calendar__day-button--in-range {
-    width: var(--var-calendar-day-button-size);
-    height: var(--var-calendar-day-button-size);
-    border-width: var(--var-border-hairline);
-    border-style: solid;
-    border-color: var(--var-calendar-range-border);
-    background-color: var(--var-calendar-range-background);
+    border-color: transparent;
+    background-color: transparent;
 }
 
 .__calendar__range-label {
@@ -215,7 +226,7 @@
 
 .__calendar[data-layout="default"] .__calendar__table {
     table-layout: fixed;
-    border-collapse: separate;
+    border-collapse: collapse;
     border-spacing: var(--var-calendar-day-cell-padding);
 }
 

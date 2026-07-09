@@ -393,6 +393,15 @@ export const defaultLightThemeTokens = {
         },
         "date-picker": {
             "calendar-icon-size": "calc(var(--var-fontsize) * 1)",
+            "panel-gap": "calc(var(--var-spacing-base) * 1)",
+            "panel-padding": "calc(var(--var-spacing-base) * 1)",
+            "presets-inline-size": "calc(var(--var-spacing-base) * 13)",
+            "preset-padding-block": "calc(var(--var-spacing-base) * 0.625)",
+            "preset-padding-inline": "calc(var(--var-spacing-base) * 0.875)",
+            "preset-selected-background": "hsla(212, 100%, 96%)",
+            "preset-font-size": "calc(var(--var-fontsize) * 0.875)",
+            "action-button-padding-block": "calc(var(--var-spacing-base) * 0.625)",
+            "action-button-padding-inline": "calc(var(--var-spacing-base) * 1)",
         },
         slider: {
             "control-block-size": "calc(var(--var-spacing-base) * 1.25)",
