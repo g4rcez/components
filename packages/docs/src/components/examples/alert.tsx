@@ -1,5 +1,5 @@
-import { Card } from "../../../../lib/src/components/display/card";
-import { Alert } from "../../../../lib/src/components/display/alert";
+import { Card } from "@g4rcez/components/card";
+import { Alert } from "@g4rcez/components/alert";
 import Link from "next/link";
 
 export const AlertExample = () => {

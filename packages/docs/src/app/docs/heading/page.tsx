@@ -1,8 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card } from "../../../../../lib/src";
-import { Heading } from "../../../../../lib/src/components/core/heading";
+import { Card, Heading } from "@g4rcez/components";
 
 export default function HeadingPage() {
     return (

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card, Radiobox } from "../../../../../lib/src";
+import { Card, Radiobox } from "@g4rcez/components";
 
 export default function RadioboxPage() {
     const [selected, setSelected] = useState("monthly");

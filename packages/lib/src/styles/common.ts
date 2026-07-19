@@ -1,4 +1,4 @@
-import { DesignTokens, ZIndex } from "./theme.types";
+import type { DesignTokens, ZIndex } from "./theme.types";
 
 export const rounded = {
     pill: "2rem",
@@ -14,7 +14,7 @@ export const spacing: DesignTokens["spacing"] = {
 } as const;
 
 export const zIndex: ZIndex = {
-    wizard: "50",
+    wizard: "100",
     normal: "1",
     navbar: "22",
     calendar: "2",

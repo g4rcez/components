@@ -104,8 +104,8 @@ export default function SteppedSlider() {
 
 - Don't use `Slider` for very large or effectively infinite ranges where a text `Input` would be more efficient.
 - Don't use `Slider` for selecting from a small discrete set (e.g., 3 named options) — use `Radiobox` or `Select`.
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 

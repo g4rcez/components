@@ -175,7 +175,7 @@ function FilterDropdown() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `hover:bg-gray-100`) — use design-token classes.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `hover:bg-gray-100`) — use design-token classes.
 - Don't use arbitrary values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
 - Don't put more than 10–15 items in a single dropdown; consider `CommandPalette` or `Modal` instead.
 - Don't place critical destructive actions in a dropdown without a confirmation step.

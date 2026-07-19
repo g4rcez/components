@@ -111,8 +111,8 @@ export default function ProjectSubtasks() {
 
 - Don't use `TaskList` for checkboxes that are not tasks (e.g., bulk-selection rows in a table).
 - Don't pack too many unrelated tasks into a single list; split them into smaller groups.
-- Don't pass raw Tailwind color classes (`bg-gray-100`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-gray-100`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 

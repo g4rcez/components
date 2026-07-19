@@ -1,13 +1,7 @@
 "use client";
-import { useState } from "react";
-import { Button } from "../../../../lib/src/components/core/button";
-import { Card } from "../../../../lib/src/components/display/card";
-import { Input } from "../../../../lib/src/components/form/input";
-import { Checkbox } from "../../../../lib/src/components/form/checkbox";
-import { Tag } from "../../../../lib/src/components/core/tag";
-import { Alert } from "../../../../lib/src/components/display/alert";
 import { CheckIcon, StarIcon } from "@phosphor-icons/react";
-import { TaskList } from "../../../../lib/src";
+import { Alert, Button, Card, Checkbox, Input, Tag, TaskList } from "@g4rcez/components";
+import { useState } from "react";
 
 export const FeatureShowcase = () => {
     const [tasks, setTasks] = useState([

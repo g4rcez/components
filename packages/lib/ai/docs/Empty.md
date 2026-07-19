@@ -142,8 +142,8 @@ import {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`text-gray-400`) for the icon — the component uses `text-disabled` from the design system.
-- Don't use arbitrary Tailwind values (`text-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`text-gray-400`) for the icon — the component uses `text-disabled` from the design system.
+- Don't use arbitrary utility values (`text-[#abc]`) — override CSS variables in your `@theme` block instead.
 - Don't use `Empty` for transient loading states — use `Skeleton` or `Spinner` instead.
 - Don't leave a blank space when data is missing; always provide visual feedback.
 - Don't use overly technical language in the empty state message.

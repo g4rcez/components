@@ -1,0 +1,30 @@
+import { defineComponentStyles } from "../../lib/component-styles";
+
+export const pageCalendarDayViewStyles = defineComponentStyles({
+    name: "page-calendar-day-view",
+    variants: {},
+    css: "@g4rcez/components/page-calendar.css",
+    defaults: {},
+    slots: [
+        "event-dot",
+        "root",
+        "main",
+        "header",
+        "day-badge",
+        "weekday",
+        "date-label",
+        "scroll-body",
+        "gutter",
+        "hour-row",
+        "hour-label",
+        "grid",
+        "time-slot",
+        "event",
+        "side-panel",
+        "detail",
+        "event-title",
+        "detail-meta",
+        "event-tag",
+    ],
+    dependencies: ["page-calendar-event-pill", "tag"],
+});

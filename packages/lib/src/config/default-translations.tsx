@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import type React from "react";
+import { Fragment } from "react";
 
 export const defaultTranslations = {
     autocompleteEmpty: "Nothing here...",
@@ -21,6 +22,7 @@ export const defaultTranslations = {
     pageCalendarMoreEvents: (n: number) => `+${n} more...`,
     pageCalendarLabel: "Calendar",
     pageCalendarNavigation: "Calendar navigation",
+    pageCalendarDatePicker: "Calendar day",
     pageCalendarMonthGrid: "Calendar month",
     pageCalendarFilterEnabled: "enabled",
     pageCalendarFilterDisabled: "disabled",
@@ -33,6 +35,16 @@ export const defaultTranslations = {
     commandPaletteSearchPlaceholder: "Search for...",
     commandPaletteTitle: "Command palette",
     datePickerCalendarButtonLabel: "Click to open a date picker",
+    datePickerSearchPeriodPlaceholder: "Search period...",
+    datePickerTodayPreset: "Today",
+    datePickerYesterdayPreset: "Yesterday",
+    datePickerLast7DaysPreset: "Last 7 days",
+    datePickerLast30DaysPreset: "Last 30 days",
+    datePickerThisMonthPreset: "This month",
+    datePickerLastMonthPreset: "Last month",
+    datePickerThisYearPreset: "This year",
+    datePickerCancel: "Cancel",
+    datePickerApply: "Apply",
     emptyDataMessage: "No data",
     inputCaretDown: "Click to see all options",
     inputCloseValue: "Click to clear the value",

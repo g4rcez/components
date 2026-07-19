@@ -1,0 +1,79 @@
+.__wizard {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--var-layer-wizard) + 1);
+    box-sizing: border-box;
+}
+
+.__wizard__overlay {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    fill: currentColor;
+    color: var(--var-wizard-overlay-background);
+}
+
+.__wizard__spotlight {
+    pointer-events: auto;
+}
+
+.__wizard__floating {
+    pointer-events: auto;
+    outline: var(--var-wizard-focus-outline-width) solid transparent;
+    outline-offset: var(--var-wizard-focus-outline-offset);
+}
+
+.__wizard__surface {
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--var-wizard-surface-inline-size);
+    max-inline-size: var(--var-wizard-surface-max-inline-size);
+    gap: var(--var-wizard-surface-gap);
+    border-style: solid;
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-wizard-surface-border);
+    border-radius: var(--var-wizard-surface-radius);
+    background-color: var(--var-wizard-surface-background);
+    color: var(--var-wizard-surface-foreground);
+    padding: var(--var-wizard-surface-padding);
+    box-shadow: var(--var-shadow-floating);
+}
+
+.__wizard__arrow {
+    fill: var(--var-wizard-surface-background);
+    stroke: var(--var-wizard-surface-border);
+}
+
+.__wizard__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: var(--var-wizard-footer-padding-block-start);
+    border-block-start-width: var(--var-border-hairline);
+    border-color: var(--var-wizard-surface-border);
+    padding-block-start: var(--var-wizard-footer-padding-block-start);
+}
+
+.__wizard__skip-button {
+    color: var(--var-wizard-label-foreground);
+    font-size: var(--var-wizard-label-font-size);
+}
+
+.__wizard__skip-button:hover {
+    color: var(--var-wizard-label-foreground-hover);
+}
+
+.__wizard__actions {
+    display: flex;
+    gap: var(--var-wizard-actions-gap);
+}
+
+.__wizard__counter {
+    position: absolute;
+    inset-inline-end: var(--var-wizard-counter-inset-inline-end);
+    inset-block-start: var(--var-wizard-counter-inset-block-start);
+    color: var(--var-wizard-label-foreground);
+    font-size: var(--var-wizard-label-font-size);
+}

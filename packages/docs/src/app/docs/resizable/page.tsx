@@ -2,8 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card } from "../../../../../lib/src";
-import { Resizable } from "../../../../../lib/src/components/core/resizable";
+import { Button, Card, Resizable } from "@g4rcez/components";
 
 export default function ResizablePage() {
     const [showExtra, setShowExtra] = useState(false);
@@ -97,13 +96,9 @@ function GrowingList() {
             >
                 <Card title="Growing list">
                     <div className="flex flex-col gap-4">
-                        <button
-                            type="button"
-                            onClick={() => setItems((v) => [...v, `Item ${v.length + 1}`])}
-                            className="w-fit rounded bg-primary px-4 py-2 text-primary-foreground"
-                        >
-                            Add item
-                        </button>
+                        <Button className="w-fit" onClick={() => setItems((v) => [...v, `Item ${v.length + 1}`])}>
+                            Add item - {items.length}
+                        </Button>
                         <Resizable>
                             <ul className="divide-y divide-card-border rounded border border-card-border">
                                 {items.map((item) => (
@@ -112,69 +107,6 @@ function GrowingList() {
                                     </li>
                                 ))}
                             </ul>
-                        </Resizable>
-                    </div>
-                </Card>
-            </ComponentDemo>
-
-            <ComponentDemo
-                title="Swap Content"
-                description="Switching between content blocks of different heights animates smoothly."
-                code={`"use client";
-import { useState } from "react";
-import { Resizable } from "@g4rcez/components/core/resizable";
-
-function SwapContent() {
-  const [tab, setTab] = useState<"a" | "b">("a");
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => setTab("a")}
-          className="rounded px-4 py-2 bg-primary text-primary-foreground"
-        >
-          Tab A
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("b")}
-          className="rounded px-4 py-2 bg-secondary text-secondary-foreground"
-        >
-          Tab B
-        </button>
-      </div>
-      <Resizable>
-        {tab === "a" ? (
-          <div className="border border-card-border rounded p-4">
-            <p>Short content for Tab A</p>
-          </div>
-        ) : (
-          <div className="border border-card-border rounded p-4">
-            <p>Tab B has more content.</p>
-            <p className="mt-2 text-secondary">It is taller than Tab A.</p>
-            <p className="mt-2 text-secondary">The container adjusts smoothly.</p>
-          </div>
-        )}
-      </Resizable>
-    </div>
-  );
-}`}
-            >
-                <Card title="Swap content">
-                    <div className="flex flex-col gap-4">
-                        <div className="flex gap-2">
-                            <button type="button" onClick={() => {}} className="rounded bg-primary px-4 py-2 text-primary-foreground">
-                                Tab A
-                            </button>
-                            <button type="button" onClick={() => {}} className="rounded bg-secondary px-4 py-2 text-secondary-foreground">
-                                Tab B
-                            </button>
-                        </div>
-                        <Resizable>
-                            <div className="rounded border border-card-border p-4">
-                                <p>Content adapts with animated height transitions.</p>
-                            </div>
                         </Resizable>
                     </div>
                 </Card>

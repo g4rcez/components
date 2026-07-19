@@ -2,10 +2,19 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card, DatePicker } from "../../../../../lib/src";
+import { Card, DatePicker, type DateRangeValue } from "@g4rcez/components";
+import { endOfWeek, startOfWeek } from "date-fns";
+
+const subDays = (date: Date, days: number) => {
+    const next = new Date(date);
+    next.setDate(next.getDate() - days);
+    return next;
+};
 
 export default function DatePickerPage() {
     const [date, setDate] = useState<Date | undefined>(undefined);
+    const [range, setRange] = useState<DateRangeValue | null>(null);
+    const [customRange, setCustomRange] = useState<DateRangeValue | null>(null);
 
     return (
         <DocsLayout
@@ -68,6 +77,120 @@ function ControlledDatePicker() {
                         <DatePicker name="event-date" title="Event date" date={date} onChange={setDate} clickToClose required />
                         {date && <p className="text-sm text-secondary">Selected: {date.toLocaleDateString()}</p>}
                     </div>
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Date Range Picker"
+                description="Pass range to render editable From and To inputs in one control, with presets, staged calendar selection, and Apply/Cancel actions."
+                code={`"use client";
+import { useState } from "react";
+import { DatePicker, type DateRangeValue } from "@g4rcez/components";
+
+function RangeDatePicker() {
+  const [range, setRange] = useState<DateRangeValue | null>(null);
+
+  return (
+    <DatePicker
+      name="report-period"
+      title="Report period"
+      type="range"
+      range={range}
+      onChange={setRange}
+    />
+  );
+}`}
+            >
+                <Card title="Range">
+                    <DatePicker type="range" range={range} name="report-period" title="Report period" onChange={setRange} />
+                    {JSON.stringify(range)}
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Localized Range Picker"
+                description="Override rangeLabels for non-English preset-list, action, and Today labels."
+                code={`"use client";
+import { DatePicker } from "@g4rcez/components";
+
+function LocalizedDatePicker() {
+  return (
+    <DatePicker
+      name="periodo"
+      title="Período"
+      type="range"
+      range={{}}
+      rangeLabels={{
+        searchPlaceholder: "Atalhos de período",
+        today: "Hoje",
+        cancel: "Cancelar",
+        apply: "Aplicar",
+      }}
+    />
+  );
+}`}
+            >
+                <Card title="Localized">
+                    <DatePicker
+                        name="periodo"
+                        title="Período"
+                        type="range"
+                        range={{}}
+                        rangeLabels={{
+                            searchPlaceholder: "Atalhos de período",
+                            today: "Hoje",
+                            cancel: "Cancelar",
+                            apply: "Aplicar",
+                        }}
+                    />
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Custom Presets"
+                description="Provide rangePresets to replace the default menu with product-specific date shortcuts."
+                code={`"use client";
+import { useState } from "react";
+import { DatePicker, type DateRangeValue } from "@g4rcez/components";
+
+const subDays = (date: Date, days: number) => {
+  const next = new Date(date);
+  next.setDate(next.getDate() - days);
+  return next;
+};
+
+function CustomPresetDatePicker() {
+  const [range, setRange] = useState<DateRangeValue | null>(null);
+
+  return (
+    <DatePicker
+      name="analytics-window"
+      title="Analytics window"
+      type="range"
+      range={range}
+      onChange={setRange}
+      rangePresets={[
+        { label: "Last 14 days", range: (today) => ({ from: subDays(today, 13), to: today }) },
+        { label: "Last 90 days", range: (today) => ({ from: subDays(today, 89), to: today }) },
+        { label: "Launch week", range: { from: new Date(2026, 6, 1), to: new Date(2026, 6, 7) } },
+      ]}
+    />
+  );
+}`}
+            >
+                <Card title="Custom presets">
+                    <DatePicker
+                        name="analytics-window"
+                        title="Analytics window"
+                        type="range"
+                        range={customRange}
+                        onChange={setCustomRange}
+                        rangePresets={[
+                            { label: "Last 14 days", range: (today) => ({ from: subDays(today, 13), to: today }) },
+                            { label: "Last 90 days", range: (today) => ({ from: subDays(today, 89), to: today }) },
+                            { label: "Launch week", range: (today) => ({ from: startOfWeek(today), to: endOfWeek(today) }) },
+                        ]}
+                    />
                 </Card>
             </ComponentDemo>
 

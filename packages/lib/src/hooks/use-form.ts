@@ -6,15 +6,15 @@ import { type AllPaths, getPath, Is } from "sidekicker";
 import { LocalStorage } from "storage-manager-js";
 import { z, ZodNumber } from "zod";
 import {
-    AutocompleteProps,
-    CheckboxProps,
-    DatePickerProps,
+    type AutocompleteProps,
+    type CheckboxProps,
+    type DatePickerProps,
     formReset,
-    InputProps,
-    MultiSelectProps,
-    SelectProps,
-    SwitchProps,
-    TextareaProps,
+    type InputProps,
+    type MultiSelectProps,
+    type SelectProps,
+    type SwitchProps,
+    type TextareaProps,
 } from "../components";
 import { Any, SetState } from "../types";
 
@@ -523,7 +523,9 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             };
             const controller = new AbortController();
             const trigger = element.getAttribute("data-trigger") || "blur";
-            element.addEventListener(trigger, onBlurField, { signal: controller.signal });
+            element.addEventListener(trigger, onBlurField, {
+                signal: controller.signal,
+            });
             const hasInitialError = element.dataset.shadow ? false : (element as HTMLInputElement).required ? !validation.success : false;
             return {
                 input,
@@ -587,7 +589,10 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             setErrors,
             data: json,
             success: false,
-            errors: result.error.issues.map((x) => ({ message: x.message, path: x.path.map((x) => String(x)) })),
+            errors: result.error.issues.map((x) => ({
+                message: x.message,
+                path: x.path.map((x) => String(x)),
+            })),
         });
     };
 

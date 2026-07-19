@@ -1,0 +1,31 @@
+import { defineComponentStyles } from "../../../lib/component-styles";
+
+export const calendarStyles = defineComponentStyles({
+    name: "calendar",
+    variants: {},
+    defaults: {},
+    slots: [
+        "day-cell",
+        "day-button",
+        "range-label",
+        "range-label-text",
+        "viewport",
+        "month-page",
+        "month-header",
+        "previous-button",
+        "next-button",
+        "nav-icon",
+        "current-month",
+        "month-controls",
+        "month-select",
+        "year-input",
+        "table",
+        "weekday",
+        "datetime",
+        "time-input",
+        "footer",
+        "today-button",
+        "numeric",
+    ],
+    dependencies: ["input"],
+});

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Tooltip } from "../src/components/floating/tooltip";
+import { Tooltip } from "../src/components/floating/tooltip/tooltip";
 
 class TestResizeObserver {
     observe() {}

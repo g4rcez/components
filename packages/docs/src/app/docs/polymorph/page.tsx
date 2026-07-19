@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Polymorph } from "../../../../../lib/src";
+import { Card, Polymorph } from "@g4rcez/components";
 
 export default function PolymorphPage() {
     return (

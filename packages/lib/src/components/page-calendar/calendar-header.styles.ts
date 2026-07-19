@@ -1,0 +1,31 @@
+import { defineComponentStyles } from "../../lib/component-styles";
+
+export const pageCalendarHeaderStyles = defineComponentStyles({
+    name: "page-calendar-header",
+    variants: {},
+    css: "@g4rcez/components/page-calendar.css",
+    defaults: {},
+    slots: [
+        "root",
+        "toolbar",
+        "date-summary",
+        "date-badge",
+        "month-label",
+        "day-number",
+        "title",
+        "week-label",
+        "nav",
+        "nav-buttons",
+        "nav-icon",
+        "today-button",
+        "date-picker",
+        "view-switch",
+        "view-button",
+        "add-icon",
+        "filters",
+        "filter-icon-wrapper",
+        "filter-icon",
+        "filter-label",
+    ],
+    dependencies: ["button", "date-picker", "tag"],
+});

@@ -5,7 +5,7 @@ import { DesignTokens } from "./theme.types";
 export const DARK_THEME: DesignTokens = {
     name: "dark",
     zIndex,
-    rounded,
+    rounded: rounded,
     spacing,
     components,
     shadow: {

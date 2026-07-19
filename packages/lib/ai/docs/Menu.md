@@ -139,8 +139,8 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 ## Don't
 
 - Don't make menus deeper than 2–3 levels — deeply nested submenus are hard to navigate.
-- Don't use raw Tailwind color classes (`text-red-600`, `hover:bg-gray-100`) on items — use design-token classes.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't use raw utility color classes (`text-red-600`, `hover:bg-gray-100`) on items — use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't use `Menu` for primary navigation that should be crawlable — use standard `<a>` links instead.
 
 ## Accessibility

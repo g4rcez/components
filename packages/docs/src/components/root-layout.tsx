@@ -1,11 +1,7 @@
 "use client";
+import { ComponentsProvider, createTokenStyles, defaultDarkTheme, defaultLightTheme, type TokenRemap, type Tweaks } from "@g4rcez/components";
 import { usePathname } from "next/navigation";
-import { PropsWithChildren } from "react";
-import { Tweaks } from "../../../lib/src";
-import { Notifications } from "../../../lib/src/components/display/notifications";
-import { ComponentsProvider } from "../../../lib/src/hooks/use-components-provider";
-import { createTokenStyles, type TokenRemap } from "../../../lib/src/styles/design-tokens";
-import { defaultDarkTheme, defaultLightTheme } from "../../../lib/src/styles/theme";
+import type { PropsWithChildren } from "react";
 import { Header } from "./header";
 import { Navigation } from "./navigation";
 
@@ -18,7 +14,7 @@ const tokenRemap: TokenRemap = {
 
 const tweaks: Tweaks = {
     input: { iconFeedback: true },
-    table: { filters: false, sorters: false, operations: false, sticky: 55 },
+    table: { filters: false, sorters: false, operations: false, sticky: 64 },
 };
 
 export const RootLayout = (props: PropsWithChildren) => {
@@ -26,10 +22,7 @@ export const RootLayout = (props: PropsWithChildren) => {
     const isLandingPage = pathname === "/";
 
     const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
-    const stylesDark = createTokenStyles(defaultDarkTheme, {
-        ...tokenRemap,
-        name: "dark",
-    });
+    const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
 
     return (
         <html lang="en" className="dark scroll-smooth bg-background proportional-nums text-foreground antialiased">
@@ -49,31 +42,29 @@ export const RootLayout = (props: PropsWithChildren) => {
                 </a>
                 <div id="root" className="flex min-h-screen flex-col">
                     <div id="root-floating" />
-                    <ComponentsProvider locale="en-US" tweaks={tweaks} iconWeight="duotone">
-                        <Notifications>
-                            <div className="flex min-h-screen flex-col">
-                                <Header />
-                                <div className="relative flex flex-1 flex-col">
-                                    {isLandingPage ? (
-                                        <main id="main-content" className="flex-1">
-                                            {props.children}
+                    <ComponentsProvider tweaks={tweaks} iconWeight="duotone">
+                        <div className="flex min-h-screen flex-col">
+                            <Header />
+                            <div className="relative flex flex-1 flex-col">
+                                {isLandingPage ? (
+                                    <main id="main-content" className="flex-1">
+                                        {props.children}
+                                    </main>
+                                ) : (
+                                    <div className="max-w-8xl mx-auto flex w-full px-4 sm:px-6 lg:px-8">
+                                        <aside
+                                            aria-label="Documentation navigation"
+                                            className="scrollbar-thin fixed bottom-0 top-[var(--header-height)] hidden w-64 shrink-0 overflow-y-auto border-r border-border/40 pb-10 pt-10 lg:block"
+                                        >
+                                            <Navigation />
+                                        </aside>
+                                        <main id="main-content" className="min-w-0 flex-1 lg:pl-64">
+                                            <div className="pb-24 pt-10 lg:pl-12">{props.children}</div>
                                         </main>
-                                    ) : (
-                                        <div className="max-w-8xl mx-auto flex w-full px-4 sm:px-6 lg:px-8">
-                                            <aside
-                                                aria-label="Documentation navigation"
-                                                className="scrollbar-thin fixed bottom-0 top-[var(--header-height)] hidden w-64 shrink-0 overflow-y-auto border-r border-border/40 pb-10 pt-10 lg:block"
-                                            >
-                                                <Navigation />
-                                            </aside>
-                                            <main id="main-content" className="min-w-0 flex-1 lg:pl-64">
-                                                <div className="pb-24 pt-10 lg:pl-12">{props.children}</div>
-                                            </main>
-                                        </div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
                             </div>
-                        </Notifications>
+                        </div>
                     </ComponentsProvider>
                 </div>
             </body>

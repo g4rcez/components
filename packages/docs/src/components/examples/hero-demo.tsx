@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { PageHeader, Button, Card, Dropdown, Menu, MenuItem, Input, CurrencyCode, Locales } from "../../../../lib/src";
+import { PageHeader, Button, Card, Dropdown, Menu, MenuItem, Input, CurrencyCode, Locales } from "@g4rcez/components";
 import Link from "next/link";
 
 type Opt = { label: string; currency: CurrencyCode; locale: Locales };

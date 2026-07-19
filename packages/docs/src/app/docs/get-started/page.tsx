@@ -3,8 +3,7 @@ import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { CodeBlock } from "@/components/code-block";
 import { useRef } from "react";
-import { Button } from "../../../../../lib/src";
-import { useNotification } from "../../../../../lib/src/components/display/notifications";
+import { Button, useNotification } from "@g4rcez/components";
 
 export default function GetStartedPage() {
     const notification = useNotification();

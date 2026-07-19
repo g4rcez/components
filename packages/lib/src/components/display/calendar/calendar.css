@@ -1,0 +1,273 @@
+.__calendar {
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: var(--var-color-foreground);
+}
+
+.__calendar__day-cell {
+    position: relative;
+    padding: var(--var-calendar-day-cell-padding);
+    vertical-align: middle;
+}
+
+.__calendar__day-cell[data-in-range="true"] {
+    background-color: var(--var-calendar-range-background);
+    box-shadow:
+        calc(0px - var(--var-calendar-day-cell-padding)) 0 0 var(--var-calendar-range-background),
+        var(--var-calendar-day-cell-padding) 0 0 var(--var-calendar-range-background);
+}
+
+.__calendar__day-button {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    width: var(--var-calendar-day-button-size);
+    height: var(--var-calendar-day-button-size);
+    align-items: center;
+    justify-content: center;
+    margin-inline: auto;
+    border: var(--var-border-hairline) solid transparent;
+    border-radius: var(--var-rounded-full);
+    color: var(--var-color-foreground);
+    outline: 0;
+    transition-property: color, background-color, border-color, box-shadow, transform;
+    transition-duration: var(--var-calendar-transition-duration);
+    transition-timing-function: var(--var-calendar-transition-timing);
+}
+
+.__calendar__day-button:enabled:hover {
+    background-color: var(--var-calendar-day-button-background-hover);
+    color: var(--var-color-foreground);
+    transform: translateY(calc(0px - var(--var-calendar-day-cell-padding)));
+}
+
+.__calendar__day-button:focus-visible {
+    border-color: var(--var-calendar-focus-border);
+    box-shadow: 0 0 0 var(--var-calendar-focus-ring-width) var(--var-calendar-focus-ring);
+}
+
+.__calendar__day-button:disabled {
+    cursor: not-allowed;
+}
+
+.__calendar__day-button--today {
+    border-color: var(--var-calendar-today-border);
+    color: var(--var-color-primary);
+    font-weight: var(--var-font-weight-semibold);
+}
+
+.__calendar__day-button--outside-month {
+    color: var(--var-calendar-outside-month-foreground);
+}
+
+.__calendar__day-button--selected {
+    background-color: var(--var-color-primary);
+    color: var(--var-color-primary-foreground);
+    box-shadow: inset 0 0 0 var(--var-calendar-selected-ring-width) var(--var-calendar-selected-ring);
+}
+
+.__calendar__day-button--selected:enabled:hover,
+.__calendar__day-button--selected:focus-visible {
+    background-color: var(--var-calendar-selected-background-hover);
+    color: var(--var-color-primary-foreground);
+}
+
+.__calendar__day-cell[data-in-range="true"] .__calendar__day-button {
+    color: var(--var-color-primary);
+}
+
+.__calendar__day-cell[data-in-range="true"] .__calendar__day-button--selected {
+    color: var(--var-color-primary-foreground);
+}
+
+.__calendar__day-button--in-range {
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.__calendar__range-label {
+    position: absolute;
+    top: var(--var-calendar-range-label-inset-block-start);
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.__calendar__range-label-text {
+    color: var(--var-color-foreground);
+    font-size: var(--var-calendar-day-button-font-size);
+}
+
+.__calendar__viewport {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: var(--var-calendar-header-radius);
+    text-align: center;
+    flex-direction: column;
+}
+
+.__calendar__month-page {
+    width: 100%;
+}
+
+.__calendar[data-layout="default"] .__calendar__viewport {
+    width: max-content;
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+.__calendar__month-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(var(--var-calendar-day-button-size), 1fr));
+    align-items: center;
+    width: 100%;
+    margin-bottom: var(--var-calendar-table-margin-block-start);
+}
+
+.__calendar__previous-button,
+.__calendar__next-button {
+    z-index: var(--var-layer-calendar);
+    justify-self: center;
+    border: var(--var-border-hairline) solid transparent;
+    border-radius: var(--var-rounded-full);
+    color: var(--var-color-muted-foreground);
+    padding: var(--var-calendar-nav-button-padding);
+    transition-property: color, background-color, border-color;
+    transition-duration: var(--var-calendar-transition-duration);
+    transition-timing-function: var(--var-calendar-transition-timing);
+}
+
+.__calendar__previous-button {
+    grid-column-start: 1;
+}
+
+.__calendar__next-button {
+    grid-column-start: 7;
+}
+
+.__calendar__previous-button:hover,
+.__calendar__previous-button:focus-visible,
+.__calendar__next-button:hover,
+.__calendar__next-button:focus-visible {
+    border-color: var(--var-calendar-nav-button-border-hover);
+    background-color: var(--var-calendar-nav-button-background-hover);
+    color: var(--var-color-primary);
+}
+
+.__calendar__nav-icon {
+    display: inline-flex;
+    width: var(--var-calendar-nav-icon-size);
+    height: var(--var-calendar-nav-icon-size);
+    align-items: center;
+    justify-content: center;
+}
+
+.__calendar__current-month {
+    position: absolute;
+    inset: 0;
+    isolation: isolate;
+    z-index: var(--var-layer-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--var-typography-lg);
+    font-weight: var(--var-calendar-current-month-font-weight);
+}
+
+.__calendar__month-controls {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    gap: var(--var-calendar-month-controls-gap);
+    padding-block: var(--var-calendar-month-controls-padding-block);
+}
+
+.__calendar__month-select,
+.__calendar__year-input {
+    cursor: pointer;
+    appearance: none;
+    border-radius: var(--var-calendar-header-radius);
+    background-color: transparent;
+    color: var(--var-color-foreground);
+    text-align: center;
+    transition-property: color, background-color;
+    transition-duration: var(--var-calendar-transition-duration);
+    transition-timing-function: var(--var-calendar-transition-timing);
+}
+
+.__calendar__month-select {
+    text-transform: capitalize;
+}
+
+.__calendar__year-input {
+    width: var(--var-calendar-year-input-width);
+}
+
+.__calendar__month-select:hover,
+.__calendar__month-select:focus-visible,
+.__calendar__year-input:hover,
+.__calendar__year-input:focus-visible {
+    background-color: var(--var-calendar-select-background-hover);
+    color: var(--var-color-primary);
+}
+
+.__calendar__table {
+    min-width: 100%;
+    table-layout: auto;
+    border-width: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.__calendar[data-layout="default"] .__calendar__table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: var(--var-calendar-day-cell-padding);
+}
+
+.__calendar__weekday {
+    padding-block: var(--var-calendar-weekday-padding-block);
+    color: var(--var-color-muted-foreground);
+    font-size: var(--var-calendar-weekday-font-size);
+    font-weight: var(--var-calendar-weekday-font-weight);
+    text-transform: capitalize;
+}
+
+.__calendar__datetime {
+    margin-block: var(--var-calendar-datetime-margin-block);
+    display: grid;
+    align-items: center;
+}
+
+.__calendar__time-input {
+    width: 100%;
+}
+
+.__calendar__footer {
+    margin-top: var(--var-calendar-footer-margin-block-start);
+    text-align: center;
+    color: var(--var-color-primary);
+}
+
+.__calendar__today-button {
+    border-radius: var(--var-calendar-header-radius);
+    padding: var(--var-calendar-month-controls-padding-block) var(--var-calendar-nav-button-padding);
+    transition-property: color, background-color, transform;
+    transition-duration: var(--var-calendar-transition-duration);
+    transition-timing-function: var(--var-calendar-transition-timing);
+}
+
+.__calendar__today-button:hover,
+.__calendar__today-button:focus-visible {
+    background-color: var(--var-calendar-nav-button-background-hover);
+    transform: translateY(calc(0px - var(--var-calendar-day-cell-padding)));
+}
+
+.__calendar__numeric {
+    font-variant-numeric: proportional-nums;
+}

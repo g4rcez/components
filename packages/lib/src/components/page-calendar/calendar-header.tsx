@@ -1,5 +1,6 @@
-import { Button } from "../core/button";
-import { Tag } from "../core/tag";
+import { Button } from "../core/button/button";
+import { css } from "../../lib/dom";
+import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
 import { CaretLeftIcon, CaretRightIcon, PlusCircleIcon, CalendarIcon } from "@phosphor-icons/react";
@@ -8,6 +9,8 @@ import type { CalendarFilter, ViewMode } from "./page-calendar.types";
 import { formatDay, formatMonthShort, formatMonthYear, getWeekNumber } from "./page-calendar.utils";
 import type { SetState } from "../../types";
 import { useMemo, type ReactNode } from "react";
+import { pageCalendarHeaderStyles } from "./calendar-header.styles";
+import { DatePicker } from "../form/date-picker/date-picker";
 
 type CalendarHeaderProps = {
     currentDate: Date;
@@ -62,64 +65,74 @@ export function CalendarHeader({
     const weekNum = getWeekNumber(currentDate);
 
     return (
-        <header className="flex flex-col gap-page-calendar-header-gap">
-            <div className="flex items-center justify-between gap-page-calendar-header-gap">
-                <div className="flex items-center gap-page-calendar-date-gap">
+        <header className={pageCalendarHeaderStyles.slots.root}>
+            <div className={pageCalendarHeaderStyles.slots.toolbar}>
+                <div className={pageCalendarHeaderStyles.slots["date-summary"]}>
                     <div
                         aria-hidden="true"
-                        className={`flex size-page-calendar-badge-size flex-col items-center justify-center overflow-hidden rounded-page-calendar-badge-radius text-page-calendar-week-label-text ${isDateToday ? "bg-primary text-primary-foreground" : "bg-card text-foreground"}`}
+                        className={css(
+                            pageCalendarHeaderStyles.slots["date-badge"],
+                            `${pageCalendarHeaderStyles.slots["date-badge"]}--${isDateToday ? "today" : "default"}`
+                        )}
                     >
-                        <span className="font-light uppercase leading-none">{formatMonthShort(currentDate, locale)}</span>
-                        <span className="text-page-calendar-title-text font-medium leading-none">{formatDay(currentDate, locale)}</span>
+                        <span className={pageCalendarHeaderStyles.slots["month-label"]}>{formatMonthShort(currentDate, locale)}</span>
+                        <span className={pageCalendarHeaderStyles.slots["day-number"]}>{formatDay(currentDate, locale)}</span>
                     </div>
                     <div>
-                        <h1 aria-live="polite" aria-atomic="true" className="text-page-calendar-title-text font-bold leading-tight">
+                        <h1 aria-live="polite" aria-atomic="true" className={pageCalendarHeaderStyles.slots.title}>
                             {formatMonthYear(currentDate, locale)}
                         </h1>
-                        <span className="text-page-calendar-week-label-text text-muted-foreground">{t.pageCalendarWeekLabel(weekNum)}</span>
+                        <span className={pageCalendarHeaderStyles.slots["week-label"]}>{t.pageCalendarWeekLabel(weekNum)}</span>
                     </div>
                 </div>
-                <nav aria-label={t.pageCalendarNavigation} className="flex items-center gap-page-calendar-nav-gap">
-                    <div className="flex items-center gap-page-calendar-nav-btn-gap">
+                <nav aria-label={t.pageCalendarNavigation} className={pageCalendarHeaderStyles.slots.nav}>
+                    <div className={pageCalendarHeaderStyles.slots["nav-buttons"]}>
                         <Button
-                            size="small"
-                            title={t.pageCalendarPrevious}
-                            aria-label={t.pageCalendarPrevious}
+                            size="tiny"
                             theme="ghost-muted"
                             onClick={handlePrev}
+                            title={t.pageCalendarPrevious}
+                            aria-label={t.pageCalendarPrevious}
                         >
-                            <CaretLeftIcon size={16} />
+                            <CaretLeftIcon className={pageCalendarHeaderStyles.slots["nav-icon"]} />
                         </Button>
-                        <button
-                            type="button"
-                            aria-label={t.pageCalendarToday}
-                            onClick={() => setCurrentDate(new Date())}
-                            className="rounded-page-calendar-today-radius px-page-calendar-today-px py-page-calendar-today-py text-page-calendar-today-text transition-colors hover:bg-muted/50"
-                        >
+                        <Button size="tiny" theme="ghost-muted" aria-label={t.pageCalendarToday} onClick={() => setCurrentDate(new Date())}>
                             {t.pageCalendarToday}
-                        </button>
-                        <Button size="small" title={t.pageCalendarNext} aria-label={t.pageCalendarNext} theme="ghost-muted" onClick={handleNext}>
-                            <CaretRightIcon size={16} />
+                        </Button>
+                        <Button size="tiny" onClick={handleNext} theme="ghost-muted" title={t.pageCalendarNext} aria-label={t.pageCalendarNext}>
+                            <CaretRightIcon className={pageCalendarHeaderStyles.slots["nav-icon"]} />
                         </Button>
                     </div>
-                    <div className="flex rounded-page-calendar-view-switch-radius">
+                    {currentView !== "month" && (
+                        <DatePicker
+                            date={currentDate}
+                            size="small"
+                            hiddenLabel
+                            required={false}
+                            clickToClose
+                            title={t.pageCalendarDatePicker}
+                            container={pageCalendarHeaderStyles.slots["date-picker"]}
+                            onChange={(date: Date | undefined) => date && setCurrentDate(date)}
+                        />
+                    )}
+                    <div className={pageCalendarHeaderStyles.slots["view-switch"]}>
                         {VIEWS.map((v) => (
                             <Button
-                                size="small"
+                                size="tiny"
                                 key={v.value}
                                 rounded="squared"
                                 onClick={() => setCurrentView(v.value)}
                                 theme={currentView === v.value ? "primary" : "muted"}
                                 aria-pressed={currentView === v.value}
-                                className="first:rounded-l-button-radius last:rounded-r-button-radius"
+                                className={pageCalendarHeaderStyles.slots["view-button"]}
                             >
                                 {v.label}
                             </Button>
                         ))}
                     </div>
                     {onAddEvent && (
-                        <Button theme="primary" size="small" onClick={onAddEvent}>
-                            <PlusCircleIcon size={14} />
+                        <Button theme="primary" size="tiny" onClick={onAddEvent}>
+                            <PlusCircleIcon className={pageCalendarHeaderStyles.slots["add-icon"]} />
                             {t.pageCalendarAddEvent}
                         </Button>
                     )}
@@ -127,27 +140,27 @@ export function CalendarHeader({
             </div>
             {filterArea ??
                 (filters.length > 0 && (
-                    <div role="group" aria-label={t.pageCalendarFilter} className="flex flex-wrap items-center gap-page-calendar-filter-gap">
-                        <span className="text-muted-foreground">
-                            <CalendarIcon size={14} aria-hidden="true" />
+                    <fieldset aria-label={t.pageCalendarFilter} className={pageCalendarHeaderStyles.slots.filters}>
+                        <span className={pageCalendarHeaderStyles.slots["filter-icon-wrapper"]}>
+                            <CalendarIcon aria-hidden="true" className={pageCalendarHeaderStyles.slots["filter-icon"]} />
                         </span>
-                        <span className="mr-page-calendar-nav-mr text-page-calendar-filter-text text-muted-foreground">{t.pageCalendarFilter}</span>
+                        <span className={pageCalendarHeaderStyles.slots["filter-label"]}>{t.pageCalendarFilter}</span>
                         {filters.map((filter) => (
                             <Tag
                                 as="button"
-                                size="small"
+                                size="tiny"
                                 type="button"
                                 key={filter.id}
                                 theme={filter.theme}
-                                indicator={filter.enabled ? filter.theme : undefined}
                                 aria-pressed={filter.enabled}
-                                aria-label={`${filter.label}, ${filter.enabled ? t.pageCalendarFilterEnabled : t.pageCalendarFilterDisabled}`}
                                 onClick={() => onToggleFilter(filter.id)}
+                                indicator={filter.enabled ? filter.theme || undefined : undefined}
+                                aria-label={`${filter.label}, ${filter.enabled ? t.pageCalendarFilterEnabled : t.pageCalendarFilterDisabled}`}
                             >
                                 {filter.label}
                             </Tag>
                         ))}
-                    </div>
+                    </fieldset>
                 ))}
         </header>
     );

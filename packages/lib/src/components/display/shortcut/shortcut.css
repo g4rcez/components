@@ -1,0 +1,13 @@
+.__shortcut {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    flex-direction: row;
+    gap: var(--var-shortcut-content-gap);
+    font-size: var(--var-shortcut-content-font-size);
+}
+
+.__shortcut__icon {
+    inline-size: var(--var-shortcut-icon-size);
+    block-size: var(--var-shortcut-icon-size);
+}

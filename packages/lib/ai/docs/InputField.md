@@ -19,27 +19,27 @@ import { InputField } from "@g4rcez/components";
 
 ## Props
 
-| Prop             | Type              | Default      | Description                                                              |
-| ---------------- | ----------------- | ------------ | ------------------------------------------------------------------------ |
-| `title`          | `Label`           | -            | Main label text for the field                                            |
-| `info`           | `Label`           | -            | Informational text shown in a `Tooltip` icon next to the label           |
-| `error`          | `string`          | -            | Error message rendered below the field border                            |
-| `feedback`       | `Label`           | -            | Success or neutral feedback message (hidden when `error` is present)     |
-| `left`           | `Label`           | -            | Content rendered to the left inside the field border                     |
-| `right`          | `Label`           | -            | Content rendered to the right inside the field border                    |
-| `rightLabel`     | `Label`           | -            | Content rendered to the right of the label text                          |
-| `required`       | `boolean`         | `false`      | If `true`, hides the "Optional" badge                                    |
-| `optionalText`   | `string`          | `"Optional"` | Text shown for optional fields (translatable)                            |
-| `disabled`       | `boolean`         | `false`      | Applies disabled styling to the wrapper and label                        |
-| `interactive`    | `boolean`         | `false`      | Sets `data-interactive` on the fieldset                                  |
-| `container`      | `string`          | -            | Extra CSS classes for the outer `<fieldset>`                             |
-| `labelClassName` | `string`          | -            | Extra CSS classes for the inner label/border wrapper `<div>`             |
-| `hiddenLabel`    | `boolean`         | `false`      | Visually hides the label row while keeping it accessible                 |
-| `reportStatus`   | `boolean`         | -            | Show `CheckCircle`/`XCircle` icons alongside the label based on validity |
-| `componentName`  | `string`          | -            | Sets `data-component` on the fieldset (e.g., `"input"`, `"select"`)      |
-| `id`             | `string`          | -            | `id` linked to the inner control via `htmlFor` on the label              |
-| `name`           | `string`          | -            | Fallback for `id` when `id` is not provided                              |
-| `children`       | `React.ReactNode` | -            | The actual form control (input, select, etc.)                            |
+| Prop             | Type              | Default | Description                                                              |
+| ---------------- | ----------------- | ------- | ------------------------------------------------------------------------ |
+| `title`          | `Label`           | -       | Main label text for the field                                            |
+| `info`           | `Label`           | -       | Informational text shown in a `Tooltip` icon next to the label           |
+| `error`          | `string`          | -       | Error message rendered below the field border                            |
+| `feedback`       | `Label`           | -       | Success or neutral feedback message (hidden when `error` is present)     |
+| `left`           | `Label`           | -       | Content rendered to the left inside the field border                     |
+| `right`          | `Label`           | -       | Content rendered to the right inside the field border                    |
+| `rightLabel`     | `Label`           | -       | Content rendered to the right of the label text                          |
+| `required`       | `boolean`         | `false` | Standard required flag forwarded by form controls                        |
+| `optionalText`   | `string`          | `""`    | Explicit text shown for optional fields when provided                    |
+| `disabled`       | `boolean`         | `false` | Applies disabled styling to the wrapper and label                        |
+| `interactive`    | `boolean`         | `false` | Sets `data-interactive` on the fieldset                                  |
+| `container`      | `string`          | -       | Extra CSS classes for the outer `<fieldset>`                             |
+| `labelClassName` | `string`          | -       | Extra CSS classes for the inner label/border wrapper `<div>`             |
+| `hiddenLabel`    | `boolean`         | `false` | Visually hides the label row while keeping it accessible                 |
+| `reportStatus`   | `boolean`         | -       | Show `CheckCircle`/`XCircle` icons alongside the label based on validity |
+| `componentName`  | `string`          | -       | Sets `data-component` on the fieldset (e.g., `"input"`, `"select"`)      |
+| `id`             | `string`          | -       | `id` linked to the inner control via `htmlFor` on the label              |
+| `name`           | `string`          | -       | Fallback for `id` when `id` is not provided                              |
+| `children`       | `React.ReactNode` | -       | The actual form control (input, select, etc.)                            |
 
 ## Design Tokens
 
@@ -153,8 +153,8 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `InputField` wrappers — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `InputField` wrappers — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `InputField` for non-form content; it is specifically designed for labeled input controls.
 - Don't skip the `title` prop — omitting it hides the label but may break screen reader associations.
 
@@ -175,6 +175,6 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 ## Notes
 
-- `InputField` uses Tailwind `group` classes to synchronize hover and focus states between the outer wrapper and inner elements. The `group-focus-within:border-primary` and `group-hover:border-primary` patterns rely on this.
+- `InputField` uses state coordination classes to synchronize hover and focus states between the outer wrapper and inner elements. The `group-focus-within:border-primary` and `group-hover:border-primary` patterns rely on this.
 - The optional text label ("Optional") is sourced from the translation system via `useTranslations`, making it localizable.
 - `reportStatus` defaults to the value configured in `useTweaks().input.iconFeedback`, allowing a global default.

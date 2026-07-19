@@ -1,14 +1,17 @@
 "use client";
-import { AnimatePresence, motion, PanInfo, Reorder } from "motion/react";
+import { AnimatePresence, motion, type PanInfo, Reorder } from "motion/react";
 import { Order } from "linq-arrays";
 import { PlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
-import React, { Fragment, useCallback, useRef } from "react";
+import type React from "react";
+import { Fragment, useCallback, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
-import { Dropdown } from "../floating/dropdown";
+import { css } from "../../lib/dom";
+import { Dropdown } from "../floating/dropdown/dropdown";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
-import { Col, getLabel, TableOperationProps, useWidthControl } from "./table-lib";
+import { tableHeadStyles } from "./thead.styles";
+import { type Col, getLabel, type TableOperationProps, useWidthControl } from "./table-lib";
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 
@@ -78,34 +81,42 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
             aria-busy={props.loading}
             data-tableheader={props.header.id}
             whileDrag={{ cursor: "grabbing" }}
-            className={`typography relative min-w-0 cursor-grab overflow-clip border-r-table-cell-border border-table-border bg-table-header font-medium first:rounded-tl-table-radius last:rounded-tr-table-radius last:border-r-transparent md:h-14 ${props.header.thProps?.className ?? ""}`}
+            className={css("typography", tableHeadStyles.slots.cell, props.header.thProps?.className)}
         >
             <span
-                className={`flex h-full items-center justify-between bg-table-header p-table-cell-padding ${props.isLast ? "rounded-tr-table-radius" : ""} ${props.index === 0 ? "rounded-tl-table-radius" : ""}`}
+                className={css(
+                    tableHeadStyles.slots["cell-content"],
+                    props.isLast ? `${tableHeadStyles.slots["cell-content"]}--last` : undefined,
+                    props.index === 0 ? `${tableHeadStyles.slots["cell-content"]}--first` : undefined
+                )}
             >
-                <span className="flex items-center gap-table-inline-gap-tight">
+                <span className={tableHeadStyles.slots.actions}>
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
                             arrow
                             trigger={
                                 <span>
-                                    <span id={`${props.header.id}-filter-dropdown-button`} className="sr-only">
+                                    <span id={`${props.header.id}-filter-dropdown-button`} className={tableHeadStyles.slots["sr-label"]}>
                                         {translation.tableFilterDropdownTitleUnique} {label}
                                     </span>
-                                    <FilterIcon aria-labelledby={`${props.header.id}-filter-dropdown-button`} size={14} />
+                                    <FilterIcon
+                                        aria-labelledby={`${props.header.id}-filter-dropdown-button`}
+                                        className={tableHeadStyles.slots["filter-icon"]}
+                                    />
                                 </span>
                             }
                             title={
-                                <span className="text-typography-lg">
-                                    {translation.tableFilterDropdownTitleUnique} <span className="font-medium">{label}</span>
+                                <span className={tableHeadStyles.slots["dropdown-title"]}>
+                                    {translation.tableFilterDropdownTitleUnique}{" "}
+                                    <span className={tableHeadStyles.slots["title-strong"]}>{label}</span>
                                 </span>
                             }
                         >
-                            <ul className="font-medium">
+                            <ul className={tableHeadStyles.slots["filter-list"]}>
                                 {ownFilters.length === 0 ? null : (
                                     <Fragment>
                                         {ownFilters.map((filter) => (
-                                            <li key={`thead-filter-${filter.id}`} className="my-1">
+                                            <li key={`thead-filter-${filter.id}`} className={tableHeadStyles.slots["filter-item"]}>
                                                 <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
                                             </li>
                                         ))}
@@ -114,20 +125,20 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 <li>
                                     <button
                                         type="button"
-                                        className="flex items-center gap-table-inline-gap-tight text-primary"
+                                        className={tableHeadStyles.slots["add-filter-button"]}
                                         onClick={() =>
                                             props.setFilters((prev) =>
                                                 prev.concat(createFilterFromCol(props.header, operators.options, operators.operations))
                                             )
                                         }
                                     >
-                                        <PlusIcon size={14} /> {translation.tableFilterNewFilter}
+                                        <PlusIcon className={tableHeadStyles.slots["add-icon"]} /> {translation.tableFilterNewFilter}
                                     </button>
                                 </li>
                             </ul>
                         </Dropdown>
                     ) : null}
-                    <span className="text-typography-base pointer-events-auto text-balance">{props.header.thead}</span>
+                    <span className={tableHeadStyles.slots.label}>{props.header.thead}</span>
                     {props.inlineSorter && defaultAllowSort ? (
                         <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
                     ) : null}
@@ -149,7 +160,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     data-type="resizer"
                     title={props.header.id}
                     dragConstraints={dragConstraints}
-                    className="absolute -right-[0.5px] top-0 z-calendar block h-full w-table-divider-w cursor-col-resize bg-transparent hover:w-1.5 hover:bg-primary active:w-1.5 active:bg-primary"
+                    className={tableHeadStyles.slots.resizer}
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => void e.currentTarget.focus()}
                     onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
                         if (e.key === "ArrowLeft" || e.key === "ArrowRight") {

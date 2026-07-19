@@ -177,8 +177,8 @@ export function ActivityFeed() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `AnimatedList` for purely informational lists with no actionable detail — use a plain `<ul>` or the `List` component instead.
 - Don't embed full sub-applications inside the overlay `children`; keep the detail view focused and lightweight.
 - Don't rely on `AnimatedListItem` rendering its `children` directly — it renders nothing on its own; all rendering is managed by the parent `AnimatedList`.

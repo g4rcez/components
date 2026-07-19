@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Progress } from "../../../../../lib/src";
+import { Card, Progress } from "@g4rcez/components";
 
 export default function ProgressPage() {
     return (
@@ -19,7 +19,7 @@ function BasicProgressBar() {
 }`}
             >
                 <Card>
-                    <Progress min={0} max={100} value={50} className="bg-gradient-to-r from-primary-hover to-primary" container="h-4 text-sm" />
+                    <Progress min={0} max={100} value={61} className="bg-gradient-to-r from-primary-hover to-primary" container="h-4 text-sm" />
                 </Card>
             </ComponentDemo>
             <ComponentDemo

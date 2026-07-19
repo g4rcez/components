@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Button, Card, Toolbar } from "../../../../../lib/src";
+import { Button, Card, Toolbar } from "@g4rcez/components";
 import { TextBIcon, TextItalicIcon, TextUnderlineIcon, LinkIcon } from "@phosphor-icons/react";
 
 export default function ToolbarPage() {

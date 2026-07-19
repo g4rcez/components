@@ -1,0 +1,20 @@
+.__expand {
+    position: relative;
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+.__expand__content {
+    position: absolute;
+    top: -75%;
+    left: -25%;
+    z-index: var(--var-layer-wizard);
+    box-sizing: border-box;
+    inline-size: max-content;
+    max-inline-size: calc(100vw - (var(--var-spacing-base) * 2));
+    outline: none;
+    transform-origin: bottom left;
+}

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React from "react";
-import { Card, Textarea } from "../../../../../lib/src";
+import { Card, Textarea } from "@g4rcez/components";
 
 export default function TextareaPage() {
     return (
@@ -21,6 +21,26 @@ function BasicTextarea() {
             >
                 <Card title="Textarea">
                     <Textarea title="Textarea" placeholder="Write" />
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Field Sizes"
+                description="Use size=normal or size=small to match dense or default form layouts."
+                code={`import { Textarea } from "@g4rcez/components";
+
+function TextareaSizes() {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Textarea size="normal" title="Normal textarea" placeholder="Default field height" />
+      <Textarea size="small" title="Small textarea" placeholder="Dense field height" />
+    </div>
+  );
+}`}
+            >
+                <Card title="Sizes" className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <Textarea size="normal" title="Normal textarea" placeholder="Default field height" />
+                    <Textarea size="small" title="Small textarea" placeholder="Dense field height" />
                 </Card>
             </ComponentDemo>
         </DocsLayout>

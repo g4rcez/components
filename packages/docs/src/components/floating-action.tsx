@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "../../../lib/src/components/core/button";
-import { Modal } from "../../../lib/src/components/floating/modal";
+import { Modal, Button } from "@g4rcez/components";
 import { BookOpenIcon, CodeIcon, RocketIcon, QuestionIcon, ArrowSquareOutIcon } from "@phosphor-icons/react";
 
 const quickLinks = [

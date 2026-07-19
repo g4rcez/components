@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React, { useState } from "react";
-import { Button, Card, Steps, Step } from "../../../../../lib/src";
+import { Button, Card, Steps, Step } from "@g4rcez/components";
 
 export default function StepperPage() {
     const [step, setStep] = useState(2);

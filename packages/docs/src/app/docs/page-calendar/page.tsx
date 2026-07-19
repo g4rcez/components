@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { PageCalendar, type CalendarEvent, type CalendarFilter } from "../../../../../lib/src";
+import { PageCalendar, type CalendarEvent, type CalendarFilter } from "@g4rcez/components";
 import { useState } from "react";
 
 const d = (daysOffset: number, hour = 10): Date => {

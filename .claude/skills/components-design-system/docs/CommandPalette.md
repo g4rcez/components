@@ -245,8 +245,8 @@ const commands = [
 ## Don't
 
 - Don't put every action in the palette — focus on the most useful commands.
-- Don't use raw Tailwind color classes (`bg-blue-500`, `text-white`) in custom `Icon` or `Preview` components — use design-token classes instead.
-- Don't pass arbitrary Tailwind values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
+- Don't use raw utility color classes (`bg-blue-500`, `text-white`) in custom `Icon` or `Preview` components — use design-token classes instead.
+- Don't pass arbitrary utility values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
 - Don't omit the global shortcut — the default `Mod+K` is a strong convention users expect.
 
 ## Accessibility

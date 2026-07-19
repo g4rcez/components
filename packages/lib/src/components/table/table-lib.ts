@@ -6,7 +6,7 @@ import { useReducer } from "use-typed-reducer";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { isSsr } from "../../lib/fns";
 import { Any, POJO, SetState } from "../../types";
-import { OptionProps } from "../form/select";
+import { OptionProps } from "../form/select/select";
 import { FilterConfig } from "./filter";
 import { GroupItem } from "./group";
 import { Sorter } from "./sort";
@@ -91,7 +91,11 @@ export type ColConstructor<T extends POJO> = {
 
 const cols =
     <T extends POJO>() =>
-    <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({ ...options, id, thead });
+    <K extends AllPaths<T>>(id: K, thead: THead, options: ColOptions<T, K>) => ({
+        ...options,
+        id,
+        thead,
+    });
 
 export type Col<T extends POJO> = ReturnType<ReturnType<typeof cols<T>>>;
 
@@ -104,7 +108,12 @@ export type TablePagination = {
     totalItems: number;
     hasPrevious: boolean;
     onChangeSize?: (size: number) => void;
-    asLink?: React.FC<React.PropsWithChildren<{ href: number | "previous" | "next"; className: string }>>;
+    asLink?: React.FC<
+        React.PropsWithChildren<{
+            href: number | "previous" | "next";
+            className: string;
+        }>
+    >;
 };
 
 export type TableGetters<T extends POJO> = {

@@ -183,8 +183,8 @@ function SignUpForm() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use a mask that blocks valid input variations — prefer dynamic masks for formats with variable length.
 - Don't forget that the mask formats the display value; if your backend expects raw data, strip formatting before sending.
 - Don't use `Input` for long-form text — use `Textarea` instead.

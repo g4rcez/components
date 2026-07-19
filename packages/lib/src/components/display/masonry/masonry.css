@@ -1,0 +1,14 @@
+.__masonry {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    list-style-type: none;
+}
+
+.__masonry__item {
+    display: block;
+    box-sizing: border-box;
+}

@@ -196,8 +196,8 @@ import { BellIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) — use `theme` prop instead
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) — use `theme` prop instead
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block
 - Don't use too many different themes on one screen — excessive color variety is distracting
 - Don't use `Tag` as a replacement for `Button` on primary actions
 - Don't combine `icon` and `indicator` on a small tag — it becomes too visually busy

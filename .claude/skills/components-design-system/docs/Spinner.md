@@ -103,8 +103,8 @@ import { Loading } from "@g4rcez/components";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`border-blue-500`) for the spinner border — use design tokens (`border-primary`) instead.
-- Don't use arbitrary Tailwind values (`border-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`border-blue-500`) for the spinner border — use design tokens (`border-primary`) instead.
+- Don't use arbitrary utility values (`border-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't leave a `Spinner` visible indefinitely; always handle error states or timeouts.
 - Don't render many spinners simultaneously on a single screen — it is visually disorienting.
 
@@ -115,6 +115,6 @@ import { Loading } from "@g4rcez/components";
 
 ## Notes
 
-- The spinning effect comes from Tailwind's `animate-spin` utility (`animation: spin 1s linear infinite`).
+- The spinning effect comes from utility CSS's `animate-spin` utility (`animation: spin 1s linear infinite`).
 - The arc effect is achieved via `border-background` for the full ring and `border-b-primary` for the colored arc — one border property per side.
 - `Loading` is a thin wrapper; prefer `Loading` over manually composing `flex items-center justify-center` wrappers every time.

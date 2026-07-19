@@ -1,5 +1,5 @@
-import { Card } from "../../../../lib/src/components/display/card";
-import { Tag } from "../../../../lib/src/components/core/tag";
+import { Card } from "@g4rcez/components/card";
+import { Tag } from "@g4rcez/components/tag";
 import { StarIcon } from "@phosphor-icons/react";
 
 const testimonials = [

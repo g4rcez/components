@@ -132,8 +132,8 @@ function FileUploadProgress({ fileName, percent }: { fileName: string; percent: 
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-green-500`, `bg-blue-500`) in `container` or `className` — use design tokens (`bg-success`, `bg-primary`) instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-green-500`, `bg-blue-500`) in `container` or `className` — use design tokens (`bg-success`, `bg-primary`) instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't use `Progress` for operations with unknown durations — use `Spinner` instead.
 - Don't update `percent` more frequently than needed; excessive updates cause jitter.
 

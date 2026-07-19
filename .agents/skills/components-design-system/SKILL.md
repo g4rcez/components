@@ -4,9 +4,10 @@ description: >
     Use when: setting up @g4rcez/components in a new project, migrating native
     HTML elements or hand-rolled UI to this design system, building any React UI
     that should use @g4rcez/components, or when the user's project already has
-    @g4rcez/components as a dependency. Covers installation, Tailwind v3 preset,
-    Tailwind v4 CSS-first setup, theming with createTokenStyles/TokenRemap,
-    ComponentsProvider/tweaks, parsers, the full component catalog (components,
+    @g4rcez/components as a dependency. Covers installation, plain CSS component
+    chunks, stable selector contracts, token customization, legacy Tailwind v3/v4
+    setup, theming with createTokenStyles/TokenRemap, ComponentsProvider/tweaks,
+    parsers, the full component catalog (components,
     hooks, React, UI, design-system, tokens, Tailwind, forms, modals,
     notifications, tables, calendar, theming), and native-element migration.
 ---
@@ -15,9 +16,51 @@ Loaded automatically when this package is present. Read fully before writing or 
 
 # @g4rcez/components — Agent Skill
 
-A React design system built on Tailwind CSS and design tokens. This skill covers
-installation, Tailwind setup (v3 and v4), theming APIs, conventions, the full
+A React design system built on stable CSS component contracts and semantic design tokens. This skill covers
+installation, CSS setup, token customization, legacy Tailwind setup, theming APIs, conventions, the full
 component catalog, and migration from native HTML patterns.
+
+---
+
+## 0 — Styling Mental Model
+
+Think of @g4rcez/components styling as **plain CSS + stable selectors + CSS variables**:
+
+1. **React components emit class contracts**, not visual implementation. Public classes are stable and semantic: `__button`, `__button--theme-primary`, `__button__icon`, `__radiobox__control`.
+2. **Component CSS chunks implement visuals**. Import `foundation.css` plus the CSS for the components you use, or import `index.css` for the full bundle.
+3. **Tokens are CSS variables**. CSS reads variables with `var(...)`, so overriding a variable on a theme scope or wrapper updates the component in real time.
+4. **Manifests tell agents/tools what to import**. Use `ai/component-style-manifest.json` or `ai/docs/style-dependencies.md` to discover a component's CSS file, dependencies, base class, variants, and slots.
+
+Do not use or document generated migration selectors such as `__component__tw-17`, `__component__tw-extra-1`, or `__component__tw-state-1`. Treat those as private cleanup artifacts; replace them with stable semantic slots before relying on them.
+
+### CSS import model
+
+```css
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
+@import "@g4rcez/components/radiobox.css";
+```
+
+- `foundation.css` must come first.
+- Prefer per-component CSS chunks for apps and examples.
+- `index.css` is a convenience bundle containing foundation + all component CSS.
+- In this repo, component CSS lives beside components under `packages/lib/src/components/**`.
+
+### Token customization model
+
+Customize by overriding token variables, not by adding raw colors/sizes or targeting internals:
+
+```tsx
+<div style={{ "--radiobox-size": "1.5rem", "--radiobox-gap": "0.75rem" } as React.CSSProperties}>
+    <Radiobox name="plan" value="pro">
+        Pro
+    </Radiobox>
+</div>
+```
+
+For global themes, use `createTokenStyles()` or `createCssProperties()` with `defaultLightTheme`, `defaultDarkTheme`, and optional `TokenRemap`. For local previews/docs, scoped wrapper variables are preferred because they update live and do not mutate the app theme.
+
+New handwritten v6 CSS uses the `--var-*` namespace (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Some legacy migrated CSS still reads direct component variables (`--radiobox-size`, `--checkbox-gap`). Preserve the component's current variable contract unless migrating that component fully.
 
 ---
 
@@ -30,19 +73,25 @@ pnpm add @g4rcez/components
 The package ships:
 
 - `dist/` — compiled JS/TS and CSS
-- `dist/index.css` — main stylesheet
+- `dist/foundation.css` — required token/base foundation for component CSS
+- `dist/index.css` — convenience bundle with foundation + all component CSS
+- `dist/*.css` — per-component CSS chunks such as `button.css`
+- `dist/style-manifest.json` — machine-readable CSS dependency and selector manifest
 - `ai/SKILL.md` — this file
+- `ai/component-style-manifest.json` — AI-readable style manifest copy
 - `ai/docs/` — per-component documentation (51 pages)
 
 Access any file via the package specifier: `@g4rcez/components/ai/SKILL.md`, `@g4rcez/components/ai/docs/Button.md`, etc.
 
 ---
 
-## 2 — Tailwind Setup
+## 2 — Tailwind Setup (legacy utility support)
+
+The primary styling path is imported plain CSS chunks. Tailwind setup is still useful for apps that also want token utility classes (`bg-primary`, `rounded-button-radius`, etc.).
 
 ### v3 (preset-based)
 
-Add the library preset to `tailwind.config.ts`. The preset registers all design tokens as Tailwind utilities.
+Add the library preset to `tailwind.config.ts`. The preset registers design tokens as Tailwind utilities.
 
 ```ts
 import preset from "@g4rcez/components/preset.tailwind";

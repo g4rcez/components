@@ -6,7 +6,7 @@ package: "@g4rcez/components"
 
 # @g4rcez/components — Component Index
 
-A design system library built on React, Tailwind CSS, and design tokens.
+A design system library built on React, utility CSS, and design tokens.
 
 **Installation:**
 

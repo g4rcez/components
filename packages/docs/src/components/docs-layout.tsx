@@ -1,10 +1,11 @@
 "use client";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { Tag, type Label } from "../../../lib/src";
+import { type PropsWithChildren, useEffect, useState } from "react";
+import { Tag, type Label } from "@g4rcez/components";
 import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { sections } from "../config/navigation";
 import Link from "next/link";
+import { tokenDefaultsForPath, tokensToStyle, type TokenGroup } from "./editable-tokens";
 
 type TocItem = { id: string; text: string };
 
@@ -24,6 +25,12 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
 
     const [tocItems, setTocItems] = useState<TocItem[]>([]);
     const [activeId, setActiveId] = useState<string>("");
+    const [editableTokens, setEditableTokens] = useState<TokenGroup>(() => tokenDefaultsForPath(pathname) ?? {});
+    const editableTokenStyle = tokensToStyle(editableTokens);
+
+    useEffect(() => {
+        setEditableTokens(tokenDefaultsForPath(pathname) ?? {});
+    }, [pathname]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -68,8 +75,11 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                     <p className="max-w-3xl font-medium leading-relaxed text-muted-foreground">{props.description}</p>
                 </header>
                 <div className="mb-12 mt-8 h-px bg-gradient-to-r from-primary to-transparent" />
-                <div className="prose prose-zinc dark:prose-invert prose-headings:scroll-mt-24 prose-pre:bg-zinc-950 prose-pre:border-none prose-a:no-underline prose-headings:font-extrabold max-w-none">
-                    {props.children}
+                <div style={editableTokenStyle}>
+                    {/* <EditableTokensSection pathname={pathname} tokens={editableTokens} onChange={setEditableTokens} /> */}
+                    <div className="prose prose-zinc dark:prose-invert prose-headings:scroll-mt-24 prose-pre:bg-zinc-950 prose-pre:border-none prose-a:no-underline prose-headings:font-extrabold max-w-none">
+                        {props.children}
+                    </div>
                 </div>
 
                 {(prev || next) && (

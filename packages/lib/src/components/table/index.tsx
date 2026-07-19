@@ -1,15 +1,16 @@
 "use client";
 import { AnimatePresence } from "motion/react";
-import { ComponentProps, useEffect, useMemo } from "react";
+import { type ComponentProps, useEffect, useMemo } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
-import { FilterConfig } from "./filter";
-import { GroupItem } from "./group";
-import { InnerTable, InnerTableProps } from "./inner-table";
+import type { FilterConfig } from "./filter";
+import type { GroupItem } from "./group";
+import { InnerTable, type InnerTableProps } from "./inner-table";
 import { Metadata } from "./metadata";
-import { Sorter } from "./sort";
-import { Col, createOptionCols, TableGetters, TableOperationProps } from "./table-lib";
-import { TableContextProps, TableProvider } from "./table.context";
+import type { Sorter } from "./sort";
+import { type Col, createOptionCols, type TableGetters, type TableOperationProps } from "./table-lib";
+import { type TableContextProps, TableProvider } from "./table.context";
+import { tableRootStyles } from "./index.styles";
 
 export type TableProps<T extends Record<string, unknown>> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
@@ -113,6 +114,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         {...props}
                         index={0}
                         cols={state.cols}
+                        sticky={props.sticky ?? undefined}
                         options={optionCols}
                         groups={state.groups}
                         filters={state.filters}
@@ -128,11 +130,12 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         inlineSorter={props.inlineSorter ?? true}
                     />
                 ) : (
-                    <div className="flex flex-wrap gap-table-groups-gap">
+                    <div className={tableRootStyles.slots.groups}>
                         {state.groups.map((group, index) => (
-                            <div className="min-w-full" key={`group-${group.groupId}`}>
+                            <div className={tableRootStyles.slots.group} key={`group-${group.groupId}`}>
                                 <InnerTable
                                     {...props}
+                                    sticky={props.sticky ?? undefined}
                                     group={group}
                                     index={index}
                                     cols={state.cols}

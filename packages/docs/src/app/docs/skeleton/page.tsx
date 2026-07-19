@@ -1,8 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card } from "../../../../../lib/src";
-import { Skeleton, SkeletonList } from "../../../../../lib/src/components/display/skeleton";
+import { Card, Skeleton, SkeletonList } from "@g4rcez/components";
 
 export default function SkeletonPage() {
     return (

@@ -1,0 +1,136 @@
+.__radiobox {
+    box-sizing: border-box;
+}
+
+.__radiobox__label {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    min-block-size: var(--var-radiobox-label-min-block-size);
+    gap: var(--var-radiobox-label-gap);
+    color: inherit;
+    font-weight: 400;
+    line-height: 1.375;
+    cursor: pointer;
+    user-select: none;
+}
+
+.__radiobox__label[data-disabled="true"],
+.__radiobox[aria-disabled="true"] .__radiobox__control-state {
+    cursor: not-allowed;
+}
+
+.__radiobox__control {
+    margin: 0;
+}
+
+.__radiobox__control-state {
+    display: inline-grid;
+    flex-shrink: 0;
+    place-content: center;
+    vertical-align: middle;
+    inline-size: var(--var-radiobox-control-size);
+    block-size: var(--var-radiobox-control-size);
+    padding: 0;
+    appearance: none;
+    color: var(--var-radiobox-control-foreground);
+    border-style: solid;
+    border-width: var(--var-radiobox-control-border-width);
+    border-color: var(--var-radiobox-control-border);
+    border-radius: var(--var-rounded-full);
+    background-color: var(--var-radiobox-control-background);
+    background-origin: border-box;
+    box-shadow: none;
+    outline: 0;
+    print-color-adjust: exact;
+    transform: scale(1);
+    user-select: none;
+    cursor: inherit;
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-duration: var(--var-radiobox-transition-duration);
+    transition-timing-function: var(--var-radiobox-transition-timing);
+}
+
+.__radiobox__control-state:focus-visible,
+.__radiobox__control-state:focus {
+  outline: currentColor 2px solid;
+  outline-offset: 3px;
+}
+
+
+.__radiobox--size-large .__radiobox__control-state {
+    inline-size: var(--var-radiobox-large-control-size);
+    block-size: var(--var-radiobox-large-control-size);
+}
+
+.__radiobox__control-state::before {
+    content: "";
+    inline-size: var(--var-radiobox-mark-size);
+    block-size: var(--var-radiobox-mark-size);
+    border-radius: var(--var-rounded-full);
+    background-color: var(--var-radiobox-mark-foreground);
+    opacity: 0;
+    transform: scale(0.55);
+    transform-origin: center;
+    transition-property: opacity, transform;
+    transition-duration: var(--var-radiobox-transition-duration);
+    transition-timing-function: var(--var-radiobox-transition-timing);
+}
+
+.__radiobox--size-large .__radiobox__control-state::before {
+    inline-size: var(--var-radiobox-large-mark-size);
+    block-size: var(--var-radiobox-large-mark-size);
+}
+
+.__radiobox__control-state:focus-visible {
+    outline: var(--var-radiobox-focus-ring-width) solid var(--var-radiobox-focus-ring);
+    outline-offset: var(--var-radiobox-focus-ring-offset);
+}
+
+.__radiobox__control-state:disabled {
+    opacity: var(--var-radiobox-disabled-opacity);
+}
+
+.__radiobox__control-state:not(:disabled):active {
+    transform: scale(0.94);
+}
+
+.__radiobox__control-state:checked {
+    border-color: transparent;
+    background-color: currentColor;
+    background-image: none;
+}
+
+.__radiobox__control-state:checked::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__radiobox__control-state:not(:disabled):not(:checked):hover {
+        border-color: currentColor;
+    }
+}
+
+@media (forced-colors: active) {
+    .__radiobox__control-state:checked {
+        appearance: auto;
+    }
+
+    .__radiobox__control-state::before {
+        content: none;
+    }
+}
+
+.__radiobox__control-state:checked:hover,
+.__radiobox__control-state:checked:focus {
+    border-color: transparent;
+    background-color: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__radiobox__control-state,
+    .__radiobox__control-state::before {
+        transition-duration: 1ms;
+    }
+}

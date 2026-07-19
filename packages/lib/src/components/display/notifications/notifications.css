@@ -1,0 +1,190 @@
+.__notifications {
+    position: relative;
+    isolation: isolate;
+    z-index: var(--var-layer-tooltip);
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-width: var(--var-border-hairline);
+    border-radius: var(--var-notification-surface-radius);
+    background-color: var(--var-color-background);
+    font-size: var(--var-typography-sm);
+    box-shadow: var(--var-shadow-notification);
+    backdrop-filter: blur(var(--var-notification-surface-backdrop-blur));
+    transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-linear);
+}
+
+.__notifications--theme-default {
+    border-color: var(--var-color-border);
+    color: var(--var-color-foreground);
+}
+
+.__notifications--theme-info {
+    border-color: var(--var-alert-info-border);
+    background-color: var(--var-alert-info-background);
+    color: var(--var-alert-info-foreground);
+}
+
+.__notifications--theme-warn {
+    border-color: var(--var-alert-warn-border);
+    background-color: var(--var-alert-warn-background);
+    color: var(--var-alert-warn-foreground);
+}
+
+.__notifications--theme-muted {
+    border-color: var(--var-color-border);
+    background-color: var(--var-color-muted);
+    color: var(--var-color-muted-foreground);
+}
+
+.__notifications--theme-danger {
+    border-color: var(--var-alert-danger-border);
+    background-color: var(--var-alert-danger-background);
+    color: var(--var-alert-danger-foreground);
+}
+
+.__notifications--theme-success {
+    border-color: var(--var-alert-success-border);
+    background-color: var(--var-alert-success-background);
+    color: var(--var-alert-success-foreground);
+}
+
+.__notifications--theme-secondary {
+    border-color: var(--var-color-secondary);
+    background-color: var(--var-color-secondary);
+    color: var(--var-color-secondary-foreground);
+}
+
+.__notifications__item {
+    pointer-events: auto;
+    width: 100%;
+    list-style-type: none;
+}
+
+.__notifications__content {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--var-notification-content-gap);
+    padding: var(--var-notification-content-padding);
+}
+
+.__notifications__icon {
+    margin-top: var(--var-notification-icon-margin-block-start);
+    display: flex;
+    width: var(--var-notification-icon-size);
+    height: var(--var-notification-icon-size);
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    opacity: var(--var-notification-icon-opacity);
+}
+
+.__notifications__icon--loading {
+    animation: notifications-spin var(--var-notification-loading-duration) var(--var-motion-timing-linear) infinite;
+}
+
+.__notifications__text {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    gap: var(--var-notification-text-gap);
+    overflow: hidden;
+}
+
+.__notifications__title {
+    user-select: text;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--var-font-weight-semibold);
+    line-height: var(--var-notification-title-line-height);
+    letter-spacing: var(--var-notification-title-letter-spacing);
+}
+
+.__notifications__description {
+    user-select: text;
+    font-size: var(--var-notification-description-font-size);
+    font-weight: var(--var-font-weight-medium);
+    line-height: var(--var-notification-description-line-height);
+    opacity: var(--var-notification-description-opacity);
+}
+
+.__notifications__close {
+    margin-top: var(--var-notification-close-margin-block-start);
+    margin-right: var(--var-notification-close-margin-inline-end);
+    flex-shrink: 0;
+    border-radius: var(--var-notification-close-radius);
+    padding: var(--var-notification-close-padding);
+    color: var(--var-notification-close-foreground);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: var(--var-notification-close-transition-duration);
+    transition-timing-function: var(--var-notification-close-transition-timing);
+}
+
+.__notifications__close:hover {
+    background-color: var(--var-notification-close-background-hover);
+    color: var(--var-color-foreground);
+}
+
+.__notifications__close-icon {
+    display: flex;
+    width: var(--var-notification-close-icon-size);
+    height: var(--var-notification-close-icon-size);
+    align-items: center;
+    justify-content: center;
+}
+
+.__notifications__viewport {
+    pointer-events: none;
+    position: fixed;
+    left: 50%;
+    top: var(--var-notification-viewport-inset-block-start);
+    z-index: var(--var-layer-floating);
+    display: flex;
+    width: 100%;
+    max-width: var(--var-notification-viewport-max-inline-size);
+    flex-direction: column;
+    transform: translateX(-50%);
+    gap: var(--var-notification-viewport-gap);
+    overflow: visible;
+    outline: var(--var-border-hairline) solid transparent;
+    outline-offset: var(--var-notification-viewport-outline-offset);
+}
+
+.__notifications__badge {
+    pointer-events: auto;
+    cursor: default;
+    align-self: center;
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-color-border);
+    border-radius: var(--var-rounded-full);
+    background-color: var(--var-notification-badge-background);
+    padding-inline: var(--var-notification-badge-padding-inline);
+    padding-block: var(--var-notification-badge-padding-block);
+    color: var(--var-notification-badge-foreground);
+    font-size: var(--var-notification-badge-font-size);
+    font-weight: var(--var-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--var-notification-badge-letter-spacing);
+    box-shadow: var(--var-shadow-notification);
+    backdrop-filter: blur(var(--var-notification-badge-backdrop-blur));
+    transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+    transition-duration: var(--var-notification-badge-transition-duration);
+    transition-timing-function: var(--var-notification-badge-transition-timing);
+}
+
+.__notifications__badge:hover {
+    background-color: var(--var-color-background);
+    color: var(--var-notification-badge-foreground-hover);
+}
+
+@keyframes notifications-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

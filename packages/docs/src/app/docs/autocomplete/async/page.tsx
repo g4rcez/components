@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import React, { useEffect, useState } from "react";
-import { Autocomplete, Card } from "../../../../../../lib/src";
+import { Autocomplete, Card } from "@g4rcez/components";
 
 const defaults = [
     { label: "JavaScript", value: "javascript" },

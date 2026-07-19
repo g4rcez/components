@@ -156,8 +156,8 @@ function EventDot({ date }: { date: Date }) {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) in `styles` or `RenderOnDay` — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) in `styles` or `RenderOnDay` — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't use `Calendar` when only year selection is needed — a `Select` is more efficient.
 - Don't place too many visual markers on each day; keep day-level indicators minimal.
 

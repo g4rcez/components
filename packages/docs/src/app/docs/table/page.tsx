@@ -1,7 +1,7 @@
 "use client";
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
-import { ColType, createColumns, Table, useTablePreferences, uuid } from "../../../../../lib/src";
+import { ColType, createColumns, Table, useTablePreferences, uuid } from "@g4rcez/components";
 
 type User = { id: string; name: string; type: string; document: string };
 

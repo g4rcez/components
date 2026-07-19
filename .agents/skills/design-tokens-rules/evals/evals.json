@@ -1,0 +1,23 @@
+{
+    "skill_name": "design-tokens-rules",
+    "evals": [
+        {
+            "id": 1,
+            "prompt": "Migrate packages/lib/src/components/display/alert/alert.css to remove generated slot class names and use semantic design tokens from packages/lib/src/styles/tokens.css. Add the component to DESIGN_TOKEN_MIGRATIONS.md when done.",
+            "expected_output": "Alert CSS/TSX uses semantic class names, no numbered slot selectors remain, token refs are shallow, and DESIGN_TOKEN_MIGRATIONS.md includes Alert.",
+            "files": []
+        },
+        {
+            "id": 2,
+            "prompt": "Review a component token migration that added color-mix() to packages/lib/src/styles/tokens.css and replace it with project-approved color tokens.",
+            "expected_output": "The result removes color-mix(), uses explicit hsla() semantic tokens, and validates no touched token/component CSS contains color-mix().",
+            "files": []
+        },
+        {
+            "id": 3,
+            "prompt": "Add tokenized spacing and icon sizing for a new component CSS file. Prefer tokens that already exist in packages/lib/src/styles/tokens.css and only add new semantic component tokens if necessary.",
+            "expected_output": "The result reuses existing base/global tokens where appropriate, creates semantic DOM-role token names only when needed, avoids deep var() fallback chains, and documents validation commands.",
+            "files": []
+        }
+    ]
+}

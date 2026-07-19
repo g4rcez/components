@@ -1,14 +1,17 @@
-import { Symbols } from "linq-arrays";
+import type { Symbols } from "linq-arrays";
 import { FunnelIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
-import React, { Fragment, useMemo } from "react";
-import { AllPaths } from "sidekicker";
+import type React from "react";
+import { Fragment, useMemo } from "react";
+import type { AllPaths } from "sidekicker";
 import { useTranslations } from "../../hooks/use-translations";
+import { css } from "../../lib/dom";
 import { uuid } from "../../lib/fns";
-import { Any, Label } from "../../types";
-import { Dropdown } from "../floating/dropdown";
-import { Input, InputTypes } from "../form/input";
-import { OptionProps, Select } from "../form/select";
-import { Col, ColType, getLabel, TableConfiguration, valueFromType } from "./table-lib";
+import type { Any, Label } from "../../types";
+import { Dropdown } from "../floating/dropdown/dropdown";
+import { Input, type InputTypes } from "../form/input/input";
+import { type OptionProps, Select } from "../form/select/select";
+import { tableFilterStyles } from "./filter.styles";
+import { type Col, ColType, getLabel, type TableConfiguration, valueFromType } from "./table-lib";
 
 type Operators = {
     value: string;
@@ -185,17 +188,17 @@ export const Filter = <T extends object>(props: Props<T>) => {
                 arrow
                 title={translation.tableFilterDropdownTitle}
                 trigger={
-                    <span className="flex items-center gap-table-inline-gap-tight proportional-nums">
-                        <FunnelIcon size={14} />
+                    <span className={tableFilterStyles.slots["trigger-label"]}>
+                        <FunnelIcon className={tableFilterStyles.slots["trigger-icon"]} />
                         {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
                     </span>
                 }
             >
-                <ul className="mt-table-filter-list-mt space-y-2">
+                <ul className={tableFilterStyles.slots.list}>
                     {props.filters.map((filter) => {
                         const options = operators.options[filter.type]!;
                         return (
-                            <li key={`filter-select-${filter.id}`} className="flex flex-nowrap gap-table-filter-row-gap">
+                            <li key={`filter-select-${filter.id}`} className={tableFilterStyles.slots.row}>
                                 <Select
                                     options={props.options}
                                     title={translation.tableFilterColumnTitle}
@@ -221,15 +224,15 @@ export const Filter = <T extends object>(props: Props<T>) => {
                                     title={translation.tableFilterValueTitle}
                                     placeholder={translation.tableFilterValuePlaceholder}
                                 />
-                                <div className="mt-5 flex items-center justify-center">
+                                <div className={tableFilterStyles.slots["delete-control"]}>
                                     <button
                                         data-id={filter.id}
                                         type="button"
                                         onClick={onDelete}
                                         aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
                                     >
-                                        <span className="text-danger">
-                                            <TrashIcon aria-hidden="true" size={16} />
+                                        <span className={tableFilterStyles.slots["danger-icon"]}>
+                                            <TrashIcon aria-hidden="true" className={tableFilterStyles.slots["delete-icon"]} />
                                         </span>
                                     </button>
                                 </div>
@@ -237,8 +240,8 @@ export const Filter = <T extends object>(props: Props<T>) => {
                         );
                     })}
                     <li>
-                        <button type="button" onClick={onAddFilter} className="flex items-center gap-table-inline-gap-tight text-primary">
-                            <PlusIcon size={14} /> {translation.tableFilterNewFilter}
+                        <button type="button" onClick={onAddFilter} className={tableFilterStyles.slots["add-button"]}>
+                            <PlusIcon className={tableFilterStyles.slots["add-icon"]} /> {translation.tableFilterNewFilter}
                         </button>
                     </li>
                 </ul>
@@ -279,7 +282,7 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
     };
 
     return (
-        <div className="flex flex-nowrap items-center gap-table-filter-inline-gap py-table-filter-inline-py">
+        <div className={tableFilterStyles.slots["inline-row"]}>
             <Select
                 data-id={filter.id}
                 onChange={onSelectOperation}
@@ -301,11 +304,14 @@ export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: 
                 onClick={onDelete}
                 data-id={filter.id}
                 type="button"
-                className="mt-4"
+                className={tableFilterStyles.slots["inline-delete-button"]}
                 aria-label={getFilterDeleteLabel(filter, translation.tableFilterDeleteLabel)}
             >
-                <span className="text-danger">
-                    <TrashIcon aria-hidden="true" size={14} />
+                <span className={tableFilterStyles.slots["danger-icon"]}>
+                    <TrashIcon
+                        aria-hidden="true"
+                        className={css(tableFilterStyles.slots["delete-icon"], `${tableFilterStyles.slots["delete-icon"]}--sm`)}
+                    />
                 </span>
             </button>
         </div>

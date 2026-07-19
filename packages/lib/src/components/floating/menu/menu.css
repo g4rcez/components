@@ -1,0 +1,88 @@
+.__menu {
+    box-sizing: border-box;
+}
+
+.__menu__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    inline-size: 100%;
+    min-inline-size: var(--var-menu-item-min-inline-size);
+    padding: var(--var-menu-item-padding);
+    text-align: left;
+    outline: var(--var-menu-item-outline-width) solid transparent;
+    outline-offset: var(--var-menu-item-outline-offset);
+}
+
+.__menu__item:first-of-type {
+    border-start-start-radius: var(--var-menu-surface-radius);
+    border-start-end-radius: var(--var-menu-surface-radius);
+}
+
+.__menu__item:last-of-type {
+    border-end-start-radius: var(--var-menu-surface-radius);
+    border-end-end-radius: var(--var-menu-surface-radius);
+}
+
+.__menu__item[aria-expanded="true"] {
+    opacity: var(--var-menu-item-expanded-opacity);
+}
+
+.__menu__item:hover,
+.__menu__item:focus,
+.__menu__item--active {
+    color: var(--var-menu-item-active-foreground);
+    background-color: var(--var-menu-item-active-background);
+}
+
+.__menu__item:disabled {
+    cursor: not-allowed;
+    opacity: var(--var-menu-item-disabled-opacity);
+}
+
+.__menu__floating {
+    isolation: isolate;
+    z-index: var(--var-layer-floating);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-block-size: var(--var-menu-surface-max-block-size);
+    overflow-y: auto;
+    border-style: solid;
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-menu-surface-border);
+    border-radius: var(--var-menu-surface-radius);
+    background-color: var(--var-menu-surface-background);
+    color: var(--var-menu-surface-foreground);
+    text-align: left;
+    box-shadow: var(--var-shadow-floating);
+    outline: var(--var-menu-item-outline-width) solid transparent;
+    outline-offset: var(--var-menu-item-outline-offset);
+}
+
+.__menu__nested-indicator {
+    margin-inline-start: var(--var-menu-nested-indicator-margin-inline-start);
+    font-size: var(--var-menu-nested-indicator-font-size);
+}
+
+.__menu__nested-icon {
+    inline-size: var(--var-menu-nested-icon-size);
+    block-size: var(--var-menu-nested-icon-size);
+}
+
+.__menu__item-icon {
+    inline-size: var(--var-menu-item-icon-size);
+    block-size: var(--var-menu-item-icon-size);
+}
+
+.__menu__sr-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

@@ -121,8 +121,8 @@ import { Skeleton } from "@g4rcez/components";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-green-500`, `text-red-600`) to `iconContainer` or `footer` — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-green-500`, `text-red-600`) to `iconContainer` or `footer` — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't place too many `Stats` cards without logical grouping — they lose impact when overused.
 - Don't put long sentences as `title` or `children`; they should be scannable at a glance.
 

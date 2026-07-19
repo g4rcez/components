@@ -1,0 +1,149 @@
+.__command-palette {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: clip;
+    padding-block: 0;
+}
+
+@media (min-width: 768px) {
+    .__command-palette {
+        max-inline-size: var(--var-command-dialog-max-inline-size-md);
+    }
+}
+
+@media (min-width: 1024px) {
+    .__command-palette {
+        max-inline-size: var(--var-command-dialog-max-inline-size-lg);
+    }
+}
+
+.__command-palette__body {
+    padding: 0;
+}
+
+.__command-palette__group-label {
+    display: flex;
+    align-items: center;
+    block-size: 100%;
+    color: var(--var-command-group-label-foreground);
+    text-align: left;
+    font-size: var(--var-typography-sm);
+    font-weight: var(--var-font-weight-medium);
+}
+
+.__command-palette__group-row {
+    block-size: var(--var-command-row-block-size);
+    padding-block-start: var(--var-command-group-padding-block-start);
+    padding-block-end: var(--var-command-group-padding-block-end);
+    padding-inline: var(--var-command-group-padding-inline);
+}
+
+.__command-palette__item,
+.__command-palette__loading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    block-size: var(--var-command-row-block-size);
+    border-radius: var(--var-command-item-radius);
+    padding: var(--var-command-item-padding);
+}
+
+.__command-palette__item:hover,
+.__command-palette__item--active {
+    background-color: var(--var-command-item-background-hover);
+}
+
+.__command-palette__item-content {
+    display: flex;
+    align-items: center;
+    gap: var(--var-command-item-content-gap);
+}
+
+.__command-palette__header {
+    position: sticky;
+    inset-block-start: 0;
+    isolation: isolate;
+    z-index: var(--var-layer-floating);
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    block-size: var(--var-command-header-block-size);
+    overflow: clip;
+    border-block-end-width: var(--var-border-hairline);
+    border-color: var(--var-command-surface-border);
+    background-color: var(--var-command-surface-background);
+}
+
+.__command-palette__search-icon-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--var-command-search-icon-frame-size);
+    block-size: var(--var-command-search-icon-frame-size);
+}
+
+.__command-palette__search-icon {
+    inline-size: var(--var-command-search-icon-size);
+    block-size: var(--var-command-search-icon-size);
+}
+
+.__command-palette__input {
+    align-items: center;
+    inline-size: 100%;
+    block-size: var(--var-command-header-block-size);
+    padding-block: var(--var-command-input-padding-block);
+    padding-inline: var(--var-command-input-padding-inline);
+    background-color: transparent;
+    text-align: left;
+    font-size: var(--var-typography-lg);
+    outline: var(--var-command-input-outline-width) solid transparent;
+    outline-offset: var(--var-command-input-outline-offset);
+}
+
+.__command-palette__loading-list,
+.__command-palette__list {
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+    max-block-size: var(--var-command-list-max-block-size);
+    margin-block: var(--var-command-list-margin-block);
+    transform-origin: top center;
+    gap: var(--var-command-list-gap);
+    overflow-y: auto;
+}
+
+.__command-palette__loading-list {
+    padding-inline: var(--var-command-group-padding-inline);
+}
+
+.__command-palette__list {
+    block-size: fit-content;
+    padding-inline: var(--var-command-list-padding-inline);
+}
+
+.__command-palette__content {
+    display: flex;
+    flex-flow: row nowrap;
+    min-inline-size: 100%;
+}
+
+.__command-palette__empty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: var(--var-command-item-radius);
+    padding: var(--var-command-item-padding);
+    color: var(--var-command-empty-foreground);
+}
+
+.__command-palette__footer {
+    display: flex;
+    align-items: center;
+    block-size: var(--var-command-footer-block-size);
+    border-block-start-width: var(--var-border-hairline);
+    border-end-start-radius: var(--var-command-item-radius);
+    border-end-end-radius: var(--var-command-item-radius);
+    border-color: var(--var-command-surface-border);
+    padding: var(--var-command-footer-padding);
+}

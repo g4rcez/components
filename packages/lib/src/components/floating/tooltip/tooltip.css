@@ -1,0 +1,18 @@
+.__tooltip {
+    box-sizing: border-box;
+    isolation: isolate;
+    z-index: var(--var-layer-tooltip);
+    border-style: solid;
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-tooltip-surface-border);
+    border-radius: var(--var-tooltip-surface-radius);
+    background-color: var(--var-tooltip-surface-background);
+    padding: var(--var-tooltip-surface-padding);
+    color: var(--var-tooltip-surface-foreground);
+    box-shadow: var(--var-shadow-floating);
+}
+
+.__tooltip__arrow {
+    fill: var(--var-tooltip-surface-background);
+    stroke: var(--var-tooltip-surface-border);
+}

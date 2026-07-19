@@ -5,9 +5,10 @@ import { axe } from "vitest-axe";
 import { describe, expect, it, vi } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
-import { Autocomplete } from "../src/components/form/autocomplete";
-import { MultiSelect } from "../src/components/form/multi-select";
-import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette";
+import { Autocomplete } from "../src/components/form/autocomplete/autocomplete";
+import { autocompleteStyles } from "../src/components/form/autocomplete/autocomplete.styles";
+import { MultiSelect } from "../src/components/form/multi-select/multi-select";
+import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette/command-palette";
 
 Element.prototype.scrollIntoView = function scrollIntoView() {};
 
@@ -78,12 +79,13 @@ describe("composite widget a11y", () => {
 
         await waitFor(() => expect(onChange).toHaveBeenCalled());
         await waitFor(() => expect(document.activeElement).toBe(combobox));
-        expect(combobox).not.toHaveClass("focus:ring-2");
-        expect(combobox).not.toHaveClass("focus:ring-inset");
-        expect(combobox).not.toHaveClass("focus:ring-primary");
-        expect(combobox.parentElement).toHaveClass("focus-within:border-primary");
+        expect(combobox.parentElement).toHaveClass("__autocomplete__field-state");
         expect(combobox).toHaveAttribute("data-value", "alpha");
         expect((await axe(container)).violations).toHaveLength(0);
+
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        await user.click(combobox);
+        expect(await screen.findByRole("listbox")).toBeInTheDocument();
     });
 
     it("keeps disabled Autocomplete readonly with not-allowed affordances", async () => {
@@ -99,10 +101,11 @@ describe("composite widget a11y", () => {
         const caretButton = container.querySelector("button");
 
         expect(combobox).toBeDisabled();
-        expect(combobox).toHaveClass("disabled:cursor-not-allowed");
+        expect(combobox).toHaveClass("__autocomplete__input");
+        expect(combobox).not.toHaveClass("__autocomplete__control-state");
         expect(caretButton).toBeDisabled();
-        expect(caretButton).toHaveClass("disabled:cursor-not-allowed");
-        expect(combobox.parentElement).toHaveClass("group-disabled:!border-disabled");
+        expect(caretButton).toHaveClass("__autocomplete__action");
+        expect(combobox.parentElement).toHaveClass(autocompleteStyles.slots["disabled-border"]);
 
         await user.click(combobox);
         if (caretButton) await user.click(caretButton);
@@ -120,7 +123,8 @@ describe("composite widget a11y", () => {
             </ComponentsProvider>
         );
 
-        await user.click(screen.getByText("Pick tags"));
+        const trigger = screen.getByRole("combobox", { name: "Tags" });
+        await user.click(trigger);
 
         const combobox = await screen.findByRole("combobox", { name: "Tags" });
         const listbox = await screen.findByRole("listbox");
@@ -144,6 +148,14 @@ describe("composite widget a11y", () => {
         await waitFor(() => expect(onChangeOptions).toHaveBeenLastCalledWith(["alpha", "bravo"]));
         expect(within(listbox).getByRole("option", { name: "Bravo" })).toHaveAttribute("aria-selected", "true");
         expect((await axe(listbox)).violations).toEqual([]);
+
+        trigger.focus();
+        await user.keyboard("[Escape]");
+        await waitFor(() => expect(screen.queryByRole("listbox")).not.toBeInTheDocument());
+        expect(document.activeElement).toBe(trigger);
+
+        await user.click(trigger);
+        expect(await screen.findByRole("listbox")).toBeInTheDocument();
     });
 
     it("keeps CommandPalette input focus, runs the active command on Enter, and closes on Escape", async () => {

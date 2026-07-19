@@ -227,8 +227,8 @@ export function CustomFilterCalendar() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use `theme` on filters/events or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use `theme` on filters/events or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't pack more than a handful of events per day in month view — the grid will overflow; guide users toward week or day view for dense schedules.
 - Don't use extremely long event titles; they are truncated inside the event pill.
 - Don't supply both `filterArea` and `filters` expecting both to render — `filterArea` fully replaces the default filter tag row.

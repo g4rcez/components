@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Masonry, type MasonryLayout } from "../src/components/display/masonry";
+import { Masonry, MasonryItem, type MasonryLayout } from "../src/components/display/masonry/masonry";
 
 const createRect = (width: number, height: number): DOMRect =>
     ({
@@ -82,7 +82,8 @@ describe("Masonry", () => {
             }
 
             const label = this.textContent?.trim() ?? "";
-            return createRect(0, itemHeights.get(label) ?? 40);
+            const width = this instanceof HTMLElement && this.style.width === "100%" ? 240 : 0;
+            return createRect(width, itemHeights.get(label) ?? 40);
         });
     });
 
@@ -109,9 +110,13 @@ describe("Masonry", () => {
 
         expect(root).toHaveAttribute("data-component", "masonry");
         expect(root).not.toHaveAttribute("role", "grid");
+        expect(root).toHaveStyle({ position: "relative", width: "100%" });
         expect(items).toHaveLength(3);
         expect(items.map((item) => item.textContent)).toEqual(["Alpha", "Beta", "Gamma"]);
-        items.forEach((item) => expect(item).toHaveAttribute("data-component", "masonry-item"));
+        items.forEach((item) => {
+            expect(item).toHaveAttribute("data-component", "masonry-item");
+            expect(item).toHaveStyle({ position: "absolute", boxSizing: "border-box" });
+        });
     });
 
     it("reports measured layout after resize", async () => {
@@ -141,6 +146,36 @@ describe("Masonry", () => {
         });
     });
 
+    it("allows an item to reserve a full-width row", async () => {
+        const onLayoutChange = vi.fn();
+
+        render(
+            <Masonry columns={2} gutter={10} onLayoutChange={onLayoutChange}>
+                <MasonryItem width="100%">
+                    <article>Alpha</article>
+                </MasonryItem>
+                <article>Beta</article>
+                <article>Gamma</article>
+            </Masonry>
+        );
+
+        MockResizeObserver.instances.forEach((observer) => observer.trigger());
+
+        await waitFor(() => expect(onLayoutChange).toHaveBeenCalled());
+
+        expect(screen.getAllByRole("listitem")[0]).toHaveStyle({ width: "100%" });
+        expect(onLayoutChange).toHaveBeenLastCalledWith({
+            columns: 2,
+            gutter: 10,
+            height: 210,
+            items: [
+                { column: 0, height: 120, index: 0, left: 0, top: 0, width: 240 },
+                { column: 0, height: 80, index: 1, left: 0, top: 130, width: 115 },
+                { column: 1, height: 60, index: 2, left: 125, top: 130, width: 115 },
+            ],
+        });
+    });
+
     it("remeasures when fresh changes", async () => {
         const onLayoutChange = vi.fn();
         const { rerender } = render(
@@ -163,6 +198,27 @@ describe("Masonry", () => {
 
         await waitFor(() => expect(onLayoutChange).toHaveBeenCalledTimes(2));
         expect(onLayoutChange.mock.calls.at(-1)?.[0].height).toBe(140);
+    });
+
+    it("remeasures when an item changes height", async () => {
+        const onLayoutChange = vi.fn();
+
+        render(
+            <Masonry columns={2} gutter={10} onLayoutChange={onLayoutChange}>
+                <article>Alpha</article>
+                <article>Beta</article>
+                <article>Gamma</article>
+            </Masonry>
+        );
+
+        MockResizeObserver.instances.forEach((observer) => observer.trigger());
+        await waitFor(() => expect(onLayoutChange).toHaveBeenCalledTimes(1));
+
+        itemHeights.set("Gamma", 140);
+        MockResizeObserver.instances.forEach((observer) => observer.trigger());
+
+        await waitFor(() => expect(onLayoutChange).toHaveBeenCalledTimes(2));
+        expect(onLayoutChange.mock.calls.at(-1)?.[0].height).toBe(230);
     });
 
     it("does not re-emit equal layouts when consumers store layout state", async () => {

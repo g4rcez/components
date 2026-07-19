@@ -259,8 +259,8 @@ export default function CascadingSelect() {
 - Don't use `Select` for only 2–3 options — prefer `Radiobox` or `Switch` for better visibility.
 - Don't use `Select` for large searchable lists — use `Autocomplete` instead.
 - Don't use long option labels that may truncate on small viewports.
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 

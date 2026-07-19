@@ -1,0 +1,85 @@
+.__select {
+    box-sizing: border-box;
+}
+
+.__select__field:focus-within,
+.__select__field:hover {
+    border-color: var(--var-color-primary);
+}
+
+.__select__field:where([aria-disabled="true"], :disabled),
+fieldset:disabled .__select__field {
+    border-color: var(--var-color-disabled) !important;
+}
+
+.__select__trigger {
+    margin-block-start: var(--var-free-text-surface-padding-block);
+    padding: 0;
+    color: inherit;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transition-property: color;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-linear);
+}
+
+.__select--size-small.__select__trigger {
+    margin-block-start: var(--var-free-text-small-surface-padding-block);
+}
+
+.__select__trigger:enabled:hover {
+    color: var(--var-color-primary);
+}
+
+.__select__trigger:disabled {
+    color: var(--var-color-disabled);
+    cursor: not-allowed;
+}
+
+.__select__trigger-icon {
+    inline-size: var(--var-input-field-icon-size);
+    block-size: var(--var-input-field-icon-size);
+}
+
+.__select--size-small .__select__trigger-icon,
+.__select--size-small.__select__trigger-icon {
+    inline-size: var(--var-input-field-small-icon-size);
+    block-size: var(--var-input-field-small-icon-size);
+}
+
+.__select__trigger-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.__select__control {
+    appearance: none;
+    border: 0;
+    background: transparent;
+}
+
+.__select__control::placeholder,
+.__select__control[data-selected="false"] {
+    color: var(--var-free-text-placeholder-foreground);
+}
+
+.__select__control:disabled {
+    color: var(--var-color-disabled);
+    cursor: not-allowed;
+}
+
+fieldset[data-error="true"] .__select__control {
+    color: var(--var-color-danger);
+}
+
+fieldset[data-error="true"] .__select__control::placeholder {
+    color: var(--var-free-text-error-placeholder-foreground);
+}

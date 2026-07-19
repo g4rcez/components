@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "@g4rcez/components/dist/index.css";
-@config "../../../lib/tailwind.config.ts";
+@import "@g4rcez/components/index.css";
+@config "../../tailwind.config.ts";
 
 @theme inline {
     --font-sans: var(--font-geist-sans);

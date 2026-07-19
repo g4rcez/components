@@ -2,11 +2,10 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Button, Card, Dropdown } from "../../../../../lib/src";
+import { Button, Card, Dropdown } from "@g4rcez/components";
 
 export default function DropdownPage() {
     const [open, setOpen] = useState(false);
-
     return (
         <DocsLayout
             title="Dropdown"

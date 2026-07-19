@@ -1,0 +1,25 @@
+.__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: 100%;
+  gap: var(--var-empty-surface-gap);
+  padding-block: var(--var-empty-surface-padding-block);
+  padding-inline: var(--var-empty-surface-padding-inline);
+}
+
+.__empty__icon,
+.__empty__message {
+  color: var(--var-color-disabled);
+}
+
+.__empty__icon svg {
+  inline-size: var(--var-empty-icon-size);
+  block-size: var(--var-empty-icon-size);
+}
+
+.__empty__message {
+  margin: 0;
+}

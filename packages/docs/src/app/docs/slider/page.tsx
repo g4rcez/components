@@ -1,8 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card } from "../../../../../lib/src";
-import { Slider } from "../../../../../lib/src/components/form/slider";
+import { Slider, Card } from "@g4rcez/components";
 
 export default function SliderPage() {
     return (

@@ -90,7 +90,7 @@ All other key tokens are rendered as-is.
 ## Don't
 
 - Don't hardcode platform symbols like `⌘` or `Ctrl` directly — let `Shortcut` handle the mapping.
-- Don't pass arbitrary Tailwind values (`text-[--my-var]`) for text color — let the component inherit from its parent.
+- Don't pass arbitrary utility values (`text-[--my-var]`) for text color — let the component inherit from its parent.
 - Don't use `Shortcut` for descriptive text longer than a typical keyboard combination.
 
 ## Accessibility

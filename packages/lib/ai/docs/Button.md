@@ -160,8 +160,8 @@ import { PlusIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) — use `theme` prop instead
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) — use `theme` prop instead
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block
 - Don't place multiple `theme="primary"` buttons in the same view
 - Don't use `theme="primary"` for destructive actions — use `theme="danger"` instead
 

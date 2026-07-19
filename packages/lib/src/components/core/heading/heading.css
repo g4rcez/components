@@ -1,0 +1,6 @@
+.__heading {
+    box-sizing: border-box;
+    color: inherit;
+    font-size: var(--var-typography-xl);
+    font-weight: var(--var-font-weight-bold);
+}

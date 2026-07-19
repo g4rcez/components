@@ -2,10 +2,9 @@
 import { HeroDemo } from "@/components/examples/hero-demo";
 import { FloatingAction } from "@/components/floating-action";
 import { Footer } from "@/components/footer";
-import { ArrowRightIcon, PaletteIcon, ShieldCheckIcon, LightningIcon } from "@phosphor-icons/react";
+import { Button, Tag } from "@g4rcez/components";
+import { ArrowRightIcon, LightningIcon, PaletteIcon, ShieldCheckIcon } from "@phosphor-icons/react";
 import Link from "next/link";
-import { Button } from "../../../lib/src/components/core/button";
-import { Tag } from "../../../lib/src/components/core/tag";
 
 export default function LandingPage() {
     return (

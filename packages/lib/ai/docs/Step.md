@@ -137,8 +137,8 @@ function CheckoutSteps({ step }: { step: number }) {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes for step styling — the component derives colors from CSS variables.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes for step styling — the component derives colors from CSS variables.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't hide critical information in steps the user hasn't yet seen.
 - Don't use `Step` for non-linear navigation without a clear sequential intent.
 

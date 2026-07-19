@@ -32,7 +32,7 @@ export type ZIndex = {
 type Shadows = "floating" | "card" | "notification" | "table";
 
 export type CardTokens = {
-    radius: string;
+    rounded: string;
     "padding-x": string;
     "padding-y": string;
     gap: string;
@@ -40,13 +40,14 @@ export type CardTokens = {
     "title-mb": string;
     "stats-icon-col-w": string;
     "stats-icon-col-p": string;
+    "stats-icon-size": string;
     "stats-content-gap": string;
     "stats-content-py": string;
     "title-text": string;
 };
 
 export type ButtonTokens = {
-    radius: string;
+    rounded: string;
     height: string;
     "padding-x": string;
     "padding-y": string;
@@ -75,7 +76,7 @@ export type ButtonTokens = {
 };
 
 export type AlertTokens = {
-    radius: string;
+    rounded: string;
     p: string;
     gap: string;
     "close-top": string;
@@ -83,58 +84,93 @@ export type AlertTokens = {
 };
 
 export type ModalTokens = {
-    radius: string;
-    "padding-x": string;
-    "padding-y": string;
-    gap: string;
-    "title-pb": string;
-    "body-py": string;
-    "footer-pt": string;
-    "footer-gap": string;
-    "sheet-pt": string;
-    "sheet-pb": string;
-    "close-p": string;
-    "close-top": string;
-    "close-right": string;
-    "confirm-py": string;
-    "sheet-handle-h": string;
-    "sheet-handle-py": string;
-    "sheet-pill-h": string;
-    "sheet-pill-w": string;
-    "sheet-pill-radius": string;
-    "drawer-resizer-h": string;
-    "drawer-resizer-w": string;
+    "surface-min-inline-size": string;
+    "surface-gap": string;
+    "surface-radius": string;
+    "surface-padding-block": string;
+    "dialog-max-inline-size-mobile": string;
+    "dialog-max-block-size": string;
+    "sheet-max-block-size": string;
+    "sheet-padding-block-start": string;
+    "sheet-padding-block-end": string;
     "resizer-radius": string;
-    "overlay-pt": string;
-    "overlay-p": string;
-    "dialog-max-w-mobile": string;
-    "sheet-max-h-svh": string;
-    "sheet-max-h-lvh": string;
-    "sheet-max-h-vh": string;
-    "title-text": string;
-    "overlay-h": string;
+    "focus-outline-offset": string;
+    "resizer-focus-ring-width": string;
+    "sheet-handle-inset-block-start": string;
+    "sheet-handle-block-size": string;
+    "sheet-handle-padding-block": string;
+    "drawer-resizer-inset-inline": string;
+    "drawer-resizer-inset-inline-start": string;
+    "drawer-resizer-block-size": string;
+    "drawer-resizer-inline-size": string;
+    "sheet-pill-block-size": string;
+    "sheet-pill-inline-size": string;
+    "overlay-block-size": string;
+    "overlay-padding-block-start": string;
+    "content-padding-inline": string;
+    "title-padding-block-end": string;
+    "title-font-size": string;
+    "title-line-height": string;
+    "body-padding-block": string;
+    "footer-padding-block-start": string;
+    "close-inset-inline-end": string;
+    "close-inset-block-start": string;
+    "close-button-padding": string;
+    "close-button-opacity": string;
+    "transition-duration": string;
+    "transition-timing": string;
+    "close-focus-ring-width": string;
+    "close-icon-size": string;
+    "confirm-dialog-max-inline-size": string;
+    "confirm-actions-gap": string;
+    "confirm-description-padding-block": string;
+    "overlay-background": string;
 };
 
 export type DropdownTokens = {
-    radius: string;
-    p: string;
-    "header-mb": string;
-    "max-h": string;
+    "surface-radius": string;
+    "surface-padding": string;
+    "header-margin-block-end": string;
+    "title-font-size": string;
+    "title-letter-spacing": string;
+    "list-max-block-size": string;
+    "surface-background": string;
+    "surface-border": string;
+    "surface-foreground": string;
 };
 
+export type ExpandTokens = Record<string, never>;
+
 export type TooltipTokens = {
-    radius: string;
-    p: string;
+    "surface-radius": string;
+    "surface-padding": string;
+    "surface-background": string;
+    "surface-foreground": string;
+    "surface-border": string;
 };
 
 export type MenuTokens = {
-    radius: string;
-    "item-p": string;
-    "max-h": string;
+    "surface-radius": string;
+    "surface-max-block-size": string;
+    "surface-background": string;
+    "surface-border": string;
+    "surface-foreground": string;
+    "item-padding": string;
+    "item-min-inline-size": string;
+    "item-outline-width": string;
+    "item-outline-offset": string;
+    "item-expanded-opacity": string;
+    "item-disabled-opacity": string;
+    "item-active-background": string;
+    "item-active-foreground": string;
+    "nested-indicator-margin-inline-start": string;
+    "nested-indicator-font-size": string;
+    "nested-icon-size": string;
+    "item-icon-size": string;
 };
 
 export type StatsTokens = {
-    radius: string;
+    rounded: string;
     p: string;
     gap: string;
     "icon-size": string;
@@ -142,11 +178,12 @@ export type StatsTokens = {
     "inner-gap": string;
     "footer-px": string;
     "footer-py": string;
+    "title-text": string;
     "value-text": string;
 };
 
 export type NotificationTokens = {
-    radius: string;
+    rounded: string;
     p: string;
     gap: string;
     "inner-gap": string;
@@ -161,41 +198,54 @@ export type NotificationTokens = {
 };
 
 export type CommandTokens = {
-    radius: string;
-    "item-p": string;
-    "item-gap": string;
-    "row-h": string;
-    "header-h": string;
-    "footer-h": string;
-    "footer-p": string;
-    "list-max-h": string;
+    "surface-background": string;
+    "surface-border": string;
+    "surface-foreground": string;
+    "dialog-max-inline-size-md": string;
+    "dialog-max-inline-size-lg": string;
+    "row-block-size": string;
+    "header-block-size": string;
+    "footer-block-size": string;
+    "footer-padding": string;
+    "list-max-block-size": string;
     "list-gap": string;
-    "list-my": string;
-    "group-px": string;
-    "group-pt": string;
-    "group-pb": string;
-    "icon-size": string;
-    "input-px": string;
-    "input-py": string;
-    "list-px": string;
+    "list-margin-block": string;
+    "list-padding-inline": string;
+    "group-padding-inline": string;
+    "group-padding-block-start": string;
+    "group-padding-block-end": string;
+    "group-label-foreground": string;
+    "item-radius": string;
+    "item-padding": string;
+    "item-content-gap": string;
+    "item-background-hover": string;
+    "search-icon-frame-size": string;
+    "search-icon-size": string;
+    "input-padding-inline": string;
+    "input-padding-block": string;
+    "input-outline-width": string;
+    "input-outline-offset": string;
+    "empty-foreground": string;
 };
 
 export type TagTokens = {
-    radius: string;
-    gap: string;
-    height: string;
-    "padding-x": string;
-    "padding-y": string;
-    "height-big": string;
-    "padding-x-big": string;
-    "padding-y-big": string;
-    "height-small": string;
-    "padding-x-small": string;
-    "padding-y-small": string;
-    "height-tiny": string;
-    "padding-x-tiny": string;
-    "padding-y-tiny": string;
-    "padding-icon": string;
+    "surface-gap": string;
+    "surface-radius": string;
+    "default-min-block-size": string;
+    "default-padding-inline": string;
+    "default-padding-block": string;
+    "big-min-block-size": string;
+    "big-padding-inline": string;
+    "big-padding-block": string;
+    "small-min-block-size": string;
+    "small-padding-inline": string;
+    "small-padding-block": string;
+    "small-font-size": string;
+    "tiny-min-block-size": string;
+    "tiny-padding-inline": string;
+    "tiny-padding-block": string;
+    "tiny-font-size": string;
+    "icon-padding": string;
     "indicator-size": string;
 };
 
@@ -217,46 +267,47 @@ export type CalendarTokens = {
 };
 
 export type TableTokens = {
-    radius: string;
-    "row-gap": string;
-    "row-pb": string;
-    "cell-px": string;
-    "loading-h": string;
-    "empty-h": string;
+    rounded: string;
     "groups-gap": string;
-    "metadata-mb": string;
-    "metadata-gap-x": string;
-    "metadata-gap-y": string;
-    "ops-py": string;
-    "ops-gap": string;
+    "inline-gap-tight": string;
     "filter-gap": string;
-    "pill-radius": string;
-    "pill-px": string;
-    "pill-py": string;
-    "pag-p": string;
-    "pag-gap": string;
-    "pag-items-gap": string;
-    "pag-item-px": string;
-    "pag-item-py": string;
-    "loading-bar-h": string;
-    "loading-bar-radius": string;
-    "filter-dot-size": string;
-    "filter-dot-mr": string;
     "filter-row-gap": string;
     "filter-inline-gap": string;
-    "filter-inline-py": string;
-    "filter-list-mt": string;
-    "cell-border": string;
-    "divider-w": string;
-    "groups-mt": string;
-    "groups-my": string;
-    "metadata-min-w": string;
-    "inline-gap-tight": string;
+    "filter-inline-padding-block": string;
+    "filter-list-margin-block-start": string;
+    "groups-margin-block-start": string;
+    "groups-margin-block": string;
+    "row-gap": string;
+    "row-padding-block-end": string;
     "cell-padding": string;
+    "cell-padding-inline": string;
+    "cell-border": string;
+    "head-cell-block-size": string;
+    "divider-width": string;
+    "pagination-padding": string;
+    "pagination-gap": string;
+    "pagination-items-gap": string;
+    "pagination-item-padding-inline": string;
+    "pagination-item-padding-block": string;
+    "metadata-margin-block-end": string;
+    "metadata-gap-inline": string;
+    "metadata-gap-block": string;
+    "metadata-min-inline-size": string;
+    "operations-padding-block": string;
+    "operations-gap": string;
+    "pill-radius": string;
+    "pill-padding-inline": string;
+    "pill-padding-block": string;
+    "filter-dot-size": string;
+    "filter-dot-margin-inline-end": string;
+    "loading-block-size": string;
+    "loading-bar-block-size": string;
+    "loading-bar-radius": string;
+    "empty-block-size": string;
 };
 
 export type SkeletonTokens = {
-    radius: string;
+    rounded: string;
     height: string;
     width: string;
     "cell-h": string;
@@ -276,32 +327,138 @@ export type TypographyTokens = {
 };
 
 export type InputTokens = {
-    radius: string;
-    height: string;
-    "padding-x": string;
-    "padding-y": string;
-    gap: string;
-    text: string;
-    "label-text": string;
-    "hint-text": string;
-    "label-mb": string;
-    "hint-mt": string;
-    inline: string;
-    "slot-gap": string;
-    "slot-pl": string;
-    "slot-pr": string;
+    "field-icon-size": string;
+    "field-small-icon-size": string;
+    "field-label-row-gap": string;
+    "field-label-meta-gap": string;
+    "field-tooltip-icon-size": string;
+    "field-small-tooltip-icon-size": string;
+    "field-tooltip-max-inline-size": string;
+    "field-status-min-inline-size": string;
+    "field-small-status-min-inline-size": string;
+    "field-status-block-size": string;
+    "field-small-status-block-size": string;
+    "field-status-indicator-size": string;
+    "field-small-status-indicator-size": string;
+    "field-label-gap": string;
+    "field-label-font-size": string;
+    "field-small-label-font-size": string;
+    "field-optional-opacity": string;
+    "field-control-column-gap": string;
+    "field-small-control-column-gap": string;
+    "field-control-row-gap": string;
+    "field-small-control-row-gap": string;
+    "field-control-radius": string;
+    "field-slot-gap": string;
+    "field-small-slot-gap": string;
+    "field-slot-padding-inline-start": string;
+    "field-small-slot-padding-inline-start": string;
+    "field-slot-padding-inline-end": string;
+    "field-small-slot-padding-inline-end": string;
+    "field-hint-margin-block-start": string;
+    "field-hint-font-size": string;
+    "field-small-hint-font-size": string;
+    "free-text-control-height": string;
+    "free-text-small-control-height": string;
+    "free-text-surface-radius": string;
+    "free-text-surface-padding-inline": string;
+    "free-text-small-surface-padding-inline": string;
+    "free-text-surface-padding-block": string;
+    "free-text-small-surface-padding-block": string;
+    "free-text-font-size": string;
+    "free-text-small-font-size": string;
+    "free-text-outline-width": string;
+    "free-text-outline-offset": string;
+    "free-text-placeholder-foreground": string;
+    "free-text-error-placeholder-foreground": string;
+};
+
+export type AutocompleteTokens = {
+    "list-max-block-size": string;
+    "panel-radius": string;
+    "option-min-block-size": string;
+    "option-padding": string;
+    "option-background-hover": string;
+    "option-active-background": string;
+    "option-active-foreground": string;
+    "option-selected-background": string;
+    "option-selected-foreground": string;
+    "actions-gap": string;
+    "action-padding": string;
+    "action-padding-md": string;
+    "panel-max-block-size": string;
+    "panel-background": string;
+    "panel-border": string;
+    "panel-foreground": string;
+    "panel-transition-timing": string;
+    "empty-border": string;
+    "empty-foreground": string;
+};
+
+export type MultiSelectTokens = {
+    "field-min-inline-size": string;
+    "tag-remove-icon-size": string;
+    "tags-gap": string;
+    "actions-gap": string;
+    "panel-transition-timing": string;
+    "search-margin-block-end": string;
+    "option-padding": string;
+    "results-max-block-size": string;
+    "option-background-hover": string;
+    "option-selected-background": string;
+    "option-selected-foreground": string;
+    "checkbox-margin-inline-end": string;
+    "footer-gap": string;
 };
 
 export type CheckboxTokens = {
-    size: string;
-    radius: string;
-    gap: string;
-    "hint-text": string;
+    "label-gap": string;
+    "control-size": string;
+    "control-radius": string;
+    "control-foreground": string;
+    "control-background": string;
+    "control-border": string;
+    "control-border-width": string;
+    "mark-foreground": string;
+    "mark-stroke-width": string;
+    "mark-inline-size": string;
+    "mark-block-size": string;
+    "indeterminate-mark-inline-size": string;
+    "focus-ring": string;
+    "focus-ring-width": string;
+    "focus-ring-offset": string;
+    "disabled-opacity": string;
+    "error-font-size": string;
+};
+
+export type DatePickerTokens = {
+    "calendar-icon-size": string;
+    "panel-gap": string;
+    "panel-padding": string;
+    "presets-inline-size": string;
+    "preset-padding-block": string;
+    "preset-padding-inline": string;
+    "preset-selected-background": string;
+    "preset-font-size": string;
+    "action-button-padding-block": string;
+    "action-button-padding-inline": string;
 };
 
 export type RadioboxTokens = {
-    size: string;
-    gap: string;
+    "label-gap": string;
+    "control-size": string;
+    "control-foreground": string;
+    "control-background": string;
+    "control-border": string;
+    "control-border-width": string;
+    "mark-size": string;
+    "mark-foreground": string;
+    "focus-ring": string;
+    "focus-ring-width": string;
+    "focus-ring-offset": string;
+    "disabled-opacity": string;
+    "transition-duration": string;
+    "transition-timing": string;
 };
 
 export type SwitchTokens = {
@@ -321,27 +478,38 @@ export type SliderTokens = {
 };
 
 export type FileUploadTokens = {
-    p: string;
-    radius: string;
-    gap: string;
+    "surface-padding": string;
+    "surface-radius": string;
+    "content-gap": string;
     "thumb-size": string;
-    "text-name": string;
-    "text-size": string;
-    "delete-py": string;
-    "inner-gap": string;
-    "thumb-my": string;
-    "thumb-gap": string;
+    "thumb-radius": string;
+    "thumb-icon-size": string;
+    "file-icon-size": string;
+    "remove-icon-size": string;
+    "idle-icon-size": string;
+    "preview-button-margin": string;
+    "item-border-width": string;
+    "actions-padding-block": string;
+    "remove-button-size": string;
+    "list-gap": string;
+    "idle-icon-gap": string;
+    "idle-copy-margin-block": string;
+    "idle-copy-gap": string;
+    "name-font-size": string;
+    "size-font-size": string;
+    "viewer-media-max-inline-size": string;
 };
 
 export type ProgressTokens = {
     "track-h": string;
-    radius: string;
+    rounded: string;
 };
 
 export type SpinnerTokens = {
-    size: string;
-    border: string;
-    "container-p": string;
+    "indicator-size": string;
+    "indicator-border-width": string;
+    "container-padding": string;
+    "spin-duration": string;
 };
 
 export type EmptyTokens = {
@@ -351,7 +519,7 @@ export type EmptyTokens = {
 };
 
 export type ListTokens = {
-    radius: string;
+    rounded: string;
     "card-p": string;
     "card-py": string;
     "card-pb": string;
@@ -366,14 +534,15 @@ export type ListTokens = {
 };
 
 export type TimelineTokens = {
-    "item-pb": string;
-    "connector-left": string;
-    "connector-top": string;
-    "connector-w": string;
+    "item-padding-block-end": string;
+    "connector-inset-inline-start": string;
+    "connector-inset-block-start": string;
+    "connector-inline-size": string;
+    "content-gap": string;
     "icon-size": string;
-    "icon-p": string;
-    "right-gap": string;
-    "right-px": string;
+    "icon-padding": string;
+    "actions-gap": string;
+    "actions-padding-inline": string;
 };
 
 export type StepTokens = {
@@ -385,10 +554,12 @@ export type StepTokens = {
 };
 
 export type TabsTokens = {
-    "header-mb": string;
-    "item-px": string;
-    "item-py": string;
-    "divider-h": string;
+    "header-margin-block-end": string;
+    "tab-padding-inline": string;
+    "tab-padding-block": string;
+    "divider-block-size": string;
+    "active-divider-block-size": string;
+    "item-transition-duration": string;
 };
 
 export type ShortcutTokens = {
@@ -398,20 +569,29 @@ export type ShortcutTokens = {
 
 export type ToolbarTokens = {
     bottom: string;
-    radius: string;
+    rounded: string;
     p: string;
 };
 
 export type WizardTokens = {
-    w: string;
-    gap: string;
-    radius: string;
-    p: string;
-    "footer-pt": string;
+    "surface-inline-size": string;
+    "surface-max-inline-size": string;
+    "surface-gap": string;
+    "surface-radius": string;
+    "surface-padding": string;
+    "surface-background": string;
+    "surface-border": string;
+    "surface-foreground": string;
+    "overlay-background": string;
+    "footer-padding-block-start": string;
+    "label-font-size": string;
+    "label-foreground": string;
+    "label-foreground-hover": string;
     "actions-gap": string;
-    "counter-right": string;
-    "counter-top": string;
-    "label-text": string;
+    "counter-inset-inline-end": string;
+    "counter-inset-block-start": string;
+    "focus-outline-width": string;
+    "focus-outline-offset": string;
 };
 
 export type InfoTokens = {
@@ -430,39 +610,39 @@ export type PageCalendarTokens = {
     "title-text": string;
     "week-label-text": string;
     "nav-gap": string;
-    "nav-btn-gap": string;
+    "nav-button-gap": string;
     "today-radius": string;
-    "today-px": string;
-    "today-py": string;
-    "today-text": string;
+    "today-padding-inline": string;
+    "today-padding-block": string;
+    "today-font-size": string;
     "view-switch-radius": string;
     "filter-gap": string;
-    "filter-text": string;
+    "filter-font-size": string;
     "dot-size": string;
     "dot-bottom": string;
     "day-header-gap": string;
-    "day-header-px": string;
-    "day-header-py": string;
+    "day-header-padding-inline": string;
+    "day-header-padding-block": string;
     "day-badge-size": string;
-    "gutter-w": string;
-    "side-px": string;
+    "gutter-width": string;
+    "side-padding-inline": string;
     "detail-gap": string;
-    "detail-p": string;
-    "weekday-py": string;
-    "weekday-text": string;
-    "cell-min-h": string;
+    "detail-padding": string;
+    "weekday-padding-block": string;
+    "weekday-font-size": string;
+    "cell-min-block-size": string;
     "cell-gap": string;
-    "cell-p": string;
+    "cell-padding": string;
     "month-badge-size": string;
-    "month-badge-text": string;
-    "overflow-text": string;
+    "month-badge-font-size": string;
+    "overflow-font-size": string;
     "week-badge-size": string;
-    "week-badge-text": string;
-    "hour-text": string;
+    "week-badge-font-size": string;
+    "hour-font-size": string;
     "pill-radius": string;
-    "pill-text": string;
+    "pill-font-size": string;
     "cell-gap-tight": string;
-    "nav-mr": string;
+    "filter-label-margin-inline-end": string;
 };
 
 export type ComponentTokens = {
@@ -471,6 +651,7 @@ export type ComponentTokens = {
     alert: AlertTokens;
     modal: ModalTokens;
     dropdown: DropdownTokens;
+    expand: ExpandTokens;
     tooltip: TooltipTokens;
     menu: MenuTokens;
     stats: StatsTokens;
@@ -482,7 +663,10 @@ export type ComponentTokens = {
     skeleton: SkeletonTokens;
     typography: TypographyTokens;
     input: InputTokens;
+    autocomplete: AutocompleteTokens;
+    "multi-select": MultiSelectTokens;
     checkbox: CheckboxTokens;
+    "date-picker": DatePickerTokens;
     radiobox: RadioboxTokens;
     switch: SwitchTokens;
     slider: SliderTokens;

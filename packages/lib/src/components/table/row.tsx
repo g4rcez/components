@@ -1,8 +1,11 @@
-import React, { Fragment, PropsWithChildren, useRef, useState } from "react";
+import type React from "react";
+import { Fragment, type PropsWithChildren, useRef, useState } from "react";
 import { Is } from "sidekicker";
+import { css } from "../../lib/dom";
 import { path } from "../../lib/fns";
-import { SkeletonCell } from "../display/skeleton";
-import { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
+import { SkeletonCell } from "../display/skeleton/skeleton";
+import { tableRowStyles } from "./row.styles";
+import type { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
 
 type ItemContentContext<T extends Record<string, unknown>> = {
     cols: Col<T>[];
@@ -14,10 +17,12 @@ type ItemContentContext<T extends Record<string, unknown>> = {
 const RowAside = (props: PropsWithChildren) => {
     const parentRef = useRef<HTMLDivElement>(null);
     const ref = useRef<HTMLDivElement>(null);
-    const [className, setClassName] = useState("opacity-0");
-    const ariaHidden = className === "opacity-0";
+    const hiddenClassName = `${tableRowStyles.slots.aside}-hidden`;
+    const visibleClassName = `${tableRowStyles.slots.aside}-visible`;
+    const [className, setClassName] = useState(hiddenClassName);
+    const ariaHidden = className === hiddenClassName;
 
-    const onLeave = () => setClassName("opacity-0");
+    const onLeave = () => setClassName(hiddenClassName);
 
     const onEnter = () => {
         const child = ref.current;
@@ -25,7 +30,7 @@ const RowAside = (props: PropsWithChildren) => {
         if (child !== null && parent !== null) {
             parent.style.left = `-${child.getBoundingClientRect().width + 4}px`;
         }
-        setClassName("opacity-100");
+        setClassName(visibleClassName);
     };
 
     return (
@@ -36,9 +41,9 @@ const RowAside = (props: PropsWithChildren) => {
             data-component="cell-aside"
             inert={ariaHidden ? true : undefined}
             tabIndex={ariaHidden ? -1 : undefined}
-            className={`group-table-cell-aside absolute inset-0 top-0 flex h-full w-full items-stretch transition-opacity duration-300 ease-in-out ${className}`}
+            className={css(tableRowStyles.slots.aside, tableRowStyles.slots["aside-overlay"], className)}
         >
-            <div ref={ref} className="isolate block">
+            <div ref={ref} className={tableRowStyles.slots["aside-content"]}>
                 {props.children}
             </div>
         </div>
@@ -63,15 +68,21 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={`typography group-table-cell flex border-collapse flex-col whitespace-pre-wrap border border-y border-b border-table-border p-table-cell-padding md:table-cell md:border-b-0 md:border-r md:border-l-transparent md:last:border-r-transparent ${className}`}
+                        className={css(
+                            "typography",
+                            tableRowStyles.slots.cell,
+                            `${tableRowStyles.base}__border`,
+                            tableRowStyles.slots["cell-content"],
+                            className
+                        )}
                     >
                         {exposeAside ? (
                             <RowAside>
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className="text-typography-sm block font-bold leading-tight md:hidden">{col.thead}</span>
-                        <span className="relative">
+                        <span className={tableRowStyles.slots["cell-label"]}>{col.thead}</span>
+                        <span className={tableRowStyles.slots["cell-frame"]}>
                             {loading ? (
                                 SkeletonCell
                             ) : Component ? (

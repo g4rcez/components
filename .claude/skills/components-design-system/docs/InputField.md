@@ -153,8 +153,8 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `InputField` wrappers — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `InputField` wrappers — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `InputField` for non-form content; it is specifically designed for labeled input controls.
 - Don't skip the `title` prop — omitting it hides the label but may break screen reader associations.
 
@@ -175,6 +175,6 @@ import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react";
 
 ## Notes
 
-- `InputField` uses Tailwind `group` classes to synchronize hover and focus states between the outer wrapper and inner elements. The `group-focus-within:border-primary` and `group-hover:border-primary` patterns rely on this.
+- `InputField` uses state coordination classes to synchronize hover and focus states between the outer wrapper and inner elements. The `group-focus-within:border-primary` and `group-hover:border-primary` patterns rely on this.
 - The optional text label ("Optional") is sourced from the translation system via `useTranslations`, making it localizable.
 - `reportStatus` defaults to the value configured in `useTweaks().input.iconFeedback`, allowing a global default.

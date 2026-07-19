@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Stats } from "../../../../../lib/src";
+import { Card, Stats } from "@g4rcez/components";
 import { UsersIcon, CurrencyDollarIcon, ChartLineUpIcon, ArrowUpIcon, ArrowDownIcon } from "@phosphor-icons/react";
 
 export default function StatsPage() {

@@ -12,35 +12,23 @@ import {
     SquaresFourIcon,
     UsersThreeIcon,
 } from "@phosphor-icons/react";
-import { CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
+import { Alert, Button, Card, Empty, Stats, StatsCard, Step, Steps, Tab, Tabs, Tag, Timeline, TimelineItem } from "@g4rcez/components";
 import {
-    Alert,
-    Button,
-    Card,
-    Empty,
-    Stats,
-    StatsCard,
-    Step,
-    Steps,
-    Tab,
-    Tabs,
-    Tag,
-    Timeline,
-    TimelineItem,
+    type DesignTokens,
     createCssProperties,
     defaultDarkTheme,
     defaultLightTheme,
-    type DesignTokens,
-} from "../../../../../lib/src";
-import { Checkbox } from "../../../../../lib/src/components/form/checkbox";
-import { Input } from "../../../../../lib/src/components/form/input";
-import { Progress } from "../../../../../lib/src/components/display/progress";
-import { Radiobox } from "../../../../../lib/src/components/form/radiobox";
-import { Shortcut } from "../../../../../lib/src/components/display/shortcut";
-import { Skeleton } from "../../../../../lib/src/components/display/skeleton";
-import { Switch } from "../../../../../lib/src/components/form/switch";
-import { CodeBlock } from "@/components/code-block";
+    Checkbox,
+    Input,
+    Progress,
+    Radiobox,
+    Shortcut,
+    Skeleton,
+    Switch,
+} from "@g4rcez/components";
 import { DocsLayout } from "@/components/docs-layout";
+import { CodeBlock } from "@/components/code-block";
 
 type Mode = "dark" | "light";
 
@@ -69,7 +57,6 @@ export const ${constName}: DesignTokens = ${JSON.stringify(theme, null, 2)};
 
 const tailwindSnippet = `import type { Config } from "tailwindcss";
 import { createDesignTokens, parsers } from "@g4rcez/components";
-import preset from "@g4rcez/components/preset.tailwind";
 import { LIGHT_THEME } from "./theme/light";
 
 const COLORS = createDesignTokens(
@@ -78,7 +65,6 @@ const COLORS = createDesignTokens(
 );
 
 const config: Config = {
-  presets: [preset],
   content: ["./src/**/*.{ts,tsx}"],
   theme: { extend: { colors: COLORS } },
 };
@@ -590,10 +576,10 @@ function OutputPane({ darkCode, lightCode }: OutputPaneProps) {
 }
 
 type OutputBlockProps = {
+    code: string;
     title: string;
     description: string;
     Icon: React.ComponentType<{ className?: string }>;
-    code: string;
 };
 
 function OutputBlock({ title, description, Icon, code }: OutputBlockProps) {

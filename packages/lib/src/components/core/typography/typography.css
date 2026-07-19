@@ -1,0 +1,79 @@
+.__typography {
+    box-sizing: border-box;
+    color: inherit;
+}
+
+.__typography__paragraph {
+    font-size: var(--var-typography-paragraph-font-size);
+    line-height: var(--var-typography-paragraph-line-height);
+}
+
+.__typography__description {
+    margin-bottom: var(--var-typography-description-margin-block-end);
+    color: var(--var-color-muted-foreground);
+    font-size: var(--var-typography-sm);
+}
+
+.__typography__info {
+    display: flex;
+    gap: var(--var-typography-info-gap);
+}
+
+.__typography__info--row {
+    align-items: center;
+    flex-direction: row;
+}
+
+.__typography__info--column {
+    flex-direction: column;
+}
+
+.__typography__info-label {
+    font-size: var(--var-typography-info-label-font-size);
+    font-weight: var(--var-font-weight-medium);
+    letter-spacing: var(--var-typography-info-label-letter-spacing);
+}
+
+.__typography__info-value {
+    font-size: var(--var-typography-info-value-font-size);
+}
+
+.__typography__info-value--row {
+    width: fit-content;
+}
+
+.__typography__info-value--column {
+    width: 100%;
+    font-size: var(--var-typography-info-secondary-font-size);
+}
+
+.__typography__info-value--disabled {
+    color: var(--var-color-muted-foreground);
+}
+
+.__typography__page-title {
+    font-size: var(--var-typography-page-title-font-size);
+    font-weight: var(--var-font-weight-bold);
+    letter-spacing: var(--var-typography-page-title-letter-spacing);
+}
+
+.__typography__page-description {
+    color: var(--var-color-muted-foreground);
+}
+
+.__typography__page-header {
+    display: flex;
+    min-width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--var-typography-page-header-gap);
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.__typography__page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--var-typography-page-header-actions-gap);
+    flex-wrap: wrap;
+}

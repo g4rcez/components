@@ -1,0 +1,79 @@
+.__tabs {
+    box-sizing: border-box;
+}
+
+.__tabs__container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding-block-start: 0;
+}
+
+.__tabs__header {
+    position: relative;
+    margin-block-end: var(--var-tabs-header-margin-block-end);
+    overflow-x: auto;
+}
+
+.__tabs__divider {
+    position: absolute;
+    inset-block-end: 0;
+    width: 100%;
+    block-size: var(--var-tabs-divider-block-size);
+    background-color: var(--var-color-border);
+}
+
+.__tabs__nav {
+    min-width: 0;
+}
+
+.__tabs__list {
+    display: flex;
+    width: 0;
+    min-width: 100%;
+    flex: 1 1 0%;
+    justify-content: flex-start;
+    overflow-x: auto;
+}
+
+.__tabs__item {
+    position: relative;
+    width: fit-content;
+    border-color: transparent;
+    border-bottom-width: var(--var-tabs-divider-block-size);
+    transition-property: color;
+    transition-duration: var(--var-tabs-item-transition-duration);
+    transition-timing-function: var(--var-tabs-item-transition-timing);
+}
+
+.__tabs__item--active {
+    color: var(--var-color-primary);
+    border-bottom-width: var(--var-tabs-active-divider-block-size);
+}
+
+.__tabs__item--disabled {
+    color: var(--var-color-muted-foreground);
+}
+
+.__tabs__tab {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    padding-block: var(--var-tabs-tab-padding-block);
+    padding-inline: var(--var-tabs-tab-padding-inline);
+}
+
+.__tabs__tab:disabled {
+    cursor: not-allowed;
+}
+
+.__tabs__indicator {
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: calc(0px - var(--var-tabs-divider-block-size));
+    z-index: var(--var-layer-normal);
+    block-size: var(--var-tabs-active-divider-block-size);
+    border-radius: var(--var-rounded-full) var(--var-rounded-full) 0 0;
+    background-color: var(--var-color-primary);
+}

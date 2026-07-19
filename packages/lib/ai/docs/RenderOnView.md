@@ -114,8 +114,8 @@ const HeavyComponent = lazy(() => import("./HeavyComponent"));
 
 - Don't use `RenderOnView` for above-the-fold content — it adds an unnecessary observer
 - Don't rely on it for critical content that must be in the initial HTML (SEO, LCP elements)
-- Don't pass raw Tailwind color classes (`bg-white`, `text-gray-800`) to children or wrappers — use design tokens
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block
+- Don't pass raw utility color classes (`bg-white`, `text-gray-800`) to children or wrappers — use design tokens
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block
 
 ## Accessibility
 

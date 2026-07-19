@@ -210,8 +210,8 @@ notify("Sync complete.", { id: SYNC_ID, theme: "success", timeout: 3000 });
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) — use `theme` instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) — use `theme` instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
 - Don't use notifications for information that must be acknowledged before proceeding — use a `Modal` instead.
 - Don't show more than 3–5 notifications at a time; configure `max` accordingly.
 - Don't use notifications for persistent status indicators — use `Alert` or a status bar.

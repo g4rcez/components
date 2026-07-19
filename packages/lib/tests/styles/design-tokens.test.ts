@@ -5,7 +5,7 @@ import { defaultLightTheme } from "../../src/styles/theme";
 describe("createTokenStyles component tokens", () => {
     it("emits default component CSS variables", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--card-radius: 1rem");
+        expect(css).toContain("--card-rounded: 1rem");
         expect(css).toContain("--button-padding-x: 1rem");
     });
 
@@ -14,19 +14,19 @@ describe("createTokenStyles component tokens", () => {
             ...defaultLightTheme,
             components: {
                 ...defaultLightTheme.components,
-                card: { ...defaultLightTheme.components.card, radius: "4px" },
+                card: { ...defaultLightTheme.components.card, rounded: "4px" },
             },
         });
-        expect(css).toContain("--card-radius: 4px");
+        expect(css).toContain("--card-rounded: 4px");
     });
 
     it("emits per-component spacing defaults beyond card and button", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--alert-p: 1rem");
-        expect(css).toContain("--modal-padding-x: 2rem");
+        expect(css).toContain("--modal-content-padding-inline: 2rem");
     });
 
-    it("emits typography defaults that fill Tailwind gaps", () => {
+    it("emits typography defaults", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--typography-xs: 0.75rem");
         expect(css).toContain("--typography-2xl: 1.5rem");
@@ -48,12 +48,16 @@ describe("createTokenStyles component tokens", () => {
 
     it("emits form component defaults", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--input-radius: 0.375rem");
-        expect(css).toContain("--input-padding-x: 0.5rem");
-        expect(css).toContain("--checkbox-size: 1rem");
+        expect(css).toContain("--input-field-control-radius: 0.375rem");
+        expect(css).toContain("--input-free-text-surface-padding-inline: 0.5rem");
+        expect(css).toContain("--checkbox-control-size: 1rem");
+        expect(css).toContain("--date-picker-calendar-icon-size: 1rem");
         expect(css).toContain("--switch-track-w: 2.75rem");
         expect(css).toContain("--slider-track-h: 0.5rem");
-        expect(css).toContain("--file-upload-p: 1.5rem");
+        expect(css).toContain("--file-upload-surface-padding: 1.5rem");
+        expect(css).toContain("--file-upload-surface-radius: 0.5rem");
+        expect(css).toContain("--file-upload-thumb-radius: 50%");
+        expect(css).toContain("--file-upload-thumb-icon-size: 1.75rem");
     });
 
     it("honors input token overrides", () => {
@@ -61,10 +65,10 @@ describe("createTokenStyles component tokens", () => {
             ...defaultLightTheme,
             components: {
                 ...defaultLightTheme.components,
-                input: { ...defaultLightTheme.components.input, radius: "12px" },
+                input: { ...defaultLightTheme.components.input, "field-control-radius": "12px" },
             },
         });
-        expect(css).toContain("--input-radius: 12px");
+        expect(css).toContain("--input-field-control-radius: 12px");
     });
 
     it("emits typography scale fillers", () => {
@@ -78,19 +82,26 @@ describe("createTokenStyles component tokens", () => {
     it("emits new component token groups", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--progress-track-h: 1.5rem");
-        expect(css).toContain("--spinner-size: 3rem");
-        expect(css).toContain("--spinner-border: 0.25rem");
+        expect(css).toContain("--spinner-indicator-size: 3rem");
+        expect(css).toContain("--spinner-indicator-border-width: 0.25rem");
         expect(css).toContain("--empty-px: 2rem");
+        expect(css).toContain("--autocomplete-option-padding: 0.625rem");
+        expect(css).toContain("--autocomplete-panel-background: hsla(0, 0%, 100%)");
+        expect(css).toContain("--multi-select-option-padding: 0.625rem");
+        expect(css).toContain("--checkbox-control-foreground: hsla(201, 49%, 36%)");
+        expect(css).toContain("--checkbox-label-gap: 0.5rem");
         expect(css).toContain("--list-card-p: 1.5rem");
         expect(css).toContain("--timeline-icon-size: 3rem");
+        expect(css).toContain("--timeline-item-padding-block-end: 3rem");
         expect(css).toContain("--step-size: 2.5rem");
-        expect(css).toContain("--tabs-item-px: 2.5rem");
+        expect(css).toContain("--tabs-tab-padding-inline: 2.5rem");
         expect(css).toContain("--shortcut-gap: 0.25rem");
-        expect(css).toContain("--toolbar-radius: 0.5rem");
-        expect(css).toContain("--wizard-w: 20rem");
+        expect(css).toContain("--toolbar-rounded: 0.5rem");
+        expect(css).toContain("--wizard-surface-inline-size: 20rem");
+        expect(css).toContain("--wizard-surface-padding: 1rem");
         expect(css).toContain("--info-gap: 0.25rem");
         expect(css).toContain("--page-calendar-badge-size: 3rem");
-        expect(css).toContain("--page-calendar-cell-min-h: 8rem");
+        expect(css).toContain("--page-calendar-cell-min-block-size: 8rem");
     });
 
     it("honors progress token overrides", () => {
@@ -138,14 +149,16 @@ describe("createTokenStyles component tokens", () => {
     it("emits per-component text-size tokens (Bucket B additions)", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--card-title-text: 2.25rem");
+        expect(css).toContain("--stats-title-text: 1rem");
         expect(css).toContain("--stats-value-text: 2.25rem");
         expect(css).toContain("--list-title-text: 1.5rem");
-        expect(css).toContain("--modal-title-text: 1.875rem");
+        expect(css).toContain("--modal-title-font-size: 1.875rem");
     });
 
     it("emits per-component dimension tokens (Bucket B additions)", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--tabs-divider-h: 1px");
+        expect(css).toContain("--tabs-divider-block-size: 1px");
+        expect(css).toContain("--tabs-active-divider-block-size: 2px");
         expect(css).toContain("--step-connector-h: 2px");
         expect(css).toContain("--calendar-weekday-text: 0.75rem");
         expect(css).toContain("--calendar-cell-text: 0.75rem");
@@ -160,20 +173,18 @@ describe("createTokenStyles component tokens", () => {
 
     it("emits modal responsive constraint tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--modal-dialog-max-w-mobile: 90%");
-        expect(css).toContain("--modal-sheet-max-h-svh: calc(100svh - 5%)");
-        expect(css).toContain("--modal-sheet-max-h-lvh: calc(100lvh - 10%)");
-        expect(css).toContain("--modal-sheet-max-h-vh: calc(100vh - 15%)");
-        expect(css).toContain("--modal-overlay-h: 100dvh");
+        expect(css).toContain("--modal-dialog-max-inline-size-mobile: 90%");
+        expect(css).toContain("--modal-sheet-max-block-size: calc(100vh - 15%)");
+        expect(css).toContain("--modal-overlay-block-size: 100dvh");
     });
 
     it("emits table structural tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--table-cell-border: 1px");
-        expect(css).toContain("--table-divider-w: 1px");
-        expect(css).toContain("--table-groups-mt: 1rem");
-        expect(css).toContain("--table-groups-my: 1rem");
-        expect(css).toContain("--table-metadata-min-w: 1ch");
+        expect(css).toContain("--table-divider-width: 1px");
+        expect(css).toContain("--table-groups-margin-block-start: 1rem");
+        expect(css).toContain("--table-groups-margin-block: 1rem");
+        expect(css).toContain("--table-metadata-min-inline-size: 1ch");
         expect(css).toContain("--table-inline-gap-tight: 0.25rem");
         expect(css).toContain("--table-cell-padding: 0.75rem");
     });
@@ -181,12 +192,15 @@ describe("createTokenStyles component tokens", () => {
     it("emits page-calendar layout tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
         expect(css).toContain("--page-calendar-cell-gap-tight: 0.125rem");
-        expect(css).toContain("--page-calendar-nav-mr: 0.25rem");
+        expect(css).toContain("--page-calendar-filter-label-margin-inline-end: 0.25rem");
     });
 
-    it("emits command list-px token", () => {
+    it("emits command palette semantic tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--command-list-px: 0.5rem");
+        expect(css).toContain("--command-surface-background: hsla(0, 0%, 100%)");
+        expect(css).toContain("--command-list-padding-inline: 0.5rem");
+        expect(css).toContain("--command-row-block-size: 2.5rem");
+        expect(css).toContain("--command-search-icon-size: 1rem");
     });
 
     it("button radius-squared emits canonical 0px (not 0rem)", () => {
@@ -219,10 +233,15 @@ describe("createTokenStyles component tokens", () => {
 
     it("emits dropdown tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--dropdown-radius: 0.5rem");
-        expect(css).toContain("--dropdown-p: 1rem");
-        expect(css).toContain("--dropdown-header-mb: 0.5rem");
-        expect(css).toContain("--dropdown-max-h: 24rem");
+        expect(css).toContain("--dropdown-surface-radius: 0.5rem");
+        expect(css).toContain("--dropdown-surface-padding: 1rem");
+        expect(css).toContain("--dropdown-header-margin-block-end: 0.5rem");
+        expect(css).toContain("--dropdown-title-font-size: 1.5rem");
+        expect(css).toContain("--dropdown-title-letter-spacing: 0.025em");
+        expect(css).toContain("--dropdown-list-max-block-size: 24rem");
+        expect(css).toContain("--dropdown-surface-background: hsla(0, 0%, 100%)");
+        expect(css).toContain("--dropdown-surface-border: hsla(240, 6%, 90%)");
+        expect(css).toContain("--dropdown-surface-foreground: hsla(240, 10%, 4%)");
     });
 
     it("honors dropdown token overrides", () => {
@@ -230,33 +249,44 @@ describe("createTokenStyles component tokens", () => {
             ...defaultLightTheme,
             components: {
                 ...defaultLightTheme.components,
-                dropdown: { ...defaultLightTheme.components.dropdown, "max-h": "32rem" },
+                dropdown: { ...defaultLightTheme.components.dropdown, "list-max-block-size": "32rem" },
             },
         });
-        expect(css).toContain("--dropdown-max-h: 32rem");
+        expect(css).toContain("--dropdown-list-max-block-size: 32rem");
     });
 
     it("emits tooltip tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--tooltip-radius: 0.5rem");
-        expect(css).toContain("--tooltip-p: 0.75rem");
+        expect(css).toContain("--tooltip-surface-radius: 0.5rem");
+        expect(css).toContain("--tooltip-surface-padding: 0.75rem");
+        expect(css).toContain("--tooltip-surface-background: hsla(240, 10%, 4%)");
+        expect(css).toContain("--tooltip-surface-foreground: hsla(0, 0%, 100%)");
+        expect(css).toContain("--tooltip-surface-border: hsla(240, 10%, 4%)");
     });
 
     it("emits menu tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--menu-radius: 0.5rem");
-        expect(css).toContain("--menu-item-p: 0.625rem");
-        expect(css).toContain("--menu-max-h: 20rem");
+        expect(css).toContain("--menu-surface-radius: 0.5rem");
+        expect(css).toContain("--menu-surface-max-block-size: 20rem");
+        expect(css).toContain("--menu-surface-background: hsla(0, 0%, 100%)");
+        expect(css).toContain("--menu-surface-border: hsla(240, 6%, 90%)");
+        expect(css).toContain("--menu-surface-foreground: hsla(240, 10%, 4%)");
+        expect(css).toContain("--menu-item-padding: 0.625rem");
+        expect(css).toContain("--menu-item-min-inline-size: 9rem");
+        expect(css).toContain("--menu-nested-icon-size: 0.875rem");
+        expect(css).toContain("--menu-item-icon-size: 1rem");
     });
 
     it("emits tag tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--tag-radius: 2rem");
-        expect(css).toContain("--tag-height: 2rem");
-        expect(css).toContain("--tag-padding-x: 1rem");
-        expect(css).toContain("--tag-padding-y: 0.5rem");
-        expect(css).toContain("--tag-height-small: 1.5rem");
-        expect(css).toContain("--tag-height-tiny: 1.25rem");
+        expect(css).toContain("--tag-surface-radius: 2rem");
+        expect(css).toContain("--tag-default-min-block-size: 2rem");
+        expect(css).toContain("--tag-default-padding-inline: 1rem");
+        expect(css).toContain("--tag-default-padding-block: 0.5rem");
+        expect(css).toContain("--tag-small-min-block-size: 1.5rem");
+        expect(css).toContain("--tag-tiny-min-block-size: 1.25rem");
+        expect(css).toContain("--tag-small-font-size: 0.875rem");
+        expect(css).toContain("--tag-tiny-font-size: 0.75rem");
         expect(css).toContain("--tag-indicator-size: 0.5rem");
     });
 
@@ -265,21 +295,22 @@ describe("createTokenStyles component tokens", () => {
             ...defaultLightTheme,
             components: {
                 ...defaultLightTheme.components,
-                tag: { ...defaultLightTheme.components.tag, radius: "0.25rem" },
+                tag: { ...defaultLightTheme.components.tag, "surface-radius": "0.25rem" },
             },
         });
-        expect(css).toContain("--tag-radius: 0.25rem");
+        expect(css).toContain("--tag-surface-radius: 0.25rem");
     });
 
     it("emits radiobox tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--radiobox-size: 1rem");
-        expect(css).toContain("--radiobox-gap: 0.5rem");
+        expect(css).toContain("--radiobox-control-size: 1rem");
+        expect(css).toContain("--radiobox-label-gap: 0.5rem");
+        expect(css).toContain("--radiobox-control-foreground: hsla(201, 49%, 36%)");
     });
 
     it("emits skeleton tokens", () => {
         const css = createTokenStyles(defaultLightTheme);
-        expect(css).toContain("--skeleton-radius: 0.25rem");
+        expect(css).toContain("--skeleton-rounded: 0.25rem");
         expect(css).toContain("--skeleton-height: 2rem");
         expect(css).toContain("--skeleton-width: 8rem");
         expect(css).toContain("--skeleton-cell-h: 1.5rem");

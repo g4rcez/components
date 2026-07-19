@@ -3,13 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 
-import { Select } from "../src/components/form/select";
+import { ComponentsProvider } from "../src/hooks/use-components-provider";
+import { Select } from "../src/components/form/select/select";
+import { selectStyles } from "../src/components/form/select/select.styles";
 
 describe("Select a11y", () => {
     const options = [{ label: "United States", value: "us" }];
+    const renderWithProvider = (ui: React.ReactElement) => render(<ComponentsProvider>{ui}</ComponentsProvider>);
 
     it("exposes the label and help text in the accessible description", async () => {
-        const { container } = render(
+        const { container } = renderWithProvider(
             <Select title="Choose country" name="country" feedback="Helpful country hint" options={options} placeholder="Choose country" />
         );
 
@@ -20,7 +23,7 @@ describe("Select a11y", () => {
     });
 
     it("marks invalid state and exposes the error in the accessible description", async () => {
-        const { container } = render(
+        const { container } = renderWithProvider(
             <Select
                 title="Choose country"
                 name="country"
@@ -39,7 +42,7 @@ describe("Select a11y", () => {
     });
 
     it("preserves consumer aria props while appending generated ids", async () => {
-        const { container } = render(
+        const { container } = renderWithProvider(
             <Select
                 title="Choose country"
                 name="country"
@@ -64,7 +67,7 @@ describe("Select a11y", () => {
     it("keeps a single field-level focus treatment after selecting an option", async () => {
         const user = userEvent.setup();
 
-        render(<Select title="Choose country" name="country" options={options} placeholder="Choose country" />);
+        renderWithProvider(<Select title="Choose country" name="country" options={options} placeholder="Choose country" />);
 
         const select = screen.getByRole("combobox", { name: "Choose country" });
         await user.selectOptions(select, "us");
@@ -73,19 +76,19 @@ describe("Select a11y", () => {
         expect(select).not.toHaveClass("focus:ring-2");
         expect(select).not.toHaveClass("focus:ring-inset");
         expect(select).not.toHaveClass("focus:ring-primary");
-        expect(select.parentElement).toHaveClass("focus-within:border-primary");
+        expect(select.parentElement).toHaveClass(selectStyles.slots.field);
     });
 
     it("disables select interactions and uses not-allowed affordances", () => {
-        render(<Select disabled title="Choose country" name="country" options={options} placeholder="Choose country" />);
+        renderWithProvider(<Select disabled title="Choose country" name="country" options={options} placeholder="Choose country" />);
 
         const select = screen.getByRole("combobox", { name: "Choose country" });
         const caretButton = screen.getByRole("button");
 
         expect(select).toBeDisabled();
-        expect(select).toHaveClass("disabled:cursor-not-allowed");
+        expect(select).toHaveClass(selectStyles.slots.control);
         expect(caretButton).toBeDisabled();
-        expect(caretButton).toHaveClass("disabled:cursor-not-allowed");
-        expect(select.parentElement).toHaveClass("group-disabled:!border-disabled");
+        expect(caretButton).toHaveClass(selectStyles.slots.trigger);
+        expect(select.parentElement).toHaveClass(selectStyles.slots.field);
     });
 });

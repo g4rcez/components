@@ -27,6 +27,7 @@ The `MultiSelect` component inherits all props from `InputField`, plus:
 | `value`           | `string[]`                    | —       | Controlled selected values.                                |
 | `defaultValue`    | `string[]`                    | `[]`    | Initial selected values for uncontrolled usage.            |
 | `onChangeOptions` | `(options: string[]) => void` | —       | Called when the selection changes.                         |
+| `renderTag`       | `(option) => ReactNode`       | —       | Customizes the content shown inside each selected tag.     |
 | `dynamicOption`   | `boolean`                     | `false` | Allows users to select their search query as a new option. |
 | `emptyMessage`    | `Label`                       | —       | Message shown when no options match the search.            |
 | `selectedLabel`   | `string`                      | —       | Text shown in the overflow counter (e.g., "selected").     |
@@ -46,21 +47,22 @@ Extends `OptionProps` with an optional custom renderer:
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token                          | CSS Variable            | Purpose                                |
-| ------------------------------ | ----------------------- | -------------------------------------- |
-| `placeholder-input-mask`       | `--input-mask`          | Placeholder text color                 |
-| `placeholder-input-mask-error` | `--input-mask-error`    | Placeholder color in error state       |
-| `border-input-border`          | `--input-border`        | Search input bottom border in dropdown |
-| `bg-floating-background`       | `--floating-background` | Dropdown panel background              |
-| `border-floating-border`       | `--floating-border`     | Dropdown panel border                  |
-| `bg-floating-hover`            | `--floating-hover`      | Option row hover/active background     |
-| `text-foreground`              | `--foreground`          | Option text color                      |
-| `text-input-placeholder`       | `--input-placeholder`   | Placeholder li color                   |
-| `text-disabled`                | `--disabled`            | Empty-state text color                 |
-| `focus:ring-primary`           | `--primary`             | Keyboard focus ring                    |
-| `h-input-height`               | `--input-height`        | Trigger element height (2.5 rem)       |
-| `px-input-padding-x`           | `--input-padding-x`     | Horizontal padding                     |
-| `py-input-padding-y`           | `--input-padding-y`     | Vertical padding                       |
+| Token                          | CSS Variable                               | Purpose                                |
+| ------------------------------ | ------------------------------------------ | -------------------------------------- |
+| `field-min-inline-size`        | `--var-multi-select-field-min-inline-size` | Minimum width of the MultiSelect field |
+| `placeholder-input-mask`       | `--input-mask`                             | Placeholder text color                 |
+| `placeholder-input-mask-error` | `--input-mask-error`                       | Placeholder color in error state       |
+| `border-input-border`          | `--input-border`                           | Search input bottom border in dropdown |
+| `bg-floating-background`       | `--floating-background`                    | Dropdown panel background              |
+| `border-floating-border`       | `--floating-border`                        | Dropdown panel border                  |
+| `bg-floating-hover`            | `--floating-hover`                         | Option row hover/active background     |
+| `text-foreground`              | `--foreground`                             | Option text color                      |
+| `text-input-placeholder`       | `--input-placeholder`                      | Placeholder li color                   |
+| `text-disabled`                | `--disabled`                               | Empty-state text color                 |
+| `focus:ring-primary`           | `--primary`                                | Keyboard focus ring                    |
+| `h-input-height`               | `--input-height`                           | Trigger element height (2.5 rem)       |
+| `px-input-padding-x`           | `--input-padding-x`                        | Horizontal padding                     |
+| `py-input-padding-y`           | `--input-padding-y`                        | Vertical padding                       |
 
 ## Examples
 
@@ -126,6 +128,25 @@ export default function RolePicker() {
 }
 ```
 
+### Custom tag content
+
+```tsx
+import { MultiSelect } from "@g4rcez/components";
+
+export default function TeamPicker() {
+    return (
+        <MultiSelect
+            title="Team"
+            options={teamMembers}
+            renderTag={(member) => <span>{member.label} · active</span>}
+            onChangeOptions={(members) => console.log(members)}
+        />
+    );
+}
+```
+
+The component keeps its tag container and remove button when `renderTag` is used; the callback only replaces the tag content.
+
 ### Dynamic option creation
 
 ```tsx
@@ -146,8 +167,8 @@ export default function TagInput() {
 ## Don't
 
 - Don't use `MultiSelect` when only a single selection is needed — use `Select` or `Autocomplete` instead.
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `color-mix()` in className or style props for theming.
 
 ## Accessibility

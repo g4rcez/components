@@ -1,7 +1,10 @@
-import React, { Fragment, useId, useMemo } from "react";
+import type React from "react";
+import { Fragment, useId, useMemo } from "react";
 import { useTranslations } from "../../hooks/use-translations";
-import { Polymorph } from "../core/polymorph";
-import { TablePagination } from "./table-lib";
+import { css } from "../../lib/dom";
+import { Polymorph } from "../core/polymorph/polymorph";
+import { tablePaginationStyles } from "./pagination.styles";
+import type { TablePagination } from "./table-lib";
 
 export function createPaginationItems(current: number, max: number) {
     if (!current || !max) return [];
@@ -30,9 +33,10 @@ export const Pagination = (pagination: TablePagination) => {
     const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination]);
     const hasNext = pagination.current < pagination.pages;
     const Link: React.ElementType = pagination.asLink ?? "button";
+    const sizeSelectClassName = tablePaginationStyles.slots["size-select"];
 
     return (
-        <footer className="text-typography-sm flex flex-wrap items-center justify-center gap-table-pag-gap border-t-muted p-table-pag-p lg:flex-nowrap lg:justify-between">
+        <footer className={tablePaginationStyles.slots.root}>
             <p>
                 <translation.tablePaginationFooter
                     {...pagination}
@@ -44,7 +48,7 @@ export const Pagination = (pagination: TablePagination) => {
                                 <select
                                     id={id}
                                     value={pagination.size}
-                                    className="cursor-pointer bg-transparent"
+                                    className={sizeSelectClassName}
                                     onChange={(e) => {
                                         pagination.onChangeSize?.(Number(e.target.value));
                                     }}
@@ -61,7 +65,7 @@ export const Pagination = (pagination: TablePagination) => {
                 />
             </p>
             <nav>
-                <ul className="flex items-center gap-table-pag-items-gap">
+                <ul className={tablePaginationStyles.slots.items}>
                     {pagination.current > 1 ? (
                         <li>
                             <Polymorph as={Link} href="previous" className="">
@@ -80,7 +84,10 @@ export const Pagination = (pagination: TablePagination) => {
                                         <Polymorph
                                             href={x}
                                             as={Link}
-                                            className={`cursor-pointer border-b-2 px-table-pag-item-px py-table-pag-item-py proportional-nums transition-colors hover:border-primary-subtle hover:text-primary-subtle ${x === pagination.current ? "border-primary text-primary" : "border-transparent"}`}
+                                            className={css(
+                                                tablePaginationStyles.slots["page-link"],
+                                                `${tablePaginationStyles.slots["page-link"]}--${x === pagination.current ? "active" : "inactive"}`
+                                            )}
                                         >
                                             {x}
                                         </Polymorph>

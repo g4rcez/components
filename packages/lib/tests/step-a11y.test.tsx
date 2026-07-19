@@ -1,11 +1,8 @@
 import { render, screen, within } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
-import { toHaveNoViolations } from "vitest-axe/matchers";
 
-import { Step, Steps } from "../src/components/display/step";
-
-expect.extend({ toHaveNoViolations });
+import { Step, Steps } from "../src/components/display/step/step";
 
 describe("Step a11y", () => {
     it("marks only the current step and hides decorative status icons", async () => {
@@ -33,7 +30,7 @@ describe("Step a11y", () => {
         expect(profileStep.querySelector("svg")).not.toBeInTheDocument();
         expect(doneStep.querySelector("svg")).not.toBeInTheDocument();
 
-        expect(await axe(container)).toHaveNoViolations();
+        expect((await axe(container)).violations).toHaveLength(0);
     });
 
     it("keeps decorative status icons hidden for completed and error steps", async () => {
@@ -50,7 +47,7 @@ describe("Step a11y", () => {
 
         expect(completedSvg).toHaveAttribute("aria-hidden", "true");
         expect(completedSvg).toHaveAttribute("focusable", "false");
-        expect(await axe(completedContainer)).toHaveNoViolations();
+        expect((await axe(completedContainer)).violations).toHaveLength(0);
     });
 
     it("keeps error status icons hidden from the accessible tree", async () => {
@@ -61,6 +58,6 @@ describe("Step a11y", () => {
 
         expect(errorSvg).toHaveAttribute("aria-hidden", "true");
         expect(errorSvg).toHaveAttribute("focusable", "false");
-        expect(await axe(container)).toHaveNoViolations();
+        expect((await axe(container)).violations).toHaveLength(0);
     });
 });

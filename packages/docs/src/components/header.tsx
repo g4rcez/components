@@ -5,8 +5,7 @@ import { ListIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Modal } from "../../../lib/src/components/floating/modal";
-import { usePrevious } from "../../../lib/src/hooks/use-previous";
+import { Modal, usePrevious } from "@g4rcez/components";
 import { Navigation } from "./navigation";
 
 export const Header = () => {

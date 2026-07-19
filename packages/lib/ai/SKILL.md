@@ -1,13 +1,13 @@
 ---
-name: g4rcez-components
+name: csscomponents
 description: >
     Use when: setting up @g4rcez/components in a new project, migrating native
     HTML elements or hand-rolled UI to this design system, building any React UI
     that should use @g4rcez/components, or when the user's project already has
-    @g4rcez/components as a dependency. Covers installation, Tailwind v3 preset,
-    Tailwind v4 CSS-first setup, theming with createTokenStyles/TokenRemap,
-    ComponentsProvider/tweaks, parsers, the full component catalog (components,
-    hooks, React, UI, design-system, tokens, Tailwind, forms, modals,
+    @g4rcez/components as a dependency. Covers installation, plain CSS setup,
+    theming with createTokenStyles/TokenRemap, ComponentsProvider/tweaks,
+    parsers, the full component catalog (components,
+    hooks, React, UI, design-system, tokens, forms, modals,
     notifications, tables, calendar, theming), and native-element migration.
 ---
 
@@ -15,9 +15,9 @@ Loaded automatically when this package is present. Read fully before writing or 
 
 # @g4rcez/components — Agent Skill
 
-A React design system built on Tailwind CSS and design tokens. This skill covers
-installation, Tailwind setup (v3 and v4), theming APIs, conventions, the full
-component catalog, and migration from native HTML patterns.
+A React design system built on stable CSS component contracts, semantic design tokens, and shipped plain CSS. This skill covers
+installation, CSS setup, theming APIs, conventions, the full
+component catalog, style dependency metadata, and migration from native HTML patterns.
 
 ---
 
@@ -30,61 +30,76 @@ pnpm add @g4rcez/components
 The package ships:
 
 - `dist/` — compiled JS/TS and CSS
-- `dist/index.css` — main stylesheet
+- `dist/css/index.css` — convenience bundle with foundation + all component CSS
+- `dist/css/foundation.css` — required token/base foundation for component CSS
+- `dist/css/*.css` — per-component CSS chunks such as `button.css`
+- `dist/style-manifest.json` — machine-readable CSS dependency and selector manifest
 - `ai/SKILL.md` — this file
+- `ai/component-style-manifest.json` — AI/CLI-readable copy of the style manifest
 - `ai/docs/` — per-component documentation (51 pages)
 
 Access any file via the package specifier: `@g4rcez/components/ai/SKILL.md`, `@g4rcez/components/ai/docs/Button.md`, etc.
 
 ---
 
-## 2 — Tailwind Setup
+## 2 — CSS Setup (v6+)
 
-### v3 (preset-based)
-
-Add the library preset to `tailwind.config.ts`. The preset registers all design tokens as Tailwind utilities.
-
-```ts
-import preset from "@g4rcez/components/preset.tailwind";
-
-export default {
-    presets: [preset],
-    content: ["./src/**/*.{ts,tsx}", "./node_modules/@g4rcez/components/dist/**/*.js"],
-};
-```
-
-### v4 (CSS-first)
-
-Import Tailwind and the library stylesheet, then reference the library config via `@config`:
+The v6 styling migration moves component styling toward generated plain CSS chunks. Import generated component CSS from an app stylesheet, not from JS/TS modules.
 
 ```css
-@import "tailwindcss";
-@import "@g4rcez/components/dist/index.css";
-@config "./tailwind.config.ts";
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
 ```
 
-The library's `tailwind.config.ts` uses `plugin.tailwind` (the v4-compatible plugin):
+Rules for agents and tools:
 
-```ts
-import plugin from "@g4rcez/components/plugin.tailwind";
+- Always include `foundation.css` before component CSS.
+- Prefer per-component CSS imports for production apps.
+- Use `csscomponents styles --css <stylesheet>` to detect used components and maintain the CSS import block automatically. The same runner is exportable from `@g4rcez/components/cli` for tooling integrations.
+- `index.css` is a convenience bundle that includes foundation + all component CSS.
+- Every public component has a CSS chunk, style contract sidecar, and manifest entry.
+- Button is fully ported to handwritten v6 CSS; remaining component chunks preserve the stable selector surface while legacy utility class names are retired component-by-component.
+- Component CSS has stable public selectors such as `.__button`, `.__button--theme-primary`, and `.__button__icon`.
+- Use `ai/component-style-manifest.json` or `ai/docs/style-dependencies.md` to resolve CSS dependencies before adding imports.
+- CSS variables use the `--var-*` prefix and semantic names such as `--var-color-primary`, `--var-button-primary-background`, and `--var-button-rounded`.
 
-export default {
-    plugins: [plugin],
-    content: ["./src/**/*.{ts,tsx}", "./node_modules/@g4rcez/components/dist/**/*.js"],
-};
-```
+The library styling model does not require consumer utility generation, framework-specific preset configuration, or generated utility classes.
 
-### Theme class (required for both versions)
+### Component CSS mental model
 
-Apply `light` or `dark` on your root element:
+- React components emit stable class contracts: `__component`, `__component--variant-value`, and `__component__slot`.
+- CSS chunks own visual rules and target those stable selectors.
+- Tokens are CSS variables; overriding the variable changes the component live without changing classes.
+- Manifests (`dist/style-manifest.json`, `ai/component-style-manifest.json`, `ai/docs/style-dependencies.md`) describe which CSS files, dependencies, variants, and slots belong to each component.
+- Generated migration selectors such as `__component__tw-17`, `__component__tw-extra-1`, or `__component__tw-state-1` are private cleanup artifacts. Never depend on them in examples, docs, tests, or app code.
+
+### Token customization mental model
+
+Customize by overriding variables at the narrowest useful scope:
 
 ```tsx
-<html className="light">...</html>
-// or
-<html className="dark">...</html>
+<div style={{ "--radiobox-size": "1.5rem", "--radiobox-gap": "0.75rem" } as React.CSSProperties}>
+    <Radiobox name="plan" value="pro">
+        Pro
+    </Radiobox>
+</div>
 ```
 
-### ComponentsProvider (optional, required for dark-mode toggle)
+Use scoped wrapper variables for demos and token playgrounds. Use `createTokenStyles()`/`createCssProperties()` for app-wide themes. Do not customize by targeting generated selectors or by adding hardcoded colors/sizes.
+
+New handwritten v6 CSS uses the `--var-*` namespace (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Some migrated CSS still reads direct component variables (`--radiobox-size`, `--checkbox-gap`); preserve that public variable contract until the component is fully ported.
+
+---
+
+## 3 — Theme scope
+
+Defaults render light variables on `:root`. Apply a named theme scope to switch variables at runtime:
+
+```tsx
+<html data-theme="dark">...</html>
+```
+
+### ComponentsProvider (optional)
 
 Wrap your app root to enable i18n strings, locale-aware masks, and `Modal.confirm`:
 
@@ -118,7 +133,7 @@ import { createTokenStyles, type TokenRemap, defaultLightTheme, defaultDarkTheme
 
 const tokenRemap: TokenRemap = {
     colors: (t) => {
-        // Strip hsla( wrapper so Tailwind opacity utilities (bg-primary/50) work
+        // Strip hsla( wrapper so opacity utility classes (bg-primary/50) work
         t.value = t.value.replace("hsla(", "").replace(/\)$/, "");
         return t;
     },
@@ -141,7 +156,7 @@ const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "d
 export type TokenRemap = Partial<Record<"colors" | "spacing" | "rounded" | "customTokens" | "zIndex", (t: Token) => Token> & { name: string }>;
 ```
 
-Stripping `hsla(…)` in the colors transformer is required for Tailwind opacity utilities (`bg-primary/50`) — they expect raw channel values (`210 40% 60%`), not a wrapped `hsla(210 40% 60%)`.
+Stripping `hsla(…)` in the colors transformer is required for opacity utility classes (`bg-primary/50`) — they expect raw channel values (`210 40% 60%`), not a wrapped `hsla(210 40% 60%)`.
 
 ---
 
@@ -168,7 +183,7 @@ const tweaks: Tweaks = {
 
 ## 6 — Key Conventions
 
-### Never use raw Tailwind color classes
+### Never use raw utility color classes
 
 ```tsx
 // Wrong

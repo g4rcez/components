@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import React from "react";
-import { Modal } from "../src/components/floating/modal";
+import { Modal } from "../src/components/floating/modal/modal";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 
 describe("Modal.confirm", () => {

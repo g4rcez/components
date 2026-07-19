@@ -1,19 +1,22 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "../../hooks/use-translations";
+import { pageCalendarStyles } from "./page-calendar.styles";
 import type { CalendarEvent, CalendarEventBase, CalendarFilter, ViewMode } from "./page-calendar.types";
 import { groupEventsByDate, getMonthDays, getWeekDays } from "./page-calendar.utils";
 import { CalendarHeader } from "./calendar-header";
 import { MonthView } from "./month-view";
 import { WeekView } from "./week-view";
 import { DayView } from "./day-view";
+import { Loading } from "../display/spinner/spinner";
 
 type PageCalendarProps<T extends CalendarEventBase> = {
     defaultDate?: Date;
     defaultView?: ViewMode;
     filterArea?: ReactNode;
     onAddEvent?: () => void;
-    getFilterId?: () => void;
+    getFilterId?: (event: CalendarEvent<T>) => string | undefined;
     events: CalendarEvent<T>[];
+    loading?: boolean;
     filters?: CalendarFilter[];
     onSlotClick?: (date: Date) => void;
     onEventClick?: (event: CalendarEvent) => void;
@@ -33,6 +36,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     renderEvent,
     onEventClick,
     filters = noop,
+    loading = false,
     defaultView = "month",
     onChangeFilters: onActiveFiltersChange,
 }: PageCalendarProps<T>) {
@@ -40,6 +44,12 @@ export function PageCalendar<T extends CalendarEventBase>({
     const [currentView, setCurrentView] = useState<ViewMode>(defaultView);
     const [currentDate, setCurrentDate] = useState<Date>(() => defaultDate ?? new Date());
     const [internalFilters, setInternalFilters] = useState<CalendarFilter[]>(filters);
+    const previousFilters = useRef(filters);
+
+    if (previousFilters.current !== filters) {
+        previousFilters.current = filters;
+        setInternalFilters(filters);
+    }
 
     const toggleFilter = (id: string) => {
         setInternalFilters((prev) => {
@@ -69,8 +79,9 @@ export function PageCalendar<T extends CalendarEventBase>({
     return (
         <section
             aria-label={t.pageCalendarLabel}
+            aria-busy={loading || undefined}
             data-component="page-calendar"
-            className="flex h-full w-full flex-grow flex-col gap-page-calendar-gap"
+            className={pageCalendarStyles.className({})}
         >
             <CalendarHeader
                 filters={internalFilters}
@@ -82,33 +93,39 @@ export function PageCalendar<T extends CalendarEventBase>({
                 setCurrentView={setCurrentView}
                 onToggleFilter={toggleFilter}
             />
-            {currentView === "month" && (
-                <MonthView
-                    days={monthDays}
-                    currentDate={currentDate}
-                    eventsByDate={eventsByDate}
-                    onDayClick={handleDayClick}
-                    onEventClick={handleEventClick}
-                />
-            )}
-            {currentView === "week" && (
-                <WeekView
-                    days={weekDays}
-                    currentDate={currentDate}
-                    onSlotClick={onSlotClick}
-                    eventsByDate={eventsByDate}
-                    onEventClick={handleEventClick}
-                />
-            )}
-            {currentView === "day" && (
-                <DayView<T>
-                    currentDate={currentDate}
-                    onSlotClick={onSlotClick}
-                    renderEvent={renderEvent}
-                    eventsByDate={eventsByDate}
-                    onDateChange={setCurrentDate}
-                    onEventClick={handleEventClick}
-                />
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    {currentView === "month" && (
+                        <MonthView
+                            days={monthDays}
+                            currentDate={currentDate}
+                            eventsByDate={eventsByDate}
+                            onDayClick={handleDayClick}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
+                    {currentView === "week" && (
+                        <WeekView
+                            days={weekDays}
+                            currentDate={currentDate}
+                            onSlotClick={onSlotClick}
+                            eventsByDate={eventsByDate}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
+                    {currentView === "day" && (
+                        <DayView<T>
+                            currentDate={currentDate}
+                            onSlotClick={onSlotClick}
+                            renderEvent={renderEvent}
+                            eventsByDate={eventsByDate}
+                            onDateChange={setCurrentDate}
+                            onEventClick={handleEventClick}
+                        />
+                    )}
+                </>
             )}
         </section>
     );

@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "5.0.6",
+    "version": "6.0.4",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -10,8 +10,7 @@
         "components",
         "design-system",
         "react",
-        "skill",
-        "tailwindcss"
+        "skill"
     ],
     "homepage": "https://github.com/g4rcez/components#readme",
     "bugs": {
@@ -27,45 +26,111 @@
         "type": "git",
         "url": "https://github.com/g4rcez/components"
     },
+    "bin": {
+        "csscomponents": "./bin/csscomponents.mjs"
+    },
     "source": "./src/index.ts",
     "files": [
         "dist",
-        "dist/index.css",
-        "ai"
+        "dist/css/index.css",
+        "ai",
+        "bin"
     ],
-    "sideEffects": false,
+    "sideEffects": [
+        "**/*.css"
+    ],
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
+            "source": "./src/index.ts",
             "types": "./dist/index.d.ts",
             "import": "./dist/index.mjs",
             "default": "./dist/index.mjs"
         },
-        "./index.css": "./dist/index.css",
-        "./dist/index.css": "./dist/index.css",
-        "./themes": {
-            "types": "./dist/styles/theme.d.ts",
-            "import": "./dist/styles/theme.mjs",
-            "default": "./dist/styles/theme.mjs"
+        "./cli": {
+            "import": "./bin/csscomponents.mjs",
+            "default": "./bin/csscomponents.mjs"
         },
-        "./styles": {
-            "types": "./dist/styles/design-tokens.d.ts",
-            "import": "./dist/styles/design-tokens.mjs",
-            "default": "./dist/styles/design-tokens.mjs"
+        "./index.css": {
+            "source": "./src/styles/index.css",
+            "default": "./dist/css/index.css"
+        },
+        "./foundation.css": {
+            "source": "./src/styles/foundation.css",
+            "default": "./dist/css/foundation.css"
+        },
+        "./tokens.css": {
+            "source": "./src/styles/tokens.css",
+            "default": "./dist/css/tokens.css"
+        },
+        "./base.css": {
+            "source": "./src/styles/base.css",
+            "default": "./dist/css/base.css"
+        },
+        "./button.css": {
+            "source": "./src/components/core/button/button.css",
+            "default": "./dist/css/button.css"
         },
         "./plugin.tailwind": {
+            "source": "./plugin.tailwind.ts",
             "types": "./dist/preset/plugin.tailwind.d.ts",
             "import": "./dist/preset/plugin.tailwind.js",
             "require": "./dist/preset/plugin.tailwind.js",
             "default": "./dist/preset/plugin.tailwind.js"
         },
         "./preset.tailwind": {
+            "source": "./preset.tailwind.ts",
             "types": "./dist/preset/preset.tailwind.d.ts",
             "import": "./dist/preset/preset.tailwind.js",
             "require": "./dist/preset/preset.tailwind.js",
             "default": "./dist/preset/preset.tailwind.js"
+        },
+        "./tailwind/plugin": {
+            "source": "./plugin.tailwind.ts",
+            "types": "./dist/preset/plugin.tailwind.d.ts",
+            "import": "./dist/preset/plugin.tailwind.js",
+            "require": "./dist/preset/plugin.tailwind.js",
+            "default": "./dist/preset/plugin.tailwind.js"
+        },
+        "./tailwind/preset": {
+            "source": "./preset.tailwind.ts",
+            "types": "./dist/preset/preset.tailwind.d.ts",
+            "import": "./dist/preset/preset.tailwind.js",
+            "require": "./dist/preset/preset.tailwind.js",
+            "default": "./dist/preset/preset.tailwind.js"
+        },
+        "./style-manifest.json": "./dist/style-manifest.json",
+        "./style-manifest": {
+            "source": "./src/styles/style-manifest.ts",
+            "types": "./dist/styles/style-manifest.d.ts",
+            "import": "./dist/styles/style-manifest.mjs",
+            "default": "./dist/styles/style-manifest.mjs"
+        },
+        "./themes": {
+            "source": "./src/styles/theme.ts",
+            "types": "./dist/styles/theme.d.ts",
+            "import": "./dist/styles/theme.mjs",
+            "default": "./dist/styles/theme.mjs"
+        },
+        "./styles": {
+            "source": "./src/styles/design-tokens.ts",
+            "types": "./dist/styles/design-tokens.d.ts",
+            "import": "./dist/styles/design-tokens.mjs",
+            "default": "./dist/styles/design-tokens.mjs"
+        },
+        "./theme": {
+            "source": "./src/styles/theme-runtime.ts",
+            "types": "./dist/styles/theme-runtime.d.ts",
+            "import": "./dist/styles/theme-runtime.mjs",
+            "default": "./dist/styles/theme-runtime.mjs"
+        },
+        "./tokens": {
+            "source": "./src/styles/tokens.ts",
+            "types": "./dist/styles/tokens.d.ts",
+            "import": "./dist/styles/tokens.mjs",
+            "default": "./dist/styles/tokens.mjs"
         },
         "./components/*": {
             "types": "./dist/components/*.d.ts",
@@ -73,154 +138,519 @@
             "default": "./dist/components/*.mjs"
         },
         "./tag": {
+            "source": "./src/components/core/tag/tag.tsx",
             "types": "./dist/components/core/tag.d.ts",
             "import": "./dist/components/core/tag.mjs",
             "default": "./dist/components/core/tag.mjs"
         },
         "./button": {
+            "source": "./src/components/core/button/button.tsx",
             "types": "./dist/components/core/button.d.ts",
             "import": "./dist/components/core/button.mjs",
             "default": "./dist/components/core/button.mjs"
         },
         "./form": {
+            "source": "./src/components/form/form/form.tsx",
             "types": "./dist/components/form/form.d.ts",
             "import": "./dist/components/form/form.mjs",
             "default": "./dist/components/form/form.mjs"
         },
         "./radiobox": {
+            "source": "./src/components/form/radiobox/radiobox.tsx",
             "types": "./dist/components/form/radiobox.d.ts",
             "import": "./dist/components/form/radiobox.mjs",
             "default": "./dist/components/form/radiobox.mjs"
         },
         "./date-picker": {
+            "source": "./src/components/form/date-picker/date-picker.tsx",
             "types": "./dist/components/form/date-picker.d.ts",
             "import": "./dist/components/form/date-picker.mjs",
             "default": "./dist/components/form/date-picker.mjs"
         },
         "./task-list": {
+            "source": "./src/components/form/task-list/task-list.tsx",
             "types": "./dist/components/form/task-list.d.ts",
             "import": "./dist/components/form/task-list.mjs",
             "default": "./dist/components/form/task-list.mjs"
         },
         "./checkbox": {
+            "source": "./src/components/form/checkbox/checkbox.tsx",
             "types": "./dist/components/form/checkbox.d.ts",
             "import": "./dist/components/form/checkbox.mjs",
             "default": "./dist/components/form/checkbox.mjs"
         },
         "./input": {
+            "source": "./src/components/form/input/input.tsx",
             "types": "./dist/components/form/input.d.ts",
             "import": "./dist/components/form/input.mjs",
             "default": "./dist/components/form/input.mjs"
         },
         "./autocomplete": {
+            "source": "./src/components/form/autocomplete/autocomplete.tsx",
             "types": "./dist/components/form/autocomplete.d.ts",
             "import": "./dist/components/form/autocomplete.mjs",
             "default": "./dist/components/form/autocomplete.mjs"
         },
         "./switch": {
+            "source": "./src/components/form/switch/switch.tsx",
             "types": "./dist/components/form/switch.d.ts",
             "import": "./dist/components/form/switch.mjs",
             "default": "./dist/components/form/switch.mjs"
         },
         "./file-upload": {
+            "source": "./src/components/form/file-upload/file-upload.tsx",
             "types": "./dist/components/form/file-upload.d.ts",
             "import": "./dist/components/form/file-upload.mjs",
             "default": "./dist/components/form/file-upload.mjs"
         },
         "./select": {
+            "source": "./src/components/form/select/select.tsx",
             "types": "./dist/components/form/select.d.ts",
             "import": "./dist/components/form/select.mjs",
             "default": "./dist/components/form/select.mjs"
         },
         "./expand": {
+            "source": "./src/components/floating/expand/expand.tsx",
             "types": "./dist/components/floating/expand.d.ts",
             "import": "./dist/components/floating/expand.mjs",
             "default": "./dist/components/floating/expand.mjs"
         },
         "./dropdown": {
+            "source": "./src/components/floating/dropdown/dropdown.tsx",
             "types": "./dist/components/floating/dropdown.d.ts",
             "import": "./dist/components/floating/dropdown.mjs",
             "default": "./dist/components/floating/dropdown.mjs"
         },
         "./modal": {
+            "source": "./src/components/floating/modal/modal.tsx",
             "types": "./dist/components/floating/modal.d.ts",
             "import": "./dist/components/floating/modal.mjs",
             "default": "./dist/components/floating/modal.mjs"
         },
         "./tooltip": {
+            "source": "./src/components/floating/tooltip/tooltip.tsx",
             "types": "./dist/components/floating/tooltip.d.ts",
             "import": "./dist/components/floating/tooltip.mjs",
             "default": "./dist/components/floating/tooltip.mjs"
         },
         "./notifications": {
+            "source": "./src/components/display/notifications/notifications.tsx",
             "types": "./dist/components/display/notifications.d.ts",
             "import": "./dist/components/display/notifications.mjs",
             "default": "./dist/components/display/notifications.mjs"
         },
         "./timeline": {
+            "source": "./src/components/display/timeline/timeline.tsx",
             "types": "./dist/components/display/timeline.d.ts",
             "import": "./dist/components/display/timeline.mjs",
             "default": "./dist/components/display/timeline.mjs"
         },
         "./list": {
+            "source": "./src/components/display/list/list.tsx",
             "types": "./dist/components/display/list.d.ts",
             "import": "./dist/components/display/list.mjs",
             "default": "./dist/components/display/list.mjs"
         },
         "./calendar": {
+            "source": "./src/components/display/calendar/calendar.tsx",
             "types": "./dist/components/display/calendar.d.ts",
             "import": "./dist/components/display/calendar.mjs",
             "default": "./dist/components/display/calendar.mjs"
         },
         "./masonry": {
+            "source": "./src/components/display/masonry/masonry.tsx",
             "types": "./dist/components/display/masonry.d.ts",
             "import": "./dist/components/display/masonry.mjs",
             "default": "./dist/components/display/masonry.mjs"
         },
         "./card": {
+            "source": "./src/components/display/card/card.tsx",
             "types": "./dist/components/display/card.d.ts",
             "import": "./dist/components/display/card.mjs",
             "default": "./dist/components/display/card.mjs"
         },
         "./table": {
+            "source": "./src/components/table/index.tsx",
             "types": "./dist/components/table/index.d.ts",
             "import": "./dist/components/table/index.mjs",
             "default": "./dist/components/table/index.mjs"
         },
         "./menu": {
+            "source": "./src/components/floating/menu/menu.tsx",
             "types": "./dist/components/floating/menu.d.ts",
             "import": "./dist/components/floating/menu.mjs",
             "default": "./dist/components/floating/menu.mjs"
         },
         "./tabs": {
+            "source": "./src/components/display/tabs/tabs.tsx",
             "types": "./dist/components/display/tabs.d.ts",
             "import": "./dist/components/display/tabs.mjs",
             "default": "./dist/components/display/tabs.mjs"
         },
         "./stats": {
+            "source": "./src/components/display/stats/stats.tsx",
             "types": "./dist/components/display/stats.d.ts",
             "import": "./dist/components/display/stats.mjs",
             "default": "./dist/components/display/stats.mjs"
         },
         "./alert": {
+            "source": "./src/components/display/alert/alert.tsx",
             "types": "./dist/components/display/alert.d.ts",
             "import": "./dist/components/display/alert.mjs",
             "default": "./dist/components/display/alert.mjs"
         },
-        "./ai/*": "./ai/*"
+        "./ai/*": "./ai/*",
+        "./tag.css": {
+            "source": "./src/components/core/tag/tag.css",
+            "default": "./dist/css/tag.css"
+        },
+        "./form.css": {
+            "source": "./src/components/form/form/form.css",
+            "default": "./dist/css/form.css"
+        },
+        "./input.css": {
+            "source": "./src/components/form/input/input.css",
+            "default": "./dist/css/input.css"
+        },
+        "./select.css": {
+            "source": "./src/components/form/select/select.css",
+            "default": "./dist/css/select.css"
+        },
+        "./slider.css": {
+            "source": "./src/components/form/slider/slider.css",
+            "default": "./dist/css/slider.css"
+        },
+        "./slider": {
+            "source": "./src/components/form/slider/slider.tsx",
+            "types": "./dist/components/form/slider.d.ts",
+            "import": "./dist/components/form/slider.mjs",
+            "default": "./dist/components/form/slider.mjs"
+        },
+        "./switch.css": {
+            "source": "./src/components/form/switch/switch.css",
+            "default": "./dist/css/switch.css"
+        },
+        "./table.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./card.css": {
+            "source": "./src/components/display/card/card.css",
+            "default": "./dist/css/card.css"
+        },
+        "./list.css": {
+            "source": "./src/components/display/list/list.css",
+            "default": "./dist/css/list.css"
+        },
+        "./step.css": {
+            "source": "./src/components/display/step/step.css",
+            "default": "./dist/css/step.css"
+        },
+        "./step": {
+            "source": "./src/components/display/step/step.tsx",
+            "types": "./dist/components/display/step.d.ts",
+            "import": "./dist/components/display/step.mjs",
+            "default": "./dist/components/display/step.mjs"
+        },
+        "./tabs.css": {
+            "source": "./src/components/display/tabs/tabs.css",
+            "default": "./dist/css/tabs.css"
+        },
+        "./alert.css": {
+            "source": "./src/components/display/alert/alert.css",
+            "default": "./dist/css/alert.css"
+        },
+        "./empty.css": {
+            "source": "./src/components/display/empty/empty.css",
+            "default": "./dist/css/empty.css"
+        },
+        "./empty": {
+            "source": "./src/components/display/empty/empty.tsx",
+            "types": "./dist/components/display/empty.d.ts",
+            "import": "./dist/components/display/empty.mjs",
+            "default": "./dist/components/display/empty.mjs"
+        },
+        "./stats.css": {
+            "source": "./src/components/display/stats/stats.css",
+            "default": "./dist/css/stats.css"
+        },
+        "./menu.css": {
+            "source": "./src/components/floating/menu/menu.css",
+            "default": "./dist/css/menu.css"
+        },
+        "./checkbox.css": {
+            "source": "./src/components/form/checkbox/checkbox.css",
+            "default": "./dist/css/checkbox.css"
+        },
+        "./radiobox.css": {
+            "source": "./src/components/form/radiobox/radiobox.css",
+            "default": "./dist/css/radiobox.css"
+        },
+        "./textarea.css": {
+            "source": "./src/components/form/input/input.css",
+            "default": "./dist/css/input.css"
+        },
+        "./textarea": {
+            "source": "./src/components/form/input/textarea.tsx",
+            "types": "./dist/components/form/textarea.d.ts",
+            "import": "./dist/components/form/textarea.mjs",
+            "default": "./dist/components/form/textarea.mjs"
+        },
+        "./page-calendar.css": {
+            "source": "./src/components/page-calendar/page-calendar.css",
+            "default": "./dist/css/page-calendar.css"
+        },
+        "./page-calendar": {
+            "source": "./src/components/page-calendar/index.ts",
+            "types": "./dist/components/page-calendar/index.d.ts",
+            "import": "./dist/components/page-calendar/index.mjs",
+            "default": "./dist/components/page-calendar/index.mjs"
+        },
+        "./polymorph.css": {
+            "source": "./src/components/core/polymorph/polymorph.css",
+            "default": "./dist/css/polymorph.css"
+        },
+        "./polymorph": {
+            "source": "./src/components/core/polymorph/polymorph.tsx",
+            "types": "./dist/components/core/polymorph.d.ts",
+            "import": "./dist/components/core/polymorph.mjs",
+            "default": "./dist/components/core/polymorph.mjs"
+        },
+        "./modal.css": {
+            "source": "./src/components/floating/modal/modal.css",
+            "default": "./dist/css/modal.css"
+        },
+        "./task-list.css": {
+            "source": "./src/components/form/task-list/task-list.css",
+            "default": "./dist/css/task-list.css"
+        },
+        "./typography.css": {
+            "source": "./src/components/core/typography/typography.css",
+            "default": "./dist/css/typography.css"
+        },
+        "./typography": {
+            "source": "./src/components/core/typography/typography.tsx",
+            "types": "./dist/components/core/typography.d.ts",
+            "import": "./dist/components/core/typography.mjs",
+            "default": "./dist/components/core/typography.mjs"
+        },
+        "./masonry.css": {
+            "source": "./src/components/display/masonry/masonry.css",
+            "default": "./dist/css/masonry.css"
+        },
+        "./spinner.css": {
+            "source": "./src/components/display/spinner/spinner.css",
+            "default": "./dist/css/spinner.css"
+        },
+        "./spinner": {
+            "source": "./src/components/display/spinner/spinner.tsx",
+            "types": "./dist/components/display/spinner.d.ts",
+            "import": "./dist/components/display/spinner.mjs",
+            "default": "./dist/components/display/spinner.mjs"
+        },
+        "./expand.css": {
+            "source": "./src/components/floating/expand/expand.css",
+            "default": "./dist/css/expand.css"
+        },
+        "./wizard.css": {
+            "source": "./src/components/floating/wizard/wizard.css",
+            "default": "./dist/css/wizard.css"
+        },
+        "./wizard": {
+            "source": "./src/components/floating/wizard/wizard.tsx",
+            "types": "./dist/components/floating/wizard.d.ts",
+            "import": "./dist/components/floating/wizard.mjs",
+            "default": "./dist/components/floating/wizard.mjs"
+        },
+        "./calendar.css": {
+            "source": "./src/components/display/calendar/calendar.css",
+            "default": "./dist/css/calendar.css"
+        },
+        "./progress.css": {
+            "source": "./src/components/display/progress/progress.css",
+            "default": "./dist/css/progress.css"
+        },
+        "./progress": {
+            "source": "./src/components/display/progress/progress.tsx",
+            "types": "./dist/components/display/progress.d.ts",
+            "import": "./dist/components/display/progress.mjs",
+            "default": "./dist/components/display/progress.mjs"
+        },
+        "./timeline.css": {
+            "source": "./src/components/display/timeline/timeline.css",
+            "default": "./dist/css/timeline.css"
+        },
+        "./toolbar.css": {
+            "source": "./src/components/floating/toolbar/toolbar.css",
+            "default": "./dist/css/toolbar.css"
+        },
+        "./toolbar": {
+            "source": "./src/components/floating/toolbar/toolbar.tsx",
+            "types": "./dist/components/floating/toolbar.d.ts",
+            "import": "./dist/components/floating/toolbar.mjs",
+            "default": "./dist/components/floating/toolbar.mjs"
+        },
+        "./tooltip.css": {
+            "source": "./src/components/floating/tooltip/tooltip.css",
+            "default": "./dist/css/tooltip.css"
+        },
+        "./date-picker.css": {
+            "source": "./src/components/form/date-picker/date-picker.css",
+            "default": "./dist/css/date-picker.css"
+        },
+        "./file-upload.css": {
+            "source": "./src/components/form/file-upload/file-upload.css",
+            "default": "./dist/css/file-upload.css"
+        },
+        "./input-field.css": {
+            "source": "./src/components/form/input/input.css",
+            "default": "./dist/css/input.css"
+        },
+        "./input-field": {
+            "source": "./src/components/form/input/input-field.tsx",
+            "types": "./dist/components/form/input-field.d.ts",
+            "import": "./dist/components/form/input-field.mjs",
+            "default": "./dist/components/form/input-field.mjs"
+        },
+        "./dropdown.css": {
+            "source": "./src/components/floating/dropdown/dropdown.css",
+            "default": "./dist/css/dropdown.css"
+        },
+        "./autocomplete.css": {
+            "source": "./src/components/form/autocomplete/autocomplete.css",
+            "default": "./dist/css/autocomplete.css"
+        },
+        "./multi-select.css": {
+            "source": "./src/components/form/multi-select/multi-select.css",
+            "default": "./dist/css/multi-select.css"
+        },
+        "./multi-select": {
+            "source": "./src/components/form/multi-select/multi-select.tsx",
+            "types": "./dist/components/form/multi-select.d.ts",
+            "import": "./dist/components/form/multi-select.mjs",
+            "default": "./dist/components/form/multi-select.mjs"
+        },
+        "./render-on-view.css": {
+            "source": "./src/components/core/render-on-view/render-on-view.css",
+            "default": "./dist/css/render-on-view.css"
+        },
+        "./render-on-view": {
+            "source": "./src/components/core/render-on-view/render-on-view.tsx",
+            "types": "./dist/components/core/render-on-view.d.ts",
+            "import": "./dist/components/core/render-on-view.mjs",
+            "default": "./dist/components/core/render-on-view.mjs"
+        },
+        "./notifications.css": {
+            "source": "./src/components/display/notifications/notifications.css",
+            "default": "./dist/css/notifications.css"
+        },
+        "./command-palette.css": {
+            "source": "./src/components/floating/command-palette/command-palette.css",
+            "default": "./dist/css/command-palette.css"
+        },
+        "./command-palette": {
+            "source": "./src/components/floating/command-palette/command-palette.tsx",
+            "types": "./dist/components/floating/command-palette.d.ts",
+            "import": "./dist/components/floating/command-palette.mjs",
+            "default": "./dist/components/floating/command-palette.mjs"
+        },
+        "./heading.css": {
+            "source": "./src/components/core/heading/heading.css",
+            "default": "./dist/css/heading.css"
+        },
+        "./resizable.css": {
+            "source": "./src/components/core/resizable/resizable.css",
+            "default": "./dist/css/resizable.css"
+        },
+        "./shortcut.css": {
+            "source": "./src/components/display/shortcut/shortcut.css",
+            "default": "./dist/css/shortcut.css"
+        },
+        "./shortcut": {
+            "source": "./src/components/display/shortcut/shortcut.tsx",
+            "types": "./dist/components/display/shortcut/shortcut.d.ts",
+            "import": "./dist/shortcut.mjs",
+            "default": "./dist/shortcut.mjs"
+        },
+        "./skeleton.css": {
+            "source": "./src/components/display/skeleton/skeleton.css",
+            "default": "./dist/css/skeleton.css"
+        },
+        "./free-text.css": {
+            "source": "./src/components/form/input/input.css",
+            "default": "./dist/css/input.css"
+        },
+        "./page-calendar-header.css": {
+            "source": "./src/components/page-calendar/page-calendar.css",
+            "default": "./dist/css/page-calendar.css"
+        },
+        "./page-calendar-day-view.css": {
+            "source": "./src/components/page-calendar/page-calendar.css",
+            "default": "./dist/css/page-calendar.css"
+        },
+        "./page-calendar-event-pill.css": {
+            "source": "./src/components/page-calendar/page-calendar.css",
+            "default": "./dist/css/page-calendar.css"
+        },
+        "./page-calendar-month-view.css": {
+            "source": "./src/components/page-calendar/page-calendar.css",
+            "default": "./dist/css/page-calendar.css"
+        },
+        "./page-calendar-week-view.css": {
+            "source": "./src/components/page-calendar/page-calendar.css",
+            "default": "./dist/css/page-calendar.css"
+        },
+        "./table-filter.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-group.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-root.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-inner-table.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-metadata.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-pagination.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-row.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-sort.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        },
+        "./table-head.css": {
+            "source": "./src/components/table/table.css",
+            "default": "./dist/css/table.css"
+        }
     },
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "rm -rf ./dist; vite build; npm run lib:types; npm run preset; npm run lib:css",
+        "build": "rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
-        "lib:css": "BUILD_LIB=true tailwind -i ./src/index.css -o ./dist/index.css --minify",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
-        "lib:types": "tsc -p tsconfig.lib.json",
+        "lib:types": "tsc -p tsconfig.lib.json && node ./scripts/flatten-component-types.mjs",
         "preset": "tsc -p tsconfig.styles.json && tsc -p tsconfig.tailwind.json",
         "test": "vitest run",
-        "test:watch": "vitest watch"
+        "test:watch": "vitest watch",
+        "styles:imports": "node ./bin/csscomponents.mjs",
+        "lib:css:v6": "vite build --config vite.css.config.mts && node ./scripts/write-css-sourcemaps.mjs",
+        "lib:style-manifest": "node ./scripts/build-style-manifest.mjs"
     },
     "dependencies": {
         "@base-ui/react": "1.5.0",
@@ -238,7 +668,6 @@
         "react-virtuoso": "4.18.7",
         "sidekicker": "0.1.10",
         "storage-manager-js": "4.2.6-5",
-        "tailwind-merge": "3.4.0",
         "the-mask-input": "3.3.14",
         "use-sync-external-store": "1.6.0",
         "use-typed-reducer": "4.3.0",
@@ -254,6 +683,7 @@
         "@types/react": "19.2.15",
         "@types/react-dom": "19.2.3",
         "@vitejs/plugin-react": "6.0.2",
+        "glob": "13.0.6",
         "jsdom": "29.1.1",
         "postcss": "8.5.15",
         "tailwindcss": "3.4.14",
@@ -270,11 +700,10 @@
     "engines": {
         "node": ">=20.14.0"
     },
-    "packageManager": "pnpm@10.12.3",
     "agents": {
         "skills": [
             {
-                "name": "g4rcez-components",
+                "name": "csscomponents",
                 "path": "./ai/SKILL.md",
                 "docs": "./ai/docs/index.md",
                 "version": "1"
@@ -282,7 +711,7 @@
         ]
     },
     "skill": {
-        "name": "g4rcez-components",
+        "name": "csscomponents",
         "path": "./ai/SKILL.md",
         "docs": "./ai/docs/index.md",
         "version": "1"

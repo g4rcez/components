@@ -1,10 +1,12 @@
 import { isToday } from "date-fns";
+import { css } from "../../lib/dom";
 import { useEffect, useRef, useState } from "react";
-import { Tag } from "../core/tag";
+import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
 import type { CalendarEvent, CalendarEventBase } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
-import { Calendar } from "../display/calendar";
+import { Calendar } from "../display/calendar/calendar";
+import { pageCalendarDayViewStyles } from "./day-view.styles";
 import {
     getHourSlots,
     toDateKey,
@@ -63,9 +65,7 @@ export function DayView<T extends CalendarEventBase>({
         const hasEvents = (eventsByDate.get(key) || []).length > 0;
         const isSelected = toDateKey(date) === toDateKey(currentDate);
         if (!hasEvents || isSelected) return null;
-        return (
-            <span className="absolute bottom-page-calendar-dot-bottom left-1/2 size-page-calendar-dot-size -translate-x-1/2 rounded-full bg-primary" />
-        );
+        return <span className={pageCalendarDayViewStyles.slots["event-dot"]} />;
     };
 
     const handleEventClick = (event: CalendarEvent<T>) => {
@@ -74,34 +74,34 @@ export function DayView<T extends CalendarEventBase>({
     };
 
     return (
-        <div className="flex min-w-full flex-1">
-            <div className="flex w-full flex-1 flex-col">
-                <div
-                    aria-label={formatFullDate(currentDate, locale)}
-                    className="flex flex-shrink-0 items-center gap-page-calendar-day-header-gap border-b border-border px-page-calendar-day-header-px py-page-calendar-day-header-py"
-                >
+        <div className={pageCalendarDayViewStyles.slots.root}>
+            <div className={pageCalendarDayViewStyles.slots.main}>
+                <div aria-label={formatFullDate(currentDate, locale)} className={pageCalendarDayViewStyles.slots.header}>
                     <span
-                        className={`inline-flex size-page-calendar-day-badge-size items-center justify-center rounded-full font-bold ${isToday(currentDate) ? "bg-primary text-primary-foreground" : "text-foreground"}`}
+                        className={css(
+                            pageCalendarDayViewStyles.slots["day-badge"],
+                            `${pageCalendarDayViewStyles.slots["day-badge"]}--${isToday(currentDate) ? "today" : "default"}`
+                        )}
                     >
                         {formatDay(currentDate, locale)}
                     </span>
                     <div>
-                        <div className="font-semibold">{formatWeekdayLong(currentDate, locale)}</div>
-                        <div className="text-typography-xs text-muted-foreground">{formatMonthYear(currentDate, locale)}</div>
+                        <div className={pageCalendarDayViewStyles.slots.weekday}>{formatWeekdayLong(currentDate, locale)}</div>
+                        <div className={pageCalendarDayViewStyles.slots["date-label"]}>{formatMonthYear(currentDate, locale)}</div>
                     </div>
                 </div>
-                <div ref={scrollBodyRef} className="flex flex-1 items-start overflow-y-auto">
-                    <div className="w-page-calendar-gutter-w flex-shrink-0">
+                <div ref={scrollBodyRef} className={pageCalendarDayViewStyles.slots["scroll-body"]}>
+                    <div className={pageCalendarDayViewStyles.slots.gutter}>
                         {hours.map((hour) => (
-                            <div key={hour} className="relative" style={{ height: HOUR_HEIGHT }}>
-                                <span className="absolute -top-2.5 right-2 text-page-calendar-hour-text text-muted-foreground">
+                            <div key={hour} className={pageCalendarDayViewStyles.slots["hour-row"]} style={{ height: HOUR_HEIGHT }}>
+                                <span className={pageCalendarDayViewStyles.slots["hour-label"]}>
                                     {hour === 0 ? "" : formatHourLabel(hour, locale)}
                                 </span>
                                 {hour === new Date().getHours() && <div ref={currentHourRef} />}
                             </div>
                         ))}
                     </div>
-                    <div className="relative flex-1 border-l border-card-border">
+                    <div className={pageCalendarDayViewStyles.slots.grid}>
                         {hours.map((hour) => {
                             const slotDate = new Date(currentDate);
                             slotDate.setHours(hour, 0, 0, 0);
@@ -110,7 +110,7 @@ export function DayView<T extends CalendarEventBase>({
                                     key={hour}
                                     type="button"
                                     aria-label={formatHourLabel(hour, locale)}
-                                    className="w-full cursor-pointer border-b border-border/50 hover:bg-muted/20"
+                                    className={pageCalendarDayViewStyles.slots["time-slot"]}
                                     style={{ height: HOUR_HEIGHT }}
                                     onClick={() => onSlotClick?.(slotDate)}
                                 />
@@ -120,7 +120,7 @@ export function DayView<T extends CalendarEventBase>({
                             <div
                                 key={event.id}
                                 role="presentation"
-                                className="absolute"
+                                className={pageCalendarDayViewStyles.slots.event}
                                 style={{
                                     top: getTopOffset(event),
                                     height: HOUR_HEIGHT,
@@ -136,7 +136,7 @@ export function DayView<T extends CalendarEventBase>({
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col overflow-y-auto border-l border-card-border px-page-calendar-side-px">
+            <div className={pageCalendarDayViewStyles.slots["side-panel"]}>
                 <Calendar
                     date={currentDate}
                     markToday
@@ -145,18 +145,18 @@ export function DayView<T extends CalendarEventBase>({
                     onChange={(d: Date | undefined) => d && onDateChange(d)}
                 />
                 {selectedEvent && (
-                    <div className="flex flex-col gap-page-calendar-detail-gap border-t p-page-calendar-detail-p">
+                    <div className={pageCalendarDayViewStyles.slots.detail}>
                         {renderEvent ? (
                             renderEvent(selectedEvent)
                         ) : (
                             <>
-                                <div className="text-typography-sm truncate font-semibold">{selectedEvent.title}</div>
-                                <div className="text-typography-xs text-muted-foreground">{formatFullDate(selectedEvent.date, locale)}</div>
-                                <div className="text-typography-xs text-muted-foreground">{formatTime(selectedEvent.date, locale)}</div>
+                                <div className={pageCalendarDayViewStyles.slots["event-title"]}>{selectedEvent.title}</div>
+                                <div className={pageCalendarDayViewStyles.slots["detail-meta"]}>{formatFullDate(selectedEvent.date, locale)}</div>
+                                <div className={pageCalendarDayViewStyles.slots["detail-meta"]}>{formatTime(selectedEvent.date, locale)}</div>
                                 <Tag
                                     theme={selectedEvent.className ? "custom" : "primary"}
                                     size="small"
-                                    className={`self-start${selectedEvent.className ? ` ${selectedEvent.className}` : ""}`}
+                                    className={css(pageCalendarDayViewStyles.slots["event-tag"], selectedEvent.className)}
                                 />
                             </>
                         )}
