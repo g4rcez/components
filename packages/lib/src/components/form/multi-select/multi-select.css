@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+.__multi-select__field {
+    min-inline-size: min(100%, var(--var-multi-select-field-min-inline-size));
+}
+
 .__multi-select__tag-remove-icon {
     inline-size: var(--var-multi-select-tag-remove-icon-size);
     block-size: var(--var-multi-select-tag-remove-icon-size);
@@ -243,17 +247,9 @@
 }
 
 .__multi-select__checkbox {
-    display: inline-block;
-    inline-size: var(--var-checkbox-control-size);
-    block-size: var(--var-checkbox-control-size);
+    flex-shrink: 0;
     margin-inline-end: var(--var-multi-select-checkbox-margin-inline-end);
-    border-width: var(--var-border-hairline);
-    border-color: var(--var-color-border);
-    border-radius: var(--var-checkbox-control-radius);
-}
-
-.__multi-select__checkbox[data-selected="true"] {
-    background-color: var(--var-color-primary);
+    pointer-events: none;
 }
 
 .__multi-select__footer {

@@ -25,6 +25,7 @@ import { css, getRemainingSize, initializeInputDataset } from "../../../lib/dom"
 import { fzf } from "../../../lib/fzf";
 import type { Label, Override } from "../../../types";
 import { Tag } from "../../core/tag/tag";
+import { Checkbox } from "../checkbox/checkbox";
 import { freeTextStyles } from "../input/free-text.styles";
 import { InputField, type InputFieldProps } from "../input/input-field";
 import type { OptionProps } from "../select/select";
@@ -44,6 +45,7 @@ export type MultiSelectProps = Override<
         defaultValue?: string[];
         dynamicOption?: boolean;
         options: MultiSelectItemProps[];
+        renderTag?: (option: MultiSelectItemProps) => React.ReactNode;
         onChangeOptions?: (options: string[]) => void;
     }
 >;
@@ -128,6 +130,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             required = false,
             dynamicOption = false,
             onChangeOptions,
+            renderTag,
             ...props
         }: MultiSelectProps,
         externalRef
@@ -338,7 +341,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     </button>
                 }
             >
-                {x.label ?? x.value}
+                {renderTag ? renderTag(x) : (x.label ?? x.value)}
             </Tag>
         ));
 
@@ -354,7 +357,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 hideLeft={hideLeft}
                 required={required}
                 title={props.title}
-                container={css(container, multiSelectStyles.className({ size: fieldSize }))}
+                container={css(container, multiSelectStyles.className({ size: fieldSize }), multiSelectStyles.slots.field)}
                 rightLabel={rightLabel}
                 interactive={interactive}
                 id={id}
@@ -399,6 +402,10 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         ...props,
                         tabIndex: open ? -1 : 0,
                         onFocus,
+                        onClick: (event: React.MouseEvent<HTMLInputElement>) => {
+                            props.onClick?.(event);
+                            onFocus();
+                        },
                         id: shadowId,
                         role: open ? "presentation" : "combobox",
                         name: shadowId,
@@ -598,10 +605,12 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                                 active || selected ? optionSelectedClass : ""
                                                             )}
                                                         >
-                                                            <span
+                                                            <Checkbox
+                                                                checked={active}
+                                                                readOnly
+                                                                inert
                                                                 aria-hidden="true"
-                                                                data-selected={active}
-                                                                className={multiSelectStyles.slots.checkbox}
+                                                                container={multiSelectStyles.slots.checkbox}
                                                             />
                                                             <Label {...option} label={option.label} value={option.value}>
                                                                 {children}

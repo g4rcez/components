@@ -8,6 +8,10 @@ export const datePickerStyles = defineComponentStyles({
     slots: [
         "calendar-icon",
         "sr-label",
+        "range-field",
+        "range-control",
+        "range-input",
+        "range-separator",
         "panel",
         "presets",
         "preset-search",

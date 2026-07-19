@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { pageCalendarStyles } from "./page-calendar.styles";
 import type { CalendarEvent, CalendarEventBase, CalendarFilter, ViewMode } from "./page-calendar.types";
@@ -14,7 +14,7 @@ type PageCalendarProps<T extends CalendarEventBase> = {
     defaultView?: ViewMode;
     filterArea?: ReactNode;
     onAddEvent?: () => void;
-    getFilterId?: () => void;
+    getFilterId?: (event: CalendarEvent<T>) => string | undefined;
     events: CalendarEvent<T>[];
     loading?: boolean;
     filters?: CalendarFilter[];
@@ -44,6 +44,12 @@ export function PageCalendar<T extends CalendarEventBase>({
     const [currentView, setCurrentView] = useState<ViewMode>(defaultView);
     const [currentDate, setCurrentDate] = useState<Date>(() => defaultDate ?? new Date());
     const [internalFilters, setInternalFilters] = useState<CalendarFilter[]>(filters);
+    const previousFilters = useRef(filters);
+
+    if (previousFilters.current !== filters) {
+        previousFilters.current = filters;
+        setInternalFilters(filters);
+    }
 
     const toggleFilter = (id: string) => {
         setInternalFilters((prev) => {

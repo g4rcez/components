@@ -118,7 +118,7 @@
     --var-layer-tooltip: 22;
     --var-layer-floating: 22;
     --var-layer-navbar: 22;
-    --var-layer-wizard: 50;
+    --var-layer-wizard: 100;
 
     --var-input-field-icon-size: calc(var(--var-fontsize) * 1);
     --var-input-field-small-icon-size: calc(var(--var-fontsize) * 0.875);
@@ -209,6 +209,7 @@
     --var-autocomplete-empty-border: hsla(240, 10%, 4%);
     --var-autocomplete-empty-foreground: hsla(240, 5%, 96%);
 
+    --var-multi-select-field-min-inline-size: calc(var(--var-spacing-base) * 12);
     --var-multi-select-tag-remove-icon-size: calc(var(--var-fontsize) * 0.875);
     --var-multi-select-tags-gap: calc(var(--var-spacing-base) * 0.5);
     --var-multi-select-actions-gap: calc(var(--var-spacing-base) * 0.125);
@@ -711,6 +712,9 @@
     --var-shadow-notification: 1px 2px 2px 2px hsla(210, 25%, 40%, 0.15);
     --var-shadow-table: 0px 1px 1px 1px hsla(210, 0%, 0%, 0.1);
 
+    --var-card-background: hsla(0, 0%, 100%);
+    --var-card-border: hsla(240, 6%, 90%);
+    --var-card-muted: hsla(240, 5%, 96%);
     --var-card-stats-panel-background-hover: hsla(201, 49%, 22%, 0.1);
 
     --var-alert-primary-foreground: hsla(199, 89%, 28%);
@@ -754,6 +758,8 @@
     --var-notification-badge-foreground: hsla(221, 15%, 23%, 0.5);
     --var-notification-badge-foreground-hover: hsla(221, 15%, 23%, 0.8);
 
+    --var-table-background: hsla(0, 0%, 100%);
+    --var-table-border: hsla(240, 6%, 90%);
     --var-table-header-background: hsla(0, 0%, 100%);
     --var-page-calendar-today-background-hover: hsla(240, 5%, 96%, 0.5);
     --var-page-calendar-slot-border: hsla(240, 6%, 90%, 0.5);
@@ -815,6 +821,9 @@ html.dark {
     --var-color-secondary-foreground: hsla(240, 5%, 96%);
     --var-color-secondary-subtle: hsla(240, 4%, 20%);
     --var-color-secondary-hover: hsla(240, 4%, 25%);
+    --var-card-background: hsla(221, 16%, 9%);
+    --var-card-border: hsla(240, 4%, 16%);
+    --var-card-muted: hsla(240, 4%, 16%);
     --var-button-secondary-background: hsla(0, 0%, 100%);
     --var-button-secondary-foreground: hsla(240, 10%, 4%);
 
@@ -898,6 +907,8 @@ html.dark {
     --var-notification-badge-foreground: hsla(240, 5%, 96%, 0.5);
     --var-notification-badge-foreground-hover: hsla(240, 5%, 96%, 0.8);
 
+    --var-table-background: hsla(240, 10%, 8%);
+    --var-table-border: hsla(240, 4%, 16%);
     --var-table-header-background: hsla(240, 10%, 8%);
     --var-table-inline-placeholder-color: hsla(201, 49%, 65%, 0.7);
     --var-page-calendar-today-background-hover: hsla(240, 4%, 16%, 0.5);

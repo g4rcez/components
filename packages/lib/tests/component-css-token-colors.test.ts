@@ -96,4 +96,14 @@ describe("component CSS color tokens", () => {
         expect(checkboxCss).not.toContain("#2563eb");
         expect(checkboxCss).not.toContain('background-image: url("data:image/svg+xml');
     });
+
+    it("uses component surface tokens for card and table backgrounds", () => {
+        const cardCss = readFileSync(join(componentsRoot, "display", "card", "card.css"), "utf8");
+        const tableCss = readFileSync(join(componentsRoot, "table", "table.css"), "utf8");
+
+        expect(cardCss).toContain("background-color: var(--var-card-background);");
+        expect(cardCss).toContain("border-color: var(--var-card-border);");
+        expect(tableCss.match(/background-color: var\(--var-table-background\);/g)).toHaveLength(3);
+        expect(tableCss.match(/border(?:-block-start)?-color: var\(--var-table-border\);/g)).toHaveLength(4);
+    });
 });

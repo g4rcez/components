@@ -82,7 +82,7 @@ function ControlledDatePicker() {
 
             <ComponentDemo
                 title="Date Range Picker"
-                description="Pass range to enable range mode with the preset menu, staged calendar selection, and Apply/Cancel actions."
+                description="Pass range to render editable From and To inputs in one control, with presets, staged calendar selection, and Apply/Cancel actions."
                 code={`"use client";
 import { useState } from "react";
 import { DatePicker, type DateRangeValue } from "@g4rcez/components";
@@ -94,19 +94,16 @@ function RangeDatePicker() {
     <DatePicker
       name="report-period"
       title="Report period"
+      type="range"
       range={range}
-      onChange={(next) => setRange(next as DateRangeValue)}
+      onChange={setRange}
     />
   );
 }`}
             >
                 <Card title="Range">
-                    <DatePicker
-                        range={range}
-                        name="report-period"
-                        title="Report period"
-                        onChange={(next: Date | DateRangeValue | undefined) => setRange(next as DateRangeValue)}
-                    />
+                    <DatePicker type="range" range={range} name="report-period" title="Report period" onChange={setRange} />
+                    {JSON.stringify(range)}
                 </Card>
             </ComponentDemo>
 
@@ -121,6 +118,7 @@ function LocalizedDatePicker() {
     <DatePicker
       name="periodo"
       title="Período"
+      type="range"
       range={{}}
       rangeLabels={{
         searchPlaceholder: "Atalhos de período",
@@ -136,6 +134,7 @@ function LocalizedDatePicker() {
                     <DatePicker
                         name="periodo"
                         title="Período"
+                        type="range"
                         range={{}}
                         rangeLabels={{
                             searchPlaceholder: "Atalhos de período",
@@ -167,8 +166,9 @@ function CustomPresetDatePicker() {
     <DatePicker
       name="analytics-window"
       title="Analytics window"
+      type="range"
       range={range}
-      onChange={(next) => setRange(next as DateRangeValue)}
+      onChange={setRange}
       rangePresets={[
         { label: "Last 14 days", range: (today) => ({ from: subDays(today, 13), to: today }) },
         { label: "Last 90 days", range: (today) => ({ from: subDays(today, 89), to: today }) },
@@ -182,8 +182,9 @@ function CustomPresetDatePicker() {
                     <DatePicker
                         name="analytics-window"
                         title="Analytics window"
+                        type="range"
                         range={customRange}
-                        onChange={(next: Date | DateRangeValue | undefined) => setCustomRange(next as DateRangeValue)}
+                        onChange={setCustomRange}
                         rangePresets={[
                             { label: "Last 14 days", range: (today) => ({ from: subDays(today, 13), to: today }) },
                             { label: "Last 90 days", range: (today) => ({ from: subDays(today, 89), to: today }) },

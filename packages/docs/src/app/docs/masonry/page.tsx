@@ -2,7 +2,7 @@
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
 import { useState } from "react";
-import { Button, Card, Masonry, type MasonryLayout } from "@g4rcez/components";
+import { Button, Card, Masonry, MasonryItem, type MasonryLayout } from "@g4rcez/components";
 
 const cards = [
     {
@@ -64,6 +64,38 @@ function BasicMasonry() {
                             {index === 1 ? <p>The visual arrangement is decorative; the DOM remains the source of truth.</p> : null}
                         </Card>
                     ))}
+                </Masonry>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Custom Item Width"
+                description="Wrap an item with MasonryItem to give it an explicit CSS width. A 100% width item reserves a row by itself while the remaining items use the calculated column width."
+                code={`import { Card, Masonry, MasonryItem } from "@g4rcez/components";
+
+function FeaturedMasonry() {
+  return (
+    <Masonry columns={2} gutter={16}>
+      <MasonryItem width="100%">
+        <Card title="Featured">This card reserves the full row.</Card>
+      </MasonryItem>
+      <Card title="Alpha">Regular column item.</Card>
+      <Card title="Beta">Regular column item.</Card>
+    </Masonry>
+  );
+}`}
+            >
+                <Masonry columns={2} gutter={16}>
+                    <MasonryItem width="100%">
+                        <Card title="Featured" className="text-typography-sm text-muted-foreground">
+                            This card reserves the full row.
+                        </Card>
+                    </MasonryItem>
+                    <Card title="Alpha" className="text-typography-sm text-muted-foreground">
+                        Regular column item.
+                    </Card>
+                    <Card title="Beta" className="text-typography-sm text-muted-foreground">
+                        Regular column item.
+                    </Card>
                 </Masonry>
             </ComponentDemo>
 

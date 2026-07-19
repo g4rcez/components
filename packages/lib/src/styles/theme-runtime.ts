@@ -875,7 +875,7 @@ export const defaultLightThemeTokens = {
         overlay: "21",
         floating: "22",
         navbar: "22",
-        wizard: "50",
+        wizard: "100",
     },
 } satisfies ThemeTokens;
 

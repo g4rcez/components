@@ -88,10 +88,10 @@ const rawColors = {
         hover: colorVar("success-hover"),
     },
     card: {
-        DEFAULT: colorVar("background"),
-        background: colorVar("background"),
-        border: colorVar("border"),
-        muted: colorVar("muted"),
+        DEFAULT: cssVar("card-background"),
+        background: cssVar("card-background"),
+        border: cssVar("card-border"),
+        muted: cssVar("card-muted"),
     },
     floating: {
         DEFAULT: cssVar("dropdown-surface-border"),
@@ -110,10 +110,10 @@ const rawColors = {
         overlay: cssVar("modal-overlay-background"),
     },
     table: {
-        DEFAULT: colorVar("background"),
+        DEFAULT: cssVar("table-background"),
         header: cssVar("table-header-background"),
-        background: colorVar("background"),
-        border: colorVar("border"),
+        background: cssVar("table-background"),
+        border: cssVar("table-border"),
     },
     input: {
         border: colorVar("border"),

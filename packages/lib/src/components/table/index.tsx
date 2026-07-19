@@ -114,6 +114,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         {...props}
                         index={0}
                         cols={state.cols}
+                        sticky={props.sticky ?? undefined}
                         options={optionCols}
                         groups={state.groups}
                         filters={state.filters}
@@ -134,6 +135,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                             <div className={tableRootStyles.slots.group} key={`group-${group.groupId}`}>
                                 <InnerTable
                                     {...props}
+                                    sticky={props.sticky ?? undefined}
                                     group={group}
                                     index={index}
                                     cols={state.cols}

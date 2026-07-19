@@ -61,24 +61,29 @@ type CalendarStyles = Partial<{
     calendar: string | ((daysOfMonth: Date[]) => string);
 }>;
 
-export type CalendarProps = Partial<{
+export type DatepickerType = "date" | "datetime" | "range";
+
+type CalendarBaseProps = Partial<{
     date: Date;
-    range: Range | null;
     markRange: boolean;
     markToday: boolean;
     rangeMode: boolean;
+    range: Range | null;
     datetimeTitle: string;
     styles: CalendarStyles;
-    type?: "date" | "datetime";
     changeOnlyOnClick: boolean;
     locale: Locales | undefined;
     onChangeYear: (d: Date) => void;
     onChangeMonth: (d: Date) => void;
     disabledDate: (date: Date) => boolean;
     RenderOnDay: React.FC<{ date: Date }>;
-    onChange: OnChangeRange | OnChangeDate;
     labelRange: { to: string; from: string };
 }>;
+
+export type CalendarProps<T extends DatepickerType = "date"> = CalendarBaseProps & {
+    type?: T;
+    onChange?: T extends "range" ? OnChangeRange : OnChangeDate;
+};
 
 const createDays = (month: Date) => {
     const start = startOfWeek(startOfMonth(month));
@@ -248,7 +253,7 @@ type SelectMode = "from" | "to";
 
 const getToday = () => startOfDay(new Date());
 
-export const Calendar = ({
+export const Calendar = <T extends DatepickerType = "date">({
     RenderOnDay,
     changeOnlyOnClick = false,
     labelRange,
@@ -261,13 +266,14 @@ export const Calendar = ({
     onChange,
     styles,
     markRange = true,
-    type = "date",
+    type,
     datetimeTitle,
     ...props
-}: CalendarProps) => {
+}: CalendarProps<T>) => {
     const id = useRef(uuid());
     const translations = useTranslations();
     const currentLocale = useLocale(locale);
+    const calendarType = type ?? "date";
     const root = useRef<HTMLDivElement>(null);
     const { date, range } = props as { date: Date | undefined; range?: Range };
     const providedDate = date || new Date();
@@ -539,7 +545,7 @@ export const Calendar = ({
                         </motion.div>
                     </AnimatePresence>
                 </div>
-                {type === "datetime" ? (
+                {calendarType === "datetime" ? (
                     <section className={calendarStyles.slots.datetime}>
                         <Input
                             info={null}

@@ -1,11 +1,20 @@
 import type { Symbols } from "linq-arrays";
 import Linq from "linq-arrays";
 import { AnimatePresence } from "motion/react";
-import React, { type ComponentProps, type CSSProperties, Fragment, type HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    type ComponentProps,
+    type CSSProperties,
+    Fragment,
+    type HTMLAttributes,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { type ContextProp, type ItemProps, type TableBodyProps, type TableComponents, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
-import { useTableTweaks, useTweaks } from "../../hooks/use-tweaks";
 import { css } from "../../lib/dom";
 import type { Any } from "../../types";
 import { Empty } from "../display/empty/empty";
@@ -18,6 +27,7 @@ import { Pagination } from "./pagination";
 import { Row } from "./row";
 import { multiSort, type Sorter } from "./sort";
 import type { CellAsideElement, Col, TableOperationProps } from "./table-lib";
+import { useTable } from "./table.context";
 import { TableHeader } from "./thead";
 
 type VirtuosoCtx = {
@@ -35,6 +45,7 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
         rows: T[];
         index: number;
         cols: Col<T>[];
+        sticky?: number;
         border?: boolean;
         loading?: boolean;
         group?: GroupItem<T>;
@@ -70,7 +81,6 @@ type TheadProps = Pick<React.ComponentProps<"thead">, "children" | "style"> & Co
 
 const Thead = React.forwardRef<HTMLTableSectionElement, TheadProps>(({ context, ...props }, ref) => {
     const stickyOffset = Is.number(context.sticky) ? `${context.sticky}px` : undefined;
-    console.log(context);
     const style: CSSProperties = {
         ...props.style,
         top: stickyOffset,
@@ -129,6 +139,18 @@ const EmptyCell = () => <Fragment />;
 
 const emptyRows: never[] = [];
 
+const scrollableOverflow = new Set(["auto", "overlay", "scroll"]);
+
+const resolveScrollParent = (viewport: HTMLElement, preferred?: HTMLElement) => {
+    let element = viewport.parentElement;
+    while (element && element !== preferred) {
+        const { overflowY } = window.getComputedStyle(element);
+        if (scrollableOverflow.has(overflowY)) return element;
+        element = element.parentElement;
+    }
+    return preferred;
+};
+
 export const InnerTable = <T extends Record<string, unknown>>({
     cols,
     filters,
@@ -140,13 +162,20 @@ export const InnerTable = <T extends Record<string, unknown>>({
     getScrollRef,
     pagination = null,
     useControl = false,
+    sticky,
     ...props
 }: InnerTableProps<T>) => {
     const ref = useRef<HTMLDivElement | null>(null);
-    const t = useTweaks();
-    const tweaks = useTableTweaks();
-    console.log({ t, tweaks });
+    const tweaks = useTable();
+    const [scrollParent, setScrollParent] = useState<HTMLElement>();
     const [, setShowLoadingFooter] = useState(false);
+    const setViewportRef = useCallback(
+        (viewport: HTMLDivElement | null) => {
+            if (!viewport || !getScrollRef) return;
+            setScrollParent(resolveScrollParent(viewport, getScrollRef()));
+        },
+        [getScrollRef]
+    );
     const onScrollEndRef = useStableRef(onScrollEnd);
     const loadingMoreRef = useStableRef(props.loadingMore);
 
@@ -184,22 +213,22 @@ export const InnerTable = <T extends Record<string, unknown>>({
     const context = {
         cols: cols,
         Aside: props.Aside,
-        sticky: tweaks.sticky,
         loading: props.loading,
         getRowProps: props.getRowProps,
         loadingMore: props.loadingMore,
+        sticky: sticky || tweaks.sticky,
     };
 
     return (
-        <div className={tableInnerTableStyles.slots.viewport}>
+        <div ref={setViewportRef} className={tableInnerTableStyles.slots.viewport}>
             <TableVirtuoso
                 components={components}
                 totalCount={rows.length}
                 data={empty ? emptyRows : rows}
                 context={context as VirtuosoCtx}
                 itemContent={empty ? EmptyCell : Row}
-                useWindowScroll={getScrollRef ? false : true}
-                customScrollParent={getScrollRef ? getScrollRef() : undefined}
+                useWindowScroll={!getScrollRef}
+                customScrollParent={scrollParent}
                 fixedHeaderContent={() => (
                     <TableHeader<T>
                         headers={cols}

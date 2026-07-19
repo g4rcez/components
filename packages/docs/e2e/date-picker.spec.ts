@@ -39,32 +39,37 @@ test.describe("DatePicker docs examples", () => {
 
     test("range example stages a preset and applies it to the input", async ({ page }) => {
         const section = example(page, "date-range-picker");
-        const input = section.getByLabel("Report period");
+        const from = section.getByRole("textbox", { name: "From" });
+        const to = section.getByRole("textbox", { name: "To" });
         const dialog = await openDatePicker(page, section);
 
         await dialog.getByRole("option", { name: "Last 7 days" }).click();
         await expect(dialog.getByRole("option", { name: "Last 7 days" })).toHaveAttribute("aria-selected", "true");
         await dialog.getByRole("button", { name: "Apply" }).click();
 
-        await expect(input).toHaveValue(/.+ – .+/);
+        await expect(from).not.toHaveValue("");
+        await expect(to).not.toHaveValue("");
         await expect(page.getByRole("dialog")).toHaveCount(0);
     });
 
     test("localized range example uses localized list and action labels", async ({ page }) => {
         const section = example(page, "localized-range-picker");
-        const input = section.getByLabel("Período");
+        const from = section.getByRole("textbox", { name: "From" });
+        const to = section.getByRole("textbox", { name: "To" });
         const dialog = await openDatePicker(page, section);
 
         await expect(dialog.getByRole("listbox", { name: "Atalhos de período" })).toBeVisible();
         await dialog.getByRole("button", { name: "Hoje" }).click();
         await dialog.getByRole("button", { name: "Aplicar" }).click();
 
-        await expect(input).toHaveValue(/.+ – .+/);
+        await expect(from).not.toHaveValue("");
+        await expect(to).not.toHaveValue("");
     });
 
     test("custom presets example supports keyboard typeahead before applying", async ({ page }) => {
         const section = example(page, "custom-presets");
-        const input = section.getByLabel("Analytics window");
+        const from = section.getByRole("textbox", { name: "From" });
+        const to = section.getByRole("textbox", { name: "To" });
         const dialog = await openDatePicker(page, section);
         const listbox = dialog.getByRole("listbox", { name: "Search period..." });
         const launchWeek = dialog.getByRole("option", { name: "Launch week" });
@@ -76,7 +81,8 @@ test.describe("DatePicker docs examples", () => {
         await expect(launchWeek).toHaveAttribute("aria-selected", "true");
         await dialog.getByRole("button", { name: "Apply" }).click();
 
-        await expect(input).toHaveValue(/.+ – .+/);
+        await expect(from).not.toHaveValue("");
+        await expect(to).not.toHaveValue("");
     });
 
     test("inline example renders an always-visible calendar", async ({ page }) => {

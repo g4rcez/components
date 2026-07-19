@@ -348,6 +348,7 @@ export const components: ComponentTokens = {
         "empty-foreground": "hsla(240, 5%, 96%)",
     },
     "multi-select": {
+        "field-min-inline-size": "calc(var(--var-spacing-base) * 12)",
         "tag-remove-icon-size": "calc(var(--var-fontsize) * 0.875)",
         "tags-gap": "calc(var(--var-spacing-base) * 0.5)",
         "actions-gap": "calc(var(--var-spacing-base) * 0.125)",

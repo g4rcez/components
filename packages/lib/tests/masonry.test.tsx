@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Masonry, type MasonryLayout } from "../src/components/display/masonry/masonry";
+import { Masonry, MasonryItem, type MasonryLayout } from "../src/components/display/masonry/masonry";
 
 const createRect = (width: number, height: number): DOMRect =>
     ({
@@ -82,7 +82,8 @@ describe("Masonry", () => {
             }
 
             const label = this.textContent?.trim() ?? "";
-            return createRect(0, itemHeights.get(label) ?? 40);
+            const width = this instanceof HTMLElement && this.style.width === "100%" ? 240 : 0;
+            return createRect(width, itemHeights.get(label) ?? 40);
         });
     });
 
@@ -141,6 +142,36 @@ describe("Masonry", () => {
                 { column: 0, height: 120, index: 0, left: 0, top: 0, width: 115 },
                 { column: 1, height: 80, index: 1, left: 125, top: 0, width: 115 },
                 { column: 1, height: 60, index: 2, left: 125, top: 90, width: 115 },
+            ],
+        });
+    });
+
+    it("allows an item to reserve a full-width row", async () => {
+        const onLayoutChange = vi.fn();
+
+        render(
+            <Masonry columns={2} gutter={10} onLayoutChange={onLayoutChange}>
+                <MasonryItem width="100%">
+                    <article>Alpha</article>
+                </MasonryItem>
+                <article>Beta</article>
+                <article>Gamma</article>
+            </Masonry>
+        );
+
+        MockResizeObserver.instances.forEach((observer) => observer.trigger());
+
+        await waitFor(() => expect(onLayoutChange).toHaveBeenCalled());
+
+        expect(screen.getAllByRole("listitem")[0]).toHaveStyle({ width: "100%" });
+        expect(onLayoutChange).toHaveBeenLastCalledWith({
+            columns: 2,
+            gutter: 10,
+            height: 210,
+            items: [
+                { column: 0, height: 120, index: 0, left: 0, top: 0, width: 240 },
+                { column: 0, height: 80, index: 1, left: 0, top: 130, width: 115 },
+                { column: 1, height: 60, index: 2, left: 125, top: 130, width: 115 },
             ],
         });
     });

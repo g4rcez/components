@@ -396,6 +396,7 @@ export type AutocompleteTokens = {
 };
 
 export type MultiSelectTokens = {
+    "field-min-inline-size": string;
     "tag-remove-icon-size": string;
     "tags-gap": string;
     "actions-gap": string;

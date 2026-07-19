@@ -1,7 +1,7 @@
 "use client";
 import {
-    autoPlacement,
     autoUpdate,
+    flip,
     FloatingFocusManager,
     FloatingPortal,
     offset,
@@ -16,7 +16,8 @@ import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { forwardRef, Fragment, type PropsWithChildren, type Ref, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type ContextProp, type ItemProps, type ListProps, type SizeFunction, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { useMediaQuery } from "../../../hooks/use-media-query";
 import { useRemoveScroll } from "../../../hooks/use-remove-scroll";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css, dispatchInput, getRemainingSize, initializeInputDataset, synthesizeChangeEvent } from "../../../lib/dom";
@@ -25,7 +26,7 @@ import { fzf } from "../../../lib/fzf";
 import type { Label } from "../../../types";
 import { freeTextStyles } from "../input/free-text.styles";
 import { InputField, type InputFieldProps } from "../input/input-field";
-import type { OptionProps } from "../select/select";
+import { Select, type OptionProps, type SelectProps } from "../select/select";
 import { autocompleteStyles } from "./autocomplete.styles";
 
 export type AutocompleteItemProps = OptionProps & {
@@ -76,6 +77,9 @@ const components = { List, Item };
 const EMPTY_NODES: Array<HTMLElement | null> = [];
 
 const MIN_SIZE = 40;
+// The panel scales from zero, but layout dimensions remain stable during the transition.
+const measureItemSize: SizeFunction = (element, field) => element[field];
+const TOUCH_DEVICE_QUERY = "(any-pointer: coarse)";
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     (
@@ -108,6 +112,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const defaults = props.value ?? props.defaultValue ?? "";
         const translation = useTranslations();
         const generatedId = useId();
+        const isTouchableDevice = useMediaQuery(TOUCH_DEVICE_QUERY, false);
         const isControlled = props.value !== undefined;
         const [open, setOpen] = useState(false);
         const [insideModal, setInsideModal] = useState(false);
@@ -122,6 +127,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const innerOptions = useMemo<AutocompleteItemProps[]>(
             () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
             [dynamicOption, shadow, options]
+        );
+        const nativeOptions = useMemo<OptionProps[]>(
+            () =>
+                options.map((option) => {
+                    const nativeOption = { ...option };
+                    delete nativeOption.Render;
+                    return nativeOption;
+                }),
+            [options]
         );
 
         const openDropdown = () => flushSync(() => setOpen(true));
@@ -166,10 +180,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             whileElementsMounted: autoUpdate,
             middleware: [
                 offset(4),
-                autoPlacement({
-                    allowedPlacements: ["top-start", "bottom-start"],
-                    alignment: "start",
-                }),
+                flip({ fallbackPlacements: ["top-start"], padding: 10 }),
                 size({
                     padding: 10,
                     elementContext: "reference",
@@ -334,7 +345,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setIndex(null);
         };
 
-        const renderOption = (i: number, option: AutocompleteItemProps) => {
+        const renderOption = (i: number, option: AutocompleteItemProps | undefined) => {
+            if (!option) return null;
             const Label = option.Render ?? Frag;
             const active = value === option.value || value === option.label;
             const selected = index === i;
@@ -367,6 +379,59 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 </div>
             );
         };
+
+        if (isTouchableDevice && !dynamicOption) {
+            const onTouchDeviceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+                const nextValue = event.target.value;
+                const selected = options.find((option) => option.value === nextValue);
+                setValue(nextValue);
+                setLabel(selected?.label ?? nextValue);
+                if (!hiddenInput.current) return;
+                hiddenInput.current.value = nextValue;
+                hiddenInput.current.setAttribute("data-value", nextValue);
+                hiddenInput.current.dispatchEvent(new Event("change", { bubbles: false, cancelable: true }));
+                props.onChange?.(synthesizeChangeEvent(hiddenInput.current));
+            };
+
+            return (
+                <Fragment>
+                    <Select
+                        {...(props as unknown as SelectProps)}
+                        left={left}
+                        error={error}
+                        right={right}
+                        loading={loading}
+                        options={nativeOptions}
+                        container={container}
+                        rightLabel={rightLabel}
+                        interactive={interactive}
+                        feedback={feedback}
+                        optionalText={optionalText}
+                        labelClassName={labelClassName}
+                        hideLeft={hideLeft}
+                        size={fieldSize}
+                        required={required}
+                        id={shadowId}
+                        name={shadowId}
+                        value={value}
+                        onChange={onTouchDeviceChange}
+                    />
+                    <input
+                        id={id}
+                        name={id}
+                        type="hidden"
+                        data-origin={id}
+                        ref={(node) => {
+                            hiddenInput.current = node;
+                            if (typeof externalRef === "function") externalRef(node);
+                            else if (externalRef) externalRef.current = node;
+                        }}
+                        value={value}
+                        readOnly
+                    />
+                </Fragment>
+            );
+        }
 
         return (
             <InputField
@@ -438,7 +503,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         id: shadowId,
                         name: shadowId,
                         ref: refs.setReference,
-                        onClick: (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.focus(),
+                        onClick: onCaretDownClick,
                         onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
                             props.onKeyDown?.(event);
                             if (event.defaultPrevented) return;
@@ -526,6 +591,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                 })}
                                 initial={false}
                                 data-floating="true"
+                                data-placement={placement}
                                 className={css(
                                     autocompleteStyles.className({ size: fieldSize }),
                                     autocompleteStyles.slots.panel,
@@ -574,6 +640,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         style={{ height: h }}
                                         initialItemCount={displayList.length}
                                         defaultItemHeight={MIN_SIZE}
+                                        itemSize={measureItemSize}
                                         components={components as never}
                                         scrollerRef={(e) => setScrollElement(e as HTMLElement)}
                                         className={autocompleteStyles.slots.scroll}

@@ -212,10 +212,16 @@ function ContactForm() {
 - `data-dynamic="true"` — on options injected by `dynamicOption`.
 - `data-initialized` — managed internally; used by `formReset` to track interaction state.
 - `data-floating="true"` — on the floating panel element.
+- `data-placement` — `bottom-start` by default, or `top-start` when there is
+  not enough space below the field.
 
 ## Notes
 
 - The component renders two `<input>` elements: a visible shadow input for display/search and a hidden input with `name` that participates in form submission.
 - Option filtering uses a fuzzy-search (`fzf`) algorithm that matches partial text, abbreviations, and out-of-order characters against both `value` and `label`.
 - Large option lists are virtualized via `react-virtuoso` — rendering performance is maintained even with thousands of options.
+- On touch-capable devices, the component renders a native `Select` so the
+  platform picker handles option selection.
+- `dynamicOption` continues to render the searchable autocomplete on
+  touch-capable devices because native selects cannot create free-text values.
 - The dropdown width always matches the width of the triggering fieldset.

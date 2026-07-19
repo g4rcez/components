@@ -682,6 +682,10 @@
       "slots": {
         "calendar-icon": "__date-picker__calendar-icon",
         "sr-label": "__date-picker__sr-label",
+        "range-field": "__date-picker__range-field",
+        "range-control": "__date-picker__range-control",
+        "range-input": "__date-picker__range-input",
+        "range-separator": "__date-picker__range-separator",
         "panel": "__date-picker__panel",
         "presets": "__date-picker__presets",
         "preset-search": "__date-picker__preset-search",
@@ -876,6 +880,7 @@
         "control-state": "__multi-select__control-state",
         "empty": "__multi-select__empty",
         "empty-text": "__multi-select__empty-text",
+        "field": "__multi-select__field",
         "footer": "__multi-select__footer",
         "input": "__multi-select__input",
         "invalid": "__multi-select__invalid",

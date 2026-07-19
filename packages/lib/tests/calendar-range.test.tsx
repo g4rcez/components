@@ -18,7 +18,13 @@ describe("Calendar range", () => {
     it("marks whole cells across the selected range connection", () => {
         render(
             <ComponentsProvider>
-                <Calendar locale="en-US" date={new Date(2026, 6, 5)} rangeMode range={{ from: new Date(2026, 6, 5), to: new Date(2026, 6, 8) }} />
+                <Calendar
+                    locale="en-US"
+                    date={new Date(2026, 6, 5)}
+                    type="range"
+                    rangeMode
+                    range={{ from: new Date(2026, 6, 5), to: new Date(2026, 6, 8) }}
+                />
             </ComponentsProvider>
         );
 
@@ -32,7 +38,13 @@ describe("Calendar range", () => {
     it("marks range cells from the previous month shown in the current grid", () => {
         render(
             <ComponentsProvider>
-                <Calendar locale="en-US" date={new Date(2026, 6, 5)} rangeMode range={{ from: new Date(2026, 5, 28), to: new Date(2026, 6, 9) }} />
+                <Calendar
+                    locale="en-US"
+                    date={new Date(2026, 6, 5)}
+                    type="range"
+                    rangeMode
+                    range={{ from: new Date(2026, 5, 28), to: new Date(2026, 6, 9) }}
+                />
             </ComponentsProvider>
         );
 

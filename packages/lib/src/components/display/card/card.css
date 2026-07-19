@@ -6,9 +6,9 @@
     display: flex;
     width: 100%;
     gap: var(--var-card-content-gap);
-    border-color: var(--var-color-border);
+    border-color: var(--var-card-border);
     border-radius: var(--var-card-surface-radius);
-    background-color: var(--var-color-background);
+    background-color: var(--var-card-background);
     padding-block: var(--var-card-surface-padding-block);
     box-shadow: var(--var-shadow-card);
 }

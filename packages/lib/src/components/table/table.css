@@ -217,7 +217,7 @@
     border-collapse: collapse;
     border-block-width: var(--var-table-cell-border);
     border-block-style: solid;
-    border-color: var(--var-color-border);
+    border-color: var(--var-table-border);
     padding: var(--var-table-cell-padding);
 }
 
@@ -284,7 +284,7 @@
     cursor: grab;
     overflow: clip;
     border-inline-end-width: var(--var-table-cell-border);
-    border-color: var(--var-color-border);
+    border-color: var(--var-table-border);
     background-color: var(--var-table-header-background);
     font-weight: var(--var-font-weight-medium);
 }
@@ -470,7 +470,7 @@
     align-items: center;
     gap: var(--var-table-inline-gap-tight);
     border-width: var(--var-table-cell-border);
-    border-color: var(--var-color-border);
+    border-color: var(--var-table-border);
     border-radius: var(--var-table-pill-radius);
     padding-block: var(--var-table-pill-padding-block);
     padding-inline: var(--var-table-pill-padding-inline);
@@ -526,7 +526,7 @@
 .__table-inner-table__body > :not([hidden]) ~ :not([hidden]) {
     border-block-start-width: var(--var-table-cell-border);
     border-block-start-style: solid;
-    border-block-start-color: var(--var-color-border);
+    border-block-start-color: var(--var-table-border);
 }
 
 .__table-inner-table__table {
@@ -569,12 +569,12 @@
 
 .__table-inner-table__footer,
 .__table-inner-table__footer-row {
-    background-color: var(--var-color-background);
+    background-color: var(--var-table-background);
 }
 
 .__table-inner-table__loading-cell {
     height: var(--var-table-loading-block-size);
-    background-color: var(--var-color-background);
+    background-color: var(--var-table-background);
     padding-inline: var(--var-table-cell-padding-inline);
 }
 
@@ -604,7 +604,7 @@
     width: 100%;
     white-space: nowrap;
     border-radius: var(--var-table-rounded);
-    background-color: var(--var-color-background);
+    background-color: var(--var-table-background);
 }
 
 .__table-inner-table__sentinel {

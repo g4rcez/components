@@ -82,6 +82,10 @@ describe("composite widget a11y", () => {
         expect(combobox.parentElement).toHaveClass("__autocomplete__field-state");
         expect(combobox).toHaveAttribute("data-value", "alpha");
         expect((await axe(container)).violations).toHaveLength(0);
+
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        await user.click(combobox);
+        expect(await screen.findByRole("listbox")).toBeInTheDocument();
     });
 
     it("keeps disabled Autocomplete readonly with not-allowed affordances", async () => {
@@ -119,7 +123,8 @@ describe("composite widget a11y", () => {
             </ComponentsProvider>
         );
 
-        await user.click(screen.getByText("Pick tags"));
+        const trigger = screen.getByRole("combobox", { name: "Tags" });
+        await user.click(trigger);
 
         const combobox = await screen.findByRole("combobox", { name: "Tags" });
         const listbox = await screen.findByRole("listbox");
@@ -143,6 +148,14 @@ describe("composite widget a11y", () => {
         await waitFor(() => expect(onChangeOptions).toHaveBeenLastCalledWith(["alpha", "bravo"]));
         expect(within(listbox).getByRole("option", { name: "Bravo" })).toHaveAttribute("aria-selected", "true");
         expect((await axe(listbox)).violations).toEqual([]);
+
+        trigger.focus();
+        await user.keyboard("[Escape]");
+        await waitFor(() => expect(screen.queryByRole("listbox")).not.toBeInTheDocument());
+        expect(document.activeElement).toBe(trigger);
+
+        await user.click(trigger);
+        expect(await screen.findByRole("listbox")).toBeInTheDocument();
     });
 
     it("keeps CommandPalette input focus, runs the active command on Enter, and closes on Escape", async () => {

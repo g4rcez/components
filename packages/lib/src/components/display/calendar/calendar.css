@@ -64,7 +64,7 @@
 .__calendar__day-button--selected {
     background-color: var(--var-color-primary);
     color: var(--var-color-primary-foreground);
-    box-shadow: 0 0 0 var(--var-calendar-selected-ring-width) var(--var-calendar-selected-ring);
+    box-shadow: inset 0 0 0 var(--var-calendar-selected-ring-width) var(--var-calendar-selected-ring);
 }
 
 .__calendar__day-button--selected:enabled:hover,

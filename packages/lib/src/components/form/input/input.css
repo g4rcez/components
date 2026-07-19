@@ -150,6 +150,8 @@
 
 .__input-field__status-indicator {
     display: none;
+    align-items: center;
+    justify-content: center;
     aspect-ratio: 1 / 1;
     inline-size: var(--var-input-field-status-indicator-size);
     block-size: var(--var-input-field-status-indicator-size);
@@ -305,13 +307,13 @@
 
 .__input-field:has(.__free-text:valid:not(:-moz-placeholder-shown)) .__input-field__status-success,
 .__input-field:has(.__free-text:valid:not(:placeholder-shown)) .__input-field__status-success {
-    display: block;
+    display: flex;
     color: var(--var-color-success);
     opacity: 1;
 }
 
 .__input-field:has(.__free-text:not(:focus):invalid[data-initialized="true"]) .__input-field__status-error {
-    display: block;
+    display: flex;
     opacity: 1;
 }
 

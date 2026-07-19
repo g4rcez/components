@@ -1,6 +1,6 @@
 ---
 name: design-system-guidelines
-description: ALWAYS use this skill when creating new components, modifying existing components, adding styling, working with design tokens, migrating CSS, or doing anything related to this component library. Use this before writing any component code. Enforce the token-first design system: prioritize `packages/lib/src/styles/tokens.css`, follow the simplified CSS-variable usage pattern from `packages/lib/src/components/display/card/card.css`, derive component tokens from base tokens with `calc()`, avoid two-level variable alias/fallback chains, never use `color-mix()`, prefer broadly supported `hsla()` color tokens, and preserve the shadcn/ui mindset of semantic tokens that are easy to theme rather than hardcoded values.
+description: "always use this skill when creating new components, modifying existing components, adding styling, working with design tokens, migrating CSS, or doing anything related to this component library. Use this before writing any component code. Enforce the token-first design system: prioritize `packages/lib/src/styles/tokens.css`, follow the simplified CSS-variable usage pattern from `packages/lib/src/components/display/card/card.css`, derive component tokens from base tokens with `calc()`, avoid two-level variable alias/fallback chains, never use `color-mix()`, prefer broadly supported `hsla()` color tokens, and preserve the shadcn/ui mindset of semantic tokens that are easy to theme rather than hardcoded values."
 ---
 
 # Design System Guidelines

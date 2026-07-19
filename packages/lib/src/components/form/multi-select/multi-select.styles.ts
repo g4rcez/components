@@ -17,6 +17,7 @@ export const multiSelectStyles = defineComponentStyles({
         "control-state",
         "empty",
         "empty-text",
+        "field",
         "footer",
         "input",
         "invalid",

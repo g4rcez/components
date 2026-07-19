@@ -51,6 +51,7 @@
   --sidebar-width: 280px;
   --content-max-width: 800px;
   --var-radius: 0.25rem;
+  --var-card-border: hsla(221, 10%, 20%);
 }
 
 @layer base {

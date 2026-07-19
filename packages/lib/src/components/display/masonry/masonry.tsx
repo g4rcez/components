@@ -41,42 +41,87 @@ type MasonryOwnProps = {
 
 export type MasonryProps<T extends React.ElementType = "ul"> = PropsWithChildren<PolymorphicProps<MasonryOwnProps, T>>;
 
+type MasonryItemOwnProps = {
+    width?: CSSProperties["width"];
+};
+
+export type MasonryItemProps<T extends React.ElementType = "li"> = PropsWithChildren<PolymorphicProps<MasonryItemOwnProps, T>>;
+
+const MasonryItemInner = <T extends React.ElementType = "li">(
+    { as, children, style, width, ...props }: MasonryItemProps<T>,
+    ref: React.ForwardedRef<Element>
+) => (
+    <Polymorph
+        {...props}
+        ref={ref}
+        as={as ?? "li"}
+        data-component="masonry-item"
+        style={{ ...style, width: width ?? style?.width }}
+        className={css(masonryStyles.slots.item, props.className)}
+    >
+        {children}
+    </Polymorph>
+);
+
+export const MasonryItem = forwardRef(MasonryItemInner) as unknown as <T extends React.ElementType = "li">(
+    props: MasonryItemProps<T>
+) => React.ReactElement | null;
+
+const isMasonryItem = (child: React.ReactNode): child is React.ReactElement<MasonryItemProps> =>
+    React.isValidElement(child) && child.type === MasonryItem;
+
+const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
+    if (typeof ref === "function") {
+        ref(value);
+    } else if (ref) {
+        ref.current = value;
+    }
+};
+
 const clampColumns = (columns: number) => Math.max(1, Math.floor(columns));
 
-const createLayout = (heights: number[], columnCount: number, gutter: number, width: number): MasonryLayout => {
+const createLayout = (heights: number[], widths: Array<number | undefined>, columnCount: number, gutter: number, width: number): MasonryLayout => {
     const columns = clampColumns(columnCount);
     const safeGutter = Math.max(0, gutter);
     const availableWidth = Math.max(0, width);
     const itemWidth = columns === 1 ? availableWidth : Math.max(0, (availableWidth - safeGutter * (columns - 1)) / columns);
+    const slotWidth = itemWidth + safeGutter;
     const columnHeights = Array.from({ length: columns }, () => 0);
     const items = heights.map<MasonryLayoutItem>((height, index) => {
+        const customWidth = widths[index];
+        const resolvedWidth = customWidth === undefined ? itemWidth : Math.max(0, customWidth);
+        const columnSpan =
+            customWidth === undefined || slotWidth <= 0 ? 1 : Math.min(columns, Math.max(1, Math.ceil((resolvedWidth + safeGutter) / slotWidth)));
         let column = 0;
+        let top = Math.max(...columnHeights.slice(0, columnSpan));
 
-        for (let current = 1; current < columnHeights.length; current += 1) {
-            if (columnHeights[current] < columnHeights[column]) {
+        for (let current = 1; current <= columns - columnSpan; current += 1) {
+            const candidateTop = Math.max(...columnHeights.slice(current, current + columnSpan));
+            if (candidateTop < top) {
                 column = current;
+                top = candidateTop;
             }
         }
 
-        const top = columnHeights[column];
-        const left = column * (itemWidth + safeGutter);
-        columnHeights[column] += height + safeGutter;
+        const left = column * slotWidth;
+        const bottom = top + height + safeGutter;
+        columnHeights.fill(bottom, column, column + columnSpan);
 
         return {
+            top,
+            left,
+            index,
             column,
             height,
-            index,
-            left,
-            top,
-            width: itemWidth,
+            width: resolvedWidth,
         };
     });
 
     return {
+        items,
         columns,
         gutter: safeGutter,
         height: Math.max(0, ...columnHeights) - (items.length > 0 ? safeGutter : 0),
-        items,
     };
 };
 
@@ -118,7 +163,7 @@ const MasonryInner = <T extends React.ElementType = "ul">(
     const itemRefs = useRef<(HTMLElement | null)[]>([]);
     const frameRef = useRef<number | null>(null);
     const childrenArray = useMemo(() => React.Children.toArray(children), [children]);
-    const [layout, setLayout] = useState<MasonryLayout>(() => createLayout([], columns, gutter, 0));
+    const [layout, setLayout] = useState<MasonryLayout>(() => createLayout([], [], columns, gutter, 0));
     const layoutRef = useRef(layout);
 
     useImperativeHandle(ref, () => rootRef.current as Element, []);
@@ -127,8 +172,10 @@ const MasonryInner = <T extends React.ElementType = "ul">(
         const root = rootRef.current;
         if (!root) return;
         const width = root.getBoundingClientRect().width;
-        const heights = childrenArray.map((_, index) => itemRefs.current[index]?.getBoundingClientRect().height ?? 0);
-        const nextLayout = createLayout(heights, columns, gutter, width);
+        const measurements = childrenArray.map((_, index) => itemRefs.current[index]?.getBoundingClientRect());
+        const heights = measurements.map((rect) => rect?.height ?? 0);
+        const widths = measurements.map((rect, index) => (isMasonryItem(childrenArray[index]) ? (rect?.width ?? 0) : undefined));
+        const nextLayout = createLayout(heights, widths, columns, gutter, width);
         if (layoutsEqual(layoutRef.current, nextLayout)) return;
         layoutRef.current = nextLayout;
         setLayout(nextLayout);
@@ -177,13 +224,13 @@ const MasonryInner = <T extends React.ElementType = "ul">(
 
     const rootStyle: CSSProperties = {
         ...style,
-        boxSizing: "border-box",
+        position: "relative",
         height: layout.height,
-        listStyleType: style?.listStyleType ?? "none",
+        boxSizing: "border-box",
         margin: style?.margin ?? 0,
         padding: style?.padding ?? 0,
-        position: "relative",
         width: style?.width ?? "100%",
+        listStyleType: style?.listStyleType ?? "none",
     };
 
     return (
@@ -198,37 +245,42 @@ const MasonryInner = <T extends React.ElementType = "ul">(
             className={css(masonryStyles.className({}), className)}
         >
             {childrenArray.map((child, index) => {
+                const masonryItem = isMasonryItem(child) ? child : undefined;
+                const requestedWidth = masonryItem?.props.width ?? masonryItem?.props.style?.width;
                 const item = layout.items[index];
-                const itemStyle: CSSProperties = item
-                    ? {
-                          boxSizing: "border-box" as const,
-                          display: "block" as const,
-                          left: item.left,
-                          position: "absolute" as const,
-                          top: item.top,
-                          width: item.width,
-                      }
-                    : {
-                          boxSizing: "border-box" as const,
-                          display: "block" as const,
-                          left: 0,
-                          position: "absolute" as const,
-                          top: 0,
-                          width: layout.columns > 1 ? `calc((100% - ${Math.max(0, gutter) * (layout.columns - 1)}px) / ${layout.columns})` : "100%",
-                      };
+                const itemStyle: CSSProperties = {
+                    ...masonryItem?.props.style,
+                    top: item?.top ?? 0,
+                    left: item?.left ?? 0,
+                    width:
+                        requestedWidth ??
+                        item?.width ??
+                        (layout.columns > 1 ? `calc((100% - ${Math.max(0, gutter) * (layout.columns - 1)}px) / ${layout.columns})` : "100%"),
+                    display: "block",
+                    position: "absolute",
+                    boxSizing: "border-box",
+                };
+                const ItemComponent = masonryItem?.props.as ?? Item;
+                const itemContent = masonryItem?.props.children ?? child;
+                const itemProps = masonryItem
+                    ? (({ as: _as, children: _children, style: _style, width: _width, ...rest }) => rest)(masonryItem.props)
+                    : {};
+                const itemRef = masonryItem?.props.ref as React.Ref<HTMLElement> | undefined;
 
                 return (
-                    <Item
+                    <ItemComponent
+                        {...itemProps}
                         style={itemStyle}
                         data-component="masonry-item"
-                        className={css(masonryStyles.slots.item, itemClassName)}
+                        className={css(masonryStyles.slots.item, itemClassName, masonryItem?.props.className)}
                         key={typeof child === "object" && "key" in child ? child.key : index}
                         ref={(node: HTMLElement | null) => {
                             itemRefs.current[index] = node;
+                            assignRef(itemRef, node);
                         }}
                     >
-                        {child}
-                    </Item>
+                        {itemContent}
+                    </ItemComponent>
                 );
             })}
         </Polymorph>

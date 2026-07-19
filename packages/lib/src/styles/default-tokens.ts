@@ -21,7 +21,7 @@ export const defaultRoundedTokens = {
 } as const;
 
 export const defaultZIndexTokens = {
-    wizard: "50",
+    wizard: "100",
     normal: "1",
     navbar: "22",
     calendar: "2",

@@ -527,3 +527,90 @@
     font-size: var(--var-page-calendar-hour-font-size);
     color: var(--var-color-muted-foreground);
 }
+
+@media (max-width: 767px) {
+    .__page-calendar {
+        min-inline-size: 0;
+        overflow: hidden;
+    }
+
+    .__page-calendar-header__toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .__page-calendar-header__nav {
+        inline-size: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--var-page-calendar-header-gap);
+    }
+
+    .__page-calendar-header__nav-buttons {
+        justify-content: center;
+    }
+
+    .__page-calendar-header__view-switch {
+        inline-size: 100%;
+    }
+
+    .__page-calendar-header__view-button {
+        flex: 1 1 0%;
+    }
+
+    .__page-calendar-header__add-icon {
+        flex: 0 0 auto;
+    }
+
+    .__page-calendar-header__nav > .__page-calendar-header__date-picker,
+    .__page-calendar-header__nav > .__page-calendar-header__view-switch,
+    .__page-calendar-header__nav > button {
+        inline-size: 100%;
+    }
+
+    .__page-calendar-header__filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scrollbar-width: thin;
+    }
+
+    .__page-calendar-header__filters > * {
+        flex: 0 0 auto;
+    }
+
+    .__page-calendar-month-view__day-cell {
+        min-block-size: calc(var(--var-spacing-base) * 5);
+        min-inline-size: 0;
+    }
+
+    .__page-calendar-month-view__event-list {
+        min-inline-size: 0;
+    }
+
+    .__page-calendar-week-view__root {
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+    }
+
+    .__page-calendar-week-view__header,
+    .__page-calendar-week-view__scroll-body {
+        min-inline-size: calc(var(--var-spacing-base) * 32);
+    }
+
+    .__page-calendar-day-view__root {
+        min-inline-size: 0;
+        flex-direction: column;
+    }
+
+    .__page-calendar-day-view__main {
+        min-inline-size: 0;
+    }
+
+    .__page-calendar-day-view__side-panel {
+        overflow: visible;
+        border-block-start-width: var(--var-border-hairline);
+        border-inline-start-width: 0;
+        padding-block-start: var(--var-page-calendar-side-padding-inline);
+    }
+}
