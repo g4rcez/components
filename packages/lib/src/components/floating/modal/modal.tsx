@@ -13,7 +13,6 @@ import {
 } from "@floating-ui/react";
 import { XIcon } from "@phosphor-icons/react";
 import {
-    animate,
     AnimatePresence,
     type HTMLMotionProps,
     motion,
@@ -352,7 +351,6 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
     ) => {
         const t = useTranslations();
         const root = useFloatingRef();
-        const innerContent = useRef<HTMLDivElement>(null);
         const removeScrollRef = useRef<HTMLDivElement>(null);
         const modalId = useId();
         const headingId = useId();
@@ -384,14 +382,10 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const interactions = useInteractions([click, dismiss, role].concat(outInteractions));
 
         const floatingSize = useMotionValue<number | undefined>(undefined);
-        const sheetY = useMotionValue<number | undefined>(undefined);
-        const isDragging = useRef(false);
-        const dragStart = useRef(0);
 
         useEffect(() => {
             floatingSize.set(undefined);
-            sheetY.set(undefined);
-        }, [type, floatingSize, sheetY]);
+        }, [type, floatingSize]);
 
         const onClose = () => onChange(false);
 
@@ -441,9 +435,6 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                       whileDrag: { cursor: "grabbing" },
                   } as const)
                 : { animate: animated, initial: false };
-
-        const scrollInitial = useMotionValue<number | undefined>(undefined);
-        const scroll = useMotionValue<number | undefined>(undefined);
 
         return (
             <Fragment>
@@ -525,7 +516,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                     type === "drawer"
                                                         ? { width: floatingSize }
                                                         : type === "sheet"
-                                                          ? { height: floatingSize, y: sheetY }
+                                                          ? { height: floatingSize }
                                                           : undefined
                                                 }
                                             >
@@ -559,63 +550,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                         {ariaDescription}
                                                     </span>
                                                 ) : null}
-                                                <motion.section
-                                                    ref={innerContent}
-                                                    data-component="modal-body"
-                                                    className={css(modalStyles.slots.body, bodyClassName)}
-                                                    onTouchEnd={async () => {
-                                                        scroll.set(undefined);
-                                                        scrollInitial.set(undefined);
-
-                                                        if (isDragging.current) {
-                                                            const currentY = sheetY.get() || 0;
-                                                            const threshold = window.innerHeight * 0.2;
-                                                            const sheetYNumeric = sheetY as MotionValue<number>;
-                                                            if (currentY > threshold) {
-                                                                await animate(sheetYNumeric, window.innerHeight, {
-                                                                    duration: 0.18,
-                                                                    ease: modalEaseOut,
-                                                                }).finished;
-                                                                onChange(false);
-                                                            } else {
-                                                                animate(sheetYNumeric, 0, {
-                                                                    type: "spring",
-                                                                    bounce: 0,
-                                                                    duration: 0.3,
-                                                                });
-                                                            }
-                                                            isDragging.current = false;
-                                                        }
-                                                    }}
-                                                    onTouchStart={(e: React.TouchEvent<HTMLElement>) => {
-                                                        const touch = e.changedTouches[0];
-                                                        scrollInitial.set(touch.pageY);
-                                                        scroll.set(touch.pageY);
-                                                        isDragging.current = false;
-                                                    }}
-                                                    onTouchMove={(e: React.TouchEvent<HTMLElement>) => {
-                                                        const touch = e.changedTouches[0];
-                                                        const y = touch.pageY;
-                                                        const prevY = scroll.get() || y;
-                                                        const scrollTop = innerContent.current?.scrollTop || 0;
-
-                                                        if (!isDragging.current && scrollTop <= 0 && y > prevY && type === "sheet") {
-                                                            isDragging.current = true;
-                                                            dragStart.current = y;
-                                                        }
-
-                                                        if (isDragging.current) {
-                                                            const delta = y - dragStart.current;
-                                                            if (delta < 0) {
-                                                                sheetY.set(delta * 0.2);
-                                                            } else {
-                                                                sheetY.set(delta);
-                                                            }
-                                                        }
-
-                                                        scroll.set(y);
-                                                    }}
-                                                >
+                                                <motion.section data-component="modal-body" className={css(modalStyles.slots.body, bodyClassName)}>
                                                     {children}
                                                 </motion.section>
                                                 {footer ? <footer className={modalStyles.slots.footer}>{footer}</footer> : null}
