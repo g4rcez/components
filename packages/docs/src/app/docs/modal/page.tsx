@@ -93,6 +93,8 @@ const SheetDemo = () => {
             <Modal closable overlayClickClose resizer type="sheet" title="Sheet" open={open} onChange={setOpen}>
                 I&apos;m a sheet component
                 <ItemContent />
+                <ItemContent />
+                <div className="h-screen bg-black">AAAAAAAAAAA</div>
             </Modal>
         </div>
     );

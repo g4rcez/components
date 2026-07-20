@@ -171,6 +171,9 @@
     flex: 1 1 0%;
     user-select: text;
     overflow-y: auto;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
     padding-inline: var(--var-modal-content-padding-inline);
     padding-block: var(--var-modal-body-padding-block);
 }
