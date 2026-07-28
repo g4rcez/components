@@ -307,6 +307,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const isTopPlacement = placement === "top" || placement === "top-start";
 
         const activeOptionId = open && index !== null && displayList[index] ? `${shadowId}-option-${index}` : undefined;
+        const describedBy =
+            [props["aria-describedby"], feedback ? `${shadowId}-feedback` : undefined, error ? `${shadowId}-error` : undefined]
+                .filter(Boolean)
+                .join(" ") || undefined;
 
         const setScrollElement = (node: HTMLElement | null) => {
             scroller.current = node;
@@ -546,6 +550,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     aria-controls={listboxId}
                     aria-activedescendant={activeOptionId}
                     aria-labelledby={`${shadowId}-label`}
+                    aria-invalid={error ? true : props["aria-invalid"]}
+                    aria-describedby={describedBy}
                     autoComplete="off"
                     className={css(
                         "input",

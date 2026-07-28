@@ -55,6 +55,11 @@ describe("InputField stable class contract", () => {
         expect(css).toContain(".__input-field__control");
         expect(css).toContain(".__input-field__status-indicator");
     });
+
+    it("shows explicit error messages independently of native input validity", () => {
+        expect(css).toContain('.__input-field[data-error="true"] .__input-field__error-state');
+        expect(css).toContain('.__input-field[data-error="true"] .__input-field__feedback-state');
+    });
 });
 
 describe("migrated form component class contracts", () => {
@@ -103,6 +108,13 @@ describe("migrated form component class contracts", () => {
         expect(readFormFile("task-list/task-list.tsx")).toContain("taskListStyles.className()");
         expect(readFormFile("date-picker/date-picker.tsx")).toContain('datePickerStyles.slots["sr-label"]');
         expect(readFormFile("file-upload/file-upload.tsx")).toContain("fileUploadStyles.slots.dropzone");
+    });
+
+    it("centers the checkbox mark inside its control", () => {
+        const checkboxCss = readFormFile("checkbox/checkbox.css");
+
+        expect(checkboxCss).toMatch(/\.__checkbox__control-state\s*\{[^}]*position: relative;/s);
+        expect(checkboxCss).toMatch(/\.__checkbox__control-state::before\s*\{[^}]*position: absolute;[^}]*inset: 0;[^}]*margin: auto;/s);
     });
 
     it("keeps radiobox control sizing and colors token-driven", () => {

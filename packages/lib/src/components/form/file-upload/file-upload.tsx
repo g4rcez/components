@@ -16,6 +16,7 @@ import type React from "react";
 import { cloneElement, createContext, Fragment, useContext, useEffect, useState } from "react";
 import { type DropzoneOptions, type DropzoneProps, useDropzone } from "react-dropzone";
 import type { Override } from "sidekicker";
+import { defaultTranslations } from "../../../config/default-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import type { SetState } from "../../../types";
@@ -140,12 +141,27 @@ const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; 
 type IdleProps = {
     dragging: boolean;
     files?: File[];
+    multiple?: boolean;
     onUpload?: () => void;
 };
+
+const singleFileUploadCopy = {
+    idle: "Arraste seu arquivo para cá ou",
+    idleButton: "clique para escolher um arquivo",
+    zoneLabel: "Área de upload de arquivo. Arraste seu arquivo para cá ou pressione Enter para escolher um arquivo.",
+};
+
+// Keep existing translation-map overrides working while defaulting new single-file consumers to singular copy.
+const getSingleFileCopy = (single: string, plural: string, defaultPlural: string) => (plural === defaultPlural ? single : plural);
 
 const Idle = (props: IdleProps) => {
     const t = useTranslations();
     const Icon = props.dragging ? FolderOpenIcon : FolderIcon;
+    const multiple = props.multiple === true;
+    const idleCopy = multiple ? t.uploadIdle : getSingleFileCopy(singleFileUploadCopy.idle, t.uploadIdle, defaultTranslations.uploadIdle);
+    const idleButtonCopy = multiple
+        ? t.uploadIdleButton
+        : getSingleFileCopy(singleFileUploadCopy.idleButton, t.uploadIdleButton, defaultTranslations.uploadIdleButton);
 
     const onUpload = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -166,15 +182,15 @@ const Idle = (props: IdleProps) => {
                 </span>
             </div>
             <div className={css(fileUploadStyles.slots["idle-copy"], fileUploadStyles.slots.column)}>
-                <p>{t.uploadIdle}</p>
+                <p>{idleCopy}</p>
                 <button
                     className={css(fileUploadStyles.slots.accent, "underline")}
                     type="button"
-                    aria-label={t.fileUploadUploadButtonLabel(t.uploadIdleButton)}
+                    aria-label={t.fileUploadUploadButtonLabel(idleButtonCopy)}
                     onClick={onUpload}
                     onKeyDown={onUploadKeyDown}
                 >
-                    {t.uploadIdleButton}
+                    {idleButtonCopy}
                 </button>
             </div>
         </div>
@@ -185,20 +201,19 @@ type InteractiveAreaProps = {
     files: File[];
     isDragActive: boolean;
     idle: React.ReactElement<IdleProps>;
+    multiple: boolean;
     onUpload: () => void;
     File?: React.FC<{ file: File }>;
     onDeleteFile?: (file: File) => void;
 };
 
 const InteractiveArea = (props: InteractiveAreaProps) => {
-    if (props.isDragActive) return <Idle files={props.files} dragging onUpload={props.onUpload} />;
+    if (props.isDragActive) return <Idle files={props.files} dragging multiple={props.multiple} onUpload={props.onUpload} />;
     if (props.files.length > 0) {
         return <FilesList File={props.File} onDeleteFile={props.onDeleteFile} files={props.files} />;
     }
     return <Fragment>{cloneElement(props.idle, { onUpload: props.onUpload })}</Fragment>;
 };
-
-const DefaultIdle = <Idle dragging={false} />;
 
 const FileViewer = (props: { item: ContextItem }) => {
     const file = props.item.file;
@@ -222,11 +237,15 @@ const FileViewer = (props: { item: ContextItem }) => {
     );
 };
 
-export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...props }: Props) => {
+export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props) => {
     const t = useTranslations();
     const state = useState<ContextProps>(null);
     const [files, setFiles] = useState<File[]>([]);
     const items = props.files ?? files;
+    const multiple = props.multiple === true;
+    const zoneLabel = multiple
+        ? t.fileUploadZoneLabel
+        : getSingleFileCopy(singleFileUploadCopy.zoneLabel, t.fileUploadZoneLabel, defaultTranslations.fileUploadZoneLabel);
 
     const close = () => state[1](null);
 
@@ -257,13 +276,21 @@ export const FileUpload = ({ idle = DefaultIdle, onDeleteFile, File, onDrop, ...
             </Modal>
             <div
                 {...getRootProps({
-                    "aria-label": t.fileUploadZoneLabel,
+                    "aria-label": zoneLabel,
                     "data-active": items ? items.length > 0 : false,
                     className: css(fileUploadStyles.className({}), fileUploadStyles.slots.dropzone),
                 })}
             >
-                <input {...getInputProps()} aria-label={t.fileUploadZoneLabel} name={props.name} id={props.name} />
-                <InteractiveArea File={File} onDeleteFile={onRemoveFile} isDragActive={isDragActive} idle={idle} files={items} onUpload={open} />
+                <input {...getInputProps()} aria-label={zoneLabel} name={props.name} id={props.name} />
+                <InteractiveArea
+                    File={File}
+                    onDeleteFile={onRemoveFile}
+                    isDragActive={isDragActive}
+                    idle={idle ?? <Idle dragging={false} multiple={multiple} />}
+                    files={items}
+                    multiple={multiple}
+                    onUpload={open}
+                />
             </div>
         </Context.Provider>
     );

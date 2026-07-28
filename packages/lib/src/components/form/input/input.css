@@ -317,6 +317,7 @@
     opacity: 1;
 }
 
+.__input-field[data-error="true"] .__input-field__error-state,
 .__input-field:has(.__free-text:not(:focus):invalid[data-initialized="true"]) .__input-field__error-state {
     display: flex;
     color: var(--var-color-danger);
@@ -328,6 +329,7 @@
     display: block;
 }
 
+.__input-field[data-error="true"] .__input-field__feedback-state,
 .__input-field:has(.__free-text:not(:focus):invalid[data-initialized="true"]) .__input-field__feedback-state {
     display: none;
 }

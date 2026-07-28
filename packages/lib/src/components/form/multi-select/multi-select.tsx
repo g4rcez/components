@@ -316,6 +316,9 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const shadowId = `${id}-shadow`;
         const listboxId = `${shadowId}-listbox`;
         const activeOptionId = open && index !== null && displayList[index] ? `${shadowId}-option-${index}` : undefined;
+        const describedBy =
+            [props["aria-describedby"], feedback ? `${id}-feedback` : undefined, error ? `${id}-error` : undefined].filter(Boolean).join(" ") ||
+            undefined;
 
         const panelTopClass = `${multiSelectStyles.slots.panel}--top`;
         const panelBottomClass = `${multiSelectStyles.slots.panel}--bottom`;
@@ -415,6 +418,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         "aria-controls": listboxId,
                         "aria-activedescendant": activeOptionId,
                         "aria-labelledby": `${id}-label`,
+                        "aria-invalid": error ? true : props["aria-invalid"],
+                        "aria-describedby": describedBy,
                     } as Parameters<typeof getReferenceProps>[0])}
                     data-name={id}
                     data-target={id}
@@ -496,6 +501,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                         aria-controls={listboxId}
                                         aria-activedescendant={activeOptionId}
                                         aria-labelledby={`${id}-label`}
+                                        aria-invalid={error ? true : props["aria-invalid"]}
+                                        aria-describedby={describedBy}
                                         autoComplete="off"
                                         placeholder={translation.multiSelectInnerPlaceholder}
                                         className={css(

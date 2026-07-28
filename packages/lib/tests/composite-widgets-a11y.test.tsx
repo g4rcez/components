@@ -51,6 +51,25 @@ const options = [
 ];
 
 describe("composite widget a11y", () => {
+    it("associates Autocomplete and MultiSelect errors with their comboboxes", () => {
+        render(
+            <ComponentsProvider>
+                <Autocomplete title="Assignee" name="assignee" error="Choose an assignee" options={options} />
+                <MultiSelect title="Tags" name="tags" error="Choose at least one tag" options={options} />
+            </ComponentsProvider>
+        );
+
+        const autocomplete = screen.getByRole("combobox", { name: "Assignee" });
+        const multiSelect = screen.getByRole("combobox", { name: "Tags" });
+
+        expect(autocomplete).toHaveAttribute("aria-invalid", "true");
+        expect(autocomplete).toHaveAttribute("aria-describedby", "assignee-shadow-error");
+        expect(multiSelect).toHaveAttribute("aria-invalid", "true");
+        expect(multiSelect).toHaveAttribute("aria-describedby", "tags-error");
+        expect(screen.getByText("Choose an assignee")).toHaveAttribute("id", "assignee-shadow-error");
+        expect(screen.getByText("Choose at least one tag")).toHaveAttribute("id", "tags-error");
+    });
+
     it("keeps Autocomplete focus on the combobox while ArrowDown updates aria-activedescendant", async () => {
         const user = userEvent.setup();
         const onChange = vi.fn();

@@ -25,6 +25,7 @@
 }
 
 .__checkbox__control-state {
+  position: relative;
   display: inline-grid;
   flex-shrink: 0;
   place-content: center;
@@ -51,6 +52,9 @@
 }
 
 .__checkbox__control-state::before {
+  position: absolute;
+  inset: 0;
+  margin: auto;
   content: "";
   inline-size: var(--var-checkbox-mark-inline-size);
   block-size: var(--var-checkbox-mark-block-size);

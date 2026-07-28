@@ -14,18 +14,66 @@ vi.mock("react-dropzone", () => ({
     }),
 }));
 
-import { FileUpload } from "../src/components/form/file-upload";
+import { FileUpload } from "../src/components/form/file-upload/file-upload";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 
+const singleIdleCopy = "Arraste seu arquivo para cá ou";
+const singleButtonCopy = "clique para escolher um arquivo";
+const singleZoneLabel = "Área de upload de arquivo. Arraste seu arquivo para cá ou pressione Enter para escolher um arquivo.";
+const multipleIdleCopy = "Arraste seus arquivos para cá ou";
+const multipleButtonCopy = "clique para escolher seus arquivos";
+const multipleZoneLabel = "Área de upload de arquivos. Arraste seus arquivos para cá ou pressione Enter para escolher seus arquivos.";
+
 describe("FileUpload a11y", () => {
-    it("finds an Upload button by role and name", () => {
+    it("uses singular copy and accessible labels by default", () => {
         render(
             <ComponentsProvider>
                 <FileUpload name="docs" />
             </ComponentsProvider>
         );
 
-        expect(screen.getByRole("button", { name: /upload/i })).toBeInTheDocument();
+        expect(screen.getByText(singleIdleCopy)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: singleButtonCopy })).toBeInTheDocument();
+        expect(screen.getByLabelText(singleZoneLabel, { selector: "input" })).toBeInTheDocument();
+    });
+
+    it("uses singular copy and accessible labels when multiple is false", () => {
+        render(
+            <ComponentsProvider>
+                <FileUpload name="docs" multiple={false} />
+            </ComponentsProvider>
+        );
+
+        expect(screen.getByText(singleIdleCopy)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: singleButtonCopy })).toBeInTheDocument();
+        expect(screen.getByLabelText(singleZoneLabel, { selector: "input" })).toBeInTheDocument();
+    });
+
+    it("uses plural copy and accessible labels when multiple is true", () => {
+        render(
+            <ComponentsProvider>
+                <FileUpload name="docs" multiple />
+            </ComponentsProvider>
+        );
+
+        expect(screen.getByText(multipleIdleCopy)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: multipleButtonCopy })).toBeInTheDocument();
+        expect(screen.getByLabelText(multipleZoneLabel, { selector: "input" })).toBeInTheDocument();
+    });
+
+    it("preserves custom idle content", () => {
+        const CustomIdle = () => <p>Estado personalizado</p>;
+
+        render(
+            <ComponentsProvider>
+                <FileUpload name="docs" idle={<CustomIdle />} />
+            </ComponentsProvider>
+        );
+
+        expect(screen.getByText("Estado personalizado")).toBeInTheDocument();
+        expect(screen.queryByText(singleIdleCopy)).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: singleButtonCopy })).not.toBeInTheDocument();
+        expect(screen.getByLabelText(singleZoneLabel, { selector: "input" })).toBeInTheDocument();
     });
 
     it("uses provider map labels for the idle upload action", () => {
@@ -61,7 +109,7 @@ describe("FileUpload a11y", () => {
         expect(screen.getByRole("button", { name: "Discard report.txt" })).toBeInTheDocument();
     });
 
-    it("clicking Upload triggers file input click once", async () => {
+    it("clicking the idle action triggers file input click once", async () => {
         const user = userEvent.setup();
         openSpy.mockClear();
 
@@ -71,12 +119,12 @@ describe("FileUpload a11y", () => {
             </ComponentsProvider>
         );
 
-        await user.click(screen.getByRole("button", { name: /upload/i }));
+        await user.click(screen.getByRole("button", { name: singleButtonCopy }));
 
         expect(openSpy).toHaveBeenCalledTimes(1);
     });
 
-    it("keyboard Enter/Space on Upload trigger file input click", async () => {
+    it("keyboard Enter/Space on the idle action trigger file input click", async () => {
         const user = userEvent.setup();
         openSpy.mockClear();
 
@@ -86,7 +134,7 @@ describe("FileUpload a11y", () => {
             </ComponentsProvider>
         );
 
-        const uploadButton = screen.getByRole("button", { name: /upload/i });
+        const uploadButton = screen.getByRole("button", { name: singleButtonCopy });
 
         uploadButton.focus();
         await user.keyboard("{Enter}");
