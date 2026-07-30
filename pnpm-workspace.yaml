@@ -5,3 +5,5 @@ allowBuilds:
   esbuild: true
   lefthook: true
   sharp: true
+minimumReleaseAgeExclude:
+  - the-mask-input@3.4.0
