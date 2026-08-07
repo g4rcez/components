@@ -1,4 +1,4 @@
-import type { ComponentTokens } from "./theme.types";
+import type { ComponentTokens } from "./theme.types.ts";
 
 export const components: ComponentTokens = {
     card: {
@@ -476,7 +476,7 @@ export const components: ComponentTokens = {
     },
     timeline: {
         "item-padding-block-end": "calc(var(--var-spacing-base) * 2)",
-        "connector-inset-inline-start": "calc(var(--var-spacing-base) * 1.5)",
+        "connector-inset-inline-start": "calc(var(--var-spacing-base) * 1)",
         "connector-inset-block-start": "calc(var(--var-spacing-base) * 2)",
         "connector-inline-size": "calc(var(--var-border-hairline) * 2)",
         "content-gap": "calc(var(--var-spacing-base) * 0.75)",

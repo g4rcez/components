@@ -1,5 +1,5 @@
-import { CSSProperties } from "react";
-import { DesignTokens, DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types";
+import type { CSSProperties } from "react";
+import type { DesignTokens, DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types.ts";
 
 export const parsers = {
     hex: (v: string) => v,

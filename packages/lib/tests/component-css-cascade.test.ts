@@ -235,6 +235,17 @@ describe("component CSS cascade contract", () => {
         expect(tokensCss).not.toContain("--var-button-small-font-size:");
     });
 
+    it("keeps the timeline connector offset synchronized across CSS and runtime themes", () => {
+        const expectedValue = "calc(var(--var-spacing-base) * 1)";
+        const tokensCss = readSourceCss("src/styles/tokens.css");
+        const componentTokens = readSourceCss("src/styles/components.ts");
+        const runtimeTheme = readSourceCss("src/styles/theme-runtime.ts");
+
+        expect(tokensCss).toContain(`--var-timeline-connector-inset-inline-start: ${expectedValue};`);
+        expect(componentTokens).toContain(`"connector-inset-inline-start": "${expectedValue}"`);
+        expect(runtimeTheme).toContain(`"connector-inset-inline-start": "${expectedValue}"`);
+    });
+
     it("keeps dark secondary buttons readable", () => {
         const tokensCss = readSourceCss("src/styles/tokens.css");
 

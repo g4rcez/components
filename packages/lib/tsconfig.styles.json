@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "allowJs": false,
+        "allowImportingTsExtensions": true,
         "allowSyntheticDefaultImports": true,
         "allowUmdGlobalAccess": false,
         "allowUnreachableCode": false,
@@ -19,6 +20,7 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
         "resolveJsonModule": true,
+        "rewriteRelativeImportExtensions": true,
         "skipLibCheck": true,
         "strict": true,
         "strictBindCallApply": true,

@@ -1,5 +1,5 @@
-import { DARK_THEME } from "./dark";
-import { LIGHT_THEME } from "./light";
+import { DARK_THEME } from "./dark.ts";
+import { LIGHT_THEME } from "./light.ts";
 
 export const defaultDarkTheme = DARK_THEME;
 

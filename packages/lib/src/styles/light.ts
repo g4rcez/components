@@ -1,6 +1,6 @@
-import { rounded, spacing, zIndex } from "./common";
-import { components } from "./components";
-import { DesignTokens } from "./theme.types";
+import { rounded, spacing, zIndex } from "./common.ts";
+import { components } from "./components.ts";
+import type { DesignTokens } from "./theme.types.ts";
 
 export const LIGHT_THEME: DesignTokens = {
     rounded: rounded,

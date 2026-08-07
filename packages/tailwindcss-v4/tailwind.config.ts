@@ -1,4 +1,4 @@
-import preset from "@g4rcez/components/tailwind/preset";
+import preset from "../lib/preset.tailwind.ts";
 
 const config = {
     presets: [preset],

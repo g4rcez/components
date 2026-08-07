@@ -2,7 +2,7 @@
     "$schema": "https://unpkg.com/knip@6/schema.json",
     "workspaces": {
         ".": {
-            "entry": ["scripts/skills.mjs"],
+            "entry": ["scripts/skills.mjs", "scripts/components-source-aliases.mjs"],
             "project": ["scripts/**/*.{js,mjs,cjs,ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "*.config.{js,mjs,cjs,ts,mts,cts}"],
         },
         "packages/lib": {
@@ -38,7 +38,7 @@
             "project": ["src/**/*.{ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "next.config.mjs", "tailwind.config.ts", "postcss.config.mjs", "tsconfig.json"],
         },
         "packages/tailwindcss-v4": {
-            "entry": ["src/app/**/*.{ts,tsx}", "next.config.ts", "postcss.config.mjs"],
+            "entry": ["src/app/**/*.{ts,tsx}", "next.config.ts", "postcss.config.mjs", "tailwind.config.ts"],
             "project": ["src/**/*.{ts,tsx,css}", "*.{js,mjs,cjs,ts,tsx}", "next.config.ts", "postcss.config.mjs", "tsconfig.json"],
         },
     },

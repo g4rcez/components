@@ -13,13 +13,13 @@
 }
 
 .__timeline__connector {
-    position: absolute;
-    inset-inline-start: var(--var-timeline-connector-inset-inline-start);
-    inset-block-start: var(--var-timeline-connector-inset-block-start);
-    margin-inline-start: calc(var(--var-timeline-connector-inline-size) * -0.5);
+    background-color: var(--var-color-border);
     block-size: 100%;
     inline-size: var(--var-timeline-connector-inline-size);
-    background-color: var(--var-color-border);
+    inset-block-start: var(--var-timeline-connector-inset-block-start);
+    inset-inline-start: var(--var-timeline-connector-inset-inline-start);
+    margin-inline-start: calc(var(--var-timeline-connector-inline-size) * -0.5);
+    position: absolute;
 }
 
 .__timeline__content {

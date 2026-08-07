@@ -1,10 +1,10 @@
 import forms from "@tailwindcss/forms";
 import type { Config } from "tailwindcss";
-import { createDesignTokens, parsers } from "./src/styles/design-tokens";
-import { defaultTokens } from "./src/styles/default-tokens";
-import { components } from "./src/styles/components";
-import { defaultLightTheme as theme } from "./src/styles/theme";
-import customPlugins from "./plugin.tailwind";
+import { createDesignTokens, parsers } from "./src/styles/design-tokens.ts";
+import { defaultTokens } from "./src/styles/default-tokens.ts";
+import { components } from "./src/styles/components.ts";
+import { defaultLightTheme as theme } from "./src/styles/theme.ts";
+import customPlugins from "./plugin.tailwind.ts";
 
 const cssVar = (name: string) => `var(--var-${name})`;
 const colorVar = (name: string) => cssVar(`color-${name}`);

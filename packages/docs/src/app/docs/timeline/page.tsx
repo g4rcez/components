@@ -1,102 +1,260 @@
 "use client";
-import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { CaretRightIcon, ClockIcon } from "@phosphor-icons/react";
+import { DocsLayout } from "@/components/docs-layout";
+import { CalendarDotsIcon, CaretRightIcon, CheckCircleIcon, RocketLaunchIcon } from "@phosphor-icons/react";
+import { Button, Card, Modal, Tag, Timeline, TimelineItem } from "@g4rcez/components";
 import { useState } from "react";
-import { Button, Card, Timeline, Tag, TimelineItem, Modal } from "@g4rcez/components";
 
-type Item = {
-    name: string;
-};
+const events = [
+    {
+        id: "release",
+        title: "Version 6.0 published",
+        description: "The new component styles, design tokens, and migration tools are now available.",
+        date: "Aug 7, 2026 · 1:17 PM",
+        dateTime: "2026-08-07T13:17:00-03:00",
+        status: "Released",
+        indicator: "success",
+        category: "Release",
+        icon: RocketLaunchIcon,
+        iconClassName: "bg-success",
+    },
+    {
+        id: "review",
+        title: "Documentation review completed",
+        description: "Component examples and API references passed the final content review.",
+        date: "Aug 7, 2026 · 11:42 AM",
+        dateTime: "2026-08-07T11:42:00-03:00",
+        status: "Reviewed",
+        indicator: "info",
+        category: "Documentation",
+        icon: CheckCircleIcon,
+        iconClassName: "bg-info",
+    },
+    {
+        id: "migration",
+        title: "Migration guide scheduled",
+        description: "The upgrade guide is ready and will be published with the next documentation update.",
+        date: "Aug 7, 2026 · 9:05 AM",
+        dateTime: "2026-08-07T09:05:00-03:00",
+        status: "Scheduled",
+        indicator: "warn",
+        category: "Guide",
+        icon: CalendarDotsIcon,
+        iconClassName: "bg-warn",
+    },
+] as const;
+
+type TimelineEvent = (typeof events)[number];
 
 export default function TimelinePage() {
-    const [state, setState] = useState<Item | null>(null);
+    const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
+
     return (
-        <DocsLayout title="Timeline" section="Display" description="View items in sequence of events, like a chronological timeline.">
-            <Modal type="drawer" title={state?.name} open={state !== null} onChange={() => setState(null)}>
-                Ok
+        <DocsLayout
+            title="Timeline"
+            section="Display"
+            description="View related events in chronological order with clear status and supporting details."
+        >
+            <Modal
+                type="drawer"
+                title={selectedEvent?.title}
+                open={selectedEvent !== null}
+                onChange={(open) => {
+                    if (!open) setSelectedEvent(null);
+                }}
+            >
+                {selectedEvent && (
+                    <div className="space-y-6">
+                        <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">{selectedEvent.description}</p>
+                        <dl className="grid gap-5 sm:grid-cols-2">
+                            <div className="space-y-1">
+                                <dt className="text-xs font-medium text-muted-foreground">Status</dt>
+                                <dd>
+                                    <Tag size="small" theme="neutral" indicator={selectedEvent.indicator}>
+                                        {selectedEvent.status}
+                                    </Tag>
+                                </dd>
+                            </div>
+                            <div className="space-y-1">
+                                <dt className="text-xs font-medium text-muted-foreground">Category</dt>
+                                <dd className="text-sm font-medium text-foreground">{selectedEvent.category}</dd>
+                            </div>
+                            <div className="space-y-1 sm:col-span-2">
+                                <dt className="text-xs font-medium text-muted-foreground">Published</dt>
+                                <dd className="text-sm font-medium text-foreground">
+                                    <time dateTime={selectedEvent.dateTime}>{selectedEvent.date}</time>
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                )}
             </Modal>
             <ComponentDemo
-                title="Basic Timeline with Details"
-                description="A timeline displaying a list of events. Clicking 'See details' opens a modal with more information for that event."
+                title="Release Activity Timeline"
+                description="A compact activity feed with status labels, supporting context, and an action that opens details for each event."
                 code={`"use client";
-import { CaretRightIcon, ClockIcon } from "@phosphor-icons/react";
-import { useState } from "react";
+import {
+  CalendarDotsIcon,
+  CaretRightIcon,
+  CheckCircleIcon,
+  RocketLaunchIcon,
+} from "@phosphor-icons/react";
 import {
   Button,
   Card,
-  Timeline,
-  Tag,
-  TimelineItem,
   Modal,
+  Tag,
+  Timeline,
+  TimelineItem,
 } from "@g4rcez/components";
+import { useState } from "react";
 
-type Item = {
-  name: string;
-};
+const events = [
+  {
+    id: "release",
+    title: "Version 6.0 published",
+    description:
+      "The new component styles, design tokens, and migration tools are now available.",
+    date: "Aug 7, 2026 · 1:17 PM",
+    dateTime: "2026-08-07T13:17:00-03:00",
+    status: "Released",
+    indicator: "success",
+    category: "Release",
+    icon: RocketLaunchIcon,
+    iconClassName: "bg-success",
+  },
+  {
+    id: "review",
+    title: "Documentation review completed",
+    description:
+      "Component examples and API references passed the final content review.",
+    date: "Aug 7, 2026 · 11:42 AM",
+    dateTime: "2026-08-07T11:42:00-03:00",
+    status: "Reviewed",
+    indicator: "info",
+    category: "Documentation",
+    icon: CheckCircleIcon,
+    iconClassName: "bg-info",
+  },
+  {
+    id: "migration",
+    title: "Migration guide scheduled",
+    description:
+      "The upgrade guide is ready and will be published with the next documentation update.",
+    date: "Aug 7, 2026 · 9:05 AM",
+    dateTime: "2026-08-07T09:05:00-03:00",
+    status: "Scheduled",
+    indicator: "warn",
+    category: "Guide",
+    icon: CalendarDotsIcon,
+    iconClassName: "bg-warn",
+  },
+] as const;
 
-function BasicTimeline() {
-  const [state, setState] = useState<Item | null>(null);
+type TimelineEvent = (typeof events)[number];
+
+function ReleaseActivityTimeline() {
+  const [selectedEvent, setSelectedEvent] =
+    useState<TimelineEvent | null>(null);
 
   return (
     <>
       <Modal
         type="drawer"
-        title={state?.name}
-        open={state !== null}
-        onChange={() => setState(null)}
+        title={selectedEvent?.title}
+        open={selectedEvent !== null}
+        onChange={(open) => {
+          if (!open) setSelectedEvent(null);
+        }}
       >
-        Event details for {state?.name}.
+        {selectedEvent && (
+          <div className="space-y-6">
+            <p className="max-w-prose text-sm leading-relaxed text-muted-foreground">
+              {selectedEvent.description}
+            </p>
+            <dl className="grid gap-5 sm:grid-cols-2">
+              <div className="space-y-1">
+                <dt className="text-xs font-medium text-muted-foreground">
+                  Status
+                </dt>
+                <dd>
+                  <Tag
+                    size="small"
+                    theme="neutral"
+                    indicator={selectedEvent.indicator}
+                  >
+                    {selectedEvent.status}
+                  </Tag>
+                </dd>
+              </div>
+              <div className="space-y-1">
+                <dt className="text-xs font-medium text-muted-foreground">
+                  Category
+                </dt>
+                <dd className="text-sm font-medium text-foreground">
+                  {selectedEvent.category}
+                </dd>
+              </div>
+              <div className="space-y-1 sm:col-span-2">
+                <dt className="text-xs font-medium text-muted-foreground">
+                  Published
+                </dt>
+                <dd className="text-sm font-medium text-foreground">
+                  <time dateTime={selectedEvent.dateTime}>
+                    {selectedEvent.date}
+                  </time>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        )}
       </Modal>
-      <Card title="Basic timeline">
+      <Card title="Release activity" container="w-full max-w-4xl">
         <Timeline>
-          {Array.from({ length: 3 }).map((_, i) => { // Reduced length for demo clarity
+          {events.map((event) => {
+            const EventIcon = event.icon;
+
             return (
-              <TimelineItem key={i}>
-                <TimelineItem.Icon
-                  className={
-                    i % 2 === 0 ? "bg-warn" : i % 3 === 0 ? "bg-info" : ""
-                  }
-                >
-                  <ClockIcon />
+              <TimelineItem key={event.id}>
+                <TimelineItem.Icon className={event.iconClassName}>
+                  <EventIcon size={20} aria-hidden />
                 </TimelineItem.Icon>
-                <TimelineItem.Body className="flex flex-col gap-2">
-                  <span className="flex flex-col gap-1">
-                    <time className="text-sm">
-                      {new Date().toLocaleDateString("pt-BR", {
-                        hour: "numeric",
-                        minute: "numeric",
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </time>
-                    <p className="text-xl leading-relaxed tracking-wide font-medium">
-                      {i + 1}. Title
+                <TimelineItem.Body className="flex flex-col gap-3 pb-1">
+                  <div className="space-y-1">
+                    <h4 className="text-base font-semibold tracking-tight text-foreground">
+                      {event.title}
+                    </h4>
+                    <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                      {event.description}
                     </p>
-                  </span>
-                  <div className="flex items-center gap-4">
-                    <Tag indicator="info" theme="neutral" size="small">
-                      Tag 1
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Tag
+                      size="tiny"
+                      theme="neutral"
+                      indicator={event.indicator}
+                    >
+                      {event.status}
                     </Tag>
-                    <Tag indicator="danger" theme="neutral" size="small">
-                      Tag 2
+                    <Tag size="tiny" theme="muted">
+                      {event.category}
                     </Tag>
-                    <Tag indicator="warn" theme="neutral" size="small">
-                      Tag 3
-                    </Tag>
+                    <time
+                      dateTime={event.dateTime}
+                      className="text-xs font-medium text-muted-foreground"
+                    >
+                      {event.date}
+                    </time>
+                    <Button
+                      theme="raw"
+                      className="ml-auto whitespace-nowrap text-sm text-secondary"
+                      aria-label={\`View details for \${event.title}\`}
+                      onClick={() => setSelectedEvent(event)}
+                    >
+                      Details <CaretRightIcon size={16} aria-hidden />
+                    </Button>
                   </div>
                 </TimelineItem.Body>
-                <TimelineItem.Right>
-                  <Button
-                    theme="raw"
-                    className="text-sm text-secondary"
-                    onClick={() => setState({ name: \`Name \${i + 1}\` })}
-                  >
-                    See details <CaretRightIcon size={18} />
-                  </Button>
-                </TimelineItem.Right>
               </TimelineItem>
             );
           })}
@@ -104,48 +262,43 @@ function BasicTimeline() {
       </Card>
     </>
   );
-}
-`}
+}`}
             >
-                <Card title="Basic timeline">
+                <Card title="Release activity" container="w-full max-w-4xl">
                     <Timeline>
-                        {Array.from({ length: 3 }).map((_, i) => {
+                        {events.map((event) => {
+                            const EventIcon = event.icon;
+
                             return (
-                                <TimelineItem key={i}>
-                                    <TimelineItem.Icon className={i % 2 === 0 ? "bg-warn" : i % 3 === 0 ? "bg-info" : ""}>
-                                        <ClockIcon size={28} />
+                                <TimelineItem key={event.id}>
+                                    <TimelineItem.Icon className={event.iconClassName}>
+                                        <EventIcon size={20} aria-hidden />
                                     </TimelineItem.Icon>
-                                    <TimelineItem.Body className="flex flex-col gap-2">
-                                        <span className="flex flex-col gap-1">
-                                            <time className="text-sm">
-                                                {new Date().toLocaleDateString("pt-BR", {
-                                                    hour: "numeric",
-                                                    minute: "numeric",
-                                                    weekday: "long",
-                                                    day: "numeric",
-                                                    month: "long",
-                                                    year: "numeric",
-                                                })}
+                                    <TimelineItem.Body className="flex flex-col gap-3 pb-1">
+                                        <div className="space-y-1">
+                                            <h4 className="text-base font-semibold tracking-tight text-foreground">{event.title}</h4>
+                                            <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{event.description}</p>
+                                        </div>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <Tag size="tiny" theme="neutral" indicator={event.indicator}>
+                                                {event.status}
+                                            </Tag>
+                                            <Tag size="tiny" theme="muted">
+                                                {event.category}
+                                            </Tag>
+                                            <time dateTime={event.dateTime} className="text-xs font-medium text-muted-foreground">
+                                                {event.date}
                                             </time>
-                                            <p className="text-xl font-medium leading-relaxed tracking-wide">{i + 1}. Title</p>
-                                        </span>
-                                        <div className="flex items-center gap-4">
-                                            <Tag indicator="info" theme="neutral" size="small">
-                                                Tag 1
-                                            </Tag>
-                                            <Tag indicator="danger" theme="neutral" size="small">
-                                                Tag 2
-                                            </Tag>
-                                            <Tag indicator="warn" theme="neutral" size="small">
-                                                Tag 3
-                                            </Tag>
+                                            <Button
+                                                theme="raw"
+                                                className="ml-auto whitespace-nowrap text-sm text-secondary"
+                                                aria-label={`View details for ${event.title}`}
+                                                onClick={() => setSelectedEvent(event)}
+                                            >
+                                                Details <CaretRightIcon size={16} aria-hidden />
+                                            </Button>
                                         </div>
                                     </TimelineItem.Body>
-                                    <TimelineItem.Right>
-                                        <Button theme="raw" className="text-sm text-secondary" onClick={() => setState({ name: `Name ${i + 1}` })}>
-                                            See details <CaretRightIcon size={18} />
-                                        </Button>
-                                    </TimelineItem.Right>
                                 </TimelineItem>
                             );
                         })}
