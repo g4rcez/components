@@ -149,6 +149,7 @@ export const sections: Section[] = [
             },
             { title: "Free Text", href: "/docs/free-text", icon: TextTIcon },
             { title: "Input", href: "/docs/input", icon: TextTIcon },
+            { title: "Input + Button Form", href: "/docs/input-button-form", icon: FileTextIcon },
             { title: "InputField", href: "/docs/input-field", icon: FileTextIcon },
             { title: "MultiSelect", href: "/docs/multiselect", icon: ListIcon },
             { title: "Radiobox", href: "/docs/radiobox", icon: RadioIcon },

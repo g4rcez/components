@@ -12,12 +12,12 @@ export type CheckboxProps = Override<
         loading?: boolean;
         container?: string;
         labelClassName?: string;
-        size?: "medium" | "large";
+        size?: "big" | "default" | "min" | "normal" | "small" | "tiny" | "medium" | "large";
     }
 >;
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-    ({ children, asTask = false, labelClassName, loading, error, className = "", size: _size, container, ...props }: CheckboxProps, ref) => {
+    ({ children, asTask = false, labelClassName, loading, error, className = "", size = "normal", container, ...props }: CheckboxProps, ref) => {
         const d = props.disabled || loading;
         const generatedId = useId();
         const id = props.id ?? props.name ?? generatedId;
@@ -31,7 +31,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                     data-disabled={d}
                     data-task={asTask}
                     data-component="checkbox"
-                    className={css(checkboxStyles.className({ task: asTask ? "true" : "false" }), checkboxStyles.slots.label, container)}
+                    className={css(checkboxStyles.className({ size, task: asTask ? "true" : "false" }), checkboxStyles.slots.label, container)}
                 >
                     <input
                         {...props}

@@ -5,7 +5,7 @@ import { css } from "../../lib/dom";
 import { path } from "../../lib/fns";
 import { SkeletonCell } from "../display/skeleton/skeleton";
 import { tableRowStyles } from "./row.styles";
-import type { CellAsideElement, CellPropsElement, Col, ColMatrix } from "./table-lib";
+import { getLabel, type CellAsideElement, type CellPropsElement, type Col, type ColMatrix } from "./table-lib";
 
 type ItemContentContext<T extends Record<string, unknown>> = {
     cols: Col<T>[];
@@ -81,7 +81,7 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                                 <Aside col={col} row={row} rowIndex={index} />
                             </RowAside>
                         ) : null}
-                        <span className={tableRowStyles.slots["cell-label"]}>{col.thead}</span>
+                        <span className={tableRowStyles.slots["cell-label"]}>{getLabel(col)}</span>
                         <span className={tableRowStyles.slots["cell-frame"]}>
                             {loading ? (
                                 SkeletonCell

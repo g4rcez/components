@@ -82,7 +82,7 @@ function ControlledDatePicker() {
 
             <ComponentDemo
                 title="Date Range Picker"
-                description="Pass range to render editable From and To inputs in one control, with presets, staged calendar selection, and Apply/Cancel actions."
+                description="Pass range to render editable endpoint inputs and a calendar header that uses labelRange, with presets, staged selection, and Apply/Cancel actions."
                 code={`"use client";
 import { useState } from "react";
 import { DatePicker, type DateRangeValue } from "@g4rcez/components";
@@ -97,12 +97,20 @@ function RangeDatePicker() {
       type="range"
       range={range}
       onChange={setRange}
+      labelRange={{ from: "Start date", to: "End date" }}
     />
   );
 }`}
             >
                 <Card title="Range">
-                    <DatePicker type="range" range={range} name="report-period" title="Report period" onChange={setRange} />
+                    <DatePicker
+                        type="range"
+                        range={range}
+                        name="report-period"
+                        title="Report period"
+                        onChange={setRange}
+                        labelRange={{ from: "Start date", to: "End date" }}
+                    />
                     {JSON.stringify(range)}
                 </Card>
             </ComponentDemo>

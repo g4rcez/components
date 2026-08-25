@@ -4,7 +4,7 @@ export const multiSelectStyles = defineComponentStyles({
     name: "multi-select",
     css: "@g4rcez/components/multi-select.css",
     variants: {
-        size: ["normal", "small"],
+        size: ["big", "default", "min", "normal", "small", "tiny"],
     },
     defaults: {
         size: "normal",

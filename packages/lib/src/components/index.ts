@@ -48,4 +48,11 @@ export * from "./form/task-list/task-list";
 export * from "./page-calendar/index";
 export * from "./table/index";
 export * from "./display/skeleton/skeleton";
-export { createColumns, createOptionCols, useTablePreferences, type ColType, type TablePagination } from "./table/table-lib";
+export {
+    createColumns,
+    createOptionCols,
+    useTablePreferences,
+    type ColType,
+    type TableHeaderCreatorProps,
+    type TablePagination,
+} from "./table/table-lib";

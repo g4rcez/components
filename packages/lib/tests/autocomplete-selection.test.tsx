@@ -150,6 +150,40 @@ describe("Autocomplete selection", () => {
         }
     });
 
+    it("renders custom options on touch-capable devices", async () => {
+        const originalMatchMedia = window.matchMedia;
+        window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+            matches: query === "(any-pointer: coarse)",
+            media: query,
+            onchange: null,
+            addListener: vi.fn(),
+            removeListener: vi.fn(),
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+            dispatchEvent: vi.fn(),
+        }));
+
+        try {
+            const user = userEvent.setup();
+            const options = [
+                {
+                    label: "Portuguese",
+                    value: "pt-BR",
+                    Render: ({ label }: { label?: string }) => <span>Custom {label}</span>,
+                },
+            ];
+            renderWithProvider(<Autocomplete name="language" title="Language" options={options} />);
+
+            const combobox = screen.getByRole("combobox", { name: /language/i });
+            expect(combobox).toBeInstanceOf(HTMLInputElement);
+            await user.click(combobox);
+
+            expect(await screen.findByRole("option", { name: "Custom Portuguese" })).toBeInTheDocument();
+        } finally {
+            window.matchMedia = originalMatchMedia;
+        }
+    });
+
     it("keeps free-text dynamic options on touch-capable devices", async () => {
         const originalMatchMedia = window.matchMedia;
         window.matchMedia = vi.fn().mockImplementation((query: string) => ({

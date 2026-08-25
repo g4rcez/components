@@ -26,6 +26,7 @@ import { DatePicker } from "@g4rcez/components/date-picker";
 | `date`         | `Date`                               | -               | Controlled selected date                                                      |
 | `range`        | `{ from?: Date; to?: Date } \| null` | -               | Enables range mode with staged selection, presets, and Apply/Cancel actions   |
 | `rangePresets` | `DatePickerPreset[]`                 | default presets | Range shortcuts shown in the preset list with keyboard typeahead              |
+| `labelRange`   | `{ from: string; to: string }`       | calendar labels | Labels shown in the range header and on selected endpoints                    |
 | `type`         | `"date" \| "datetime"`               | `"date"`        | Whether to include time (hour + minute) selection                             |
 | `floating`     | `boolean`                            | `true`          | Show the calendar in a floating `Dropdown`; set to `false` to embed it inline |
 | `clickToClose` | `boolean`                            | `false`         | Close the calendar immediately after a date is picked                         |
@@ -85,6 +86,18 @@ import { isBefore, startOfDay } from "date-fns";
 const [date, setDate] = useState<Date | undefined>();
 
 <DatePicker name="due_date" title="Due date" date={date} onChange={setDate} />;
+```
+
+### Date range header
+
+```tsx
+<DatePicker
+    name="trip"
+    title="Trip dates"
+    type="range"
+    range={{ from: new Date(2026, 6, 14), to: new Date(2026, 6, 21) }}
+    labelRange={{ from: "Arrival", to: "Departure" }}
+/>
 ```
 
 ### Inline calendar (no dropdown)

@@ -12,6 +12,96 @@
   width: 100%;
 }
 
+.__date-picker__range-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--var-spacing-base);
+}
+
+.__date-picker__range-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--var-spacing-base);
+}
+
+.__date-picker__range-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--var-spacing-base);
+}
+
+.__date-picker__range-title {
+  margin: 0;
+  color: var(--var-color-foreground);
+  font-size: var(--var-typography-page-title-font-size);
+  font-weight: var(--var-font-weight-semibold);
+}
+
+.__date-picker__range-nights {
+  flex: none;
+  border-radius: var(--var-date-picker-range-nights-radius);
+  padding-block: calc(var(--var-spacing-base) * 0.5);
+  padding-inline: var(--var-spacing-base);
+  background-color: var(--var-calendar-range-background);
+  color: var(--var-color-primary);
+  font-size: var(--var-typography-sm);
+  font-weight: var(--var-font-weight-medium);
+}
+
+.__date-picker__range-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--var-border-hairline) minmax(0, 1fr);
+  align-items: stretch;
+  gap: var(--var-spacing-base);
+  padding-block-end: var(--var-spacing-base);
+  border-block-end: var(--var-border-hairline) solid var(--var-color-border);
+}
+
+.__date-picker__range-header-field {
+  position: relative;
+  min-inline-size: 0;
+  padding-block: calc(var(--var-spacing-base) * 0.5);
+  text-align: start;
+}
+
+.__date-picker__range-header-field-label {
+  display: block;
+  color: var(--var-color-muted-foreground);
+  font-size: calc(var(--var-fontsize) * 0.75);
+  font-weight: var(--var-font-weight-medium);
+  letter-spacing: var(--var-typography-info-label-letter-spacing);
+  text-transform: uppercase;
+}
+
+.__date-picker__range-header-field-value {
+  display: block;
+  margin-block-start: calc(var(--var-spacing-base) * 0.25);
+  color: var(--var-color-foreground);
+  font-size: var(--var-typography-sm);
+  font-weight: var(--var-font-weight-medium);
+}
+
+.__date-picker__range-header-field[data-empty="true"] .__date-picker__range-header-field-value {
+  color: var(--var-color-muted-foreground);
+}
+
+.__date-picker__range-header-field[data-active="true"]::after {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: calc(0px - var(--var-border-hairline));
+  width: calc(var(--var-spacing-base) * 8);
+  height: calc(var(--var-border-hairline) * 2);
+  background-color: var(--var-color-primary);
+  content: "";
+}
+
+.__date-picker__range-header-field-divider {
+  align-self: center;
+  height: calc(var(--var-spacing-base) * 2);
+  border-inline-start: var(--var-border-hairline) solid var(--var-color-border);
+}
+
 .__date-picker__range-control {
   overflow: hidden;
 }

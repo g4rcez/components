@@ -20,6 +20,32 @@
   cursor: not-allowed;
 }
 
+.__checkbox--size-big.__checkbox__label {
+  min-block-size: var(--var-button-big-height);
+}
+
+.__checkbox--size-default.__checkbox__label,
+.__checkbox--size-normal.__checkbox__label,
+.__checkbox--size-medium.__checkbox__label {
+  min-block-size: var(--var-button-height);
+}
+
+.__checkbox--size-min.__checkbox__label {
+  min-block-size: var(--var-button-min-height);
+}
+
+.__checkbox--size-small.__checkbox__label {
+  min-block-size: var(--var-button-small-height);
+}
+
+.__checkbox--size-tiny.__checkbox__label {
+  min-block-size: var(--var-button-tiny-height);
+}
+
+.__checkbox--size-large.__checkbox__label {
+  min-block-size: var(--var-button-big-height);
+}
+
 .__checkbox__control {
   margin: 0;
 }

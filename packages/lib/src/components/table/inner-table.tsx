@@ -45,6 +45,7 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
         rows: T[];
         index: number;
         cols: Col<T>[];
+        allCols?: Col<T>[];
         sticky?: number;
         border?: boolean;
         loading?: boolean;
@@ -153,6 +154,7 @@ const resolveScrollParent = (viewport: HTMLElement, preferred?: HTMLElement) => 
 
 export const InnerTable = <T extends Record<string, unknown>>({
     cols,
+    allCols = cols,
     filters,
     setCols,
     sorters,
@@ -232,6 +234,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
                 fixedHeaderContent={() => (
                     <TableHeader<T>
                         headers={cols}
+                        columns={allCols}
                         filters={filters}
                         setCols={setCols}
                         sorters={sorters}

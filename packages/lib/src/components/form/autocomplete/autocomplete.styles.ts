@@ -3,7 +3,7 @@ import { defineComponentStyles } from "../../../lib/component-styles";
 export const autocompleteStyles = defineComponentStyles({
     name: "autocomplete",
     variants: {
-        size: ["normal", "small"],
+        size: ["big", "default", "min", "normal", "small", "tiny"],
     },
     css: "@g4rcez/components/autocomplete.css",
     defaults: {

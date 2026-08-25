@@ -179,18 +179,27 @@
   --var-input-field-hint-font-size: calc(var(--var-fontsize) * 0.75);
   --var-input-field-small-hint-font-size: calc(var(--var-fontsize) * 0.6875);
   --var-free-text-control-height: calc(var(--var-spacing-base) * 2.5);
+  --var-free-text-big-control-height: calc(var(--var-spacing-base) * 3);
+  --var-free-text-min-control-height: calc(var(--var-spacing-base) * 1.75);
   --var-free-text-small-control-height: calc(var(--var-spacing-base) * 2);
+  --var-free-text-tiny-control-height: calc(var(--var-spacing-base) * 1.5);
   --var-free-text-surface-radius: calc(var(--var-radius) * 0.375);
   --var-free-text-surface-padding-inline: calc(var(--var-spacing-base) * 0.5);
+  --var-free-text-big-surface-padding-inline: calc(var(--var-spacing-base) * 1.5);
+  --var-free-text-min-surface-padding-inline: calc(var(--var-spacing-base) * 0.75);
   --var-free-text-small-surface-padding-inline: calc(
     var(--var-spacing-base) * 0.375
   );
+  --var-free-text-tiny-surface-padding-inline: calc(var(--var-spacing-base) * 0.5);
   --var-free-text-surface-padding-block: calc(var(--var-spacing-base) * 0.25);
   --var-free-text-small-surface-padding-block: calc(
     var(--var-spacing-base) * 0.125
   );
   --var-free-text-font-size: calc(var(--var-fontsize) * 1);
+  --var-free-text-big-font-size: calc(var(--var-fontsize) * 1);
+  --var-free-text-min-font-size: calc(var(--var-fontsize) * 0.875);
   --var-free-text-small-font-size: calc(var(--var-fontsize) * 0.875);
+  --var-free-text-tiny-font-size: calc(var(--var-fontsize) * 0.875);
   --var-free-text-outline-width: calc(var(--var-spacing-base) * 0.125);
   --var-free-text-outline-offset: calc(var(--var-spacing-base) * 0.125);
   --var-free-text-placeholder-foreground: hsla(240, 4%, 46%);
@@ -319,6 +328,7 @@
   --var-date-picker-calendar-icon-size: calc(var(--var-fontsize) * 1);
   --var-date-picker-panel-gap: calc(var(--var-spacing-base) * 1);
   --var-date-picker-panel-padding: calc(var(--var-spacing-base) * 1);
+  --var-date-picker-range-nights-radius: calc(var(--var-card-surface-radius) * 1);
   --var-date-picker-presets-inline-size: calc(var(--var-spacing-base) * 13);
   --var-date-picker-preset-padding-block: calc(var(--var-spacing-base) * 0.625);
   --var-date-picker-preset-padding-inline: calc(
@@ -666,6 +676,9 @@
 
   --var-table-rounded: calc(var(--var-radius) * 0.666667);
   --var-table-groups-gap: calc(var(--var-spacing-base) * 1);
+  --var-table-group-title-gap: calc(var(--var-spacing-base) * 0.25);
+  --var-table-group-title-padding-block: calc(var(--var-spacing-base) * 0.5);
+  --var-table-group-title-padding-inline: calc(var(--var-spacing-base) * 0.75);
   --var-table-inline-gap-tight: calc(var(--var-spacing-base) * 0.25);
   --var-table-filter-gap: calc(var(--var-spacing-base) * 1);
   --var-table-filter-icon-size: calc(var(--var-fontsize) * 0.875);
@@ -700,8 +713,22 @@
   --var-table-head-filter-item-margin-block: calc(
     var(--var-spacing-base) * 0.25
   );
-  --var-table-divider-width: calc(var(--var-border-hairline) * 1);
-  --var-table-divider-width-active: calc(var(--var-spacing-base) * 0.375);
+  --var-table-properties-icon-size: calc(var(--var-fontsize) * 0.875);
+  --var-table-properties-trigger-min-block-size: calc(
+    var(--var-spacing-base) * 2.75
+  );
+  --var-table-properties-list-min-inline-size: calc(
+    var(--var-spacing-base) * 14
+  );
+  --var-table-properties-list-gap: calc(var(--var-spacing-base) * 0.5);
+  --var-table-properties-item-gap: calc(var(--var-spacing-base) * 0.5);
+  --var-table-properties-handle-padding: calc(var(--var-spacing-base) * 0.25);
+  --var-table-divider-width: var(--var-spacing-base);
+  --var-table-divider-width-active: calc(var(--var-spacing-base) * 0.5);
+  --var-table-resizer-inline-size: calc(var(--var-spacing-base) * 0.75);
+  --var-table-resizer-block-size: calc(var(--var-spacing-base) * 3);
+  --var-table-resizer-focus-ring-width: calc(var(--var-border-hairline) * 2);
+  --var-table-resizer-focus-ring-offset: calc(var(--var-spacing-base) * 0.125);
   --var-table-pagination-gap: calc(var(--var-spacing-base) * 1);
   --var-table-pagination-padding: calc(var(--var-spacing-base) * 0.75);
   --var-table-pagination-items-gap: calc(var(--var-spacing-base) * 0.5);

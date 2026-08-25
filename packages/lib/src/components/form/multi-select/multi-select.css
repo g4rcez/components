@@ -16,8 +16,8 @@
     block-size: var(--var-input-field-icon-size);
 }
 
-.__multi-select--size-small .__multi-select__caret-icon,
-.__multi-select--size-small.__multi-select__caret-icon {
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny) .__multi-select__caret-icon,
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__caret-icon {
     inline-size: var(--var-input-field-small-icon-size);
     block-size: var(--var-input-field-small-icon-size);
 }
@@ -48,8 +48,8 @@
     column-gap: var(--var-multi-select-tags-gap);
 }
 
-.__multi-select--size-small .__multi-select__tags,
-.__multi-select--size-small.__multi-select__tags {
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny) .__multi-select__tags,
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__tags {
     column-gap: var(--var-input-field-small-slot-gap);
 }
 
@@ -78,7 +78,7 @@
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__multi-select--size-small.__multi-select__action {
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__action {
     font-size: var(--var-free-text-small-font-size);
 }
 
@@ -202,7 +202,7 @@
     text-align: left;
 }
 
-.__multi-select--size-small.__multi-select__panel .__multi-select__empty-text {
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__panel .__multi-select__empty-text {
     padding: var(--var-free-text-small-surface-padding-inline);
 }
 
@@ -231,7 +231,7 @@
     text-align: left;
 }
 
-.__multi-select--size-small.__multi-select__panel .__multi-select__option {
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__panel .__multi-select__option {
     min-block-size: var(--var-free-text-small-control-height);
     padding: var(--var-free-text-small-surface-padding-inline);
 }
@@ -266,7 +266,7 @@
     padding: var(--var-multi-select-option-padding);
 }
 
-.__multi-select--size-small.__multi-select__panel .__multi-select__footer {
+.__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__panel .__multi-select__footer {
     padding: var(--var-free-text-small-surface-padding-inline);
 }
 

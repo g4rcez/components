@@ -71,6 +71,55 @@ describe("DatePicker range picker", () => {
         expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ from: new Date(2026, 7, 1), to: new Date(2026, 7, 15) }));
     });
 
+    it("renders range labels and the number of nights in the calendar header", async () => {
+        const user = userEvent.setup();
+        render(
+            <ComponentsProvider locale="en-US">
+                <DatePicker
+                    name="trip"
+                    title="Trip dates"
+                    type="range"
+                    range={{ from: new Date(2026, 6, 14), to: new Date(2026, 6, 21) }}
+                    labelRange={{ from: "Arrival", to: "Departure" }}
+                />
+            </ComponentsProvider>
+        );
+
+        await user.click(screen.getByRole("button", { name: /open a date picker/i }));
+
+        const header = document.querySelector<HTMLElement>(".__date-picker__range-header");
+        expect(header).not.toBeNull();
+        expect(within(header as HTMLElement).getByText("Arrival")).toBeInTheDocument();
+        expect(within(header as HTMLElement).getByText("Departure")).toBeInTheDocument();
+        expect(within(header as HTMLElement).getByText("Jul 14")).toBeInTheDocument();
+        expect(within(header as HTMLElement).getByText("Jul 21")).toBeInTheDocument();
+        expect(within(header as HTMLElement).getByText("7 nights")).toBeInTheDocument();
+
+        const group = screen.getByRole("group", { name: "Trip dates" });
+        expect(within(group).getByRole("textbox", { name: "Arrival" })).toHaveValue("07/14/2026");
+        expect(within(group).getByRole("textbox", { name: "Departure" })).toHaveValue("07/21/2026");
+    });
+
+    it("shows an add-date placeholder for an unselected endpoint", async () => {
+        const user = userEvent.setup();
+        renderWithProvider(
+            <DatePicker
+                name="trip"
+                title="Trip dates"
+                type="range"
+                range={{ from: new Date(2026, 6, 14) }}
+                labelRange={{ from: "Arrival", to: "Departure" }}
+            />
+        );
+
+        await user.click(screen.getByRole("button", { name: /open a date picker/i }));
+
+        const header = document.querySelector<HTMLElement>(".__date-picker__range-header");
+        expect(header).not.toBeNull();
+        expect(within(header as HTMLElement).getByText("Jul 14")).toBeInTheDocument();
+        expect(within(header as HTMLElement).getByText("Add date")).toBeInTheDocument();
+    });
+
     it("keeps the selected to date when typing a new from date after closing the calendar", async () => {
         const user = userEvent.setup();
 

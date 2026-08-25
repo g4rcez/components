@@ -128,15 +128,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
             [dynamicOption, shadow, options]
         );
-        const nativeOptions = useMemo<OptionProps[]>(
-            () =>
-                options.map((option) => {
-                    const nativeOption = { ...option };
-                    delete nativeOption.Render;
-                    return nativeOption;
-                }),
-            [options]
-        );
+        const hasCustomRenderer = useMemo(() => options.some((option) => option.Render), [options]);
 
         const openDropdown = () => flushSync(() => setOpen(true));
 
@@ -384,7 +376,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             );
         };
 
-        if (isTouchableDevice && !dynamicOption) {
+        if (isTouchableDevice && !dynamicOption && !hasCustomRenderer) {
             const onTouchDeviceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
                 const nextValue = event.target.value;
                 const selected = options.find((option) => option.value === nextValue);
@@ -405,7 +397,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         error={error}
                         right={right}
                         loading={loading}
-                        options={nativeOptions}
+                        options={options}
                         container={container}
                         rightLabel={rightLabel}
                         interactive={interactive}

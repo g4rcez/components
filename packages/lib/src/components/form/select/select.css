@@ -24,7 +24,7 @@ fieldset:disabled .__select__field {
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__select--size-small.__select__trigger {
+.__select:is(.__select--size-min, .__select--size-small, .__select--size-tiny).__select__trigger {
     margin-block-start: var(--var-free-text-small-surface-padding-block);
 }
 
@@ -42,8 +42,8 @@ fieldset:disabled .__select__field {
     block-size: var(--var-input-field-icon-size);
 }
 
-.__select--size-small .__select__trigger-icon,
-.__select--size-small.__select__trigger-icon {
+.__select:is(.__select--size-min, .__select--size-small, .__select--size-tiny) .__select__trigger-icon,
+.__select:is(.__select--size-min, .__select--size-small, .__select--size-tiny).__select__trigger-icon {
     inline-size: var(--var-input-field-small-icon-size);
     block-size: var(--var-input-field-small-icon-size);
 }

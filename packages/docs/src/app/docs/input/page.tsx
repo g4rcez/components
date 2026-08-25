@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { useState } from "react";
-import { Card, Input, type CurrencyCode, type InputTypes } from "@g4rcez/components";
+import { Button, Card, Input, type CurrencyCode, type InputTypes } from "@g4rcez/components";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
 
 const Password = () => {
@@ -174,21 +174,29 @@ function CustomAndInteractiveMasks() {
 
             <ComponentDemo
                 title="Field Sizes"
-                description="Use size=normal or size=small to match the density of your form layout."
-                code={`import { Input } from "@g4rcez/components";
+                description="Use the button-compatible size names to align inputs and actions in one row."
+                code={`import { Button, Input } from "@g4rcez/components";
 
 function InputSizes() {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <Input size="normal" title="Normal input" placeholder="Default field height" />
-      <Input size="small" title="Small input" placeholder="Dense field height" />
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
+      {(["big", "default", "min", "small", "tiny"] as const).map((size) => (
+        <div className="flex items-end gap-2" key={size}>
+          <Input size={size} title={size} placeholder="Search" />
+          <Button size={size}>Go</Button>
+        </div>
+      ))}
     </div>
   );
 }`}
             >
-                <Card title="Sizes" className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <Input size="normal" title="Normal input" placeholder="Default field height" />
-                    <Input size="small" title="Small input" placeholder="Dense field height" />
+                <Card title="Sizes" className="grid grid-cols-1 gap-6 md:grid-cols-5">
+                    {(["big", "default", "min", "small", "tiny"] as const).map((size) => (
+                        <div className="flex items-end gap-2" key={size}>
+                            <Input size={size} title={size} placeholder="Search" />
+                            <Button size={size}>Go</Button>
+                        </div>
+                    ))}
                 </Card>
             </ComponentDemo>
         </DocsLayout>

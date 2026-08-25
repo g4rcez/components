@@ -3,7 +3,7 @@ import { defineComponentStyles } from "../../../lib/component-styles";
 export const inputFieldStyles = defineComponentStyles({
     name: "input-field",
     variants: {
-        size: ["normal", "small"],
+        size: ["big", "default", "min", "normal", "small", "tiny"],
     },
     css: "@g4rcez/components/input.css",
     defaults: {

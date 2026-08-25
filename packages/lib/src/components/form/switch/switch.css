@@ -12,6 +12,27 @@
     align-items: center;
 }
 
+.__switch--size-big .__switch__row {
+    min-block-size: var(--var-button-big-height);
+}
+
+.__switch--size-default .__switch__row,
+.__switch--size-normal .__switch__row {
+    min-block-size: var(--var-button-height);
+}
+
+.__switch--size-min .__switch__row {
+    min-block-size: var(--var-button-min-height);
+}
+
+.__switch--size-small .__switch__row {
+    min-block-size: var(--var-button-small-height);
+}
+
+.__switch--size-tiny .__switch__row {
+    min-block-size: var(--var-button-tiny-height);
+}
+
 .__switch__track {
     position: relative;
     display: inline-flex;

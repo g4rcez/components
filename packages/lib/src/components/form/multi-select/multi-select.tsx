@@ -323,7 +323,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const panelTopClass = `${multiSelectStyles.slots.panel}--top`;
         const panelBottomClass = `${multiSelectStyles.slots.panel}--bottom`;
         const optionSelectedClass = `${multiSelectStyles.slots.option}--selected`;
-        const tagSize = fieldSize === "small" ? "tiny" : "small";
+        const tagSize = ["min", "small", "tiny"].includes(fieldSize) ? "tiny" : "small";
 
         const tags = value.map((x, i) => (
             <Tag

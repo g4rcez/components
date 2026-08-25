@@ -1,7 +1,19 @@
 "use client";
 import { useFloating, useInteractions, useListNavigation, useTypeahead } from "@floating-ui/react";
 import { CalendarIcon } from "@phosphor-icons/react";
-import { endOfMonth, endOfYear, format, isValid, parse, startOfDay, startOfMonth, startOfYear, subDays, subMonths } from "date-fns";
+import {
+    differenceInCalendarDays,
+    endOfMonth,
+    endOfYear,
+    format,
+    isValid,
+    parse,
+    startOfDay,
+    startOfMonth,
+    startOfYear,
+    subDays,
+    subMonths,
+} from "date-fns";
 import type React from "react";
 import { forwardRef, Fragment, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Is } from "sidekicker";
@@ -273,20 +285,33 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
 
         const formatDateValue = useCallback((d: Date | undefined) => (isValid(d) ? format(d!, placeholder) : ""), [placeholder]);
 
-        const [value, setValue] = useState(formatDateValue(innerDate));
+        const [value, setValue] = useState(() => formatDateValue(innerDate));
         const [rangeValues, setRangeValues] = useState(() => ({
             from: formatDateValue(innerRange?.from),
             to: formatDateValue(innerRange?.to),
         }));
         const labels = {
-            searchPlaceholder: rangeLabels?.searchPlaceholder || translation.datePickerSearchPeriodPlaceholder,
-            today: rangeLabels?.today || translation.datePickerTodayPreset,
-            cancel: rangeLabels?.cancel || translation.datePickerCancel,
             apply: rangeLabels?.apply || translation.datePickerApply,
+            cancel: rangeLabels?.cancel || translation.datePickerCancel,
+            today: rangeLabels?.today || translation.datePickerTodayPreset,
+            searchPlaceholder: rangeLabels?.searchPlaceholder || translation.datePickerSearchPeriodPlaceholder,
         };
+        const rangeEndpointLabels = {
+            to: props.labelRange?.to ?? translation.calendarToDate,
+            from: props.labelRange?.from ?? translation.calendarFromDate,
+        };
+        const rangeHeaderDateFormatter = useMemo(() => new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }), [locale]);
+        const rangeFromDate = draftRange?.from;
+        const rangeToDate = draftRange?.to;
+        const hasRangeFromDate = isValid(rangeFromDate);
+        const hasRangeToDate = isValid(rangeToDate);
+        const rangeNights = hasRangeFromDate && hasRangeToDate ? Math.abs(differenceInCalendarDays(rangeToDate!, rangeFromDate!)) : undefined;
+        const activeRangeField = !hasRangeFromDate ? "from" : !hasRangeToDate ? "to" : undefined;
+        const formatRangeHeaderDate = (date: Date | undefined) =>
+            isValid(date) ? rangeHeaderDateFormatter.format(date) : translation.datePickerAddDate;
         const presetRanges = useMemo(() => {
             const today = startOfDay(new Date());
-            const defaults = getPresetRanges(
+            const defaultItems = getPresetRanges(
                 {
                     today: translation.datePickerTodayPreset,
                     yesterday: translation.datePickerYesterdayPreset,
@@ -298,7 +323,8 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                 },
                 today
             );
-            return (rangePresets || defaults).map((preset) => ({
+            const items = rangePresets || defaultItems;
+            return items.map((preset) => ({
                 label: preset.label,
                 range: typeof preset.range === "function" ? preset.range(today) : preset.range,
             }));
@@ -359,14 +385,16 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
 
         const validDate = isValid(innerDate);
         const validRange = isValidRange(innerRange);
-        const htmlValue = (() => {
-            if (rangeMode) return validRange ? `${innerRange?.from?.toISOString() || ""}/${innerRange?.to?.toISOString() || ""}` : undefined;
-            return validDate ? innerDate!.toISOString() : undefined;
-        })();
-        const nativeValue = (() => {
-            if (rangeMode) return htmlValue || "";
-            return validDate ? format(innerDate!, "yyyy-MM-dd") : "";
-        })();
+        const htmlValue = rangeMode
+            ? validRange
+                ? `${innerRange?.from?.toISOString() || ""}/${innerRange?.to?.toISOString() || ""}`
+                : undefined
+            : validDate
+              ? innerDate!.toISOString()
+              : undefined;
+
+        const nativeValue = rangeMode ? htmlValue || "" : validDate ? format(innerDate!, "yyyy-MM-dd") : "";
+
         const calendarDate = !rangeMode && validDate ? innerDate : undefined;
 
         const applyRange = (nextRange = draftRangeRef.current ?? null) => {
@@ -381,20 +409,19 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
         const onChangeRangeInput = (key: "from" | "to") => (event: React.ChangeEvent<HTMLInputElement>) => {
             const inputValue = event.target.value;
             setRangeValues((current) => ({ ...current, [key]: inputValue }));
-
             const matchesMask =
                 mask.length === inputValue.length &&
                 mask.every((part, index) => {
                     const character = inputValue.charAt(index);
                     return typeof part === "string" ? character === part : part.test(character);
                 });
-            // Keep the committed range intact while a masked date is incomplete.
-            // Otherwise a controlled parent receives a transient `undefined` endpoint.
-            if (!matchesMask) return;
-
+            if (!matchesMask) {
+                return;
+            }
             const parsed = parse(inputValue, placeholder, new Date());
-            if (!isValid(parsed)) return;
-
+            if (!isValid(parsed)) {
+                return;
+            }
             const nextRange = {
                 ...(draftRangeRef.current ?? innerRangeRef.current),
                 [key]: type === "datetime" ? parsed : startOfDay(parsed),
@@ -420,7 +447,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
             setOpen(false);
         };
 
-        const CalendarComponent = (
+        const CalendarElement = (
             <Calendar
                 {...(props as unknown as CalendarProps)}
                 locale={locale}
@@ -434,6 +461,35 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                 type={rangeMode ? "range" : type}
                 range={rangeMode ? draftRange : undefined}
             />
+        );
+
+        const CalendarComponent = rangeMode ? (
+            <div className={datePickerStyles.slots["range-calendar"]}>
+                <header className={datePickerStyles.slots["range-header"]}>
+                    <div className={datePickerStyles.slots["range-fields"]}>
+                        <div
+                            data-empty={!hasRangeFromDate || undefined}
+                            data-active={activeRangeField === "from" || undefined}
+                            className={datePickerStyles.slots["range-header-field"]}
+                        >
+                            <span className={datePickerStyles.slots["range-header-field-label"]}>{rangeEndpointLabels.from}</span>
+                            <span className={datePickerStyles.slots["range-header-field-value"]}>{formatRangeHeaderDate(rangeFromDate)}</span>
+                        </div>
+                        <span aria-hidden="true" className={datePickerStyles.slots["range-header-field-divider"]} />
+                        <div
+                            className={datePickerStyles.slots["range-header-field"]}
+                            data-active={activeRangeField === "to" || undefined}
+                            data-empty={!hasRangeToDate || undefined}
+                        >
+                            <span className={datePickerStyles.slots["range-header-field-label"]}>{rangeEndpointLabels.to}</span>
+                            <span className={datePickerStyles.slots["range-header-field-value"]}>{formatRangeHeaderDate(rangeToDate)}</span>
+                        </div>
+                    </div>
+                </header>
+                {CalendarElement}
+            </div>
+        ) : (
+            CalendarElement
         );
 
         const CalendarDropdown = floating ? (
@@ -502,15 +558,15 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
 
         const HiddenInput = (
             <input
-                data-origin={props.name}
-                value={nativeValue || ""}
-                form={props.form}
                 hidden
+                readOnly
                 id={props.name}
+                form={props.form}
                 name={props.name}
                 ref={externalRef}
+                data-origin={props.name}
+                value={nativeValue || ""}
                 type={rangeMode ? "hidden" : "date"}
-                readOnly
             />
         );
 
@@ -524,6 +580,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
             freeTextStyles.slots["input-state"],
             datePickerStyles.slots["range-input"]
         );
+
         const rangeRequired = props.required ?? true;
 
         return (
@@ -580,7 +637,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                                 disabled={props.disabled}
                                 readOnly={props.readOnly}
                                 aria-invalid={!!props.error}
-                                aria-label={translation.calendarFromDate}
+                                aria-label={rangeEndpointLabels.from}
                                 aria-describedby={props.error ? `${rangeId}-error` : undefined}
                                 placeholder={props.placeholder || translation.datepickerPlaceholder(placeholder)}
                                 className={rangeInputClassName}
@@ -593,19 +650,19 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                             <MaskInput
                                 mask={mask}
                                 type="text"
-                                id={`${rangeId}-to`}
                                 form={props.form}
+                                id={`${rangeId}-to`}
                                 value={rangeValues.to}
                                 required={rangeRequired}
                                 disabled={props.disabled}
                                 readOnly={props.readOnly}
                                 aria-invalid={!!props.error}
-                                aria-label={translation.calendarToDate}
+                                onBlur={resetRangeInput("to")}
+                                className={rangeInputClassName}
+                                aria-label={rangeEndpointLabels.to}
+                                onChange={onChangeRangeInput("to")}
                                 aria-describedby={props.error ? `${rangeId}-error` : undefined}
                                 placeholder={props.placeholder || translation.datepickerPlaceholder(placeholder)}
-                                className={rangeInputClassName}
-                                onChange={onChangeRangeInput("to")}
-                                onBlur={resetRangeInput("to")}
                             />
                             {floating ? (
                                 <span className={css(inputFieldStyles.slots["slot-end"], inputFieldStyles.slots.slot)}>

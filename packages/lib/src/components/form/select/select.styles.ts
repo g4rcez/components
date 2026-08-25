@@ -4,7 +4,7 @@ export const selectStyles = defineComponentStyles({
     name: "select",
     css: "@g4rcez/components/select.css",
     variants: {
-        size: ["normal", "small"],
+        size: ["big", "default", "min", "normal", "small", "tiny"],
     },
     defaults: {
         size: "normal",

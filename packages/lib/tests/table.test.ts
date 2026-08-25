@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { createPaginationItems } from "../src/components/table/pagination";
-import { multiSort } from "../src/components/table/sort";
+import { multiSort, type Sorter } from "../src/components/table/sort";
 
 type Row = { name: string; age: number; score: number };
+
+const ascending = "asc" as Sorter<Row>["type"];
+const descending = "desc" as Sorter<Row>["type"];
 
 describe("multiSort", () => {
     it("sorts ascending by a string field", () => {
@@ -11,7 +14,7 @@ describe("multiSort", () => {
             { name: "Alice", age: 25, score: 90 },
             { name: "Bob", age: 28, score: 85 },
         ];
-        const result = multiSort([...rows], [{ id: "s1", value: "name", type: "asc", label: "Name" }]);
+        const result = multiSort([...rows], [{ id: "s1", value: "name", type: ascending, label: "Name" }]);
         expect(result.map((r) => r.name)).toEqual(["Alice", "Bob", "Charlie"]);
     });
 
@@ -21,7 +24,7 @@ describe("multiSort", () => {
             { name: "Bob", age: 28, score: 85 },
             { name: "Charlie", age: 30, score: 80 },
         ];
-        const result = multiSort([...rows], [{ id: "s1", value: "age", type: "desc", label: "Age" }]);
+        const result = multiSort([...rows], [{ id: "s1", value: "age", type: descending, label: "Age" }]);
         expect(result.map((r) => r.age)).toEqual([30, 28, 25]);
     });
 
@@ -34,8 +37,8 @@ describe("multiSort", () => {
         const result = multiSort(
             [...rows],
             [
-                { id: "s1", value: "age", type: "asc", label: "Age" },
-                { id: "s2", value: "score", type: "desc", label: "Score" },
+                { id: "s1", value: "age", type: ascending, label: "Age" },
+                { id: "s2", value: "score", type: descending, label: "Score" },
             ]
         );
         expect(result.map((r) => r.name)).toEqual(["Charlie", "Alice", "Bob"]);

@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { Fragment, useEffect, useState } from "react";
-import { Autocomplete, Button, Modal } from "@g4rcez/components";
+import { Autocomplete, AutocompleteItemProps, Button, Modal, OptionProps } from "@g4rcez/components";
 
 const defaults = [
     { label: "JavaScript", value: "javascript" },
@@ -66,6 +66,35 @@ const SelectOnModal = () => {
             </Modal>
             <Button onClick={() => setOpen(true)}>Open modal</Button>
         </Fragment>
+    );
+};
+
+const CreateOptionAutocomplete = () => {
+    const [options, setOptions] = useState<AutocompleteItemProps[]>(() => defaults.slice(0, 6));
+    const [value, setValue] = useState("");
+    console.log(options);
+
+    return (
+        <Autocomplete
+            dynamicOption
+            id="create-option-demo"
+            options={options}
+            title="Programming language"
+            placeholder="Search or create a language"
+            value={value}
+            onChange={(event) => {
+                const value = event.target.value.trim();
+                setValue(value);
+                if (!value) return;
+                setOptions((current: AutocompleteItemProps[]): AutocompleteItemProps[] => {
+                    const normalizedValue = value.toLowerCase();
+                    const exists = current.some(
+                        (option) => option.value.toLowerCase() === normalizedValue || option.label?.toLowerCase() === normalizedValue
+                    );
+                    return exists ? current : [...current, { label: value, value }];
+                });
+            }}
+        />
     );
 };
 
@@ -141,6 +170,59 @@ function BasicAutocomplete() {
                         }}
                     />
                     <Autocomplete id="5" rightLabel=" " title="Overflow" options={withHidden} />
+                </div>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Create a New Option"
+                description="Use dynamicOption to let users add text that is not already in the options. Type a new language, then press Enter or select it to add it to the list."
+                code={`"use client";
+import { useState, type ChangeEvent } from "react";
+import { Autocomplete } from "@g4rcez/components";
+
+const initialOptions = [
+  { label: "JavaScript", value: "javascript" },
+  { label: "Python", value: "python" },
+  { label: "TypeScript", value: "typescript" },
+];
+
+function CreatableAutocomplete() {
+  const [options, setOptions] = useState(initialOptions);
+  const [value, setValue] = useState("");
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value.trim();
+    setValue(nextValue);
+    if (!nextValue) return;
+
+    setOptions((current) => {
+      const normalizedValue = nextValue.toLowerCase();
+      const exists = current.some(
+        (option) =>
+          option.value.toLowerCase() === normalizedValue ||
+          option.label.toLowerCase() === normalizedValue,
+      );
+
+      return exists
+        ? current
+        : [...current, { label: nextValue, value: nextValue }];
+    });
+  };
+
+  return (
+    <Autocomplete
+      dynamicOption
+      title="Programming language"
+      placeholder="Search or create a language"
+      options={options}
+      value={value}
+      onChange={handleChange}
+    />
+  );
+}`}
+            >
+                <div className="w-full max-w-md">
+                    <CreateOptionAutocomplete />
                 </div>
             </ComponentDemo>
 

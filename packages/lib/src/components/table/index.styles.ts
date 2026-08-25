@@ -5,6 +5,6 @@ export const tableRootStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/table.css",
     defaults: {},
-    slots: ["groups", "group"],
+    slots: ["groups", "group", "group-title"],
     dependencies: ["table-filter", "table-group", "table-inner-table", "table-metadata"],
 });

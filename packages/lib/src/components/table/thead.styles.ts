@@ -8,6 +8,14 @@ export const tableHeadStyles = defineComponentStyles({
     slots: [
         "filter-icon",
         "add-icon",
+        "properties-trigger",
+        "properties-trigger-content",
+        "properties-trigger-icon",
+        "properties-list",
+        "properties-item",
+        "properties-drag-handle",
+        "properties-drag-icon",
+        "properties-label",
         "cell",
         "cell-content",
         "actions",
@@ -20,5 +28,5 @@ export const tableHeadStyles = defineComponentStyles({
         "label",
         "resizer",
     ],
-    dependencies: ["dropdown", "table-filter", "table-sort"],
+    dependencies: ["checkbox", "dropdown", "table-filter", "table-sort"],
 });

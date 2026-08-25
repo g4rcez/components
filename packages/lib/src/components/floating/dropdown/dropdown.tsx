@@ -22,6 +22,7 @@ import { dropdownStyles } from "./dropdown.styles";
 type DropdownProps = {
     open?: boolean;
     arrow?: boolean;
+    lockPositionOnOpen?: boolean;
     hover?: boolean;
     returnFocus?: boolean;
     restoreFocus?: boolean;
@@ -29,6 +30,11 @@ type DropdownProps = {
     onChange?: (nextValue: boolean) => void;
     trigger: React.ReactElement | React.ReactNode;
     title?: React.ReactNode | React.ReactElement | string;
+};
+
+const updatePositionOnce: typeof autoUpdate = (_reference, _floating, update) => {
+    void update();
+    return () => undefined;
 };
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
@@ -52,7 +58,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
         open,
         middleware,
         transform: true,
-        whileElementsMounted: autoUpdate,
+        whileElementsMounted: props.lockPositionOnOpen ? updatePositionOnce : autoUpdate,
         onOpenChange: (nextValue, event) => {
             const element = (event as FocusEvent | undefined)?.relatedTarget as HTMLElement | null;
             if (element) {

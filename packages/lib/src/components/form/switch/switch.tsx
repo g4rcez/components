@@ -5,16 +5,17 @@ import { useStableRef } from "../../../hooks/use-stable-ref";
 import { css } from "../../../lib/dom";
 import { switchStyles } from "./switch.styles";
 
-export type SwitchProps = Omit<React.ComponentProps<"input">, "onKeyDown"> & {
+export type SwitchProps = Omit<React.ComponentProps<"input">, "onKeyDown" | "size"> & {
     error?: string;
     loading?: boolean;
     container?: string;
     onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>;
     onCheck?: (nextValue: boolean) => void;
+    size?: "big" | "default" | "min" | "normal" | "small" | "tiny";
 };
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-    ({ children, loading, container, error, onKeyDown, onCheck: onCheckProp, ...props }: SwitchProps, ref) => {
+    ({ children, loading, container, error, onKeyDown, onCheck: onCheckProp, size = "default", ...props }: SwitchProps, ref) => {
         const id = useId();
         const errorId = error ? `${props.id || id}-error` : undefined;
         const describedBy = [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
@@ -49,7 +50,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         };
 
         return (
-            <fieldset className={css(switchStyles.className(), container)} data-component="switch" disabled={props.disabled || loading}>
+            <fieldset className={css(switchStyles.className({ size }), container)} data-component="switch" disabled={props.disabled || loading}>
                 <span className={switchStyles.slots.row}>
                     <input
                         {...props}

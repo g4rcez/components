@@ -1,13 +1,13 @@
 "use client";
-import { AnimatePresence, motion, type PanInfo, Reorder } from "motion/react";
+import { AnimatePresence, motion, type PanInfo, Reorder, useDragControls, useMotionValue } from "motion/react";
 import { Order } from "linq-arrays";
-import { PlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
-import type React from "react";
-import { Fragment, useCallback, useRef } from "react";
+import { DotsSixVerticalIcon, PlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon, GearFineIcon } from "@phosphor-icons/react";
+import React, { Fragment, useCallback, useMemo, useRef } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
 import { css } from "../../lib/dom";
 import { Dropdown } from "../floating/dropdown/dropdown";
+import { Checkbox } from "../form/checkbox/checkbox";
 import { ColumnHeaderFilter, createFilterFromCol, useOperators } from "./filter";
 import { SorterHead } from "./sort";
 import { tableHeadStyles } from "./thead.styles";
@@ -18,14 +18,110 @@ const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 type TableHeaderProps<T extends object> = {
     loading: boolean;
     headers: Col<T>[];
+    columns: Col<T>[];
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "setSorters" | "sorters" | "inlineSorter" | "inlineFilter">;
 
 type HeaderChildProps<T extends object> = {
     index: number;
     isLast: boolean;
     header: Col<T>;
+    columns: Col<T>[];
     loading: boolean;
-} & Pick<TableOperationProps<T>, "filters" | "setFilters" | "sorters" | "setSorters" | "inlineFilter" | "inlineSorter">;
+} & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "sorters" | "setSorters" | "inlineFilter" | "inlineSorter">;
+
+type PropertiesItemProps<T extends object> = {
+    column: Col<T>;
+    columns: Col<T>[];
+    ownerId: Col<T>["id"];
+    setCols: TableOperationProps<T>["setCols"];
+};
+
+const moveColumn = <T extends object>(columns: Col<T>[], column: Col<T>, offset: -1 | 1) => {
+    const index = columns.indexOf(column);
+    const nextIndex = index + offset;
+    if (index < 0 || nextIndex < 0 || nextIndex >= columns.length) return columns;
+    const next = [...columns];
+    next.splice(index, 1);
+    next.splice(nextIndex, 0, column);
+    return next;
+};
+
+const PropertiesItem = <T extends object>(props: PropertiesItemProps<T>) => {
+    const translations = useTranslations();
+    const controls = useDragControls();
+    const y = useMotionValue(0);
+    const label = getLabel(props.column);
+    const textLabel = typeof label === "string" ? label : String(label);
+    const isOwner = props.column.id === props.ownerId;
+
+    return (
+        <Reorder.Item
+            as="li"
+            value={props.column}
+            style={{ y }}
+            dragControls={controls}
+            dragListener={false}
+            className={tableHeadStyles.slots["properties-item"]}
+        >
+            <button
+                type="button"
+                className={tableHeadStyles.slots["properties-drag-handle"]}
+                aria-label={translations.tablePropertiesReorderLabel(textLabel)}
+                onPointerDown={(event) => controls.start(event)}
+                onKeyDown={(event) => {
+                    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+                    event.preventDefault();
+                    const offset = event.key === "ArrowUp" ? -1 : 1;
+                    props.setCols(moveColumn(props.columns, props.column, offset));
+                }}
+            >
+                <DotsSixVerticalIcon aria-hidden="true" className={tableHeadStyles.slots["properties-drag-icon"]} />
+            </button>
+            <Checkbox
+                aria-label={textLabel}
+                checked={props.column.visible !== false}
+                disabled={isOwner}
+                onChange={(event) => {
+                    const visible = event.currentTarget.checked;
+                    props.setCols((columns) => columns.map((column) => (column.id === props.column.id ? { ...column, visible } : column)));
+                }}
+            >
+                <span className={tableHeadStyles.slots["properties-label"]}>{label}</span>
+            </Checkbox>
+        </Reorder.Item>
+    );
+};
+
+const ColumnProperties = <T extends object>(props: Pick<PropertiesItemProps<T>, "columns" | "ownerId" | "setCols">) => {
+    const translations = useTranslations();
+    return (
+        <Dropdown
+            arrow
+            lockPositionOnOpen
+            title={translations.tablePropertiesTitle}
+            buttonProps={{
+                "aria-label": translations.tablePropertiesLabel,
+                className: tableHeadStyles.slots["properties-trigger"],
+            }}
+            trigger={
+                <span title={translations.tablePropertiesLabel} className={tableHeadStyles.slots["properties-trigger-content"]}>
+                    <GearFineIcon aria-hidden="true" className={tableHeadStyles.slots["properties-trigger-icon"]} />
+                </span>
+            }
+        >
+            <Reorder.Group as="ul" axis="y" values={props.columns} onReorder={props.setCols} className={tableHeadStyles.slots["properties-list"]}>
+                {props.columns.map((column) => (
+                    <PropertiesItem key={String(column.id)} column={column} columns={props.columns} ownerId={props.ownerId} setCols={props.setCols} />
+                ))}
+            </Reorder.Group>
+        </Dropdown>
+    );
+};
+
+const reorderVisibleColumns = <T extends object>(columns: Col<T>[], visibleColumns: Col<T>[]) => {
+    let visibleIndex = 0;
+    return columns.map((column) => (column.visible === false ? column : (visibleColumns[visibleIndex++] ?? column)));
+};
 
 const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
     const tweaks = useTweaks();
@@ -66,16 +162,26 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
     const ariaSort = !ownSorter?.type ? "none" : ownSorter.type === Order.Asc ? "ascending" : "descending";
 
     const label = getLabel(props.header);
+    const textLabel = typeof label === "string" ? label : String(props.header.id);
+    const propertiesProps = useRef({ columns: props.columns, ownerId: props.header.id, setCols: props.setCols });
+    propertiesProps.current = { columns: props.columns, ownerId: props.header.id, setCols: props.setCols };
+
+    const Properties = useMemo(() => {
+        const BoundProperties = () => <ColumnProperties {...propertiesProps.current} />;
+        return BoundProperties;
+    }, []);
+
+    const headerContent = typeof props.header.thead === "function" ? React.createElement(props.header.thead, { Properties }) : props.header.thead;
 
     return (
         <Reorder.Item
             {...(props.header.thProps as object)}
             as="th"
             ref={dragRef}
+            layout="position"
             initial={false}
             dragSnapToOrigin
             dragDirectionLock
-            role="columnheader"
             aria-sort={ariaSort}
             value={props.header}
             aria-busy={props.loading}
@@ -138,7 +244,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                             </ul>
                         </Dropdown>
                     ) : null}
-                    <span className={tableHeadStyles.slots.label}>{props.header.thead}</span>
+                    <span className={tableHeadStyles.slots.label}>{headerContent}</span>
                     {props.inlineSorter && defaultAllowSort ? (
                         <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
                     ) : null}
@@ -158,7 +264,9 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     dragSnapToOrigin
                     dragDirectionLock
                     data-type="resizer"
-                    title={props.header.id}
+                    title={translation.tableColumnResizer}
+                    aria-label={`${translation.tableColumnResizer}: ${textLabel}`}
+                    aria-keyshortcuts="ArrowLeft ArrowRight"
                     dragConstraints={dragConstraints}
                     className={tableHeadStyles.slots.resizer}
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => void e.currentTarget.focus()}
@@ -190,17 +298,32 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
 };
 
 export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
-    const [ref, onChange] = useWidthControl(props.setCols);
+    const { columns, setCols } = props;
+    const reorder = useCallback((headers: Col<T>[]) => setCols(reorderVisibleColumns(columns, headers)), [columns, setCols]);
+    const [ref, onChange] = useWidthControl(reorder);
     return (
-        <Reorder.Group layout as="tr" axis="x" drag="x" ref={ref} layoutRoot role="row" layoutScroll onReorder={onChange} values={props.headers}>
+        <Reorder.Group
+            layout="position"
+            as="tr"
+            axis="x"
+            drag="x"
+            ref={ref}
+            layoutRoot
+            role="row"
+            layoutScroll
+            onReorder={onChange}
+            values={props.headers}
+        >
             <AnimatePresence>
                 {props.headers.map((header, index) => (
                     <HeaderChild<T>
                         index={index}
                         header={header}
+                        columns={props.columns}
                         filters={props.filters}
                         loading={props.loading}
                         sorters={props.sorters}
+                        setCols={props.setCols}
                         setFilters={props.setFilters}
                         setSorters={props.setSorters}
                         inlineFilter={props.inlineFilter}

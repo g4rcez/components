@@ -307,7 +307,6 @@ const runtimeTokenAliases: Partial<Record<ComponentTokenName, Record<string, Css
         "cell-border": ["--var-table-cell-border"],
         "cell-padding": ["--var-table-cell-padding"],
         "cell-padding-inline": ["--var-table-cell-padding-inline"],
-        "divider-width": ["--var-table-divider-width"],
         "empty-block-size": ["--var-table-empty-block-size"],
         "filter-dot-margin-inline-end": ["--var-table-filter-dot-margin-inline-end"],
         "filter-dot-size": ["--var-table-filter-dot-size"],

@@ -1,5 +1,4 @@
 "use client";
-
 import { ComponentsProvider } from "@g4rcez/components";
 import type { PropsWithChildren } from "react";
 

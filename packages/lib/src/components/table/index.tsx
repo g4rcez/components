@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence } from "motion/react";
-import { type ComponentProps, useEffect, useMemo } from "react";
+import { type ComponentProps, useEffect, useId, useMemo } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
 import type { FilterConfig } from "./filter";
@@ -37,6 +37,7 @@ type DispatcherFun<T extends object> = T | ((prev: T) => T);
 const compareAndExec = <T extends unknown[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
 
 export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) => {
+    const groupIdPrefix = useId();
     const tweaks = useTweaks();
     const contextState = useMemo(
         (): TableContextProps => ({
@@ -89,6 +90,8 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
         dispatch.cols(props.cols);
     }, [props.cols]);
 
+    const visibleCols = useMemo(() => state.cols.filter((col) => col.visible !== false), [state.cols]);
+
     return (
         <TableProvider value={contextState}>
             <AnimatePresence propagate initial={false}>
@@ -113,7 +116,8 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                     <InnerTable
                         {...props}
                         index={0}
-                        cols={state.cols}
+                        cols={visibleCols}
+                        allCols={state.cols}
                         sticky={props.sticky ?? undefined}
                         options={optionCols}
                         groups={state.groups}
@@ -132,13 +136,23 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                 ) : (
                     <div className={tableRootStyles.slots.groups}>
                         {state.groups.map((group, index) => (
-                            <div className={tableRootStyles.slots.group} key={`group-${group.groupId}`}>
+                            <section
+                                aria-labelledby={group.groupTitle ? `${groupIdPrefix}-group-${index}` : undefined}
+                                className={tableRootStyles.slots.group}
+                                key={`group-${group.groupId}`}
+                            >
+                                {group.groupTitle ? (
+                                    <h2 className={tableRootStyles.slots["group-title"]} id={`${groupIdPrefix}-group-${index}`}>
+                                        {group.groupTitle}
+                                    </h2>
+                                ) : null}
                                 <InnerTable
                                     {...props}
                                     sticky={props.sticky ?? undefined}
                                     group={group}
                                     index={index}
-                                    cols={state.cols}
+                                    cols={visibleCols}
+                                    allCols={state.cols}
                                     pagination={null}
                                     rows={group.rows}
                                     options={optionCols}
@@ -154,7 +168,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                                     inlineFilter={props.inlineFilter ?? true}
                                     inlineSorter={props.inlineSorter ?? true}
                                 />
-                            </div>
+                            </section>
                         ))}
                     </div>
                 )}

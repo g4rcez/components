@@ -74,8 +74,12 @@
       "base": "__select",
       "variants": {
         "size": {
+          "big": "__select--size-big",
+          "default": "__select--size-default",
+          "min": "__select--size-min",
           "normal": "__select--size-normal",
-          "small": "__select--size-small"
+          "small": "__select--size-small",
+          "tiny": "__select--size-tiny"
         }
       },
       "slots": {
@@ -113,7 +117,16 @@
     "dependencies": [],
     "classes": {
       "base": "__switch",
-      "variants": {},
+      "variants": {
+        "size": {
+          "big": "__switch--size-big",
+          "default": "__switch--size-default",
+          "min": "__switch--size-min",
+          "normal": "__switch--size-normal",
+          "small": "__switch--size-small",
+          "tiny": "__switch--size-tiny"
+        }
+      },
       "slots": {
         "row": "__switch__row",
         "track": "__switch__track",
@@ -130,6 +143,7 @@
     "css": "@g4rcez/components/table.css",
     "dependencies": [
       "button",
+      "checkbox",
       "dropdown",
       "empty",
       "free-text",
@@ -341,6 +355,16 @@
     "classes": {
       "base": "__checkbox",
       "variants": {
+        "size": {
+          "big": "__checkbox--size-big",
+          "default": "__checkbox--size-default",
+          "min": "__checkbox--size-min",
+          "normal": "__checkbox--size-normal",
+          "small": "__checkbox--size-small",
+          "tiny": "__checkbox--size-tiny",
+          "medium": "__checkbox--size-medium",
+          "large": "__checkbox--size-large"
+        },
         "task": {
           "true": "__checkbox--task-true",
           "false": "__checkbox--task-false"
@@ -753,8 +777,12 @@
       "base": "__input-field",
       "variants": {
         "size": {
+          "big": "__input-field--size-big",
+          "default": "__input-field--size-default",
+          "min": "__input-field--size-min",
           "normal": "__input-field--size-normal",
-          "small": "__input-field--size-small"
+          "small": "__input-field--size-small",
+          "tiny": "__input-field--size-tiny"
         }
       },
       "slots": {
@@ -829,8 +857,12 @@
       "base": "__autocomplete",
       "variants": {
         "size": {
+          "big": "__autocomplete--size-big",
+          "default": "__autocomplete--size-default",
+          "min": "__autocomplete--size-min",
           "normal": "__autocomplete--size-normal",
-          "small": "__autocomplete--size-small"
+          "small": "__autocomplete--size-small",
+          "tiny": "__autocomplete--size-tiny"
         }
       },
       "slots": {
@@ -868,8 +900,12 @@
       "base": "__multi-select",
       "variants": {
         "size": {
+          "big": "__multi-select--size-big",
+          "default": "__multi-select--size-default",
+          "min": "__multi-select--size-min",
           "normal": "__multi-select--size-normal",
-          "small": "__multi-select--size-small"
+          "small": "__multi-select--size-small",
+          "tiny": "__multi-select--size-tiny"
         }
       },
       "slots": {
@@ -1100,8 +1136,12 @@
       "base": "__free-text",
       "variants": {
         "size": {
+          "big": "__free-text--size-big",
+          "default": "__free-text--size-default",
+          "min": "__free-text--size-min",
           "normal": "__free-text--size-normal",
-          "small": "__free-text--size-small"
+          "small": "__free-text--size-small",
+          "tiny": "__free-text--size-tiny"
         }
       },
       "slots": {
@@ -1335,6 +1375,7 @@
     "css": "@g4rcez/components/table.css",
     "dependencies": [
       "button",
+      "checkbox",
       "dropdown",
       "empty",
       "free-text",
@@ -1357,7 +1398,8 @@
       "variants": {},
       "slots": {
         "groups": "__table-root__groups",
-        "group": "__table-root__group"
+        "group": "__table-root__group",
+        "group-title": "__table-root__group-title"
       },
       "compounds": []
     }
@@ -1366,6 +1408,7 @@
     "import": "@g4rcez/components/table-inner-table",
     "css": "@g4rcez/components/table.css",
     "dependencies": [
+      "checkbox",
       "dropdown",
       "empty",
       "free-text",
@@ -1504,6 +1547,7 @@
     "import": "@g4rcez/components/table-head",
     "css": "@g4rcez/components/table.css",
     "dependencies": [
+      "checkbox",
       "dropdown",
       "free-text",
       "input",
@@ -1520,6 +1564,14 @@
       "slots": {
         "filter-icon": "__table-head__filter-icon",
         "add-icon": "__table-head__add-icon",
+        "properties-trigger": "__table-head__properties-trigger",
+        "properties-trigger-content": "__table-head__properties-trigger-content",
+        "properties-trigger-icon": "__table-head__properties-trigger-icon",
+        "properties-list": "__table-head__properties-list",
+        "properties-item": "__table-head__properties-item",
+        "properties-drag-handle": "__table-head__properties-drag-handle",
+        "properties-drag-icon": "__table-head__properties-drag-icon",
+        "properties-label": "__table-head__properties-label",
         "cell": "__table-head__cell",
         "cell-content": "__table-head__cell-content",
         "actions": "__table-head__actions",

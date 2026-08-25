@@ -128,6 +128,13 @@ const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement | nul
 
 const formatYear = (now: Date) => now.getFullYear().toString().padStart(4, "0");
 
+const normalizeRange = (range: Range) => {
+    const from = range.from;
+    const to = range.to;
+    if (from && to && isAfter(from, to)) return { from: to, to: from };
+    return { from, to };
+};
+
 const inRange = (start: Date | undefined, middle: Date, end: Date | undefined) => {
     if (start === undefined || end === undefined) return false;
     const from = isBefore(start, end) ? start : end;
@@ -154,33 +161,39 @@ type CalendarBodyProps = {
 };
 
 const CalendarBody = (props: CalendarBodyProps) => {
-    const translate = useTranslations();
     const dayButtonClassName = calendarStyles.slots["day-button"];
-    const rangeLabelClassName = calendarStyles.slots["range-label"];
     return (
         <motion.tbody layout onKeyDown={props.onKeyDown} className={css(props.styles?.week)}>
             {props.zip.map((week, index) => {
                 const weekClassName = Is.function(props.styles?.week) ? props.styles?.week(week) : props.styles?.week;
+                const activeRange = normalizeRange(props.range || props.stateRange);
+                const fromKey = activeRange.from?.toISOString();
+                const toKey = activeRange.to?.toISOString();
+                const hasCompleteRange = Boolean(props.rangeMode && props.markRange && fromKey && toKey);
+                const isRangeDate = (date: Date) => {
+                    const key = date.toISOString();
+                    return hasCompleteRange && (key === fromKey || key === toKey || inRange(activeRange.from, date, activeRange.to));
+                };
+
                 return (
                     <tr key={`week-${week.length}-${index}`} className={weekClassName}>
-                        {week.map((day) => {
+                        {week.map((day, dayIndex) => {
                             const key = day.toISOString();
-                            const activeRange = props.range || props.stateRange;
                             const isSelected = props.rangeMode
-                                ? key === activeRange?.to?.toISOString() || key === activeRange?.from?.toISOString()
+                                ? key === toKey || key === fromKey
                                 : key === (props.date ? startOfDay(props.date).toISOString() : undefined);
                             const today = isToday(day) && props.markToday;
                             const disabledByFn = props.disabledDate?.(day) || false;
                             const sameMonth = isSameMonth(day, props.stateDate);
                             const disableDate = !sameMonth || disabledByFn;
-                            const isInRange = props.rangeMode ? inRange(activeRange?.from, day, activeRange?.to) : false;
-                            const isRangeConnection = !!(
-                                props.rangeMode &&
-                                props.markRange &&
-                                activeRange?.from &&
-                                activeRange?.to &&
-                                (isSelected || isInRange)
-                            );
+                            const isInRange = props.rangeMode ? inRange(activeRange.from, day, activeRange.to) : false;
+                            const isRangeConnection = hasCompleteRange && (isSelected || isInRange);
+                            const previousIsRangeConnection = dayIndex > 0 && isRangeDate(week[dayIndex - 1]);
+                            const nextIsRangeConnection = dayIndex < week.length - 1 && isRangeDate(week[dayIndex + 1]);
+                            const isRangeStart = isRangeConnection && key === fromKey;
+                            const isRangeEnd = isRangeConnection && key === toKey;
+                            const isRangeSegmentStart = isRangeConnection && !previousIsRangeConnection;
+                            const isRangeSegmentEnd = isRangeConnection && !nextIsRangeConnection;
                             const dayLabel = day.toLocaleDateString(props.locale, {
                                 weekday: "long",
                                 year: "numeric",
@@ -192,6 +205,10 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                     key={key}
                                     align="center"
                                     data-in-range={isRangeConnection || undefined}
+                                    data-range-start={isRangeStart || undefined}
+                                    data-range-end={isRangeEnd || undefined}
+                                    data-range-segment-start={isRangeSegmentStart || undefined}
+                                    data-range-segment-end={isRangeSegmentEnd || undefined}
                                     className={css(
                                         calendarStyles.slots["day-cell"],
                                         Is.function(props.styles?.dayFrame) ? props.styles?.dayFrame(day) : props.styles?.dayFrame
@@ -200,17 +217,17 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                     <button
                                         type="button"
                                         data-date={key}
+                                        aria-label={dayLabel}
                                         disabled={disabledByFn}
                                         data-samemonth={sameMonth}
                                         data-range={props.rangeMode}
                                         data-today={today || undefined}
-                                        aria-label={dayLabel}
-                                        aria-current={today ? "date" : undefined}
+                                        onClick={props.dispatch.onSelectDate}
                                         aria-pressed={isSelected || undefined}
                                         data-selected={isSelected || undefined}
-                                        data-in-range={(isInRange && props.markRange) || undefined}
-                                        onClick={props.dispatch.onSelectDate}
+                                        aria-current={today ? "date" : undefined}
                                         data-view={props.stateDate.getMonth().toString()}
+                                        data-in-range={(isInRange && props.markRange) || undefined}
                                         className={css(
                                             dayButtonClassName,
                                             calendarStyles.slots.numeric,
@@ -221,22 +238,7 @@ const CalendarBody = (props: CalendarBodyProps) => {
                                             Is.function(props.styles?.day) ? props.styles?.day(day) : props.styles?.day
                                         )}
                                     >
-                                        <div></div>
                                         {day.getDate()}
-                                        {isSelected && props.stateRange.from?.toISOString() === key ? (
-                                            <span className={rangeLabelClassName}>
-                                                <span className={calendarStyles.slots["range-label-text"]}>
-                                                    {props.labelRange?.from ?? translate.calendarFromDate}
-                                                </span>
-                                            </span>
-                                        ) : null}
-                                        {isSelected && props.stateRange.to?.toISOString() === key ? (
-                                            <span className={rangeLabelClassName}>
-                                                <span className={calendarStyles.slots["range-label-text"]}>
-                                                    {props.labelRange?.to ?? translate.calendarToDate}
-                                                </span>
-                                            </span>
-                                        ) : null}
                                     </button>
                                     {props.RenderOnDay ? <props.RenderOnDay date={day} /> : null}
                                 </td>
@@ -336,10 +338,10 @@ export const Calendar = <T extends DatepickerType = "date">({
                 let selectMode = state.selectMode;
                 if (selectMode !== undefined) selectMode = selectMode === "from" ? "to" : "from";
                 const range = isRangeMode
-                    ? {
+                    ? normalizeRange({
                           from: state.selectMode === "from" ? date : state.range.from,
                           to: state.selectMode === "to" ? date : state.range.to,
-                      }
+                      })
                     : state.range;
                 return {
                     date,
@@ -533,11 +535,11 @@ export const Calendar = <T extends DatepickerType = "date">({
                                     markRange={markRange}
                                     markToday={markToday}
                                     rangeMode={rangeMode}
+                                    locale={currentLocale}
                                     stateDate={state.date}
                                     labelRange={labelRange}
                                     stateRange={state.range}
                                     RenderOnDay={RenderOnDay}
-                                    locale={currentLocale}
                                     disabledDate={disabledDate}
                                     onKeyDown={dispatch.onKeyDown}
                                 />

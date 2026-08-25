@@ -53,7 +53,7 @@ export const Group = <T extends object>(props: Props<T>) => {
     const translations = useTranslations();
     const options = createOptionCols(props.cols);
     const controls = useDragControls();
-    const [group, setGroup] = useState((props.groups[0]?.thead as string) || "");
+    const [group, setGroup] = useState(props.groups[0]?.groupName || "");
 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const select = e.target;
