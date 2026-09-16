@@ -28,6 +28,7 @@ Inherits all standard HTML `input[type="checkbox"]` attributes, plus:
 | `error`     | `string`                       | —       | Error message displayed below the switch.            |
 | `loading`   | `boolean`                      | `false` | Disables the switch and signals a pending operation. |
 | `container` | `string`                       | —       | Additional CSS classes for the outer `<fieldset>`.   |
+| `size`      | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"default"` | Shared control size. |
 
 ## Design Tokens
 
@@ -152,6 +153,6 @@ export default function PrivacySettings() {
 
 ## Notes
 
-- The component manages its own `innerChecked` state and re-syncs when `props.checked` changes, supporting both controlled and semi-controlled usage patterns.
+- The component manages its own `innerChecked` state, initialized from `checked`; use `onCheck` for the boolean value produced by the visual toggle.
 - A synthetic `change` event is dispatched on the hidden input after toggling, so external form libraries that listen to native events will pick up the change.
 - Smooth track and thumb transitions use `duration-300 ease-in-out`.

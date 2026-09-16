@@ -125,5 +125,5 @@ function ControlledExpand() {
 
 - Uses `motion/react` (`layoutId`) to animate a seamless transition between the collapsed button and the expanded container.
 - The expanded container is absolutely positioned at `-left-1/4 -top-3/4` by default. Override via `className` on the children wrapper if needed.
-- The `disabled` prop is forwarded to `useClick` — when `true`, the click interaction is enabled (the prop name is semantically inverted in the hook call, so pass `disabled={true}` to prevent expansion).
+- When `disabled` is `true`, the trigger is disabled and the click interaction is not enabled.
 - Rendered inside a `FloatingPortal` scoped to the component's own root `<div>` so it stays visually attached.

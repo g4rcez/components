@@ -50,9 +50,20 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | State         | Description                                                                |
 | ------------- | -------------------------------------------------------------------------- |
-| Idle (empty)  | Displays the `idle` prop or the default folder icon with an upload prompt  |
+| Idle (empty)  | Displays the `idle` prop or context-aware singular/plural default copy     |
 | Drag active   | Replaces the idle UI with an open folder icon while dragging               |
 | Files present | Renders the file list; drop zone border becomes solid and background fills |
+
+## Default Idle Copy
+
+The default idle content follows `multiple`. Omitted `multiple` and `multiple={false}` use singular wording; `multiple={true}` preserves plural wording.
+
+| `multiple`         | Prompt                             | Action                               |
+| ------------------ | ---------------------------------- | ------------------------------------ |
+| omitted or `false` | `Arraste seu arquivo para cá ou`   | `clique para escolher um arquivo`    |
+| `true`             | `Arraste seus arquivos para cá ou` | `clique para escolher seus arquivos` |
+
+Pass `idle` to replace the default content completely.
 
 ## File Type Rendering
 
@@ -194,14 +205,15 @@ function SubmissionForm() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't rely solely on client-side `maxSize`/`accept` — validate files server-side as well.
 - Don't skip `onDeleteFile` when `files` is controlled — without it, users cannot remove files they added.
 
 ## Accessibility
 
 - The drop zone uses `react-dropzone`'s `getRootProps` and `getInputProps`, which include keyboard support (Enter/Space to open the file browser).
+- The drop zone and hidden `<input type="file">` labels use singular wording by default and plural wording when `multiple={true}`.
 - The hidden `<input type="file">` is accessible by assistive technologies.
 - Delete buttons include a `type="button"` to prevent accidental form submission.
 - The modal viewer opened for file preview is managed by the `Modal` component, which handles focus trapping and Escape to close.

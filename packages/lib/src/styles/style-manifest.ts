@@ -7,6 +7,7 @@ import { switchStyles } from "../components/form/switch/switch.styles";
 import { tableStyles } from "../components/table/table.styles";
 import { cardStyles } from "../components/display/card/card.styles";
 import { listStyles } from "../components/display/list/list.styles";
+import { swipeableListStyles } from "../components/display/swipeable-list/swipeable-list.styles";
 import { stepStyles } from "../components/display/step/step.styles";
 import { tabsStyles } from "../components/display/tabs/tabs.styles";
 import { alertStyles } from "../components/display/alert/alert.styles";
@@ -70,6 +71,7 @@ const componentStyles = [
     tableStyles,
     cardStyles,
     listStyles,
+    swipeableListStyles,
     stepStyles,
     tabsStyles,
     alertStyles,

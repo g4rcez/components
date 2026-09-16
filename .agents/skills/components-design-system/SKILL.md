@@ -267,16 +267,84 @@ See `@g4rcez/components/ai/docs/index.md` for the complete export list.
 
 ---
 
-## 9 — Per-Component Documentation
+## 9 — Component References and Context Loading
 
-Each component has a dedicated doc page with full props, design tokens, and usage examples:
+Use the component references as on-demand context. Do not guess a component's props,
+slots, variants, defaults, controlled state, keyboard behavior, CSS tokens, or style
+dependencies.
 
-`@g4rcez/components/ai/docs/<ComponentName>.md`
+When a task uses a component:
 
-Examples:
+1. Identify the component reference from the map below.
+2. Read that reference before writing or changing its code.
+3. Read references for every component in a composition, not only the parent.
+4. Read `@g4rcez/components/ai/docs/index.md` when you need the complete
+   catalog or import path.
+5. Read `@g4rcez/components/ai/docs/style-dependencies.md` when adding or
+   changing CSS imports.
+6. If a reference is missing or does not answer the question, inspect the package
+   export and source before making an assumption.
 
-- `@g4rcez/components/ai/docs/Button.md`
-- `@g4rcez/components/ai/docs/Input.md`
-- `@g4rcez/components/ai/docs/Modal.md`
-- `@g4rcez/components/ai/docs/Table.md`
-- `@g4rcez/components/ai/docs/Form.md`
+Load a new component context whenever the component is unfamiliar, the task uses
+non-default props or compound children, behavior depends on focus/keyboard/async
+state, the component replaces native HTML, or styling and accessibility details
+matter. A component name in the task is enough reason to read its reference
+before implementation.
+
+Reference paths:
+
+- Installed package: `@g4rcez/components/ai/docs/<ComponentName>.md`
+- This repository: `packages/lib/ai/docs/<ComponentName>.md`
+
+### Component reference map
+
+- `Alert` — `@g4rcez/components/ai/docs/Alert.md`
+- `AnimatedList` — `@g4rcez/components/ai/docs/AnimatedList.md`
+- `Autocomplete` — `@g4rcez/components/ai/docs/Autocomplete.md`
+- `Button` — `@g4rcez/components/ai/docs/Button.md`
+- `Calendar` — `@g4rcez/components/ai/docs/Calendar.md`
+- `Card` — `@g4rcez/components/ai/docs/Card.md`
+- `Checkbox` — `@g4rcez/components/ai/docs/Checkbox.md`
+- `CommandPalette` — `@g4rcez/components/ai/docs/CommandPalette.md`
+- `DatePicker` — `@g4rcez/components/ai/docs/DatePicker.md`
+- `Dropdown` — `@g4rcez/components/ai/docs/Dropdown.md`
+- `Empty` — `@g4rcez/components/ai/docs/Empty.md`
+- `Expand` — `@g4rcez/components/ai/docs/Expand.md`
+- `FileUpload` — `@g4rcez/components/ai/docs/FileUpload.md`
+- `Form` — `@g4rcez/components/ai/docs/Form.md`
+- `FormReset` — `@g4rcez/components/ai/docs/FormReset.md`
+- `Heading` — `@g4rcez/components/ai/docs/Heading.md`
+- `Input` — `@g4rcez/components/ai/docs/Input.md`
+- `InputField` — `@g4rcez/components/ai/docs/InputField.md`
+- `List` — `@g4rcez/components/ai/docs/List.md`
+- `Masonry` — `@g4rcez/components/ai/docs/Masonry.md`
+- `Menu` — `@g4rcez/components/ai/docs/Menu.md`
+- `Modal` — `@g4rcez/components/ai/docs/Modal.md`
+- `MultiSelect` — `@g4rcez/components/ai/docs/MultiSelect.md`
+- `Notifications` — `@g4rcez/components/ai/docs/Notifications.md`
+- `PageCalendar` — `@g4rcez/components/ai/docs/PageCalendar.md`
+- `Polymorph` — `@g4rcez/components/ai/docs/Polymorph.md`
+- `Progress` — `@g4rcez/components/ai/docs/Progress.md`
+- `Radiobox` — `@g4rcez/components/ai/docs/Radiobox.md`
+- `RenderOnView` — `@g4rcez/components/ai/docs/RenderOnView.md`
+- `Resizable` — `@g4rcez/components/ai/docs/Resizable.md`
+- `Select` — `@g4rcez/components/ai/docs/Select.md`
+- `Shortcut` — `@g4rcez/components/ai/docs/Shortcut.md`
+- `Skeleton` — `@g4rcez/components/ai/docs/Skeleton.md`
+- `Slider` — `@g4rcez/components/ai/docs/Slider.md`
+- `Slot` — `@g4rcez/components/ai/docs/Slot.md`
+- `Spinner` — `@g4rcez/components/ai/docs/Spinner.md`
+- `Stats` — `@g4rcez/components/ai/docs/Stats.md`
+- `Step` — `@g4rcez/components/ai/docs/Step.md`
+- `SwipeableList` — `@g4rcez/components/ai/docs/SwipeableList.md`
+- `Switch` — `@g4rcez/components/ai/docs/Switch.md`
+- `Table` — `@g4rcez/components/ai/docs/Table.md`
+- `Tabs` — `@g4rcez/components/ai/docs/Tabs.md`
+- `Tag` — `@g4rcez/components/ai/docs/Tag.md`
+- `TaskList` — `@g4rcez/components/ai/docs/TaskList.md`
+- `Textarea` — `@g4rcez/components/ai/docs/Textarea.md`
+- `Timeline` — `@g4rcez/components/ai/docs/Timeline.md`
+- `Toolbar` — `@g4rcez/components/ai/docs/Toolbar.md`
+- `Tooltip` — `@g4rcez/components/ai/docs/Tooltip.md`
+- `Typography` — `@g4rcez/components/ai/docs/Typography.md`
+- `Wizard` — `@g4rcez/components/ai/docs/Wizard.md`

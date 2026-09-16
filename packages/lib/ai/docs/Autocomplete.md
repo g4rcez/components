@@ -19,23 +19,24 @@ import { Autocomplete } from "@g4rcez/components/autocomplete";
 
 ## Props
 
-| Prop             | Type                                               | Default | Description                                           |
-| ---------------- | -------------------------------------------------- | ------- | ----------------------------------------------------- |
-| `title`          | `string`                                           | -       | Field label                                           |
-| `value`          | `string`                                           | -       | Controlled selected value                             |
-| `options`        | `AutocompleteItemProps[]`                          | -       | List of selectable options                            |
-| `emptyMessage`   | `Label`                                            | -       | Message displayed when no options match               |
-| `dynamicOption`  | `boolean`                                          | `false` | Allow creating new options from typed text            |
-| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void` | -       | Change handler                                        |
-| `error`          | `string`                                           | -       | Error message displayed below the field               |
-| `feedback`       | `Label`                                            | -       | Success/neutral feedback text below the field         |
-| `left`           | `Label`                                            | -       | Content rendered on the left inside the field border  |
-| `right`          | `Label`                                            | -       | Content rendered on the right inside the field border |
-| `required`       | `boolean`                                          | `false` | Marks field as required; hides "Optional" text        |
-| `disabled`       | `boolean`                                          | `false` | Disables the field                                    |
-| `loading`        | `boolean`                                          | `false` | Shows loading state                                   |
-| `container`      | `string`                                           | -       | Extra CSS classes for the outer `fieldset`            |
-| `labelClassName` | `string`                                           | -       | Extra CSS classes for the label/border wrapper        |
+| Prop             | Type                                                           | Default    | Description                                           |
+| ---------------- | -------------------------------------------------------------- | ---------- | ----------------------------------------------------- |
+| `title`          | `string`                                                       | -          | Field label                                           |
+| `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`       |
+| `value`          | `string`                                                       | -          | Controlled selected value                             |
+| `options`        | `AutocompleteItemProps[]`                                      | -          | List of selectable options                            |
+| `emptyMessage`   | `Label`                                                        | -          | Message displayed when no options match               |
+| `dynamicOption`  | `boolean`                                                      | `false`    | Allow creating new options from typed text            |
+| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void`             | -          | Change handler                                        |
+| `error`          | `string`                                                       | -          | Error message displayed below the field               |
+| `feedback`       | `Label`                                                        | -          | Success/neutral feedback text below the field         |
+| `left`           | `Label`                                                        | -          | Content rendered on the left inside the field border  |
+| `right`          | `Label`                                                        | -          | Content rendered on the right inside the field border |
+| `required`       | `boolean`                                                      | `false`    | Marks field as required; hides "Optional" text        |
+| `disabled`       | `boolean`                                                      | `false`    | Disables the field                                    |
+| `loading`        | `boolean`                                                      | `false`    | Shows loading state                                   |
+| `container`      | `string`                                                       | -          | Extra CSS classes for the outer `fieldset`            |
+| `labelClassName` | `string`                                                       | -          | Extra CSS classes for the label/border wrapper        |
 
 ### AutocompleteItemProps
 

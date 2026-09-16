@@ -25,6 +25,7 @@ import { Modal, ModalConfirmProvider, useConfirm } from "@g4rcez/components/moda
 | `onChange`          | `(nextState: boolean) => void`    | —          | Callback when modal state changes                             |
 | `title`             | `React.ReactNode`                 | —          | Modal title; creates a `<h2>` header                          |
 | `ariaTitle`         | `string`                          | —          | ARIA label used when no visible `title` is provided           |
+| `ariaDescription`   | `string`                          | —          | Accessible description for the modal content                  |
 | `footer`            | `React.ReactNode`                 | —          | Footer content                                                |
 | `type`              | `"dialog" \| "drawer" \| "sheet"` | `"dialog"` | Modal display variant                                         |
 | `position`          | `"left" \| "right"`               | `"right"`  | Drawer slide-in side (drawer type only)                       |
@@ -33,14 +34,16 @@ import { Modal, ModalConfirmProvider, useConfirm } from "@g4rcez/components/moda
 | `resizer`           | `boolean`                         | `true`     | Show the drag-to-resize handle (drawer and sheet)             |
 | `forceType`         | `boolean`                         | `false`    | Disable responsive behavior — keep `type` on all screen sizes |
 | `overlayClickClose` | `boolean`                         | `false`    | Close when clicking the backdrop                              |
+| `closeOnFocusOut`   | `boolean`                         | `false`    | Close when focus leaves the modal                             |
 | `trigger`           | `React.ReactNode \| React.FC`     | —          | Element that toggles the modal when clicked                   |
 | `asChild`           | `boolean`                         | `false`    | Merge trigger props onto the child element via `Slot`         |
 | `className`         | `string`                          | —          | Additional classes for the modal surface                      |
 | `bodyClassName`     | `string`                          | —          | Additional classes for the scrollable body                    |
 | `overlayClassName`  | `string`                          | —          | Additional classes for the backdrop overlay                   |
 | `layoutId`          | `string`                          | —          | Framer Motion layout ID for shared-element transitions        |
-| `role`              | `"dialog"`                        | `"dialog"` | ARIA role                                                     |
-| `interactions`      | `ElementProps[]`                  | `[]`       | Extra Floating UI interaction hooks                           |
+| `role`              | `"dialog" \| "alertdialog"`      | `"dialog"` | ARIA role                                                     |
+| `interactions`      | `ElementProps[]`                  | —          | Extra Floating UI interaction hooks                           |
+| `initialFocus`      | `number \| React.MutableRefObject<HTMLElement \| null>` | — | Initial focus target passed to Floating UI |
 
 ## Modal Types
 

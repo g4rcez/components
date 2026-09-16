@@ -93,6 +93,7 @@ export const sections: Section[] = [
             { title: "Cards", href: "/docs/cards", icon: CreditCardIcon },
             { title: "Empty", href: "/docs/empty", icon: FolderOpenIcon },
             { title: "List", href: "/docs/list", icon: ListIcon },
+            { title: "Swipeable List", href: "/docs/swippeable-list", icon: ListIcon },
             { title: "Masonry", href: "/docs/masonry", icon: SquaresFourIcon },
             { title: "Notification", href: "/docs/notification", icon: BellIcon },
             { title: "Progress", href: "/docs/progress", icon: ChartBarIcon },

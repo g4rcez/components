@@ -19,20 +19,20 @@ import { PageCalendar } from "@g4rcez/components";
 
 ## Props
 
-| Prop              | Type                                     | Default      | Description                                                                           |
-| ----------------- | ---------------------------------------- | ------------ | ------------------------------------------------------------------------------------- |
-| `events`          | `CalendarEvent<T>[]`                     | —            | Array of event objects to display across all views.                                   |
-| `filters`         | `CalendarFilter[]`                       | `[]`         | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
-| `defaultView`     | `"month" \| "week" \| "day"`             | `"month"`    | Initial view rendered when the component mounts.                                      |
-| `defaultDate`     | `Date`                                   | `new Date()` | Initial date the calendar focuses on.                                                 |
-| `loading`         | `boolean`                                | `false`      | Shows a centered loading spinner instead of the active calendar view.                 |
-| `onEventClick`    | `(event: CalendarEvent) => void`         | —            | Called when the user clicks an event pill.                                            |
-| `onSlotClick`     | `(date: Date) => void`                   | —            | Called when the user clicks an empty time slot (week and day views).                  |
-| `onAddEvent`      | `() => void`                             | —            | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
-| `onChangeFilters` | `(filters: CalendarFilter[]) => void`    | —            | Called whenever a filter is toggled, receiving the updated filter array.              |
-| `renderEvent`     | `(event: CalendarEvent<T>) => ReactNode` | —            | Custom renderer for the selected event detail panel in day view.                      |
-| `filterArea`      | `ReactNode`                              | —            | Replaces the default filter tag row in the header with custom content.                |
-| `getFilterId`     | `() => void`                             | —            | Custom accessor to extract a `filterId` from an event. Defaults to `event.filterId`.  |
+| Prop              | Type                                               | Default      | Description                                                                           |
+| ----------------- | -------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------- |
+| `events`          | `CalendarEvent<T>[]`                               | —            | Array of event objects to display across all views.                                   |
+| `filters`         | `CalendarFilter[]`                                 | `[]`         | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
+| `defaultView`     | `"month" \| "week" \| "day"`                       | `"month"`    | Initial view rendered when the component mounts.                                      |
+| `defaultDate`     | `Date`                                             | `new Date()` | Initial date the calendar focuses on.                                                 |
+| `loading`         | `boolean`                                          | `false`      | Shows a centered loading spinner instead of the active calendar view.                 |
+| `onEventClick`    | `(event: CalendarEvent) => void`                   | —            | Called when the user clicks an event pill.                                            |
+| `onSlotClick`     | `(date: Date) => void`                             | —            | Called when the user clicks an empty time slot (week and day views).                  |
+| `onAddEvent`      | `() => void`                                       | —            | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
+| `onChangeFilters` | `(filters: CalendarFilter[]) => void`              | —            | Called whenever a filter is toggled, receiving the updated filter array.              |
+| `renderEvent`     | `(event: CalendarEvent<T>) => ReactNode`           | —            | Custom renderer for the selected event detail panel in day view.                      |
+| `filterArea`      | `ReactNode`                                        | —            | Replaces the default filter tag row in the header with custom content.                |
+| `getFilterId`     | `(event: CalendarEvent<T>) => string \| undefined` | —            | Custom accessor to extract a filter id from an event. Defaults to `event.filterId`.   |
 
 ## Type Definitions
 

@@ -162,11 +162,11 @@ const categories = [
     { name: "React", theme: "info" },
     { name: "TypeScript", theme: "primary" },
     { name: "CSS", theme: "success" },
-];
+] as const;
 
 <div className="flex gap-2 flex-wrap">
     {categories.map((cat) => (
-        <Tag key={cat.name} theme={cat.theme as any}>
+        <Tag key={cat.name} theme={cat.theme}>
             {cat.name}
         </Tag>
     ))}

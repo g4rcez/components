@@ -84,7 +84,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     <Input name="firstName" title="First name" required />
     <Input name="lastName" title="Last name" required />
     <Input name="email" type="email" title="Email" container="col-span-2" required />
-    <Button type="submit" theme="primary" container="col-start-2">
+    <Button type="submit" theme="primary" className="col-start-2">
         Save
     </Button>
 </Form>
@@ -98,8 +98,8 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `Form` — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `Form` — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 - Don't use `Form` when you need a traditional server-rendered full-page reload; use a plain `<form>` with `action` and `method` instead.
 
 ## Accessibility

@@ -552,6 +552,25 @@ export type ListTokens = {
     "title-text": string;
 };
 
+export type SwipeableListTokens = {
+    "root-gap": string;
+    "content-gap": string;
+    "surface-radius": string;
+    "surface-min-block-size": string;
+    "surface-padding-inline": string;
+    "surface-padding-block": string;
+    "action-icon-size": string;
+    "action-focus-ring-width": string;
+    "action-focus-ring-offset": string;
+    "action-transition-duration": string;
+    "action-transition-timing": string;
+    "action-active-scale": string;
+    "description-margin-block-start": string;
+    "description-font-size": string;
+    "item-disabled-opacity": string;
+    "action-disabled-opacity": string;
+};
+
 export type TimelineTokens = {
     "item-padding-block-end": string;
     "connector-inset-inline-start": string;
@@ -694,6 +713,7 @@ export type ComponentTokens = {
     spinner: SpinnerTokens;
     empty: EmptyTokens;
     list: ListTokens;
+    "swipeable-list": SwipeableListTokens;
     timeline: TimelineTokens;
     step: StepTokens;
     tabs: TabsTokens;

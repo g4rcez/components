@@ -231,6 +231,40 @@
       "compounds": []
     }
   },
+  "swipeable-list": {
+    "import": "@g4rcez/components/swipeable-list",
+    "css": "@g4rcez/components/swipeable-list.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__swipeable-list",
+      "variants": {
+        "tone": {
+          "neutral": "__swipeable-list--tone-neutral",
+          "primary": "__swipeable-list--tone-primary",
+          "success": "__swipeable-list--tone-success",
+          "warning": "__swipeable-list--tone-warning",
+          "danger": "__swipeable-list--tone-danger"
+        }
+      },
+      "slots": {
+        "list": "__swipeable-list__list",
+        "item": "__swipeable-list__item",
+        "rail": "__swipeable-list__rail",
+        "action-group": "__swipeable-list__action-group",
+        "action": "__swipeable-list__action",
+        "action-icon": "__swipeable-list__action-icon",
+        "screen-reader-label": "__swipeable-list__screen-reader-label",
+        "surface": "__swipeable-list__surface",
+        "item-content": "__swipeable-list__item-content",
+        "leading": "__swipeable-list__leading",
+        "content": "__swipeable-list__content",
+        "title": "__swipeable-list__title",
+        "description": "__swipeable-list__description",
+        "meta": "__swipeable-list__meta"
+      },
+      "compounds": []
+    }
+  },
   "step": {
     "import": "@g4rcez/components/step",
     "css": "@g4rcez/components/step.css",

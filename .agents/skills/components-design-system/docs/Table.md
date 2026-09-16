@@ -52,24 +52,49 @@ createColumns<T>((c) => {
 })
 ```
 
-| Builder method | Signature                                                                 | Description                               |
-| -------------- | ------------------------------------------------------------------------- | ----------------------------------------- |
-| `add`          | `(id: AllPaths<T>, thead: ReactNode, options?: ColOptions<T, K>) => void` | Registers a column.                       |
-| `remove`       | `(id: AllPaths<T>) => void`                                               | Removes a column by id.                   |
-| `filter`       | `(c: (col: Col<T>) => boolean) => Col<T>[]`                               | Filters the column list in-place.         |
-| `getAll`       | `() => Col<T>[]`                                                          | Returns a copy of all registered columns. |
+| Builder method | Signature                                                                                                                    | Description                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `add`          | `(id: AllPaths<T>, thead: ReactNode \| ((props: TableHeaderCreatorProps) => ReactNode), options?: ColOptions<T, K>) => void` | Registers a column.                       |
+| `remove`       | `(id: AllPaths<T>) => void`                                                                                                  | Removes a column by id.                   |
+| `filter`       | `(c: (col: Col<T>) => boolean) => Col<T>[]`                                                                                  | Filters the column list in-place.         |
+| `getAll`       | `() => Col<T>[]`                                                                                                             | Returns a copy of all registered columns. |
 
 ### ColOptions
 
-| Option        | Type                                   | Default        | Description                                                                  |
-| ------------- | -------------------------------------- | -------------- | ---------------------------------------------------------------------------- |
-| `type`        | `ColType`                              | `ColType.Text` | Data type (`Text`, `Number`, `Boolean`, `Select`). Affects filter operators. |
-| `allowSort`   | `boolean`                              | `true`         | Whether this column can be sorted.                                           |
-| `allowFilter` | `boolean`                              | `true`         | Whether this column shows a filter control.                                  |
-| `headerLabel` | `string`                               | —              | Overrides the column header text used in the filter/sort metadata bar.       |
-| `Element`     | `React.FC<CellPropsElement<T, K>>`     | —              | Custom cell renderer. Receives `{ row, value, rowIndex, matrix, col }`.      |
-| `thProps`     | `HTMLAttributes<HTMLTableCellElement>` | —              | Extra props forwarded to the `<th>` element.                                 |
-| `cellProps`   | `HTMLAttributes<HTMLTableCellElement>` | —              | Extra props forwarded to each `<td>` element.                                |
+| Option        | Type                                   | Default        | Description                                                                                                              |
+| ------------- | -------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `type`        | `ColType`                              | `ColType.Text` | Data type (`Text`, `Number`, `Boolean`, `Select`). Affects filter operators.                                             |
+| `allowSort`   | `boolean`                              | `true`         | Whether this column can be sorted.                                                                                       |
+| `allowFilter` | `boolean`                              | `true`         | Whether this column shows a filter control.                                                                              |
+| `visible`     | `boolean`                              | `true`         | Sets the initial column visibility.                                                                                      |
+| `headerLabel` | `string`                               | —              | Overrides the column header text used in controls. Required for function headers whose label differs from the column id. |
+| `groupTitle`  | `Label`                                | —              | Visible heading for grouped tables created from this column. Accepts any design-system `Label` value.                    |
+| `Element`     | `React.FC<CellPropsElement<T, K>>`     | —              | Custom cell renderer. Receives `{ row, value, rowIndex, matrix, col }`.                                                  |
+| `thProps`     | `HTMLAttributes<HTMLTableCellElement>` | —              | Extra props forwarded to the `<th>` element.                                                                             |
+| `cellProps`   | `HTMLAttributes<HTMLTableCellElement>` | —              | Extra props forwarded to each `<td>` element.                                                                            |
+
+### Column Properties
+
+Pass a header creator to `add` to receive the bound `Properties` component. Render it in one header cell to let users show, hide, and reorder columns from a dropdown.
+
+```tsx
+const columns = createColumns<User>((column) => {
+    column.add(
+        "name",
+        ({ Properties }) => (
+            <>
+                <Properties />
+                Name
+            </>
+        ),
+        { headerLabel: "Name" }
+    );
+    column.add("email", "Email");
+    column.add("role", "Role");
+});
+```
+
+The dropdown keeps its host column visible so users cannot lose access to the control. Its position stays fixed while it is open, including when column changes update the table layout. Do not set `visible: false` on that column. Column order and visibility are included in `useTablePreferences` persistence. Users can drag rows in the dropdown or focus a reorder handle and use the Up and Down arrow keys.
 
 ### TablePagination
 
@@ -87,7 +112,7 @@ createColumns<T>((c) => {
 
 ### useTablePreferences
 
-Persists column order, active filters, sorters, and groups in `localStorage` keyed by `name`.
+Persists column order, visibility, active filters, sorters, and groups in `localStorage` keyed by `name`.
 
 ```tsx
 const prefs = useTablePreferences("users-table", columns, options?);
@@ -139,6 +164,7 @@ const columns = createColumns<User>((c) => {
     c.add("id", "ID");
     c.add("name", "Name");
     c.add("email", "Email");
+    c.add("role", "Role", { groupTitle: <span>Users by role</span> });
 });
 
 export function UsersTable({ users }: { users: User[] }) {
@@ -256,8 +282,8 @@ import { TrashIcon, PencilIcon } from "@phosphor-icons/react";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't render `<Table>` without a `name` — preferences and DOM ids rely on it.
 - Don't put heavy rendering logic directly inside `rows` array transformation; use `Element` cells instead so virtualization can skip off-screen rows.
 - Don't use `Table` for single-row or trivial datasets — a plain list or card layout is more appropriate.

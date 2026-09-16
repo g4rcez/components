@@ -2,8 +2,8 @@
 title: Card
 description: Polymorphic container for grouping related content with optional title header, loading state, and composable sub-components.
 package: "@g4rcez/components"
-export: "{ Card }"
-import: "import { Card } from '@g4rcez/components/card'"
+export: "{ Card, StatsCard }"
+import: "import { Card, StatsCard } from '@g4rcez/components/card'"
 category: display
 ---
 
@@ -44,6 +44,19 @@ A composable header with a title and an optional navigation/action area.
 | `as`       | `React.ElementType`            | `"div"` | Element type for the container                  |
 | `children` | `React.ReactNode`              | —       | Action elements rendered in the navigation area |
 
+### StatsCard
+
+| Prop          | Type              | Default | Description |
+| ------------- | ----------------- | ------- | ----------- |
+| `title`       | `string`          | —       | Metric label. |
+| `value`       | `Label`           | —       | Metric value. |
+| `Icon`        | `Icon`            | `InfoIcon` | Decorative metric icon. |
+| `mark`        | `string`          | —       | Additional class for the icon mark. |
+| `interactive` | `boolean`         | `true`  | Applies the interactive stats-panel styling. |
+| `loading`     | `boolean`         | —       | Shows a skeleton in place of the value. |
+
+`StatsCard` is exported from the same entry point and uses the card surface contract.
+
 ## Design Tokens
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
@@ -83,6 +96,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 <Card title="Analytics" loading={isLoading}>
     <p>Loaded content rendered here when not loading.</p>
 </Card>
+```
+
+### StatsCard
+
+```tsx
+<StatsCard title="Active users" value="1,234" loading={isLoading} />
 ```
 
 ### Card.Title with Actions
@@ -154,8 +173,8 @@ import { Button } from "@g4rcez/components/button";
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't over-nest cards; multiple borders and shadows create visual clutter.
 - Don't put more than one primary action in a single `Card.Title` — keep actions focused.
 

@@ -37,12 +37,14 @@ import "@g4rcez/components/index.css";
 | Calendar       | Display  | `import { Calendar } from "@g4rcez/components/calendar"`           | Inline date picker calendar                                               |
 | Card           | Display  | `import { Card } from "@g4rcez/components/card"`                   | Surface container with card tokens and elevation                          |
 | Empty          | Display  | `import { Empty } from "@g4rcez/components"`                       | Empty state placeholder with optional icon and action                     |
-| List           | Display  | `import { List } from "@g4rcez/components/list"`                   | Virtualized scrollable list for large data sets                           |
+| List           | Display  | `import { List } from "@g4rcez/components/list"`                   | Animated list with an expandable detail overlay                          |
+| Masonry        | Display  | `import { Masonry } from "@g4rcez/components/masonry"`              | Measured masonry layout that preserves source order                      |
 | Notifications  | Display  | `import { Notifications } from "@g4rcez/components/notifications"` | Toast notification system with queue management                           |
 | Progress       | Display  | `import { Progress } from "@g4rcez/components"`                    | Progress bar with themed fill                                             |
 | Shortcut       | Display  | `import { Shortcut } from "@g4rcez/components"`                    | Keyboard shortcut badge display                                           |
-| Skeleton       | Display  | `import { Skeleton } from "@g4rcez/components"`                    | Loading placeholder with pulse animation                                  |
-| Spinner        | Display  | `import { Spinner } from "@g4rcez/components"`                     | Animated loading spinner                                                  |
+| Skeleton       | Display  | `import { Skeleton } from "@g4rcez/components"`                    | Accessible loading placeholder with pulse animation                       |
+| Spinner        | Display  | `import { Spinner } from "@g4rcez/components"`                     | Accessible indeterminate loading spinner                                  |
+| SwipeableList  | Display  | `import { SwipeableList } from "@g4rcez/components/swipeable-list"` | Virtualized list with swipe-revealed actions                              |
 | Stats          | Display  | `import { Stats } from "@g4rcez/components/stats"`                 | Metric/statistics display with label and value                            |
 | Step           | Display  | `import { Step } from "@g4rcez/components"`                        | Multi-step wizard progress indicator                                      |
 | Tabs           | Display  | `import { Tabs } from "@g4rcez/components/tabs"`                   | Tabbed navigation with panel switching                                    |
@@ -51,7 +53,7 @@ import "@g4rcez/components/index.css";
 | Checkbox       | Form     | `import { Checkbox } from "@g4rcez/components/checkbox"`           | Checkbox with indeterminate support                                       |
 | DatePicker     | Form     | `import { DatePicker } from "@g4rcez/components/date-picker"`      | Date input with calendar popover                                          |
 | FileUpload     | Form     | `import { FileUpload } from "@g4rcez/components/file-upload"`      | Drag-and-drop file upload with preview                                    |
-| Form           | Form     | `import { Form } from "@g4rcez/components/form"`                   | Form wrapper with Zod validation and field management                     |
+| Form           | Form     | `import { Form } from "@g4rcez/components/form"`                   | Minimal form wrapper that prevents default submit behavior                |
 | FormReset      | Form     | `import { FormReset } from "@g4rcez/components"`                   | Reset button wired to the nearest Form context                            |
 | Input          | Form     | `import { Input } from "@g4rcez/components/input"`                 | Text input with mask, prefix/suffix, and error states                     |
 | InputField     | Form     | `import { InputField } from "@g4rcez/components"`                  | Input with label, helper text, and error message                          |
@@ -97,12 +99,14 @@ import "@g4rcez/components/index.css";
 | Calendar      | `import { Calendar } from "@g4rcez/components/calendar"`           | Inline date picker calendar                                  |
 | Card          | `import { Card } from "@g4rcez/components/card"`                   | Surface container with card tokens and elevation             |
 | Empty         | `import { Empty } from "@g4rcez/components"`                       | Empty state placeholder with optional icon and action        |
-| List          | `import { List } from "@g4rcez/components/list"`                   | Virtualized scrollable list for large data sets              |
+| List          | `import { List } from "@g4rcez/components/list"`                   | Animated list with an expandable detail overlay             |
+| Masonry       | `import { Masonry } from "@g4rcez/components/masonry"`              | Measured masonry layout that preserves source order         |
 | Notifications | `import { Notifications } from "@g4rcez/components/notifications"` | Toast notification system with queue management              |
 | Progress      | `import { Progress } from "@g4rcez/components"`                    | Progress bar with themed fill                                |
 | Shortcut      | `import { Shortcut } from "@g4rcez/components"`                    | Keyboard shortcut badge display                              |
-| Skeleton      | `import { Skeleton } from "@g4rcez/components"`                    | Loading placeholder with pulse animation                     |
-| Spinner       | `import { Spinner } from "@g4rcez/components"`                     | Animated loading spinner                                     |
+| Skeleton      | `import { Skeleton } from "@g4rcez/components"`                    | Accessible loading placeholder with pulse animation          |
+| Spinner       | `import { Spinner } from "@g4rcez/components"`                     | Accessible indeterminate loading spinner                     |
+| SwipeableList | `import { SwipeableList } from "@g4rcez/components/swipeable-list"` | Virtualized list with swipe-revealed actions                 |
 | Stats         | `import { Stats } from "@g4rcez/components/stats"`                 | Metric/statistics display with label and value               |
 | Step          | `import { Step } from "@g4rcez/components"`                        | Multi-step wizard progress indicator                         |
 | Tabs          | `import { Tabs } from "@g4rcez/components/tabs"`                   | Tabbed navigation with panel switching                       |
@@ -116,7 +120,7 @@ import "@g4rcez/components/index.css";
 | Checkbox     | `import { Checkbox } from "@g4rcez/components/checkbox"`         | Checkbox with indeterminate support                   |
 | DatePicker   | `import { DatePicker } from "@g4rcez/components/date-picker"`    | Date input with calendar popover                      |
 | FileUpload   | `import { FileUpload } from "@g4rcez/components/file-upload"`    | Drag-and-drop file upload with preview                |
-| Form         | `import { Form } from "@g4rcez/components/form"`                 | Form wrapper with Zod validation and field management |
+| Form         | `import { Form } from "@g4rcez/components/form"`                 | Prevents default submit behavior                   |
 | FormReset    | `import { FormReset } from "@g4rcez/components"`                 | Reset button wired to the nearest Form context        |
 | Input        | `import { Input } from "@g4rcez/components/input"`               | Text input with mask, prefix/suffix, and error states |
 | InputField   | `import { InputField } from "@g4rcez/components"`                | Input with label, helper text, and error message      |

@@ -1,6 +1,6 @@
 ---
 title: Spinner
-description: Animated loading indicator for unknown-duration operations, available as an inline Spinner or a full-container Loading wrapper.
+description: Accessible animated loading indicator for indeterminate work, with an optional full-container wrapper.
 package: "@g4rcez/components"
 export: "{ Spinner, Loading }"
 import: "import { Spinner, Loading } from '@g4rcez/components'"
@@ -9,7 +9,7 @@ category: display
 
 # Spinner
 
-Animated loading indicator for unknown-duration operations, available as an inline `Spinner` or a full-container `Loading` wrapper.
+`Spinner` indicates work with an unknown completion time. `Loading` centers a spinner in a full-size container.
 
 ## Import
 
@@ -21,100 +21,67 @@ import { Spinner, Loading } from "@g4rcez/components";
 
 ### Spinner
 
-| Prop        | Type     | Default | Description                                            |
-| ----------- | -------- | ------- | ------------------------------------------------------ |
-| `className` | `string` | —       | Additional classes to customize size, color, or border |
-
-Default appearance: `size-12 border-4 border-background border-b-primary animate-spin rounded-full`.
+| Prop        | Type     | Default | Description |
+| ----------- | -------- | ------- | ----------- |
+| `className` | `string` | —       | Additional class for the spinner element. |
 
 ### Loading
 
-No props. Renders a centered `Spinner` inside a `flex h-full w-full items-center justify-center p-12` container.
+`Loading` accepts no props. It renders a container with `Spinner` centered inside it.
 
-## Design Tokens
+## Design Tokens and CSS
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token               | CSS Variable   | Purpose                     |
-| ------------------- | -------------- | --------------------------- |
-| `border-background` | `--background` | Inactive spinner ring color |
-| `border-b-primary`  | `--primary`    | Active spinner arc color    |
+The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__spinner` and `.__spinner__container`. The stylesheet reads `--var-spinner-indicator-size`, `--var-spinner-indicator-border-width`, `--var-spinner-spin-duration`, `--var-spinner-container-padding`, `--var-color-background`, `--var-color-primary`, and `--var-rounded-full`.
 
 ## Examples
 
-### Default Spinner
+### Inline spinner
 
 ```tsx
 <Spinner />
 ```
 
-### Full-Container Loading State
+### Loading container
 
 ```tsx
-{
-    isLoading ? <Loading /> : <Content />;
-}
+{isLoading ? <Loading /> : <Content />}
 ```
 
-### Custom Size
+### Inside a button
 
 ```tsx
-<Spinner className="size-6 border-2" />
+<Button disabled={isSaving}>
+    {isSaving ? <Spinner /> : null}
+    {isSaving ? "Saving…" : "Save"}
+</Button>
 ```
 
-### Spinner Inside a Button
-
-```tsx
-<button type="submit" disabled={isSubmitting} className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-button-radius">
-    {isSubmitting && <Spinner className="size-4 border-2 border-primary-foreground border-b-transparent" />}
-    {isSubmitting ? "Saving…" : "Save"}
-</button>
-```
-
-### Centered in a Card
-
-```tsx
-import { Card } from "@g4rcez/components/card";
-
-<Card title="Analytics">
-    <div className="h-64 flex items-center justify-center">
-        <Spinner />
-    </div>
-</Card>;
-```
-
-### Lazy Component Fallback
-
-```tsx
-import { Suspense } from "react";
-import { Loading } from "@g4rcez/components";
-
-<Suspense fallback={<Loading />}>
-    <HeavyComponent />
-</Suspense>;
-```
+`Spinner` only declares `className` in its public props and remains an announced status. Use a separate decorative element when an inline indicator should not be announced.
 
 ## Do
 
-- Use `Loading` for full-page or large-section loading states where the parent already has a defined height.
-- Use `Spinner` inline (e.g. inside buttons) when an action is being processed.
-- Ensure the parent container of `Loading` has a defined height so the spinner centers correctly.
-- Provide a relevant `aria-label` or `aria-description` if the Portuguese default ("Carregando...") is not appropriate.
+- Use `Spinner` for indeterminate operations and `Progress` when completion can be measured.
+- Use `Loading` when its parent has a meaningful width and height.
+- Keep a nearby status message when the operation needs more context than "Loading".
 
 ## Don't
 
-- Don't pass raw utility color classes (`border-blue-500`) for the spinner border — use design tokens (`border-primary`) instead.
-- Don't use arbitrary utility values (`border-[#abc]`) — override CSS variables in your `@theme` block.
-- Don't leave a `Spinner` visible indefinitely; always handle error states or timeouts.
-- Don't render many spinners simultaneously on a single screen — it is visually disorienting.
+- Don't display a spinner indefinitely without an error or timeout path.
+- Don't render many competing spinners for one operation.
+- Don't use raw color values; override semantic `--var-*` tokens.
 
 ## Accessibility
 
-- `Spinner` includes `aria-busy="true"` and `aria-description="Carregando..."` so assistive technologies know content is loading.
-- For non-Portuguese applications, pass a `className` and wrap with a visually hidden `<span aria-live="polite">` if you need a localized announcement.
+- `Spinner` renders `role="status"`, `aria-live="polite"`, and the localized `aria-label` from `useTranslations`.
+- `Loading` uses the same accessible `Spinner` and adds a layout container.
+- Do not hide the only status indicator from assistive technology while work is in progress.
+
+## Data Attributes
+
+- `data-component="spinner"` — spinner element and the `Loading` container.
+- `data-slot="container"` — `Loading` wrapper.
 
 ## Notes
 
-- The spinning effect comes from utility CSS's `animate-spin` utility (`animation: spin 1s linear infinite`).
-- The arc effect is achieved via `border-background` for the full ring and `border-b-primary` for the colored arc — one border property per side.
-- `Loading` is a thin wrapper; prefer `Loading` over manually composing `flex items-center justify-center` wrappers every time.
+- The spinner uses a border arc and CSS animation; it does not report numeric progress.
+- The default translation is `Loading` in the default locale and changes with `ComponentsProvider` translations.

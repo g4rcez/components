@@ -1,18 +1,27 @@
 # @g4rcez/components
 
-A comprehensive React component library built with TypeScript, Tailwind CSS, and modern web technologies. This library provides a complete set of customizable, accessible, and performant UI components for building modern web applications.
+A comprehensive React component library built with TypeScript, plain CSS, semantic design tokens, and modern web technologies. This library provides customizable, accessible, and performant UI components for building modern web applications.
 
 ## Agent skill
 
-This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. It covers installation, Tailwind setup, theming APIs, design token conventions, and the full component catalog.
+This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. It covers installation, plain CSS setup, legacy Tailwind support, theming APIs, design token conventions, and the full component catalog.
 
-**Install with the [skills CLI](https://github.com/vercel-labs/skills):**
+**Install the agent skill with the [skills CLI](https://github.com/vercel-labs/skills):**
 
 ```bash
-npx skills add @g4rcez/components
+npx skills add g4rcez/components --skill csscomponents
 ```
 
-This installs the skill into your agent's skill directory (Claude Code, Cursor, Copilot, and others). The skill is then loaded automatically when the agent works in a project that depends on this package.
+This installs the skill from this repository into your agent's skill directory (Claude Code, Cursor, Copilot, and others).
+
+**Install the skill from `node_modules`:**
+
+```bash
+npm install @g4rcez/components
+npx skills experimental_sync --yes
+```
+
+`experimental_sync` discovers the package's root `SKILL.md` and installs it for the detected agents. Add `--agent claude-code` to target a specific agent.
 
 **Manual fallback:** tools that follow the Anthropic Agent Skills convention will load the skill automatically from `package.json`. Agents without auto-loading should `Read @g4rcez/components/ai/SKILL.md` before writing any UI in a codebase that depends on this package.
 
@@ -41,7 +50,7 @@ This is a monorepo containing:
 - 🔧 **TypeScript First** - Complete type safety and IntelliSense support
 - 🎯 **Tree Shakeable** - Import only what you need
 - 📱 **Responsive** - Mobile-first design approach
-- 🚀 **Modern Stack** - React 18+, TypeScript, Tailwind CSS
+- 🚀 **Modern Stack** - React 19, TypeScript, plain CSS, and optional Tailwind compatibility
 
 ## 🏗️ Architecture
 
@@ -120,7 +129,7 @@ import { Button, Input, Modal } from "@g4rcez/components";
 function App() {
     return (
         <div>
-            <Button variant="primary">Click me</Button>
+            <Button theme="primary">Click me</Button>
             <Input placeholder="Enter text..." />
         </div>
     );
@@ -164,18 +173,20 @@ function App() {
 | `Switch`       | Toggle switch                      | `import { Switch } from "@g4rcez/components/switch"`             |
 | `DatePicker`   | Date selection component           | `import { DatePicker } from "@g4rcez/components/date-picker"`    |
 | `FileUpload`   | File upload with drag & drop       | `import { FileUpload } from "@g4rcez/components/file-upload"`    |
-| `Form`         | Form wrapper with validation       | `import { Form } from "@g4rcez/components/form"`                 |
+| `Form`         | Minimal form wrapper               | `import { Form } from "@g4rcez/components/form"`                 |
 
 ### Display Components
 
-| Component  | Description                 | Import                                                   |
-| ---------- | --------------------------- | -------------------------------------------------------- |
-| `Alert`    | Alert/notification messages | `import { Alert } from "@g4rcez/components/alert"`       |
-| `Card`     | Content container           | `import { Card } from "@g4rcez/components/card"`         |
-| `Calendar` | Calendar display            | `import { Calendar } from "@g4rcez/components/calendar"` |
-| `Timeline` | Timeline/stepper component  | `import { Timeline } from "@g4rcez/components/timeline"` |
-| `Tabs`     | Tab navigation              | `import { Tabs } from "@g4rcez/components/tabs"`         |
-| `Stats`    | Statistics display          | `import { Stats } from "@g4rcez/components/stats"`       |
+| Component       | Description                 | Import                                                              |
+| --------------- | --------------------------- | ------------------------------------------------------------------- |
+| `Alert`         | Alert/notification messages | `import { Alert } from "@g4rcez/components/alert"`                  |
+| `Card`          | Content container           | `import { Card } from "@g4rcez/components/card"`                    |
+| `Calendar`      | Calendar display            | `import { Calendar } from "@g4rcez/components/calendar"`            |
+| `Timeline`      | Vertical event timeline     | `import { Timeline } from "@g4rcez/components/timeline"`            |
+| `Tabs`          | Tab navigation              | `import { Tabs } from "@g4rcez/components/tabs"`                    |
+| `Stats`         | Statistics display          | `import { Stats } from "@g4rcez/components/stats"`                  |
+| `Masonry`       | Measured masonry layout     | `import { Masonry } from "@g4rcez/components/masonry"`              |
+| `SwipeableList` | Swipeable virtualized list  | `import { SwipeableList } from "@g4rcez/components/swipeable-list"` |
 
 ### Floating Components
 
@@ -191,6 +202,8 @@ function App() {
 | Component | Description         | Import                                             |
 | --------- | ------------------- | -------------------------------------------------- |
 | `Table`   | Advanced data table | `import { Table } from "@g4rcez/components/table"` |
+
+For the complete, source-aligned component props and examples, see [`packages/lib/ai/docs/index.md`](packages/lib/ai/docs/index.md) and the per-component references in [`packages/lib/ai/docs`](packages/lib/ai/docs).
 
 ## 🎨 Theming & Customization
 
@@ -243,11 +256,11 @@ Components expose semver-protected selectors:
 
 Use semantic `--var-*` tokens for durable customization; use selectors for advanced overrides.
 
-### Why Tailwind CSS was removed
+### Why plain CSS is the default
 
 Earlier versions used Tailwind as both the authoring API and token distribution mechanism. That made component styling depend on consumer Tailwind configuration, made theme maintenance harder, and polluted component internals with long utility strings.
 
-The v6 model removes Tailwind from the library foundation in favor of plain CSS, stable selectors, and runtime CSS variables. The package no longer exports Tailwind preset or plugin entrypoints.
+The v6 model makes plain CSS, stable selectors, and runtime CSS variables the default. Legacy Tailwind preset and plugin entrypoints remain exported for projects that still use the v3/v4 integration; new apps should prefer the CSS chunks.
 
 ### Style Manifest
 

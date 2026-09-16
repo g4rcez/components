@@ -12,6 +12,7 @@ export * from "./display/calendar/calendar";
 export * from "./display/card/card";
 export * from "./display/empty/empty";
 export * from "./display/list/list";
+export * from "./display/swipeable-list/swipeable-list";
 export * from "./display/masonry/masonry";
 export * from "./display/notifications/notifications";
 export * from "./display/progress/progress";

@@ -19,17 +19,19 @@ import { Dropdown } from "@g4rcez/components/dropdown";
 
 ## Props
 
-| Prop           | Type                                    | Default | Description                                          |
-| -------------- | --------------------------------------- | ------- | ---------------------------------------------------- |
-| `trigger`      | `React.ReactElement \| React.ReactNode` | —       | Element that toggles the dropdown on click           |
-| `open`         | `boolean`                               | —       | Controlled open state                                |
-| `arrow`        | `boolean`                               | `false` | Show an arrow pointer pointing at the trigger        |
-| `title`        | `React.ReactNode \| string`             | —       | Header title rendered inside the panel               |
-| `restoreFocus` | `boolean`                               | `true`  | Restore focus to the trigger when the panel closes   |
-| `returnFocus`  | `boolean`                               | `true`  | Return focus to the trigger element                  |
-| `onChange`     | `(nextValue: boolean) => void`          | —       | Callback fired when the open state changes           |
-| `buttonProps`  | `React.HTMLProps<"button">`             | —       | Additional props forwarded to the trigger `<button>` |
-| `children`     | `React.ReactNode`                       | —       | Panel content                                        |
+| Prop                 | Type                                    | Default | Description                                          |
+| -------------------- | --------------------------------------- | ------- | ---------------------------------------------------- |
+| `trigger`            | `React.ReactElement \| React.ReactNode` | —       | Element that toggles the dropdown on click           |
+| `open`               | `boolean`                               | —       | Controlled open state                                |
+| `arrow`              | `boolean`                               | `false` | Show an arrow pointer pointing at the trigger        |
+| `hover`              | `boolean`                               | `false` | Also open the panel from pointer hover               |
+| `lockPositionOnOpen` | `boolean`                               | `false` | Keep the panel at its initial position while open    |
+| `title`              | `React.ReactNode \| string`             | —       | Header title rendered inside the panel               |
+| `restoreFocus`       | `boolean`                               | `true`  | Public focus option; the current implementation restores focus to the trigger |
+| `returnFocus`        | `boolean`                               | `true`  | Public focus option; the current implementation returns focus to the trigger |
+| `onChange`           | `(nextValue: boolean) => void`          | —       | Callback fired when the open state changes           |
+| `buttonProps`        | `React.HTMLProps<"button">`             | —       | Additional props forwarded to the trigger `<button>` |
+| `children`           | `React.ReactNode`                       | —       | Panel content                                        |
 
 ## Design Tokens
 
@@ -193,3 +195,5 @@ function FilterDropdown() {
 - Built on `@floating-ui/react` with `flip`, `shift`, and `offset(10)` middleware. The panel flips to the opposite side if there is insufficient space.
 - When a child element has `data-floating="true"`, focus leaving to that element will not close the dropdown — useful for nested portals.
 - The `open` prop is synced to local state via `useEffect`; controlled and uncontrolled usage are both supported.
+- `hover` is opt-in and uses Floating UI hover interactions in addition to the default click interaction.
+- Focus is restored to the trigger by the current implementation even when the focus option props are set to `false`.

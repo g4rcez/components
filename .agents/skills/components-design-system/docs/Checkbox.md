@@ -27,7 +27,7 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 | `loading`        | `boolean`                                          | `false`    | Loading state — disables the checkbox while loading        |
 | `error`          | `string`                                           | -          | Error message rendered below the label                     |
 | `asTask`         | `boolean`                                          | `false`    | Task mode: applies strikethrough to the label when checked |
-| `size`           | `"medium" \| "large"`                              | `"medium"` | Checkbox size                                              |
+| `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny" \| "medium" \| "large"` | `"normal"` | Checkbox size; the named values map to the library control-size tokens |
 | `container`      | `string`                                           | -          | Extra CSS classes for the outer `<label>` wrapper          |
 | `labelClassName` | `string`                                           | -          | Extra CSS classes for the error text element               |
 | `className`      | `string`                                           | -          | Extra CSS classes for the `<input>` element                |
@@ -50,10 +50,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ### Size
 
-| Value      | Description                           |
-| ---------- | ------------------------------------- |
-| `"medium"` | Default size — 1rem × 1rem (`size-4`) |
-| `"large"`  | Larger touch target                   |
+The default is `"normal"`. The component accepts the shared control-size names `"big"`, `"default"`, `"min"`, `"normal"`, `"small"`, and `"tiny"`, plus the legacy aliases `"medium"` and `"large"`. Use `"normal"` for new code unless the design calls for another control size.
 
 ### Task mode
 
@@ -167,8 +164,8 @@ function PreferencesForm() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use `Checkbox` to trigger an immediate action — use a `Button` or `Switch` instead.
 - Don't use checkboxes for mutually exclusive choices — use `Radiobox` instead.
 

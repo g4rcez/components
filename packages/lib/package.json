@@ -33,6 +33,7 @@
     "files": [
         "dist",
         "dist/css/index.css",
+        "SKILL.md",
         "ai",
         "bin"
     ],
@@ -251,6 +252,12 @@
             "import": "./dist/components/display/list.mjs",
             "default": "./dist/components/display/list.mjs"
         },
+        "./swipeable-list": {
+            "source": "./src/components/display/swipeable-list/swipeable-list.tsx",
+            "types": "./dist/components/display/swipeable-list.d.ts",
+            "import": "./dist/components/display/swipeable-list.mjs",
+            "default": "./dist/components/display/swipeable-list.mjs"
+        },
         "./calendar": {
             "source": "./src/components/display/calendar/calendar.tsx",
             "types": "./dist/components/display/calendar.d.ts",
@@ -341,6 +348,10 @@
         "./list.css": {
             "source": "./src/components/display/list/list.css",
             "default": "./dist/css/list.css"
+        },
+        "./swipeable-list.css": {
+            "source": "./src/components/display/swipeable-list/swipeable-list.css",
+            "default": "./dist/css/swipeable-list.css"
         },
         "./step.css": {
             "source": "./src/components/display/step/step.css",
@@ -640,7 +651,7 @@
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest",
+        "build": "cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",

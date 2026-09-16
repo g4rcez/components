@@ -28,6 +28,7 @@ Inherits all standard HTML `input[type="checkbox"]` attributes, plus:
 | `error`     | `string`                       | —       | Error message displayed below the switch.            |
 | `loading`   | `boolean`                      | `false` | Disables the switch and signals a pending operation. |
 | `container` | `string`                       | —       | Additional CSS classes for the outer `<fieldset>`.   |
+| `size`      | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"default"` | Shared control size. |
 
 ## Design Tokens
 
@@ -131,8 +132,8 @@ export default function PrivacySettings() {
 
 - Don't use `Switch` for selecting multiple items from a list — use `Checkbox` or `MultiSelect`.
 - Don't use `Switch` when the action involves a long or complex process without additional loading feedback.
-- Don't pass raw Tailwind color classes (`bg-green-500`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-green-500`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 
@@ -152,6 +153,6 @@ export default function PrivacySettings() {
 
 ## Notes
 
-- The component manages its own `innerChecked` state and re-syncs when `props.checked` changes, supporting both controlled and semi-controlled usage patterns.
+- The component manages its own `innerChecked` state, initialized from `checked`; use `onCheck` for the boolean value produced by the visual toggle.
 - A synthetic `change` event is dispatched on the hidden input after toggling, so external form libraries that listen to native events will pick up the change.
 - Smooth track and thumb transitions use `duration-300 ease-in-out`.

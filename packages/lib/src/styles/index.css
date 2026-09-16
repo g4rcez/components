@@ -9,6 +9,7 @@
 @import "../components/display/card/card.css";
 @import "../components/display/collapse/collapse.css";
 @import "../components/display/list/list.css";
+@import "../components/display/swipeable-list/swipeable-list.css";
 @import "../components/display/step/step.css";
 @import "../components/display/tabs/tabs.css";
 @import "../components/display/alert/alert.css";

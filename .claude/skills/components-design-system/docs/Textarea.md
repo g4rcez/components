@@ -24,6 +24,7 @@ Inherits all `InputField` props and standard HTML `<textarea>` attributes, plus:
 | Prop          | Type      | Default | Description                                                                             |
 | ------------- | --------- | ------- | --------------------------------------------------------------------------------------- |
 | `title`       | `Label`   | —       | Label for the textarea.                                                                 |
+| `size`        | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`. |
 | `error`       | `string`  | —       | Error message displayed below the field.                                                |
 | `loading`     | `boolean` | `false` | Disables the field and signals a pending state.                                         |
 | `rows`        | `number`  | `2`     | Initial number of visible text rows.                                                    |

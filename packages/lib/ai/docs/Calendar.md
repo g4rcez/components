@@ -1,6 +1,6 @@
 ---
 title: Calendar
-description: Interactive month-view calendar with single-date and range selection, keyboard navigation, and locale support.
+description: Interactive month calendar with single-date, date-time, and range selection modes.
 package: "@g4rcez/components"
 export: "{ Calendar }"
 import: "import { Calendar } from '@g4rcez/components/calendar'"
@@ -9,177 +9,105 @@ category: display
 
 # Calendar
 
-Interactive month-view calendar with single-date and range selection, keyboard navigation, and locale support.
+`Calendar` renders a keyboard-navigable month grid. It supports single-date selection, optional time input, and staged date-range selection.
 
 ## Import
 
 ```tsx
 import { Calendar } from "@g4rcez/components/calendar";
-import type { Range, Locales } from "@g4rcez/components/calendar";
 ```
 
 ## Props
 
-| Prop                | Type                            | Default  | Description                                                           |
-| ------------------- | ------------------------------- | -------- | --------------------------------------------------------------------- |
-| `date`              | `Date`                          | —        | Selected date (single-date mode)                                      |
-| `range`             | `Range`                         | —        | Selected range `{ from?: Date; to?: Date }`                           |
-| `rangeMode`         | `boolean`                       | `false`  | Enable range selection mode                                           |
-| `markRange`         | `boolean`                       | `true`   | Visually highlight dates inside a range                               |
-| `markToday`         | `boolean`                       | `true`   | Emphasize today's date                                                |
-| `type`              | `"date" \| "datetime"`          | `"date"` | Show an additional time input when `"datetime"`                       |
-| `datetimeTitle`     | `string`                        | —        | Label for the time input in `"datetime"` mode                         |
-| `onChange`          | `OnChangeDate \| OnChangeRange` | —        | Called when a date or range changes                                   |
-| `changeOnlyOnClick` | `boolean`                       | `false`  | Suppress onChange on keyboard navigation; fire only on explicit click |
-| `onChangeYear`      | `(date: Date) => void`          | —        | Called when the year changes                                          |
-| `onChangeMonth`     | `(date: Date) => void`          | —        | Called when the month changes                                         |
-| `disabledDate`      | `(date: Date) => boolean`       | —        | Return `true` to disable a specific date                              |
-| `RenderOnDay`       | `React.FC<{ date: Date }>`      | —        | Custom renderer overlaid on each day cell                             |
-| `locale`            | `Locales`                       | —        | BCP 47 locale string for month/weekday labels                         |
-| `labelRange`        | `{ from: string; to: string }`  | —        | Labels shown on the selected range endpoints                          |
-| `styles`            | `CalendarStyles`                | —        | Fine-grained class overrides per calendar section                     |
+`Calendar` also accepts the standard props used by its internal controls through the component implementation. The component-specific props are:
 
-## Design Tokens
+| Prop                | Type                                                                                              | Default       | Description                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `type`              | `"date" \| "datetime" \| "range"`                                                                 | `"date"`      | Select date-only, date-time, or range mode.                                  |
+| `date`              | `Date`                                                                                            | current date  | Month and selected date used in date and datetime modes.                     |
+| `range`             | `{ from?: Date; to?: Date } \| null`                                                              | —             | Initial or controlled range value.                                           |
+| `rangeMode`         | `boolean`                                                                                         | `false`       | Enables two-step `from`/`to` selection. Set this for range selection.        |
+| `markRange`         | `boolean`                                                                                         | `true`        | Highlights the days between the selected range endpoints.                    |
+| `markToday`         | `boolean`                                                                                         | `true`        | Highlights the current day.                                                  |
+| `changeOnlyOnClick` | `boolean`                                                                                         | `false`       | In range mode, delay `onChange` until a complete range is selected by click. |
+| `locale`            | `Locales \| undefined`                                                                            | active locale | Locale used for month labels and date formatting.                            |
+| `disabledDate`      | `(date: Date) => boolean`                                                                         | —             | Disables matching dates.                                                     |
+| `onChange`          | `(date: Date \| undefined) => void` or `(range: { from?: Date; to?: Date } \| undefined) => void` | —             | Called when the selected date or range changes.                              |
+| `onChangeMonth`     | `(date: Date) => void`                                                                            | —             | Called after the visible month changes.                                      |
+| `onChangeYear`      | `(date: Date) => void`                                                                            | —             | Called after the visible year changes.                                       |
+| `RenderOnDay`       | `React.FC<{ date: Date }>`                                                                        | —             | Renders extra content for a day.                                             |
+| `labelRange`        | `{ from: string; to: string }`                                                                    | —             | Accessible labels for the range endpoints.                                   |
+| `datetimeTitle`     | `string`                                                                                          | —             | Label for the time control in datetime mode.                                 |
+| `styles`            | `CalendarStyles`                                                                                  | —             | Class names or class-name callbacks for calendar regions.                    |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+`rangeMode` is not inferred from `type="range"`; pass both when using `Calendar` directly. `DatePicker` configures range mode for you.
 
-| Token                           | CSS Variable           | Purpose                                   |
-| ------------------------------- | ---------------------- | ----------------------------------------- |
-| `bg-primary`                    | `--primary`            | Selected day background                   |
-| `text-primary-foreground`       | `--primary-foreground` | Selected day text                         |
-| `hover:bg-primary`              | `--primary`            | Navigation button hover background        |
-| `hover:text-primary-foreground` | `--primary-foreground` | Navigation button hover text              |
-| `text-primary`                  | `--primary`            | "Today" button and year/month hover color |
-| `text-disabled`                 | `--disabled`           | Days outside the current month            |
-| `border-card-border`            | `--card-border`        | Range highlight border                    |
-| `text-foreground`               | `--foreground`         | Range endpoint label                      |
+## Design Tokens and CSS
+
+The component ships a plain CSS chunk at `@g4rcez/components/calendar.css`. Its stable root selector is `.__calendar`; use the component style manifest for its slots and dependencies. Calendar-specific token values are defined in the library token sheet and should be overridden with semantic `--var-*` variables.
 
 ## Examples
 
-### Single Date Selection
+### Single date
 
 ```tsx
-import { useState } from "react";
+const [date, setDate] = useState<Date>();
 
-function DatePicker() {
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
-    return <Calendar date={selectedDate} onChange={setSelectedDate} markToday />;
-}
+<Calendar date={date} onChange={setDate} />;
 ```
 
-### Date Range Selection
+### Date range
 
 ```tsx
-import { useState } from "react";
-import { Calendar, type Range } from "@g4rcez/components/calendar";
+type DateRange = { from?: Date; to?: Date };
+const [range, setRange] = useState<DateRange | undefined>();
 
-function DateRangePicker() {
-    const [range, setRange] = useState<Range>({ from: undefined, to: undefined });
-
-    return <Calendar range={range} rangeMode markRange onChange={setRange} labelRange={{ from: "Start Date", to: "End Date" }} />;
-}
+<Calendar type="range" rangeMode range={range} onChange={setRange} labelRange={{ from: "Start date", to: "End date" }} />;
 ```
 
-### Disabled Dates
+### Disable past dates
 
 ```tsx
-const isPastDate = (date: Date): boolean => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-};
-
-<Calendar date={selectedDate} onChange={setSelectedDate} disabledDate={isPastDate} />;
+<Calendar disabledDate={(date) => date < startOfDay(new Date())} />
 ```
 
-### Booking Calendar with Range Restrictions
+### Add content to days
 
 ```tsx
-function BookingCalendar() {
-    const [bookingRange, setBookingRange] = useState<Range>({});
-
-    const isDateDisabled = (date: Date): boolean => {
-        const today = new Date();
-        const minDate = new Date(today);
-        minDate.setDate(today.getDate() + 2);
-        const maxDate = new Date(today);
-        maxDate.setDate(today.getDate() + 90);
-        return date < minDate || date > maxDate;
-    };
-
-    return (
-        <Calendar
-            range={bookingRange}
-            rangeMode
-            markRange
-            markToday
-            onChange={setBookingRange}
-            disabledDate={isDateDisabled}
-            labelRange={{ from: "Check-in", to: "Check-out" }}
-        />
-    );
-}
-```
-
-### Internationalized Calendar
-
-```tsx
-import { Calendar, type Locales } from "@g4rcez/components/calendar";
-
-function InternationalCalendar() {
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const [locale, setLocale] = useState<Locales>("en");
-
-    return <Calendar date={selectedDate} onChange={setSelectedDate} locale={locale} markToday />;
-}
-```
-
-### Custom Day Renderer
-
-```tsx
-function EventDot({ date }: { date: Date }) {
-    const hasEvent = myEvents.some((e) => e.date.toDateString() === date.toDateString());
-    return hasEvent ? <span className="absolute bottom-1 left-1/2 -translate-x-1/2 size-1 rounded-full bg-primary" /> : null;
-}
-
-<Calendar date={selectedDate} onChange={setSelectedDate} RenderOnDay={EventDot} markToday />;
+<Calendar RenderOnDay={({ date }) => (hasEvent(date) ? <span aria-label="Has event">•</span> : null)} />
 ```
 
 ## Do
 
-- Use `markToday` to help users orient themselves.
-- Use `disabledDate` to restrict selection to valid periods.
-- Provide `labelRange` labels when using `rangeMode` so users know which endpoint they are selecting.
-- Pass the correct `locale` to match user locale preferences.
-- Use design-token classes for any wrapper elements (`bg-background`, `border-border`).
+- Use `disabledDate` for business rules such as unavailable or past dates.
+- Supply `labelRange` when the endpoint labels need to be more specific than the defaults.
+- Use `changeOnlyOnClick` when partial keyboard range changes should not update application state.
+- Provide a locale through `ComponentsProvider` or the `locale` prop when month labels must be localized.
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) in `styles` or `RenderOnDay` — use design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
-- Don't use `Calendar` when only year selection is needed — a `Select` is more efficient.
-- Don't place too many visual markers on each day; keep day-level indicators minimal.
+- Don't treat a partial range as a complete date interval.
+- Don't rely on color alone to communicate the selected range.
+- Don't use `Calendar` when a native date input is the better fit for a simple form.
 
 ## Accessibility
 
-- Full keyboard navigation: Arrow keys move days, Shift+Arrow moves months/years, Enter/Space selects.
-- Month and year controls are accessible `<select>` and masked text inputs with `aria-label`.
-- Navigation buttons include `title` attributes for screen reader description.
-- Disabled dates use the native `disabled` attribute on `<button>`.
+- Day cells are buttons and support keyboard navigation with arrow keys.
+- Previous/next month controls and month/year selectors are keyboard accessible.
+- Selected, disabled, today, and range states are exposed through the rendered control attributes.
+- Supply meaningful `labelRange` values for range forms and keep `RenderOnDay` content decorative or labelled.
 
 ## Data Attributes
 
-- `data-component="calendar"` — root container.
-- `data-date` — ISO date string on each day button, used for focus management.
-- `data-samemonth` — `"true"` / `"false"` on each day button.
-- `data-range` — `"true"` / `"false"` on each day button.
-- `data-focustrap` — `"prev"` / `"next"` on navigation buttons.
+- `data-component="calendar"` — calendar root.
+- `data-date` — ISO date on each day button.
+- `data-samemonth` — whether the day belongs to the visible month.
+- `data-range` — whether range mode is active.
+- `data-today` — present for the current day.
+- `data-focustrap` — navigation focus targets.
 
 ## Notes
 
-- Uses `date-fns` for date arithmetic and Framer Motion (`motion/react`) for slide animations.
-- Touch devices get swipe-left/right support for month navigation automatically.
-- When `changeOnlyOnClick` is `false` (default), `onChange` fires on every keyboard navigation move.
-- The calendar always renders 6 weeks (42 cells) to avoid layout shifts when switching months.
-- `type="datetime"` appends a masked time input below the calendar grid.
+- The grid uses 42 days to keep its height stable while changing months.
+- Month transitions use `motion/react`; reduced-motion behavior follows the library motion configuration.
+- `type="datetime"` adds a masked time input below the calendar grid.

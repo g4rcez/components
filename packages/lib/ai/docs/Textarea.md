@@ -21,16 +21,17 @@ import { Textarea } from "@g4rcez/components";
 
 Inherits all `InputField` props and standard HTML `<textarea>` attributes, plus:
 
-| Prop          | Type      | Default | Description                                                                             |
-| ------------- | --------- | ------- | --------------------------------------------------------------------------------------- |
-| `title`       | `Label`   | —       | Label for the textarea.                                                                 |
-| `error`       | `string`  | —       | Error message displayed below the field.                                                |
-| `loading`     | `boolean` | `false` | Disables the field and signals a pending state.                                         |
-| `rows`        | `number`  | `2`     | Initial number of visible text rows.                                                    |
-| `next`        | `string`  | —       | ID of the next element to focus when Enter is pressed (requires `enterKeyHint="next"`). |
-| `placeholder` | `string`  | —       | Placeholder text.                                                                       |
-| `required`    | `boolean` | —       | Marks the field as required.                                                            |
-| `className`   | `string`  | —       | Additional CSS classes for the `<textarea>` element.                                    |
+| Prop          | Type                                                           | Default    | Description                                                                             |
+| ------------- | -------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| `title`       | `Label`                                                        | —          | Label for the textarea.                                                                 |
+| `size`        | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`.                                        |
+| `error`       | `string`                                                       | —          | Error message displayed below the field.                                                |
+| `loading`     | `boolean`                                                      | `false`    | Disables the field and signals a pending state.                                         |
+| `rows`        | `number`                                                       | `2`        | Initial number of visible text rows.                                                    |
+| `next`        | `string`                                                       | —          | ID of the next element to focus when Enter is pressed (requires `enterKeyHint="next"`). |
+| `placeholder` | `string`                                                       | —          | Placeholder text.                                                                       |
+| `required`    | `boolean`                                                      | —          | Marks the field as required.                                                            |
+| `className`   | `string`                                                       | —          | Additional CSS classes for the `<textarea>` element.                                    |
 
 ## Design Tokens
 

@@ -179,8 +179,8 @@ export function NotificationFeed() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use this component for purely informational lists where no detail overlay is needed — use a plain `<ul>` instead.
 - Don't embed full applications or heavy forms inside the overlay `children`; use a `Modal` for complex workflows.
 - Don't render `AnimatedListItem` outside of `AnimatedList` — the item component returns a `Fragment` and relies entirely on the parent list for rendering.
@@ -192,7 +192,7 @@ export function NotificationFeed() {
 - The overlay uses `FloatingFocusManager` to trap focus and `FloatingOverlay` with `lockScroll` to block background interaction.
 - Pressing `Escape`, clicking outside, or clicking the close button dismisses the overlay.
 - The close button inside the overlay is a focusable `<button>` with an `XIcon`.
-- `MotionConfig reducedMotion="user"` honours the system-level reduced-motion preference, disabling animations when requested.
+- Motion is provided by `motion/react`; wrap the list in your app's reduced-motion configuration when your application needs to disable transitions.
 
 ## Data Attributes
 

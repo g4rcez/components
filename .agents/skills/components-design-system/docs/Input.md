@@ -21,24 +21,25 @@ import { Input } from "@g4rcez/components/input";
 
 `Input` extends all standard HTML `<input>` attributes plus `InputField` layout props:
 
-| Prop             | Type                                                                   | Default | Description                                                                      |
-| ---------------- | ---------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------- |
-| `mask`           | `AllMasks \| Array<string \| RegExp> \| ((value: string) => AllMasks)` | -       | Input mask pattern                                                               |
-| `locale`         | `Locales`                                                              | -       | Locale for currency/number formatting                                            |
-| `currency`       | `CurrencyCode`                                                         | -       | Currency code when using `mask="currency"`                                       |
-| `error`          | `string`                                                               | -       | Error message shown below the field                                              |
-| `title`          | `string`                                                               | -       | Field label                                                                      |
-| `feedback`       | `Label`                                                                | -       | Success or neutral feedback text below the field                                 |
-| `left`           | `Label`                                                                | -       | Content rendered on the left inside the field border                             |
-| `right`          | `Label`                                                                | -       | Content rendered on the right inside the field border                            |
-| `required`       | `boolean`                                                              | `false` | Marks field as required; hides "Optional" label text                             |
-| `disabled`       | `boolean`                                                              | `false` | Disabled state                                                                   |
-| `loading`        | `boolean`                                                              | `false` | Loading state                                                                    |
-| `container`      | `string`                                                               | -       | Extra CSS classes for the outer `fieldset`                                       |
-| `labelClassName` | `string`                                                               | -       | Extra CSS classes for the label/border wrapper                                   |
-| `next`           | `string`                                                               | -       | `id` of the next field to focus when Enter is pressed with `enterKeyHint="next"` |
-| `hiddenLabel`    | `boolean`                                                              | `false` | Visually hides the label but keeps it for screen readers                         |
-| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`                          | -       | All standard input attributes                                                    |
+| Prop             | Type                                                                   | Default    | Description                                                                      |
+| ---------------- | ---------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------- |
+| `mask`           | `AllMasks \| Array<string \| RegExp> \| ((value: string) => AllMasks)` | -          | Input mask pattern                                                               |
+| `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"`         | `"normal"` | Field size; button-compatible names use the same control heights                 |
+| `locale`         | `Locales`                                                              | -          | Locale for currency/number formatting                                            |
+| `currency`       | `CurrencyCode`                                                         | -          | Currency code when using `mask="currency"`                                       |
+| `error`          | `string`                                                               | -          | Error message shown below the field                                              |
+| `title`          | `string`                                                               | -          | Field label                                                                      |
+| `feedback`       | `Label`                                                                | -          | Success or neutral feedback text below the field                                 |
+| `left`           | `Label`                                                                | -          | Content rendered on the left inside the field border                             |
+| `right`          | `Label`                                                                | -          | Content rendered on the right inside the field border                            |
+| `required`       | `boolean`                                                              | `false`    | Marks field as required; hides "Optional" label text                             |
+| `disabled`       | `boolean`                                                              | `false`    | Disabled state                                                                   |
+| `loading`        | `boolean`                                                              | `false`    | Loading state                                                                    |
+| `container`      | `string`                                                               | -          | Extra CSS classes for the outer `fieldset`                                       |
+| `labelClassName` | `string`                                                               | -          | Extra CSS classes for the label/border wrapper                                   |
+| `next`           | `string`                                                               | -          | `id` of the next field to focus when Enter is pressed with `enterKeyHint="next"` |
+| `hiddenLabel`    | `boolean`                                                              | `false`    | Visually hides the label but keeps it for screen readers                         |
+| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`                          | -          | All standard input attributes                                                    |
 
 ### Mask patterns
 
@@ -105,6 +106,17 @@ const docMask = (value: string) => (value.replace(/\D/g, "").length <= 11 ? "999
 
 <Input name="document" title="CPF or CNPJ" mask={docMask} placeholder="000.000.000-00" />;
 ```
+
+### Button-compatible sizes
+
+```tsx
+<div className="flex items-end gap-2">
+    <Input size="small" title="Search" placeholder="Search records" />
+    <Button size="small">Search</Button>
+</div>
+```
+
+`big`, `default`, `min`, `small`, and `tiny` use the same control heights as the matching `Button` sizes. `normal` remains the default input size and has the same height as `default`.
 
 ### Input with inline left/right slots
 
@@ -183,8 +195,8 @@ function SignUpForm() {
 
 ## Don't
 
-- Don't pass raw Tailwind color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
 - Don't use a mask that blocks valid input variations — prefer dynamic masks for formats with variable length.
 - Don't forget that the mask formats the display value; if your backend expects raw data, strip formatting before sending.
 - Don't use `Input` for long-form text — use `Textarea` instead.

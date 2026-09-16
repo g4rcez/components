@@ -328,7 +328,7 @@ describe("MyComponent", () => {
 
 ## Documentation
 
-The shipped agent skill lives at `packages/lib/ai/SKILL.md`. Edit it there — do not create copies elsewhere.
+The shipped agent skill source lives at `skills/csscomponents/SKILL.md`. Edit it there. The library build copies it to `packages/lib/SKILL.md` for node_modules discovery and `packages/lib/ai/SKILL.md` for package distribution.
 
 ### Adding Component Documentation
 

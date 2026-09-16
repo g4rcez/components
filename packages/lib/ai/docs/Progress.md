@@ -1,6 +1,6 @@
 ---
 title: Progress
-description: Accessible progress bar built on Base UI Progress with optional label overlay and smooth transitions.
+description: Accessible determinate progress bar with an optional label overlay.
 package: "@g4rcez/components"
 export: "{ Progress }"
 import: "import { Progress } from '@g4rcez/components'"
@@ -9,7 +9,7 @@ category: display
 
 # Progress
 
-Accessible progress bar built on Base UI Progress with optional label overlay and smooth transitions.
+`Progress` wraps Base UI's progress primitive and renders a themed track, indicator, and optional percentage label. It accepts values in any numeric range and maps them to the configured `min`/`max` interval.
 
 ## Import
 
@@ -19,131 +19,80 @@ import { Progress } from "@g4rcez/components";
 
 ## Props
 
-| Prop            | Type     | Default | Description                                              |
-| --------------- | -------- | ------- | -------------------------------------------------------- |
-| `percent`       | `number` | —       | Current progress value (0–100)                           |
-| `max`           | `number` | —       | Maximum value (forwarded to Base UI `Progress.Root`)     |
-| `label`         | `Label`  | —       | Custom text overlay; overrides the default `{percent} %` |
-| `container`     | `string` | —       | Additional classes for the track element                 |
-| `className`     | `string` | —       | Additional classes for the indicator (fill) element      |
-| `textClassName` | `string` | —       | Additional classes for the label text overlay            |
+| Prop            | Type     | Default | Description                                                                    |
+| --------------- | -------- | ------- | ------------------------------------------------------------------------------ |
+| `value`         | `number` | —       | Current progress value. Preferred API.                                         |
+| `percent`       | `number` | —       | Deprecated alias for `value`. `value` takes precedence when both are provided. |
+| `min`           | `number` | `0`     | Minimum value of the progress range.                                           |
+| `max`           | `number` | `100`   | Maximum value of the progress range.                                           |
+| `label`         | `Label`  | —       | Replaces the rounded percentage label.                                         |
+| `container`     | `string` | —       | Class for the progress track.                                                  |
+| `className`     | `string` | —       | Class for the indicator.                                                       |
+| `textClassName` | `string` | —       | Class for the label.                                                           |
 
-## Design Tokens
+If `value` and `percent` are both absent, or `max <= min`, the track is rendered without an indicator or label. Values outside the range are clamped for the visual percentage.
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+## Design Tokens and CSS
 
-| Token                     | CSS Variable           | Purpose                     |
-| ------------------------- | ---------------------- | --------------------------- |
-| `bg-background`           | `--background`         | Track (unfilled) background |
-| `bg-primary`              | `--primary`            | Indicator (fill) color      |
-| `text-primary-foreground` | `--primary-foreground` | Default label text color    |
+The component ships `@g4rcez/components/progress.css`. Its stable selectors are `.__progress`, `.__progress__indicator`, and `.__progress__label`. The stylesheet reads `--var-progress-track-block-size`, `--var-progress-track-radius`, `--var-progress-indicator-transition-duration`, `--var-progress-indicator-transition-timing`, `--var-color-background`, `--var-color-primary`, and `--var-color-primary-foreground`.
 
 ## Examples
 
-### Basic Progress Bar
+### Basic progress
 
 ```tsx
-<Progress percent={75} />
+<Progress value={75} />
 ```
 
-### Animated Progress
+### Custom range
 
 ```tsx
-function AnimatedProgress() {
-    const [progress, setProgress] = useState(0);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prev) => (prev >= 100 ? 0 : prev + 10));
-        }, 500);
-        return () => clearInterval(timer);
-    }, []);
-
-    return <Progress percent={progress} />;
-}
+<Progress min={0} max={4} value={3} label="Step 3 of 4" />
 ```
 
-### Custom Label
+### Animated progress
 
 ```tsx
-<Progress percent={60} label="Uploading file… 60%" />
+const [value, setValue] = useState(0);
+
+<Progress value={value} />;
 ```
 
-### Indeterminate / Unknown Duration
+### Unknown duration
 
-When `percent` is `undefined` the indicator is not rendered and the label is hidden, leaving only the track. Combine with a separate `Spinner` for unknown-duration operations.
+Use a `Spinner` or another pending-state indicator when no numeric progress is available.
 
 ```tsx
 {
-    isLoading ? <Spinner /> : <Progress percent={uploadPercent} />;
-}
-```
-
-### Multi-Step Form Progress
-
-```tsx
-function MultiStepForm() {
-    const [currentStep, setCurrentStep] = useState(1);
-    const totalSteps = 4;
-    const progress = (currentStep / totalSteps) * 100;
-
-    return (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center text-sm text-muted-foreground">
-                <span>
-                    Step {currentStep} of {totalSteps}
-                </span>
-                <span>{Math.round(progress)}% complete</span>
-            </div>
-            <Progress percent={progress} />
-        </div>
-    );
-}
-```
-
-### Upload with Status Label
-
-```tsx
-function FileUploadProgress({ fileName, percent }: { fileName: string; percent: number }) {
-    const isDone = percent >= 100;
-
-    return (
-        <div className="space-y-1">
-            <div className="flex justify-between text-sm">
-                <span className="text-foreground">{fileName}</span>
-                <span className="text-muted-foreground">{percent}%</span>
-            </div>
-            <Progress
-                percent={percent}
-                label={isDone ? "Complete" : undefined}
-                container={isDone ? "bg-success/20" : undefined}
-                className={isDone ? "bg-success" : undefined}
-            />
-        </div>
-    );
+    isUploading ? <Spinner /> : <Progress value={uploadProgress} />;
 }
 ```
 
 ## Do
 
-- Use `Progress` when the duration of an operation is known or can be estimated.
-- Provide a `label` when a percentage alone is not descriptive enough.
-- Use `container` and `className` with design-token classes to change the track and fill colors (`bg-success`, `bg-warn`, etc.).
+- Use `value` for new code and keep the value in the same domain as `min` and `max`.
+- Provide a descriptive `label` when a rounded percentage is not enough context.
+- Keep progress updates meaningful to avoid unnecessary visual work.
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-green-500`, `bg-blue-500`) in `container` or `className` — use design tokens (`bg-success`, `bg-primary`) instead.
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
-- Don't use `Progress` for operations with unknown durations — use `Spinner` instead.
-- Don't update `percent` more frequently than needed; excessive updates cause jitter.
+- Don't use `Progress` for an operation whose progress cannot be measured.
+- Don't use the deprecated `percent` prop in new code.
+- Don't style the indicator with raw colors; override semantic `--var-*` tokens or use the component CSS contract.
 
 ## Accessibility
 
-- Built on Base UI `Progress.Root` which renders the correct `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` automatically.
-- The label overlay is a `<p>` element with `tabular-nums` for consistent digit rendering.
+- Base UI provides the progressbar semantics and value attributes.
+- The label is supplementary text inside the progress root; do not use it as the only status announcement for rapidly changing progress.
+- Pair long-running progress with a visible status message when users need more detail.
+
+## Data Attributes
+
+- `data-component="progress"` — progress root.
+- `data-slot="indicator"` — filled indicator.
+- `data-slot="label"` — rendered only when a value is available.
 
 ## Notes
 
-- The indicator moves via a CSS `translateX` transform (`translateX(-${100 - percent}%)`) for GPU-accelerated animation.
-- The 500 ms `transition-transform ease-in-out` is applied via the `className` on the indicator element and can be overridden.
-- When `percent` is `undefined` or `null`, the label and fill are hidden; the track remains visible.
+- The displayed label is `Math.round(percent) %` unless `label` is supplied.
+- The indicator width is controlled by Base UI from the normalized value; the component does not render an indeterminate animation.

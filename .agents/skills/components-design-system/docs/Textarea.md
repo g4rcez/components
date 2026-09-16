@@ -24,6 +24,7 @@ Inherits all `InputField` props and standard HTML `<textarea>` attributes, plus:
 | Prop          | Type      | Default | Description                                                                             |
 | ------------- | --------- | ------- | --------------------------------------------------------------------------------------- |
 | `title`       | `Label`   | —       | Label for the textarea.                                                                 |
+| `size`        | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`. |
 | `error`       | `string`  | —       | Error message displayed below the field.                                                |
 | `loading`     | `boolean` | `false` | Disables the field and signals a pending state.                                         |
 | `rows`        | `number`  | `2`     | Initial number of visible text rows.                                                    |
@@ -119,8 +120,8 @@ export default function MultiFieldForm() {
 
 - Don't use `Textarea` for single-line inputs like names or emails — use `Input` instead.
 - Don't fix the height with a `className` like `h-32` if you want the auto-resize behavior to work.
-- Don't pass raw Tailwind color classes (`bg-gray-50`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-gray-50`, `border-gray-300`) — use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
 
 ## Accessibility
 

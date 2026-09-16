@@ -31,6 +31,7 @@
 - [x] Spinner
 - [x] Step
 - [x] Switch
+- [x] Swipeable List
 - [x] Task List
 - [x] Table
 - [x] Tabs

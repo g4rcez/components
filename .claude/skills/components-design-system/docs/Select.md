@@ -22,7 +22,8 @@ import { Select } from "@g4rcez/components/select";
 | Prop                 | Type                                          | Default | Description                                                  |
 | -------------------- | --------------------------------------------- | ------- | ------------------------------------------------------------ |
 | `options`            | `OptionProps[]`                               | —       | Array of option objects.                                     |
-| `selectContainer`    | `string`                                      | `""`    | Additional CSS classes for the select container.             |
+| `size`               | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`. |
+| `selectContainer`    | `string`                                      | `""`    | Legacy compatibility prop; currently accepted but not applied. |
 | `required`           | `boolean`                                     | `true`  | Whether the field is required.                               |
 | `error`              | `string`                                      | —       | Error message to display.                                    |
 | `loading`            | `boolean`                                     | `false` | Shows a loading indicator and disables the field.            |
@@ -37,7 +38,7 @@ import { Select } from "@g4rcez/components/select";
 | Prop           | Type      | Description                                             |
 | -------------- | --------- | ------------------------------------------------------- |
 | `value`        | `string`  | Option value (required).                                |
-| `label`        | `string`  | Display text (falls back to `value` if omitted).        |
+| `label`        | `string`  | Optional display text; falls back to `value` if omitted.  |
 | `disabled`     | `boolean` | Disables this individual option.                        |
 | `data-dynamic` | `string`  | Marks a dynamically generated option.                   |
 | `data-*`       | `string`  | Any custom data attributes forwarded to the `<option>`. |
@@ -174,7 +175,10 @@ export default function AsyncSelect() {
 
 ```tsx
 import { Select } from "@g4rcez/components/select";
-import { useForm } from "@g4rcez/components/form";
+import { useForm } from "@g4rcez/components";
+import { z } from "zod";
+
+const schema = z.object({ role: z.string() });
 
 export default function UserForm() {
     const form = useForm(schema, "userForm");
@@ -252,33 +256,45 @@ export default function CascadingSelect() {
 - Order options logically (alphabetically or by usage frequency).
 - Provide a `placeholder` so users know what to select.
 - Use `loading` and `disabled` together while fetching options asynchronously.
-- Use design-token classes for wrapper elements (`bg-background`, `text-foreground`, `border-border`).
+- Use design-token classes for wrapper elements
+  (`bg-background`, `text-foreground`, `border-border`).
 
 ## Don't
 
-- Don't use `Select` for only 2–3 options — prefer `Radiobox` or `Switch` for better visibility.
-- Don't use `Select` for large searchable lists — use `Autocomplete` instead.
+- Don't use `Select` for only 2–3 options; prefer `Radiobox` or `Switch` for
+  better visibility.
+- Don't use `Select` for large searchable lists; use `Autocomplete` instead.
 - Don't use long option labels that may truncate on small viewports.
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`,
+  `border-gray-300`); use design tokens instead.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`); override
+  CSS variables in your `@theme` block instead.
 
 ## Accessibility
 
-- Uses a native `<select>` element for full keyboard support and screen-reader compatibility.
-- The `placeholder` renders as a `disabled hidden` option so it is never submitted.
-- A `CaretDownIcon` caret is rendered inside a `<label>` pointing to the select id, giving it a larger click target.
-- `data-selected` is set to `"false"` until the user selects an option, which toggles the placeholder color class.
+- Uses a native `<select>` for keyboard and screen-reader compatibility.
+- The `placeholder` renders as a `disabled hidden` option and is never
+  submitted.
+- A `CaretDownIcon` is rendered inside a `<label>` pointing to the select id,
+  giving it a larger click target.
+- `data-selected` is `"false"` until the user selects an option, which toggles
+  the placeholder color class.
 
 ## Data Attributes
 
-| Attribute        | Element           | Value               | Description                                   |
-| ---------------- | ----------------- | ------------------- | --------------------------------------------- |
-| `data-component` | `InputField` root | `"select"`          | Identifies the component.                     |
-| `data-selected`  | `<select>`        | `"true" \| "false"` | Whether a non-placeholder option is selected. |
+| Attribute        | Element    | Value            | Description       |
+| ---------------- | ---------- | ---------------- | ----------------- |
+| `data-component` | Root       | `"select"`       | Component ID.     |
+| `data-selected`  | `<select>` | `true` / `false` | Whether selected. |
 
 ## Notes
 
+- `selectContainer` remains in the public type for compatibility but is not
+  applied. Use `container` or `labelClassName` for styling.
+
 - Built on `InputField` for layout, label, error, and loading handling.
 - Supports all standard HTML `<select>` attributes via prop spread.
-- `required` defaults to `true` — pass `required={false}` when the field is optional.
-- Custom data attributes on `OptionProps` (e.g., `data-price`) are forwarded to each `<option>` and accessible via `e.target.selectedOptions[0].dataset`.
+- `required` defaults to `true`; pass `required={false}` when optional.
+- Custom `OptionProps` data attributes (for example, `data-price`) are
+  forwarded to each `<option>` and available through
+  `e.target.selectedOptions[0].dataset`.

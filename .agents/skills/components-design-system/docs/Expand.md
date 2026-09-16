@@ -111,8 +111,8 @@ function ControlledExpand() {
 
 - Don't use `Expand` when a standard `Dropdown` or `Modal` would feel more familiar to the user — the animation is distinctive and should be reserved for intentional moments.
 - Don't nest multiple `Expand` components inside each other; layout animations can conflict.
-- Don't pass raw Tailwind color classes (`bg-gray-50`, `border-gray-200`) inside the expanded content — use design-token classes.
-- Don't use arbitrary Tailwind values (`bg-[#abc]`, `shadow-[--my-shadow]`) — override CSS variables in your `@theme` block.
+- Don't pass raw utility color classes (`bg-gray-50`, `border-gray-200`) inside the expanded content — use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`, `shadow-[--my-shadow]`) — override CSS variables in your `@theme` block.
 
 ## Accessibility
 
@@ -125,5 +125,5 @@ function ControlledExpand() {
 
 - Uses `motion/react` (`layoutId`) to animate a seamless transition between the collapsed button and the expanded container.
 - The expanded container is absolutely positioned at `-left-1/4 -top-3/4` by default. Override via `className` on the children wrapper if needed.
-- The `disabled` prop is forwarded to `useClick` — when `true`, the click interaction is enabled (the prop name is semantically inverted in the hook call, so pass `disabled={true}` to prevent expansion).
+- When `disabled` is `true`, the trigger is disabled and the click interaction is not enabled.
 - Rendered inside a `FloatingPortal` scoped to the component's own root `<div>` so it stays visually attached.

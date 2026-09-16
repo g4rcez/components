@@ -917,6 +917,7 @@ const docsTokenGroupsByPath: Partial<Record<string, ComponentTokenName[]>> = {
     "/docs/input": [formFieldTokenGroup],
     "/docs/input-field": [formFieldTokenGroup],
     "/docs/list": ["list"],
+    "/docs/swippeable-list": ["swipeable-list"],
     "/docs/masonry": [],
     "/docs/menu": ["menu"],
     "/docs/modal": ["modal"],

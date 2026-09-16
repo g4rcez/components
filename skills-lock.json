@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "csscomponents": {
+      "source": "g4rcez/components",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/components-design-system/SKILL.md",
+      "computedHash": "f4e497594fab6190ec538398dc52266476c69b9ce3a37400276f9881b6e89c6e"
+    }
+  }
+}
