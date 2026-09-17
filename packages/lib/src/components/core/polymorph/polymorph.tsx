@@ -10,7 +10,7 @@ export type PolymorphicProps<Props, T extends React.ElementType> = Props & {
         ref?: React.ComponentProps<T>["ref"];
     };
 
-export const Polymorph = forwardRef(function InnerPolymorph<P extends React.ElementType = "div">(props: PropsOf<P>, ref: React.ForwardedRef<P>) {
+export const Polymorph = forwardRef(function InnerPolymorph<P extends React.ElementType = "span">(props: PropsOf<P>, ref: React.ForwardedRef<P>) {
     const Element = props.as || "span";
     const component = typeof props["data-component"] === "string" ? props["data-component"] : undefined;
     const componentClassName = component ? `__${component}` : undefined;

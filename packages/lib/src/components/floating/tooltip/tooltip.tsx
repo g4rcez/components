@@ -20,7 +20,7 @@ import {
     useRole,
 } from "@floating-ui/react";
 import type React from "react";
-import { forwardRef, Fragment, useEffect, useRef, useState } from "react";
+import { forwardRef, Fragment, useRef, useState } from "react";
 import { Polymorph, type PolymorphicProps } from "../../../components/core/polymorph/polymorph";
 import { FLOATING_DELAY } from "../../../constants";
 import { mergeRefs } from "../../../lib/dom";
@@ -61,18 +61,20 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
         }: TooltipProps<T>,
         outerRef: React.ForwardedRef<HTMLSpanElement>
     ) {
-        const [innerOpen, setInnerOpen] = useState<boolean>(open ?? false);
+        const isControlled = open !== undefined;
+        const [innerOpen, setInnerOpen] = useState(false);
+        const currentOpen = isControlled ? open : innerOpen;
         const arrowRef = useRef(null);
         const Component: React.ElementType = as || "span";
-        const toggleBoth = (b: boolean) => {
-            setInnerOpen(b);
-            onChange?.(b);
+        const handleOpenChange = (nextOpen: boolean) => {
+            if (!isControlled) setInnerOpen(nextOpen);
+            onChange?.(nextOpen);
         };
         const { refs, floatingStyles, context } = useFloating({
             placement,
-            open: innerOpen,
+            open: currentOpen,
             whileElementsMounted: autoUpdate,
-            onOpenChange: open ? undefined : toggleBoth,
+            onOpenChange: handleOpenChange,
             middleware: [shift(), offset(5), autoPlacement(), arrow({ padding: 5, element: arrowRef }), flip({ fallbackAxisSideDirection: "start" })],
         });
         const dismiss = useDismiss(context, { enabled });
@@ -104,17 +106,12 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             popover ? clickController : undefined,
         ]);
 
-        useEffect(() => {
-            if (open === undefined) return setInnerOpen(false);
-            return setInnerOpen(open);
-        }, [open]);
-
         return (
             <Fragment>
                 <Component {...getReferenceProps(props)} ref={mergeRefs(refs.setReference, outerRef)}>
                     {title}
                 </Component>
-                {innerOpen && (
+                {currentOpen && (
                     <FloatingPortal>
                         <Polymorph
                             {...getFloatingProps()}

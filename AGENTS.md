@@ -6,9 +6,9 @@ This document provides instructions and guidelines for AI agents operating withi
 
 - **Architecture**: Monorepo managed with pnpm workspaces.
 - **Packages**:
-  - `packages/lib` (`@g4rcez/components`): The main React component library.
-  - `packages/docs`: Documentation site built with Next.js 16.
-  - `packages/tailwindcss-v4`: Tailwind CSS v4 integration/test app.
+    - `packages/lib` (`@g4rcez/components`): The main React component library.
+    - `packages/docs`: Documentation site built with Next.js 16.
+    - `packages/tailwindcss-v4`: Tailwind CSS v4 integration/test app.
 - **Tech Stack**: React 19, TypeScript, Tailwind CSS, Radix UI/Base UI, Framer Motion, Vitest.
 
 ## 2. Build, Lint, and Test Commands
@@ -42,7 +42,7 @@ Testing is primarily focused on `packages/lib`.
 ### File Organization
 
 - **Library Components**: `packages/lib/src/components/<category>/<kebab-case-name>.tsx`
-  - Categories: `core`, `display`, `floating`, `form`, `table`.
+    - Categories: `core`, `display`, `floating`, `form`, `table`.
 - **Library Tests**: `packages/lib/tests/<kebab-case-name>.test.tsx` or alongside components.
 - **Library Styles**: `packages/lib/src/styles/`
 - **Docs Pages**: `packages/docs/app/...`
@@ -68,37 +68,27 @@ import { css } from "../../lib/dom"; // Utility for merging classes (clsx + tail
 
 // Define variants using CVA
 const variants = cva("base-classes focus:outline-none focus:ring-2", {
-  variants: {
-    variant: {
-      default: "bg-primary text-white",
-      outline: "border border-input bg-background",
+    variants: {
+        variant: {
+            default: "bg-primary text-white",
+            outline: "border border-input bg-background",
+        },
+        size: {
+            sm: "h-8 px-3 text-xs",
+            md: "h-10 px-4 text-sm",
+        },
     },
-    size: {
-      sm: "h-8 px-3 text-xs",
-      md: "h-10 px-4 text-sm",
-    },
-  },
-  defaultVariants: { variant: "default", size: "md" },
+    defaultVariants: { variant: "default", size: "md" },
 });
 
-export interface MyComponentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof variants> {
-  // Add custom props here
-  asChild?: boolean; // If using Radix Slot
+export interface MyComponentProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof variants> {
+    // Add custom props here
+    asChild?: boolean; // If using Radix Slot
 }
 
-export const MyComponent = forwardRef<HTMLDivElement, MyComponentProps>(
-  ({ className, variant, size, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={css(variants({ variant, size }), className)}
-        {...props}
-      />
-    );
-  },
-);
+export const MyComponent = forwardRef<HTMLDivElement, MyComponentProps>(({ className, variant, size, ...props }, ref) => {
+    return <div ref={ref} className={css(variants({ variant, size }), className)} {...props} />;
+});
 MyComponent.displayName = "MyComponent";
 ```
 
@@ -110,11 +100,11 @@ MyComponent.displayName = "MyComponent";
 ### Imports
 
 - **Library (`packages/lib`)**:
-  - Use **relative imports** (e.g., `../../lib/dom`).
-  - Do NOT use path aliases like `@/` in the library package.
+    - Use **relative imports** (e.g., `../../lib/dom`).
+    - Do NOT use path aliases like `@/` in the library package.
 - **Docs (`packages/docs`)**:
-  - Use **path aliases** (`@/*`) for internal imports.
-  - Import library components from `@g4rcez/components`.
+    - Use **path aliases** (`@/*`) for internal imports.
+    - Import library components from `@g4rcez/components`.
 
 ### Testing Guidelines
 
@@ -122,32 +112,53 @@ MyComponent.displayName = "MyComponent";
 - **Location**: `packages/lib/tests/`.
 - **Structure**:
 
-  ```tsx
-  import { render, screen, fireEvent } from "@testing-library/react";
-  import { describe, it, expect, vi } from "vitest";
-  import { MyComponent } from "../src/components/category/my-component";
+    ```tsx
+    import { render, screen, fireEvent } from "@testing-library/react";
+    import { describe, it, expect, vi } from "vitest";
+    import { MyComponent } from "../src/components/category/my-component";
 
-  describe("MyComponent", () => {
-    it("renders correctly with default props", () => {
-      render(<MyComponent>Label</MyComponent>);
-      expect(screen.getByText("Label")).toBeInTheDocument();
-    });
+    describe("MyComponent", () => {
+        it("renders correctly with default props", () => {
+            render(<MyComponent>Label</MyComponent>);
+            expect(screen.getByText("Label")).toBeInTheDocument();
+        });
 
-    it("handles click events", () => {
-      const handleClick = vi.fn();
-      render(<MyComponent onClick={handleClick}>Click me</MyComponent>);
-      fireEvent.click(screen.getByText("Click me"));
-      expect(handleClick).toHaveBeenCalledTimes(1);
+        it("handles click events", () => {
+            const handleClick = vi.fn();
+            render(<MyComponent onClick={handleClick}>Click me</MyComponent>);
+            fireEvent.click(screen.getByText("Click me"));
+            expect(handleClick).toHaveBeenCalledTimes(1);
+        });
     });
-  });
-  ```
+    ```
 
 ## 4. Documentation & comments
 
 - Add concise JSDoc comments for complex logic or public APIs.
 - Update `packages/docs` when adding new components or features.
 - Do not leave commented-out code.
-- **Component documentation lives exclusively in `packages/lib/docs/`** (YAML frontmatter, design tokens, usage examples). Do NOT create or edit docs in `docs/components/` — that directory is removed and must not be recreated.
+- **Component documentation lives exclusively in `packages/lib/ai/docs/`**
+  (YAML frontmatter, design tokens, usage examples). Do NOT create or edit docs
+  in `docs/components/` — that directory is removed and must not be recreated.
+
+### AI skill synchronization
+
+1. Read the changed component and CSS, then review the matching canonical
+   reference in `packages/lib/ai/docs/`. Update changed props, behavior,
+   accessibility, tokens, selectors, variants, imports, and CSS dependencies.
+2. Update `packages/lib/ai/docs/index.md` for component additions, removals, or
+   import changes. Update `skills/csscomponents/SKILL.md` when general usage or
+   setup guidance changes.
+3. For documentation-only changes, run `pnpm components:skills sync` and then
+   `pnpm components:skills check`; no build is needed.
+4. When source CSS contracts or style dependencies change, obtain build
+   approval and run `pnpm --filter @g4rcez/components build` before the final
+   check. Never treat a sync of stale generated metadata as source validation.
+5. Run `pnpm --filter @g4rcez/components test tests/skills-sync.test.ts` and
+   the affected component tests. Do not edit derived copies directly; preserve
+   the legacy `g4rcez-components` skill-name alias.
+6. Report references that were reviewed but unchanged, and report skipped
+   checks explicitly.
 
 ## 5. Error Handling & Safety
 

@@ -1,0 +1,8 @@
+{
+  "name": "fixture-no-json",
+  "private": true,
+  "imports": {
+    "#ds/*": "./src/ds/*.tsx",
+    "#ds": "./src/ds/index.ts"
+  }
+}

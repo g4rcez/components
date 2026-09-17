@@ -24,20 +24,6 @@
   gap: var(--var-spacing-base);
 }
 
-.__date-picker__range-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--var-spacing-base);
-}
-
-.__date-picker__range-title {
-  margin: 0;
-  color: var(--var-color-foreground);
-  font-size: var(--var-typography-page-title-font-size);
-  font-weight: var(--var-font-weight-semibold);
-}
-
 .__date-picker__range-nights {
   flex: none;
   border-radius: var(--var-date-picker-range-nights-radius);
@@ -170,10 +156,6 @@
   }
 }
 
-.__date-picker__preset-search {
-  width: 100%;
-}
-
 .__date-picker__preset-list {
   display: flex;
   flex-direction: row;
@@ -206,10 +188,6 @@
 .__date-picker__preset-button[data-selected="true"] {
   background-color: var(--var-date-picker-preset-selected-background);
   color: var(--var-date-picker-preset-selected-foreground);
-}
-
-.__date-picker__preset-check {
-  color: var(--var-color-primary);
 }
 
 .__date-picker__panel .__calendar__footer {

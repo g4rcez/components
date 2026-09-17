@@ -316,7 +316,18 @@
     ],
     "classes": {
       "base": "__alert",
-      "variants": {},
+      "variants": {
+        "theme": {
+          "primary": "__alert--theme-primary",
+          "danger": "__alert--theme-danger",
+          "info": "__alert--theme-info",
+          "success": "__alert--theme-success",
+          "secondary": "__alert--theme-secondary",
+          "warn": "__alert--theme-warn",
+          "muted": "__alert--theme-muted",
+          "neutral": "__alert--theme-neutral"
+        }
+      },
       "slots": {
         "container": "__alert__container",
         "collapse": "__alert__collapse",
@@ -742,8 +753,6 @@
         "sr-label": "__date-picker__sr-label",
         "range-calendar": "__date-picker__range-calendar",
         "range-header": "__date-picker__range-header",
-        "range-summary": "__date-picker__range-summary",
-        "range-title": "__date-picker__range-title",
         "range-nights": "__date-picker__range-nights",
         "range-fields": "__date-picker__range-fields",
         "range-field": "__date-picker__range-field",
@@ -756,10 +765,8 @@
         "range-separator": "__date-picker__range-separator",
         "panel": "__date-picker__panel",
         "presets": "__date-picker__presets",
-        "preset-search": "__date-picker__preset-search",
         "preset-list": "__date-picker__preset-list",
         "preset-button": "__date-picker__preset-button",
-        "preset-check": "__date-picker__preset-check",
         "actions": "__date-picker__actions",
         "actions-confirm": "__date-picker__actions-confirm",
         "today-action": "__date-picker__today-action",

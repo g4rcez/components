@@ -1,7 +1,7 @@
 "use client";
 import { FloatingFocusManager, FloatingPortal, useClick, useDismiss, useFloating, useInteractions, useRole } from "@floating-ui/react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { type PropsWithChildren, useEffect, useId, useRef, useState } from "react";
+import { type PropsWithChildren, useId, useRef, useState } from "react";
 import type { Label, Override } from "../../../types";
 import { Button, type ButtonProps } from "../../core/button/button";
 import { expandStyles } from "./expand.styles";
@@ -11,27 +11,38 @@ export type ExpandProps = Override<
     {
         trigger: Label;
         open?: boolean;
+        onOpenChange?: (open: boolean) => void;
         disabled?: boolean;
     }
 >;
 
 const expandTransition = { type: "spring", duration: 0.28, bounce: 0.08 } as const;
 
-export const Expand = ({ trigger, open: controlledOpen, disabled = false, children, ...buttonProps }: PropsWithChildren<ExpandProps>) => {
+export const Expand = ({
+    trigger,
+    open: controlledOpen,
+    onOpenChange,
+    disabled = false,
+    children,
+    ...buttonProps
+}: PropsWithChildren<ExpandProps>) => {
     const root = useRef<HTMLDivElement | null>(null);
     const id = useId();
     const titleId = `${id}:title`;
     const wrapperId = `${id}:wrapper`;
-    const [open, setOpen] = useState(controlledOpen ?? false);
+    const isControlled = controlledOpen !== undefined;
+    const [innerOpen, setInnerOpen] = useState(false);
+    const open = isControlled ? controlledOpen : innerOpen;
 
-    useEffect(() => {
-        setOpen(controlledOpen ?? false);
-    }, [controlledOpen]);
+    const handleOpenChange = (nextOpen: boolean) => {
+        if (!isControlled) setInnerOpen(nextOpen);
+        onOpenChange?.(nextOpen);
+    };
 
     const { context, refs } = useFloating({
         open,
         nodeId: id,
-        onOpenChange: setOpen,
+        onOpenChange: handleOpenChange,
     });
     const click = useClick(context, { enabled: !disabled });
     const role = useRole(context, { role: "dialog" });

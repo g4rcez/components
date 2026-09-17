@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useId, useRef } from "react";
 import type MaskInput from "the-mask-input";
 import type { InputTypes } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../../lib/dom";
@@ -45,7 +45,8 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
             ref
         ): React.ReactElement => {
             const Render: React.ElementType = Element;
-            const id = props.id ?? props.name;
+            const generatedId = useId();
+            const id = props.id ?? props.name ?? generatedId;
             const inputRef = useRef<Html>(null);
 
             useEffect(() => {
@@ -94,7 +95,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                     required={props.required}
                     size={size}
                     componentName={elementName}
-                    id={props.name || props.id}
+                    id={id}
                     optionalText={optionalText}
                     labelClassName={css(
                         !props.disabled && freeTextStyles.slots["field-state"],
@@ -108,7 +109,7 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         {...defaultProps}
                         {...props}
                         id={id}
-                        name={id}
+                        name={props.name}
                         type={type}
                         data-next={next}
                         aria-busy={loading}

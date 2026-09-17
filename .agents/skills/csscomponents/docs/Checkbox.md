@@ -19,20 +19,20 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 
 ## Props
 
-| Prop             | Type                                               | Default    | Description                                                |
-| ---------------- | -------------------------------------------------- | ---------- | ---------------------------------------------------------- |
-| `checked`        | `boolean`                                          | -          | Controlled checked state                                   |
-| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void` | -          | Change handler                                             |
-| `disabled`       | `boolean`                                          | `false`    | Disabled state                                             |
-| `loading`        | `boolean`                                          | `false`    | Loading state — disables the checkbox while loading        |
-| `error`          | `string`                                           | -          | Error message rendered below the label                     |
-| `asTask`         | `boolean`                                          | `false`    | Task mode: applies strikethrough to the label when checked |
-| `size`           | `"medium" \| "large"`                              | `"medium"` | Checkbox size                                              |
-| `container`      | `string`                                           | -          | Extra CSS classes for the outer `<label>` wrapper          |
-| `labelClassName` | `string`                                           | -          | Extra CSS classes for the error text element               |
-| `className`      | `string`                                           | -          | Extra CSS classes for the `<input>` element                |
-| `children`       | `React.ReactNode`                                  | -          | Label content                                              |
-| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`      | -          | All standard input attributes                              |
+| Prop             | Type                                                                                  | Default    | Description                                                            |
+| ---------------- | ------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------- |
+| `checked`        | `boolean`                                                                             | -          | Controlled checked state                                               |
+| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void`                                    | -          | Change handler                                                         |
+| `disabled`       | `boolean`                                                                             | `false`    | Disabled state                                                         |
+| `loading`        | `boolean`                                                                             | `false`    | Loading state — disables the checkbox while loading                    |
+| `error`          | `string`                                                                              | -          | Error message rendered below the label                                 |
+| `asTask`         | `boolean`                                                                             | `false`    | Task mode: applies strikethrough to the label when checked             |
+| `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny" \| "medium" \| "large"` | `"normal"` | Checkbox size; the named values map to the library control-size tokens |
+| `container`      | `string`                                                                              | -          | Extra CSS classes for the outer `<label>` wrapper                      |
+| `labelClassName` | `string`                                                                              | -          | Extra CSS classes for the error text element                           |
+| `className`      | `string`                                                                              | -          | Extra CSS classes for the `<input>` element                            |
+| `children`       | `React.ReactNode`                                                                     | -          | Label content                                                          |
+| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`                                         | -          | All standard input attributes                                          |
 
 ## Design Tokens
 
@@ -50,10 +50,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ### Size
 
-| Value      | Description                           |
-| ---------- | ------------------------------------- |
-| `"medium"` | Default size — 1rem × 1rem (`size-4`) |
-| `"large"`  | Larger touch target                   |
+The default is `"normal"`. The component accepts the shared control-size names `"big"`, `"default"`, `"min"`, `"normal"`, `"small"`, and `"tiny"`, plus the legacy aliases `"medium"` and `"large"`. Use `"normal"` for new code unless the design calls for another control size.
 
 ### Task mode
 

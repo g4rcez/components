@@ -21,12 +21,12 @@ import { Heading } from "@g4rcez/components";
 
 `Heading` accepts the standard props for the selected element through `PolymorphicProps`.
 
-| Prop        | Type                 | Default | Description |
-| ----------- | -------------------- | ------- | ----------- |
-| `as`        | `React.ElementType`  | `"h2"` | Element used for the heading. |
-| `children`  | `React.ReactNode`    | —       | Heading content. |
-| `className` | `string`             | —       | Additional classes. |
-| `...props`  | Element-specific props | —      | Standard props for the element selected by `as`. |
+| Prop        | Type                   | Default | Description                                      |
+| ----------- | ---------------------- | ------- | ------------------------------------------------ |
+| `as`        | `React.ElementType`    | `"h2"`  | Element used for the heading.                    |
+| `children`  | `React.ReactNode`      | —       | Heading content.                                 |
+| `className` | `string`               | —       | Additional classes.                              |
+| `...props`  | Element-specific props | —       | Standard props for the element selected by `as`. |
 
 ## Design Tokens
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
@@ -90,5 +90,51 @@ describe("table group a11y", () => {
         expect(screen.getByRole("combobox", { name: "Segment type" })).toBeInTheDocument();
         expect(screen.getByText("Pick a segment")).toBeInTheDocument();
         expect(screen.getByRole("heading", { name: "Arrange segments" })).toBeInTheDocument();
+    });
+
+    it("names group controls and reorders groups with arrow keys", async () => {
+        const user = userEvent.setup();
+        const second = {
+            ...grouped,
+            groupId: "group-inactive",
+            groupName: "inactive",
+            index: 1,
+            rows: [{ status: "inactive" }],
+        } satisfies GroupItem<Row>;
+
+        const TestApp = () => {
+            const [groups, setGroups] = useState<GroupItem<Row>[]>([grouped, second]);
+
+            return (
+                <ComponentsProvider>
+                    <Group
+                        cols={columns}
+                        rows={[{ status: "active" }, { status: "inactive" }]}
+                        groups={groups}
+                        setGroups={setGroups}
+                        options={createOptionCols(columns)}
+                    />
+                </ComponentsProvider>
+            );
+        };
+
+        render(<TestApp />);
+        await user.click(screen.getByRole("button", { name: /Group/ }));
+
+        expect(screen.getByRole("button", { name: /delete|clear/i })).toBeInTheDocument();
+        expect(screen.getAllByRole("button", { name: /reorder/i })).toHaveLength(2);
+
+        const getOrder = () => screen.getAllByRole("button", { name: /reorder/i }).map((button) => button.parentElement?.textContent);
+        const firstHandle = screen.getAllByRole("button", { name: /reorder/i })[0];
+        firstHandle.focus();
+        await user.keyboard("{ArrowDown}");
+
+        await waitFor(() => expect(getOrder()).toEqual(["inactive", "active"]));
+
+        const secondHandle = screen.getAllByRole("button", { name: /reorder/i })[1];
+        secondHandle.focus();
+        await user.keyboard("{ArrowDown}");
+
+        await waitFor(() => expect(getOrder()).toEqual(["inactive", "active"]));
     });
 });

@@ -19,12 +19,12 @@ import { Resizable } from "@g4rcez/components";
 
 ## Props
 
-| Prop              | Type              | Default | Description |
-| ----------------- | ----------------- | ------- | ----------- |
-| `children`        | `React.ReactNode` | —       | Content to measure and render. |
-| `open`            | `boolean`         | `true`  | Animates to the measured height when true and to `0` when false. |
-| `destroyOnUnmount`| `boolean`         | `false` | When false, keep children mounted while closed. When true, unmount them after the close animation delay. |
-| `className`       | `string`          | —       | Class for the animated outer wrapper. |
+| Prop               | Type              | Default | Description                                                                                              |
+| ------------------ | ----------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| `children`         | `React.ReactNode` | —       | Content to measure and render.                                                                           |
+| `open`             | `boolean`         | `true`  | Animates to the measured height when true and to `0` when false.                                         |
+| `destroyOnUnmount` | `boolean`         | `false` | When false, keep children mounted while closed. When true, unmount them after the close animation delay. |
+| `className`        | `string`          | —       | Class for the animated outer wrapper.                                                                    |
 
 ## Design Tokens and CSS
 

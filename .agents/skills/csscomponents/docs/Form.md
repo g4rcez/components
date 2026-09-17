@@ -84,7 +84,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     <Input name="firstName" title="First name" required />
     <Input name="lastName" title="Last name" required />
     <Input name="email" type="email" title="Email" container="col-span-2" required />
-    <Button type="submit" theme="primary" container="col-start-2">
+    <Button type="submit" theme="primary" className="col-start-2">
         Save
     </Button>
 </Form>

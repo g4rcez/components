@@ -1,0 +1,4 @@
+@theme {
+  --color-accent: oklch(0.6 0.13 195);
+  --color-accent-ink: oklch(0.99 0 0);
+}

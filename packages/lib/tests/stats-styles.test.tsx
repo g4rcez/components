@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Stats } from "../src/components/display/stats";
+import { Stats } from "../src/components/display/stats/stats";
 
 const Icon = ({ className }: { className: string }) => <svg aria-hidden="true" className={className} />;
 

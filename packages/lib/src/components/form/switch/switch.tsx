@@ -15,13 +15,28 @@ export type SwitchProps = Omit<React.ComponentProps<"input">, "onKeyDown" | "siz
 };
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-    ({ children, loading, container, error, onKeyDown, onCheck: onCheckProp, size = "default", ...props }: SwitchProps, ref) => {
+    (
+        {
+            children,
+            loading,
+            container,
+            error,
+            onKeyDown,
+            onCheck: onCheckProp,
+            size = "default",
+            checked: checkedProp,
+            defaultChecked,
+            ...props
+        }: SwitchProps,
+        ref
+    ) => {
         const id = useId();
         const errorId = error ? `${props.id || id}-error` : undefined;
         const describedBy = [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
         const ariaInvalid = error ? true : props["aria-invalid"];
-        const [innerChecked, setInnerChecked] = useState(props.checked ?? false);
-        const checked = innerChecked;
+        const isControlled = checkedProp !== undefined;
+        const [innerChecked, setInnerChecked] = useState(defaultChecked ?? false);
+        const checked = isControlled ? checkedProp : innerChecked;
         const innerRef = useRef<HTMLInputElement>(null);
         const stableOnChange = useStableRef(props.onChange);
         useImperativeHandle(ref, () => innerRef.current!);
@@ -40,11 +55,11 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         }, [stableOnChange]);
 
         const onCheck = () => {
-            const checked = !innerRef.current?.checked;
-            setInnerChecked(checked);
-            onCheckProp?.(checked);
+            const nextChecked = !checked;
+            if (!isControlled) setInnerChecked(nextChecked);
+            onCheckProp?.(nextChecked);
             if (innerRef.current !== null) {
-                innerRef.current.checked = checked;
+                innerRef.current.checked = nextChecked;
                 innerRef.current.dispatchEvent(new Event("change", { bubbles: true }));
             }
         };
@@ -62,7 +77,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                         data-trigger="change"
                         data-checked={checked}
                         disabled={props.disabled || loading}
-                        onChange={(e) => setInnerChecked(e.target.checked)}
+                        onChange={(e) => {
+                            if (!isControlled) setInnerChecked(e.target.checked);
+                        }}
                     />
                     <button
                         role="switch"

@@ -357,8 +357,12 @@ const SwipeableListRow = ({
                 classNames?.item
             )}
         >
-            <div aria-hidden={!openSide} inert={!openSide} className={css(swipeableListStyles.slots.rail, classNames?.rail)}>
-                <div className={css(actionGroupClassName, `${actionGroupClassName}--left`)}>
+            <div className={css(swipeableListStyles.slots.rail, classNames?.rail)}>
+                <div
+                    aria-hidden={openSide !== "left"}
+                    inert={openSide !== "left" ? true : undefined}
+                    className={css(actionGroupClassName, `${actionGroupClassName}--left`)}
+                >
                     {leftActions.map((action) => (
                         <SwipeActionButton
                             key={action.id}
@@ -371,7 +375,11 @@ const SwipeableListRow = ({
                         />
                     ))}
                 </div>
-                <div className={css(actionGroupClassName, `${actionGroupClassName}--right`)}>
+                <div
+                    aria-hidden={openSide !== "right"}
+                    inert={openSide !== "right" ? true : undefined}
+                    className={css(actionGroupClassName, `${actionGroupClassName}--right`)}
+                >
                     {rightActions.map((action) => (
                         <SwipeActionButton
                             key={action.id}

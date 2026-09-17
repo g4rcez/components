@@ -21,8 +21,8 @@ import { Spinner, Loading } from "@g4rcez/components";
 
 ### Spinner
 
-| Prop        | Type     | Default | Description |
-| ----------- | -------- | ------- | ----------- |
+| Prop        | Type     | Default | Description                               |
+| ----------- | -------- | ------- | ----------------------------------------- |
 | `className` | `string` | —       | Additional class for the spinner element. |
 
 ### Loading
@@ -44,7 +44,9 @@ The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__s
 ### Loading container
 
 ```tsx
-{isLoading ? <Loading /> : <Content />}
+{
+    isLoading ? <Loading /> : <Content />;
+}
 ```
 
 ### Inside a button

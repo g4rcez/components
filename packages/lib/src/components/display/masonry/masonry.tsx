@@ -227,8 +227,6 @@ const MasonryInner = <T extends React.ElementType = "ul">(
         position: "relative",
         height: layout.height,
         boxSizing: "border-box",
-        margin: style?.margin ?? 0,
-        padding: style?.padding ?? 0,
         width: style?.width ?? "100%",
         listStyleType: style?.listStyleType ?? "none",
     };

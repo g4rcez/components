@@ -21,17 +21,17 @@ import { MultiSelect } from "@g4rcez/components";
 
 The `MultiSelect` component inherits all props from `InputField`, plus:
 
-| Prop              | Type                          | Default | Description                                                |
-| ----------------- | ----------------------------- | ------- | ---------------------------------------------------------- |
-| `options`         | `MultiSelectItemProps[]`      | —       | Array of `{ value, label, Render? }` option objects.       |
-| `size`            | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`. |
-| `value`           | `string[]`                    | —       | Controlled selected values.                                |
-| `defaultValue`    | `string[]`                    | `[]`    | Initial selected values for uncontrolled usage.            |
-| `onChangeOptions` | `(options: string[]) => void` | —       | Called when the selection changes.                         |
-| `renderTag`       | `(option) => ReactNode`       | —       | Customizes the content shown inside each selected tag.     |
-| `dynamicOption`   | `boolean`                     | `false` | Allows users to select their search query as a new option. |
-| `emptyMessage`    | `Label`                       | —       | Message shown when no options match the search.            |
-| `selectedLabel`   | `string`                      | —       | Text shown in the overflow counter (e.g., "selected").     |
+| Prop              | Type                                                           | Default    | Description                                                |
+| ----------------- | -------------------------------------------------------------- | ---------- | ---------------------------------------------------------- |
+| `options`         | `MultiSelectItemProps[]`                                       | —          | Array of `{ value, label, Render? }` option objects.       |
+| `size`            | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`.           |
+| `value`           | `string[]`                                                     | —          | Controlled selected values.                                |
+| `defaultValue`    | `string[]`                                                     | `[]`       | Initial selected values for uncontrolled usage.            |
+| `onChangeOptions` | `(options: string[]) => void`                                  | —          | Called when the selection changes.                         |
+| `renderTag`       | `(option) => ReactNode`                                        | —          | Customizes the content shown inside each selected tag.     |
+| `dynamicOption`   | `boolean`                                                      | `false`    | Allows users to select their search query as a new option. |
+| `emptyMessage`    | `Label`                                                        | —          | Message shown when no options match the search.            |
+| `selectedLabel`   | `string`                                                       | —          | Text shown in the overflow counter (e.g., "selected").     |
 
 ### MultiSelectItemProps
 
@@ -181,15 +181,15 @@ export default function TagInput() {
 
 ## Data Attributes
 
-| Attribute        | Element       | Value            | Description                                 |
-| ---------------- | ------------- | ---------------- | ------------------------------------------- |
-| `data-component` | fieldset       | `"multi-select"` | Identifies the component type.              |
-| `data-shadow`    | visible trigger | `"true"`         | Marks the visual shadow trigger.            |
-| `data-value`     | visible trigger | comma-separated values | Currently selected values.              |
-| `data-floating`  | dropdown root  | `"true"`         | Marks the floating panel.                   |
-| `data-dynamic`   | option         | `"true"`         | Marks options injected via `dynamicOption`. |
-| `data-error`     | visible trigger | boolean string   | Reflects the error state.                   |
-| `data-origin`    | hidden input   | field id         | Links the native form value to the field.   |
+| Attribute        | Element         | Value                  | Description                                 |
+| ---------------- | --------------- | ---------------------- | ------------------------------------------- |
+| `data-component` | fieldset        | `"multi-select"`       | Identifies the component type.              |
+| `data-shadow`    | visible trigger | `"true"`               | Marks the visual shadow trigger.            |
+| `data-value`     | visible trigger | comma-separated values | Currently selected values.                  |
+| `data-floating`  | dropdown root   | `"true"`               | Marks the floating panel.                   |
+| `data-dynamic`   | option          | `"true"`               | Marks options injected via `dynamicOption`. |
+| `data-error`     | visible trigger | boolean string         | Reflects the error state.                   |
+| `data-origin`    | hidden input    | field id               | Links the native form value to the field.   |
 
 ## Notes
 

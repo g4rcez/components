@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@workspace/ui/*": ["../ui/src/*"]
+    }
+  }
+}

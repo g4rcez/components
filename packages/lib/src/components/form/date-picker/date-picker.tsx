@@ -352,10 +352,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
 
         useEffect(() => {
             if (rangeMode) return;
-            if (isValid(date)) {
-                setInnerDate(date);
-                setValue(formatDateValue(date));
-            }
+            const nextDate = isValid(date) ? date : undefined;
+            setInnerDate(nextDate);
+            setValue(formatDateValue(nextDate));
         }, [isoDateEffect, formatDateValue, date, rangeMode]);
 
         useEffect(() => {
@@ -485,6 +484,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                             <span className={datePickerStyles.slots["range-header-field-value"]}>{formatRangeHeaderDate(rangeToDate)}</span>
                         </div>
                     </div>
+                    {rangeNights !== undefined ? (
+                        <span className={datePickerStyles.slots["range-nights"]}>{translation.datePickerNights(rangeNights)}</span>
+                    ) : null}
                 </header>
                 {CalendarElement}
             </div>
@@ -531,6 +533,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                             <Button
                                 size="small"
                                 theme="ghost-primary"
+                                className={datePickerStyles.slots["today-action"]}
                                 onClick={() => {
                                     const today = startOfDay(new Date());
                                     draftRangeRef.current = { from: today, to: today };
@@ -541,10 +544,10 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                                 {labels.today}
                             </Button>
                             <span className={datePickerStyles.slots["actions-confirm"]}>
-                                <Button size="small" onClick={cancelRange} theme="ghost-muted">
+                                <Button size="small" onClick={cancelRange} theme="ghost-muted" className={datePickerStyles.slots["cancel-action"]}>
                                     {labels.cancel}
                                 </Button>
-                                <Button size="small" onClick={() => applyRange()}>
+                                <Button size="small" onClick={() => applyRange()} className={datePickerStyles.slots["apply-action"]}>
                                     {labels.apply}
                                 </Button>
                             </span>

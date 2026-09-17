@@ -85,6 +85,8 @@ export const defaultTranslations = {
     tableGroupOrderTitle: "Order groups",
     tableGroupPlaceholder: "Group by...",
     tableGroupTypeTitle: "Group type",
+    tableGroupDeleteLabel: (label: string) => `Delete group ${label}`,
+    tableGroupReorderLabel: (label: string) => `Reorder group ${label}. Use the Up and Down arrow keys.`,
     tablePaginationFooter: (pagination: { pages: number; totalItems: number; sizes?: number[]; current: number; select: React.ReactNode }) => (
         <Fragment>
             {pagination.current} to {pagination.pages} of {pagination.totalItems} items.{Array.isArray(pagination.sizes) ? pagination.select : null}{" "}

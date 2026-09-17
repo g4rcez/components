@@ -20,7 +20,7 @@ TimelineItem.Icon = function TimelineIcon(props: PropsWithChildren<ComponentProp
 
 TimelineItem.Body = function TimelineItemBody<T extends ElementType = "section">(props: PropsWithChildren<PolymorphicProps<object, T>>) {
     return (
-        <Polymorph {...props} className={css(timelineStyles.slots.body, props.className)}>
+        <Polymorph {...props} as={props.as ?? "section"} className={css(timelineStyles.slots.body, props.className)}>
             {props.children}
         </Polymorph>
     );
@@ -29,7 +29,7 @@ TimelineItem.Body = function TimelineItemBody<T extends ElementType = "section">
 TimelineItem.Right = function TimelineItemRight<T extends ElementType = "button">(props: PolymorphicProps<object, T>) {
     return (
         <footer className={timelineStyles.slots.actions}>
-            <Polymorph {...props} type="button" />
+            <Polymorph {...props} as={props.as ?? "button"} type={props.as === undefined || props.as === "button" ? "button" : undefined} />
         </footer>
     );
 };

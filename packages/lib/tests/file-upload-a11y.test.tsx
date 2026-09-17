@@ -1,17 +1,22 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
+import type { DropzoneOptions } from "react-dropzone";
 import { describe, expect, it, vi } from "vitest";
 
 const openSpy = vi.hoisted(() => vi.fn());
+const dropzoneOptions = vi.hoisted(() => ({ current: undefined as DropzoneOptions | undefined }));
 
 vi.mock("react-dropzone", () => ({
-    useDropzone: () => ({
-        getRootProps: () => ({ role: "presentation", tabIndex: 0 }),
-        getInputProps: () => ({ type: "file", multiple: true }),
-        isDragActive: false,
-        open: openSpy,
-    }),
+    useDropzone: (options: DropzoneOptions) => {
+        dropzoneOptions.current = options;
+        return {
+            getRootProps: (props: Record<string, unknown> = {}) => ({ role: "presentation", tabIndex: 0, ...props }),
+            getInputProps: () => ({ type: "file", multiple: true }),
+            isDragActive: false,
+            open: openSpy,
+        };
+    },
 }));
 
 import { FileUpload } from "../src/components/form/file-upload/file-upload";
@@ -25,6 +30,65 @@ const multipleButtonCopy = "clique para escolher seus arquivos";
 const multipleZoneLabel = "Área de upload de arquivos. Arraste seus arquivos para cá ou pressione Enter para escolher seus arquivos.";
 
 describe("FileUpload a11y", () => {
+    it("forwards Dropzone options and keeps controlled files as the rendered source", () => {
+        const file = new File(["contents"], "report.txt", { type: "text/plain" });
+        const droppedFile = new File(["new contents"], "new-report.txt", { type: "text/plain" });
+        const onDrop = vi.fn();
+        const onDeleteFile = vi.fn();
+        const accept = { "text/plain": [".txt"] };
+
+        render(
+            <ComponentsProvider>
+                <FileUpload
+                    name="docs"
+                    files={[file]}
+                    accept={accept}
+                    minSize={10}
+                    maxSize={1000}
+                    maxFiles={2}
+                    multiple
+                    disabled
+                    onDrop={onDrop}
+                    onDeleteFile={onDeleteFile}
+                />
+            </ComponentsProvider>
+        );
+
+        expect(dropzoneOptions.current).toMatchObject({ accept, minSize: 10, maxSize: 1000, maxFiles: 2, multiple: true, disabled: true });
+        expect(screen.getByLabelText(multipleZoneLabel, { selector: "input" })).toBeDisabled();
+        expect(screen.getByRole("button", { name: "Remove report.txt" })).toBeInTheDocument();
+
+        dropzoneOptions.current?.onDrop?.([droppedFile], [], new Event("drop"));
+        expect(onDrop).toHaveBeenCalledWith([droppedFile]);
+        expect(screen.queryByRole("button", { name: "Preview new-report.txt" })).not.toBeInTheDocument();
+
+        screen.getByRole("button", { name: "Remove report.txt" }).click();
+        expect(onDeleteFile).toHaveBeenCalledWith(file);
+        expect(screen.getByRole("button", { name: "View report.txt" })).toBeInTheDocument();
+    });
+
+    it("renders same-name files as separate rows", () => {
+        const files = [new File(["first"], "duplicate.txt"), new File(["second"], "duplicate.txt")];
+
+        render(
+            <ComponentsProvider>
+                <FileUpload name="docs" files={files} />
+            </ComponentsProvider>
+        );
+
+        expect(screen.getAllByRole("button", { name: "View duplicate.txt" })).toHaveLength(2);
+    });
+
+    it("disables the idle upload action when disabled", () => {
+        render(
+            <ComponentsProvider>
+                <FileUpload name="docs" disabled />
+            </ComponentsProvider>
+        );
+
+        expect(screen.getByRole("button", { name: singleButtonCopy })).toBeDisabled();
+    });
+
     it("uses singular copy and accessible labels by default", () => {
         render(
             <ComponentsProvider>

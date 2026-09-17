@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { pageCalendarStyles } from "./page-calendar.styles";
 import type { CalendarEvent, CalendarEventBase, CalendarFilter, ViewMode } from "./page-calendar.types";
@@ -45,25 +45,29 @@ export function PageCalendar<T extends CalendarEventBase>({
     const [currentDate, setCurrentDate] = useState<Date>(() => defaultDate ?? new Date());
     const [internalFilters, setInternalFilters] = useState<CalendarFilter[]>(filters);
     const previousFilters = useRef(filters);
+    const filtersChanged = previousFilters.current !== filters;
+    const effectiveFilters = filtersChanged ? filters : internalFilters;
 
-    if (previousFilters.current !== filters) {
+    useEffect(() => {
+        if (previousFilters.current === filters) return;
         previousFilters.current = filters;
         setInternalFilters(filters);
-    }
+    }, [filters]);
 
     const toggleFilter = (id: string) => {
         setInternalFilters((prev) => {
-            const next = prev.map((f) => (f.id === id ? { ...f, enabled: !f.enabled } : f));
+            const source = previousFilters.current === filters ? prev : effectiveFilters;
+            const next = source.map((f) => (f.id === id ? { ...f, enabled: !f.enabled } : f));
             onActiveFiltersChange?.(next);
             return next;
         });
     };
 
     const filteredEvents = useMemo(() => {
-        if (filters.length === 0) return events;
+        if (effectiveFilters.length === 0) return events;
         const get = getFilterId ?? ((e: CalendarEvent<T>) => e?.filterId);
-        return events.filter((e) => internalFilters.find((f) => f.id === get(e))?.enabled ?? true);
-    }, [events, internalFilters, filters, getFilterId]);
+        return events.filter((e) => effectiveFilters.find((f) => f.id === get(e))?.enabled ?? true);
+    }, [events, effectiveFilters, getFilterId]);
 
     const eventsByDate = useMemo(() => groupEventsByDate(filteredEvents), [filteredEvents]);
     const monthDays = useMemo(() => getMonthDays(currentDate), [currentDate]);
@@ -84,7 +88,7 @@ export function PageCalendar<T extends CalendarEventBase>({
             className={pageCalendarStyles.className({})}
         >
             <CalendarHeader
-                filters={internalFilters}
+                filters={effectiveFilters}
                 filterArea={filterArea}
                 onAddEvent={onAddEvent}
                 currentDate={currentDate}

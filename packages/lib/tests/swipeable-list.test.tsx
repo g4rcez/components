@@ -73,4 +73,31 @@ describe("SwipeableList virtualization", () => {
             side: "right",
         });
     });
+
+    it("exposes only the revealed action group to assistive technology", () => {
+        const item: SwipeableListItem = {
+            ...items[0],
+            leftActions: [
+                {
+                    id: "archive",
+                    label: "Archive",
+                    icon: <span aria-hidden>×</span>,
+                },
+            ],
+        };
+
+        renderVirtualized([item], {
+            defaultValue: { id: item.id, side: "right" },
+        });
+
+        const leftGroup = screen.getByRole("button", { name: "Archive", hidden: true }).parentElement;
+        const rightGroup = screen.getByRole("button", { name: "Delete" }).parentElement;
+
+        expect(leftGroup).toHaveAttribute("aria-hidden", "true");
+        expect(leftGroup).toHaveAttribute("inert");
+        expect(rightGroup).toHaveAttribute("aria-hidden", "false");
+        expect(rightGroup).not.toHaveAttribute("inert");
+        expect(screen.getByRole("button", { name: "Archive", hidden: true })).toHaveAttribute("tabindex", "-1");
+        expect(screen.getByRole("button", { name: "Delete" })).toHaveAttribute("tabindex", "0");
+    });
 });

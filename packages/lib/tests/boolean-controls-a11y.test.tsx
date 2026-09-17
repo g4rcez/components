@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 
-import { Checkbox } from "../src/components/form/checkbox";
-import { Switch } from "../src/components/form/switch";
+import { Checkbox } from "../src/components/form/checkbox/checkbox";
+import { Switch } from "../src/components/form/switch/switch";
 
 describe("Boolean controls a11y", () => {
     it("exposes checkbox error text as an accessible description and supports Space toggling", async () => {

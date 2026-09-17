@@ -23,38 +23,38 @@ import { DatePicker } from "@g4rcez/components/date-picker";
 
 ### Date and datetime mode
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `date` | `Date` | — | Controlled selected date. |
-| `type` | `"date" \| "datetime"` | `"date"` | Date-only or date-and-time input. |
-| `onChange` | `(date: Date \| undefined) => void` | — | Called with a valid date or `undefined` when cleared. |
-| `floating` | `boolean` | `true` | Render the calendar in a floating dropdown; `false` renders it inline. |
-| `clickToClose` | `boolean` | `false` | Close the calendar after selecting a date. |
+| Prop           | Type                                | Default  | Description                                                            |
+| -------------- | ----------------------------------- | -------- | ---------------------------------------------------------------------- |
+| `date`         | `Date`                              | —        | Controlled selected date.                                              |
+| `type`         | `"date" \| "datetime"`              | `"date"` | Date-only or date-and-time input.                                      |
+| `onChange`     | `(date: Date \| undefined) => void` | —        | Called with a valid date or `undefined` when cleared.                  |
+| `floating`     | `boolean`                           | `true`   | Render the calendar in a floating dropdown; `false` renders it inline. |
+| `clickToClose` | `boolean`                           | `false`  | Close the calendar after selecting a date.                             |
 
 ### Range mode
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `type` | `"range"` | — | Enables the range-specific prop union. |
-| `range` | `{ from?: Date; to?: Date } \| null` | — | Controlled or initial range. Passing it also enables range behavior at runtime. |
-| `rangeMode` | `true` | — | Explicitly enables range mode when needed. |
-| `onChange` | `(range: { from?: Date; to?: Date } \| null) => void` | — | Called when the range draft is applied or changed. |
-| `rangePresets` | `DatePickerPreset[]` | built-in presets | Preset ranges shown in the range picker. |
-| `rangeLabels` | `DatePickerRangeLabels` | locale defaults | Labels for the preset search, Today, Cancel, and Apply controls. |
-| `labelRange` | `{ from: string; to: string }` | locale defaults | Accessible labels for the two range inputs. |
+| Prop           | Type                                                  | Default          | Description                                                                     |
+| -------------- | ----------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------- |
+| `type`         | `"range"`                                             | —                | Enables the range-specific prop union.                                          |
+| `range`        | `{ from?: Date; to?: Date } \| null`                  | —                | Controlled or initial range. Passing it also enables range behavior at runtime. |
+| `rangeMode`    | `true`                                                | —                | Explicitly enables range mode when needed.                                      |
+| `onChange`     | `(range: { from?: Date; to?: Date } \| null) => void` | —                | Called when the range draft is applied or changed.                              |
+| `rangePresets` | `DatePickerPreset[]`                                  | built-in presets | Preset ranges shown in the range picker.                                        |
+| `rangeLabels`  | `DatePickerRangeLabels`                               | locale defaults  | Labels for the preset search, Today, Cancel, and Apply controls.                |
+| `labelRange`   | `{ from: string; to: string }`                        | locale defaults  | Accessible labels for the two range inputs.                                     |
 
 ### Shared props
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `locale` | `Locales` | active locale | Locale used to build the mask and format the calendar. |
-| `markToday` | `boolean` | `true` | Highlights today in the calendar. |
-| `disabledDate` | `(date: Date) => boolean` | — | Prevents matching dates from being selected. |
-| `size` | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | — | Field size inherited from `InputField`. |
-| `title` | `string` | — | Visible field label. |
-| `error` | `string` | — | Validation message. |
-| `required` | `boolean` | `true` in range mode | Required state for the visible field(s). |
-| `name` | `string` | — | Name of the hidden native form field. |
+| Prop           | Type                                                           | Default              | Description                                            |
+| -------------- | -------------------------------------------------------------- | -------------------- | ------------------------------------------------------ |
+| `locale`       | `Locales`                                                      | active locale        | Locale used to build the mask and format the calendar. |
+| `markToday`    | `boolean`                                                      | `true`               | Highlights today in the calendar.                      |
+| `disabledDate` | `(date: Date) => boolean`                                      | —                    | Prevents matching dates from being selected.           |
+| `size`         | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | —                    | Field size inherited from `InputField`.                |
+| `title`        | `string`                                                       | —                    | Visible field label.                                   |
+| `error`        | `string`                                                       | —                    | Validation message.                                    |
+| `required`     | `boolean`                                                      | `true` in range mode | Required state for the visible field(s).               |
+| `name`         | `string`                                                       | —                    | Name of the hidden native form field.                  |
 
 ## Design Tokens and CSS
 
@@ -79,7 +79,7 @@ The component uses the CSS contracts from `date-picker`, `input`, `input-field`,
 ```tsx
 const [date, setDate] = useState<Date>();
 
-<DatePicker name="due-date" title="Due date" date={date} onChange={setDate} />
+<DatePicker name="due-date" title="Due date" date={date} onChange={setDate} />;
 ```
 
 ### Date range
@@ -95,7 +95,7 @@ const [range, setRange] = useState<{ from?: Date; to?: Date } | null>(null);
     onChange={setRange}
     rangeLabels={{ apply: "Apply dates", cancel: "Cancel" }}
     labelRange={{ from: "Check-in", to: "Check-out" }}
-/>
+/>;
 ```
 
 ### Disable past dates

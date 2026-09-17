@@ -1,6 +1,6 @@
 ---
 title: Skeleton
-description: Animated loading placeholder components for content that is being fetched.
+description: Accessible animated loading placeholders for blocks, cells, and lists.
 package: "@g4rcez/components"
 export: "{ Skeleton, SkeletonCell, SkeletonList }"
 import: "import { Skeleton, SkeletonCell, SkeletonList } from '@g4rcez/components'"
@@ -9,7 +9,7 @@ category: display
 
 # Skeleton
 
-Animated loading placeholder components for content that is being fetched.
+The skeleton components indicate that content is loading while preserving a stable layout. They render status semantics and use the library's pulse animation.
 
 ## Import
 
@@ -17,146 +17,89 @@ Animated loading placeholder components for content that is being fetched.
 import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components";
 ```
 
-## Components
-
-### SkeletonCell
-
-A pre-built table-cell skeleton with `h-6 w-10/12 animate-pulse rounded bg-muted`. Renders as a plain `<div>` (no props).
+## Props
 
 ### Skeleton
 
-A configurable block skeleton.
+| Prop        | Type                  | Default  | Description                           |
+| ----------- | --------------------- | -------- | ------------------------------------- |
+| `as`        | `React.ElementType`   | `"span"` | Element used for the placeholder.     |
+| `className` | `string`              | —        | Additional classes.                   |
+| `style`     | `React.CSSProperties` | —        | Inline styles such as a custom width. |
 
-| Prop        | Type                | Default  | Description                             |
-| ----------- | ------------------- | -------- | --------------------------------------- |
-| `className` | `string`            | —        | Override or extend dimensions and shape |
-| `as`        | `React.ElementType` | `"span"` | Polymorphic root element                |
-| `style`     | `CSSProperties`     | —        | Inline styles (e.g. dynamic `width`)    |
+### SkeletonCell
 
-Default appearance: `block h-8 w-32 animate-pulse rounded bg-muted`.
+`SkeletonCell` is a ready-to-render element with no props. It renders a status placeholder sized for a table/list cell.
 
 ### SkeletonList
 
-A vertical list of randomized-width `Skeleton` lines.
+| Prop        | Type     | Default | Description                             |
+| ----------- | -------- | ------- | --------------------------------------- |
+| `rows`      | `number` | —       | Number of skeleton list rows to render. |
+| `className` | `string` | —       | Additional classes for the list.        |
 
-| Prop        | Type     | Default | Description                                 |
-| ----------- | -------- | ------- | ------------------------------------------- |
-| `rows`      | `number` | —       | Number of skeleton lines to render          |
-| `className` | `string` | —       | Additional classes for the `<ul>` container |
+## Design Tokens and CSS
 
-## Design Tokens
-
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token      | CSS Variable | Purpose                                              |
-| ---------- | ------------ | ---------------------------------------------------- |
-| `bg-muted` | `--muted`    | Pulse animation background for all skeleton variants |
+The component ships `@g4rcez/components/skeleton.css`. Stable selectors include `.__skeleton`, `.__skeleton__cell`, `.__skeleton__block`, and `.__skeleton__list`. The stylesheet reads semantic variables such as `--var-skeleton-radius`, `--var-skeleton-pulse-duration`, `--var-skeleton-pulse-opacity`, `--var-skeleton-block-inline-size`, and `--var-color-muted`.
 
 ## Examples
 
-### Table Loading Skeleton
+### Block placeholder
 
 ```tsx
-function TableSkeleton() {
-    return (
-        <table className="w-full">
-            <tbody>
-                {Array.from({ length: 5 }).map((_, index) => (
-                    <tr key={index} className="border-b border-border">
-                        <td className="py-3 px-4">
-                            <SkeletonCell />
-                        </td>
-                        <td className="py-3 px-4">
-                            <SkeletonCell />
-                        </td>
-                        <td className="py-3 px-4">
-                            <SkeletonCell />
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
+{
+    loading ? <Skeleton as="div" /> : <Article />;
 }
 ```
 
-### Card Loading Skeleton
+### Cell placeholder
 
 ```tsx
-function CardSkeleton() {
-    return (
-        <div className="rounded-card-radius border border-card-border bg-card-background p-6 space-y-4">
-            <Skeleton className="h-4 w-3/4" />
-            <div className="space-y-2">
-                <SkeletonCell />
-                <SkeletonCell />
-                <Skeleton className="h-2 w-1/2" />
-            </div>
-            <div className="flex gap-2">
-                <Skeleton className="h-8 w-20" />
-                <Skeleton className="h-8 w-16" />
-            </div>
-        </div>
-    );
-}
+<table>
+    <tbody>
+        <tr>
+            <td>{loading ? <SkeletonCell /> : value}</td>
+        </tr>
+    </tbody>
+</table>
 ```
 
-### List Loading Skeleton
+### List placeholder
 
 ```tsx
-<SkeletonList rows={5} className="px-4" />
+<SkeletonList rows={5} />
 ```
 
-### Conditional Skeleton
+### Preserve a custom size
 
 ```tsx
-function DataSection({ data, loading }: { data?: Item; loading: boolean }) {
-    return <div>{loading ? <Skeleton className="h-6 w-full" /> : <p>{data?.name}</p>}</div>;
-}
-```
-
-### Avatar + Text Row Skeleton
-
-```tsx
-function UserRowSkeleton() {
-    return (
-        <div className="flex items-center gap-3">
-            <Skeleton className="size-10 rounded-full" />
-            <div className="flex-1 space-y-1">
-                <SkeletonCell />
-                <Skeleton className="h-2 w-1/3" />
-            </div>
-        </div>
-    );
-}
+<Skeleton as="div" style={{ inlineSize: "18rem", blockSize: "4rem" }} />
 ```
 
 ## Do
 
-- Design skeletons that closely match the dimensions of the real content to minimize layout shift.
-- Use `animate-pulse` (applied by default) to signal that the system is active.
-- Use `SkeletonList` for simple vertically stacked text content.
-- Wrap skeleton containers with `aria-live="polite"` so screen readers announce when real content loads.
+- Use a skeleton where the loaded content will occupy the same region.
+- Set `rows` to the approximate number of items users will see.
+- Use `as` and `style` when the placeholder needs the same semantic element or dimensions as the final content.
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-gray-200`, `bg-slate-300`) as `className` — use `bg-muted` or other design-token classes instead.
-- Don't use arbitrary utility values (`bg-[#ddd]`) — override CSS variables in your `@theme` block.
-- Don't show skeletons for very short loading states (under ~300 ms) — it causes visual flicker.
-- Don't make skeletons too detailed; simple geometric shapes are most effective.
-- Don't use skeletons for error states — show `Empty` or `Alert` instead.
+- Don't use a skeleton for a short operation where a spinner or no indicator is less disruptive.
+- Don't expose placeholder text as if it were completed content.
+- Don't rely on the animation alone to communicate loading; keep the status semantics intact.
 
 ## Accessibility
 
-- Skeleton components are purely decorative; they carry no ARIA roles.
-- Add `aria-live="polite"` to the container that transitions from skeleton to real content so assistive technologies announce the change.
-- Consider `aria-label="Loading content"` on the skeleton container for additional context.
+- `Skeleton` and `SkeletonList` expose `role="status"`, `aria-busy="true"`, and a localized loading label.
+- `SkeletonCell` exposes `role="status"`, `aria-busy="true"`, and the label `Loading content`.
+- Replace or remove the placeholder when loading finishes so assistive technology does not announce stale status.
 
-```tsx
-<div aria-live="polite">{loading ? <SkeletonCell /> : <ActualContent />}</div>
-```
+## Data Attributes
+
+- The components do not add custom `data-*` attributes; their stable styling contract is class-based.
 
 ## Notes
 
-- `SkeletonList` generates random widths at mount time (via `Math.random()`) so each row looks distinct. Widths are stable across re-renders thanks to `useRef`.
-- `Skeleton` uses `as="span"` by default, making it safe to use inside inline contexts. Change `as` to `"div"` or `"li"` as needed.
+- `Skeleton` renders a `span` by default; use `as="div"` or `as="li"` to match the surrounding structure.
+- `SkeletonList` creates `li` children inside a `ul`.
+- The current list implementation assigns each generated row a minimum width of `100%`; use `Skeleton` directly when varied widths are required.

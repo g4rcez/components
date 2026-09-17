@@ -19,19 +19,19 @@ import { SwipeableList } from "@g4rcez/components/swipeable-list";
 
 ## Props
 
-| Prop | Type | Default | Description |
-| ---------------- | ---- | ------- | ----------- |
-| `items` | `SwipeableListItem[]` | — | Rows to render. Each item needs a stable `id`. |
-| `value` | `SwipeableListValue \| null` | — | Controlled open row and side. |
-| `defaultValue` | `SwipeableListValue \| null` | `null` | Initial open row for uncontrolled usage. |
-| `onValueChange` | `(value: SwipeableListValue \| null) => void` | — | Called when a row opens or closes. |
-| `onAction` | `(payload: { item; action; side }) => void` | — | Called after an action is activated. |
-| `actionWidth` | `number` | `56` | Width of each action slot in pixels. |
-| `revealThreshold` | `number` | `34` | Drag distance in pixels required to reveal an action rail. |
-| `closeOnAction` | `boolean` | `true` | Closes the row after an action is activated. |
-| `className` | `string` | — | Class for the virtualized root. |
-| `classNames` | `SwipeableListClassNames` | — | Classes for root, row, surface, content, labels, rails, and actions. |
-| `renderItem` | `(item: SwipeableListItem) => React.ReactNode` | — | Replaces the default row content while preserving swipe behavior. |
+| Prop              | Type                                           | Default | Description                                                          |
+| ----------------- | ---------------------------------------------- | ------- | -------------------------------------------------------------------- |
+| `items`           | `SwipeableListItem[]`                          | —       | Rows to render. Each item needs a stable `id`.                       |
+| `value`           | `SwipeableListValue \| null`                   | —       | Controlled open row and side.                                        |
+| `defaultValue`    | `SwipeableListValue \| null`                   | `null`  | Initial open row for uncontrolled usage.                             |
+| `onValueChange`   | `(value: SwipeableListValue \| null) => void`  | —       | Called when a row opens or closes.                                   |
+| `onAction`        | `(payload: { item; action; side }) => void`    | —       | Called after an action is activated.                                 |
+| `actionWidth`     | `number`                                       | `56`    | Width of each action slot in pixels.                                 |
+| `revealThreshold` | `number`                                       | `34`    | Drag distance in pixels required to reveal an action rail.           |
+| `closeOnAction`   | `boolean`                                      | `true`  | Closes the row after an action is activated.                         |
+| `className`       | `string`                                       | —       | Class for the virtualized root.                                      |
+| `classNames`      | `SwipeableListClassNames`                      | —       | Classes for root, row, surface, content, labels, rails, and actions. |
+| `renderItem`      | `(item: SwipeableListItem) => React.ReactNode` | —       | Replaces the default row content while preserving swipe behavior.    |
 
 ### SwipeableListItem
 
@@ -80,19 +80,12 @@ const items = [
         id: "invoice-42",
         title: "Invoice #42",
         description: "Due tomorrow",
-        leftActions: [
-            { id: "archive", label: "Archive", icon: <ArchiveIcon />, tone: "neutral" },
-        ],
-        rightActions: [
-            { id: "delete", label: "Delete", icon: <TrashIcon />, tone: "danger" },
-        ],
+        leftActions: [{ id: "archive", label: "Archive", icon: <ArchiveIcon />, tone: "neutral" }],
+        rightActions: [{ id: "delete", label: "Delete", icon: <TrashIcon />, tone: "danger" }],
     },
 ];
 
-<SwipeableList
-    items={items}
-    onAction={({ item, action }) => handleAction(item.id, action.id)}
-/>
+<SwipeableList items={items} onAction={({ item, action }) => handleAction(item.id, action.id)} />;
 ```
 
 ### Controlled open row
@@ -100,11 +93,7 @@ const items = [
 ```tsx
 const [open, setOpen] = useState<SwipeableListValue | null>(null);
 
-<SwipeableList
-    items={items}
-    value={open}
-    onValueChange={setOpen}
-/>
+<SwipeableList items={items} value={open} onValueChange={setOpen} />;
 ```
 
 ### Custom row content

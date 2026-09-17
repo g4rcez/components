@@ -16,7 +16,7 @@ import {
     type SwitchProps,
     type TextareaProps,
 } from "../components";
-import { Any, SetState } from "../types";
+import type { Any, SetState } from "../types";
 
 /**
  * Validates if a value is valid JSON
@@ -164,7 +164,7 @@ const getValueByType = (e: HTMLEntryElements) => {
     if (e.dataset.value) return e.dataset.value;
     if (e.type === "checkbox") return (e as HTMLInputElement).checked;
     if (e.type === "number") return (e as HTMLInputElement).valueAsNumber;
-    return e.value || e.getAttribute("value");
+    return e.value ?? e.getAttribute("value");
 };
 
 const getDataTarget = (e: HTMLEntryElements) => {
@@ -278,7 +278,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
                 return;
             }
             const path = getName(target);
-            const value = getDataTarget(target) || (related ? getValueByType(related) : "");
+            const value = getDataTarget(target) ?? (related ? getValueByType(related) : "");
             const partialSchema = getSchemaShape(path, schema);
             target.setAttribute("data-initialized", "true");
             if (partialSchema) {
@@ -416,7 +416,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             onInvalid: onInvalidField,
             error: getPath(errors, name, undefined),
             required: props?.required ?? !validator.isOptional(),
-            value: getPath(state, name, undefined) || props?.value || "",
+            value: getPath(state, name, undefined) ?? props?.value ?? "",
             type: Is.instance(validator, ZodNumber) ? "number" : (props?.type ?? "text"),
             ref: (e: HTMLInputElement) =>
                 e === null
@@ -443,7 +443,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             onInvalid: onInvalidField,
             error: getPath(errors, name, undefined),
             required: props?.required ?? !validator.isOptional(),
-            value: getPath(state, name, undefined) || props?.value || [],
+            value: getPath(state, name, undefined) ?? props?.value ?? [],
             ref: (e: HTMLInputElement) =>
                 e === null
                     ? undefined
@@ -474,7 +474,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             error: getPath(errors, name, undefined),
             required: props?.required ?? !validator.isOptional(),
             type: isNumber ? "number" : (props?.type ?? "text"),
-            value: getPath(state, name, undefined) || props?.value || "",
+            value: getPath(state, name, undefined) ?? props?.value ?? "",
             ref: (e: HTMLInputElement) =>
                 e === null
                     ? undefined
@@ -497,7 +497,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
                 if (!name) return false;
                 const current = e.target as HTMLEntryElements;
                 const relatedTarget = (e as FocusEvent).relatedTarget as HTMLEntryElements | null;
-                const value = getDataTarget(current) || (relatedTarget ? getValueByType(relatedTarget) : "");
+                const value = getDataTarget(current) ?? (relatedTarget ? getValueByType(relatedTarget) : "");
                 const validation = input.schema.safeParse(value);
                 current.setAttribute("value", value as string);
                 if (validation.success) {
@@ -550,7 +550,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             }
             if (field.tagName === "INPUT") {
                 const input = field as HTMLInputElement;
-                const value = getDataTarget(input) || (input ? getValueByType(input) : "");
+                const value = getDataTarget(input) ?? (input ? getValueByType(input) : "");
                 json = setPath(json, input.dataset.target || input.name, value);
             }
         });
@@ -596,7 +596,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
         });
     };
 
-    const get = (p: Fields) => getPath(state, p) || "";
+    const get = (p: Fields) => getPath(state, p) ?? "";
 
     const controller = (props?: ComponentProps<"form">) => ({
         ...props,
@@ -627,5 +627,13 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
     };
 };
 
-export const getJsonForm = <T extends z.ZodObject<z.ZodRawShape>>(form?: HTMLFormElement | null): z.infer<T> =>
-    !form ? ({} as z.infer<T>) : (JSON.parse(form.getAttribute("data-json")!) as z.infer<T>);
+export const getJsonForm = <T extends z.ZodObject<z.ZodRawShape>>(form?: HTMLFormElement | null): z.infer<T> => {
+    if (!form) return {} as z.infer<T>;
+    const value = form.getAttribute("data-json");
+    if (!value) return {} as z.infer<T>;
+    try {
+        return JSON.parse(value) as z.infer<T>;
+    } catch {
+        return {} as z.infer<T>;
+    }
+};

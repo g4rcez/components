@@ -1,0 +1,4 @@
+/* A stylesheet with one token, so discovery has to pick the bigger one. */
+@theme {
+  --color-stray: red;
+}

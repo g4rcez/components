@@ -20,16 +20,22 @@ export type TabsProps = Omit<CardProps<"div">, "onChange"> & {
 
 const Context = createContext<string>("");
 
-const isElementDisabled = (element: HTMLElement): boolean => element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true";
+const isElementDisabled = (element: HTMLElement): boolean => {
+    if (element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true") return true;
+    const control = element.matches("button") ? element : element.querySelector<HTMLElement>("button");
+    return control?.hasAttribute("disabled") === true || control?.getAttribute("aria-disabled") === "true";
+};
 
 const getNElement = (elements: HTMLElement[], currentIndex: number, direction: "backward" | "forward"): HTMLElement | null => {
     const step = direction === "forward" ? 1 : -1;
-    const startIndex = currentIndex + step;
-    for (let i = startIndex; i >= 0 && i < elements.length; i += step) {
-        const element = elements[i];
+    if (elements.length === 0) return null;
+
+    for (let offset = 1; offset <= elements.length; offset += 1) {
+        const index = (currentIndex + step * offset + elements.length) % elements.length;
+        const element = elements[index];
         if (!isElementDisabled(element)) return element;
     }
-    return direction === "backward" ? getNElement(elements, elements.length - 1, "backward") : getNElement(elements, -1, "forward");
+    return null;
 };
 
 const moveOn = (ul: HTMLUListElement, direction: "backward" | "forward") => {
@@ -68,12 +74,13 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
     useEffect(() => {
         const header = ref.current;
         if (header === null) return;
-        let first = header.querySelector<HTMLElement>(`li[data-active=true]`);
-        if (first === null) {
-            first = header.querySelector<HTMLElement>(`li[data-id]`)!;
-            const id = first.getAttribute("data-id") || "";
-            setActive(id);
-        }
+        const first = header.querySelector<HTMLElement>(`li[data-active=true]`);
+        if (first !== null) return;
+
+        const firstEnabled = Array.from(header.querySelectorAll<HTMLElement>(`li[data-id]`)).find((item) => !isElementDisabled(item));
+        if (firstEnabled === undefined) return;
+        const id = firstEnabled.getAttribute("data-id") || "";
+        setActive(id);
     }, [props.active, setActive]);
 
     useEffect(() => {

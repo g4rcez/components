@@ -56,7 +56,12 @@ export const Resizable = ({ children, open = true, className, destroyOnUnmount =
     if (!mounted) return null;
 
     return (
-        <motion.div className={css(resizableStyles.className({}), className)} style={{ height: measuredHeight === null ? 0 : height }}>
+        <motion.div
+            aria-hidden={!open}
+            inert={!open ? true : undefined}
+            className={css(resizableStyles.className({}), className)}
+            style={{ height: measuredHeight === null ? 0 : height }}
+        >
             <div ref={ref} className={resizableStyles.slots.content}>
                 {children}
             </div>

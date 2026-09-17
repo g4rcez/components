@@ -47,9 +47,7 @@ styles of its own.
 
 ```tsx
 <div>
-    <div className="h-screen flex items-center justify-center text-foreground">
-        Scroll down to see lazy content
-    </div>
+    <div className="h-screen flex items-center justify-center text-foreground">Scroll down to see lazy content</div>
 
     <RenderOnView>
         <ExpensiveChart data={largeDataset} />
@@ -61,14 +59,9 @@ styles of its own.
 
 ```tsx
 const TrackableSection = ({ sectionName, children }) => {
-    const handleIntersection = () =>
-        analytics.track("Section Viewed", { section: sectionName });
+    const handleIntersection = () => analytics.track("Section Viewed", { section: sectionName });
 
-    return (
-        <RenderOnView onIntersection={handleIntersection}>
-            {children}
-        </RenderOnView>
-    );
+    return <RenderOnView onIntersection={handleIntersection}>{children}</RenderOnView>;
 };
 ```
 

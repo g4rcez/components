@@ -111,4 +111,21 @@ describe("Resizable", () => {
             expect(animateMock).toHaveBeenLastCalledWith(expect.anything(), 72, expect.objectContaining({ type: "spring" }));
         });
     });
+
+    it("hides delayed closed content from assistive technology and focus", () => {
+        const { container, rerender } = render(
+            <Resizable open destroyOnUnmount>
+                <button type="button">Content</button>
+            </Resizable>
+        );
+
+        rerender(
+            <Resizable open={false} destroyOnUnmount>
+                <button type="button">Content</button>
+            </Resizable>
+        );
+
+        expect(container.firstElementChild).toHaveAttribute("aria-hidden", "true");
+        expect(container.firstElementChild).toHaveAttribute("inert");
+    });
 });

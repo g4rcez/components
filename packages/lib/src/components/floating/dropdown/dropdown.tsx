@@ -16,7 +16,7 @@ import {
     useRole,
 } from "@floating-ui/react";
 import type React from "react";
-import { Fragment, type PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
+import { Fragment, type PropsWithChildren, useId, useMemo, useRef, useState } from "react";
 import { dropdownStyles } from "./dropdown.styles";
 
 type DropdownProps = {
@@ -39,8 +39,9 @@ const updatePositionOnce: typeof autoUpdate = (_reference, _floating, update) =>
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const headingId = useId();
-    const [open, setOpen] = useState(props.open);
-    useEffect(() => setOpen(props.open), [props.open]);
+    const isControlled = props.open !== undefined;
+    const [innerOpen, setInnerOpen] = useState(false);
+    const open = isControlled ? props.open : innerOpen;
     const arrowRef = useRef(null);
     const middleware = useMemo(
         () => [
@@ -64,7 +65,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
             if (element) {
                 if (element.dataset.floating === "true" && !nextValue) return;
             }
-            setOpen(nextValue);
+            if (!isControlled) setInnerOpen(nextValue);
             props.onChange?.(nextValue);
         },
     });

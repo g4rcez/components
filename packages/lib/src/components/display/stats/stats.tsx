@@ -1,6 +1,7 @@
 import type React from "react";
 import { css } from "../../../lib/dom";
 import type { Label } from "../../../types";
+import { statsStyles } from "./stats.styles";
 
 export type StatsProps = {
     title: Label;
@@ -11,18 +12,18 @@ export type StatsProps = {
 
 export const Stats = (props: React.PropsWithChildren<StatsProps>) => {
     return (
-        <div data-component="stats" className="__stats">
-            <header data-slot="header" className="__stats__header">
-                <div data-slot="icon" className={css("__stats__icon", props.iconContainer)}>
-                    <props.Icon className="__stats__icon-svg" />
+        <div data-component="stats" className={statsStyles.className({})}>
+            <header data-slot="header" className={statsStyles.slots.header}>
+                <div data-slot="icon" className={css(statsStyles.slots.icon, props.iconContainer)}>
+                    <props.Icon className={statsStyles.slots["icon-svg"]} />
                 </div>
-                <div data-slot="content" className="__stats__content">
-                    <h3 className="__stats__title">{props.title}</h3>
-                    <p className="__stats__value">{props.children}</p>
+                <div data-slot="content" className={statsStyles.slots.content}>
+                    <h3 className={statsStyles.slots.title}>{props.title}</h3>
+                    <p className={statsStyles.slots.value}>{props.children}</p>
                 </div>
             </header>
             {props.footer ? (
-                <footer data-slot="footer" className="__stats__footer">
+                <footer data-slot="footer" className={statsStyles.slots.footer}>
                     {props.footer}
                 </footer>
             ) : null}

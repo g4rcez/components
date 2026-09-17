@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 export const useReactive = <T>(t: T, initial?: T) => {
-    const [state, setState] = useState(() => (initial ? initial : t));
+    const [state, setState] = useState(() => (initial !== undefined ? initial : t));
     useEffect(() => {
         setState(t);
     }, [t]);

@@ -95,8 +95,8 @@
 
 .__checkbox__control-state:focus-visible,
 .__checkbox__control-state:focus {
-  outline: currentColor 2px solid;
-  outline-offset: 3px;
+  outline: var(--var-checkbox-focus-ring-width) solid var(--var-checkbox-focus-ring);
+  outline-offset: var(--var-checkbox-focus-ring-offset);
 }
 
 .__checkbox__control-state:disabled {

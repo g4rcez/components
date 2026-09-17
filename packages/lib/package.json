@@ -38,7 +38,8 @@
         "bin"
     ],
     "sideEffects": [
-        "**/*.css"
+        "**/*.css",
+        "dist/lint/tailwind-worker.mjs"
     ],
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
@@ -53,6 +54,11 @@
         "./cli": {
             "import": "./bin/csscomponents.mjs",
             "default": "./bin/csscomponents.mjs"
+        },
+        "./lint": {
+            "types": "./dist/lint/index.d.mts",
+            "import": "./dist/lint/index.mjs",
+            "default": "./dist/lint/index.mjs"
         },
         "./index.css": {
             "source": "./src/styles/index.css",
@@ -651,7 +657,8 @@
     "scripts": {
         "watch": "vite build --watch --minify false",
         "prepublishOnly": "npm run build",
-        "build": "cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest",
+        "build": "cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
+        "lib:lint": "pnpm --filter @g4rcez/lint build && node ./scripts/copy-lint.mjs",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
@@ -669,9 +676,11 @@
         "@phosphor-icons/react": "2.1.10",
         "class-variance-authority": "0.7.1",
         "clsx": "2.1.1",
+        "cn": "0.2.6",
         "date-fns": "4.4.0",
         "linq-arrays": "3.2.5",
         "motion": "12.43.0",
+        "oxc-parser": "0.148.0",
         "pretty-bytes": "7.1.1",
         "qs": "6.15.3",
         "react-dropzone": "19.1.1",

@@ -21,14 +21,14 @@ import { Switch } from "@g4rcez/components/switch";
 
 Inherits all standard HTML `input[type="checkbox"]` attributes, plus:
 
-| Prop        | Type                           | Default | Description                                          |
-| ----------- | ------------------------------ | ------- | ---------------------------------------------------- |
-| `children`  | `React.ReactNode`              | —       | Label text or element displayed next to the switch.  |
-| `onCheck`   | `(nextValue: boolean) => void` | —       | Called with the new boolean value after toggling.    |
-| `error`     | `string`                       | —       | Error message displayed below the switch.            |
-| `loading`   | `boolean`                      | `false` | Disables the switch and signals a pending operation. |
-| `container` | `string`                       | —       | Additional CSS classes for the outer `<fieldset>`.   |
-| `size`      | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"default"` | Shared control size. |
+| Prop        | Type                                                           | Default     | Description                                          |
+| ----------- | -------------------------------------------------------------- | ----------- | ---------------------------------------------------- |
+| `children`  | `React.ReactNode`                                              | —           | Label text or element displayed next to the switch.  |
+| `onCheck`   | `(nextValue: boolean) => void`                                 | —           | Called with the new boolean value after toggling.    |
+| `error`     | `string`                                                       | —           | Error message displayed below the switch.            |
+| `loading`   | `boolean`                                                      | `false`     | Disables the switch and signals a pending operation. |
+| `container` | `string`                                                       | —           | Additional CSS classes for the outer `<fieldset>`.   |
+| `size`      | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"default"` | Shared control size.                                 |
 
 ## Design Tokens
 

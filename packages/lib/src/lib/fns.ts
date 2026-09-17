@@ -1,14 +1,14 @@
 import type { AllPaths } from "sidekicker";
-import { Any } from "../types";
+import type { Any } from "../types";
 
 export const uuid = (): string => {
     const timestamp = Date.now();
     const bytes = new Uint8Array(16);
-    bytes[0] = (timestamp / Math.pow(2, 40)) & 0xff;
-    bytes[1] = (timestamp / Math.pow(2, 32)) & 0xff;
-    bytes[2] = (timestamp / Math.pow(2, 24)) & 0xff;
-    bytes[3] = (timestamp / Math.pow(2, 16)) & 0xff;
-    bytes[4] = (timestamp / Math.pow(2, 8)) & 0xff;
+    bytes[0] = (timestamp / 2 ** 40) & 0xff;
+    bytes[1] = (timestamp / 2 ** 32) & 0xff;
+    bytes[2] = (timestamp / 2 ** 24) & 0xff;
+    bytes[3] = (timestamp / 2 ** 16) & 0xff;
+    bytes[4] = (timestamp / 2 ** 8) & 0xff;
     bytes[5] = timestamp & 0xff;
     const randomBytes = new Uint8Array(10);
     crypto.getRandomValues(randomBytes);
@@ -30,8 +30,9 @@ const travel = (path: string, regexp: RegExp, obj: Any) =>
 const regexPaths = { basic: /[,[\]]+?/, extend: /[,[\].]+?/ };
 
 export const path = <T extends Any, K extends AllPaths<T>>(obj: T, path: K) => {
-    const result = travel(path, regexPaths.basic, obj) || travel(path, regexPaths.extend, obj);
-    return result === undefined || result === obj ? undefined : result;
+    const result = travel(path, regexPaths.basic, obj);
+    const extendedResult = result === undefined ? travel(path, regexPaths.extend, obj) : result;
+    return extendedResult === undefined || extendedResult === obj ? undefined : extendedResult;
 };
 
 export const isSsr = () => typeof window === "undefined";
@@ -39,11 +40,10 @@ export const isSsr = () => typeof window === "undefined";
 export const safeRegex = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export const splitInto = <T>(array: T[], size: number) => {
+    if (!Number.isInteger(size) || size <= 0) return [];
     const newArray: T[][] = [];
-    for (let i = 0; i < size; i++) {
-        const init = i * size;
-        const result = array.slice(init, init + size);
-        if (result.length > 0) newArray.push(result);
+    for (let index = 0; index < array.length; index += size) {
+        newArray.push(array.slice(index, index + size));
     }
     return newArray;
 };

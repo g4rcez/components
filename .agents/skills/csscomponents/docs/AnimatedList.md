@@ -190,11 +190,10 @@ export function ActivityFeed() {
 - The overlay uses `FloatingFocusManager` to trap focus and `FloatingOverlay` with `lockScroll` to prevent background interaction.
 - Pressing `Escape` or clicking outside the overlay dismisses it.
 - The close button inside the overlay is a focusable `<button>` element.
-- `MotionConfig reducedMotion="user"` respects the user's system-level reduced-motion preference.
+- Motion is provided by `motion/react`; wrap the list in your app's reduced-motion configuration when your application needs to disable transitions.
 
 ## Data Attributes
 
-- `data-component="collapse"` — internal animation wrapper (referenced in motion layout animations).
 - `layoutId="item-{id}"` — shared between the list row and the overlay card to drive the expand/collapse shared-element animation.
 - `layoutId="toast-{id}"` — inner content wrapper used for coordinated layout transitions.
 

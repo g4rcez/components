@@ -21,11 +21,11 @@ import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components";
 
 ### Skeleton
 
-| Prop        | Type                 | Default  | Description |
-| ----------- | -------------------- | -------- | ----------- |
-| `as`        | `React.ElementType`  | `"span"` | Element used for the placeholder. |
-| `className` | `string`             | —        | Additional classes. |
-| `style`     | `React.CSSProperties`| —        | Inline styles such as a custom width. |
+| Prop        | Type                  | Default  | Description                           |
+| ----------- | --------------------- | -------- | ------------------------------------- |
+| `as`        | `React.ElementType`   | `"span"` | Element used for the placeholder.     |
+| `className` | `string`              | —        | Additional classes.                   |
+| `style`     | `React.CSSProperties` | —        | Inline styles such as a custom width. |
 
 ### SkeletonCell
 
@@ -33,10 +33,10 @@ import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components";
 
 ### SkeletonList
 
-| Prop        | Type     | Default | Description |
-| ----------- | -------- | ------- | ----------- |
+| Prop        | Type     | Default | Description                             |
+| ----------- | -------- | ------- | --------------------------------------- |
 | `rows`      | `number` | —       | Number of skeleton list rows to render. |
-| `className` | `string` | —       | Additional classes for the list. |
+| `className` | `string` | —       | Additional classes for the list.        |
 
 ## Design Tokens and CSS
 
@@ -47,7 +47,9 @@ The component ships `@g4rcez/components/skeleton.css`. Stable selectors include 
 ### Block placeholder
 
 ```tsx
-{loading ? <Skeleton as="div" /> : <Article />}
+{
+    loading ? <Skeleton as="div" /> : <Article />;
+}
 ```
 
 ### Cell placeholder

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "tailwind": {
+    "config": "",
+    "css": "app/globals.css",
+    "cssVariables": true
+  },
+  "aliases": {
+    "ui": "@nowhere/ui/components"
+  }
+}

@@ -25,14 +25,16 @@ export const Progress = (props: PropsWithoutRef<ProgressProps>) => {
     const max = props.max ?? 100;
     const range = max - min;
     const rawValue = props.value ?? props.percent;
-    const hasValue = Is.number(rawValue) && range > 0;
-    const percent = hasValue ? clamp(((rawValue! - min) / range) * 100, 0, 100) : null;
+    const numericValue = Is.number(rawValue) ? rawValue : undefined;
+    const hasValue = numericValue !== undefined && range > 0;
+    const normalizedValue = hasValue ? clamp(numericValue, min, max) : null;
+    const percent = normalizedValue === null ? null : clamp(((normalizedValue - min) / range) * 100, 0, 100);
 
     return (
         <RadixProgress.Root
             min={min}
             max={max}
-            value={hasValue ? rawValue! : null}
+            value={normalizedValue}
             style={{ transform: "translateZ(0)" }}
             data-component="progress"
             className={css(progressStyles.className({}), props.container)}

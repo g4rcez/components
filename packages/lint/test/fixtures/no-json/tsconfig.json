@@ -1,0 +1,8 @@
+{
+  // A comment, as tsconfig allows.
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"], // trailing comma below on purpose
+    },
+  },
+}

@@ -15,10 +15,11 @@ import React, {
 import { type ContextProp, type ItemProps, type TableBodyProps, type TableComponents, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
+import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import type { Any } from "../../types";
 import { Empty } from "../display/empty/empty";
-import { SkeletonCell } from "../display/skeleton/skeleton";
+import { Skeleton } from "../display/skeleton/skeleton";
 import type { OptionProps } from "../form/select/select";
 import type { FilterConfig } from "./filter";
 import type { GroupItem } from "./group";
@@ -132,8 +133,13 @@ const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+const LoadingStatus = () => {
+    const translations = useTranslations();
+    return <div role="status" aria-busy="true" aria-label={translations.skeletonLoading} />;
+};
+
 const EmptyContent = (props: { loading?: boolean }) => (
-    <div className={tableInnerTableStyles.slots.empty}>{props.loading ? SkeletonCell : <Empty />}</div>
+    <div className={tableInnerTableStyles.slots.empty}>{props.loading ? <Skeleton /> : <Empty />}</div>
 );
 
 const EmptyCell = () => <Fragment />;
@@ -223,6 +229,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
 
     return (
         <div ref={setViewportRef} className={tableInnerTableStyles.slots.viewport}>
+            {props.loading && !empty ? <LoadingStatus /> : null}
             <TableVirtuoso
                 components={components}
                 totalCount={rows.length}

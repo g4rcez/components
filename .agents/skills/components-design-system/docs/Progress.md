@@ -19,16 +19,16 @@ import { Progress } from "@g4rcez/components";
 
 ## Props
 
-| Prop | Type | Default | Description |
-| --------------- | ---- | ------- | ----------- |
-| `value` | `number` | — | Current progress value. Preferred API. |
-| `percent` | `number` | — | Deprecated alias for `value`. `value` takes precedence when both are provided. |
-| `min` | `number` | `0` | Minimum value of the progress range. |
-| `max` | `number` | `100` | Maximum value of the progress range. |
-| `label` | `Label` | — | Replaces the rounded percentage label. |
-| `container` | `string` | — | Class for the progress track. |
-| `className` | `string` | — | Class for the indicator. |
-| `textClassName` | `string` | — | Class for the label. |
+| Prop            | Type     | Default | Description                                                                    |
+| --------------- | -------- | ------- | ------------------------------------------------------------------------------ |
+| `value`         | `number` | —       | Current progress value. Preferred API.                                         |
+| `percent`       | `number` | —       | Deprecated alias for `value`. `value` takes precedence when both are provided. |
+| `min`           | `number` | `0`     | Minimum value of the progress range.                                           |
+| `max`           | `number` | `100`   | Maximum value of the progress range.                                           |
+| `label`         | `Label`  | —       | Replaces the rounded percentage label.                                         |
+| `container`     | `string` | —       | Class for the progress track.                                                  |
+| `className`     | `string` | —       | Class for the indicator.                                                       |
+| `textClassName` | `string` | —       | Class for the label.                                                           |
 
 If `value` and `percent` are both absent, or `max <= min`, the track is rendered without an indicator or label. Values outside the range are clamped for the visual percentage.
 
@@ -55,7 +55,7 @@ The component ships `@g4rcez/components/progress.css`. Its stable selectors are 
 ```tsx
 const [value, setValue] = useState(0);
 
-<Progress value={value} />
+<Progress value={value} />;
 ```
 
 ### Unknown duration
@@ -63,7 +63,9 @@ const [value, setValue] = useState(0);
 Use a `Spinner` or another pending-state indicator when no numeric progress is available.
 
 ```tsx
-{isUploading ? <Spinner /> : <Progress value={uploadProgress} />}
+{
+    isUploading ? <Spinner /> : <Progress value={uploadProgress} />;
+}
 ```
 
 ## Do

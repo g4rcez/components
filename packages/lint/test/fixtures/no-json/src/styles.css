@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "./tokens/brand.css";
+
+@theme {
+  --color-paper: oklch(0.985 0.004 90);
+  --color-ink: oklch(0.24 0.02 260);
+  --color-ink-muted: oklch(0.55 0.02 260);
+  --color-line: oklch(0.9 0.01 260);
+}

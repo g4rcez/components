@@ -2,31 +2,45 @@
 
 A comprehensive React component library built with TypeScript, plain CSS, semantic design tokens, and modern web technologies. This library provides customizable, accessible, and performant UI components for building modern web applications.
 
-## Agent skill
+## AI Agents + Skills
 
-This package ships an agent skill at `@g4rcez/components/ai/SKILL.md`. It covers installation, plain CSS setup, legacy Tailwind support, theming APIs, design token conventions, and the full component catalog.
+This package includes the `csscomponents` agent skill. It gives AI coding
+agents guidance for installation, CSS setup, theming, design tokens, and the
+component API.
 
-**Install the agent skill with the [skills CLI](https://github.com/vercel-labs/skills):**
+### Install from GitHub
+
+Use the [Vercel Skills CLI](https://github.com/vercel-labs/skills) to install
+the skill in your agent's skill directory:
 
 ```bash
 npx skills add g4rcez/components --skill csscomponents
 ```
 
-This installs the skill from this repository into your agent's skill directory (Claude Code, Cursor, Copilot, and others).
+The CLI supports Claude Code, Cursor, GitHub Copilot, and other compatible
+agents.
 
-**Install the skill from `node_modules`:**
+### Install from `node_modules`
+
+Install the package, then sync its bundled skill:
 
 ```bash
 npm install @g4rcez/components
 npx skills experimental_sync --yes
 ```
 
-`experimental_sync` discovers the package's root `SKILL.md` and installs it for the detected agents. Add `--agent claude-code` to target a specific agent.
+`experimental_sync` discovers the package's root `SKILL.md` and installs it
+for detected agents. Add `--agent claude-code` to target a specific agent.
 
-**Manual fallback:** tools that follow the Anthropic Agent Skills convention will load the skill automatically from `package.json`. Agents without auto-loading should `Read @g4rcez/components/ai/SKILL.md` before writing any UI in a codebase that depends on this package.
+### Manual fallback
+
+Agents that do not discover package skills automatically should read
+`@g4rcez/components/ai/SKILL.md` before writing or modifying UI in a project
+that uses this package.
 
 ## 📋 Table of Contents
 
+- [AI Agents + Skills](#ai-agents--skills)
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Installation](#installation)
@@ -118,6 +132,32 @@ pnpm exec g4rcez-components styles --css src/app.css
 ```
 
 Use `--check` in CI to fail when the stylesheet is out of date.
+
+### Oxlint design-system rules
+
+The design-system rules are published with `@g4rcez/components`. Install the
+library as a development dependency:
+
+```bash
+npm install --save-dev @g4rcez/components
+# or
+pnpm add --save-dev @g4rcez/components
+```
+
+Register the bundled plugin in `oxlint.config.ts` or `.oxlintrc.json`:
+
+```json
+{
+    "jsPlugins": ["@g4rcez/components/lint"],
+    "rules": {
+        "shadcn/no-restyle": "error",
+        "shadcn/no-raw-colors": "error"
+    }
+}
+```
+
+Available rules include `no-restyle`, `no-raw-colors`, `no-arbitrary-values`,
+`no-inline-styles`, `no-unknown-classes`, and `require-static-classes`.
 
 ## 🚀 Quick Start
 

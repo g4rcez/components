@@ -46,14 +46,14 @@ A composable header with a title and an optional navigation/action area.
 
 ### StatsCard
 
-| Prop          | Type              | Default | Description |
-| ------------- | ----------------- | ------- | ----------- |
-| `title`       | `string`          | —       | Metric label. |
-| `value`       | `Label`           | —       | Metric value. |
-| `Icon`        | `Icon`            | `InfoIcon` | Decorative metric icon. |
-| `mark`        | `string`          | —       | Additional class for the icon mark. |
-| `interactive` | `boolean`         | `true`  | Applies the interactive stats-panel styling. |
-| `loading`     | `boolean`         | —       | Shows a skeleton in place of the value. |
+| Prop          | Type      | Default    | Description                                  |
+| ------------- | --------- | ---------- | -------------------------------------------- |
+| `title`       | `string`  | —          | Metric label.                                |
+| `value`       | `Label`   | —          | Metric value.                                |
+| `Icon`        | `Icon`    | `InfoIcon` | Decorative metric icon.                      |
+| `mark`        | `string`  | —          | Additional class for the icon mark.          |
+| `interactive` | `boolean` | `true`     | Applies the interactive stats-panel styling. |
+| `loading`     | `boolean` | —          | Shows a skeleton in place of the value.      |
 
 `StatsCard` is exported from the same entry point and uses the card surface contract.
 

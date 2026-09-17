@@ -23,23 +23,23 @@ import { Masonry, MasonryItem } from "@g4rcez/components/masonry";
 
 `Masonry` accepts the standard props for its polymorphic root element (`ul` by default) and these component props:
 
-| Prop             | Type                         | Default | Description |
-| ---------------- | ---------------------------- | ------- | ----------- |
-| `columns`        | `number`                     | `3`     | Number of layout columns. Values below `1` are clamped to `1`. |
-| `gutter`         | `number`                     | `16`    | Gap between columns and rows in pixels. |
-| `fresh`          | `React.Key`                 | —       | Changes this value to request a fresh measurement. |
-| `itemAs`         | `React.ElementType`          | `"li"` | Element used for ordinary child items. |
-| `itemClassName`  | `string`                     | —       | Class applied to every rendered item wrapper. |
-| `onLayoutChange` | `(layout: MasonryLayout) => void` | —    | Receives the computed columns, height, gutter, and item positions. |
+| Prop             | Type                              | Default | Description                                                        |
+| ---------------- | --------------------------------- | ------- | ------------------------------------------------------------------ |
+| `columns`        | `number`                          | `3`     | Number of layout columns. Values below `1` are clamped to `1`.     |
+| `gutter`         | `number`                          | `16`    | Gap between columns and rows in pixels.                            |
+| `fresh`          | `React.Key`                       | —       | Changes this value to request a fresh measurement.                 |
+| `itemAs`         | `React.ElementType`               | `"li"`  | Element used for ordinary child items.                             |
+| `itemClassName`  | `string`                          | —       | Class applied to every rendered item wrapper.                      |
+| `onLayoutChange` | `(layout: MasonryLayout) => void` | —       | Receives the computed columns, height, gutter, and item positions. |
 
 ### MasonryItem
 
 `MasonryItem` is an optional wrapper for an item that needs an explicit width. It accepts standard props for its polymorphic root (`li` by default) and:
 
-| Prop       | Type                    | Default | Description |
-| ---------- | ----------------------- | ------- | ----------- |
-| `width`    | `React.CSSProperties["width"]` | — | Requested item width, such as `"100%"` to reserve a full row. |
-| `children` | `React.ReactNode`       | —       | Item content. |
+| Prop       | Type                           | Default | Description                                                   |
+| ---------- | ------------------------------ | ------- | ------------------------------------------------------------- |
+| `width`    | `React.CSSProperties["width"]` | —       | Requested item width, such as `"100%"` to reserve a full row. |
+| `children` | `React.ReactNode`              | —       | Item content.                                                 |
 
 `MasonryLayout` has the shape `{ columns, gutter, height, items }`. Each item contains `index`, `column`, `top`, `left`, `width`, and `height`.
 

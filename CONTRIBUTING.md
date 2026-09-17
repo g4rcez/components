@@ -330,6 +330,24 @@ describe("MyComponent", () => {
 
 The shipped agent skill source lives at `skills/csscomponents/SKILL.md`. Edit it there. The library build copies it to `packages/lib/SKILL.md` for node_modules discovery and `packages/lib/ai/SKILL.md` for package distribution.
 
+### Maintaining AI Skill References
+
+1. Read the changed component and CSS, then review its canonical reference in
+   `packages/lib/ai/docs/`. Update changed props, behavior, accessibility,
+   tokens, selectors, variants, imports, and CSS dependencies.
+2. Update `packages/lib/ai/docs/index.md` for component additions, removals, or
+   import changes. Update `skills/csscomponents/SKILL.md` when general usage or
+   setup guidance changes.
+3. For documentation-only changes, run `pnpm components:skills sync` and then
+   `pnpm components:skills check`; no build is needed.
+4. When source CSS contracts or style dependencies change, obtain build
+   approval and run `pnpm --filter @g4rcez/components build` before the final
+   check. A sync of stale generated metadata is not source validation.
+5. Run `pnpm --filter @g4rcez/components test tests/skills-sync.test.ts` and
+   affected component tests. Do not edit derived copies directly; preserve
+   the legacy `g4rcez-components` skill-name alias.
+6. Report references reviewed but unchanged and any skipped checks explicitly.
+
 ### Adding Component Documentation
 
 1. **Create Documentation Page**

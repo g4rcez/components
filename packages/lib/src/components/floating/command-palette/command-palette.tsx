@@ -2,7 +2,7 @@
 import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
 import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import type React from "react";
-import { forwardRef, Fragment, useEffect, useId, useRef, useState } from "react";
+import { forwardRef, Fragment, useCallback, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../../hooks/use-stable-ref";
 import { useTranslations } from "../../../hooks/use-translations";
@@ -149,6 +149,14 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     const listRef = useRef<Array<HTMLElement | null>>([]);
     const translations = useTranslations();
     const valueRef = useStableRef(text);
+    const { onChangeText } = props;
+    const changeText = useCallback(
+        (nextText: string) => {
+            setText(nextText);
+            onChangeText?.(nextText);
+        },
+        [onChangeText]
+    );
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     useEffect(() => {
         setActiveIndex(null);
@@ -225,14 +233,14 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 combi.add(cmd.shortcut, (event) =>
                     cmd.action({
                         event,
-                        setText,
+                        setText: changeText,
                         text: valueRef.current,
                         setOpen: props.onChangeVisibility,
                     })
                 );
         });
         return combi.register();
-    }, [bindKey, commands, props, valueRef]);
+    }, [bindKey, commands, props, valueRef, changeText]);
 
     const Icon = props.Icon ?? FunnelIcon;
 
@@ -278,7 +286,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                                 event: e,
                                                 text: text,
                                                 setOpen: props.onChangeVisibility,
-                                                setText,
+                                                setText: changeText,
                                             });
                                     } else {
                                         const item = findFirstClickable(fuzzy);
@@ -287,7 +295,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                                 event: e,
                                                 text: text,
                                                 setOpen: props.onChangeVisibility,
-                                                setText,
+                                                setText: changeText,
                                             });
                                     }
                                 }
@@ -303,15 +311,21 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         aria-activedescendant={activeOptionId}
                         data-combikeysbypass="true"
                         placeholder={translations.commandPaletteSearchPlaceholder}
-                        onChange={(e) => setText(e.target.value)}
+                        onChange={(e) => changeText(e.target.value)}
                         className={commandPaletteStyles.slots.input}
                     />
                 </header>
                 {props.loading ? (
-                    <div data-component="command-palette-list" className={commandPaletteStyles.slots["loading-list"]}>
+                    <div
+                        data-component="command-palette-list"
+                        className={commandPaletteStyles.slots["loading-list"]}
+                        role="status"
+                        aria-busy="true"
+                        aria-label={translations.commandPaletteLoading}
+                    >
                         <div className={commandPaletteStyles.slots["group-row"]}>{translations.commandPaletteLoading}</div>
                         {loadingSkeleton.map((_, i) => (
-                            <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]}>
+                            <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]} aria-hidden="true">
                                 {SkeletonCell}
                             </div>
                         ))}
@@ -341,7 +355,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                                     event: e,
                                                     text: text,
                                                     setOpen: props.onChangeVisibility,
-                                                    setText,
+                                                    setText: changeText,
                                                 });
                                         },
                                     })}
@@ -352,7 +366,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                 />
                             ))}
                             {displayItems.length === 1 ? (
-                                <div className={commandPaletteStyles.slots.empty}>{translations.commandPaletteEmpty ?? props.emptyMessage}</div>
+                                <div className={commandPaletteStyles.slots.empty}>{props.emptyMessage ?? translations.commandPaletteEmpty}</div>
                             ) : null}
                         </div>
                         {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}

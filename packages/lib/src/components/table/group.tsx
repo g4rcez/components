@@ -30,7 +30,19 @@ type Props<T extends object> = TableConfiguration<
     }
 >;
 
-const Item = <T extends object>({ item, onPointerDown }: { item: GroupItem<T>; onPointerDown: (e: React.PointerEvent) => void }) => {
+const Item = <T extends object>({
+    item,
+    index,
+    onPointerDown,
+    onMove,
+    reorderLabel,
+}: {
+    item: GroupItem<T>;
+    index: number;
+    onPointerDown: (e: React.PointerEvent) => void;
+    onMove: (index: number, offset: number) => void;
+    reorderLabel: string;
+}) => {
     const y = useMotionValue(0);
     return (
         <Reorder.Item
@@ -41,8 +53,17 @@ const Item = <T extends object>({ item, onPointerDown }: { item: GroupItem<T>; o
             value={item}
             style={{ y }}
         >
-            <button type="button" className={tableGroupStyles.slots["drag-handle"]}>
-                <DotsSixVerticalIcon className={tableGroupStyles.slots["drag-icon"]} />
+            <button
+                type="button"
+                aria-label={reorderLabel}
+                onKeyDown={(e) => {
+                    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+                    e.preventDefault();
+                    onMove(index, e.key === "ArrowUp" ? -1 : 1);
+                }}
+                className={tableGroupStyles.slots["drag-handle"]}
+            >
+                <DotsSixVerticalIcon aria-hidden="true" className={tableGroupStyles.slots["drag-icon"]} />
             </button>
             <span>{item.groupName}</span>
         </Reorder.Item>
@@ -79,6 +100,16 @@ export const Group = <T extends object>(props: Props<T>) => {
     };
 
     const onDelete = () => props.setGroups([]);
+    const onMove = (index: number, offset: number) => {
+        props.setGroups((groups) => {
+            const nextIndex = index + offset;
+            if (nextIndex < 0 || nextIndex >= groups.length) return groups;
+
+            const nextGroups = [...groups];
+            [nextGroups[index], nextGroups[nextIndex]] = [nextGroups[nextIndex], nextGroups[index]];
+            return nextGroups.map((item, nextGroupIndex) => ({ ...item, index: nextGroupIndex }));
+        });
+    };
     const orderSectionClassName = tableGroupStyles.slots["order-section"];
     const orderTitleClassName = tableGroupStyles.slots["order-title"];
     const orderListClassName = tableGroupStyles.slots["order-list"];
@@ -104,7 +135,13 @@ export const Group = <T extends object>(props: Props<T>) => {
                         options={options}
                         placeholder={translations.tableGroupPlaceholder}
                     />
-                    <Button className={tableGroupStyles.slots["clear-button"]} onClick={onDelete} theme="raw" data-id={group}>
+                    <Button
+                        className={tableGroupStyles.slots["clear-button"]}
+                        onClick={onDelete}
+                        theme="raw"
+                        data-id={group}
+                        aria-label={translations.tableGroupDeleteLabel(group)}
+                    >
                         <span className={tableGroupStyles.slots["danger-icon"]}>
                             <TrashIcon aria-hidden="true" className={tableGroupStyles.slots["delete-icon"]} />
                         </span>
@@ -126,10 +163,13 @@ export const Group = <T extends object>(props: Props<T>) => {
                                 onReorder={props.setGroups}
                                 values={props.groups}
                             >
-                                {props.groups.map((item) => (
+                                {props.groups.map((item, index) => (
                                     <Item
                                         key={item.groupId}
                                         item={item}
+                                        index={index}
+                                        onMove={onMove}
+                                        reorderLabel={translations.tableGroupReorderLabel(item.groupName)}
                                         onPointerDown={(e) => {
                                             controls.start(e);
                                             props.setGroups([...props.groups]);

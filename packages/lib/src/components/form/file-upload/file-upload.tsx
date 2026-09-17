@@ -132,8 +132,9 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
 
 const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => (
     <ul className={fileUploadStyles.slots.list}>
-        {props.files.map((file) => {
-            return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} key={file.name} file={file} />;
+        {props.files.map((file, index) => {
+            const key = `${file.name}-${file.lastModified}-${file.size}-${index}`;
+            return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} key={key} file={file} />;
         })}
     </ul>
 );
@@ -142,6 +143,7 @@ type IdleProps = {
     dragging: boolean;
     files?: File[];
     multiple?: boolean;
+    disabled?: boolean;
     onUpload?: () => void;
 };
 
@@ -166,7 +168,7 @@ const Idle = (props: IdleProps) => {
     const onUpload = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        props.onUpload?.();
+        if (!props.disabled) props.onUpload?.();
     };
 
     const onUploadKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -187,6 +189,7 @@ const Idle = (props: IdleProps) => {
                     className={css(fileUploadStyles.slots.accent, "underline")}
                     type="button"
                     aria-label={t.fileUploadUploadButtonLabel(idleButtonCopy)}
+                    disabled={props.disabled}
                     onClick={onUpload}
                     onKeyDown={onUploadKeyDown}
                 >
@@ -202,17 +205,20 @@ type InteractiveAreaProps = {
     isDragActive: boolean;
     idle: React.ReactElement<IdleProps>;
     multiple: boolean;
+    disabled: boolean;
     onUpload: () => void;
     File?: React.FC<{ file: File }>;
     onDeleteFile?: (file: File) => void;
 };
 
 const InteractiveArea = (props: InteractiveAreaProps) => {
-    if (props.isDragActive) return <Idle files={props.files} dragging multiple={props.multiple} onUpload={props.onUpload} />;
+    if (props.isDragActive) {
+        return <Idle files={props.files} dragging multiple={props.multiple} disabled={props.disabled} onUpload={props.onUpload} />;
+    }
     if (props.files.length > 0) {
         return <FilesList File={props.File} onDeleteFile={props.onDeleteFile} files={props.files} />;
     }
-    return <Fragment>{cloneElement(props.idle, { onUpload: props.onUpload })}</Fragment>;
+    return <Fragment>{cloneElement(props.idle, { onUpload: props.onUpload, disabled: props.disabled })}</Fragment>;
 };
 
 const FileViewer = (props: { item: ContextItem }) => {
@@ -241,8 +247,10 @@ export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props
     const t = useTranslations();
     const state = useState<ContextProps>(null);
     const [files, setFiles] = useState<File[]>([]);
+    const isControlled = props.files !== undefined;
     const items = props.files ?? files;
     const multiple = props.multiple === true;
+    const disabled = props.disabled === true;
     const zoneLabel = multiple
         ? t.fileUploadZoneLabel
         : getSingleFileCopy(singleFileUploadCopy.zoneLabel, t.fileUploadZoneLabel, defaultTranslations.fileUploadZoneLabel);
@@ -251,20 +259,40 @@ export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props
 
     const onRemoveFile = (file: File) => {
         onDeleteFile?.(file);
-        setFiles((prev) => prev.filter((x) => x !== file));
+        if (!isControlled) setFiles((prev) => prev.filter((x) => x !== file));
     };
 
     const drop = (x: File[]) => {
         onDrop?.(x);
-        setFiles((prev) => prev.concat(x));
+        if (!isControlled) setFiles((prev) => prev.concat(x));
     };
 
     const dropzoneOptions: DropzoneOptions = {
+        accept: props.accept,
+        minSize: props.minSize,
+        maxSize: props.maxSize,
+        maxFiles: props.maxFiles,
         multiple: props.multiple,
+        preventDropOnDocument: props.preventDropOnDocument,
+        noClick: props.noClick,
+        noKeyboard: props.noKeyboard,
+        noDrag: props.noDrag,
+        noDragEventsBubbling: props.noDragEventsBubbling,
+        disabled,
         onDragEnter: props.onDragEnter,
         onDragOver: props.onDragOver,
         onDragLeave: props.onDragLeave,
         onDrop: drop,
+        onDropAccepted: props.onDropAccepted,
+        onDropRejected: props.onDropRejected,
+        getFilesFromEvent: props.getFilesFromEvent,
+        onFileDialogCancel: props.onFileDialogCancel,
+        onFileDialogOpen: props.onFileDialogOpen,
+        onError: props.onError,
+        validator: props.validator,
+        getErrorMessage: props.getErrorMessage,
+        useFsAccessApi: props.useFsAccessApi,
+        autoFocus: props.autoFocus,
     };
 
     const { getRootProps, getInputProps, isDragActive, open } = useDropzone(dropzoneOptions);
@@ -277,11 +305,12 @@ export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props
             <div
                 {...getRootProps({
                     "aria-label": zoneLabel,
+                    "aria-disabled": disabled || undefined,
                     "data-active": items ? items.length > 0 : false,
                     className: css(fileUploadStyles.className({}), fileUploadStyles.slots.dropzone),
                 })}
             >
-                <input {...getInputProps()} aria-label={zoneLabel} name={props.name} id={props.name} />
+                <input {...getInputProps()} aria-label={zoneLabel} name={props.name} id={props.name} disabled={disabled} />
                 <InteractiveArea
                     File={File}
                     onDeleteFile={onRemoveFile}
@@ -289,6 +318,7 @@ export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props
                     idle={idle ?? <Idle dragging={false} multiple={multiple} />}
                     files={items}
                     multiple={multiple}
+                    disabled={disabled}
                     onUpload={open}
                 />
             </div>

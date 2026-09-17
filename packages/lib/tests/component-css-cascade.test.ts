@@ -22,9 +22,7 @@ describe("component CSS cascade contract", () => {
     it("sizes button icons from the button text icon token", () => {
         const buttonCss = readSourceCss("src/components/core/button/button.css");
 
-        expect(buttonCss).toContain(
-            "inline-size: var(--var-button-icon-font-size, var(--button-text-icon, var(--var-button-font-size, var(--button-font-size))));"
-        );
+        expect(buttonCss).toContain("inline-size: var(--var-button-icon-font-size);");
         expect(buttonCss).toContain(".__button__icon > svg");
     });
 
@@ -34,7 +32,7 @@ describe("component CSS cascade contract", () => {
 
         expect(cardCss).toContain("inline-size: var(--var-card-stats-icon-size);");
         expect(cardCss).toContain(".__card__stats-icon > svg");
-        expect(componentTokens).toContain('"stats-icon-size": "3rem"');
+        expect(componentTokens).toContain('"stats-icon-size": "calc(var(--var-spacing-base) * 3)"');
     });
 
     it("wires spinner geometry to semantic component tokens", () => {
@@ -51,10 +49,11 @@ describe("component CSS cascade contract", () => {
         const componentTokens = readSourceCss("src/styles/components.ts");
 
         expect(expandCss).toContain("position: absolute;");
-        expect(expandCss).toContain("inset-block-end: calc(100% + (var(--var-spacing-base) * 0.5));");
+        expect(expandCss).toContain("top: -75%;");
+        expect(expandCss).toContain("left: -25%;");
         expect(expandCss).toContain("z-index: var(--var-layer-wizard);");
         expect(expandCss).toContain("inline-size: max-content;");
-        expect(componentTokens).toContain('expand: {} as ComponentTokens["expand"],');
+        expect(componentTokens).toContain("expand: {},");
     });
 
     it("wires dropdown surface and title styles to semantic component tokens", () => {
@@ -65,7 +64,7 @@ describe("component CSS cascade contract", () => {
         expect(dropdownCss).toContain("padding: var(--var-dropdown-surface-padding);");
         expect(dropdownCss).toContain("margin-block-end: var(--var-dropdown-header-margin-block-end);");
         expect(dropdownCss).toContain("font-size: var(--var-dropdown-title-font-size);");
-        expect(componentTokens).toContain('"list-max-block-size": "24rem"');
+        expect(componentTokens).toContain('"list-max-block-size": "calc(var(--var-spacing-base) * 24)"');
     });
 
     it("wires checkbox control and label styles to semantic component tokens", () => {
@@ -77,7 +76,7 @@ describe("component CSS cascade contract", () => {
         expect(checkboxCss).toContain("border-radius: var(--var-checkbox-control-radius);");
         expect(checkboxCss).toContain("color: var(--var-checkbox-control-foreground);");
         expect(checkboxCss).toContain("outline: var(--var-checkbox-focus-ring-width) solid var(--var-checkbox-focus-ring);");
-        expect(componentTokens).toContain('"control-size": "1rem"');
+        expect(componentTokens).toContain('"control-size": "calc(var(--var-spacing-base) * 1)"');
     });
 
     it("wires radiobox control and label styles to semantic component tokens", () => {
@@ -89,7 +88,7 @@ describe("component CSS cascade contract", () => {
         expect(radioboxCss).toContain("color: var(--var-radiobox-control-foreground);");
         expect(radioboxCss).toContain("outline: var(--var-radiobox-focus-ring-width) solid var(--var-radiobox-focus-ring);");
         expect(componentTokens).toContain("radiobox: {");
-        expect(componentTokens).toContain('"mark-size": "0.375rem"');
+        expect(componentTokens).toContain('"mark-size": "calc(var(--var-spacing-base) * 0.375)"');
     });
 
     it("wires date picker icon styles to semantic component tokens", () => {
@@ -99,7 +98,7 @@ describe("component CSS cascade contract", () => {
         expect(datePickerCss).toContain("inline-size: var(--var-date-picker-calendar-icon-size);");
         expect(datePickerCss).toContain("block-size: var(--var-date-picker-calendar-icon-size);");
         expect(componentTokens).toContain('"date-picker": {');
-        expect(componentTokens).toContain('"calendar-icon-size": "1rem"');
+        expect(componentTokens).toContain('"calendar-icon-size": "calc(var(--var-fontsize) * 1)"');
     });
 
     it("wires select trigger and control styles to shared input tokens", () => {
@@ -120,7 +119,7 @@ describe("component CSS cascade contract", () => {
         expect(autocompleteCss).toContain("min-block-size: var(--var-autocomplete-option-min-block-size);");
         expect(autocompleteCss).toContain("padding: var(--var-autocomplete-option-padding);");
         expect(autocompleteCss).toContain("background-color: var(--var-autocomplete-panel-background);");
-        expect(componentTokens).toContain('"option-padding": "0.625rem"');
+        expect(componentTokens).toContain('"option-padding": "calc(var(--var-spacing-base) * 0.625)"');
     });
 
     it("wires multi-select panel and option styles to semantic component tokens", () => {
@@ -132,7 +131,7 @@ describe("component CSS cascade contract", () => {
         expect(multiSelectCss).toContain("max-block-size: var(--var-multi-select-results-max-block-size);");
         expect(multiSelectCss).toContain("background-color: var(--var-multi-select-option-selected-background);");
         expect(componentTokens).toContain('"multi-select": {');
-        expect(componentTokens).toContain('"option-padding": "0.625rem"');
+        expect(componentTokens).toContain('"option-padding": "calc(var(--var-spacing-base) * 0.625)"');
     });
 
     it("wires menu surface and item styles to semantic component tokens", () => {
@@ -143,7 +142,7 @@ describe("component CSS cascade contract", () => {
         expect(menuCss).toContain("max-block-size: var(--var-menu-surface-max-block-size);");
         expect(menuCss).toContain("padding: var(--var-menu-item-padding);");
         expect(menuCss).toContain("inline-size: var(--var-menu-item-icon-size);");
-        expect(componentTokens).toContain('"item-min-inline-size": "9rem"');
+        expect(componentTokens).toContain('"item-min-inline-size": "calc(var(--var-spacing-base) * 9)"');
     });
 
     it("wires command palette layout and item styles to semantic component tokens", () => {
@@ -154,7 +153,7 @@ describe("component CSS cascade contract", () => {
         expect(commandCss).toContain("block-size: var(--var-command-row-block-size);");
         expect(commandCss).toContain("padding: var(--var-command-item-padding);");
         expect(commandCss).toContain("inline-size: var(--var-command-search-icon-size);");
-        expect(componentTokens).toContain('"search-icon-size": "1rem"');
+        expect(componentTokens).toContain('"search-icon-size": "calc(var(--var-fontsize) * 1)"');
     });
 
     it("wires wizard surface and overlay styles to semantic component tokens", () => {
@@ -165,7 +164,7 @@ describe("component CSS cascade contract", () => {
         expect(wizardCss).toContain("background-color: var(--var-wizard-surface-background);");
         expect(wizardCss).toContain("color: var(--var-wizard-overlay-background);");
         expect(wizardCss).toContain("font-size: var(--var-wizard-label-font-size);");
-        expect(componentTokens).toContain('"surface-inline-size": "20rem"');
+        expect(componentTokens).toContain('"surface-inline-size": "calc(var(--var-spacing-base) * 20)"');
     });
 
     it("wires stats geometry and typography to editable legacy tokens with runtime fallbacks", () => {
@@ -188,7 +187,7 @@ describe("component CSS cascade contract", () => {
         expect(tagCss).toContain("min-block-size: var(--var-tag-default-min-block-size);");
         expect(tagCss).toContain("inline-size: var(--var-tag-indicator-size);");
         expect(tagCss).toContain("font-size: var(--var-tag-small-font-size);");
-        expect(componentTokens).toContain('"small-font-size": "0.875rem"');
+        expect(componentTokens).toContain('"small-font-size": "calc(var(--var-fontsize) * 0.875)"');
     });
 
     it("wires input field and free text styles to semantic component tokens", () => {
@@ -199,7 +198,7 @@ describe("component CSS cascade contract", () => {
         expect(inputCss).toContain("border-radius: var(--var-input-field-control-radius);");
         expect(inputCss).toContain("block-size: var(--var-free-text-control-height);");
         expect(inputCss).toContain("padding-inline: var(--var-free-text-surface-padding-inline);");
-        expect(tokensCss).toContain("--var-input-field-control-radius: calc(var(--var-spacing-base) * 0.375);");
+        expect(tokensCss).toContain("--var-input-field-control-radius: calc(var(--var-radius) * 0.375);");
         expect(tokensCss).toContain("--var-free-text-placeholder-foreground: hsla(240, 4%, 46%);");
     });
 
@@ -211,8 +210,8 @@ describe("component CSS cascade contract", () => {
         expect(fileUploadCss).toContain("border-radius: var(--var-file-upload-surface-radius);");
         expect(fileUploadCss).toContain("inline-size: var(--var-file-upload-thumb-icon-size);");
         expect(fileUploadCss).toContain("margin-block-start: var(--var-file-upload-list-gap);");
-        expect(componentTokens).toContain('"surface-padding": "1.5rem"');
-        expect(componentTokens).toContain('"thumb-icon-size": "1.75rem"');
+        expect(componentTokens).toContain('"surface-padding": "calc(var(--var-spacing-base) * 1.5)"');
+        expect(componentTokens).toContain('"thumb-icon-size": "calc(var(--var-fontsize) * 1.75)"');
     });
 
     it("wires tabs active divider height to semantic component tokens", () => {
@@ -221,18 +220,18 @@ describe("component CSS cascade contract", () => {
 
         expect(tabsCss).toContain("border-bottom-width: var(--var-tabs-divider-block-size);");
         expect(tabsCss).toContain("border-bottom-width: var(--var-tabs-active-divider-block-size);");
-        expect(componentTokens).toContain('"active-divider-block-size": "2px"');
+        expect(componentTokens).toContain('"active-divider-block-size": "calc(var(--var-border-hairline) * 2)"');
     });
 
-    it("derives button size variants from the small customization set", () => {
+    it("wires button size variants to semantic component tokens", () => {
         const buttonCss = readSourceCss("src/components/core/button/button.css");
         const tokensCss = readSourceCss("src/styles/tokens.css");
 
-        expect(buttonCss).toContain("min-block-size: var(--var-button-big-height, calc(var(--var-button-height, var(--button-height)) + 0.5rem));");
-        expect(buttonCss).toContain("padding-inline: var(--var-button-tiny-px, calc(var(--var-button-px, var(--button-px)) - 0.5rem));");
-        expect(tokensCss).toContain("--var-button-height: 2.5rem;");
-        expect(tokensCss).not.toContain("--var-button-big-height:");
-        expect(tokensCss).not.toContain("--var-button-small-font-size:");
+        expect(buttonCss).toContain("min-block-size: var(--var-button-big-height);");
+        expect(buttonCss).toContain("padding-inline: var(--var-button-tiny-px);");
+        expect(tokensCss).toContain("--var-button-height: calc(var(--var-spacing-base) * 2.5);");
+        expect(tokensCss).toContain("--var-button-big-height: calc(var(--var-spacing-base) * 3);");
+        expect(tokensCss).toContain("--var-button-small-font-size: calc(var(--var-fontsize) * 0.875);");
     });
 
     it("keeps the timeline connector offset synchronized across CSS and runtime themes", () => {

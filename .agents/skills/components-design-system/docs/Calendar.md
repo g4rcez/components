@@ -21,24 +21,24 @@ import { Calendar } from "@g4rcez/components/calendar";
 
 `Calendar` also accepts the standard props used by its internal controls through the component implementation. The component-specific props are:
 
-| Prop | Type | Default | Description |
-| ------------------ | ---- | ------- | ----------- |
-| `type` | `"date" \| "datetime" \| "range"` | `"date"` | Select date-only, date-time, or range mode. |
-| `date` | `Date` | current date | Month and selected date used in date and datetime modes. |
-| `range` | `{ from?: Date; to?: Date } \| null` | — | Initial or controlled range value. |
-| `rangeMode` | `boolean` | `false` | Enables two-step `from`/`to` selection. Set this for range selection. |
-| `markRange` | `boolean` | `true` | Highlights the days between the selected range endpoints. |
-| `markToday` | `boolean` | `true` | Highlights the current day. |
-| `changeOnlyOnClick` | `boolean` | `false` | In range mode, delay `onChange` until a complete range is selected by click. |
-| `locale` | `Locales \| undefined` | active locale | Locale used for month labels and date formatting. |
-| `disabledDate` | `(date: Date) => boolean` | — | Disables matching dates. |
-| `onChange` | `(date: Date \| undefined) => void` or `(range: { from?: Date; to?: Date } \| undefined) => void` | — | Called when the selected date or range changes. |
-| `onChangeMonth` | `(date: Date) => void` | — | Called after the visible month changes. |
-| `onChangeYear` | `(date: Date) => void` | — | Called after the visible year changes. |
-| `RenderOnDay` | `React.FC<{ date: Date }>` | — | Renders extra content for a day. |
-| `labelRange` | `{ from: string; to: string }` | — | Accessible labels for the range endpoints. |
-| `datetimeTitle` | `string` | — | Label for the time control in datetime mode. |
-| `styles` | `CalendarStyles` | — | Class names or class-name callbacks for calendar regions. |
+| Prop                | Type                                                                                              | Default       | Description                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `type`              | `"date" \| "datetime" \| "range"`                                                                 | `"date"`      | Select date-only, date-time, or range mode.                                  |
+| `date`              | `Date`                                                                                            | current date  | Month and selected date used in date and datetime modes.                     |
+| `range`             | `{ from?: Date; to?: Date } \| null`                                                              | —             | Initial or controlled range value.                                           |
+| `rangeMode`         | `boolean`                                                                                         | `false`       | Enables two-step `from`/`to` selection. Set this for range selection.        |
+| `markRange`         | `boolean`                                                                                         | `true`        | Highlights the days between the selected range endpoints.                    |
+| `markToday`         | `boolean`                                                                                         | `true`        | Highlights the current day.                                                  |
+| `changeOnlyOnClick` | `boolean`                                                                                         | `false`       | In range mode, delay `onChange` until a complete range is selected by click. |
+| `locale`            | `Locales \| undefined`                                                                            | active locale | Locale used for month labels and date formatting.                            |
+| `disabledDate`      | `(date: Date) => boolean`                                                                         | —             | Disables matching dates.                                                     |
+| `onChange`          | `(date: Date \| undefined) => void` or `(range: { from?: Date; to?: Date } \| undefined) => void` | —             | Called when the selected date or range changes.                              |
+| `onChangeMonth`     | `(date: Date) => void`                                                                            | —             | Called after the visible month changes.                                      |
+| `onChangeYear`      | `(date: Date) => void`                                                                            | —             | Called after the visible year changes.                                       |
+| `RenderOnDay`       | `React.FC<{ date: Date }>`                                                                        | —             | Renders extra content for a day.                                             |
+| `labelRange`        | `{ from: string; to: string }`                                                                    | —             | Accessible labels for the range endpoints.                                   |
+| `datetimeTitle`     | `string`                                                                                          | —             | Label for the time control in datetime mode.                                 |
+| `styles`            | `CalendarStyles`                                                                                  | —             | Class names or class-name callbacks for calendar regions.                    |
 
 `rangeMode` is not inferred from `type="range"`; pass both when using `Calendar` directly. `DatePicker` configures range mode for you.
 
@@ -53,7 +53,7 @@ The component ships a plain CSS chunk at `@g4rcez/components/calendar.css`. Its 
 ```tsx
 const [date, setDate] = useState<Date>();
 
-<Calendar date={date} onChange={setDate} />
+<Calendar date={date} onChange={setDate} />;
 ```
 
 ### Date range
@@ -62,13 +62,7 @@ const [date, setDate] = useState<Date>();
 type DateRange = { from?: Date; to?: Date };
 const [range, setRange] = useState<DateRange | undefined>();
 
-<Calendar
-    type="range"
-    rangeMode
-    range={range}
-    onChange={setRange}
-    labelRange={{ from: "Start date", to: "End date" }}
-/>
+<Calendar type="range" rangeMode range={range} onChange={setRange} labelRange={{ from: "Start date", to: "End date" }} />;
 ```
 
 ### Disable past dates
@@ -80,9 +74,7 @@ const [range, setRange] = useState<DateRange | undefined>();
 ### Add content to days
 
 ```tsx
-<Calendar
-    RenderOnDay={({ date }) => (hasEvent(date) ? <span aria-label="Has event">•</span> : null)}
-/>
+<Calendar RenderOnDay={({ date }) => (hasEvent(date) ? <span aria-label="Has event">•</span> : null)} />
 ```
 
 ## Do

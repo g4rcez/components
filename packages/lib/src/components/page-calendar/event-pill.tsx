@@ -40,8 +40,8 @@ export function EventPill({ event, onClick, compact = false }: EventPillProps) {
             aria-label={t.pageCalendarEventAt(event.title, formatEventTime(event.date))}
             theme={event.className ? "raw" : "primary"}
         >
-            <div className={pageCalendarEventPillStyles.slots.title}>{event.title}</div>
-            <div className={pageCalendarEventPillStyles.slots.time}>{formatEventTime(event.date)}</div>
+            <span className={pageCalendarEventPillStyles.slots.title}>{event.title}</span>
+            <span className={pageCalendarEventPillStyles.slots.time}>{formatEventTime(event.date)}</span>
         </Button>
     );
 }

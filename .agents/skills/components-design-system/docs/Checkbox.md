@@ -19,20 +19,20 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 
 ## Props
 
-| Prop             | Type                                               | Default    | Description                                                |
-| ---------------- | -------------------------------------------------- | ---------- | ---------------------------------------------------------- |
-| `checked`        | `boolean`                                          | -          | Controlled checked state                                   |
-| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void` | -          | Change handler                                             |
-| `disabled`       | `boolean`                                          | `false`    | Disabled state                                             |
-| `loading`        | `boolean`                                          | `false`    | Loading state — disables the checkbox while loading        |
-| `error`          | `string`                                           | -          | Error message rendered below the label                     |
-| `asTask`         | `boolean`                                          | `false`    | Task mode: applies strikethrough to the label when checked |
+| Prop             | Type                                                                                  | Default    | Description                                                            |
+| ---------------- | ------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------- |
+| `checked`        | `boolean`                                                                             | -          | Controlled checked state                                               |
+| `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void`                                    | -          | Change handler                                                         |
+| `disabled`       | `boolean`                                                                             | `false`    | Disabled state                                                         |
+| `loading`        | `boolean`                                                                             | `false`    | Loading state — disables the checkbox while loading                    |
+| `error`          | `string`                                                                              | -          | Error message rendered below the label                                 |
+| `asTask`         | `boolean`                                                                             | `false`    | Task mode: applies strikethrough to the label when checked             |
 | `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny" \| "medium" \| "large"` | `"normal"` | Checkbox size; the named values map to the library control-size tokens |
-| `container`      | `string`                                           | -          | Extra CSS classes for the outer `<label>` wrapper          |
-| `labelClassName` | `string`                                           | -          | Extra CSS classes for the error text element               |
-| `className`      | `string`                                           | -          | Extra CSS classes for the `<input>` element                |
-| `children`       | `React.ReactNode`                                  | -          | Label content                                              |
-| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`      | -          | All standard input attributes                              |
+| `container`      | `string`                                                                              | -          | Extra CSS classes for the outer `<label>` wrapper                      |
+| `labelClassName` | `string`                                                                              | -          | Extra CSS classes for the error text element                           |
+| `className`      | `string`                                                                              | -          | Extra CSS classes for the `<input>` element                            |
+| `children`       | `React.ReactNode`                                                                     | -          | Label content                                                          |
+| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`                                         | -          | All standard input attributes                                          |
 
 ## Design Tokens
 

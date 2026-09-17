@@ -140,6 +140,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const fieldset = useRef<HTMLFieldSetElement>(null);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const searchInputRef = useRef<HTMLInputElement>(null);
+        const isControlled = props.value !== undefined;
         const defaults = props.value ?? props.defaultValue ?? EMPTY_VALUES;
         const translation = useTranslations();
         const generatedId = useId();
@@ -153,6 +154,15 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             });
             return d;
         });
+        const controlledValue = useMemo(() => {
+            const d = new Dict<string, MultiSelectItemProps>();
+            (props.value ?? EMPTY_VALUES).forEach((x) => {
+                const result = map.get(x);
+                if (result) d.set(x, result);
+            });
+            return d;
+        }, [map, props.value]);
+        const selectedValue = isControlled ? controlledValue : value;
         const [_label, setLabel] = useState<string[]>(() => {
             const d = new Set(defaults);
             return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
@@ -181,7 +191,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
 
         const displayList = useMemo(() => list.filter((x) => x.hidden !== true), [list]);
 
-        const values = useMemo(() => Array.from(value.keys()), [value]);
+        const values = useMemo(() => Array.from(selectedValue.keys()), [selectedValue]);
 
         const isEmpty = displayList.length === 0;
 
@@ -242,10 +252,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         ]);
 
         useEffect(() => {
-            if (props.value) {
-                setValue(new Dict(props.value.map((x) => [x, map.get(x)!])));
-            }
-        }, [props.value, map]);
+            if (isControlled) setValue(controlledValue);
+        }, [controlledValue, isControlled]);
 
         useEffect(() => {
             const input = refs.reference.current as HTMLInputElement;
@@ -269,11 +277,11 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         }, [open, displayList.length]);
 
         const onSelect = (opt: MultiSelectItemProps, i: number) => {
-            const clone = value.clone((c) => {
+            const clone = selectedValue.clone((c) => {
                 if (c.has(opt.value)) return c.remove(opt.value);
                 return c.set(opt.value, opt);
             });
-            setValue(clone);
+            if (!isControlled) setValue(clone);
             const input = refs.reference.current as HTMLInputElement;
             if (!input) return;
             const opts = clone.map((x) => x.value);
@@ -305,9 +313,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         };
 
         const onClose = () => {
-            (refs.reference.current as HTMLInputElement)?.setAttribute("data-value", "[]");
             setShadow("");
-            setValue(new Dict());
+            if (!isControlled) setValue(new Dict());
             onChangeOptions?.([]);
             setClosed();
         };
@@ -325,7 +332,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const optionSelectedClass = `${multiSelectStyles.slots.option}--selected`;
         const tagSize = ["min", "small", "tiny"].includes(fieldSize) ? "tiny" : "small";
 
-        const tags = value.map((x, i) => (
+        const tags = selectedValue.map((x, i) => (
             <Tag
                 size={tagSize}
                 key={`MultiSelect-${x.value}-x`}
@@ -380,7 +387,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                             <CaretDownIcon aria-hidden="true" className={multiSelectStyles.slots["caret-icon"]} />
                             <span className={multiSelectStyles.slots["sr-label"]}>{translation.inputCaretDown}</span>
                         </button>
-                        {value ? (
+                        {values.length > 0 ? (
                             <button
                                 type="button"
                                 onClick={onClose}
@@ -452,15 +459,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                         {tags}
                     </OverflowControl>
                 </div>
-                <input
-                    id={id}
-                    name={id}
-                    type="hidden"
-                    data-origin={id}
-                    ref={externalRef}
-                    required={required}
-                    defaultValue={props.value || values || undefined}
-                />
+                <input id={id} name={id} type="hidden" data-origin={id} ref={externalRef} required={required} value={values} readOnly />
                 <FloatingPortal preserveTabOrder>
                     {open ? (
                         <FloatingOverlay lockScroll className={multiSelectStyles.slots.overlay}>
@@ -588,7 +587,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                 className={multiSelectStyles.slots.scroll}
                                                 itemContent={(i, option) => {
                                                     const Label = option.Render ?? Frag;
-                                                    const active = value.has(option.value) || value.has(option.label ?? "");
+                                                    const active = selectedValue.has(option.value) || selectedValue.has(option.label ?? "");
                                                     const selected = index === i;
                                                     const children = option.label ?? option.value;
                                                     return (
@@ -629,7 +628,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                         </motion.div>
                                     )}
                                     <div className={css(multiSelectStyles.slots.footer, `${multiSelectStyles.slots.tags}--row`)}>
-                                        {value.size === 0 ? (
+                                        {selectedValue.size === 0 ? (
                                             <Tag theme="muted" size="small">
                                                 {translation.autocompleteEmpty}
                                             </Tag>

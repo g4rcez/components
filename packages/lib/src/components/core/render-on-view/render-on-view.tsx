@@ -1,7 +1,7 @@
 "use client";
-import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from "react";
+import React, { type PropsWithChildren, useLayoutEffect, useRef, useState } from "react";
 import { useStableRef } from "../../../hooks/use-stable-ref";
-import { PolymorphicProps } from "../polymorph/polymorph";
+import type { PolymorphicProps } from "../polymorph/polymorph";
 
 export type RenderOnViewProps<T extends React.ElementType = "div"> = PolymorphicProps<
     {
@@ -10,36 +10,31 @@ export type RenderOnViewProps<T extends React.ElementType = "div"> = Polymorphic
     T
 >;
 
-function isInViewport(el: HTMLElement): boolean {
-    const rect = el.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
-    );
-}
-
-export const RenderOnView = ({ children, ...props }: PropsWithChildren<RenderOnViewProps>) => {
-    const onIntersect = useStableRef(props.onIntersection);
-    const ref = useRef<HTMLDivElement>(null);
-    const [shouldRender, setShouldRender] = useState(() => (ref.current === null ? false : isInViewport(ref.current)));
+export const RenderOnView = <T extends React.ElementType = "div">({
+    as,
+    children,
+    onIntersection,
+    ...props
+}: PropsWithChildren<RenderOnViewProps<T>>) => {
+    const onIntersect = useStableRef(onIntersection);
+    const ref = useRef<HTMLElement | null>(null);
+    const [shouldRender, setShouldRender] = useState(false);
 
     useLayoutEffect(() => {
-        const div = ref.current;
-        if (div === null) return;
-        const observer = new IntersectionObserver((args) => {
-            const first = args[0];
-            if (first.isIntersecting) onIntersect.current?.();
-            return setShouldRender((prev) => (first.isIntersecting ? true : prev));
+        const element = ref.current;
+        if (element === null) return;
+        const observer = new IntersectionObserver((entries) => {
+            const first = entries[0];
+            if (!first) return;
+            if (first.isIntersecting) {
+                onIntersect.current?.();
+                setShouldRender(true);
+            }
         });
-        observer.observe(div);
+        observer.observe(element);
         return () => observer.disconnect();
     }, [onIntersect]);
 
-    return (
-        <div {...props} ref={ref}>
-            {shouldRender ? children : null}
-        </div>
-    );
+    const Element = as ?? "div";
+    return React.createElement(Element, { ...props, ref }, shouldRender ? children : null);
 };

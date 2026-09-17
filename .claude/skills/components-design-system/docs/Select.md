@@ -19,29 +19,29 @@ import { Select } from "@g4rcez/components/select";
 
 ## Props
 
-| Prop                 | Type                                          | Default | Description                                                  |
-| -------------------- | --------------------------------------------- | ------- | ------------------------------------------------------------ |
-| `options`            | `OptionProps[]`                               | —       | Array of option objects.                                     |
-| `size`               | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`. |
-| `selectContainer`    | `string`                                      | `""`    | Legacy compatibility prop; currently accepted but not applied. |
-| `required`           | `boolean`                                     | `true`  | Whether the field is required.                               |
-| `error`              | `string`                                      | —       | Error message to display.                                    |
-| `loading`            | `boolean`                                     | `false` | Shows a loading indicator and disables the field.            |
-| `disabled`           | `boolean`                                     | `false` | Disables the select.                                         |
-| `placeholder`        | `string`                                      | —       | Placeholder shown as a disabled hidden option.               |
-| `value`              | `string`                                      | —       | Controlled selected value.                                   |
-| `onChange`           | `(e: ChangeEvent<HTMLSelectElement>) => void` | —       | Change handler.                                              |
-| `...inputFieldProps` | `InputFieldProps`                             | —       | All `InputField` props (title, left, right, feedback, etc.). |
+| Prop                 | Type                                                           | Default    | Description                                                    |
+| -------------------- | -------------------------------------------------------------- | ---------- | -------------------------------------------------------------- |
+| `options`            | `OptionProps[]`                                                | —          | Array of option objects.                                       |
+| `size`               | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`.               |
+| `selectContainer`    | `string`                                                       | `""`       | Legacy compatibility prop; currently accepted but not applied. |
+| `required`           | `boolean`                                                      | `true`     | Whether the field is required.                                 |
+| `error`              | `string`                                                       | —          | Error message to display.                                      |
+| `loading`            | `boolean`                                                      | `false`    | Shows a loading indicator and disables the field.              |
+| `disabled`           | `boolean`                                                      | `false`    | Disables the select.                                           |
+| `placeholder`        | `string`                                                       | —          | Placeholder shown as a disabled hidden option.                 |
+| `value`              | `string`                                                       | —          | Controlled selected value.                                     |
+| `onChange`           | `(e: ChangeEvent<HTMLSelectElement>) => void`                  | —          | Change handler.                                                |
+| `...inputFieldProps` | `InputFieldProps`                                              | —          | All `InputField` props (title, left, right, feedback, etc.).   |
 
 ### OptionProps
 
-| Prop           | Type      | Description                                             |
-| -------------- | --------- | ------------------------------------------------------- |
-| `value`        | `string`  | Option value (required).                                |
-| `label`        | `string`  | Optional display text; falls back to `value` if omitted.  |
-| `disabled`     | `boolean` | Disables this individual option.                        |
-| `data-dynamic` | `string`  | Marks a dynamically generated option.                   |
-| `data-*`       | `string`  | Any custom data attributes forwarded to the `<option>`. |
+| Prop           | Type      | Description                                              |
+| -------------- | --------- | -------------------------------------------------------- |
+| `value`        | `string`  | Option value (required).                                 |
+| `label`        | `string`  | Optional display text; falls back to `value` if omitted. |
+| `disabled`     | `boolean` | Disables this individual option.                         |
+| `data-dynamic` | `string`  | Marks a dynamically generated option.                    |
+| `data-*`       | `string`  | Any custom data attributes forwarded to the `<option>`.  |
 
 ## Design Tokens
 
