@@ -317,7 +317,7 @@ function CommanderExample() {
 }`}
             >
                 <div className="flex flex-col items-center gap-4">
-                    <Button theme="primary" size="big" onClick={() => setOpen1(true)} className="shadow-xl shadow-primary/20">
+                    <Button theme="primary" size="big" onClick={() => setOpen1(true)}>
                         Open Commander
                     </Button>
                     <p className="text-xs text-muted-foreground">

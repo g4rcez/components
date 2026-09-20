@@ -9,7 +9,10 @@ export default function InputFieldPage() {
         <DocsLayout
             title="InputField"
             section="form"
-            description="The fieldset wrapper used by all form inputs. Composes label, left/right slots, error, feedback, and ARIA attributes."
+            description="A labeled field wrapper with slots, validation, feedback, and ARIA relationships."
+            useWhen="Use InputField when a control needs a persistent label, hint, validation message, or slot."
+            avoidWhen="Avoid replacing the label with placeholder text or using InputField for non-form content."
+            accessibility="Keep the title or label present, connect errors and hints to the control, and let the field expose its required state."
         >
             <ComponentDemo
                 title="Basic InputField"

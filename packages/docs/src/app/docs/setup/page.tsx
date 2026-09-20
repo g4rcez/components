@@ -260,10 +260,7 @@ function LivePreview({ theme }: { theme: DesignTokens }) {
     );
     const [previewTab, setPreviewTab] = useState("overview");
     return (
-        <div
-            style={style}
-            className="rounded-card-radius border border-card-border bg-background p-card-padding-x text-foreground shadow-shadow-card"
-        >
+        <div style={style} className="rounded-card-radius border border-card-border bg-background p-card-padding-x text-foreground">
             <div className="flex flex-col gap-base">
                 <header className="flex items-center justify-between gap-base">
                     <div className="flex flex-col gap-card-title-pb">

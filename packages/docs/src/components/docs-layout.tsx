@@ -1,169 +1,263 @@
 "use client";
-import { type PropsWithChildren, useEffect, useState } from "react";
-import { Tag, type Label } from "@g4rcez/components";
-import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
-import { usePathname } from "next/navigation";
-import { sections } from "../config/navigation";
-import Link from "next/link";
-import { tokenDefaultsForPath, tokensToStyle, type TokenGroup } from "./editable-tokens";
 
-type TocItem = { id: string; text: string };
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import type { Label } from "@g4rcez/components";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from "react";
+import { sections } from "../config/navigation";
+
+type TocItem = {
+    id: string;
+    text: string;
+    level: 2 | 3;
+};
 
 type Props = {
     title: Label;
     section: string;
     description: Label;
     className?: string;
+    useWhen?: ReactNode;
+    avoidWhen?: ReactNode;
+    accessibility?: ReactNode;
+    packageName?: string;
 };
+
+const sectionLabels: Record<string, string> = {
+    display: "Display Components",
+    floating: "Floating Elements",
+    form: "Form Controls",
+    primitives: "Primitives",
+    start: "Getting Started",
+    utilities: "Utilities",
+};
+
+const slugify = (value: string) =>
+    value
+        .toLocaleLowerCase()
+        .trim()
+        .replace(/[^\p{L}\p{N}]+/gu, "-")
+        .replace(/^-+|-+$/g, "");
+
+const DocsTableOfContents = ({ items, activeId, compact = false }: { items: TocItem[]; activeId: string; compact?: boolean }) => {
+    if (items.length === 0) return null;
+
+    return (
+        <aside className={compact ? "docs-toc docs-toc-compact" : "docs-toc docs-toc-desktop"} aria-label="On this page">
+            <h2 className="docs-toc-title">On this page</h2>
+            <nav className="docs-toc-list" aria-label="Page sections">
+                {items.map((item) => (
+                    <Link
+                        key={item.id}
+                        href={`#${item.id}`}
+                        aria-current={item.id === activeId ? "location" : undefined}
+                        className={`docs-toc-link docs-toc-link-level-${item.level}${item.id === activeId ? " docs-toc-link-active" : ""}`}
+                    >
+                        {item.text}
+                    </Link>
+                ))}
+            </nav>
+        </aside>
+    );
+};
+
+const UsageSummary = ({ title, useWhen, avoidWhen }: { title: string; useWhen?: ReactNode; avoidWhen?: ReactNode }) => (
+    <section id="usage-guidance" className="docs-usage" aria-labelledby="usage-guidance-title">
+        <h2 id="usage-guidance-title" className="docs-section-title">
+            When to use {title}
+        </h2>
+        <div className="docs-guidance-grid">
+            <div className="docs-guidance docs-guidance-use">
+                <div className="docs-guidance-heading">
+                    <span className="docs-guidance-mark" aria-hidden="true">
+                        ✓
+                    </span>
+                    <h3>Use when</h3>
+                </div>
+                <p>{useWhen ?? `You need the documented ${title} interaction or presentation in a product workflow.`}</p>
+            </div>
+            <div className="docs-guidance docs-guidance-avoid">
+                <div className="docs-guidance-heading">
+                    <span className="docs-guidance-mark" aria-hidden="true">
+                        !
+                    </span>
+                    <h3>Avoid when</h3>
+                </div>
+                <p>{avoidWhen ?? `A native HTML element already provides the ${title} behavior you need.`}</p>
+            </div>
+        </div>
+    </section>
+);
+
+const AccessibilityNotes = ({ title, children }: { title: string; children?: ReactNode }) => (
+    <section id="accessibility-notes" className="docs-accessibility" aria-labelledby="accessibility-notes-title">
+        <h2 id="accessibility-notes-title" className="docs-section-title">
+            Accessibility
+        </h2>
+        <p>
+            {children ??
+                `Keep the ${title} labeled and use its documented keyboard interaction. The component preserves visible focus and communicates state without relying on color alone.`}
+        </p>
+        <ul>
+            <li>Keep keyboard focus visible and follow the documented key commands.</li>
+            <li>Provide an accessible name and connect descriptions or errors to the control.</li>
+        </ul>
+    </section>
+);
 
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
     const pathname = usePathname();
-    const allItems = sections.flatMap((s) => s.items);
-    const currentIndex = allItems.findIndex((i) => i.href === pathname);
-    const prev = currentIndex > 0 ? allItems[currentIndex - 1] : null;
-    const next = currentIndex !== -1 && currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
-
+    const articleRef = useRef<HTMLElement>(null);
+    const allItems = sections.flatMap((section) => section.items);
+    const currentIndex = allItems.findIndex((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+    const currentSection = sections.find((section) => section.items.some((item) => pathname === item.href || pathname.startsWith(`${item.href}/`)));
+    const relatedItems = currentSection?.items.filter((item) => item.href !== pathname).slice(0, 3) ?? [];
+    const previous = currentIndex > 0 ? allItems[currentIndex - 1] : null;
+    const next = currentIndex >= 0 && currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
     const [tocItems, setTocItems] = useState<TocItem[]>([]);
-    const [activeId, setActiveId] = useState<string>("");
-    const [editableTokens, setEditableTokens] = useState<TokenGroup>(() => tokenDefaultsForPath(pathname) ?? {});
-    const editableTokenStyle = tokensToStyle(editableTokens);
+    const [activeId, setActiveId] = useState("");
+    const title = String(props.title);
+    const sectionLabel = sectionLabels[props.section.toLocaleLowerCase()] ?? props.section;
 
     useEffect(() => {
-        setEditableTokens(tokenDefaultsForPath(pathname) ?? {});
+        const frame = window.requestAnimationFrame(() => {
+            const article = articleRef.current;
+            if (!article) return;
+
+            const usedIds = new Set<string>();
+            const headings = Array.from(article.querySelectorAll<HTMLElement>("h2, h3")).filter((heading) => !heading.closest(".docs-toc"));
+            const items = headings.flatMap((heading) => {
+                const text = heading.textContent?.trim() ?? "";
+                if (!text) return [];
+
+                let id = heading.id || slugify(text) || "section";
+                let suffix = 2;
+                while (usedIds.has(id)) {
+                    id = `${slugify(text) || "section"}-${suffix}`;
+                    suffix += 1;
+                }
+
+                heading.id = id;
+                usedIds.add(id);
+                return [{ id, text, level: heading.tagName === "H2" ? (2 as const) : (3 as const) }];
+            });
+
+            setTocItems(items);
+            setActiveId(items[0]?.id ?? "");
+        });
+
+        return () => window.cancelAnimationFrame(frame);
     }, [pathname]);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            const headings = Array.from(document.querySelectorAll("h3[id]"));
-            setTocItems(
-                headings.map((h) => ({
-                    id: h.id,
-                    text: h.textContent ?? "",
-                }))
-            );
-        }, 0);
-        return () => clearTimeout(timeout);
-    }, [pathname]);
+        if (tocItems.length === 0) return;
 
-    useEffect(() => {
-        const headings = Array.from(document.querySelectorAll("h3[id]"));
+        const headings = tocItems.map((item) => document.getElementById(item.id)).filter((heading): heading is HTMLElement => heading !== null);
         if (headings.length === 0) return;
 
         const observer = new IntersectionObserver(
             (entries) => {
-                for (const entry of entries) {
-                    if (entry.isIntersecting) {
-                        setActiveId(entry.target.id);
-                    }
-                }
+                const visible = entries.find((entry) => entry.isIntersecting);
+                if (visible) setActiveId(visible.target.id);
             },
-            { threshold: 0.6 }
+            { rootMargin: "-96px 0px -58% 0px", threshold: [0, 1] }
         );
 
-        headings.forEach((h) => observer.observe(h));
+        headings.forEach((heading) => observer.observe(heading));
         return () => observer.disconnect();
     }, [tocItems]);
 
     return (
-        <div className="relative flex flex-col gap-16 lg:flex-row">
-            <div className="min-w-0 flex-1">
-                <header>
-                    <div className="mb-4 flex items-center gap-2">
-                        <Tag size="tiny">{props.section}</Tag>
+        <div className="docs-reading-layout">
+            <article ref={articleRef} className="docs-article" aria-labelledby="docs-page-title">
+                <header className="docs-page-header">
+                    <nav className="docs-breadcrumb" aria-label="Breadcrumb">
+                        <Link href="/docs">Docs</Link>
+                        <span aria-hidden="true">/</span>
+                        <span>{sectionLabel}</span>
+                    </nav>
+                    <h1 id="docs-page-title" className="docs-page-title">
+                        {props.title}
+                    </h1>
+                    <p className="docs-page-summary">{props.description}</p>
+                    <div className="docs-page-meta" aria-label="Page metadata">
+                        <span>
+                            <span className="docs-meta-label">Package</span>
+                            <code>{props.packageName ?? "@g4rcez/components"}</code>
+                        </span>
+                        <span>
+                            <span className="docs-meta-label">Section</span>
+                            {sectionLabel}
+                        </span>
                     </div>
-                    <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-foreground lg:text-5xl">{props.title}</h1>
-                    <p className="max-w-3xl font-medium leading-relaxed text-muted-foreground">{props.description}</p>
                 </header>
-                <div className="mb-12 mt-8 h-px bg-gradient-to-r from-primary to-transparent" />
-                <div style={editableTokenStyle}>
-                    {/* <EditableTokensSection pathname={pathname} tokens={editableTokens} onChange={setEditableTokens} /> */}
-                    <div className="prose prose-zinc dark:prose-invert prose-headings:scroll-mt-24 prose-pre:bg-zinc-950 prose-pre:border-none prose-a:no-underline prose-headings:font-extrabold max-w-none">
-                        {props.children}
-                    </div>
-                </div>
 
-                {(prev || next) && (
-                    <div className="mt-16 flex items-center justify-between gap-4 border-t border-border/40 pt-8">
-                        {prev ? (
-                            <Link
-                                href={prev.href}
-                                className="group flex max-w-[240px] flex-1 flex-col gap-2 rounded-xl border border-border/40 p-4 transition-colors hover:border-primary/40"
-                            >
-                                <span className="flex items-center gap-2 text-[12px] font-medium text-muted-foreground">
-                                    <ArrowLeftIcon className="size-3" />
+                <DocsTableOfContents items={tocItems} activeId={activeId} compact />
+                <UsageSummary title={title} useWhen={props.useWhen} avoidWhen={props.avoidWhen} />
+
+                <section className="docs-examples" aria-labelledby="docs-examples-title">
+                    <h2 id="docs-examples-title" className="docs-section-title">
+                        Examples
+                    </h2>
+                    <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
+                </section>
+
+                <AccessibilityNotes title={title}>{props.accessibility}</AccessibilityNotes>
+
+                {relatedItems.length > 0 ? (
+                    <section id="related-components" className="docs-related" aria-labelledby="related-components-title">
+                        <h2 id="related-components-title" className="docs-section-title">
+                            Related components
+                        </h2>
+                        <div className="docs-related-links">
+                            {relatedItems.map((item) => (
+                                <Link key={item.href} href={item.href} className="docs-related-link">
+                                    <span>{item.title}</span>
+                                    <ArrowRightIcon size={14} aria-hidden="true" />
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                ) : null}
+
+                {(previous || next) && (
+                    <nav className="docs-pager" aria-label="Documentation pagination">
+                        {previous ? (
+                            <Link href={previous.href} className="docs-pager-link docs-pager-previous">
+                                <span className="docs-pager-label">
+                                    <ArrowLeftIcon size={14} aria-hidden="true" />
                                     Previous
                                 </span>
-                                <span className="font-bold text-foreground transition-colors group-hover:text-primary">{prev.title}</span>
+                                <strong>{previous.title}</strong>
                             </Link>
                         ) : (
-                            <div className="flex-1" />
+                            <span />
                         )}
                         {next ? (
-                            <Link
-                                href={next.href}
-                                className="group flex max-w-[240px] flex-1 flex-col items-end gap-2 rounded-xl border border-border/40 p-4 text-right transition-colors hover:border-primary/40"
-                            >
-                                <span className="flex items-center gap-2 text-[12px] font-medium text-muted-foreground">
+                            <Link href={next.href} className="docs-pager-link docs-pager-next">
+                                <span className="docs-pager-label">
                                     Next
-                                    <ArrowRightIcon className="size-3" />
+                                    <ArrowRightIcon size={14} aria-hidden="true" />
                                 </span>
-                                <span className="font-bold text-foreground transition-colors group-hover:text-primary">{next.title}</span>
+                                <strong>{next.title}</strong>
                             </Link>
                         ) : (
-                            <div className="flex-1" />
+                            <span />
                         )}
-                    </div>
+                    </nav>
                 )}
 
-                <footer className="mt-16 border-t border-border/40 pt-8">
-                    <div className="flex flex-col items-center justify-between gap-6 py-8 text-xs sm:flex-row">
-                        <a className="font-medium text-muted-foreground" href="https://github.com/g4rcez">
-                            Refined by g4rcez
-                        </a>
-                        <a
-                            href="https://github.com/g4rcez/components"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center gap-1.5 font-bold text-foreground transition-colors hover:text-primary"
-                        >
-                            Edit this page on GitHub
-                            <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                        </a>
-                    </div>
+                <footer className="docs-article-footer">
+                    <span>Documentation for @g4rcez/components</span>
+                    <Link href="https://github.com/g4rcez/components" target="_blank" rel="noreferrer">
+                        View source on GitHub
+                        <ArrowRightIcon size={14} aria-hidden="true" />
+                    </Link>
                 </footer>
-            </div>
+            </article>
 
-            {tocItems.length > 0 && (
-                <aside className="sticky top-[calc(var(--header-height)+40px)] hidden h-fit w-64 shrink-0 self-start xl:block">
-                    <div className="space-y-6">
-                        <h5 className="text-sm font-medium tracking-wide text-foreground opacity-40">On this page</h5>
-                        <nav className="flex flex-col gap-3 border-l border-border/40 pl-4">
-                            {tocItems.map((item) => (
-                                <a
-                                    key={item.id}
-                                    href={`#${item.id}`}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
-                                    }}
-                                    className="flex items-center gap-2 text-[13px] no-underline transition-colors"
-                                >
-                                    <div
-                                        className={`h-3 w-0.5 rounded ${
-                                            item.id === activeId ? "bg-gradient-to-b from-blue-500 to-sky-400" : "bg-transparent"
-                                        }`}
-                                    />
-                                    <span
-                                        className={item.id === activeId ? "font-medium text-blue-400" : "text-muted-foreground hover:text-foreground"}
-                                    >
-                                        {item.text}
-                                    </span>
-                                </a>
-                            ))}
-                        </nav>
-                    </div>
-                </aside>
-            )}
+            <DocsTableOfContents items={tocItems} activeId={activeId} />
         </div>
     );
 };

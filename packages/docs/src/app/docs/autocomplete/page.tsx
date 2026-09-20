@@ -2,7 +2,7 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { Fragment, useEffect, useState } from "react";
-import { Autocomplete, AutocompleteItemProps, Button, Modal, OptionProps } from "@g4rcez/components";
+import { Autocomplete, type AutocompleteItemProps, Button, Modal } from "@g4rcez/components";
 
 const defaults = [
     { label: "JavaScript", value: "javascript" },
@@ -111,7 +111,14 @@ export default function AutocompletePage() {
     }, []);
 
     return (
-        <DocsLayout section="form" title="Autocomplete" description="Multiple options with a beautiful search input.">
+        <DocsLayout
+            section="form"
+            title="Autocomplete"
+            description="Search and choose one or more options from a list."
+            useWhen="Use Autocomplete when a user selects one or more known options from a searchable list."
+            avoidWhen="Avoid it for a short, stable list that is faster to scan as native radio buttons or a select."
+            accessibility="Keep the field labeled, announce the expanded state, and make option movement and selection available from the keyboard."
+        >
             <ComponentDemo
                 title="Basic Autocomplete"
                 description="A basic autocomplete with a list of programming languages. Selecting an option updates the controlled value."

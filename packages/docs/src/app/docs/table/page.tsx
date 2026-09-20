@@ -67,7 +67,10 @@ export default function TablePage() {
         <DocsLayout
             title="Table"
             section="Display"
-            description="A high-performance, feature-rich tabular data component designed for large datasets and complex interactions."
+            description="Virtualized tables for large datasets, complex interactions, and aligned records."
+            useWhen="Use Table for related records that benefit from aligned columns, sorting, grouping, or selection."
+            avoidWhen="Avoid a table when each record needs a different layout or when a short list is easier to scan as cards."
+            accessibility="Keep native table semantics, provide a caption or accessible name, and keep row and column actions keyboard reachable."
         >
             <ComponentDemo
                 title="Virtual and fast by default"

@@ -6,7 +6,14 @@ import { Button, Card } from "@g4rcez/components";
 
 export default function Buttons() {
     return (
-        <DocsLayout title="Buttons" section="display" description="The way users interact with your actions.">
+        <DocsLayout
+            title="Buttons"
+            section="display"
+            description="Clear actions for submitting work or changing state."
+            useWhen="Use Button for a clear, deliberate action that changes state or submits work."
+            avoidWhen="Avoid using Button as a substitute for navigation links or passive labels."
+            accessibility="Give icon-only buttons an accessible name, keep the action text specific, and preserve the visible focus ring."
+        >
             <ComponentDemo
                 title="Button Themes"
                 description="Demonstrates various button themes, including default, loading, and themed variants."

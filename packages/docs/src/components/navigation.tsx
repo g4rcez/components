@@ -1,42 +1,150 @@
 "use client";
+
+import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { sections } from "../config/navigation";
 
-export const Navigation = () => {
+type NavigationProps = {
+    onNavigateAction?: () => void;
+    searchId?: string;
+    sectionIdPrefix?: string;
+};
+
+export const Navigation = ({ onNavigateAction, searchId = "docs-navigation-search", sectionIdPrefix = "docs-nav" }: NavigationProps) => {
     const path = usePathname();
+    const [query, setQuery] = useState("");
+    const groupsRef = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<HTMLInputElement>(null);
+
+    const visibleSections = useMemo(() => {
+        const normalizedQuery = query.trim().toLocaleLowerCase();
+        if (!normalizedQuery) return sections;
+
+        return sections
+            .map((section) => ({
+                ...section,
+                items: section.items.filter((item) => `${section.title} ${item.title}`.toLocaleLowerCase().includes(normalizedQuery)),
+            }))
+            .filter((section) => section.items.length > 0);
+    }, [query]);
+
+    useEffect(() => {
+        const groups = groupsRef.current;
+        if (!groups) return;
+
+        try {
+            const savedScrollTop = window.sessionStorage.getItem("docs-navigation-scroll");
+            if (savedScrollTop) {
+                groups.scrollTop = Number(savedScrollTop);
+            }
+        } catch {
+            // Storage is optional. Navigation still works when it is unavailable.
+        }
+    }, []);
+
+    useEffect(() => {
+        if (searchId !== "docs-navigation-search") return;
+
+        const onKeyDown = (event: KeyboardEvent) => {
+            const target = event.target as HTMLElement | null;
+            if (event.key !== "/" || target?.matches("input, textarea, select, [contenteditable='true']")) return;
+
+            event.preventDefault();
+            searchRef.current?.focus();
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [searchId]);
+
+    const saveScrollPosition = () => {
+        const groups = groupsRef.current;
+        if (!groups) return;
+
+        try {
+            window.sessionStorage.setItem("docs-navigation-scroll", String(groups.scrollTop));
+        } catch {
+            // Storage is optional. Navigation still works when it is unavailable.
+        }
+    };
+
+    const clearSearch = () => {
+        setQuery("");
+        searchRef.current?.focus();
+    };
 
     return (
-        <nav className="space-y-8 pr-6">
-            {sections.map((section) => {
-                return (
-                    <div key={`section-${section.title}`}>
-                        <h5 className="mb-3 px-4 text-[13px] font-medium tracking-wide text-foreground/40 lg:px-0">{section.title}</h5>
+        <nav className="docs-nav" aria-label="Documentation navigation">
+            <div className="docs-nav-search">
+                <label className="sr-only" htmlFor={searchId}>
+                    Search documentation
+                </label>
+                <MagnifyingGlassIcon className="docs-nav-search-icon" size={17} aria-hidden="true" />
+                <input
+                    ref={searchRef}
+                    id={searchId}
+                    type="search"
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Search docs"
+                    autoComplete="off"
+                    spellCheck={false}
+                />
+                {query ? (
+                    <button type="button" className="docs-nav-clear" aria-label="Clear documentation search" onClick={clearSearch}>
+                        <XIcon size={15} aria-hidden="true" />
+                    </button>
+                ) : (
+                    <kbd className="docs-nav-shortcut">/</kbd>
+                )}
+            </div>
 
-                        <ul className="ml-0.5 space-y-1 border-l border-border/40">
-                            {section.items.map((item) => {
-                                const isActive = path === item.href;
+            <div ref={groupsRef} className="docs-nav-groups" onScroll={saveScrollPosition}>
+                {visibleSections.length > 0 ? (
+                    visibleSections.map((section) => {
+                        const sectionId = `${sectionIdPrefix}-${section.title.toLocaleLowerCase().replace(/\s+/g, "-")}`;
 
-                                return (
-                                    <li key={`section-item-${item.title}`}>
-                                        <Link
-                                            href={item.href}
-                                            aria-current={isActive ? "page" : undefined}
-                                            className={`-ml-px block border-l py-1.5 pl-4 text-[14px] transition-all ${
-                                                isActive
-                                                    ? "border-primary font-semibold text-primary"
-                                                    : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
-                                            } `}
-                                        >
-                                            {item.title}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                );
-            })}
+                        return (
+                            <section key={section.title} className="docs-nav-section" aria-labelledby={sectionId}>
+                                <h2 id={sectionId} className="docs-nav-section-title">
+                                    {section.title}
+                                </h2>
+                                <ul className="docs-nav-list">
+                                    {section.items.map((item) => {
+                                        const isActive = path === item.href || path.startsWith(`${item.href}/`);
+                                        const Icon = item.icon;
+
+                                        return (
+                                            <li key={item.href}>
+                                                <Link
+                                                    href={item.href}
+                                                    aria-current={isActive ? "page" : undefined}
+                                                    className={`docs-nav-link${isActive ? " docs-nav-link-active" : ""}`}
+                                                    onClick={onNavigateAction}
+                                                >
+                                                    {Icon ? (
+                                                        <span className="docs-nav-link-icon" aria-hidden="true">
+                                                            <Icon className="docs-nav-link-icon-glyph" />
+                                                        </span>
+                                                    ) : null}
+                                                    <span>{item.title}</span>
+                                                    {item.badge ? <span className="docs-nav-link-badge">{item.badge}</span> : null}
+                                                </Link>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </section>
+                        );
+                    })
+                ) : (
+                    <p className="docs-nav-empty" role="status">
+                        No documentation matches “{query}”.
+                    </p>
+                )}
+            </div>
         </nav>
     );
 };

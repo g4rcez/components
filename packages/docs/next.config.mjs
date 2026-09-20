@@ -4,6 +4,7 @@ const sourceAliases = process.env.NODE_ENV === "development" ? getComponentsSour
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     transpilePackages: ["@g4rcez/components"],
+    turbopack: {},
     ...(sourceAliases && {
         turbopack: {
             root: sourceAliases.workspaceRoot,

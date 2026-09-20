@@ -43,7 +43,7 @@
     border: var(--var-switch-track-border-width) solid transparent;
     border-radius: var(--var-rounded-full);
     appearance: none;
-    background-color: var(--var-color-border);
+    background-color: var(--var-switch-track-background);
     cursor: pointer;
     outline: 0;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -62,11 +62,11 @@
 }
 
 .__switch__track[data-checked="false"] {
-    background-color: var(--var-color-border);
+    background-color: var(--var-switch-track-background);
 }
 
 .__switch__track[data-checked="true"] {
-    background-color: var(--var-color-primary);
+    background-color: var(--var-switch-track-checked-background);
 }
 
 .__switch__thumb {
@@ -74,7 +74,7 @@
     inline-size: var(--var-switch-thumb-size);
     block-size: var(--var-switch-thumb-size);
     border-radius: var(--var-rounded-full);
-    background-color: var(--var-color-disabled);
+    background-color: var(--var-switch-thumb-background);
     box-shadow: none;
     transform: translateX(0);
     transition-property: background-color, transform;

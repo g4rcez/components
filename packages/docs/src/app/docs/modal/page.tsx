@@ -105,7 +105,10 @@ export default function ModalExamplePage() {
         <DocsLayout
             title="Modal"
             section="floating"
-            description="Dialog, Drawer or BottomSheet. This component can do with all these options. For responsive websites, BottomSheet will be used for mobile, while desktop preserve the dialog/drawer."
+            description="Responsive dialog, drawer, and bottom-sheet surfaces for temporary tasks."
+            useWhen="Use Modal when a task needs temporary focus, confirmation, or a contained surface above the current page."
+            avoidWhen="Avoid a modal for information that can remain in the page flow or for a simple link destination."
+            accessibility="Use a descriptive title, keep focus inside the open surface, close on Escape, and return focus to the trigger."
         >
             <ComponentDemo
                 title="Dialog"

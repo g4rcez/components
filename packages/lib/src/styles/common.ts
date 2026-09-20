@@ -16,7 +16,7 @@ export const spacing: DesignTokens["spacing"] = {
 export const zIndex: ZIndex = {
     wizard: "100",
     normal: "1",
-    navbar: "22",
+    navbar: "19",
     calendar: "2",
     overlay: "21",
     tooltip: "20",

@@ -245,6 +245,18 @@ describe("component CSS cascade contract", () => {
         expect(runtimeTheme).toContain(`"connector-inset-inline-start": "${expectedValue}"`);
     });
 
+    it("keeps transient layers above the navigation layer", () => {
+        const tokensCss = readSourceCss("src/styles/tokens.css");
+        const layerValue = (name: string) => {
+            const value = tokensCss.match(new RegExp(`--var-layer-${name}:\\s*(\\d+);`))?.[1];
+            expect(value).toBeDefined();
+            return Number(value);
+        };
+
+        expect(layerValue("navbar")).toBeLessThan(layerValue("overlay"));
+        expect(layerValue("navbar")).toBeLessThan(layerValue("floating"));
+    });
+
     it("keeps dark secondary buttons readable", () => {
         const tokensCss = readSourceCss("src/styles/tokens.css");
 

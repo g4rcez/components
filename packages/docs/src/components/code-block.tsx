@@ -1,84 +1,87 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { codeToHtml } from "shiki";
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
-import { Button, Tag } from "@g4rcez/components";
+import { codeToHtml } from "shiki";
+import { useEffect, useRef, useState } from "react";
 
 type CodeBlockProps = {
     code: string;
     lang?: string;
 };
 
+type CopyState = "idle" | "copied" | "error";
+
 export const CodeBlock = ({ code, lang = "tsx" }: CodeBlockProps) => {
     const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
-    const [copied, setCopied] = useState(false);
+    const [copyState, setCopyState] = useState<CopyState>("idle");
+    const resetCopyState = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         let isMounted = true;
+        setHighlightedCode(null);
 
-        const highlight = async () => {
-            try {
-                const html = await codeToHtml(code, {
-                    lang,
-                    themes: {
-                        light: "github-light",
-                        dark: "catppuccin-mocha",
-                    },
-                    defaultColor: false,
-                });
-                if (isMounted) {
-                    setHighlightedCode(html);
-                }
-            } catch (error) {
-                console.error("Failed to highlight code:", error);
-            }
-        };
+        void codeToHtml(code, {
+            lang,
+            themes: {
+                light: "github-light",
+                dark: "github-dark",
+            },
+            defaultColor: false,
+        })
+            .then((html) => {
+                if (isMounted) setHighlightedCode(html);
+            })
+            .catch(() => {
+                if (isMounted) setHighlightedCode(null);
+            });
 
-        highlight();
         return () => {
             isMounted = false;
         };
     }, [code, lang]);
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+    useEffect(() => {
+        return () => {
+            if (resetCopyState.current) clearTimeout(resetCopyState.current);
+        };
+    }, []);
+
+    const handleCopy = async () => {
+        try {
+            if (!navigator.clipboard?.writeText) throw new Error("Clipboard API unavailable");
+            await navigator.clipboard.writeText(code);
+            setCopyState("copied");
+        } catch {
+            setCopyState("error");
+        }
+
+        if (resetCopyState.current) clearTimeout(resetCopyState.current);
+        resetCopyState.current = setTimeout(() => setCopyState("idle"), 2200);
     };
 
-    if (!highlightedCode) {
-        return (
-            <div className="overflow-hidden rounded-xl border border-white/[0.06] dark:bg-[#0a0f1e]">
-                <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/40 px-4 py-2">
-                    <span className="rounded-full border border-blue-500/25 bg-blue-500/15 px-2 py-0.5 text-[10px] text-blue-400">{lang}</span>
-                    <button
-                        disabled
-                        className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-400 transition"
-                    >
-                        <CopyIcon className="size-3" />
-                        Copy
-                    </button>
-                </div>
-                <div className="relative min-h-[100px] overflow-x-auto p-6 font-mono text-[13px]">
-                    <pre className="opacity-50">
-                        <code>{code}</code>
-                    </pre>
-                </div>
-            </div>
-        );
-    }
+    const copyLabel = copyState === "copied" ? "Copied" : copyState === "error" ? "Copy failed" : "Copy";
 
     return (
-        <div className="overflow-hidden rounded-xl border border-card-border">
-            <div className="flex items-center justify-between border-b border-card-border px-4 py-2">
-                <Tag size="small">{lang}</Tag>
-                <Button size="small" theme="ghost-muted" onClick={handleCopy}>
-                    {copied ? <CheckIcon className="size-3" /> : <CopyIcon className="size-3" />}
-                    {copied ? "Copied" : "Copy"}
-                </Button>
+        <div className="docs-code-block">
+            <div className="docs-code-toolbar">
+                <span className="docs-code-language">{lang}</span>
+                <button type="button" className="docs-code-copy" onClick={handleCopy} aria-label={`${copyLabel} code example`}>
+                    {copyState === "copied" ? <CheckIcon size={15} aria-hidden="true" /> : <CopyIcon size={15} aria-hidden="true" />}
+                    <span>{copyLabel}</span>
+                </button>
             </div>
-            <div className="shiki-container relative overflow-x-auto font-mono text-xs" dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+            <section className="shiki-container" aria-label={`${lang} code example`}>
+                {highlightedCode ? (
+                    <div dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+                ) : (
+                    <pre>
+                        <code>{code}</code>
+                    </pre>
+                )}
+            </section>
+            <span className="sr-only" role="status" aria-live="polite">
+                {copyState === "copied" ? "Code copied to clipboard." : copyState === "error" ? "Code could not be copied." : ""}
+            </span>
         </div>
     );
 };

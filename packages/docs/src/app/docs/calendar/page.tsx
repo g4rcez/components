@@ -31,7 +31,15 @@ export default function CalendarPage() {
         to: to as Date | undefined,
     });
     return (
-        <DocsLayout title="Calendar" section="form" description="Today is the day." className="flex flex-col gap-8">
+        <DocsLayout
+            title="Calendar"
+            section="form"
+            description="Choose a date or range in context."
+            className="flex flex-col gap-8"
+            useWhen="Use Calendar when users need to inspect dates or choose a date or range in context."
+            avoidWhen="Avoid Calendar for a single known date or when a compact input is enough."
+            accessibility="Keep the calendar labeled, expose the selected date, and support previous/next month and date selection from the keyboard."
+        >
             <ComponentDemo
                 title="Basic Calendar"
                 description="A basic calendar for single date selection."

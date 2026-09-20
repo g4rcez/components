@@ -10,7 +10,7 @@ export default function DocsPage() {
     return (
         <DocsLayout title="Introduction" section="start" description="Learn more about this powerful and beautiful React component library.">
             <section className="space-y-8">
-                <div className="rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 p-6">
+                <div className="rounded-xl border border-border bg-card-background p-6">
                     <h2 className="mb-3 text-xl font-semibold text-primary">Welcome to the Documentation</h2>
                     <p className="leading-relaxed">
                         This library provides a comprehensive set of accessible, customizable, and performant React components built with TypeScript

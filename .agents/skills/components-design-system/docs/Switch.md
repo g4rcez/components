@@ -34,15 +34,15 @@ Inherits all standard HTML `input[type="checkbox"]` attributes, plus:
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token                | CSS Variable        | Purpose                         |
-| -------------------- | ------------------- | ------------------------------- |
-| `bg-input-switch-bg` | `--input-switch-bg` | Track background when unchecked |
-| `bg-primary`         | `--primary`         | Track background when checked   |
-| `bg-disabled`        | `--disabled`        | Thumb fill when unchecked       |
-| `bg-input-switch`    | `--input-switch`    | Thumb fill when checked         |
-| `focus:ring-primary` | `--primary`         | Focus ring on the toggle button |
-| `text-danger`        | `--danger`          | Error message color             |
-| `text-foreground`    | `--foreground`      | Label text color                |
+| Token                             | CSS Variable                            | Purpose                         |
+| --------------------------------- | --------------------------------------- | ------------------------------- |
+| `switch-track-background`         | `--var-switch-track-background`         | Track background when unchecked |
+| `switch-track-checked-background` | `--var-switch-track-checked-background` | Track background when checked   |
+| `switch-thumb-background`         | `--var-switch-thumb-background`         | Thumb fill when unchecked       |
+| `switch-thumb-checked-background` | `--var-switch-thumb-checked-background` | Thumb fill when checked         |
+| `color-ring`                      | `--var-color-ring`                      | Focus ring on the toggle button |
+| `color-danger`                    | `--var-color-danger`                    | Error message color             |
+| `color-foreground`                | `--var-color-foreground`                | Label text color                |
 
 ## Themes
 

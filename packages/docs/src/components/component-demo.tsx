@@ -1,6 +1,9 @@
-import { PropsWithChildren } from "react";
+"use client";
+
+import { ArrowCounterClockwiseIcon, LinkIcon } from "@phosphor-icons/react";
+import Link from "next/link";
+import { type PropsWithChildren, useState } from "react";
 import { CodeBlock } from "./code-block";
-import { LinkIcon } from "@phosphor-icons/react";
 
 type ComponentDemoProps = {
     title: string;
@@ -8,31 +11,56 @@ type ComponentDemoProps = {
     code: string;
     className?: string;
     demoClassName?: string;
+    onReset?: () => void;
 };
 
-export const ComponentDemo = ({ title, description, code, children, className = "", demoClassName = "" }: PropsWithChildren<ComponentDemoProps>) => {
-    const id = title.toLowerCase().replace(/\s+/g, "-");
+const slugify = (value: string) => value.toLocaleLowerCase().replace(/\s+/g, "-");
+
+export const ComponentDemo = ({
+    title,
+    description,
+    code,
+    children,
+    className = "",
+    demoClassName = "",
+    onReset,
+}: PropsWithChildren<ComponentDemoProps>) => {
+    const id = slugify(title);
+    const [resetAnnouncement, setResetAnnouncement] = useState("");
+
+    const handleReset = () => {
+        onReset?.();
+        setResetAnnouncement(`${title} demo reset.`);
+    };
+
     return (
-        <section id={id} className={`scroll-mt-24 space-y-6 overflow-clip ${className}`}>
-            <div className="space-y-2">
-                <h3 className="group flex items-center gap-2 text-xl font-bold tracking-tight text-foreground">
-                    <a href={`#${id}`} className="no-underline hover:underline">
-                        {title}
-                    </a>
-                    <LinkIcon className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
-                </h3>
-                <p className="max-w-3xl text-[15px] font-medium leading-relaxed text-muted-foreground">{description}</p>
-            </div>
-            <div className="overflow-clip rounded-xl border border-card-border">
-                <div
-                    className={`flex min-h-full flex-col items-center justify-center bg-gradient-to-br from-background via-primary-hover/5 to-card-background p-8 ${demoClassName}`}
-                >
-                    <div className="z-10 flex w-full flex-1 flex-col items-center justify-center">{children}</div>
+        <section id={id} className={`docs-example ${className}`} aria-labelledby={`${id}-heading`}>
+            <div className="docs-example-heading">
+                <div>
+                    <h3 id={`${id}-heading`} className="docs-example-title">
+                        <span>{title}</span>
+                        <Link className="docs-example-anchor" href={`#${id}`} aria-label={`Link to ${title}`}>
+                            <LinkIcon className="docs-example-link-icon" size={15} aria-hidden="true" />
+                        </Link>
+                    </h3>
+                    <p className="docs-example-description">{description}</p>
                 </div>
-                <div className="border-t border-card-border p-4">
+                {onReset ? (
+                    <button type="button" className="docs-reset-button" onClick={handleReset}>
+                        <ArrowCounterClockwiseIcon size={15} aria-hidden="true" />
+                        Reset
+                    </button>
+                ) : null}
+            </div>
+            <div className="docs-example-panel">
+                <div className={`docs-example-preview ${demoClassName}`}>{children}</div>
+                <div className="docs-example-code">
                     <CodeBlock code={code} />
                 </div>
             </div>
+            <span className="sr-only" role="status" aria-live="polite">
+                {resetAnnouncement}
+            </span>
         </section>
     );
 };

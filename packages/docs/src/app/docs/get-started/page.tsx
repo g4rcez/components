@@ -30,7 +30,7 @@ export default function GetStartedPage() {
                         Install the library and its peer dependencies using your preferred package manager. We recommend `pnpm` for its speed and
                         efficiency.
                     </p>
-                    <div className="overflow-hidden rounded-xl border border-border/40 bg-background shadow-sm">
+                    <div className="overflow-hidden rounded-xl border border-border/40 bg-background">
                         <div className="flex items-center justify-between border-b border-border/40 bg-muted/30 px-4 py-2">
                             <span className="text-xs font-medium tracking-wide text-muted-foreground">Terminal</span>
                         </div>
@@ -46,6 +46,9 @@ export default function GetStartedPage() {
                     <ComponentDemo
                         title="Interactive Demo"
                         description="Our components use Framer Motion for physically-accurate animations. Try triggering a system notification."
+                        onReset={() => {
+                            count.current = 0;
+                        }}
                         code={`import { Button, useNotification } from "@g4rcez/components";
 
 function App() {
