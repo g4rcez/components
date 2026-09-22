@@ -29,6 +29,17 @@ import { Stats } from "@g4rcez/components/stats";
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-stats-rounded` | `calc(var(--var-radius-base) * 1)` |
+| `--var-stats-gap` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-stats-icon-p` | `calc(var(--var-spacing-base) * 2)` |
+| `--var-stats-icon-size` | `calc(var(--var-spacing-base) * 2.5)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                     | CSS Variable           | Purpose                             |

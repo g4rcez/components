@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 
-import { Toolbar } from "../src/components/floating/toolbar";
+import { Toolbar } from "../src/components/floating/toolbar/toolbar";
 
 describe("Toolbar", () => {
     it("exposes an accessible toolbar name and preserves root props", async () => {

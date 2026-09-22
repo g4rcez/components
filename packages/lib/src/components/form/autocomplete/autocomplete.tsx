@@ -143,7 +143,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             [innerOptions, shadow]
         );
 
-        const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
+        const [h, setH] = useState<number | null>(null);
 
         const setClosed = () => {
             setOpen(false);
@@ -217,7 +217,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 setH(0);
                 return;
             }
-            const id = setTimeout(() => setH(Math.min(320, displayList.length * MIN_SIZE)), 100);
+            const id = setTimeout(() => setH(null), 100);
             return () => clearTimeout(id);
         }, [open, displayList.length]);
 
@@ -295,6 +295,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const listboxId = `${shadowId}-listbox`;
 
         const isEmpty = displayList.length === 0;
+        // Measured content is physical geometry; only authored estimates/caps scale.
+        const resultHeight = `min(var(--var-autocomplete-panel-max-block-size, calc(var(--var-spacing-base) * 20)), ${h === null ? `calc(var(--var-autocomplete-option-min-block-size, calc(var(--var-spacing-base) * 2.5)) * ${displayList.length})` : `calc(${h}px + var(--var-spacing-base) * 0.125)`})`;
 
         const isTopPlacement = placement === "top" || placement === "top-start";
 
@@ -389,10 +391,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 props.onChange?.(synthesizeChangeEvent(hiddenInput.current));
             };
 
+            // SAFETY: Shared field props pass through; select-specific value, options and onChange are supplied below.
+            const selectProps = props as unknown as SelectProps;
             return (
                 <Fragment>
                     <Select
-                        {...(props as unknown as SelectProps)}
+                        {...selectProps}
                         left={left}
                         error={error}
                         right={right}
@@ -453,7 +457,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     labelClassName
                 )}
                 placeholder={props.placeholder}
-                ref={fieldset as unknown as Ref<HTMLInputElement>}
+                ref={
+                    /* SAFETY: InputField attaches this ref to its fieldset despite its public input-ref type. */ fieldset as unknown as Ref<HTMLInputElement>
+                }
                 feedback={open && isTopPlacement ? props.title : feedback}
                 right={
                     <span className={autocompleteStyles.slots.actions}>
@@ -595,15 +601,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     autocompleteStyles.slots.panel,
                                     isTopPlacement ? autocompletePanelTopClassName : autocompletePanelBottomClassName
                                 )}
-                                animate={{ height: isEmpty ? "auto" : h }}
+                                animate={{ height: isEmpty ? "auto" : resultHeight }}
                                 onAnimationComplete={() => {
                                     if (!open) {
                                         setH(0);
                                         return;
                                     }
                                     const li = refs.floating.current?.querySelector("li");
-                                    const sum = (li?.getBoundingClientRect().height ?? MIN_SIZE) * displayList.length;
-                                    flushSync(() => setH(Math.min(320, sum + 2)));
+                                    if (li) flushSync(() => setH(li.getBoundingClientRect().height * displayList.length));
                                 }}
                             >
                                 {isEmpty ? (
@@ -619,7 +624,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         role="listbox"
                                         ref={setScrollElement}
                                         hidden={isEmpty}
-                                        style={{ maxHeight: h, overflowY: "auto" }}
+                                        style={{ maxHeight: resultHeight, overflowY: "auto" }}
                                         className={autocompleteStyles.slots.scroll}
                                     >
                                         {displayList.map((option, i) => (
@@ -635,7 +640,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                         hidden={isEmpty}
                                         data={displayList}
                                         context={{ listboxId }}
-                                        style={{ height: h }}
+                                        style={{ height: resultHeight }}
                                         initialItemCount={displayList.length}
                                         defaultItemHeight={MIN_SIZE}
                                         itemSize={measureItemSize}

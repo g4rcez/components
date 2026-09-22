@@ -1,5 +1,4 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { defaultGeometryTokens } from "../src/styles/geometry-defaults";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
@@ -41,9 +40,8 @@ describe("form field sizes", () => {
             expect(screen.getByLabelText(`${size} button`)).toHaveClass(`__button--size-${size}`);
         }
 
-        const tokens = readFileSync(resolve(__dirname, "../src/styles/tokens.css"), "utf8");
         const tokenValue = (name: string) => {
-            const value = tokens.match(new RegExp(`--var-${name}:\\s*([^;]+);`))?.[1];
+            const value = defaultGeometryTokens[`--var-${name}` as keyof typeof defaultGeometryTokens];
             expect(value, `Missing --var-${name}`).toBeDefined();
             return value;
         };

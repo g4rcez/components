@@ -170,7 +170,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
         const [, tick] = useState(0);
-        const [h, setH] = useState(() => Math.min(320, MIN_SIZE * options.length));
+        const [h, setH] = useState<number | null>(null);
         const removeScrollRef = useRemoveScroll<HTMLElement>(open, "block-only");
 
         const innerOptions = useMemo<MultiSelectItemProps[]>(
@@ -194,6 +194,8 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const values = useMemo(() => Array.from(selectedValue.keys()), [selectedValue]);
 
         const isEmpty = displayList.length === 0;
+        // Measured content is physical geometry; only authored estimates/caps scale.
+        const resultHeight = `min(var(--var-multi-select-results-max-block-size, calc(var(--var-spacing-base) * 18)), ${h === null ? `calc(var(--var-spacing-base) * ${displayList.length * 2.5})` : `calc(${h}px + var(--var-spacing-base) * 0.125)`})`;
 
         const openDropdown = () => flushSync(() => setOpen(true));
 
@@ -272,7 +274,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                 setH(0);
                 return;
             }
-            const id = setTimeout(() => setH(Math.min(320, displayList.length * MIN_SIZE)), 100);
+            const id = setTimeout(() => setH(null), 100);
             return () => clearTimeout(id);
         }, [open, displayList.length]);
 
@@ -557,7 +559,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                     {isEmpty ? null : (
                                         <motion.div
                                             initial={false}
-                                            animate={{ height: isEmpty ? "auto" : h }}
+                                            animate={{ height: isEmpty ? "auto" : resultHeight }}
                                             className={multiSelectStyles.slots.results}
                                             onAnimationComplete={() => {
                                                 if (!open) {
@@ -565,8 +567,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                     return;
                                                 }
                                                 const li = refs.floating.current?.querySelector("li");
-                                                const sum = (li?.getBoundingClientRect().height ?? MIN_SIZE) * displayList.length;
-                                                flushSync(() => setH(Math.min(320, sum + 2)));
+                                                if (li) flushSync(() => setH(li.getBoundingClientRect().height * displayList.length));
                                             }}
                                         >
                                             <Virtuoso
@@ -575,11 +576,11 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                                                 hidden={isEmpty}
                                                 data={displayList}
                                                 context={{ listboxId }}
-                                                style={{ height: h }}
+                                                style={{ height: resultHeight }}
                                                 initialItemCount={displayList.length}
                                                 defaultItemHeight={MIN_SIZE}
                                                 components={components as never}
-                                                totalListHeightChanged={(totalHeight) => setH(Math.min(320, totalHeight))}
+                                                totalListHeightChanged={setH}
                                                 scrollerRef={(e) => {
                                                     scroller.current = e as HTMLElement;
                                                     removeScrollRef.current = e as HTMLElement;

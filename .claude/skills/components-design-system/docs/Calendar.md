@@ -44,6 +44,17 @@ import { Calendar } from "@g4rcez/components/calendar";
 
 ## Design Tokens and CSS
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-calendar-day-cell-padding` | `calc(var(--var-spacing-base) / 4)` |
+| `--var-calendar-day-button-size` | `calc(var(--var-spacing-base) * 2.25)` |
+| `--var-calendar-focus-ring-width` | `calc(var(--var-spacing-base) / 4)` |
+| `--var-calendar-selected-ring-width` | `calc(var(--var-spacing-base) / 4)` |
+
 The component ships a plain CSS chunk at `@g4rcez/components/calendar.css`. Its stable root selector is `.__calendar`; use the component style manifest for its slots and dependencies. Calendar-specific token values are defined in the library token sheet and should be overridden with semantic `--var-*` variables.
 
 ## Examples

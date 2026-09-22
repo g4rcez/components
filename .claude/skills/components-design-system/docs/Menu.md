@@ -44,6 +44,17 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-menu-item-min-inline-size` | `calc(var(--var-spacing-base) * 9)` |
+| `--var-menu-item-padding` | `calc(var(--var-spacing-base) * 0.625)` |
+| `--var-menu-item-outline-width` | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-menu-item-outline-offset` | `calc(var(--var-spacing-base) * 0.125)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                     | CSS Variable            | Purpose                        |

@@ -57,6 +57,17 @@ On mobile (`< 64 rem`) drawers automatically become sheets unless `forceType` is
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-modal-surface-min-inline-size` | `calc(var(--var-spacing-base) * 20)` |
+| `--var-modal-surface-gap` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-modal-dialog-max-block-size` | `calc(var(--var-spacing-base) * 40)` |
+| `--var-modal-surface-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 1.333333)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                    | CSS Variable            | Purpose                                            |

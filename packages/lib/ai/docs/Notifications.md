@@ -89,6 +89,17 @@ const subscription = notify(message, options);
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-notification-surface-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 1.333333)` |
+| `--var-notification-surface-backdrop-blur` | `calc( var(--var-spacing-base) * 0.75 )` |
+| `--var-notification-content-gap` | `calc(var(--var-spacing-base) * 0.75)` |
+| `--var-notification-content-padding` | `calc(var(--var-spacing-base) * 1)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                         | CSS Variable             | Purpose                         |

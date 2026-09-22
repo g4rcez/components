@@ -5,8 +5,9 @@ import { defaultTokens } from "./src/styles/default-tokens.ts";
 import { components } from "./src/styles/components.ts";
 import { defaultLightTheme as theme } from "./src/styles/theme.ts";
 import customPlugins from "./plugin.tailwind.ts";
+import { geometryToken } from "./src/styles/geometry-defaults.ts";
 
-const cssVar = (name: string) => `var(--var-${name})`;
+const cssVar = geometryToken;
 const colorVar = (name: string) => cssVar(`color-${name}`);
 
 type TailwindColorOptions = {

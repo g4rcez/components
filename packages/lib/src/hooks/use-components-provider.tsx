@@ -21,6 +21,7 @@ type FlatToken = {
 type NumericToken = {
     amount: number;
     unit: string;
+    reference?: string;
 };
 
 type CssVariableProperties = CSSProperties & Record<`--${string}`, string>;
@@ -91,7 +92,12 @@ const legacyAttributeAliases = (attribute: string) => {
 
 const parseNumericToken = (value: string): NumericToken | undefined => {
     const match = value.match(/^(-?\d*\.?\d+)([a-z%]+)$/i);
-    return match ? { amount: Number(match[1]), unit: match[2] } : undefined;
+    if (match) return { amount: Number(match[1]), unit: match[2] };
+    const derived = value.match(/^calc\(\s*var\((--var-(?:spacing-base|radius-base|fontsize))\)\s*([*/])\s*(-?\d*\.?\d+)\s*\)$/);
+    if (!derived) return undefined;
+    const operand = Number(derived[3]);
+    if (derived[2] === "/" && operand === 0) return undefined;
+    return { amount: derived[2] === "/" ? 1 / operand : operand, unit: "", reference: derived[1] };
 };
 
 const calcFromDefaultDelta = (baseReference: string, baseDefault: string | undefined, targetDefault: string) => {
@@ -99,11 +105,12 @@ const calcFromDefaultDelta = (baseReference: string, baseDefault: string | undef
 
     const base = parseNumericToken(baseDefault);
     const target = parseNumericToken(targetDefault);
-    if (!base || !target || base.unit !== target.unit) return undefined;
+    if (!base || !target || base.unit !== target.unit || base.reference !== target.reference) return undefined;
 
-    const delta = Number((target.amount - base.amount).toFixed(4));
+    const delta = Number((target.amount - base.amount).toFixed(6));
     if (delta === 0) return `var(${baseReference})`;
-    return `calc(var(${baseReference}) ${delta > 0 ? "+" : "-"} ${Math.abs(delta)}${base.unit})`;
+    const distance = base.reference ? `calc(var(${base.reference}) * ${Math.abs(delta)})` : `${Math.abs(delta)}${base.unit}`;
+    return `calc(var(${baseReference}) ${delta > 0 ? "+" : "-"} ${distance})`;
 };
 
 const runtimeAttributeName = (attribute: string) => {
@@ -194,7 +201,7 @@ const componentTokenProperties = (tokens: TokenTree): CSSProperties => {
 
 export const ComponentsProvider = (props: PropsWithChildren<ContextProps>) => {
     const css = useMemo(() => {
-        const componentOverrides = props.injectComponentTokens ? (props.components ? toTokenTree(props.components) : {}) : {};
+        const componentOverrides = props.components ? toTokenTree(props.components) : {};
         const componentTokens = mergeTokenTree(mergeTokenTree(defaultLightThemeTokens.components, defaultComponentTokens), componentOverrides);
         const styles =
             componentOverrides && props.injectComponentTokens ? { display: "contents", ...componentTokenProperties(componentOverrides) } : undefined;

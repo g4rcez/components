@@ -13,7 +13,7 @@ fieldset:disabled .__select__field {
 }
 
 .__select__trigger {
-    margin-block-start: var(--var-free-text-surface-padding-block);
+    margin-block-start: var(--var-free-text-surface-padding-block, calc(var(--var-spacing-base) * 0.25));
     padding: 0;
     color: inherit;
     border: 0;
@@ -25,7 +25,7 @@ fieldset:disabled .__select__field {
 }
 
 .__select:is(.__select--size-min, .__select--size-small, .__select--size-tiny).__select__trigger {
-    margin-block-start: var(--var-free-text-small-surface-padding-block);
+    margin-block-start: var(--var-free-text-small-surface-padding-block, calc( var(--var-spacing-base) * 0.125 ));
 }
 
 .__select__trigger:enabled:hover {
@@ -38,14 +38,14 @@ fieldset:disabled .__select__field {
 }
 
 .__select__trigger-icon {
-    inline-size: var(--var-input-field-icon-size);
-    block-size: var(--var-input-field-icon-size);
+    inline-size: var(--var-input-field-icon-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-input-field-icon-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__select:is(.__select--size-min, .__select--size-small, .__select--size-tiny) .__select__trigger-icon,
 .__select:is(.__select--size-min, .__select--size-small, .__select--size-tiny).__select__trigger-icon {
-    inline-size: var(--var-input-field-small-icon-size);
-    block-size: var(--var-input-field-small-icon-size);
+    inline-size: var(--var-input-field-small-icon-size, calc(var(--var-spacing-base) * 0.875));
+    block-size: var(--var-input-field-small-icon-size, calc(var(--var-spacing-base) * 0.875));
 }
 
 .__select__trigger-label {

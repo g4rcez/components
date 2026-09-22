@@ -1,7 +1,7 @@
 .__stats {
     overflow: hidden;
     border: 1px solid var(--var-stats-border-color);
-    border-radius: var(--var-stats-rounded, var(--stats-radius));
+    border-radius: var(--var-stats-rounded, var(--stats-radius, calc(var(--var-radius-base) * 1)));
     background: var(--var-stats-background);
     box-shadow: var(--var-shadow-card, var(--shadow-card));
 }
@@ -9,7 +9,7 @@
 .__stats__header {
     display: flex;
     align-items: stretch;
-    gap: var(--var-stats-gap, var(--stats-gap));
+    gap: var(--var-stats-gap, var(--stats-gap, calc(var(--var-spacing-base) * 1)));
 }
 
 .__stats__icon {
@@ -17,13 +17,13 @@
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    padding: var(--var-stats-icon-p, var(--stats-icon-p));
+    padding: var(--var-stats-icon-p, var(--stats-icon-p, calc(var(--var-spacing-base) * 2)));
     background: var(--var-stats-icon-background);
 }
 
 .__stats__icon-svg {
-    inline-size: var(--var-stats-icon-size, var(--stats-icon-size));
-    block-size: var(--var-stats-icon-size, var(--stats-icon-size));
+    inline-size: var(--var-stats-icon-size, var(--stats-icon-size, calc(var(--var-spacing-base) * 2.5)));
+    block-size: var(--var-stats-icon-size, var(--stats-icon-size, calc(var(--var-spacing-base) * 2.5)));
     color: var(--var-stats-icon-foreground);
 }
 
@@ -31,9 +31,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: var(--var-stats-inner-gap, var(--stats-inner-gap));
-    padding-block: var(--var-stats-p, var(--stats-p));
-    padding-inline-end: var(--var-stats-p, var(--stats-p));
+    gap: var(--var-stats-inner-gap, var(--stats-inner-gap, calc(var(--var-spacing-base) * 0.25)));
+    padding-block: var(--var-stats-p, var(--stats-p, calc(var(--var-spacing-base) * 1.5)));
+    padding-inline-end: var(--var-stats-p, var(--stats-p, calc(var(--var-spacing-base) * 1.5)));
 }
 
 .__stats__title {
@@ -51,6 +51,6 @@
 
 .__stats__footer {
     border-block-start: 1px solid var(--var-stats-border-color);
-    padding-block: var(--var-stats-footer-py, var(--stats-footer-py));
-    padding-inline: var(--var-stats-footer-px, var(--stats-footer-px));
+    padding-block: var(--var-stats-footer-py, var(--stats-footer-py, calc(var(--var-spacing-base) * 0.5)));
+    padding-inline: var(--var-stats-footer-px, var(--stats-footer-px, calc(var(--var-spacing-base) * 1.5)));
 }

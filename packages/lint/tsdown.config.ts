@@ -16,4 +16,15 @@ export default defineConfig({
     target: "es2022",
     minify: false,
     clean: true,
+    inputOptions(options) {
+        // tsdown 0.12 injects empty legacy options that Rolldown 1 no longer accepts.
+        const legacyOptions: typeof options & { define?: unknown; inject?: unknown } = options;
+        for (const key of ["define", "inject"] as const) {
+            const value = legacyOptions[key];
+            if (value && typeof value === "object" && Object.keys(value).length === 0) {
+                delete legacyOptions[key];
+            }
+        }
+        return options;
+    },
 });

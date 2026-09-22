@@ -7,7 +7,7 @@ import { css } from "../../lib/dom";
 import { pageCalendarWeekViewStyles } from "./week-view.styles";
 import { getHourSlots, toDateKey, formatWeekdayShort, formatDay, formatHourLabel, formatFullDate, computeEventColumns } from "./page-calendar.utils";
 
-const HOUR_HEIGHT = 48;
+const HOUR_HEIGHT = "var(--var-page-calendar-hour-block-size, calc(var(--var-spacing-base) * 3))";
 
 type WeekViewProps = {
     days: Date[];
@@ -17,10 +17,10 @@ type WeekViewProps = {
     onSlotClick?: (date: Date) => void;
 };
 
-function getTopOffset(event: CalendarEvent): number {
+function getTopOffset(event: CalendarEvent): string {
     const hour = event.date.getHours();
     const minutes = event.date.getMinutes();
-    return hour * HOUR_HEIGHT + (minutes / 60) * HOUR_HEIGHT;
+    return `calc(${HOUR_HEIGHT} * ${hour + minutes / 60})`;
 }
 
 export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick }: WeekViewProps) {
@@ -102,8 +102,8 @@ export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlot
                                     style={{
                                         top: getTopOffset(event),
                                         height: HOUR_HEIGHT,
-                                        left: `calc(${(columnIndex / columnCount) * 100}% + 1px)`,
-                                        width: `calc(${100 / columnCount}% - 2px)`,
+                                        left: `calc(${(columnIndex / columnCount) * 100}% + var(--var-spacing-base) * 0.0625)`,
+                                        width: `calc(${100 / columnCount}% - var(--var-spacing-base) * 0.125)`,
                                     }}
                                 >
                                     <EventPill event={event} onClick={() => onEventClick(event)} />

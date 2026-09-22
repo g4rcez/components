@@ -6,7 +6,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    gap: var(--var-step-gap);
+    gap: var(--var-step-gap, calc(var(--var-spacing-base) * 1));
 }
 
 @media (min-width: 1024px) {
@@ -77,8 +77,8 @@
     position: relative;
     display: flex;
     aspect-ratio: 1 / 1;
-    width: var(--var-step-marker-size);
-    height: var(--var-step-marker-size);
+    width: var(--var-step-marker-size, calc(var(--var-spacing-base) * 2.5));
+    height: var(--var-step-marker-size, calc(var(--var-spacing-base) * 2.5));
     align-items: center;
     justify-content: center;
     border-style: solid;
@@ -121,8 +121,8 @@
 }
 
 .__step__status-icon {
-    width: var(--var-step-icon-size);
-    height: var(--var-step-icon-size);
+    width: var(--var-step-icon-size, calc(var(--var-spacing-base) * 1.5));
+    height: var(--var-step-icon-size, calc(var(--var-spacing-base) * 1.5));
     color: currentColor;
 }
 
@@ -131,7 +131,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-inline: var(--var-step-label-padding-inline);
+    padding-inline: var(--var-step-label-padding-inline, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__step__title {

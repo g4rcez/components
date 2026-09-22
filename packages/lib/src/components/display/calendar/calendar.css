@@ -7,7 +7,7 @@
 
 .__calendar__day-cell {
     position: relative;
-    padding: var(--var-calendar-day-cell-padding);
+    padding: var(--var-calendar-day-cell-padding, calc(var(--var-spacing-base) / 4));
     vertical-align: middle;
 }
 
@@ -21,7 +21,7 @@
 .__calendar__day-cell[data-in-range="true"]::before {
     position: absolute;
     z-index: var(--var-layer-normal);
-    inset-block: var(--var-calendar-day-cell-padding);
+    inset-block: var(--var-calendar-day-cell-padding, calc(var(--var-spacing-base) / 4));
     inset-inline: 0;
     pointer-events: none;
     background-color: var(--var-calendar-range-background);
@@ -55,8 +55,8 @@
     z-index: var(--var-layer-normal);
     isolation: isolate;
     display: flex;
-    width: var(--var-calendar-day-button-size);
-    height: var(--var-calendar-day-button-size);
+    width: var(--var-calendar-day-button-size, calc(var(--var-spacing-base) * 2.25));
+    height: var(--var-calendar-day-button-size, calc(var(--var-spacing-base) * 2.25));
     align-items: center;
     justify-content: center;
     margin-inline: auto;
@@ -72,12 +72,12 @@
 .__calendar__day-button:enabled:hover {
     background-color: var(--var-calendar-day-button-background-hover);
     color: var(--var-color-foreground);
-    transform: translateY(calc(0px - var(--var-calendar-day-cell-padding)));
+    transform: translateY(calc(0px - var(--var-calendar-day-cell-padding, calc(var(--var-spacing-base) / 4))));
 }
 
 .__calendar__day-button:focus-visible {
     border-color: var(--var-calendar-focus-border);
-    box-shadow: 0 0 0 var(--var-calendar-focus-ring-width) var(--var-calendar-focus-ring);
+    box-shadow: 0 0 0 var(--var-calendar-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-calendar-focus-ring);
 }
 
 .__calendar__day-button:disabled {
@@ -97,14 +97,14 @@
 .__calendar__day-button--selected {
     background-color: var(--var-color-primary);
     color: var(--var-color-primary-foreground);
-    box-shadow: inset 0 0 0 var(--var-calendar-selected-ring-width) var(--var-calendar-selected-ring);
+    box-shadow: inset 0 0 0 var(--var-calendar-selected-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-calendar-selected-ring);
 }
 
 .__calendar__day-cell[data-range-start="true"] .__calendar__day-button--selected,
 .__calendar__day-cell[data-range-end="true"] .__calendar__day-button--selected {
     box-shadow:
-        0 0 0 var(--var-calendar-selected-ring-width) var(--var-color-background),
-        inset 0 0 0 var(--var-calendar-selected-ring-width) var(--var-calendar-selected-ring);
+        0 0 0 var(--var-calendar-selected-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-background),
+        inset 0 0 0 var(--var-calendar-selected-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-calendar-selected-ring);
 }
 
 .__calendar__day-button--selected:enabled:hover,
@@ -128,7 +128,7 @@
 
 .__calendar__range-label {
     position: absolute;
-    top: var(--var-calendar-range-label-inset-block-start);
+    top: var(--var-calendar-range-label-inset-block-start, calc( var(--var-spacing-base) * -0.5 ));
     left: 0;
     height: 100%;
     width: 100%;
@@ -144,7 +144,7 @@
     display: flex;
     justify-content: center;
     overflow: hidden;
-    border-radius: var(--var-calendar-header-radius);
+    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
     text-align: center;
     flex-direction: column;
 }
@@ -162,10 +162,10 @@
 .__calendar__month-header {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(7, minmax(var(--var-calendar-day-button-size), 1fr));
+    grid-template-columns: repeat(7, minmax(var(--var-calendar-day-button-size, calc(var(--var-spacing-base) * 2.25)), 1fr));
     align-items: center;
     width: 100%;
-    margin-bottom: var(--var-calendar-table-margin-block-start);
+    margin-bottom: var(--var-calendar-table-margin-block-start, calc(var(--var-spacing-base) * 1));
 }
 
 .__calendar__previous-button,
@@ -175,7 +175,7 @@
     border: var(--var-border-hairline) solid transparent;
     border-radius: var(--var-rounded-full);
     color: var(--var-color-muted-foreground);
-    padding: var(--var-calendar-nav-button-padding);
+    padding: var(--var-calendar-nav-button-padding, calc(var(--var-spacing-base) / 4));
     transition-property: color, background-color, border-color;
     transition-duration: var(--var-calendar-transition-duration);
     transition-timing-function: var(--var-calendar-transition-timing);
@@ -200,8 +200,8 @@
 
 .__calendar__nav-icon {
     display: inline-flex;
-    width: var(--var-calendar-nav-icon-size);
-    height: var(--var-calendar-nav-icon-size);
+    width: var(--var-calendar-nav-icon-size, calc(var(--var-spacing-base) * 1));
+    height: var(--var-calendar-nav-icon-size, calc(var(--var-spacing-base) * 1));
     align-items: center;
     justify-content: center;
 }
@@ -223,15 +223,15 @@
     width: fit-content;
     align-items: center;
     justify-content: center;
-    gap: var(--var-calendar-month-controls-gap);
-    padding-block: var(--var-calendar-month-controls-padding-block);
+    gap: var(--var-calendar-month-controls-gap, calc(var(--var-spacing-base) * 0.5));
+    padding-block: var(--var-calendar-month-controls-padding-block, calc( var(--var-spacing-base) / 4 ));
 }
 
 .__calendar__month-select,
 .__calendar__year-input {
     cursor: pointer;
     appearance: none;
-    border-radius: var(--var-calendar-header-radius);
+    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
     background-color: transparent;
     color: var(--var-color-foreground);
     text-align: center;
@@ -245,7 +245,7 @@
 }
 
 .__calendar__year-input {
-    width: var(--var-calendar-year-input-width);
+    width: var(--var-calendar-year-input-width, calc(var(--var-spacing-base) * 4));
 }
 
 .__calendar__month-select:hover,
@@ -267,11 +267,11 @@
 .__calendar[data-layout="default"] .__calendar__table {
     table-layout: fixed;
     border-collapse: collapse;
-    border-spacing: var(--var-calendar-day-cell-padding);
+    border-spacing: var(--var-calendar-day-cell-padding, calc(var(--var-spacing-base) / 4));
 }
 
 .__calendar__weekday {
-    padding-block: var(--var-calendar-weekday-padding-block);
+    padding-block: var(--var-calendar-weekday-padding-block, calc(var(--var-spacing-base) * 0.5));
     color: var(--var-color-muted-foreground);
     font-size: var(--var-calendar-weekday-font-size);
     font-weight: var(--var-calendar-weekday-font-weight);
@@ -279,7 +279,7 @@
 }
 
 .__calendar__datetime {
-    margin-block: var(--var-calendar-datetime-margin-block);
+    margin-block: var(--var-calendar-datetime-margin-block, calc(var(--var-spacing-base) * 1));
     display: grid;
     align-items: center;
 }
@@ -289,14 +289,14 @@
 }
 
 .__calendar__footer {
-    margin-top: var(--var-calendar-footer-margin-block-start);
+    margin-top: var(--var-calendar-footer-margin-block-start, calc(var(--var-spacing-base) * 1));
     text-align: center;
     color: var(--var-color-primary);
 }
 
 .__calendar__today-button {
-    border-radius: var(--var-calendar-header-radius);
-    padding: var(--var-calendar-month-controls-padding-block) var(--var-calendar-nav-button-padding);
+    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    padding: var(--var-calendar-month-controls-padding-block, calc( var(--var-spacing-base) / 4 )) var(--var-calendar-nav-button-padding, calc(var(--var-spacing-base) / 4));
     transition-property: color, background-color, transform;
     transition-duration: var(--var-calendar-transition-duration);
     transition-timing-function: var(--var-calendar-transition-timing);
@@ -305,7 +305,7 @@
 .__calendar__today-button:hover,
 .__calendar__today-button:focus-visible {
     background-color: var(--var-calendar-nav-button-background-hover);
-    transform: translateY(calc(0px - var(--var-calendar-day-cell-padding)));
+    transform: translateY(calc(0px - var(--var-calendar-day-cell-padding, calc(var(--var-spacing-base) / 4))));
 }
 
 .__calendar__numeric {

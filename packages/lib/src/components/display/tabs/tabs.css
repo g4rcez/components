@@ -11,7 +11,7 @@
 
 .__tabs__header {
     position: relative;
-    margin-block-end: var(--var-tabs-header-margin-block-end);
+    margin-block-end: var(--var-tabs-header-margin-block-end, calc(var(--var-spacing-base) * 0.5));
     overflow-x: auto;
 }
 
@@ -59,8 +59,8 @@
     display: block;
     width: 100%;
     white-space: nowrap;
-    padding-block: var(--var-tabs-tab-padding-block);
-    padding-inline: var(--var-tabs-tab-padding-inline);
+    padding-block: var(--var-tabs-tab-padding-block, calc(var(--var-spacing-base) * 1));
+    padding-inline: var(--var-tabs-tab-padding-inline, calc(var(--var-spacing-base) * 2.5));
 }
 
 .__tabs__tab:disabled {

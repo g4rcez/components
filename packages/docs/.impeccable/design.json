@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 2,
+  "title": "Design System: Components Website",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Cyan", "canonical": "hsla(188, 86%, 57%, 1)" },
+      "canvas": { "role": "neutral", "displayName": "Ink" },
+      "light-canvas": { "role": "neutral", "displayName": "White" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Landing title", "purpose": "Landing headline, with a smaller mobile size." },
+      "headline": { "displayName": "Documentation title", "purpose": "One primary heading per article." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "control-color", "value": "150ms ease", "purpose": "Action and navigation color changes." },
+      { "name": "catalog-arrow", "value": "180ms ease-out", "purpose": "Small arrow translation on catalog-link hover; suppressed for reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "stack", "value": "640px" },
+      { "name": "sidebar", "value": "960px" },
+      { "name": "desktop-outline", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary navigation action on the landing page.",
+      "html": "<a class=\"ds-primary\" href=\"#\">Get started</a>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;min-height:44px;padding:12px 20px;background:var(--docs-primary);color:var(--docs-canvas);border-radius:8px;font:600 14px var(--font-sans);text-decoration:none;box-sizing:border-box;transition:background-color 150ms ease}.ds-primary:hover{background:var(--docs-text)}.ds-primary:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary navigation action with an outline.",
+      "html": "<a class=\"ds-secondary\" href=\"#\">Explore the components</a>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;min-height:44px;padding:12px 20px;border:1px solid var(--docs-border);border-radius:8px;color:var(--docs-text);font:600 14px var(--font-sans);text-decoration:none;box-sizing:border-box}.ds-secondary:hover{background:var(--docs-surface-raised);border-color:var(--docs-text-muted)}.ds-secondary:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+    },
+    {
+      "name": "Documentation search",
+      "kind": "input",
+      "refersTo": "search",
+      "description": "Filter the documentation navigation.",
+      "html": "<input class=\"ds-search\" type=\"search\" aria-label=\"Search documentation\" placeholder=\"Search docs\" />",
+      "css": ".ds-search{height:42px;padding:0 12px;border:1px solid var(--docs-border);border-radius:8px;background:var(--docs-surface);color:var(--docs-text);font:13px var(--font-sans);caret-color:var(--docs-primary)}.ds-search::placeholder{color:var(--docs-text-muted)}.ds-search:hover{border-color:var(--docs-text-muted)}.ds-search:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+    },
+    {
+      "name": "Current navigation link",
+      "kind": "nav",
+      "description": "Cyan selection on a one-pixel navigation rail.",
+      "html": "<a class=\"ds-nav\" href=\"#\" aria-current=\"page\">Introduction</a>",
+      "css": ".ds-nav{display:block;padding:7px 12px;border-left:1px solid var(--docs-primary);background:var(--docs-primary-soft);color:var(--docs-primary);font:600 13px/1.35 var(--font-sans);text-decoration:none}.ds-nav:hover{background:var(--docs-surface-raised)}.ds-nav:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+    },
+    {
+      "name": "Guide link",
+      "kind": "card",
+      "description": "A bounded link to installation or theming.",
+      "html": "<a class=\"ds-guide\" href=\"#\"><strong>Get started</strong><span>Install the library and build your first interface.</span></a>",
+      "css": ".ds-guide{display:block;max-width:280px;padding:20px;border:1px solid var(--docs-border);border-radius:12px;color:var(--docs-text);font:14px var(--font-sans);text-decoration:none}.ds-guide strong{display:block;margin-bottom:8px;font-weight:600}.ds-guide span{display:block;color:var(--docs-text-muted);font-size:13px;line-height:1.6}.ds-guide:hover{border-color:var(--docs-primary);background:var(--docs-primary-soft)}.ds-guide:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "overview": "The website uses the developer-documentation structure requested from Tailwind CSS and Next.js: a stable header, fine borders, clear type, and examples that demonstrate the library. Cyan connects navigation and actions across the landing page and documentation.",
+    "rules": [],
+    "dos": [
+      "Do preserve routes, examples, theme switching, and keyboard navigation.",
+      "Do use cyan for the website's primary actions and navigation.",
+      "Do keep the landing preview interactive and code horizontally scrollable.",
+      "Do respect reduced-motion preferences."
+    ],
+    "donts": [
+      "Don't introduce gradients, promotional statistics, or unsupported product claims.",
+      "Don't change library component tokens as part of website styling.",
+      "Don't use a full expanded page outline to push mobile content below the fold."
+    ]
+  }
+}

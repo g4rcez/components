@@ -20,6 +20,10 @@ npm install @g4rcez/components
 import "@g4rcez/components/index.css";
 ```
 
+## Geometry and default lookup
+
+Read [Geometry tokens](geometry-tokens.md) for independent spacing/radius bases, scoped overrides, and migration notes. Import `defaultGeometryTokens`, `defaultGeometryBases`, and `defaultLightThemeTokens` from `@g4rcez/components` to inspect defaults; derived geometry is no longer declared on `:root`.
+
 ## All Components
 
 | Component      | Category | Import                                                              | Description                                                               |

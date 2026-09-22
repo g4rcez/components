@@ -19,12 +19,12 @@ import {
     computeEventColumns,
 } from "./page-calendar.utils";
 
-const HOUR_HEIGHT = 48;
+const HOUR_HEIGHT = "var(--var-page-calendar-hour-block-size, calc(var(--var-spacing-base) * 3))";
 
-function getTopOffset(event: CalendarEvent): number {
+function getTopOffset(event: CalendarEvent): string {
     const hour = event.date.getHours();
     const minutes = event.date.getMinutes();
-    return hour * HOUR_HEIGHT + (minutes / 60) * HOUR_HEIGHT;
+    return `calc(${HOUR_HEIGHT} * ${hour + minutes / 60})`;
 }
 
 type DayViewProps<T extends CalendarEventBase> = {
@@ -124,8 +124,8 @@ export function DayView<T extends CalendarEventBase>({
                                 style={{
                                     top: getTopOffset(event),
                                     height: HOUR_HEIGHT,
-                                    left: `calc(${(columnIndex / columnCount) * 100}% + 2px)`,
-                                    width: `calc(${100 / columnCount}% - 4px)`,
+                                    left: `calc(${(columnIndex / columnCount) * 100}% + var(--var-spacing-base) * 0.125)`,
+                                    width: `calc(${100 / columnCount}% - var(--var-spacing-base) * 0.25)`,
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                                 onKeyDown={(e) => e.stopPropagation()}

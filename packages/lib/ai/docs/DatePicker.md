@@ -58,6 +58,17 @@ import { DatePicker } from "@g4rcez/components/date-picker";
 
 ## Design Tokens and CSS
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-date-picker-calendar-icon-size` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-date-picker-range-nights-radius` | `var(--var-card-surface-radius, calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 4)))` |
+| `--var-card-surface-radius` | `calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) )` |
+| `--var-date-picker-panel-gap` | `calc(var(--var-spacing-base) * 1)` |
+
 The component uses the CSS contracts from `date-picker`, `input`, `input-field`, `calendar`, and `dropdown`. Import `foundation.css` before the relevant chunks, or use `index.css`. Customize the semantic `--var-*` variables instead of relying on generated utility selectors.
 
 ## Examples

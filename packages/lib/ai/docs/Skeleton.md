@@ -40,6 +40,17 @@ import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components";
 
 ## Design Tokens and CSS
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-skeleton-radius` | `calc(var(--var-radius, var(--var-radius-base)) / 3)` |
+| `--var-skeleton-cell-block-size` | `calc(var(--var-spacing-base) * 1.5)` |
+| `--var-skeleton-block-inline-size` | `calc(var(--var-spacing-base) * 8)` |
+| `--var-skeleton-block-size` | `calc(var(--var-spacing-base) * 2)` |
+
 The component ships `@g4rcez/components/skeleton.css`. Stable selectors include `.__skeleton`, `.__skeleton__cell`, `.__skeleton__block`, and `.__skeleton__list`. The stylesheet reads semantic variables such as `--var-skeleton-radius`, `--var-skeleton-pulse-duration`, `--var-skeleton-pulse-opacity`, `--var-skeleton-block-inline-size`, and `--var-color-muted`.
 
 ## Examples

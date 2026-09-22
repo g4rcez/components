@@ -1,22 +1,22 @@
 export const defaultSpacingTokens = {
     base: "1rem",
-    hairline: "0.0625rem",
-    lg: "1.125rem",
-    sm: "0.75rem",
-    dialog: "20rem",
-    "field-height": "1.5rem",
-    "field-label": "0.875rem",
-    "input-height": "2.5rem",
-    "input-x": "0.5rem",
-    "input-y": "0.25rem",
-    "input-inline": "0.25rem",
-    "input-gap": "0.3rem",
+    hairline: "calc(var(--var-spacing-base) * 0.0625)",
+    lg: "calc(var(--var-spacing-base) * 1.125)",
+    sm: "calc(var(--var-spacing-base) * 0.75)",
+    dialog: "calc(var(--var-spacing-base) * 20)",
+    "field-height": "calc(var(--var-spacing-base) * 1.5)",
+    "field-label": "calc(var(--var-fontsize) * 0.875)",
+    "input-height": "calc(var(--var-spacing-base) * 2.5)",
+    "input-x": "calc(var(--var-spacing-base) * 0.5)",
+    "input-y": "calc(var(--var-spacing-base) * 0.25)",
+    "input-inline": "calc(var(--var-spacing-base) * 0.25)",
+    "input-gap": "calc(var(--var-spacing-base) * 0.3)",
 } as const;
 
 export const defaultRoundedTokens = {
-    button: "0.55rem",
-    pill: "2rem",
-    card: "0.75rem",
+    button: "calc(var(--var-radius-base) * 0.55)",
+    pill: "calc(var(--var-radius-base) * 2)",
+    card: "calc(var(--var-radius-base) * 0.75)",
     full: "9999px",
 } as const;
 

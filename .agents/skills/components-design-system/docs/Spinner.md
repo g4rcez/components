@@ -31,6 +31,16 @@ import { Spinner, Loading } from "@g4rcez/components";
 
 ## Design Tokens and CSS
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-spinner-indicator-size` | `calc(var(--var-spacing-base) * 3)` |
+| `--var-spinner-indicator-border-width` | `calc(var(--var-spacing-base) * 0.25)` |
+| `--var-spinner-container-padding` | `calc(var(--var-spacing-base) * 3)` |
+
 The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__spinner` and `.__spinner__container`. The stylesheet reads `--var-spinner-indicator-size`, `--var-spinner-indicator-border-width`, `--var-spinner-spin-duration`, `--var-spinner-container-padding`, `--var-color-background`, `--var-color-primary`, and `--var-rounded-full`.
 
 ## Examples

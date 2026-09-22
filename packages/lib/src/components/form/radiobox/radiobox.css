@@ -6,8 +6,8 @@
     display: inline-flex;
     align-items: center;
     width: fit-content;
-    min-block-size: var(--var-radiobox-label-min-block-size);
-    gap: var(--var-radiobox-label-gap);
+    min-block-size: var(--var-radiobox-label-min-block-size, calc(var(--var-spacing-base) * 1.25));
+    gap: var(--var-radiobox-label-gap, calc(var(--var-spacing-base) * 0.5));
     color: inherit;
     font-weight: 400;
     line-height: 1.375;
@@ -29,13 +29,13 @@
     flex-shrink: 0;
     place-content: center;
     vertical-align: middle;
-    inline-size: var(--var-radiobox-control-size);
-    block-size: var(--var-radiobox-control-size);
+    inline-size: var(--var-radiobox-control-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-radiobox-control-size, calc(var(--var-spacing-base) * 1));
     padding: 0;
     appearance: none;
     color: var(--var-radiobox-control-foreground);
     border-style: solid;
-    border-width: var(--var-radiobox-control-border-width);
+    border-width: var(--var-radiobox-control-border-width, calc(var(--var-spacing-base) * 0.0625));
     border-color: var(--var-radiobox-control-border);
     border-radius: var(--var-rounded-full);
     background-color: var(--var-radiobox-control-background);
@@ -59,14 +59,14 @@
 
 
 .__radiobox--size-large .__radiobox__control-state {
-    inline-size: var(--var-radiobox-large-control-size);
-    block-size: var(--var-radiobox-large-control-size);
+    inline-size: var(--var-radiobox-large-control-size, calc(var(--var-spacing-base) * 1.25));
+    block-size: var(--var-radiobox-large-control-size, calc(var(--var-spacing-base) * 1.25));
 }
 
 .__radiobox__control-state::before {
     content: "";
-    inline-size: var(--var-radiobox-mark-size);
-    block-size: var(--var-radiobox-mark-size);
+    inline-size: var(--var-radiobox-mark-size, calc(var(--var-spacing-base) * 0.375));
+    block-size: var(--var-radiobox-mark-size, calc(var(--var-spacing-base) * 0.375));
     border-radius: var(--var-rounded-full);
     background-color: var(--var-radiobox-mark-foreground);
     opacity: 0;
@@ -78,13 +78,13 @@
 }
 
 .__radiobox--size-large .__radiobox__control-state::before {
-    inline-size: var(--var-radiobox-large-mark-size);
-    block-size: var(--var-radiobox-large-mark-size);
+    inline-size: var(--var-radiobox-large-mark-size, calc(var(--var-spacing-base) * 0.46875));
+    block-size: var(--var-radiobox-large-mark-size, calc(var(--var-spacing-base) * 0.46875));
 }
 
 .__radiobox__control-state:focus-visible {
-    outline: var(--var-radiobox-focus-ring-width) solid var(--var-radiobox-focus-ring);
-    outline-offset: var(--var-radiobox-focus-ring-offset);
+    outline: var(--var-radiobox-focus-ring-width, calc(var(--var-spacing-base) * 0.125)) solid var(--var-radiobox-focus-ring);
+    outline-offset: var(--var-radiobox-focus-ring-offset, calc(var(--var-spacing-base) * 0.125));
 }
 
 .__radiobox__control-state:disabled {

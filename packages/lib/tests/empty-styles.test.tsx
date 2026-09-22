@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Empty } from "../src/components/display/empty";
+import { Empty } from "../src/components/display/empty/empty";
 
 describe("Empty v6 styles", () => {
     it("renders stable root and slot classes", () => {

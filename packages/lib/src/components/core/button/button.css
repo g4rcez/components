@@ -3,7 +3,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--var-button-gap);
+    gap: var(--var-button-gap, calc(var(--var-spacing-base) * 0.375));
     overflow: hidden;
     border: 0 solid transparent;
     appearance: none;
@@ -21,7 +21,7 @@
 }
 
 .__button:focus-visible {
-    box-shadow: 0 0 0 var(--var-button-focus-ring-width) var(--var-color-ring);
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
 }
 
 .__button:disabled,
@@ -40,64 +40,64 @@
     flex: 0 0 auto;
     align-items: center;
     justify-content: center;
-    inline-size: var(--var-button-icon-font-size);
-    block-size: var(--var-button-icon-font-size);
-    font-size: var(--var-button-icon-font-size);
+    inline-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    font-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
     line-height: 1;
 }
 
 .__button__icon > svg {
-    inline-size: var(--var-button-icon-font-size);
-    block-size: var(--var-button-icon-font-size);
+    inline-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__button--size-default {
-    min-block-size: var(--var-button-height);
-    padding-block: var(--var-button-py);
-    padding-inline: var(--var-button-px);
+    min-block-size: var(--var-button-height, calc(var(--var-spacing-base) * 2.5));
+    padding-block: var(--var-button-py, calc(var(--var-spacing-base) / 2));
+    padding-inline: var(--var-button-px, calc(var(--var-spacing-base) * 1));
     font-size: var(--var-button-font-size);
 }
 
 .__button--size-big {
-    min-block-size: var(--var-button-big-height);
-    padding-block: var(--var-button-big-py);
-    padding-inline: var(--var-button-big-px);
+    min-block-size: var(--var-button-big-height, calc(var(--var-spacing-base) * 3));
+    padding-block: var(--var-button-big-py, calc(var(--var-spacing-base) * 1));
+    padding-inline: var(--var-button-big-px, calc(var(--var-spacing-base) * 1.5));
     font-size: var(--var-button-big-font-size);
 }
 
 .__button--size-min {
-    min-block-size: var(--var-button-min-height);
-    padding-block: var(--var-button-min-py);
-    padding-inline: var(--var-button-min-px);
+    min-block-size: var(--var-button-min-height, calc(var(--var-spacing-base) * 1.75));
+    padding-block: var(--var-button-min-py, calc(var(--var-spacing-base) / 4));
+    padding-inline: var(--var-button-min-px, calc(var(--var-spacing-base) * 0.75));
     font-size: var(--var-button-min-font-size);
 }
 
 .__button--size-small {
-    min-block-size: var(--var-button-small-height);
-    padding-block: var(--var-button-small-py);
-    padding-inline: var(--var-button-small-px);
+    min-block-size: var(--var-button-small-height, calc(var(--var-spacing-base) * 2));
+    padding-block: var(--var-button-small-py, calc(var(--var-spacing-base) / 2));
+    padding-inline: var(--var-button-small-px, calc(var(--var-spacing-base) * 1));
     font-size: var(--var-button-small-font-size);
 }
 
 .__button--size-tiny {
-    min-block-size: var(--var-button-tiny-height);
-    padding-block: var(--var-button-tiny-py);
-    padding-inline: var(--var-button-tiny-px);
+    min-block-size: var(--var-button-tiny-height, calc(var(--var-spacing-base) * 1.5));
+    padding-block: var(--var-button-tiny-py, calc(var(--var-spacing-base) / 4));
+    padding-inline: var(--var-button-tiny-px, calc(var(--var-spacing-base) / 2));
     font-size: var(--var-button-tiny-font-size);
 }
 
 .__button--size-icon {
     aspect-ratio: 1;
-    padding: var(--var-button-icon-p);
-    font-size: var(--var-button-icon-font-size);
+    padding: var(--var-button-icon-p, calc(var(--var-spacing-base) / 4));
+    font-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__button--rounded-default {
-    border-radius: var(--var-button-rounded);
+    border-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
 }
 
 .__button--rounded-rough {
-    border-radius: var(--var-button-rough-rounded);
+    border-radius: var(--var-button-rough-rounded, calc(var(--var-radius, var(--var-radius-base)) / 6));
 }
 
 .__button--rounded-squared {

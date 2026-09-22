@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Tag } from "../src/components/core/tag";
+import { Tag } from "../src/components/core/tag/tag";
 
 describe("Tag v6 styles", () => {
     it("renders stable root size and theme classes", () => {

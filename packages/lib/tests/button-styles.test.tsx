@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Button } from "../src/components/core/button";
+import { Button } from "../src/components/core/button/button";
 
 describe("Button style contract", () => {
     it("renders stable default style classes", () => {
@@ -9,7 +9,7 @@ describe("Button style contract", () => {
         expect(screen.getByRole("button", { name: "Save" })).toHaveClass(
             "__button",
             "__button--size-default",
-            "__button--theme-main",
+            "__button--theme-primary",
             "__button--rounded-default"
         );
     });

@@ -1,5 +1,18 @@
 # Design Token Migrations
 
+## Scoped geometry migration
+
+- [x] Audit all 46 component CSS chunks; migrate density geometry to use-site semantic overrides with base-derived fallbacks.
+- [x] One spacing base (`--var-spacing-base`) and one independent radius base (`--var-radius-base`).
+- [x] Preserve explicit consumer literals, zero values, legacy compatibility inputs, and provider variant overrides.
+- [x] Export inspectable geometry defaults; prevent implicit runtime theme geometry from freezing nested scopes.
+- [x] Align calendar inline layout and popup authored sizing with density.
+- [x] Keep typography, full circles, border hairlines, structural constraints, and accessibility clipping independent.
+
+Contract and default-appearance changes: [Geometry tokens](../packages/lib/ai/docs/geometry-tokens.md).
+
+## Component token coverage
+
 - [x] Alert
 - [x] Autocomplete
 - [x] Button

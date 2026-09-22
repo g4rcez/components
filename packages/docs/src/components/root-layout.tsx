@@ -22,7 +22,6 @@ const tweaks: Tweaks = {
 export const RootLayout = (props: PropsWithChildren) => {
     const pathname = usePathname();
     const isLandingPage = pathname === "/";
-    const isDocsPage = pathname.startsWith("/docs");
 
     const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
     const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
@@ -36,19 +35,16 @@ export const RootLayout = (props: PropsWithChildren) => {
                 <style>{stylesLight}</style>
                 <style>{stylesDark}</style>
             </head>
-            <body className={isDocsPage ? "docs-body" : "min-h-screen bg-background font-sans text-foreground"}>
-                <Link
-                    href="#main-content"
-                    className="sr-only absolute left-4 top-4 z-navbar rounded-md bg-background px-3 py-2 text-sm font-medium text-foreground ring-2 ring-primary focus:not-sr-only"
-                >
+            <body className="docs-body">
+                <Link href="#main-content" className="docs-skip-link">
                     Skip to main content
                 </Link>
-                <div id="root" className={isDocsPage ? "docs-shell" : "flex min-h-screen flex-col"}>
+                <div id="root" className="docs-shell">
                     <div id="root-floating" />
                     <ComponentsProvider tweaks={tweaks} iconWeight="duotone">
                         <Header />
                         {isLandingPage ? (
-                            <main id="main-content" className="flex-1">
+                            <main id="main-content" tabIndex={-1} className="flex-1">
                                 {props.children}
                             </main>
                         ) : (
@@ -56,7 +52,7 @@ export const RootLayout = (props: PropsWithChildren) => {
                                 <aside aria-label="Documentation navigation" className="docs-sidebar">
                                     <Navigation />
                                 </aside>
-                                <main id="main-content" className="docs-main">
+                                <main id="main-content" tabIndex={-1} className="docs-main">
                                     <div className="docs-main-inner">{props.children}</div>
                                 </main>
                             </div>

@@ -59,6 +59,17 @@ A composable header with a title and an optional navigation/action area.
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-card-content-gap` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-card-surface-radius` | `calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) )` |
+| `--var-card-surface-padding-block` | `calc(var(--var-spacing-base) * 0.75)` |
+| `--var-card-title-margin-block-end` | `calc(var(--var-spacing-base) / 2)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                 | CSS Variable        | Purpose                         |

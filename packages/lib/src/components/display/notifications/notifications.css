@@ -9,11 +9,11 @@
     box-sizing: border-box;
     overflow: hidden;
     border-width: var(--var-border-hairline);
-    border-radius: var(--var-notification-surface-radius);
+    border-radius: var(--var-notification-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
     background-color: var(--var-color-background);
     font-size: var(--var-typography-sm);
     box-shadow: var(--var-shadow-notification);
-    backdrop-filter: blur(var(--var-notification-surface-backdrop-blur));
+    backdrop-filter: blur(var(--var-notification-surface-backdrop-blur, calc( var(--var-spacing-base) * 0.75 )));
     transition-property: color, background-color, border-color, opacity, box-shadow, transform;
     transition-duration: var(--var-motion-duration-normal);
     transition-timing-function: var(--var-motion-timing-linear);
@@ -69,15 +69,15 @@
 .__notifications__content {
     display: flex;
     align-items: flex-start;
-    gap: var(--var-notification-content-gap);
-    padding: var(--var-notification-content-padding);
+    gap: var(--var-notification-content-gap, calc(var(--var-spacing-base) * 0.75));
+    padding: var(--var-notification-content-padding, calc(var(--var-spacing-base) * 1));
 }
 
 .__notifications__icon {
-    margin-top: var(--var-notification-icon-margin-block-start);
+    margin-top: var(--var-notification-icon-margin-block-start, calc( var(--var-spacing-base) * 0.125 ));
     display: flex;
-    width: var(--var-notification-icon-size);
-    height: var(--var-notification-icon-size);
+    width: var(--var-notification-icon-size, calc(var(--var-spacing-base) * 1));
+    height: var(--var-notification-icon-size, calc(var(--var-spacing-base) * 1));
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
@@ -92,7 +92,7 @@
     display: flex;
     flex: 1 1 0%;
     flex-direction: column;
-    gap: var(--var-notification-text-gap);
+    gap: var(--var-notification-text-gap, calc(var(--var-spacing-base) * 0.25));
     overflow: hidden;
 }
 
@@ -115,11 +115,11 @@
 }
 
 .__notifications__close {
-    margin-top: var(--var-notification-close-margin-block-start);
-    margin-right: var(--var-notification-close-margin-inline-end);
+    margin-top: var(--var-notification-close-margin-block-start, calc( var(--var-spacing-base) * -0.25 ));
+    margin-right: var(--var-notification-close-margin-inline-end, calc( var(--var-spacing-base) * -0.25 ));
     flex-shrink: 0;
-    border-radius: var(--var-notification-close-radius);
-    padding: var(--var-notification-close-padding);
+    border-radius: var(--var-notification-close-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.666667));
+    padding: var(--var-notification-close-padding, calc(var(--var-spacing-base) * 0.25));
     color: var(--var-notification-close-foreground);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
     transition-duration: var(--var-notification-close-transition-duration);
@@ -133,8 +133,8 @@
 
 .__notifications__close-icon {
     display: flex;
-    width: var(--var-notification-close-icon-size);
-    height: var(--var-notification-close-icon-size);
+    width: var(--var-notification-close-icon-size, calc(var(--var-spacing-base) * 0.875));
+    height: var(--var-notification-close-icon-size, calc(var(--var-spacing-base) * 0.875));
     align-items: center;
     justify-content: center;
 }
@@ -143,17 +143,17 @@
     pointer-events: none;
     position: fixed;
     left: 50%;
-    top: var(--var-notification-viewport-inset-block-start);
+    top: var(--var-notification-viewport-inset-block-start, calc( var(--var-spacing-base) * 1 ));
     z-index: var(--var-layer-floating);
     display: flex;
     width: 100%;
-    max-width: var(--var-notification-viewport-max-inline-size);
+    max-width: var(--var-notification-viewport-max-inline-size, calc( var(--var-spacing-base) * 28 ));
     flex-direction: column;
     transform: translateX(-50%);
-    gap: var(--var-notification-viewport-gap);
+    gap: var(--var-notification-viewport-gap, calc(var(--var-spacing-base) * 0.75));
     overflow: visible;
     outline: var(--var-border-hairline) solid transparent;
-    outline-offset: var(--var-notification-viewport-outline-offset);
+    outline-offset: var(--var-notification-viewport-outline-offset, calc( var(--var-spacing-base) * 0.125 ));
 }
 
 .__notifications__badge {
@@ -164,15 +164,15 @@
     border-color: var(--var-color-border);
     border-radius: var(--var-rounded-full);
     background-color: var(--var-notification-badge-background);
-    padding-inline: var(--var-notification-badge-padding-inline);
-    padding-block: var(--var-notification-badge-padding-block);
+    padding-inline: var(--var-notification-badge-padding-inline, calc(var(--var-spacing-base) * 0.75));
+    padding-block: var(--var-notification-badge-padding-block, calc(var(--var-spacing-base) * 0.25));
     color: var(--var-notification-badge-foreground);
     font-size: var(--var-notification-badge-font-size);
     font-weight: var(--var-font-weight-bold);
     text-transform: uppercase;
     letter-spacing: var(--var-notification-badge-letter-spacing);
     box-shadow: var(--var-shadow-notification);
-    backdrop-filter: blur(var(--var-notification-badge-backdrop-blur));
+    backdrop-filter: blur(var(--var-notification-badge-backdrop-blur, calc(var(--var-spacing-base) * 0.5)));
     transition-property: color, background-color, border-color, opacity, box-shadow, transform;
     transition-duration: var(--var-notification-badge-transition-duration);
     transition-timing-function: var(--var-notification-badge-transition-timing);

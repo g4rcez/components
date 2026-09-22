@@ -2,10 +2,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--var-tag-surface-gap);
+    gap: var(--var-tag-surface-gap, calc(var(--var-spacing-base) * 0.375));
     box-sizing: border-box;
     border: 0 solid transparent;
-    border-radius: var(--var-tag-surface-radius);
+    border-radius: var(--var-tag-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 2.666667));
     white-space: nowrap;
     font-weight: var(--var-font-weight-medium);
     vertical-align: middle;
@@ -24,40 +24,40 @@
 .__tag__indicator {
     display: inline-block;
     flex: 0 0 auto;
-    inline-size: var(--var-tag-indicator-size);
-    block-size: var(--var-tag-indicator-size);
+    inline-size: var(--var-tag-indicator-size, calc(var(--var-spacing-base) * 0.5));
+    block-size: var(--var-tag-indicator-size, calc(var(--var-spacing-base) * 0.5));
     border: 0;
     border-radius: var(--var-rounded-full);
 }
 
 .__tag--size-default {
-    min-block-size: var(--var-tag-default-min-block-size);
-    padding-block: var(--var-tag-default-padding-block);
-    padding-inline: var(--var-tag-default-padding-inline);
+    min-block-size: var(--var-tag-default-min-block-size, calc(var(--var-spacing-base) * 2));
+    padding-block: var(--var-tag-default-padding-block, calc(var(--var-spacing-base) * 0.5));
+    padding-inline: var(--var-tag-default-padding-inline, calc(var(--var-spacing-base) * 1));
 }
 
 .__tag--size-big {
-    min-block-size: var(--var-tag-big-min-block-size);
-    padding-block: var(--var-tag-big-padding-block);
-    padding-inline: var(--var-tag-big-padding-inline);
+    min-block-size: var(--var-tag-big-min-block-size, calc(var(--var-spacing-base) * 3));
+    padding-block: var(--var-tag-big-padding-block, calc(var(--var-spacing-base) * 1));
+    padding-inline: var(--var-tag-big-padding-inline, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__tag--size-small {
-    min-block-size: var(--var-tag-small-min-block-size);
-    padding-block: var(--var-tag-small-padding-block);
-    padding-inline: var(--var-tag-small-padding-inline);
+    min-block-size: var(--var-tag-small-min-block-size, calc(var(--var-spacing-base) * 1.5));
+    padding-block: var(--var-tag-small-padding-block, calc(var(--var-spacing-base) * 0.5));
+    padding-inline: var(--var-tag-small-padding-inline, calc(var(--var-spacing-base) * 0.75));
     font-size: var(--var-tag-small-font-size);
 }
 
 .__tag--size-tiny {
-    min-block-size: var(--var-tag-tiny-min-block-size);
-    padding-block: var(--var-tag-tiny-padding-block);
-    padding-inline: var(--var-tag-tiny-padding-inline);
+    min-block-size: var(--var-tag-tiny-min-block-size, calc(var(--var-spacing-base) * 1.25));
+    padding-block: var(--var-tag-tiny-padding-block, calc(var(--var-spacing-base) * 0.25));
+    padding-inline: var(--var-tag-tiny-padding-inline, calc(var(--var-spacing-base) * 0.5));
     font-size: var(--var-tag-tiny-font-size);
 }
 
 .__tag--size-icon {
-    padding: var(--var-tag-icon-padding);
+    padding: var(--var-tag-icon-padding, calc(var(--var-spacing-base) * 0.25));
 }
 
 .__tag--theme-primary {

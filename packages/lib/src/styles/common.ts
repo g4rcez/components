@@ -1,16 +1,16 @@
 import type { DesignTokens, ZIndex } from "./theme.types";
 
 export const rounded = {
-    pill: "2rem",
+    pill: "calc(var(--var-radius-base) * 2)",
     full: "9999px",
 } as const;
 
 export const spacing: DesignTokens["spacing"] = {
     base: "1rem",
-    hairline: "0.0625rem",
-    lg: "1.125rem",
-    sm: "0.75rem",
-    dialog: "20rem",
+    hairline: "calc(var(--var-spacing-base) * 0.0625)",
+    lg: "calc(var(--var-spacing-base) * 1.125)",
+    sm: "calc(var(--var-spacing-base) * 0.75)",
+    dialog: "calc(var(--var-spacing-base) * 20)",
 } as const;
 
 export const zIndex: ZIndex = {

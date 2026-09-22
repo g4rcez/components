@@ -1,25 +1,25 @@
 .__skeleton {
     box-sizing: border-box;
-    border-radius: var(--var-skeleton-radius);
+    border-radius: var(--var-skeleton-radius, calc(var(--var-radius, var(--var-radius-base)) / 3));
     background-color: var(--var-color-muted);
     animation: skeleton-pulse var(--var-skeleton-pulse-duration) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .__skeleton__cell {
     width: var(--var-skeleton-cell-inline-size);
-    height: var(--var-skeleton-cell-block-size);
+    height: var(--var-skeleton-cell-block-size, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__skeleton__block {
     display: block;
-    width: var(--var-skeleton-block-inline-size);
-    height: var(--var-skeleton-block-size);
+    width: var(--var-skeleton-block-inline-size, calc(var(--var-spacing-base) * 8));
+    height: var(--var-skeleton-block-size, calc(var(--var-spacing-base) * 2));
 }
 
 .__skeleton__list {
     display: flex;
     flex-direction: column;
-    gap: var(--var-skeleton-list-gap);
+    gap: var(--var-skeleton-list-gap, calc(var(--var-spacing-base) * 1.5));
 }
 
 @keyframes skeleton-pulse {

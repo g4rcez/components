@@ -74,6 +74,17 @@ Renders a `<header>` element with title/description on the left and action slots
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-typography-description-margin-block-end` | `calc( var(--var-spacing-base) * 1 )` |
+| `--var-typography-info-gap` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-typography-page-header-gap` | `calc(var(--var-spacing-base) * 1.5)` |
+| `--var-typography-page-header-actions-gap` | `calc(var(--var-spacing-base) * 1)` |
+
 Tokens these components read. Customize by overriding these CSS variables in your theme.
 
 | Token            | CSS Variable     | Purpose                                  |

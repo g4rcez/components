@@ -5,16 +5,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0;
     box-sizing: border-box;
-    border-radius: var(--var-toolbar-rounded, var(--toolbar-radius));
-    --tw-border-opacity: 1;
-    border-color: hsla(var(--card-border), var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: hsla(var(--background), var(--tw-bg-opacity));
     padding: var(--var-toolbar-p, var(--toolbar-p));
 }
 
-.__toolbar,
-.__floating-toolbar__border {
-    border-width: 1px;
+.__toolbar > :is(button, .__button) {
+    flex-shrink: 0;
+}
+
+.__toolbar > :is(button, .__button) + :is(button, .__button) {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+}
+
+.__toolbar > :is(button, .__button):has(+ :is(button, .__button)) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+}
+
+.__toolbar > :is(button, .__button):focus-visible {
+    position: relative;
+    z-index: var(--var-layer-normal);
 }

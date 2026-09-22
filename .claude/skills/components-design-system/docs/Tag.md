@@ -32,6 +32,17 @@ import { Tag } from "@g4rcez/components/tag";
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-tag-surface-gap` | `calc(var(--var-spacing-base) * 0.375)` |
+| `--var-tag-surface-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 2.666667)` |
+| `--var-tag-indicator-size` | `calc(var(--var-spacing-base) * 0.5)` |
+| `--var-tag-default-min-block-size` | `calc(var(--var-spacing-base) * 2)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                     | CSS Variable           | Purpose                                |

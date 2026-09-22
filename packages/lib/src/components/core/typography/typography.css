@@ -9,14 +9,14 @@
 }
 
 .__typography__description {
-    margin-bottom: var(--var-typography-description-margin-block-end);
+    margin-bottom: var(--var-typography-description-margin-block-end, calc( var(--var-spacing-base) * 1 ));
     color: var(--var-color-muted-foreground);
     font-size: var(--var-typography-sm);
 }
 
 .__typography__info {
     display: flex;
-    gap: var(--var-typography-info-gap);
+    gap: var(--var-typography-info-gap, calc(var(--var-spacing-base) * 1));
 }
 
 .__typography__info--row {
@@ -66,7 +66,7 @@
     min-width: 100%;
     align-items: center;
     justify-content: space-between;
-    gap: var(--var-typography-page-header-gap);
+    gap: var(--var-typography-page-header-gap, calc(var(--var-spacing-base) * 1.5));
     flex-direction: row;
     flex-wrap: wrap;
 }
@@ -74,6 +74,6 @@
 .__typography__page-header-actions {
     display: flex;
     align-items: center;
-    gap: var(--var-typography-page-header-actions-gap);
+    gap: var(--var-typography-page-header-actions-gap, calc(var(--var-spacing-base) * 1));
     flex-wrap: wrap;
 }

@@ -59,7 +59,8 @@ export const sections: Section[] = [
         title: "Getting Started",
         icon: RocketIcon,
         items: [
-            { title: "Introduction", href: "/docs/get-started", icon: BookOpenIcon },
+            { title: "Introduction", href: "/docs", icon: BookOpenIcon },
+            { title: "Installation", href: "/docs/get-started", icon: RocketIcon },
             {
                 title: "Theme Setup",
                 href: "/docs/setup",

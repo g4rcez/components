@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ArrowRightIcon, CaretDownIcon, CheckIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import type { Label } from "@g4rcez/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -43,21 +43,36 @@ const slugify = (value: string) =>
 const DocsTableOfContents = ({ items, activeId, compact = false }: { items: TocItem[]; activeId: string; compact?: boolean }) => {
     if (items.length === 0) return null;
 
+    const links = (
+        <nav className="docs-toc-list" aria-label="Page sections">
+            {items.map((item) => (
+                <Link
+                    key={item.id}
+                    href={`#${item.id}`}
+                    aria-current={item.id === activeId ? "location" : undefined}
+                    className={`docs-toc-link docs-toc-link-level-${item.level}${item.id === activeId ? " docs-toc-link-active" : ""}`}
+                >
+                    {item.text}
+                </Link>
+            ))}
+        </nav>
+    );
+
+    if (compact) {
+        return (
+            <details className="docs-toc docs-toc-compact">
+                <summary>
+                    On this page <CaretDownIcon size={15} aria-hidden="true" />
+                </summary>
+                {links}
+            </details>
+        );
+    }
+
     return (
-        <aside className={compact ? "docs-toc docs-toc-compact" : "docs-toc docs-toc-desktop"} aria-label="On this page">
+        <aside className="docs-toc docs-toc-desktop" aria-label="On this page">
             <h2 className="docs-toc-title">On this page</h2>
-            <nav className="docs-toc-list" aria-label="Page sections">
-                {items.map((item) => (
-                    <Link
-                        key={item.id}
-                        href={`#${item.id}`}
-                        aria-current={item.id === activeId ? "location" : undefined}
-                        className={`docs-toc-link docs-toc-link-level-${item.level}${item.id === activeId ? " docs-toc-link-active" : ""}`}
-                    >
-                        {item.text}
-                    </Link>
-                ))}
-            </nav>
+            {links}
         </aside>
     );
 };
@@ -71,7 +86,7 @@ const UsageSummary = ({ title, useWhen, avoidWhen }: { title: string; useWhen?: 
             <div className="docs-guidance docs-guidance-use">
                 <div className="docs-guidance-heading">
                     <span className="docs-guidance-mark" aria-hidden="true">
-                        ✓
+                        <CheckIcon size={14} />
                     </span>
                     <h3>Use when</h3>
                 </div>
@@ -80,7 +95,7 @@ const UsageSummary = ({ title, useWhen, avoidWhen }: { title: string; useWhen?: 
             <div className="docs-guidance docs-guidance-avoid">
                 <div className="docs-guidance-heading">
                     <span className="docs-guidance-mark" aria-hidden="true">
-                        !
+                        <WarningCircleIcon size={14} />
                     </span>
                     <h3>Avoid when</h3>
                 </div>
@@ -110,8 +125,10 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
     const pathname = usePathname();
     const articleRef = useRef<HTMLElement>(null);
     const allItems = sections.flatMap((section) => section.items);
-    const currentIndex = allItems.findIndex((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
-    const currentSection = sections.find((section) => section.items.some((item) => pathname === item.href || pathname.startsWith(`${item.href}/`)));
+    const matchesRoute = (href: string) => pathname === href || (href !== "/docs" && pathname.startsWith(`${href}/`));
+    const currentIndex = allItems.findIndex((item) => matchesRoute(item.href));
+    const currentSection = sections.find((section) => section.items.some((item) => matchesRoute(item.href)));
+    const isGuide = currentSection?.title === "Getting Started";
     const relatedItems = currentSection?.items.filter((item) => item.href !== pathname).slice(0, 3) ?? [];
     const previous = currentIndex > 0 ? allItems[currentIndex - 1] : null;
     const next = currentIndex >= 0 && currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
@@ -194,21 +211,25 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                 </header>
 
                 <DocsTableOfContents items={tocItems} activeId={activeId} compact />
-                <UsageSummary title={title} useWhen={props.useWhen} avoidWhen={props.avoidWhen} />
-
-                <section className="docs-examples" aria-labelledby="docs-examples-title">
-                    <h2 id="docs-examples-title" className="docs-section-title">
-                        Examples
-                    </h2>
+                {isGuide ? (
                     <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
-                </section>
-
-                <AccessibilityNotes title={title}>{props.accessibility}</AccessibilityNotes>
+                ) : (
+                    <>
+                        <section className="docs-examples" aria-labelledby="docs-examples-title">
+                            <h2 id="docs-examples-title" className="docs-section-title">
+                                Examples
+                            </h2>
+                            <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
+                        </section>
+                        <UsageSummary title={title} useWhen={props.useWhen} avoidWhen={props.avoidWhen} />
+                        <AccessibilityNotes title={title}>{props.accessibility}</AccessibilityNotes>
+                    </>
+                )}
 
                 {relatedItems.length > 0 ? (
                     <section id="related-components" className="docs-related" aria-labelledby="related-components-title">
                         <h2 id="related-components-title" className="docs-section-title">
-                            Related components
+                            {isGuide ? "Continue reading" : "Related components"}
                         </h2>
                         <div className="docs-related-links">
                             {relatedItems.map((item) => (

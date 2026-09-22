@@ -44,6 +44,8 @@ import { InputField } from "@g4rcez/components";
 
 ## Design Tokens
 
+Shared geometry uses scoped spacing/radius fallbacks; explicit overrides win. Read [Geometry tokens](geometry-tokens.md) before changing density or looking up library defaults.
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                   | CSS Variable         | Purpose                                            |

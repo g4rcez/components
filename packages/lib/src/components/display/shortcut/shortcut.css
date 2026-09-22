@@ -3,11 +3,11 @@
     align-items: center;
     box-sizing: border-box;
     flex-direction: row;
-    gap: var(--var-shortcut-content-gap);
+    gap: var(--var-shortcut-content-gap, calc(var(--var-spacing-base) * 0.25));
     font-size: var(--var-shortcut-content-font-size);
 }
 
 .__shortcut__icon {
-    inline-size: var(--var-shortcut-icon-size);
-    block-size: var(--var-shortcut-icon-size);
+    inline-size: var(--var-shortcut-icon-size, calc(var(--var-spacing-base) * 0.75));
+    block-size: var(--var-shortcut-icon-size, calc(var(--var-spacing-base) * 0.75));
 }

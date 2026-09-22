@@ -1,12 +1,12 @@
 .__modal {
     z-index: var(--var-layer-floating);
     display: flex;
-    min-width: var(--var-modal-surface-min-inline-size);
+    min-width: var(--var-modal-surface-min-inline-size, calc(var(--var-spacing-base) * 20));
     flex-direction: column;
     flex-wrap: nowrap;
     box-sizing: border-box;
     appearance: none;
-    gap: var(--var-modal-surface-gap);
+    gap: var(--var-modal-surface-gap, calc(var(--var-spacing-base) * 1));
     border-width: var(--var-border-hairline);
     border-color: var(--var-color-border);
     background-color: var(--var-color-background);
@@ -26,9 +26,9 @@
 .__modal--type-dialog {
     position: relative;
     height: min-content;
-    max-height: var(--var-modal-dialog-max-block-size);
-    border-radius: var(--var-modal-surface-radius);
-    padding-block: var(--var-modal-surface-padding-block);
+    max-height: var(--var-modal-dialog-max-block-size, calc(var(--var-spacing-base) * 40));
+    border-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    padding-block: var(--var-modal-surface-padding-block, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__modal--type-sheet {
@@ -40,41 +40,41 @@
     min-inline-size: 0;
     max-inline-size: none;
     inline-size: 100%;
-    border-top-left-radius: var(--var-modal-surface-radius);
-    border-top-right-radius: var(--var-modal-surface-radius);
-    padding-top: var(--var-modal-sheet-padding-block-start);
-    padding-bottom: var(--var-modal-sheet-padding-block-end);
+    border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    padding-top: var(--var-modal-sheet-padding-block-start, calc(var(--var-spacing-base) * 1.5));
+    padding-bottom: var(--var-modal-sheet-padding-block-end, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__modal--position-right {
     position: absolute;
     right: 0;
     top: 0;
-    border-top-left-radius: var(--var-modal-surface-radius);
-    border-bottom-left-radius: var(--var-modal-surface-radius);
-    padding-block: var(--var-modal-surface-padding-block);
+    border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-bottom-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    padding-block: var(--var-modal-surface-padding-block, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__modal--position-left {
     position: absolute;
     left: 0;
     top: 0;
-    border-top-right-radius: var(--var-modal-surface-radius);
-    border-bottom-right-radius: var(--var-modal-surface-radius);
-    padding-block: var(--var-modal-surface-padding-block);
+    border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-bottom-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    padding-block: var(--var-modal-surface-padding-block, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__modal__resizer {
     position: absolute;
     isolation: isolate;
     z-index: var(--var-layer-calendar);
-    border-radius: var(--var-modal-resizer-radius);
+    border-radius: var(--var-modal-resizer-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.666667));
 }
 
 .__modal__resizer:focus-visible {
     outline: var(--var-border-hairline) solid transparent;
-    outline-offset: var(--var-modal-focus-outline-offset);
-    box-shadow: 0 0 0 var(--var-modal-resizer-focus-ring-width) var(--var-color-ring);
+    outline-offset: var(--var-modal-focus-outline-offset, calc(var(--var-spacing-base) * 0.125));
+    box-shadow: 0 0 0 var(--var-modal-resizer-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
 }
 
 .__modal__resizer--sheet {
@@ -87,32 +87,32 @@
 }
 
 .__modal__resizer--sheet-handle {
-    top: var(--var-modal-sheet-handle-inset-block-start);
+    top: var(--var-modal-sheet-handle-inset-block-start, calc(var(--var-spacing-base) / 4));
     display: flex;
-    height: var(--var-modal-sheet-handle-block-size);
+    height: var(--var-modal-sheet-handle-block-size, calc(var(--var-spacing-base) * 1));
     width: 100%;
     justify-content: center;
-    padding-block: var(--var-modal-sheet-handle-padding-block);
+    padding-block: var(--var-modal-sheet-handle-padding-block, calc(var(--var-spacing-base) / 4));
 }
 
 .__modal__resizer--drawer-right {
-    right: var(--var-modal-drawer-resizer-inset-inline);
+    right: var(--var-modal-drawer-resizer-inset-inline, calc(var(--var-spacing-base) * 1.25));
     top: 50%;
-    height: var(--var-modal-drawer-resizer-block-size);
-    width: var(--var-modal-drawer-resizer-inline-size);
+    height: var(--var-modal-drawer-resizer-block-size, calc(var(--var-spacing-base) * 4));
+    width: var(--var-modal-drawer-resizer-inline-size, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__modal__resizer--drawer-left {
-    left: var(--var-modal-drawer-resizer-inset-inline-start);
+    left: var(--var-modal-drawer-resizer-inset-inline-start, calc( var(--var-spacing-base) * 0.5 ));
     top: 50%;
-    height: var(--var-modal-drawer-resizer-block-size);
-    width: var(--var-modal-drawer-resizer-inline-size);
+    height: var(--var-modal-drawer-resizer-block-size, calc(var(--var-spacing-base) * 4));
+    width: var(--var-modal-drawer-resizer-inline-size, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__modal__sheet-pill {
-    height: var(--var-modal-sheet-pill-block-size);
-    width: var(--var-modal-sheet-pill-inline-size);
-    border-radius: var(--var-rounded-pill);
+    height: var(--var-modal-sheet-pill-block-size, calc(var(--var-spacing-base) * 0.25));
+    width: var(--var-modal-sheet-pill-inline-size, calc(var(--var-spacing-base) * 4));
+    border-radius: var(--var-rounded-pill, calc(var(--var-radius-base) * 2));
     background-color: var(--var-color-border);
 }
 
@@ -129,7 +129,7 @@
 .__modal__overlay--centered {
     align-items: flex-start;
     justify-content: center;
-    padding-top: var(--var-modal-overlay-padding-block-start);
+    padding-top: var(--var-modal-overlay-padding-block-start, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__modal__content {
@@ -160,8 +160,8 @@
     user-select: text;
     border-bottom-width: var(--var-border-hairline);
     border-color: var(--var-color-border);
-    padding-inline: var(--var-modal-content-padding-inline);
-    padding-bottom: var(--var-modal-title-padding-block-end);
+    padding-inline: var(--var-modal-content-padding-inline, calc(var(--var-spacing-base) * 1.5));
+    padding-bottom: var(--var-modal-title-padding-block-end, calc(var(--var-spacing-base) * 1));
     font-size: var(--var-modal-title-font-size);
     font-weight: var(--var-font-weight-medium);
     line-height: var(--var-modal-title-line-height);
@@ -174,8 +174,8 @@
     overscroll-behavior-y: contain;
     touch-action: pan-y pinch-zoom;
     -webkit-overflow-scrolling: touch;
-    padding-inline: var(--var-modal-content-padding-inline);
-    padding-block: var(--var-modal-body-padding-block);
+    padding-inline: var(--var-modal-content-padding-inline, calc(var(--var-spacing-base) * 1.5));
+    padding-block: var(--var-modal-body-padding-block, calc(var(--var-spacing-base) * 1));
 }
 
 .__modal__footer {
@@ -183,20 +183,20 @@
     user-select: text;
     border-top-width: var(--var-border-hairline);
     border-color: var(--var-color-border);
-    padding-inline: var(--var-modal-content-padding-inline);
-    padding-top: var(--var-modal-footer-padding-block-start);
+    padding-inline: var(--var-modal-content-padding-inline, calc(var(--var-spacing-base) * 1.5));
+    padding-top: var(--var-modal-footer-padding-block-start, calc(var(--var-spacing-base) * 1));
 }
 
 .__modal__close-control {
     position: absolute;
-    right: var(--var-modal-close-inset-inline-end);
-    top: var(--var-modal-close-inset-block-start);
+    right: var(--var-modal-close-inset-inline-end, calc(var(--var-spacing-base) * 1));
+    top: var(--var-modal-close-inset-block-start, calc(var(--var-spacing-base) * 1));
     z-index: var(--var-layer-floating);
 }
 
 .__modal__close-button {
-    border-radius: var(--var-button-rounded);
-    padding: var(--var-modal-close-button-padding);
+    border-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    padding: var(--var-modal-close-button-padding, calc(var(--var-spacing-base) * 0.5));
     opacity: var(--var-modal-close-button-opacity);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: var(--var-modal-transition-duration);
@@ -211,26 +211,26 @@
 
 .__modal__close-button:focus-visible {
     outline: var(--var-border-hairline) solid transparent;
-    outline-offset: var(--var-modal-focus-outline-offset);
-    box-shadow: 0 0 0 var(--var-modal-close-focus-ring-width) var(--var-color-primary);
+    outline-offset: var(--var-modal-focus-outline-offset, calc(var(--var-spacing-base) * 0.125));
+    box-shadow: 0 0 0 var(--var-modal-close-focus-ring-width, calc(var(--var-spacing-base) * 0.125)) var(--var-color-primary);
 }
 
 .__modal__close-icon {
-    inline-size: var(--var-modal-close-icon-size);
-    block-size: var(--var-modal-close-icon-size);
+    inline-size: var(--var-modal-close-icon-size, calc(var(--var-spacing-base) * 1.25));
+    block-size: var(--var-modal-close-icon-size, calc(var(--var-spacing-base) * 1.25));
 }
 
 .__modal__confirm-dialog {
-    max-width: var(--var-modal-confirm-dialog-max-inline-size);
+    max-width: var(--var-modal-confirm-dialog-max-inline-size, calc( var(--var-spacing-base) * 24 ));
 }
 
 .__modal__confirm-actions {
     display: flex;
     justify-content: flex-end;
-    gap: var(--var-modal-confirm-actions-gap);
+    gap: var(--var-modal-confirm-actions-gap, calc(var(--var-spacing-base) * 1));
 }
 
 .__modal__confirm-description {
-    padding-block: var(--var-modal-confirm-description-padding-block);
+    padding-block: var(--var-modal-confirm-description-padding-block, calc( var(--var-spacing-base) * 1 ));
     color: var(--var-color-foreground);
 }

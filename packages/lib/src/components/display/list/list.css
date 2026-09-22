@@ -26,15 +26,15 @@
     display: flex;
     height: min-content;
     width: min-content;
-    min-width: var(--var-list-detail-card-min-inline-size);
-    gap: var(--var-list-detail-card-gap);
+    min-width: var(--var-list-detail-card-min-inline-size, calc(var(--var-spacing-base) * 20));
+    gap: var(--var-list-detail-card-gap, calc(var(--var-spacing-base) * 1));
     border-width: var(--var-border-hairline);
     border-color: var(--var-color-border);
-    border-radius: var(--var-list-detail-card-radius);
+    border-radius: var(--var-list-detail-card-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
     background-color: var(--var-color-background);
-    padding: var(--var-list-detail-card-padding);
-    padding-block: var(--var-list-detail-card-padding-block);
-    padding-bottom: var(--var-list-detail-card-padding-block-end);
+    padding: var(--var-list-detail-card-padding, calc(var(--var-spacing-base) * 1.5));
+    padding-block: var(--var-list-detail-card-padding-block, calc(var(--var-spacing-base) * 1.5));
+    padding-bottom: var(--var-list-detail-card-padding-block-end, calc(var(--var-spacing-base) * 1.5));
     box-shadow: var(--var-shadow-card);
 }
 
@@ -44,12 +44,12 @@
 
 .__list__close-nav {
     position: absolute;
-    right: var(--var-list-close-inset-inline-end);
-    top: var(--var-list-close-inset-block-start);
+    right: var(--var-list-close-inset-inline-end, calc(var(--var-spacing-base) * 1));
+    top: var(--var-list-close-inset-block-start, calc(var(--var-spacing-base) / 4));
 }
 
 .__list__close-button {
-    padding: var(--var-list-close-button-padding);
+    padding: var(--var-list-close-button-padding, calc(var(--var-spacing-base) * 0.5));
     opacity: var(--var-list-close-button-opacity);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: var(--var-list-transition-duration);
@@ -67,7 +67,7 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    gap: var(--var-list-header-gap);
+    gap: var(--var-list-header-gap, calc(var(--var-spacing-base) * 1));
 }
 
 .__list__header--wrap {
@@ -90,7 +90,7 @@
 .__list__item {
     border-bottom-width: var(--var-border-hairline);
     border-color: var(--var-color-border);
-    padding-block: var(--var-list-item-padding-block);
+    padding-block: var(--var-list-item-padding-block, calc(var(--var-spacing-base) * 1));
 }
 
 .__list__item:last-child {
@@ -105,18 +105,18 @@
     position: relative;
     display: flex;
     align-items: flex-start;
-    gap: var(--var-list-item-media-gap);
+    gap: var(--var-list-item-media-gap, calc(var(--var-spacing-base) * 0.75));
 }
 
 .__list__avatar-frame {
     position: relative;
-    padding-inline: var(--var-list-avatar-frame-padding-inline);
+    padding-inline: var(--var-list-avatar-frame-padding-inline, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__list__avatar-button {
     display: flex;
-    width: var(--var-list-avatar-button-size);
-    height: var(--var-list-avatar-button-size);
+    width: var(--var-list-avatar-button-size, calc(var(--var-spacing-base) * 2.5));
+    height: var(--var-list-avatar-button-size, calc(var(--var-spacing-base) * 2.5));
     align-items: center;
     justify-content: center;
 }
@@ -124,14 +124,14 @@
 .__list__item-body {
     min-width: 0;
     flex: 1 1 0%;
-    padding-block: var(--var-list-item-body-padding-block);
+    padding-block: var(--var-list-item-body-padding-block, calc(var(--var-spacing-base) * 0.5));
     color: var(--var-color-foreground);
 }
 
 .__list__item-content {
     display: flex;
     justify-content: space-between;
-    gap: var(--var-list-item-content-gap);
+    gap: var(--var-list-item-content-gap, calc(var(--var-spacing-base) * 1));
 }
 
 .__list__item-content--row {

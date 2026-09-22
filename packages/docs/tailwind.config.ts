@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import preset from "../lib/preset.tailwind.ts";
+import preset from "@g4rcez/components/preset.tailwind";
 
 const config: Config = {
     presets: [preset],

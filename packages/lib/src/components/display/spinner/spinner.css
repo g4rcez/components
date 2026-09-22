@@ -1,10 +1,10 @@
 .__spinner {
     display: inline-block;
     box-sizing: border-box;
-    inline-size: var(--var-spinner-indicator-size);
-    block-size: var(--var-spinner-indicator-size);
+    inline-size: var(--var-spinner-indicator-size, calc(var(--var-spacing-base) * 3));
+    block-size: var(--var-spinner-indicator-size, calc(var(--var-spacing-base) * 3));
     border-style: solid;
-    border-width: var(--var-spinner-indicator-border-width);
+    border-width: var(--var-spinner-indicator-border-width, calc(var(--var-spacing-base) * 0.25));
     border-color: var(--var-color-background);
     border-block-end-color: var(--var-color-primary);
     border-radius: var(--var-rounded-full);
@@ -17,7 +17,7 @@
     justify-content: center;
     inline-size: 100%;
     block-size: 100%;
-    padding: var(--var-spinner-container-padding);
+    padding: var(--var-spinner-container-padding, calc(var(--var-spacing-base) * 3));
 }
 
 @keyframes var-spinner-spin {

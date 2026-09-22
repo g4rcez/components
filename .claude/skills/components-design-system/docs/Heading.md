@@ -30,6 +30,8 @@ import { Heading } from "@g4rcez/components";
 
 ## Design Tokens
 
+Shared geometry uses scoped spacing/radius fallbacks; explicit overrides win. Read [Geometry tokens](geometry-tokens.md) before changing density or looking up library defaults.
+
 The component uses the `.__heading` selector and the typography tokens used by the heading stylesheet, including `--var-typography-xl` and `--var-font-weight-bold`. Override the variables or add `className` for local styling.
 
 ## Examples

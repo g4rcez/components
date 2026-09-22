@@ -16,16 +16,29 @@ const ComponentTokensProbe = () => {
             data-testid="component-tokens"
             data-height={button?.height}
             data-px={button?.px}
-            data-primary-background={button?.primary.background}
-            data-primary-foreground={button?.primary.foreground}
+            data-secondary-background={button?.secondary.background}
+            data-secondary-foreground={button?.secondary.foreground}
         />
     );
 };
 
 describe("ComponentsProvider component tokens", () => {
+    it("preserves explicit variants and zero radii while deriving unspecified variants from the spacing base", () => {
+        render(
+            <ComponentsProvider injectComponentTokens components={{ button: { height: "40px", "height-big": "60px", rounded: "0" } }}>
+                <button>Explicit geometry</button>
+            </ComponentsProvider>
+        );
+        const style = screen.getByRole("button", { name: "Explicit geometry" }).parentElement!.style;
+        expect(style.getPropertyValue("--var-button-height")).toBe("40px");
+        expect(style.getPropertyValue("--var-button-big-height")).toBe("60px");
+        expect(style.getPropertyValue("--var-button-rounded")).toBe("0");
+        expect(style.getPropertyValue("--var-button-small-height")).toBe("calc(var(--button-height) - calc(var(--var-spacing-base) * 0.5))");
+    });
+
     it("deeply merges a small component token set with defaults", () => {
         render(
-            <ComponentsProvider components={{ button: { height: "4rem", primary: { background: "hotpink" } } }}>
+            <ComponentsProvider components={{ button: { height: "4rem", secondary: { background: "hotpink" } } }}>
                 <ComponentTokensProbe />
             </ComponentsProvider>
         );
@@ -34,14 +47,14 @@ describe("ComponentsProvider component tokens", () => {
 
         expect(probe).toHaveAttribute("data-height", "4rem");
         expect(probe).toHaveAttribute("data-px", defaultLightThemeTokens.components.button.px);
-        expect(probe).toHaveAttribute("data-primary-background", "hotpink");
-        expect(probe).toHaveAttribute("data-primary-foreground", defaultLightThemeTokens.components.button.primary.foreground);
+        expect(probe).toHaveAttribute("data-secondary-background", "hotpink");
+        expect(probe).toHaveAttribute("data-secondary-foreground", defaultLightThemeTokens.components.button.secondary.foreground);
     });
 
     it("does not inject component token CSS variables unless explicitly enabled", () => {
         render(
             <ComponentsProvider
-                components={{ button: { height: "4rem", primary: { background: "hotpink" } }, tag: { "default-min-block-size": "3rem" } }}
+                components={{ button: { height: "4rem", secondary: { background: "hotpink" } }, tag: { "default-min-block-size": "3rem" } }}
             >
                 <button type="button">Preview</button>
             </ComponentsProvider>
@@ -55,7 +68,7 @@ describe("ComponentsProvider component tokens", () => {
         render(
             <ComponentsProvider
                 injectComponentTokens
-                components={{ button: { height: "4rem", primary: { background: "hotpink" } }, tag: { "default-min-block-size": "3rem" } }}
+                components={{ button: { height: "4rem", secondary: { background: "hotpink" } }, tag: { "default-min-block-size": "3rem" } }}
             >
                 <button type="button">Preview</button>
             </ComponentsProvider>
@@ -67,12 +80,12 @@ describe("ComponentsProvider component tokens", () => {
         expect(scope).toHaveStyle({ display: "contents" });
         expect(scope?.style.getPropertyValue("--button-height")).toBe("4rem");
         expect(scope?.style.getPropertyValue("--var-button-height")).toBe("4rem");
-        expect(scope?.style.getPropertyValue("--button-height-big")).toBe("calc(var(--button-height) + 0.5rem)");
-        expect(scope?.style.getPropertyValue("--var-button-big-height")).toBe("calc(var(--button-height) + 0.5rem)");
-        expect(scope?.style.getPropertyValue("--button-primary-background")).toBe("hotpink");
-        expect(scope?.style.getPropertyValue("--var-button-primary-background")).toBe("hotpink");
+        expect(scope?.style.getPropertyValue("--button-height-big")).toBe("calc(var(--button-height) + calc(var(--var-spacing-base) * 0.5))");
+        expect(scope?.style.getPropertyValue("--var-button-big-height")).toBe("calc(var(--button-height) + calc(var(--var-spacing-base) * 0.5))");
+        expect(scope?.style.getPropertyValue("--button-secondary-background")).toBe("hotpink");
+        expect(scope?.style.getPropertyValue("--var-button-secondary-background")).toBe("hotpink");
         expect(scope?.style.getPropertyValue("--tag-default-min-block-size")).toBe("3rem");
         expect(scope?.style.getPropertyValue("--var-tag-default-min-block-size")).toBe("3rem");
-        expect(scope?.style.getPropertyValue("--var-button-primary-foreground")).toBe("");
+        expect(scope?.style.getPropertyValue("--var-button-secondary-foreground")).toBe("");
     });
 });

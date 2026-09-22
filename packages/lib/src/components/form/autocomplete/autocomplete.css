@@ -4,32 +4,32 @@
 
 .__autocomplete__list {
     inline-size: 100%;
-    max-block-size: var(--var-autocomplete-list-max-block-size);
+    max-block-size: var(--var-autocomplete-list-max-block-size, calc(var(--var-spacing-base) * 24));
     overscroll-behavior: contain;
-    border-radius: var(--var-autocomplete-panel-radius);
+    border-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
 }
 
 .__autocomplete__item:first-child {
-    border-start-start-radius: var(--var-autocomplete-panel-radius);
-    border-start-end-radius: var(--var-autocomplete-panel-radius);
+    border-start-start-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-start-end-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
 }
 
 .__autocomplete__item:last-child {
-    border-end-start-radius: var(--var-autocomplete-panel-radius);
-    border-end-end-radius: var(--var-autocomplete-panel-radius);
+    border-end-start-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-end-end-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
 }
 
 .__autocomplete__option {
     inline-size: 100%;
-    min-block-size: var(--var-autocomplete-option-min-block-size);
+    min-block-size: var(--var-autocomplete-option-min-block-size, calc(var(--var-spacing-base) * 2.5));
     cursor: pointer;
-    padding: var(--var-autocomplete-option-padding);
+    padding: var(--var-autocomplete-option-padding, calc(var(--var-spacing-base) * 0.625));
     text-align: left;
 }
 
 .__autocomplete:is(.__autocomplete--size-min, .__autocomplete--size-small, .__autocomplete--size-tiny).__autocomplete__panel .__autocomplete__option {
-    min-block-size: var(--var-free-text-small-control-height);
-    padding: var(--var-free-text-small-surface-padding-inline);
+    min-block-size: var(--var-free-text-small-control-height, calc(var(--var-spacing-base) * 2));
+    padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
 .__autocomplete__option:hover {
@@ -58,18 +58,18 @@
 .__autocomplete__actions {
     display: flex;
     align-items: center;
-    gap: var(--var-autocomplete-actions-gap);
+    gap: var(--var-autocomplete-actions-gap, calc(var(--var-spacing-base) * 0.125));
 }
 
 .__autocomplete__action {
-    padding: var(--var-autocomplete-action-padding);
+    padding: var(--var-autocomplete-action-padding, calc(var(--var-spacing-base) * 0.5));
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: var(--var-motion-duration-normal);
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
 .__autocomplete:is(.__autocomplete--size-min, .__autocomplete--size-small, .__autocomplete--size-tiny).__autocomplete__action {
-    padding: var(--var-autocomplete-action-padding-md);
+    padding: var(--var-autocomplete-action-padding-md, calc(var(--var-spacing-base) * 0.25));
 }
 
 .__autocomplete__action--primary:hover,
@@ -89,19 +89,19 @@
 
 @media (min-width: 768px) {
     .__autocomplete__action {
-        padding: var(--var-autocomplete-action-padding-md);
+        padding: var(--var-autocomplete-action-padding-md, calc(var(--var-spacing-base) * 0.25));
     }
 }
 
 .__autocomplete__input-icon {
-    inline-size: var(--var-input-field-icon-size);
-    block-size: var(--var-input-field-icon-size);
+    inline-size: var(--var-input-field-icon-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-input-field-icon-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__autocomplete:is(.__autocomplete--size-min, .__autocomplete--size-small, .__autocomplete--size-tiny) .__autocomplete__input-icon,
 .__autocomplete:is(.__autocomplete--size-min, .__autocomplete--size-small, .__autocomplete--size-tiny).__autocomplete__input-icon {
-    inline-size: var(--var-input-field-small-icon-size);
-    block-size: var(--var-input-field-small-icon-size);
+    inline-size: var(--var-input-field-small-icon-size, calc(var(--var-spacing-base) * 0.875));
+    block-size: var(--var-input-field-small-icon-size, calc(var(--var-spacing-base) * 0.875));
 }
 
 .__autocomplete__sr-label {
@@ -132,14 +132,14 @@
     isolation: isolate;
     z-index: var(--var-layer-floating);
     margin: 0;
-    max-block-size: var(--var-autocomplete-panel-max-block-size);
+    max-block-size: var(--var-autocomplete-panel-max-block-size, calc(var(--var-spacing-base) * 20));
     transform-origin: top center;
     overflow: hidden;
     overscroll-behavior: contain;
     border-style: solid;
     border-width: var(--var-border-hairline);
     border-color: var(--var-autocomplete-panel-border);
-    border-radius: var(--var-autocomplete-panel-radius);
+    border-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
     background-color: var(--var-autocomplete-panel-background);
     padding: 0;
     color: var(--var-autocomplete-panel-foreground);
@@ -165,20 +165,20 @@
     display: flex;
     inline-size: 100%;
     justify-content: space-between;
-    padding: var(--var-autocomplete-option-padding);
+    padding: var(--var-autocomplete-option-padding, calc(var(--var-spacing-base) * 0.625));
     color: var(--var-autocomplete-empty-foreground);
     text-align: left;
 }
 
 .__autocomplete:is(.__autocomplete--size-min, .__autocomplete--size-small, .__autocomplete--size-tiny).__autocomplete__panel .__autocomplete__empty-text {
-    padding: var(--var-free-text-small-surface-padding-inline);
+    padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
 .__autocomplete__scroll {
     max-block-size: 100%;
     overscroll-behavior: contain;
     border-color: var(--var-autocomplete-panel-border);
-    border-radius: var(--var-autocomplete-panel-radius);
+    border-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
     background-color: var(--var-autocomplete-panel-background);
     padding: 0;
     color: var(--var-autocomplete-panel-foreground);

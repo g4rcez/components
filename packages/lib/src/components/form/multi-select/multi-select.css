@@ -3,23 +3,23 @@
 }
 
 .__multi-select__field {
-    min-inline-size: min(100%, var(--var-multi-select-field-min-inline-size));
+    min-inline-size: min(100%, var(--var-multi-select-field-min-inline-size, calc(var(--var-spacing-base) * 12)));
 }
 
 .__multi-select__tag-remove-icon {
-    inline-size: var(--var-multi-select-tag-remove-icon-size);
-    block-size: var(--var-multi-select-tag-remove-icon-size);
+    inline-size: var(--var-multi-select-tag-remove-icon-size, calc(var(--var-spacing-base) * 0.875));
+    block-size: var(--var-multi-select-tag-remove-icon-size, calc(var(--var-spacing-base) * 0.875));
 }
 
 .__multi-select__caret-icon {
-    inline-size: var(--var-input-field-icon-size);
-    block-size: var(--var-input-field-icon-size);
+    inline-size: var(--var-input-field-icon-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-input-field-icon-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny) .__multi-select__caret-icon,
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__caret-icon {
-    inline-size: var(--var-input-field-small-icon-size);
-    block-size: var(--var-input-field-small-icon-size);
+    inline-size: var(--var-input-field-small-icon-size, calc(var(--var-spacing-base) * 0.875));
+    block-size: var(--var-input-field-small-icon-size, calc(var(--var-spacing-base) * 0.875));
 }
 
 .__multi-select__sr-label {
@@ -35,8 +35,8 @@
 }
 
 .__multi-select__list:last-child {
-    border-start-start-radius: var(--var-dropdown-surface-radius);
-    border-start-end-radius: var(--var-dropdown-surface-radius);
+    border-start-start-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-start-end-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
 }
 
 .__multi-select__item {
@@ -45,12 +45,12 @@
 
 .__multi-select__tags {
     display: flex;
-    column-gap: var(--var-multi-select-tags-gap);
+    column-gap: var(--var-multi-select-tags-gap, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny) .__multi-select__tags,
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__tags {
-    column-gap: var(--var-input-field-small-slot-gap);
+    column-gap: var(--var-input-field-small-slot-gap, calc(var(--var-spacing-base) * 0.375));
 }
 
 .__multi-select__tags--row {
@@ -69,7 +69,7 @@
 .__multi-select__actions {
     display: flex;
     align-items: center;
-    gap: var(--var-multi-select-actions-gap);
+    gap: var(--var-multi-select-actions-gap, calc(var(--var-spacing-base) * 0.125));
 }
 
 .__multi-select__action {
@@ -83,35 +83,35 @@
 }
 
 .__multi-select__input {
-    block-size: var(--var-free-text-control-height);
+    block-size: var(--var-free-text-control-height, calc(var(--var-spacing-base) * 2.5));
     width: 100%;
     font-size: var(--var-free-text-font-size);
 }
 
 .__multi-select__surface {
-    border-radius: var(--var-free-text-surface-radius);
+    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.375));
     background-color: transparent;
-    padding-inline: var(--var-free-text-surface-padding-inline);
-    padding-block: var(--var-free-text-surface-padding-block);
+    padding-inline: var(--var-free-text-surface-padding-inline, calc(var(--var-spacing-base) * 0.5));
+    padding-block: var(--var-free-text-surface-padding-block, calc(var(--var-spacing-base) * 0.25));
     color: var(--var-color-foreground);
 }
 
 .__multi-select__transition {
-    outline: var(--var-free-text-outline-width) solid transparent;
-    outline-offset: var(--var-free-text-outline-offset);
+    outline: var(--var-free-text-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
+    outline-offset: var(--var-free-text-outline-offset, calc(var(--var-spacing-base) * 0.125));
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: var(--var-motion-duration-normal);
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
 .__multi-select__transition:focus {
-    box-shadow: inset 0 0 0 var(--var-free-text-outline-width) var(--var-color-ring);
+    box-shadow: inset 0 0 0 var(--var-free-text-outline-width, calc(var(--var-spacing-base) * 0.125)) var(--var-color-ring);
 }
 
 .__multi-select__value {
     display: flex;
     align-items: center;
-    gap: var(--var-input-field-control-column-gap);
+    gap: var(--var-input-field-control-column-gap, calc(var(--var-spacing-base) * 0.5));
     white-space: nowrap;
     text-align: left;
 }
@@ -140,11 +140,11 @@
     isolation: isolate;
     z-index: var(--var-layer-floating);
     margin: 0;
-    max-block-size: var(--var-dropdown-list-max-block-size);
+    max-block-size: var(--var-dropdown-list-max-block-size, calc(var(--var-spacing-base) * 24));
     overflow: clip;
     overscroll-behavior: contain;
     border-color: var(--var-dropdown-surface-border);
-    border-radius: var(--var-dropdown-surface-radius);
+    border-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
     background-color: var(--var-dropdown-surface-background);
     padding: 0;
     color: var(--var-dropdown-surface-foreground);
@@ -162,18 +162,18 @@
 }
 
 .__multi-select__search {
-    block-size: var(--var-free-text-control-height);
+    block-size: var(--var-free-text-control-height, calc(var(--var-spacing-base) * 2.5));
     width: 100%;
     flex: 1 1 0%;
-    margin-block-end: var(--var-multi-select-search-margin-block-end);
+    margin-block-end: var(--var-multi-select-search-margin-block-end, calc( var(--var-spacing-base) * 0.25 ));
     border-bottom-width: var(--var-border-hairline);
     border-color: var(--var-color-border);
     border-radius: 0;
     background-color: transparent;
-    padding-inline: var(--var-free-text-surface-padding-inline);
-    padding-block: var(--var-free-text-surface-padding-block);
-    outline: var(--var-free-text-outline-width) solid transparent;
-    outline-offset: var(--var-free-text-outline-offset);
+    padding-inline: var(--var-free-text-surface-padding-inline, calc(var(--var-spacing-base) * 0.5));
+    padding-block: var(--var-free-text-surface-padding-block, calc(var(--var-spacing-base) * 0.25));
+    outline: var(--var-free-text-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
+    outline-offset: var(--var-free-text-outline-offset, calc(var(--var-spacing-base) * 0.125));
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: var(--var-motion-duration-normal);
     transition-timing-function: var(--var-motion-timing-linear);
@@ -197,18 +197,18 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding: var(--var-multi-select-option-padding);
+    padding: var(--var-multi-select-option-padding, calc(var(--var-spacing-base) * 0.625));
     color: var(--var-color-disabled);
     text-align: left;
 }
 
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__panel .__multi-select__empty-text {
-    padding: var(--var-free-text-small-surface-padding-inline);
+    padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
 .__multi-select__results,
 .__multi-select__scroll {
-    max-block-size: var(--var-multi-select-results-max-block-size);
+    max-block-size: var(--var-multi-select-results-max-block-size, calc(var(--var-spacing-base) * 18));
     width: 100%;
     overscroll-behavior: contain;
 }
@@ -227,13 +227,13 @@
     cursor: pointer;
     align-items: center;
     justify-content: flex-start;
-    padding: var(--var-multi-select-option-padding);
+    padding: var(--var-multi-select-option-padding, calc(var(--var-spacing-base) * 0.625));
     text-align: left;
 }
 
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__panel .__multi-select__option {
-    min-block-size: var(--var-free-text-small-control-height);
-    padding: var(--var-free-text-small-surface-padding-inline);
+    min-block-size: var(--var-free-text-small-control-height, calc(var(--var-spacing-base) * 2));
+    padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
 .__multi-select__option:hover,
@@ -248,7 +248,7 @@
 
 .__multi-select__checkbox {
     flex-shrink: 0;
-    margin-inline-end: var(--var-multi-select-checkbox-margin-inline-end);
+    margin-inline-end: var(--var-multi-select-checkbox-margin-inline-end, calc( var(--var-spacing-base) * 0.5 ));
     pointer-events: none;
 }
 
@@ -258,16 +258,16 @@
     display: flex;
     width: 100%;
     align-items: center;
-    gap: var(--var-multi-select-footer-gap);
+    gap: var(--var-multi-select-footer-gap, calc(var(--var-spacing-base) * 0.5));
     overflow-x: auto;
-    border-end-start-radius: var(--var-dropdown-surface-radius);
-    border-end-end-radius: var(--var-dropdown-surface-radius);
+    border-end-start-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-end-end-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
     background-color: var(--var-dropdown-surface-background);
-    padding: var(--var-multi-select-option-padding);
+    padding: var(--var-multi-select-option-padding, calc(var(--var-spacing-base) * 0.625));
 }
 
 .__multi-select:is(.__multi-select--size-min, .__multi-select--size-small, .__multi-select--size-tiny).__multi-select__panel .__multi-select__footer {
-    padding: var(--var-free-text-small-surface-padding-inline);
+    padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
 .__multi-select__control-state:is(:hover, :focus-within),

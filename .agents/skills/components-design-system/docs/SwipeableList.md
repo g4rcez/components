@@ -66,6 +66,17 @@ The `onAction` payload includes the item, the activated action, and its `side` (
 
 ## Design Tokens and CSS
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-swipeable-list-root-gap` | `calc(var(--var-spacing-base) * 0.5)` |
+| `--var-swipeable-list-surface-radius` | `calc( var(--var-radius, 0px) + var(--var-radius-base) )` |
+| `--var-swipeable-list-action-focus-ring-width` | `calc( var(--var-spacing-base) * 0.125 )` |
+| `--var-swipeable-list-action-focus-ring-offset` | `calc( var(--var-spacing-base) * 0.125 )` |
+
 The component ships a plain CSS chunk at `@g4rcez/components/swipeable-list.css`. Import `foundation.css` before it, or use `index.css`.
 
 The stable selectors start with `.__swipeable-list`, with slots such as `.__swipeable-list__surface`, `.__swipeable-list__action`, and `.__swipeable-list__description`. Component variables include `--var-swipeable-list-surface-radius`, `--var-swipeable-list-surface-padding-block`, `--var-swipeable-list-action-icon-size`, and semantic color tokens such as `--var-color-border` and `--var-card-background`.

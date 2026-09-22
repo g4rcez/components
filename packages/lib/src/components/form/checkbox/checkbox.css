@@ -11,7 +11,7 @@
   flex-wrap: wrap;
   align-items: center;
   width: fit-content;
-  gap: var(--var-checkbox-label-gap);
+  gap: var(--var-checkbox-label-gap, calc(var(--var-spacing-base) * 0.5));
   font-weight: 400;
 }
 
@@ -21,29 +21,29 @@
 }
 
 .__checkbox--size-big.__checkbox__label {
-  min-block-size: var(--var-button-big-height);
+  min-block-size: var(--var-button-big-height, calc(var(--var-spacing-base) * 3));
 }
 
 .__checkbox--size-default.__checkbox__label,
 .__checkbox--size-normal.__checkbox__label,
 .__checkbox--size-medium.__checkbox__label {
-  min-block-size: var(--var-button-height);
+  min-block-size: var(--var-button-height, calc(var(--var-spacing-base) * 2.5));
 }
 
 .__checkbox--size-min.__checkbox__label {
-  min-block-size: var(--var-button-min-height);
+  min-block-size: var(--var-button-min-height, calc(var(--var-spacing-base) * 1.75));
 }
 
 .__checkbox--size-small.__checkbox__label {
-  min-block-size: var(--var-button-small-height);
+  min-block-size: var(--var-button-small-height, calc(var(--var-spacing-base) * 2));
 }
 
 .__checkbox--size-tiny.__checkbox__label {
-  min-block-size: var(--var-button-tiny-height);
+  min-block-size: var(--var-button-tiny-height, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__checkbox--size-large.__checkbox__label {
-  min-block-size: var(--var-button-big-height);
+  min-block-size: var(--var-button-big-height, calc(var(--var-spacing-base) * 3));
 }
 
 .__checkbox__control {
@@ -56,15 +56,15 @@
   flex-shrink: 0;
   place-content: center;
   vertical-align: middle;
-  inline-size: var(--var-checkbox-control-size);
-  block-size: var(--var-checkbox-control-size);
+  inline-size: var(--var-checkbox-control-size, calc(var(--var-spacing-base) * 1));
+  block-size: var(--var-checkbox-control-size, calc(var(--var-spacing-base) * 1));
   padding: 0;
   appearance: none;
   color: var(--var-checkbox-control-foreground);
   border-style: solid;
-  border-width: var(--var-checkbox-control-border-width);
+  border-width: var(--var-checkbox-control-border-width, calc(var(--var-spacing-base) * 0.0625));
   border-color: var(--var-checkbox-control-border);
-  border-radius: var(--var-checkbox-control-radius);
+  border-radius: var(--var-checkbox-control-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.25));
   background-color: var(--var-checkbox-control-background);
   background-origin: border-box;
   box-shadow: none;
@@ -82,12 +82,12 @@
   inset: 0;
   margin: auto;
   content: "";
-  inline-size: var(--var-checkbox-mark-inline-size);
-  block-size: var(--var-checkbox-mark-block-size);
+  inline-size: var(--var-checkbox-mark-inline-size, calc(var(--var-spacing-base) * 0.35));
+  block-size: var(--var-checkbox-mark-block-size, calc(var(--var-spacing-base) * 0.6));
   border-style: solid;
   border-color: var(--var-checkbox-mark-foreground);
-  border-width: 0 var(--var-checkbox-mark-stroke-width)
-    var(--var-checkbox-mark-stroke-width) 0;
+  border-width: 0 var(--var-checkbox-mark-stroke-width, calc(var(--var-spacing-base) * 0.125))
+    var(--var-checkbox-mark-stroke-width, calc(var(--var-spacing-base) * 0.125)) 0;
   transform: rotate(45deg) scale(0);
   transform-origin: center;
   transition: transform var(--var-motion-duration-normal) ease-in-out;
@@ -95,8 +95,8 @@
 
 .__checkbox__control-state:focus-visible,
 .__checkbox__control-state:focus {
-  outline: var(--var-checkbox-focus-ring-width) solid var(--var-checkbox-focus-ring);
-  outline-offset: var(--var-checkbox-focus-ring-offset);
+  outline: var(--var-checkbox-focus-ring-width, calc(var(--var-spacing-base) * 0.125)) solid var(--var-checkbox-focus-ring);
+  outline-offset: var(--var-checkbox-focus-ring-offset, calc(var(--var-spacing-base) * 0.125));
 }
 
 .__checkbox__control-state:disabled {
@@ -115,8 +115,8 @@
 }
 
 .__checkbox__control-state:indeterminate::before {
-  inline-size: var(--var-checkbox-indeterminate-mark-inline-size);
-  block-size: var(--var-checkbox-mark-stroke-width);
+  inline-size: var(--var-checkbox-indeterminate-mark-inline-size, calc( var(--var-spacing-base) * 0.55 ));
+  block-size: var(--var-checkbox-mark-stroke-width, calc(var(--var-spacing-base) * 0.125));
   border: 0;
   background-color: var(--var-checkbox-mark-foreground);
   transform: scale(1);

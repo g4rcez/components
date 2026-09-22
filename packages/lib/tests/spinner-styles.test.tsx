@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Loading, Spinner } from "../src/components/display/spinner";
+import { Loading, Spinner } from "../src/components/display/spinner/spinner";
 
 describe("Spinner v6 styles", () => {
     it("renders the stable spinner root class", () => {

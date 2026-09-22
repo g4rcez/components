@@ -1,3 +1,6 @@
+import { defaultGeometryTokens } from "./geometry-defaults";
+export { defaultGeometryTokens, defaultGeometryBases } from "./geometry-defaults";
+
 export type TokenTree = {
     readonly [key: string]: string | TokenTree;
 };
@@ -97,7 +100,7 @@ export const defaultLightThemeTokens = {
         },
         card: {
             "content-gap": "calc(var(--var-spacing-base) * 1)",
-            "surface-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 4))",
+            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 4))",
             "surface-padding-block": "calc(var(--var-spacing-base) * 0.75)",
             "content-padding-inline": "calc(var(--var-spacing-base) * 1.5)",
             "title-margin-block-end": "calc(var(--var-spacing-base) / 2)",
@@ -117,8 +120,8 @@ export const defaultLightThemeTokens = {
             "stats-panel-background-hover": "hsla(201, 49%, 22%, 0.1)",
         },
         alert: {
-            "icon-size": "calc(var(--var-fontsize) * 1.25)",
-            "surface-radius": "calc(var(--var-radius) - calc(var(--var-spacing-base) / 4))",
+            "icon-size": "calc(var(--var-spacing-base) * 1.25)",
+            "surface-radius": "calc(var(--var-radius, calc(var(--var-radius-base) / 2)) - calc(var(--var-radius-base) / 4))",
             "surface-padding": "calc(var(--var-spacing-base) * 1)",
             "content-gap": "calc(var(--var-spacing-base) / 2)",
             "close-inset-block-start": "calc(var(--var-spacing-base) * 0.75)",
@@ -157,7 +160,7 @@ export const defaultLightThemeTokens = {
             py: "calc(var(--var-spacing-base) / 2)",
             gap: "calc(var(--var-spacing-base) * 0.375)",
             "font-size": "calc(var(--var-fontsize) * 1)",
-            rounded: "calc(var(--var-radius) * 0.733333)",
+            rounded: "calc(var(--var-radius, var(--var-radius-base)) * 0.733333)",
             "big-height": "calc(var(--var-spacing-base) * 3)",
             "big-px": "calc(var(--var-spacing-base) * 1.5)",
             "big-py": "calc(var(--var-spacing-base) * 1)",
@@ -175,8 +178,8 @@ export const defaultLightThemeTokens = {
             "tiny-py": "calc(var(--var-spacing-base) / 4)",
             "tiny-font-size": "calc(var(--var-fontsize) * 0.875)",
             "icon-p": "calc(var(--var-spacing-base) / 4)",
-            "icon-font-size": "calc(var(--var-fontsize) * 1)",
-            "rough-rounded": "calc(var(--var-radius) / 6)",
+            "icon-font-size": "calc(var(--var-spacing-base) * 1)",
+            "rough-rounded": "calc(var(--var-radius, var(--var-radius-base)) / 6)",
             "squared-rounded": "0",
             "focus-ring-width": "calc(var(--var-spacing-base) / 4)",
             secondary: {
@@ -197,10 +200,10 @@ export const defaultLightThemeTokens = {
             "day-button-font-size": "calc(var(--var-fontsize) * 0.75)",
             "focus-ring-width": "calc(var(--var-spacing-base) / 4)",
             "selected-ring-width": "calc(var(--var-spacing-base) / 4)",
-            "header-radius": "calc(var(--var-radius) * 0.733333)",
+            "header-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.733333)",
             "table-margin-block-start": "calc(var(--var-spacing-base) * 1)",
             "nav-button-padding": "calc(var(--var-spacing-base) / 4)",
-            "nav-icon-size": "calc(var(--var-fontsize) * 1)",
+            "nav-icon-size": "calc(var(--var-spacing-base) * 1)",
             "current-month-font-weight": "650",
             "month-controls-gap": "calc(var(--var-spacing-base) * 0.5)",
             "month-controls-padding-block": "calc(var(--var-spacing-base) / 4)",
@@ -227,12 +230,12 @@ export const defaultLightThemeTokens = {
             "select-background-hover": "hsla(240, 5%, 96%, 0.42)",
         },
         "input-field": {
-            "icon-size": "calc(var(--var-fontsize) * 1)",
-            "small-icon-size": "calc(var(--var-fontsize) * 0.875)",
+            "icon-size": "calc(var(--var-spacing-base) * 1)",
+            "small-icon-size": "calc(var(--var-spacing-base) * 0.875)",
             "label-row-gap": "calc(var(--var-spacing-base) * 0.25)",
             "label-meta-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "tooltip-icon-size": "calc(var(--var-fontsize) * 0.75)",
-            "small-tooltip-icon-size": "calc(var(--var-fontsize) * 0.6875)",
+            "tooltip-icon-size": "calc(var(--var-spacing-base) * 0.75)",
+            "small-tooltip-icon-size": "calc(var(--var-spacing-base) * 0.6875)",
             "tooltip-max-inline-size": "calc(var(--var-spacing-base) * 12)",
             "status-min-inline-size": "calc(var(--var-spacing-base) * 1.5)",
             "small-status-min-inline-size": "calc(var(--var-spacing-base) * 1.25)",
@@ -248,7 +251,7 @@ export const defaultLightThemeTokens = {
             "small-control-column-gap": "calc(var(--var-spacing-base) * 0.375)",
             "control-row-gap": "calc(var(--var-spacing-base) * 0.25)",
             "small-control-row-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "control-radius": "calc(var(--var-radius) * 0.375)",
+            "control-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.375)",
             "slot-gap": "calc(var(--var-spacing-base) * 0.5)",
             "small-slot-gap": "calc(var(--var-spacing-base) * 0.375)",
             "slot-padding-inline-start": "calc(var(--var-spacing-base) * 0.5)",
@@ -265,7 +268,7 @@ export const defaultLightThemeTokens = {
             "min-control-height": "calc(var(--var-spacing-base) * 1.75)",
             "small-control-height": "calc(var(--var-spacing-base) * 2)",
             "tiny-control-height": "calc(var(--var-spacing-base) * 1.5)",
-            "surface-radius": "calc(var(--var-radius) * 0.375)",
+            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.375)",
             "surface-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
             "big-surface-padding-inline": "calc(var(--var-spacing-base) * 1.5)",
             "min-surface-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
@@ -284,7 +287,7 @@ export const defaultLightThemeTokens = {
             "error-placeholder-foreground": "hsla(0, 84%, 96%)",
         },
         dropdown: {
-            "surface-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 2))",
+            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
             "surface-padding": "calc(var(--var-spacing-base) * 1)",
             "header-margin-block-end": "calc(var(--var-spacing-base) / 2)",
             "title-font-size": "calc(var(--var-fontsize) * 1.5)",
@@ -295,7 +298,7 @@ export const defaultLightThemeTokens = {
             "surface-border": "hsla(240, 6%, 90%)",
         },
         menu: {
-            "surface-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 2))",
+            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
             "surface-max-block-size": "calc(var(--var-spacing-base) * 20)",
             "surface-background": "hsla(0, 0%, 100%)",
             "surface-foreground": "hsla(240, 10%, 4%)",
@@ -310,12 +313,12 @@ export const defaultLightThemeTokens = {
             "item-active-foreground": "hsla(221, 6%, 90%)",
             "nested-indicator-margin-inline-start": "calc(var(--var-spacing-base) * 0.625)",
             "nested-indicator-font-size": "calc(var(--var-fontsize) * 0.625)",
-            "nested-icon-size": "calc(var(--var-fontsize) * 0.875)",
-            "item-icon-size": "calc(var(--var-fontsize) * 1)",
+            "nested-icon-size": "calc(var(--var-spacing-base) * 0.875)",
+            "item-icon-size": "calc(var(--var-spacing-base) * 1)",
         },
         autocomplete: {
             "list-max-block-size": "calc(var(--var-spacing-base) * 24)",
-            "panel-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 2))",
+            "panel-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
             "option-min-block-size": "calc(var(--var-spacing-base) * 2.5)",
             "option-padding": "calc(var(--var-spacing-base) * 0.625)",
             "option-background-hover": "hsla(240, 5%, 96%)",
@@ -335,7 +338,7 @@ export const defaultLightThemeTokens = {
             "empty-foreground": "hsla(240, 5%, 96%)",
         },
         "multi-select": {
-            "tag-remove-icon-size": "calc(var(--var-fontsize) * 0.875)",
+            "tag-remove-icon-size": "calc(var(--var-spacing-base) * 0.875)",
             "tags-gap": "calc(var(--var-spacing-base) * 0.5)",
             "actions-gap": "calc(var(--var-spacing-base) * 0.125)",
             "panel-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -370,7 +373,7 @@ export const defaultLightThemeTokens = {
         checkbox: {
             "label-gap": "calc(var(--var-spacing-base) * 0.5)",
             "control-size": "calc(var(--var-spacing-base) * 1)",
-            "control-radius": "calc(var(--var-radius) * 0.25)",
+            "control-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.25)",
             "control-foreground": "hsla(201, 49%, 36%)",
             "control-background": "hsla(0, 0%, 100%)",
             "control-border": "hsla(240, 6%, 90%)",
@@ -404,7 +407,7 @@ export const defaultLightThemeTokens = {
             "error-margin-block-start": "calc(var(--var-spacing-base) * 0.25)",
         },
         "date-picker": {
-            "calendar-icon-size": "calc(var(--var-fontsize) * 1)",
+            "calendar-icon-size": "calc(var(--var-spacing-base) * 1)",
             "panel-gap": "calc(var(--var-spacing-base) * 1)",
             "panel-padding": "calc(var(--var-spacing-base) * 1)",
             "presets-inline-size": "calc(var(--var-spacing-base) * 13)",
@@ -427,13 +430,13 @@ export const defaultLightThemeTokens = {
         },
         "file-upload": {
             "surface-padding": "calc(var(--var-spacing-base) * 1.5)",
-            "surface-radius": "calc(var(--var-spacing-base) * 0.5)",
+            "surface-radius": "calc(var(--var-radius-base) * 0.5)",
             "content-gap": "calc(var(--var-spacing-base) * 1)",
             "thumb-size": "calc(var(--var-spacing-base) * 4)",
             "thumb-radius": "50%",
-            "thumb-icon-size": "calc(var(--var-fontsize) * 1.75)",
+            "thumb-icon-size": "calc(var(--var-spacing-base) * 1.75)",
             "file-icon-size": "calc(var(--var-spacing-base) * 3)",
-            "remove-icon-size": "calc(var(--var-fontsize) * 1)",
+            "remove-icon-size": "calc(var(--var-spacing-base) * 1)",
             "idle-icon-size": "calc(var(--var-spacing-base) * 5)",
             "preview-button-margin": "calc(var(--var-spacing-base) * 0.5)",
             "item-border-width": "calc(var(--var-spacing-base) * 0.0625)",
@@ -465,12 +468,12 @@ export const defaultLightThemeTokens = {
             "group-padding-block-start": "calc(var(--var-spacing-base) * 0.5)",
             "group-padding-block-end": "calc(var(--var-spacing-base) * 0.25)",
             "group-label-foreground": "hsla(240, 6%, 10%)",
-            "item-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 2))",
+            "item-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
             "item-padding": "calc(var(--var-spacing-base) * 0.5)",
             "item-content-gap": "calc(var(--var-spacing-base) * 0.5)",
             "item-background-hover": "hsla(240, 5%, 96%)",
             "search-icon-frame-size": "calc(var(--var-spacing-base) * 2.5)",
-            "search-icon-size": "calc(var(--var-fontsize) * 1)",
+            "search-icon-size": "calc(var(--var-spacing-base) * 1)",
             "input-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
             "input-padding-block": "calc(var(--var-spacing-base) * 0.5)",
             "input-outline-width": "calc(var(--var-spacing-base) * 0.125)",
@@ -478,7 +481,7 @@ export const defaultLightThemeTokens = {
             "empty-foreground": "hsla(240, 6%, 10%)",
         },
         tooltip: {
-            "surface-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 2))",
+            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
             "surface-padding": "calc(var(--var-spacing-base) * 0.75)",
             "surface-background": "hsla(240, 10%, 4%)",
             "surface-foreground": "hsla(0, 0%, 100%)",
@@ -486,7 +489,7 @@ export const defaultLightThemeTokens = {
         },
         tag: {
             "surface-gap": "calc(var(--var-spacing-base) * 0.375)",
-            "surface-radius": "calc(var(--var-radius) * 2.666667)",
+            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 2.666667)",
             "default-min-block-size": "calc(var(--var-spacing-base) * 2)",
             "default-padding-inline": "calc(var(--var-spacing-base) * 1)",
             "default-padding-block": "calc(var(--var-spacing-base) * 0.5)",
@@ -560,7 +563,7 @@ export const defaultLightThemeTokens = {
         list: {
             "detail-card-min-inline-size": "calc(var(--var-spacing-base) * 20)",
             "detail-card-gap": "calc(var(--var-spacing-base) * 1)",
-            "detail-card-radius": "calc(var(--var-radius) * 1.333333)",
+            "detail-card-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1.333333)",
             "detail-card-padding": "calc(var(--var-spacing-base) * 1.5)",
             "detail-card-padding-block": "calc(var(--var-spacing-base) * 1.5)",
             "detail-card-padding-block-end": "calc(var(--var-spacing-base) * 1.5)",
@@ -584,7 +587,7 @@ export const defaultLightThemeTokens = {
         "swipeable-list": {
             "root-gap": "calc(var(--var-spacing-base) * 0.5)",
             "content-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "surface-radius": "calc(var(--var-radius) + var(--var-spacing-base))",
+            "surface-radius": "calc(var(--var-radius, 0px) + var(--var-radius-base))",
             "surface-min-block-size": "calc(var(--var-spacing-base) * 4.5)",
             "surface-padding-inline": "calc(var(--var-spacing-base) * 1)",
             "surface-padding-block": "calc(var(--var-spacing-base) * 0.75)",
@@ -605,12 +608,12 @@ export const defaultLightThemeTokens = {
             "dialog-max-inline-size-mobile": "calc(var(--var-spacing-base) * 20)",
             "dialog-max-block-size": "calc(var(--var-spacing-base) * 40)",
             "drawer-max-inline-size": "90vw",
-            "surface-radius": "calc(var(--var-radius) * 1.333333)",
+            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1.333333)",
             "surface-padding-block": "calc(var(--var-spacing-base) * 1.5)",
             "sheet-max-block-size": "90svh",
             "sheet-padding-block-start": "calc(var(--var-spacing-base) * 1.5)",
             "sheet-padding-block-end": "calc(var(--var-spacing-base) * 1.5)",
-            "resizer-radius": "calc(var(--var-radius) * 0.666667)",
+            "resizer-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
             "focus-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
             "resizer-focus-ring-width": "calc(var(--var-spacing-base) / 4)",
             "sheet-handle-inset-block-start": "calc(var(--var-spacing-base) / 4)",
@@ -637,14 +640,14 @@ export const defaultLightThemeTokens = {
             "transition-duration": "375ms",
             "transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
             "close-focus-ring-width": "calc(var(--var-spacing-base) * 0.125)",
-            "close-icon-size": "calc(var(--var-fontsize) * 1.25)",
+            "close-icon-size": "calc(var(--var-spacing-base) * 1.25)",
             "confirm-dialog-max-inline-size": "calc(var(--var-spacing-base) * 24)",
             "confirm-actions-gap": "calc(var(--var-spacing-base) * 1)",
             "confirm-description-padding-block": "calc(var(--var-spacing-base) * 1)",
             "overlay-background": "hsla(240, 6%, 10%, 0.8)",
         },
         notification: {
-            "surface-radius": "calc(var(--var-radius) * 1.333333)",
+            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1.333333)",
             "surface-backdrop-blur": "calc(var(--var-spacing-base) * 0.75)",
             "content-gap": "calc(var(--var-spacing-base) * 0.75)",
             "content-padding": "calc(var(--var-spacing-base) * 1)",
@@ -660,7 +663,7 @@ export const defaultLightThemeTokens = {
             "description-opacity": "0.9",
             "close-margin-block-start": "calc(var(--var-spacing-base) * -0.25)",
             "close-margin-inline-end": "calc(var(--var-spacing-base) * -0.25)",
-            "close-radius": "calc(var(--var-radius) * 0.666667)",
+            "close-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
             "close-padding": "calc(var(--var-spacing-base) * 0.25)",
             "close-transition-duration": "150ms",
             "close-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -684,7 +687,7 @@ export const defaultLightThemeTokens = {
         },
         progress: {
             "track-block-size": "calc(var(--var-spacing-base) * 1.5)",
-            "track-radius": "calc(var(--var-radius) * 0.4)",
+            "track-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.4)",
             "indicator-transition-duration": "500ms",
             "indicator-transition-timing": "ease-in-out",
         },
@@ -701,28 +704,29 @@ export const defaultLightThemeTokens = {
         },
         step: {
             "marker-size": "calc(var(--var-spacing-base) * 2.5)",
-            "icon-size": "calc(var(--var-fontsize) * 1.5)",
+            "icon-size": "calc(var(--var-spacing-base) * 1.5)",
             "label-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
             gap: "calc(var(--var-spacing-base) * 1)",
             "connector-block-size": "calc(var(--var-border-hairline) * 2)",
         },
         "page-calendar": {
+            "hour-block-size": "calc(var(--var-spacing-base) * 3)",
             gap: "calc(var(--var-spacing-base) * 1)",
             "header-gap": "calc(var(--var-spacing-base) * 1)",
-            "header-nav-icon-size": "calc(var(--var-fontsize) * 1)",
-            "header-icon-size": "calc(var(--var-fontsize) * 0.875)",
+            "header-nav-icon-size": "calc(var(--var-spacing-base) * 1)",
+            "header-icon-size": "calc(var(--var-spacing-base) * 0.875)",
             "date-gap": "calc(var(--var-spacing-base) * 0.75)",
             "badge-size": "calc(var(--var-spacing-base) * 3)",
-            "badge-radius": "calc(var(--var-radius) * 0.666667)",
+            "badge-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
             "title-text": "calc(var(--var-fontsize) * 1.25)",
             "week-label-text": "calc(var(--var-fontsize) * 0.75)",
             "nav-gap": "calc(var(--var-spacing-base) * 0.5)",
             "nav-button-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "today-radius": "calc(var(--var-radius) * 0.5)",
+            "today-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.5)",
             "today-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
             "today-padding-block": "calc(var(--var-spacing-base) * 0.375)",
             "today-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "view-switch-radius": "calc(var(--var-radius) * 0.5)",
+            "view-switch-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.5)",
             "filter-gap": "calc(var(--var-spacing-base) * 0.375)",
             "filter-font-size": "calc(var(--var-fontsize) * 0.75)",
             "filter-label-margin-inline-end": "calc(var(--var-spacing-base) * 0.25)",
@@ -749,7 +753,7 @@ export const defaultLightThemeTokens = {
             "hour-font-size": "calc(var(--var-fontsize) * 0.625)",
             "hour-label-inset-block-start": "calc(var(--var-spacing-base) * -0.625)",
             "hour-label-inset-inline-end": "calc(var(--var-spacing-base) * 0.5)",
-            "pill-radius": "calc(var(--var-radius) / 3)",
+            "pill-radius": "calc(var(--var-radius, var(--var-radius-base)) / 3)",
             "pill-font-size": "calc(var(--var-fontsize) * 0.75)",
             "pill-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
             "pill-block-size": "calc(var(--var-spacing-base) * 1.25)",
@@ -766,12 +770,12 @@ export const defaultLightThemeTokens = {
             "cell-background-hover": "hsla(240, 5%, 96%, 0.2)",
         },
         table: {
-            rounded: "calc(var(--var-radius) * 0.666667)",
+            rounded: "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
             "groups-gap": "calc(var(--var-spacing-base) * 1)",
             "inline-gap-tight": "calc(var(--var-spacing-base) * 0.25)",
             "filter-gap": "calc(var(--var-spacing-base) * 1)",
-            "filter-icon-size": "calc(var(--var-fontsize) * 0.875)",
-            "filter-delete-icon-size": "calc(var(--var-fontsize) * 1)",
+            "filter-icon-size": "calc(var(--var-spacing-base) * 0.875)",
+            "filter-delete-icon-size": "calc(var(--var-spacing-base) * 1)",
             "filter-list-margin-block-start": "calc(var(--var-spacing-base) * 1)",
             "filter-list-gap": "calc(var(--var-spacing-base) * 0.5)",
             "filter-row-gap": "calc(var(--var-spacing-base) * 0.75)",
@@ -779,10 +783,10 @@ export const defaultLightThemeTokens = {
             "filter-inline-gap": "calc(var(--var-spacing-base) * 1)",
             "filter-inline-padding-block": "calc(var(--var-spacing-base) * 0.5)",
             "filter-inline-delete-margin-block-start": "calc(var(--var-spacing-base) * 1)",
-            "group-icon-size": "calc(var(--var-fontsize) * 0.875)",
-            "group-delete-icon-size": "calc(var(--var-fontsize) * 1)",
+            "group-icon-size": "calc(var(--var-spacing-base) * 0.875)",
+            "group-delete-icon-size": "calc(var(--var-spacing-base) * 1)",
             "group-order-list-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "sort-icon-size": "calc(var(--var-fontsize) * 0.875)",
+            "sort-icon-size": "calc(var(--var-spacing-base) * 0.875)",
             "sort-list-gap": "calc(var(--var-spacing-base) * 0.5)",
             "sort-row-gap": "calc(var(--var-spacing-base) * 0.75)",
             "groups-margin-block-start": "calc(var(--var-spacing-base) * 1)",
@@ -793,19 +797,19 @@ export const defaultLightThemeTokens = {
             "cell-padding": "calc(var(--var-spacing-base) * 0.75)",
             "cell-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
             "cell-border": "calc(var(--var-border-hairline) * 1)",
-            "head-icon-size": "calc(var(--var-fontsize) * 0.875)",
+            "head-icon-size": "calc(var(--var-spacing-base) * 0.875)",
             "head-cell-block-size": "calc(var(--var-spacing-base) * 3.5)",
             "head-filter-item-margin-block": "calc(var(--var-spacing-base) * 0.25)",
-            "properties-icon-size": "calc(var(--var-fontsize) * 0.875)",
+            "properties-icon-size": "calc(var(--var-spacing-base) * 0.875)",
             "properties-trigger-min-block-size": "calc(var(--var-spacing-base) * 2.75)",
             "properties-list-min-inline-size": "calc(var(--var-spacing-base) * 14)",
             "properties-list-gap": "calc(var(--var-spacing-base) * 0.5)",
             "properties-item-gap": "calc(var(--var-spacing-base) * 0.5)",
             "properties-handle-padding": "calc(var(--var-spacing-base) * 0.25)",
-            "divider-width": "calc(var(--var-border-hairline) * 1)",
-            "divider-width-active": "calc(var(--var-spacing-base) * 0.375)",
-            "resizer-inline-size": "calc(var(--var-spacing-base) * 1.5)",
-            "resizer-block-size": "calc(var(--var-spacing-base) * 1.5)",
+            "divider-width": "calc(var(--var-spacing-base) * 1)",
+            "divider-width-active": "calc(var(--var-spacing-base) * 0.5)",
+            "resizer-inline-size": "calc(var(--var-spacing-base) * 0.75)",
+            "resizer-block-size": "calc(var(--var-spacing-base) * 3)",
             "resizer-focus-ring-width": "calc(var(--var-border-hairline) * 2)",
             "resizer-focus-ring-offset": "calc(var(--var-spacing-base) * 0.125)",
             "pagination-gap": "calc(var(--var-spacing-base) * 1)",
@@ -822,7 +826,7 @@ export const defaultLightThemeTokens = {
             "metadata-min-inline-size": "1ch",
             "operations-gap": "calc(var(--var-spacing-base) * 1)",
             "operations-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "pill-radius": "calc(var(--var-radius) * 1)",
+            "pill-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1)",
             "pill-padding-inline": "calc(var(--var-spacing-base) * 1)",
             "pill-padding-block": "calc(var(--var-spacing-base) * 0.125)",
             "filter-dot-size": "calc(var(--var-spacing-base) * 0.75)",
@@ -830,7 +834,7 @@ export const defaultLightThemeTokens = {
             "inline-placeholder-color": "hsla(201, 49%, 36%, 0.7)",
             "loading-block-size": "calc(var(--var-spacing-base) * 3.5)",
             "loading-bar-block-size": "calc(var(--var-spacing-base) * 0.5)",
-            "loading-bar-radius": "calc(var(--var-radius) / 3)",
+            "loading-bar-radius": "calc(var(--var-radius, var(--var-radius-base)) / 3)",
             "loading-bar-opacity": "0.6",
             "loading-bar-pulse-duration": "2s",
             "loading-bar-pulse-timing": "cubic-bezier(0.4, 0, 0.6, 1)",
@@ -842,13 +846,13 @@ export const defaultLightThemeTokens = {
         shortcut: {
             "content-gap": "calc(var(--var-spacing-base) * 0.25)",
             "content-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "icon-size": "calc(var(--var-fontsize) * 0.75)",
+            "icon-size": "calc(var(--var-spacing-base) * 0.75)",
         },
         wizard: {
             "surface-inline-size": "calc(var(--var-spacing-base) * 20)",
             "surface-max-inline-size": "calc(var(--var-spacing-base) * 24)",
             "surface-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "surface-radius": "calc(var(--var-radius) + calc(var(--var-spacing-base) / 2))",
+            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
             "surface-padding": "calc(var(--var-spacing-base) * 1)",
             "surface-background": "hsla(0, 0%, 100%)",
             "surface-foreground": "hsla(240, 10%, 4%)",
@@ -865,7 +869,7 @@ export const defaultLightThemeTokens = {
             "focus-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
         },
         skeleton: {
-            radius: "calc(var(--var-radius) / 3)",
+            radius: "calc(var(--var-radius, var(--var-radius-base)) / 3)",
             "cell-block-size": "calc(var(--var-spacing-base) * 1.5)",
             "cell-inline-size": "calc(100% * 0.833333)",
             "block-size": "calc(var(--var-spacing-base) * 2)",
@@ -875,14 +879,14 @@ export const defaultLightThemeTokens = {
             "pulse-opacity": "0.5",
         },
         stats: {
-            rounded: "1rem",
-            p: "1.5rem",
-            gap: "1rem",
-            "icon-size": "2.5rem",
-            "icon-p": "2rem",
-            "inner-gap": "0.25rem",
-            "footer-px": "1.5rem",
-            "footer-py": "0.5rem",
+            rounded: "calc(var(--var-radius-base) * 1)",
+            p: "calc(var(--var-spacing-base) * 1.5)",
+            gap: "calc(var(--var-spacing-base) * 1)",
+            "icon-size": "calc(var(--var-spacing-base) * 2.5)",
+            "icon-p": "calc(var(--var-spacing-base) * 2)",
+            "inner-gap": "calc(var(--var-spacing-base) * 0.25)",
+            "footer-px": "calc(var(--var-spacing-base) * 1.5)",
+            "footer-py": "calc(var(--var-spacing-base) * 0.5)",
             "title-font-size": "1rem",
             "value-font-size": "2.25rem",
             background: "var(--var-color-background)",
@@ -893,13 +897,13 @@ export const defaultLightThemeTokens = {
     },
     spacing: {
         base: "1rem",
-        hairline: "0.0625rem",
-        lg: "1.125rem",
-        sm: "0.75rem",
-        dialog: "20rem",
+        hairline: "calc(var(--var-spacing-base) * 0.0625)",
+        lg: "calc(var(--var-spacing-base) * 1.125)",
+        sm: "calc(var(--var-spacing-base) * 0.75)",
+        dialog: "calc(var(--var-spacing-base) * 20)",
     },
     rounded: {
-        pill: "2rem",
+        pill: "calc(var(--var-radius-base) * 2)",
         full: "9999px",
     },
     shadow: {
@@ -1196,14 +1200,24 @@ const collectProperties = (tokens: TokenTree, parts: readonly string[], properti
 };
 
 export const createThemeProperties = (theme: ThemeTokens = {}, options: ThemeCssOptions = {}): ThemeCssProperties => {
-    const merged = mergeThemeTokens(options.base ?? defaultLightThemeTokens, theme);
     const properties: ThemeCssProperties = {};
+    const collect = (source: ThemeTokens) => {
+        for (const [group, prefix] of Object.entries(groupPrefixes)) {
+            const tokens = source[group as keyof ThemeTokens];
+            if (tokens) collectProperties(tokens, prefix, properties);
+        }
+    };
 
-    for (const [group, prefix] of Object.entries(groupPrefixes)) {
-        const tokens = merged[group as keyof ThemeTokens];
-        if (tokens) collectProperties(tokens, prefix, properties);
+    // Implicit library geometry resolves at the element, not at the theme scope.
+    // Explicit base/theme entries must survive even when equal to a default.
+    collect(defaultLightThemeTokens);
+    for (const key of Object.keys(defaultGeometryTokens)) delete properties[key as keyof ThemeCssProperties];
+    delete properties["--var-spacing-base"];
+    if (options.base) {
+        for (const key of Object.keys(properties)) delete properties[key as keyof ThemeCssProperties];
+        collect(options.base);
     }
-
+    collect(theme);
     return properties;
 };
 

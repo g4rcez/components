@@ -9,7 +9,7 @@ category: floating
 
 # Toolbar
 
-Sticky floating toolbar for surfacing persistent actions at the bottom of a scrollable area.
+Sticky floating toolbar with a shared border and connected buttons. Place buttons directly inside the toolbar: adjacent button edges are square, while exposed edges retain each button’s design-system radius. A single button keeps all its corners, and a separator starts a new connected group. Button themes, disabled states, and focus rings are preserved. This is not a menubar and does not add menu navigation.
 
 ## Import
 
@@ -28,11 +28,17 @@ import { Toolbar } from "@g4rcez/components";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| Token                | CSS Variable    | Purpose                    |
-| -------------------- | --------------- | -------------------------- |
-| `bg-background`      | `--background`  | Toolbar surface background |
-| `border-card-border` | `--card-border` | Toolbar border             |
-| `rounded-lg`         | —               | Toolbar corner radius      |
+| CSS Variable | Purpose |
+| --- | --- |
+| `--var-color-background` | Shared toolbar surface |
+| `--var-color-border` | Shared border |
+| `--var-border-hairline` | Border width |
+| `--var-toolbar-bottom` | Sticky bottom offset; legacy `--toolbar-bottom` fallback |
+| `--var-toolbar-rounded` | Toolbar surface corners; legacy `--toolbar-radius` fallback |
+| `--var-toolbar-p` | Compact surface padding; legacy `--toolbar-p` fallback |
+| `--var-layer-normal` | Keeps focused buttons above adjacent controls |
+
+The root selector is `.__toolbar`. Connected styling targets direct native buttons and direct `.__button` elements, including polymorphic button links. Wrapping controls in a layout element opts out of connected styling. Load `button.css` separately when composing with `Button`; toolbar CSS does not replace button styles.
 
 ## Examples
 
@@ -109,7 +115,7 @@ function BatchToolbar({ selectedCount }: { selectedCount: number }) {
 
 - Keep the toolbar small — it overlays content and should not obscure more than a thin strip at the bottom.
 - Reserve the toolbar for primary actions users may need at any scroll position.
-- Provide sufficient spacing between touch targets for mobile usability.
+- Use controls with sufficient touch-target sizes; connected controls intentionally have no gap.
 - Use design-token classes for any custom styling inside the toolbar (`bg-background`, `border-card-border`, `text-foreground`).
 
 ## Don't
@@ -121,7 +127,7 @@ function BatchToolbar({ selectedCount }: { selectedCount: number }) {
 
 ## Accessibility
 
-- Wrap the toolbar in a `<div role="toolbar" aria-label="Page actions">` when it contains only icon buttons, so assistive technologies can announce the region.
+- The component already has `role="toolbar"`. Pass `aria-label="Page actions"` directly to it; do not add a nested toolbar wrapper.
 - Ensure each icon-only button inside the toolbar has an accessible name via `aria-label` or a `Tooltip` with `focus={true}`.
 - Tab key navigates through items in the toolbar naturally.
 

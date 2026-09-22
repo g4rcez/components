@@ -640,6 +640,7 @@ export type InfoTokens = {
 };
 
 export type PageCalendarTokens = {
+    "hour-block-size"?: string;
     gap: string;
     "header-gap": string;
     "date-gap": string;

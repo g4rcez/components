@@ -57,6 +57,17 @@ Optional right-side slot for timestamps or auxiliary actions. Renders inside a `
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-timeline-item-padding-block-end` | `calc(var(--var-spacing-base) * 2)` |
+| `--var-timeline-connector-inset-block-start` | `calc(var(--var-spacing-base) * 2)` |
+| `--var-timeline-connector-inset-inline-start` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-timeline-content-gap` | `calc(var(--var-spacing-base) * 0.75)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                     | CSS Variable           | Purpose                           |

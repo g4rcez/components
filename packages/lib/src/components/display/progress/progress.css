@@ -2,8 +2,8 @@
   position: relative;
   overflow: hidden;
   inline-size: 100%;
-  block-size: var(--var-progress-track-block-size);
-  border-radius: var(--var-progress-track-radius);
+  block-size: var(--var-progress-track-block-size, calc(var(--var-spacing-base) * 1.5));
+  border-radius: var(--var-progress-track-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.4));
   background: var(--var-color-background);
 }
 

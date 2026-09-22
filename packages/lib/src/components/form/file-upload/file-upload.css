@@ -3,23 +3,23 @@
 }
 
 .__file-upload__file-icon {
-    inline-size: var(--var-file-upload-file-icon-size);
-    block-size: var(--var-file-upload-file-icon-size);
+    inline-size: var(--var-file-upload-file-icon-size, calc(var(--var-spacing-base) * 3));
+    block-size: var(--var-file-upload-file-icon-size, calc(var(--var-spacing-base) * 3));
 }
 
 .__file-upload__remove-icon {
-    inline-size: var(--var-file-upload-remove-icon-size);
-    block-size: var(--var-file-upload-remove-icon-size);
+    inline-size: var(--var-file-upload-remove-icon-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-file-upload-remove-icon-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__file-upload__idle-icon {
-    inline-size: var(--var-file-upload-idle-icon-size);
-    block-size: var(--var-file-upload-idle-icon-size);
+    inline-size: var(--var-file-upload-idle-icon-size, calc(var(--var-spacing-base) * 5));
+    block-size: var(--var-file-upload-idle-icon-size, calc(var(--var-spacing-base) * 5));
 }
 
 .__file-upload__thumb-icon {
-    inline-size: var(--var-file-upload-thumb-icon-size);
-    block-size: var(--var-file-upload-thumb-icon-size);
+    inline-size: var(--var-file-upload-thumb-icon-size, calc(var(--var-spacing-base) * 1.75));
+    block-size: var(--var-file-upload-thumb-icon-size, calc(var(--var-spacing-base) * 1.75));
 }
 
 .__file-upload__preview-image {
@@ -31,8 +31,8 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    gap: var(--var-file-upload-content-gap);
-    border-bottom-width: var(--var-file-upload-item-border-width);
+    gap: var(--var-file-upload-content-gap, calc(var(--var-spacing-base) * 1));
+    border-bottom-width: var(--var-file-upload-item-border-width, calc(var(--var-spacing-base) * 0.0625));
     border-color: var(--var-color-border);
 }
 
@@ -45,7 +45,7 @@
 .__file-upload__idle-icon-wrap,
 .__file-upload__idle-copy {
     display: flex;
-    gap: var(--var-file-upload-content-gap);
+    gap: var(--var-file-upload-content-gap, calc(var(--var-spacing-base) * 1));
 }
 
 .__file-upload__file-row {
@@ -56,9 +56,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--var-file-upload-thumb-size);
-    block-size: var(--var-file-upload-thumb-size);
-    margin: var(--var-file-upload-preview-button-margin);
+    inline-size: var(--var-file-upload-thumb-size, calc(var(--var-spacing-base) * 4));
+    block-size: var(--var-file-upload-thumb-size, calc(var(--var-spacing-base) * 4));
+    margin: var(--var-file-upload-preview-button-margin, calc(var(--var-spacing-base) * 0.5));
     overflow: hidden;
     border-radius: var(--var-file-upload-thumb-radius);
 }
@@ -88,7 +88,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-block: var(--var-file-upload-actions-padding-block);
+    padding-block: var(--var-file-upload-actions-padding-block, calc(var(--var-spacing-base) * 1));
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-duration: var(--var-motion-duration-normal);
     transition-timing-function: var(--var-motion-timing-linear);
@@ -102,8 +102,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--var-file-upload-remove-button-size);
-    block-size: var(--var-file-upload-remove-button-size);
+    inline-size: var(--var-file-upload-remove-button-size, calc(var(--var-spacing-base) * 1.5));
+    block-size: var(--var-file-upload-remove-button-size, calc(var(--var-spacing-base) * 1.5));
 }
 
 .__file-upload__list {
@@ -111,7 +111,7 @@
 }
 
 .__file-upload__list > :not([hidden]) ~ :not([hidden]) {
-    margin-block-start: var(--var-file-upload-list-gap);
+    margin-block-start: var(--var-file-upload-list-gap, calc(var(--var-spacing-base) * 2));
 }
 
 .__file-upload__idle {
@@ -123,7 +123,7 @@
 .__file-upload__idle-icon-wrap {
     align-items: center;
     justify-content: center;
-    gap: var(--var-file-upload-idle-icon-gap);
+    gap: var(--var-file-upload-idle-icon-gap, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__file-upload__accent {
@@ -132,8 +132,8 @@
 
 .__file-upload__idle-copy {
     align-items: center;
-    margin-block: var(--var-file-upload-idle-copy-margin-block);
-    gap: var(--var-file-upload-idle-copy-gap);
+    margin-block: var(--var-file-upload-idle-copy-margin-block, calc(var(--var-spacing-base) * 1));
+    gap: var(--var-file-upload-idle-copy-gap, calc(var(--var-spacing-base) * 0.25));
 }
 
 .__file-upload__viewer-name {
@@ -144,13 +144,13 @@
 .__file-upload__viewer-image {
     display: inline-block;
     width: 100%;
-    max-width: var(--var-file-upload-viewer-media-max-inline-size);
+    max-width: var(--var-file-upload-viewer-media-max-inline-size, calc( var(--var-spacing-base) * 24 ));
 }
 
 .__file-upload__viewer-video {
     display: block;
     width: 100%;
-    max-width: var(--var-file-upload-viewer-media-max-inline-size);
+    max-width: var(--var-file-upload-viewer-media-max-inline-size, calc( var(--var-spacing-base) * 24 ));
 }
 
 .__file-upload__row {
@@ -167,8 +167,8 @@
     align-items: center;
     justify-content: center;
     border: var(--var-border-hairline) solid var(--var-color-border);
-    border-radius: var(--var-file-upload-surface-radius);
-    padding: var(--var-file-upload-surface-padding);
+    border-radius: var(--var-file-upload-surface-radius, calc(var(--var-radius-base) * 0.5));
+    padding: var(--var-file-upload-surface-padding, calc(var(--var-spacing-base) * 1.5));
     color: var(--var-color-foreground);
 }
 

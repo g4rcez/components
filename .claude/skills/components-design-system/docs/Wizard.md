@@ -44,6 +44,17 @@ import { Wizard } from "@g4rcez/components";
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-wizard-focus-outline-width` | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-wizard-focus-outline-offset` | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-wizard-surface-inline-size` | `calc(var(--var-spacing-base) * 20)` |
+| `--var-wizard-surface-max-inline-size` | `calc(var(--var-spacing-base) * 24)` |
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                    | CSS Variable            | Purpose                                     |

@@ -9,15 +9,15 @@
 
 .__timeline__item {
     position: relative;
-    padding-block-end: var(--var-timeline-item-padding-block-end);
+    padding-block-end: var(--var-timeline-item-padding-block-end, calc(var(--var-spacing-base) * 2));
 }
 
 .__timeline__connector {
     background-color: var(--var-color-border);
     block-size: 100%;
     inline-size: var(--var-timeline-connector-inline-size);
-    inset-block-start: var(--var-timeline-connector-inset-block-start);
-    inset-inline-start: var(--var-timeline-connector-inset-inline-start);
+    inset-block-start: var(--var-timeline-connector-inset-block-start, calc(var(--var-spacing-base) * 2));
+    inset-inline-start: var(--var-timeline-connector-inset-inline-start, calc(var(--var-spacing-base) * 1));
     margin-inline-start: calc(var(--var-timeline-connector-inline-size) * -0.5);
     position: absolute;
 }
@@ -27,19 +27,19 @@
     display: flex;
     align-items: stretch;
     justify-content: flex-start;
-    gap: var(--var-timeline-content-gap);
+    gap: var(--var-timeline-content-gap, calc(var(--var-spacing-base) * 0.75));
 }
 
 .__timeline__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--var-timeline-icon-size);
-    block-size: var(--var-timeline-icon-size);
+    inline-size: var(--var-timeline-icon-size, calc(var(--var-spacing-base) * 2));
+    block-size: var(--var-timeline-icon-size, calc(var(--var-spacing-base) * 2));
     border-radius: var(--var-rounded-full);
     background-color: var(--var-color-primary);
     color: var(--var-color-primary-foreground);
-    padding: var(--var-timeline-icon-padding);
+    padding: var(--var-timeline-icon-padding, calc(var(--var-spacing-base) * 0.5));
 }
 
 .__timeline__body {
@@ -49,8 +49,8 @@
 
 .__timeline__actions {
     display: flex;
-    gap: var(--var-timeline-actions-gap);
+    gap: var(--var-timeline-actions-gap, calc(var(--var-spacing-base) * 1.5));
     align-self: stretch;
-    padding-inline: var(--var-timeline-actions-padding-inline);
+    padding-inline: var(--var-timeline-actions-padding-inline, calc(var(--var-spacing-base) * 1));
     vertical-align: baseline;
 }

@@ -79,7 +79,7 @@ The library styling model does not require consumer utility generation, framewor
 Customize by overriding variables at the narrowest useful scope:
 
 ```tsx
-<div style={{ "--radiobox-size": "1.5rem", "--radiobox-gap": "0.75rem" } as React.CSSProperties}>
+<div style={{ "--var-radiobox-control-size": "1.5rem", "--var-radiobox-label-gap": "0.75rem" } as React.CSSProperties}>
     <Radiobox name="plan" value="pro">
         Pro
     </Radiobox>
@@ -88,7 +88,11 @@ Customize by overriding variables at the narrowest useful scope:
 
 Use scoped wrapper variables for demos and token playgrounds. Use `createTokenStyles()`/`createCssProperties()` for app-wide themes. Do not customize by targeting generated selectors or by adding hardcoded colors/sizes.
 
-New handwritten v6 CSS uses the `--var-*` namespace (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Some migrated CSS still reads direct component variables (`--radiobox-size`, `--checkbox-gap`); preserve that public variable contract until the component is fully ported.
+Current CSS uses the `--var-*` namespace (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Preserve explicit legacy fallbacks where the component still supports them, such as Stats.
+
+Library geometry derives from one `--var-spacing-base` and an independent `--var-radius-base`, both defaulting to `1rem`. Override either on a wrapper; use `--var-radius-base: 0px` for square default corners. Typography and full-circle primitives remain independent. Explicit component values, including zero and literal sizes, always win.
+
+Derived semantic defaults are use-site CSS fallbacks, not root custom-property declarations, so nested base overrides remain reactive. Inspect exported `defaultGeometryTokens`, `defaultGeometryBases`, or `defaultLightThemeTokens` instead of reading default custom properties with `getComputedStyle()`. Runtime theme helpers omit implicit geometry but preserve every explicitly supplied entry; passing a complete default object explicitly pins its formulas to that scope. Legacy theme generators preserve supplied values and remaps. See `ai/docs/geometry-tokens.md` for the radius appearance change, provider variants, compatibility paths, and exceptions.
 
 ---
 

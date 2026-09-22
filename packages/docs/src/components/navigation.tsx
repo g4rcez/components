@@ -3,16 +3,22 @@
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { sections } from "../config/navigation";
 
 type NavigationProps = {
     onNavigateAction?: () => void;
     searchId?: string;
     sectionIdPrefix?: string;
+    searchInputRef?: RefObject<HTMLInputElement | null>;
 };
 
-export const Navigation = ({ onNavigateAction, searchId = "docs-navigation-search", sectionIdPrefix = "docs-nav" }: NavigationProps) => {
+export const Navigation = ({
+    onNavigateAction,
+    searchId = "docs-navigation-search",
+    sectionIdPrefix = "docs-nav",
+    searchInputRef,
+}: NavigationProps) => {
     const path = usePathname();
     const [query, setQuery] = useState("");
     const groupsRef = useRef<HTMLDivElement>(null);
@@ -44,21 +50,6 @@ export const Navigation = ({ onNavigateAction, searchId = "docs-navigation-searc
         }
     }, []);
 
-    useEffect(() => {
-        if (searchId !== "docs-navigation-search") return;
-
-        const onKeyDown = (event: KeyboardEvent) => {
-            const target = event.target as HTMLElement | null;
-            if (event.key !== "/" || target?.matches("input, textarea, select, [contenteditable='true']")) return;
-
-            event.preventDefault();
-            searchRef.current?.focus();
-        };
-
-        window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-    }, [searchId]);
-
     const saveScrollPosition = () => {
         const groups = groupsRef.current;
         if (!groups) return;
@@ -72,7 +63,7 @@ export const Navigation = ({ onNavigateAction, searchId = "docs-navigation-searc
 
     const clearSearch = () => {
         setQuery("");
-        searchRef.current?.focus();
+        (searchInputRef ?? searchRef).current?.focus();
     };
 
     return (
@@ -83,7 +74,7 @@ export const Navigation = ({ onNavigateAction, searchId = "docs-navigation-searc
                 </label>
                 <MagnifyingGlassIcon className="docs-nav-search-icon" size={17} aria-hidden="true" />
                 <input
-                    ref={searchRef}
+                    ref={searchInputRef ?? searchRef}
                     id={searchId}
                     type="search"
                     value={query}
@@ -113,7 +104,7 @@ export const Navigation = ({ onNavigateAction, searchId = "docs-navigation-searc
                                 </h2>
                                 <ul className="docs-nav-list">
                                     {section.items.map((item) => {
-                                        const isActive = path === item.href || path.startsWith(`${item.href}/`);
+                                        const isActive = path === item.href || (item.href !== "/docs" && path.startsWith(`${item.href}/`));
                                         const Icon = item.icon;
 
                                         return (

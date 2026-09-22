@@ -46,6 +46,19 @@ Extends `OptionProps` with an optional custom renderer:
 
 ## Design Tokens
 
+Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+
+Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+
+| Override | Library default |
+| --- | --- |
+| `--var-multi-select-field-min-inline-size` | `calc(var(--var-spacing-base) * 12)` |
+| `--var-multi-select-tag-remove-icon-size` | `calc(var(--var-spacing-base) * 0.875)` |
+| `--var-input-field-icon-size` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-input-field-small-icon-size` | `calc(var(--var-spacing-base) * 0.875)` |
+
+Popup maximum height and initial estimates scale with density; measured list content keeps its physical size. Virtualizer pixel estimates are not fixed CSS dimensions.
+
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                          | CSS Variable                               | Purpose                                |
