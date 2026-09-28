@@ -1,5 +1,5 @@
 "use client";
-import { type HTMLMotionProps, motion, type Transition } from "motion/react";
+import { AnimatePresence, type HTMLMotionProps, motion, type Transition } from "motion/react";
 import type { PropsWithChildren } from "react";
 import { css } from "../../../lib/dom";
 import { Resizable } from "../../core/resizable/resizable";
@@ -13,17 +13,22 @@ const transition: Transition = {
 type CollapseProps = HTMLMotionProps<"div"> & { open: boolean };
 
 export const Collapse = ({ open, children, className, ...props }: PropsWithChildren<CollapseProps>) => (
-    <motion.div
-        {...props}
-        initial={false}
-        transition={transition}
-        aria-hidden={!open}
-        data-component="collapse"
-        animate={{ opacity: open ? 1 : 0 }}
-        className={css("__collapse", className)}
-    >
-        <Resizable open={open} destroyOnUnmount>
-            {children}
-        </Resizable>
-    </motion.div>
+    <AnimatePresence mode="popLayout" propagate>
+        {open ? (
+            <motion.div
+                {...props}
+                initial={false}
+                aria-hidden={!open}
+                transition={transition}
+                animate={{ opacity: 1 }}
+                data-component="collapse"
+                exit={{ opacity: 0, height: 0 }}
+                className={css("__collapse", className)}
+            >
+                <Resizable open={open} destroyOnUnmount>
+                    {children}
+                </Resizable>
+            </motion.div>
+        ) : null}
+    </AnimatePresence>
 );
