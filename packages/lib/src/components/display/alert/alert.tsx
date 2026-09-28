@@ -11,12 +11,12 @@ import { Collapse } from "../collapse/collapse";
 
 export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
     ComponentStyleProps<typeof alertStyles> &
-        Partial<{
-            open: boolean;
-            container: string;
-            Icon: React.ReactElement;
-            onClose: (nextState: boolean) => void;
-        }>,
+    Partial<{
+        open: boolean;
+        container: string;
+        Icon: React.ReactElement;
+        onClose: (nextState: boolean) => void;
+    }>,
     T
 >;
 
@@ -30,18 +30,18 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
     const liveRole = resolvedTheme === "danger" || resolvedTheme === "warn" ? "alert" : "status";
     const customIcon = Icon
         ? cloneElement(Icon as React.ReactElement<{ className?: string }>, {
-              className: css(alertStyles.slots.icon, (Icon.props as { className?: string }).className),
-          })
+            className: css(alertStyles.slots.icon, (Icon.props as { className?: string }).className),
+        })
         : null;
 
     return (
-        <div
-            data-open={!!open}
-            aria-hidden={!open}
-            data-component="alert"
-            className={css(alertStyles.slots.container, open ? "__alert__container--open" : "__alert__container--closed", container)}
-        >
-            <Collapse open={!!open} className={alertStyles.slots.collapse}>
+        <Collapse open={!!open} className={alertStyles.slots.collapse}>
+            <div
+                data-open={!!open}
+                aria-hidden={!open}
+                data-component="alert"
+                className={css(alertStyles.slots.container, open ? "__alert__container--open" : "__alert__container--closed", container)}
+            >
                 <Polymorph
                     {...props}
                     ref={ref}
@@ -70,7 +70,7 @@ export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) 
                         {props.title ? <div className={alertStyles.slots.body}>{props.children}</div> : null}
                     </div>
                 </Polymorph>
-            </Collapse>
-        </div>
+            </div>
+        </Collapse>
     );
 }) as never;

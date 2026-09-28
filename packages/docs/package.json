@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "NODE_OPTIONS=--conditions=source next dev --port 10000",
         "build": "pnpm --filter @g4rcez/components build && next build",
-        "start": "next start --turbo",
+        "start": "next start",
         "components:styles": "node ../lib/bin/g4rcez-components.mjs styles --root . --content src --css src/app/index.css --library-root ../lib",
         "lint": "oxlint .",
         "test:e2e": "pnpm --filter @g4rcez/components build && playwright test",

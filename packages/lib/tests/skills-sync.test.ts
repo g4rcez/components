@@ -264,6 +264,23 @@ describe("skills sync CLI", () => {
         }
     });
 
+    it("rejects an install destination ancestor symlink before deleting external files", () => {
+        const root = createFixture();
+        writeFileSync(resolve(root, "packages/lib/ai/SKILL.md"), "installed fixture skill\n");
+        const externalRoot = mkdtempSync(join(tmpdir(), "g4-skills-install-external-"));
+        roots.push(externalRoot);
+        const sentinel = resolve(externalRoot, "sentinel.txt");
+        writeFileSync(sentinel, "do not change\n");
+        symlinkSync(externalRoot, resolve(root, ".claude"), "dir");
+
+        const result = run(root, "install");
+
+        expect(result.status).not.toBe(0);
+        expect(result.stderr).toContain("install destination contains symlink at .claude");
+        expect(readFileSync(sentinel, "utf8")).toBe("do not change\n");
+        expect(existsSync(resolve(externalRoot, "skills/components-design-system"))).toBe(false);
+    });
+
     it("repository copies match canonical sources", () => {
         const repositoryRoot = resolve(__dirname, "../../..");
         const result = spawnSync(process.execPath, [sourceScript, "check"], {

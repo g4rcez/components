@@ -245,16 +245,20 @@ function runInstall() {
         process.stderr.write(`error: skill source directory not found at ${packageAi}\n`);
         process.exit(1);
     }
+    validatePath(packageAi, "skill source directory", "directory");
 
     if (!existsSync(sourceSkill)) {
         process.stderr.write(`error: skill source not found at ${sourceSkill}\n`);
         process.exit(1);
     }
+    validatePath(sourceSkill, "skill source", "file");
 
     if (!existsSync(sourceDocs)) {
         process.stderr.write(`error: docs source not found at ${sourceDocs}\n`);
         process.exit(1);
     }
+    validatePath(sourceDocs, "docs source", "directory");
+    validatePath(installDestination, "install destination", "directory");
 
     rmSync(installDestination, { recursive: true, force: true });
     mkdirSync(join(installDestination, "docs"), { recursive: true });

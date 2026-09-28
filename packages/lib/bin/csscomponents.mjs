@@ -162,12 +162,22 @@ const sourceRoots = (root, content) => {
     return entries.map((entry) => resolveFrom(root, entry));
 };
 
-const componentAliases = (name) => {
-    const pascal = pascalCase(name);
-    return new Set([pascal]);
-};
-
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+
+const componentAliases = (content, name, packageName) => {
+    const pascal = pascalCase(name);
+    const aliases = new Set([pascal]);
+    const importPattern = new RegExp(`import\\s*\\{(?<specifiers>[^{}]*)\\}\\s*from\\s*["']${escapeRegExp(packageName)}["']`, "gu");
+    const aliasPattern = new RegExp(`(?:^|,)\\s*${escapeRegExp(pascal)}(?:\\s+as\\s+(?<alias>[A-Za-z_$][\\w$]*))?\\s*(?:,|$)`, "u");
+
+    for (const match of content.matchAll(importPattern)) {
+        const specifiers = match.groups?.specifiers ?? "";
+        const alias = aliasPattern.exec(specifiers);
+        if (alias) aliases.add(alias.groups?.alias ?? pascal);
+    }
+
+    return aliases;
+};
 
 const hasJsxUsage = (content, alias) => new RegExp(`<${escapeRegExp(alias)}(?:[\\s>/]|\\.)`, "u").test(content);
 
@@ -185,7 +195,7 @@ const detectUsedComponents = (files, manifest, packageName) => {
         const content = readFileSync(file, "utf8");
         for (const [name, entry] of Object.entries(manifest)) {
             if (used.has(name)) continue;
-            const aliases = componentAliases(name);
+            const aliases = componentAliases(content, name, packageName);
             const classNames = [entry.classes?.base, ...Object.values(entry.classes?.slots ?? {})].filter(Boolean);
             const classUsage = classNames.some((className) => content.includes(className));
             const jsxUsage = [...aliases].some((alias) => hasJsxUsage(content, alias));

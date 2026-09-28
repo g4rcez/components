@@ -10,16 +10,15 @@ import { describe, expect, it } from "vitest";
 const cli = resolve(__dirname, "../bin/csscomponents.mjs");
 const manifest = resolve(__dirname, "../ai/component-style-manifest.json");
 
-const createProject = () => {
-    const root = mkdtempSync(resolve(tmpdir(), "g4-styles-cli-"));
-    mkdirSync(resolve(root, "src"), { recursive: true });
-    writeFileSync(
-        resolve(root, "src/app.tsx"),
-        `import { Button } from "@g4rcez/components";
+const createProject = (
+    source = `import { Button } from "@g4rcez/components";
 
 export const App = () => <Button>Save</Button>;
 `
-    );
+) => {
+    const root = mkdtempSync(resolve(tmpdir(), "g4-styles-cli-"));
+    mkdirSync(resolve(root, "src"), { recursive: true });
+    writeFileSync(resolve(root, "src/app.tsx"), source);
     writeFileSync(resolve(root, "src/app.css"), `@import "@g4rcez/components/index.css";\nbody { margin: 0; }\n`);
     return root;
 };
@@ -47,6 +46,40 @@ describe("csscomponents CLI", () => {
         expect(css).toContain('@import "@g4rcez/components/foundation.css";');
         expect(css).toContain('@import "@g4rcez/components/button.css";');
         expect(css).not.toContain('@import "@g4rcez/components/index.css";');
+    });
+
+    it("detects multiline root-package named import aliases", () => {
+        const root = createProject(`import {
+    Button as SaveButton,
+} from "@g4rcez/components";
+
+export const App = () => <SaveButton>Save</SaveButton>;
+`);
+
+        execFileSync(process.execPath, [cli, "--manifest", manifest], {
+            cwd: root,
+        });
+
+        const css = readFileSync(resolve(root, "src/app.css"), "utf8");
+        expect(css).toContain('@import "@g4rcez/components/foundation.css";');
+        expect(css).toContain('@import "@g4rcez/components/button.css";');
+    });
+
+    it("does not detect an unrelated root-package import alias", () => {
+        const root = createProject(`import {
+    Card as SaveButton,
+} from "@g4rcez/components";
+
+export const App = () => <SaveButton>Save</SaveButton>;
+`);
+
+        execFileSync(process.execPath, [cli, "--manifest", manifest], {
+            cwd: root,
+        });
+
+        const css = readFileSync(resolve(root, "src/app.css"), "utf8");
+        expect(css).toContain('@import "@g4rcez/components/foundation.css";');
+        expect(css).not.toContain('@import "@g4rcez/components/button.css";');
     });
 
     it("can write local source CSS imports for workspace docs", () => {
