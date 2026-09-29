@@ -44,13 +44,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                     | CSS Variable           | Purpose                             |
 | ------------------------- | ---------------------- | ----------------------------------- |
-| `bg-card-background`      | `--card-background`    | Card surface                        |
-| `border-card-border`      | `--card-border`        | Card border and divider             |
-| `rounded-stats-radius`    | `--stats-radius`       | Corner radius                       |
-| `shadow-shadow-card`      | `--shadow-card`        | Card drop shadow                    |
-| `bg-primary`              | `--primary`            | Icon container background (default) |
-| `text-primary-foreground` | `--primary-foreground` | Icon color (default)                |
-| `divide-card-border`      | `--card-border`        | Divider between header and footer   |
+| CSS override | `--var-stats-background` | Card surface |
+| CSS override | `--var-stats-border-color` | Card border and footer divider |
+| `rounded-stats-rounded` | `--var-stats-rounded` | Corner radius |
+| `shadow-shadow-card` | `--var-shadow-card` | Card shadow |
+| CSS override | `--var-stats-icon-background` | Icon container background |
+| CSS override | `--var-stats-icon-foreground` | Icon color |
 
 ## Examples
 

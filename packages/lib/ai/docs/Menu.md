@@ -59,12 +59,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                     | CSS Variable            | Purpose                        |
 | ------------------------- | ----------------------- | ------------------------------ |
-| `bg-floating-background`  | `--floating-background` | Menu list surface background   |
-| `border-floating-border`  | `--floating-border`     | Menu list border               |
-| `shadow-shadow-floating`  | `--shadow-floating`     | Menu list drop shadow          |
-| `z-tooltip`               | `--z-tooltip`           | Z-index of the floating list   |
-| `bg-primary`              | `--primary`             | Active/focused item background |
-| `text-primary-foreground` | `--primary-foreground`  | Active/focused item text       |
+| CSS override | `--var-menu-surface-background` | Menu list surface background |
+| CSS override | `--var-menu-surface-border` | Menu list border |
+| `shadow-shadow-floating` | `--var-shadow-floating` | Menu list drop shadow |
+| `z-floating` | `--var-layer-floating` | Floating list z-index |
+| CSS override | `--var-menu-item-active-background` | Active/focused item background |
+| CSS override | `--var-menu-item-active-foreground` | Active/focused item text |
 
 ## Examples
 

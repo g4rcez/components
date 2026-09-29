@@ -41,7 +41,7 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | Override | Library default |
 | --- | --- |
 | `--var-progress-track-block-size` | `calc(var(--var-spacing-base) * 1.5)` |
-| `--var-progress-track-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 0.4)` |
+| `--var-progress-track-radius` | `calc(var(--var-radius-base) * 0.4)` |
 
 The component ships `@g4rcez/components/progress.css`. Its stable selectors are `.__progress`, `.__progress__indicator`, and `.__progress__label`. The stylesheet reads `--var-progress-track-block-size`, `--var-progress-track-radius`, `--var-progress-indicator-transition-duration`, `--var-progress-indicator-transition-timing`, `--var-color-background`, `--var-color-primary`, and `--var-color-primary-foreground`.
 

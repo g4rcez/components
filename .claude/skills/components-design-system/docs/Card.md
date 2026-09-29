@@ -66,7 +66,7 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | Override | Library default |
 | --- | --- |
 | `--var-card-content-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-card-surface-radius` | `calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) )` |
+| `--var-card-surface-radius` | `calc(var(--var-radius-base) / 4)` |
 | `--var-card-surface-padding-block` | `calc(var(--var-spacing-base) * 0.75)` |
 | `--var-card-title-margin-block-end` | `calc(var(--var-spacing-base) / 2)` |
 
@@ -74,11 +74,11 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                 | CSS Variable        | Purpose                         |
 | --------------------- | ------------------- | ------------------------------- |
-| `bg-card-background`  | `--card-background` | Card surface color              |
-| `border-card-border`  | `--card-border`     | Card border and title separator |
-| `rounded-card-radius` | `--card-radius`     | Corner radius                   |
-| `shadow-shadow-card`  | `--shadow-card`     | Card drop shadow                |
-| `bg-muted`            | `--muted`           | Skeleton loading lines          |
+| `bg-card-background` | `--var-card-background` | Card surface color |
+| `border-card-border` | `--var-card-border` | Card border and title separator |
+| `rounded-card-radius` | `--var-card-surface-radius` | Corner radius |
+| `shadow-shadow-card` | `--var-shadow-card` | Card drop shadow |
+| `bg-muted` | `--var-color-muted` | Skeleton loading lines |
 
 ## Examples
 

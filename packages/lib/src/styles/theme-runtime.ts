@@ -1,1265 +1,351 @@
-import { defaultGeometryTokens } from "./geometry-defaults";
-export { defaultGeometryTokens, defaultGeometryBases } from "./geometry-defaults";
+import { z } from "zod";
+import { themeTokenRegistry } from "./theme-registry.generated";
 
-export type TokenTree = {
-    readonly [key: string]: string | TokenTree;
+export {
+  defaultDarkThemeTokens,
+  defaultLightThemeTokens,
+  themeTokenRegistry,
+} from "./theme-registry.generated";
+export {
+  defaultGeometryTokens,
+  defaultGeometryBases,
+} from "./geometry-defaults";
+
+export type ThemeTokenName = (typeof themeTokenRegistry.tokens)[number];
+export type ThemeColorName = (typeof themeTokenRegistry.colors)[number];
+export type ThemeComponentName = keyof typeof themeTokenRegistry.components;
+export type ThemeComponentOverrides = {
+  [Component in ThemeComponentName]?: Partial<
+    Record<
+      (typeof themeTokenRegistry.components)[Component][number],
+      string | undefined
+    >
+  >;
 };
 
-export type ThemeTokens = Partial<{
-    colors: TokenTree;
-    components: TokenTree;
-    spacing: TokenTree;
-    rounded: TokenTree;
-    shadow: TokenTree;
-    layer: TokenTree;
-}>;
+type PrimitiveCssValue = string | number;
 
-export type ThemeCssOptions = Partial<{
-    name: string;
-    selector: string;
-    layer: boolean;
-    base: ThemeTokens;
-}>;
+export type ThemeTokenOverrides = {
+  tokens?: Partial<Record<ThemeTokenName, string>> & {
+    spacing?: PrimitiveCssValue;
+    rounding?: PrimitiveCssValue;
+  };
+  colors?: Partial<Record<ThemeColorName, string>>;
+  components?: ThemeComponentOverrides;
+};
 
-export type ThemeStyleElementOptions = ThemeCssOptions &
-    Partial<{
-        document: Document;
-        id: string;
-    }>;
+export type ThemeConfiguration = ThemeTokenOverrides & {
+  name: string;
+  colorScheme?: "light" | "dark" | "normal";
+};
 
 export type ThemeCssProperties = Record<`--var-${string}`, string>;
+export type ConfigureThemeOptions = { document?: Document; nonce?: string };
 
-const THEME_ATTRIBUTE = "data-theme";
+type NormalizedThemeConfiguration = {
+  name: string;
+  colorScheme?: ThemeConfiguration["colorScheme"];
+  properties: ThemeCssProperties;
+};
+type ParsedOverrides = z.infer<typeof themeOverridesSchema>;
+type ParsedConfiguration = z.infer<typeof themeConfigurationSchema>;
+type ParsedConfigureOptions = z.infer<typeof configureOptionsSchema>;
 
-export const defaultLightThemeTokens = {
-    colors: {
-        background: "hsla(0, 0%, 100%)",
-        foreground: "hsla(221, 15%, 23%)",
-        border: "hsla(240, 6%, 90%)",
-        ring: "hsla(201, 49%, 36%)",
-        disabled: "hsla(240, 5%, 96%)",
-        muted: {
-            DEFAULT: "hsla(240, 5%, 96%)",
-            foreground: "hsla(240, 4%, 46%)",
-        },
-        primary: {
-            DEFAULT: "hsla(201, 49%, 36%)",
-            foreground: "hsla(221, 6%, 90%)",
-            subtle: "hsla(201, 49%, 28%)",
-            hover: "hsla(201, 49%, 22%)",
-        },
-        secondary: {
-            DEFAULT: "hsla(240, 6%, 10%)",
-            foreground: "hsla(0, 0%, 100%)",
-            subtle: "hsla(240, 5%, 96%)",
-            hover: "hsla(240, 6%, 15%)",
-        },
-        info: {
-            DEFAULT: "hsla(199, 89%, 48%)",
-            foreground: "hsla(0, 0%, 100%)",
-            subtle: "hsla(199, 89%, 96%)",
-            hover: "hsla(199, 89%, 40%)",
-        },
-        warn: {
-            DEFAULT: "hsla(38, 92%, 50%)",
-            foreground: "hsla(0, 0%, 100%)",
-            subtle: "hsla(38, 92%, 96%)",
-            hover: "hsla(38, 92%, 45%)",
-        },
-        danger: {
-            DEFAULT: "hsla(0, 84%, 60%)",
-            foreground: "hsla(0, 0%, 100%)",
-            subtle: "hsla(0, 84%, 96%)",
-            hover: "hsla(0, 84%, 50%)",
-        },
-        success: {
-            DEFAULT: "hsla(142, 71%, 45%)",
-            foreground: "hsla(0, 0%, 100%)",
-            subtle: "hsla(142, 71%, 96%)",
-            hover: "hsla(142, 71%, 40%)",
-        },
-    },
-    components: {
-        typography: {
-            sm: "calc(var(--var-fontsize) * 0.875)",
-            lg: "calc(var(--var-fontsize) * 1.25)",
-            "lg-weight": "500",
-            xl: "calc(var(--var-fontsize) * 1.5)",
-            "paragraph-font-size": "calc(var(--var-fontsize) * 1)",
-            "paragraph-line-height": "1.375",
-            "description-margin-block-end": "calc(var(--var-spacing-base) * 1)",
-            "info-gap": "calc(var(--var-spacing-base) * 1)",
-            "info-label-font-size": "calc(var(--var-fontsize) * 1)",
-            "info-label-letter-spacing": "0.025em",
-            "info-value-font-size": "calc(var(--var-fontsize) * 1)",
-            "info-secondary-font-size": "calc(var(--var-fontsize) * 1)",
-            "page-title-font-size": "calc(var(--var-fontsize) * 1.875)",
-            "page-title-letter-spacing": "0.025em",
-            "page-header-gap": "calc(var(--var-spacing-base) * 1.5)",
-            "page-header-actions-gap": "calc(var(--var-spacing-base) * 1)",
-        },
-        card: {
-            "content-gap": "calc(var(--var-spacing-base) * 1)",
-            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 4))",
-            "surface-padding-block": "calc(var(--var-spacing-base) * 0.75)",
-            "content-padding-inline": "calc(var(--var-spacing-base) * 1.5)",
-            "title-margin-block-end": "calc(var(--var-spacing-base) / 2)",
-            "title-padding-block-end": "calc(var(--var-spacing-base) / 2)",
-            "title-font-size": "calc(var(--var-fontsize) * 1.25)",
-            "header-gap": "calc(var(--var-spacing-base) * 1)",
-            "actions-gap": "calc(var(--var-spacing-base) * 1)",
-            "stats-icon-column-width": "calc(var(--var-spacing-base) * 5)",
-            "stats-icon-column-padding": "calc(var(--var-spacing-base) * 1)",
-            "stats-icon-size": "calc(var(--var-spacing-base) * 3)",
-            "stats-content-gap": "calc(var(--var-spacing-base) / 2)",
-            "stats-content-padding-block": "calc(var(--var-spacing-base) / 2)",
-            "stats-title-font-size": "calc(var(--var-fontsize) * 1.25)",
-            "stats-value-font-size": "calc(var(--var-fontsize) * 2.25)",
-            "stats-value-letter-spacing": "0.025em",
-            "stats-loading-block-size": "calc(var(--var-spacing-base) * 2.5)",
-            "stats-panel-background-hover": "hsla(201, 49%, 22%, 0.1)",
-        },
-        alert: {
-            "icon-size": "calc(var(--var-spacing-base) * 1.25)",
-            "surface-radius": "calc(var(--var-radius, calc(var(--var-radius-base) / 2)) - calc(var(--var-radius-base) / 4))",
-            "surface-padding": "calc(var(--var-spacing-base) * 1)",
-            "content-gap": "calc(var(--var-spacing-base) / 2)",
-            "close-inset-block-start": "calc(var(--var-spacing-base) * 0.75)",
-            "close-inset-inline-end": "calc(var(--var-spacing-base) * 0.75)",
-            "title-font-size": "calc(var(--var-fontsize) * 1.25)",
-            "title-letter-spacing": "0.03em",
-            primary: {
-                foreground: "hsla(199, 89%, 28%)",
-                border: "hsla(199, 89%, 90%)",
-                background: "hsla(199, 89%, 98%)",
-            },
-            danger: {
-                foreground: "hsla(0, 84%, 40%)",
-                border: "hsla(0, 84%, 90%)",
-                background: "hsla(0, 84%, 98%)",
-            },
-            info: {
-                foreground: "hsla(199, 89%, 30%)",
-                border: "hsla(199, 89%, 90%)",
-                background: "hsla(199, 89%, 98%)",
-            },
-            success: {
-                foreground: "hsla(142, 71%, 30%)",
-                border: "hsla(142, 71%, 90%)",
-                background: "hsla(142, 71%, 98%)",
-            },
-            warn: {
-                foreground: "hsla(38, 92%, 28%)",
-                border: "hsla(38, 92%, 90%)",
-                background: "hsla(38, 92%, 98%)",
-            },
-        },
-        button: {
-            height: "calc(var(--var-spacing-base) * 2.5)",
-            px: "calc(var(--var-spacing-base) * 1)",
-            py: "calc(var(--var-spacing-base) / 2)",
-            gap: "calc(var(--var-spacing-base) * 0.375)",
-            "font-size": "calc(var(--var-fontsize) * 1)",
-            rounded: "calc(var(--var-radius, var(--var-radius-base)) * 0.733333)",
-            "big-height": "calc(var(--var-spacing-base) * 3)",
-            "big-px": "calc(var(--var-spacing-base) * 1.5)",
-            "big-py": "calc(var(--var-spacing-base) * 1)",
-            "big-font-size": "calc(var(--var-fontsize) * 1)",
-            "min-height": "calc(var(--var-spacing-base) * 1.75)",
-            "min-px": "calc(var(--var-spacing-base) * 0.75)",
-            "min-py": "calc(var(--var-spacing-base) / 4)",
-            "min-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "small-height": "calc(var(--var-spacing-base) * 2)",
-            "small-px": "calc(var(--var-spacing-base) * 1)",
-            "small-py": "calc(var(--var-spacing-base) / 2)",
-            "small-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "tiny-height": "calc(var(--var-spacing-base) * 1.5)",
-            "tiny-px": "calc(var(--var-spacing-base) / 2)",
-            "tiny-py": "calc(var(--var-spacing-base) / 4)",
-            "tiny-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "icon-p": "calc(var(--var-spacing-base) / 4)",
-            "icon-font-size": "calc(var(--var-spacing-base) * 1)",
-            "rough-rounded": "calc(var(--var-radius, var(--var-radius-base)) / 6)",
-            "squared-rounded": "0",
-            "focus-ring-width": "calc(var(--var-spacing-base) / 4)",
-            secondary: {
-                background: "hsla(240, 6%, 10%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            "ghost-info-background-hover": "hsla(199, 89%, 48%, 0.2)",
-            "ghost-warn-background-hover": "hsla(38, 92%, 50%, 0.2)",
-            "ghost-danger-background-hover": "hsla(0, 84%, 60%, 0.2)",
-            "ghost-primary-background-hover": "hsla(201, 49%, 36%, 0.2)",
-            "ghost-success-background-hover": "hsla(142, 71%, 45%, 0.2)",
-            "ghost-secondary-background-hover": "hsla(240, 6%, 10%, 0.2)",
-            "ghost-muted-background-hover": "hsla(240, 5%, 96%, 0.2)",
-        },
-        calendar: {
-            "day-cell-padding": "calc(var(--var-spacing-base) / 4)",
-            "day-button-size": "calc(var(--var-spacing-base) * 2.25)",
-            "day-button-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "focus-ring-width": "calc(var(--var-spacing-base) / 4)",
-            "selected-ring-width": "calc(var(--var-spacing-base) / 4)",
-            "header-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.733333)",
-            "table-margin-block-start": "calc(var(--var-spacing-base) * 1)",
-            "nav-button-padding": "calc(var(--var-spacing-base) / 4)",
-            "nav-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "current-month-font-weight": "650",
-            "month-controls-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "month-controls-padding-block": "calc(var(--var-spacing-base) / 4)",
-            "year-input-width": "calc(var(--var-spacing-base) * 4)",
-            "weekday-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "weekday-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "weekday-font-weight": "650",
-            "datetime-margin-block": "calc(var(--var-spacing-base) * 1)",
-            "footer-margin-block-start": "calc(var(--var-spacing-base) * 1)",
-            "range-label-inset-block-start": "calc(var(--var-spacing-base) * -0.5)",
-            "transition-duration": "180ms",
-            "transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-            "day-button-background-hover": "hsla(240, 5%, 96%, 0.48)",
-            "focus-border": "hsla(201, 49%, 36%, 0.78)",
-            "focus-ring": "hsla(201, 49%, 36%, 0.18)",
-            "today-border": "hsla(201, 49%, 36%, 0.38)",
-            "outside-month-foreground": "hsla(240, 4%, 46%, 0.42)",
-            "selected-ring": "hsla(201, 49%, 36%, 0.14)",
-            "selected-background-hover": "hsla(201, 49%, 36%, 0.92)",
-            "range-border": "hsla(201, 49%, 36%, 0.28)",
-            "range-background": "hsla(201, 49%, 36%, 0.08)",
-            "nav-button-border-hover": "hsla(201, 49%, 36%, 0.28)",
-            "nav-button-background-hover": "hsla(201, 49%, 36%, 0.1)",
-            "select-background-hover": "hsla(240, 5%, 96%, 0.42)",
-        },
-        "input-field": {
-            "icon-size": "calc(var(--var-spacing-base) * 1)",
-            "small-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "label-row-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "label-meta-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "tooltip-icon-size": "calc(var(--var-spacing-base) * 0.75)",
-            "small-tooltip-icon-size": "calc(var(--var-spacing-base) * 0.6875)",
-            "tooltip-max-inline-size": "calc(var(--var-spacing-base) * 12)",
-            "status-min-inline-size": "calc(var(--var-spacing-base) * 1.5)",
-            "small-status-min-inline-size": "calc(var(--var-spacing-base) * 1.25)",
-            "status-block-size": "calc(var(--var-spacing-base) * 0.75)",
-            "small-status-block-size": "calc(var(--var-spacing-base) * 0.625)",
-            "status-indicator-size": "calc(var(--var-spacing-base) * 0.75)",
-            "small-status-indicator-size": "calc(var(--var-spacing-base) * 0.625)",
-            "label-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "label-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "small-label-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "optional-opacity": "0.7",
-            "control-column-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "small-control-column-gap": "calc(var(--var-spacing-base) * 0.375)",
-            "control-row-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "small-control-row-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "control-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.375)",
-            "slot-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "small-slot-gap": "calc(var(--var-spacing-base) * 0.375)",
-            "slot-padding-inline-start": "calc(var(--var-spacing-base) * 0.5)",
-            "small-slot-padding-inline-start": "calc(var(--var-spacing-base) * 0.375)",
-            "slot-padding-inline-end": "calc(var(--var-spacing-base) * 0.5)",
-            "small-slot-padding-inline-end": "calc(var(--var-spacing-base) * 0.375)",
-            "hint-margin-block-start": "calc(var(--var-spacing-base) * 0.3)",
-            "hint-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "small-hint-font-size": "calc(var(--var-fontsize) * 0.6875)",
-        },
-        "free-text": {
-            "control-height": "calc(var(--var-spacing-base) * 2.5)",
-            "big-control-height": "calc(var(--var-spacing-base) * 3)",
-            "min-control-height": "calc(var(--var-spacing-base) * 1.75)",
-            "small-control-height": "calc(var(--var-spacing-base) * 2)",
-            "tiny-control-height": "calc(var(--var-spacing-base) * 1.5)",
-            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.375)",
-            "surface-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "big-surface-padding-inline": "calc(var(--var-spacing-base) * 1.5)",
-            "min-surface-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
-            "small-surface-padding-inline": "calc(var(--var-spacing-base) * 0.375)",
-            "tiny-surface-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "surface-padding-block": "calc(var(--var-spacing-base) * 0.25)",
-            "small-surface-padding-block": "calc(var(--var-spacing-base) * 0.125)",
-            "font-size": "calc(var(--var-fontsize) * 1)",
-            "big-font-size": "calc(var(--var-fontsize) * 1)",
-            "min-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "small-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "tiny-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "outline-width": "calc(var(--var-spacing-base) * 0.125)",
-            "outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "placeholder-foreground": "hsla(240, 4%, 46%)",
-            "error-placeholder-foreground": "hsla(0, 84%, 96%)",
-        },
-        dropdown: {
-            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
-            "surface-padding": "calc(var(--var-spacing-base) * 1)",
-            "header-margin-block-end": "calc(var(--var-spacing-base) / 2)",
-            "title-font-size": "calc(var(--var-fontsize) * 1.5)",
-            "title-letter-spacing": "0.025em",
-            "list-max-block-size": "calc(var(--var-spacing-base) * 24)",
-            "surface-background": "hsla(0, 0%, 100%)",
-            "surface-foreground": "hsla(240, 10%, 4%)",
-            "surface-border": "hsla(240, 6%, 90%)",
-        },
-        menu: {
-            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
-            "surface-max-block-size": "calc(var(--var-spacing-base) * 20)",
-            "surface-background": "hsla(0, 0%, 100%)",
-            "surface-foreground": "hsla(240, 10%, 4%)",
-            "surface-border": "hsla(240, 6%, 90%)",
-            "item-padding": "calc(var(--var-spacing-base) * 0.625)",
-            "item-min-inline-size": "calc(var(--var-spacing-base) * 9)",
-            "item-outline-width": "calc(var(--var-spacing-base) * 0.125)",
-            "item-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "item-expanded-opacity": "0.8",
-            "item-disabled-opacity": "0.4",
-            "item-active-background": "hsla(201, 49%, 36%)",
-            "item-active-foreground": "hsla(221, 6%, 90%)",
-            "nested-indicator-margin-inline-start": "calc(var(--var-spacing-base) * 0.625)",
-            "nested-indicator-font-size": "calc(var(--var-fontsize) * 0.625)",
-            "nested-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "item-icon-size": "calc(var(--var-spacing-base) * 1)",
-        },
-        autocomplete: {
-            "list-max-block-size": "calc(var(--var-spacing-base) * 24)",
-            "panel-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
-            "option-min-block-size": "calc(var(--var-spacing-base) * 2.5)",
-            "option-padding": "calc(var(--var-spacing-base) * 0.625)",
-            "option-background-hover": "hsla(240, 5%, 96%)",
-            "option-active-background": "hsla(201, 49%, 22%)",
-            "option-active-foreground": "hsla(221, 6%, 90%)",
-            "option-selected-background": "hsla(240, 5%, 96%)",
-            "option-selected-foreground": "hsla(240, 10%, 4%)",
-            "actions-gap": "calc(var(--var-spacing-base) * 0.125)",
-            "action-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "action-padding-md": "calc(var(--var-spacing-base) * 0.25)",
-            "panel-max-block-size": "calc(var(--var-spacing-base) * 20)",
-            "panel-background": "hsla(0, 0%, 100%)",
-            "panel-border": "hsla(240, 6%, 90%)",
-            "panel-foreground": "hsla(221, 15%, 23%)",
-            "panel-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
-            "empty-border": "hsla(240, 10%, 4%)",
-            "empty-foreground": "hsla(240, 5%, 96%)",
-        },
-        "multi-select": {
-            "tag-remove-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "tags-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "actions-gap": "calc(var(--var-spacing-base) * 0.125)",
-            "panel-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
-            "search-margin-block-end": "calc(var(--var-spacing-base) * 0.25)",
-            "option-padding": "calc(var(--var-spacing-base) * 0.625)",
-            "results-max-block-size": "calc(var(--var-spacing-base) * 18)",
-            "option-background-hover": "hsla(240, 5%, 96%)",
-            "option-selected-background": "hsla(240, 5%, 96%)",
-            "option-selected-foreground": "hsla(240, 10%, 4%)",
-            "checkbox-margin-inline-end": "calc(var(--var-spacing-base) * 0.5)",
-            "footer-gap": "calc(var(--var-spacing-base) * 0.5)",
-        },
-        radiobox: {
-            "label-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "label-min-block-size": "calc(var(--var-spacing-base) * 1.25)",
-            "control-size": "calc(var(--var-spacing-base) * 1)",
-            "large-control-size": "calc(var(--var-spacing-base) * 1.25)",
-            "control-foreground": "hsla(201, 49%, 36%)",
-            "control-background": "hsla(0, 0%, 100%)",
-            "control-border": "hsla(240, 6%, 90%)",
-            "control-border-width": "calc(var(--var-spacing-base) * 0.0625)",
-            "mark-size": "calc(var(--var-spacing-base) * 0.375)",
-            "large-mark-size": "calc(var(--var-spacing-base) * 0.46875)",
-            "mark-foreground": "hsla(0, 0%, 100%)",
-            "focus-ring": "hsla(201, 49%, 36%)",
-            "focus-ring-width": "calc(var(--var-spacing-base) * 0.125)",
-            "focus-ring-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "disabled-opacity": "0.7",
-            "transition-duration": "180ms",
-            "transition-timing": "cubic-bezier(0.23, 1, 0.32, 1)",
-        },
-        checkbox: {
-            "label-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "control-size": "calc(var(--var-spacing-base) * 1)",
-            "control-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.25)",
-            "control-foreground": "hsla(201, 49%, 36%)",
-            "control-background": "hsla(0, 0%, 100%)",
-            "control-border": "hsla(240, 6%, 90%)",
-            "control-border-width": "calc(var(--var-spacing-base) * 0.0625)",
-            "mark-foreground": "hsla(0, 0%, 100%)",
-            "mark-stroke-width": "calc(var(--var-spacing-base) * 0.125)",
-            "mark-inline-size": "calc(var(--var-spacing-base) * 0.35)",
-            "mark-block-size": "calc(var(--var-spacing-base) * 0.6)",
-            "indeterminate-mark-inline-size": "calc(var(--var-spacing-base) * 0.55)",
-            "focus-ring": "hsla(201, 49%, 36%)",
-            "focus-ring-width": "calc(var(--var-spacing-base) * 0.125)",
-            "focus-ring-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "disabled-opacity": "0.7",
-            "error-font-size": "calc(var(--var-fontsize) * 0.75)",
-        },
-        switch: {
-            "track-block-size": "calc(var(--var-spacing-base) * 1.25)",
-            "track-inline-size": "calc(var(--var-spacing-base) * 2.25)",
-            "track-border-width": "calc(var(--var-border-hairline) * 2)",
-            "track-focus-ring-width": "calc(var(--var-spacing-base) * 0.125)",
-            "track-focus-ring-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "thumb-size": "calc(var(--var-spacing-base) * 1)",
-            "thumb-checked-translate-inline": "calc(var(--var-spacing-base) * 1.25)",
-            "track-background": "hsla(240, 6%, 90%, 0.72)",
-            "track-checked-background": "hsla(201, 49%, 36%, 0.9)",
-            "thumb-background": "hsla(240, 4%, 46%)",
-            "thumb-checked-background": "hsla(0, 0%, 100%, 0.96)",
-            "label-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "label-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "error-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "error-margin-block-start": "calc(var(--var-spacing-base) * 0.25)",
-        },
-        "date-picker": {
-            "calendar-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "panel-gap": "calc(var(--var-spacing-base) * 1)",
-            "panel-padding": "calc(var(--var-spacing-base) * 1)",
-            "presets-inline-size": "calc(var(--var-spacing-base) * 13)",
-            "preset-padding-block": "calc(var(--var-spacing-base) * 0.625)",
-            "preset-padding-inline": "calc(var(--var-spacing-base) * 0.875)",
-            "preset-selected-background": "hsla(212, 100%, 96%)",
-            "preset-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "action-button-padding-block": "calc(var(--var-spacing-base) * 0.625)",
-            "action-button-padding-inline": "calc(var(--var-spacing-base) * 1)",
-        },
-        slider: {
-            "control-block-size": "calc(var(--var-spacing-base) * 1.25)",
-            "track-block-size": "calc(var(--var-spacing-base) * 0.5)",
-            "thumb-size": "calc(var(--var-spacing-base) * 1.25)",
-            "thumb-border-width": "calc(var(--var-border-hairline) * 2)",
-            "thumb-focus-outline-width": "calc(var(--var-spacing-base) * 0.125)",
-            "thumb-focus-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "thumb-focus-scale": "1.05",
-            "thumb-background": "hsla(0, 0%, 100%)",
-        },
-        "file-upload": {
-            "surface-padding": "calc(var(--var-spacing-base) * 1.5)",
-            "surface-radius": "calc(var(--var-radius-base) * 0.5)",
-            "content-gap": "calc(var(--var-spacing-base) * 1)",
-            "thumb-size": "calc(var(--var-spacing-base) * 4)",
-            "thumb-radius": "50%",
-            "thumb-icon-size": "calc(var(--var-spacing-base) * 1.75)",
-            "file-icon-size": "calc(var(--var-spacing-base) * 3)",
-            "remove-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "idle-icon-size": "calc(var(--var-spacing-base) * 5)",
-            "preview-button-margin": "calc(var(--var-spacing-base) * 0.5)",
-            "item-border-width": "calc(var(--var-spacing-base) * 0.0625)",
-            "actions-padding-block": "calc(var(--var-spacing-base) * 1)",
-            "remove-button-size": "calc(var(--var-spacing-base) * 1.5)",
-            "list-gap": "calc(var(--var-spacing-base) * 2)",
-            "idle-icon-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "idle-copy-margin-block": "calc(var(--var-spacing-base) * 1)",
-            "idle-copy-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "name-font-size": "calc(var(--var-fontsize) * 1.125)",
-            "size-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "viewer-media-max-inline-size": "calc(var(--var-spacing-base) * 24)",
-        },
-        command: {
-            "surface-background": "hsla(0, 0%, 100%)",
-            "surface-foreground": "hsla(240, 10%, 4%)",
-            "surface-border": "hsla(240, 6%, 90%)",
-            "dialog-max-inline-size-md": "calc(var(--var-spacing-base) * 40)",
-            "dialog-max-inline-size-lg": "calc(var(--var-spacing-base) * 48)",
-            "row-block-size": "calc(var(--var-spacing-base) * 2.5)",
-            "header-block-size": "calc(var(--var-spacing-base) * 3)",
-            "footer-block-size": "calc(var(--var-spacing-base) * 2)",
-            "footer-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "list-max-block-size": "calc(var(--var-spacing-base) * 24)",
-            "list-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "list-margin-block": "calc(var(--var-spacing-base) * 0.5)",
-            "list-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "group-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "group-padding-block-start": "calc(var(--var-spacing-base) * 0.5)",
-            "group-padding-block-end": "calc(var(--var-spacing-base) * 0.25)",
-            "group-label-foreground": "hsla(240, 6%, 10%)",
-            "item-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
-            "item-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "item-content-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "item-background-hover": "hsla(240, 5%, 96%)",
-            "search-icon-frame-size": "calc(var(--var-spacing-base) * 2.5)",
-            "search-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "input-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "input-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "input-outline-width": "calc(var(--var-spacing-base) * 0.125)",
-            "input-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "empty-foreground": "hsla(240, 6%, 10%)",
-        },
-        tooltip: {
-            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
-            "surface-padding": "calc(var(--var-spacing-base) * 0.75)",
-            "surface-background": "hsla(240, 10%, 4%)",
-            "surface-foreground": "hsla(0, 0%, 100%)",
-            "surface-border": "hsla(240, 10%, 4%)",
-        },
-        tag: {
-            "surface-gap": "calc(var(--var-spacing-base) * 0.375)",
-            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 2.666667)",
-            "default-min-block-size": "calc(var(--var-spacing-base) * 2)",
-            "default-padding-inline": "calc(var(--var-spacing-base) * 1)",
-            "default-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "big-min-block-size": "calc(var(--var-spacing-base) * 3)",
-            "big-padding-inline": "calc(var(--var-spacing-base) * 1.5)",
-            "big-padding-block": "calc(var(--var-spacing-base) * 1)",
-            "small-min-block-size": "calc(var(--var-spacing-base) * 1.5)",
-            "small-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
-            "small-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "small-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "tiny-min-block-size": "calc(var(--var-spacing-base) * 1.25)",
-            "tiny-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "tiny-padding-block": "calc(var(--var-spacing-base) * 0.25)",
-            "tiny-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "icon-padding": "calc(var(--var-spacing-base) * 0.25)",
-            "indicator-size": "calc(var(--var-spacing-base) * 0.5)",
-            "loading-opacity": "0.7",
-            "loading-pulse-duration": "2s",
-            "loading-pulse-timing": "cubic-bezier(0.4, 0, 0.6, 1)",
-            "loading-pulse-opacity": "0.45",
-            primary: {
-                background: "hsla(201, 49%, 36%)",
-                foreground: "hsla(221, 6%, 90%)",
-            },
-            info: {
-                background: "hsla(199, 89%, 48%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            warn: {
-                background: "hsla(38, 92%, 50%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            muted: {
-                background: "hsla(240, 5%, 96%)",
-                foreground: "hsla(240, 4%, 46%)",
-            },
-            danger: {
-                background: "hsla(0, 84%, 60%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            success: {
-                background: "hsla(142, 71%, 45%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            secondary: {
-                background: "hsla(240, 6%, 10%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            disabled: {
-                background: "hsla(240, 5%, 96%)",
-                foreground: "hsla(240, 4%, 46%)",
-            },
-            neutral: {
-                background: "transparent",
-                foreground: "hsla(221, 15%, 23%)",
-                border: "hsla(240, 6%, 90%)",
-            },
-        },
-        spinner: {
-            "indicator-size": "calc(var(--var-spacing-base) * 3)",
-            "indicator-border-width": "calc(var(--var-spacing-base) * 0.25)",
-            "container-padding": "calc(var(--var-spacing-base) * 3)",
-            "spin-duration": "1s",
-        },
-        empty: {
-            "surface-gap": "calc(var(--var-spacing-base) * 1)",
-            "surface-padding-inline": "calc(var(--var-spacing-base) * 2)",
-            "surface-padding-block": "calc(var(--var-spacing-base) * 3)",
-            "icon-size": "calc(var(--var-spacing-base) * 4)",
-        },
-        list: {
-            "detail-card-min-inline-size": "calc(var(--var-spacing-base) * 20)",
-            "detail-card-gap": "calc(var(--var-spacing-base) * 1)",
-            "detail-card-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1.333333)",
-            "detail-card-padding": "calc(var(--var-spacing-base) * 1.5)",
-            "detail-card-padding-block": "calc(var(--var-spacing-base) * 1.5)",
-            "detail-card-padding-block-end": "calc(var(--var-spacing-base) * 1.5)",
-            "close-inset-inline-end": "calc(var(--var-spacing-base) * 1)",
-            "close-inset-block-start": "calc(var(--var-spacing-base) / 4)",
-            "close-button-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "close-button-opacity": "0.7",
-            "header-gap": "calc(var(--var-spacing-base) * 1)",
-            "title-font-size": "calc(var(--var-fontsize) * 1)",
-            "description-line-height": "1.375",
-            "item-padding-block": "calc(var(--var-spacing-base) * 1)",
-            "item-media-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "avatar-frame-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "avatar-button-size": "calc(var(--var-spacing-base) * 2.5)",
-            "item-body-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "item-content-gap": "calc(var(--var-spacing-base) * 1)",
-            "transition-duration": "375ms",
-            "transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-            "overlay-background": "hsla(240, 6%, 10%, 0.7)",
-        },
-        "swipeable-list": {
-            "root-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "content-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "surface-radius": "calc(var(--var-radius, 0px) + var(--var-radius-base))",
-            "surface-min-block-size": "calc(var(--var-spacing-base) * 4.5)",
-            "surface-padding-inline": "calc(var(--var-spacing-base) * 1)",
-            "surface-padding-block": "calc(var(--var-spacing-base) * 0.75)",
-            "action-icon-size": "calc(var(--var-spacing-base) * 2.25)",
-            "action-focus-ring-width": "calc(var(--var-spacing-base) * 0.125)",
-            "action-focus-ring-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "action-transition-duration": "150ms",
-            "action-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
-            "action-active-scale": "0.95",
-            "description-margin-block-start": "calc(var(--var-spacing-base) * 0.125)",
-            "description-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "item-disabled-opacity": "0.6",
-            "action-disabled-opacity": "0.5",
-        },
-        modal: {
-            "surface-min-inline-size": "calc(var(--var-spacing-base) * 20)",
-            "surface-gap": "calc(var(--var-spacing-base) * 1)",
-            "dialog-max-inline-size-mobile": "calc(var(--var-spacing-base) * 20)",
-            "dialog-max-block-size": "calc(var(--var-spacing-base) * 40)",
-            "drawer-max-inline-size": "90vw",
-            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1.333333)",
-            "surface-padding-block": "calc(var(--var-spacing-base) * 1.5)",
-            "sheet-max-block-size": "90svh",
-            "sheet-padding-block-start": "calc(var(--var-spacing-base) * 1.5)",
-            "sheet-padding-block-end": "calc(var(--var-spacing-base) * 1.5)",
-            "resizer-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
-            "focus-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "resizer-focus-ring-width": "calc(var(--var-spacing-base) / 4)",
-            "sheet-handle-inset-block-start": "calc(var(--var-spacing-base) / 4)",
-            "sheet-handle-block-size": "calc(var(--var-spacing-base) * 1)",
-            "sheet-handle-padding-block": "calc(var(--var-spacing-base) / 4)",
-            "drawer-resizer-inset-inline": "calc(var(--var-spacing-base) * 1.25)",
-            "drawer-resizer-inset-inline-start": "calc(var(--var-spacing-base) * 0.5)",
-            "drawer-resizer-block-size": "calc(var(--var-spacing-base) * 4)",
-            "drawer-resizer-inline-size": "calc(var(--var-spacing-base) * 0.5)",
-            "sheet-pill-block-size": "calc(var(--var-spacing-base) * 0.25)",
-            "sheet-pill-inline-size": "calc(var(--var-spacing-base) * 4)",
-            "overlay-block-size": "100vh",
-            "overlay-padding-block-start": "calc(var(--var-spacing-base) * 1.5)",
-            "content-padding-inline": "calc(var(--var-spacing-base) * 1.5)",
-            "title-padding-block-end": "calc(var(--var-spacing-base) * 1)",
-            "title-font-size": "calc(var(--var-fontsize) * 1.25)",
-            "title-line-height": "1.625",
-            "body-padding-block": "calc(var(--var-spacing-base) * 1)",
-            "footer-padding-block-start": "calc(var(--var-spacing-base) * 1)",
-            "close-inset-inline-end": "calc(var(--var-spacing-base) * 1)",
-            "close-inset-block-start": "calc(var(--var-spacing-base) * 1)",
-            "close-button-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "close-button-opacity": "0.7",
-            "transition-duration": "375ms",
-            "transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-            "close-focus-ring-width": "calc(var(--var-spacing-base) * 0.125)",
-            "close-icon-size": "calc(var(--var-spacing-base) * 1.25)",
-            "confirm-dialog-max-inline-size": "calc(var(--var-spacing-base) * 24)",
-            "confirm-actions-gap": "calc(var(--var-spacing-base) * 1)",
-            "confirm-description-padding-block": "calc(var(--var-spacing-base) * 1)",
-            "overlay-background": "hsla(240, 6%, 10%, 0.8)",
-        },
-        notification: {
-            "surface-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1.333333)",
-            "surface-backdrop-blur": "calc(var(--var-spacing-base) * 0.75)",
-            "content-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "content-padding": "calc(var(--var-spacing-base) * 1)",
-            "icon-margin-block-start": "calc(var(--var-spacing-base) * 0.125)",
-            "icon-size": "calc(var(--var-spacing-base) * 1)",
-            "icon-opacity": "0.8",
-            "loading-duration": "1s",
-            "text-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "title-line-height": "1.25",
-            "title-letter-spacing": "-0.025em",
-            "description-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "description-line-height": "1.625",
-            "description-opacity": "0.9",
-            "close-margin-block-start": "calc(var(--var-spacing-base) * -0.25)",
-            "close-margin-inline-end": "calc(var(--var-spacing-base) * -0.25)",
-            "close-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
-            "close-padding": "calc(var(--var-spacing-base) * 0.25)",
-            "close-transition-duration": "150ms",
-            "close-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
-            "close-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "viewport-inset-block-start": "calc(var(--var-spacing-base) * 1)",
-            "viewport-max-inline-size": "calc(var(--var-spacing-base) * 28)",
-            "viewport-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "viewport-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "badge-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
-            "badge-padding-block": "calc(var(--var-spacing-base) * 0.25)",
-            "badge-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "badge-letter-spacing": "0.05em",
-            "badge-backdrop-blur": "calc(var(--var-spacing-base) * 0.5)",
-            "badge-transition-duration": "375ms",
-            "badge-transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-            "close-foreground": "hsla(221, 15%, 23%, 0.4)",
-            "close-background-hover": "hsla(221, 15%, 23%, 0.1)",
-            "badge-background": "hsla(0, 0%, 100%, 0.8)",
-            "badge-foreground": "hsla(221, 15%, 23%, 0.5)",
-            "badge-foreground-hover": "hsla(221, 15%, 23%, 0.8)",
-        },
-        progress: {
-            "track-block-size": "calc(var(--var-spacing-base) * 1.5)",
-            "track-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.4)",
-            "indicator-transition-duration": "500ms",
-            "indicator-transition-timing": "ease-in-out",
-        },
-        timeline: {
-            "item-padding-block-end": "calc(var(--var-spacing-base) * 2)",
-            "connector-inset-inline-start": "calc(var(--var-spacing-base) * 1)",
-            "connector-inset-block-start": "calc(var(--var-spacing-base) * 2)",
-            "connector-inline-size": "calc(var(--var-border-hairline) * 2)",
-            "content-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "icon-size": "calc(var(--var-spacing-base) * 2)",
-            "icon-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "actions-gap": "calc(var(--var-spacing-base) * 1.5)",
-            "actions-padding-inline": "calc(var(--var-spacing-base) * 1)",
-        },
-        step: {
-            "marker-size": "calc(var(--var-spacing-base) * 2.5)",
-            "icon-size": "calc(var(--var-spacing-base) * 1.5)",
-            "label-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            gap: "calc(var(--var-spacing-base) * 1)",
-            "connector-block-size": "calc(var(--var-border-hairline) * 2)",
-        },
-        "page-calendar": {
-            "hour-block-size": "calc(var(--var-spacing-base) * 3)",
-            gap: "calc(var(--var-spacing-base) * 1)",
-            "header-gap": "calc(var(--var-spacing-base) * 1)",
-            "header-nav-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "header-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "date-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "badge-size": "calc(var(--var-spacing-base) * 3)",
-            "badge-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
-            "title-text": "calc(var(--var-fontsize) * 1.25)",
-            "week-label-text": "calc(var(--var-fontsize) * 0.75)",
-            "nav-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "nav-button-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "today-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.5)",
-            "today-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
-            "today-padding-block": "calc(var(--var-spacing-base) * 0.375)",
-            "today-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "view-switch-radius": "calc(var(--var-radius, var(--var-radius-base)) * 0.5)",
-            "filter-gap": "calc(var(--var-spacing-base) * 0.375)",
-            "filter-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "filter-label-margin-inline-end": "calc(var(--var-spacing-base) * 0.25)",
-            "dot-size": "calc(var(--var-spacing-base) * 0.25)",
-            "dot-bottom": "calc(var(--var-spacing-base) * 0.125)",
-            "day-header-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "day-header-padding-inline": "calc(var(--var-spacing-base) * 1)",
-            "day-header-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "day-badge-size": "calc(var(--var-spacing-base) * 2)",
-            "gutter-width": "calc(var(--var-spacing-base) * 3.75)",
-            "side-padding-inline": "calc(var(--var-spacing-base) * 1)",
-            "detail-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "detail-padding": "calc(var(--var-spacing-base) * 0.75)",
-            "weekday-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "weekday-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "cell-min-block-size": "calc(var(--var-spacing-base) * 8)",
-            "cell-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "cell-padding": "calc(var(--var-spacing-base) * 0.5)",
-            "month-badge-size": "calc(var(--var-spacing-base) * 1.5)",
-            "month-badge-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "overflow-font-size": "calc(var(--var-fontsize) * 1.125)",
-            "week-badge-size": "calc(var(--var-spacing-base) * 1.5)",
-            "week-badge-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "hour-font-size": "calc(var(--var-fontsize) * 0.625)",
-            "hour-label-inset-block-start": "calc(var(--var-spacing-base) * -0.625)",
-            "hour-label-inset-inline-end": "calc(var(--var-spacing-base) * 0.5)",
-            "pill-radius": "calc(var(--var-radius, var(--var-radius-base)) / 3)",
-            "pill-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "pill-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "pill-block-size": "calc(var(--var-spacing-base) * 1.25)",
-            "pill-time-opacity": "0.6",
-            "cell-gap-tight": "calc(var(--var-spacing-base) * 0.125)",
-            "focus-ring-width": "calc(var(--var-border-hairline) * 2)",
-            "transition-duration": "375ms",
-            "transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-            "outside-month-opacity": "0.5",
-            "add-indicator-opacity-hover": "0.4",
-            "today-background-hover": "hsla(240, 5%, 96%, 0.5)",
-            "slot-border": "hsla(240, 6%, 90%, 0.5)",
-            "slot-background-hover": "hsla(240, 5%, 96%, 0.2)",
-            "cell-background-hover": "hsla(240, 5%, 96%, 0.2)",
-        },
-        table: {
-            rounded: "calc(var(--var-radius, var(--var-radius-base)) * 0.666667)",
-            "groups-gap": "calc(var(--var-spacing-base) * 1)",
-            "inline-gap-tight": "calc(var(--var-spacing-base) * 0.25)",
-            "filter-gap": "calc(var(--var-spacing-base) * 1)",
-            "filter-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "filter-delete-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "filter-list-margin-block-start": "calc(var(--var-spacing-base) * 1)",
-            "filter-list-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "filter-row-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "filter-delete-control-margin-block-start": "calc(var(--var-spacing-base) * 1.25)",
-            "filter-inline-gap": "calc(var(--var-spacing-base) * 1)",
-            "filter-inline-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "filter-inline-delete-margin-block-start": "calc(var(--var-spacing-base) * 1)",
-            "group-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "group-delete-icon-size": "calc(var(--var-spacing-base) * 1)",
-            "group-order-list-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "sort-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "sort-list-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "sort-row-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "groups-margin-block-start": "calc(var(--var-spacing-base) * 1)",
-            "groups-margin-block": "calc(var(--var-spacing-base) * 1)",
-            "row-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "row-padding-block-end": "calc(var(--var-spacing-base) * 1)",
-            "row-aside-transition-timing": "cubic-bezier(0.4, 0, 0.2, 1)",
-            "cell-padding": "calc(var(--var-spacing-base) * 0.75)",
-            "cell-padding-inline": "calc(var(--var-spacing-base) * 0.5)",
-            "cell-border": "calc(var(--var-border-hairline) * 1)",
-            "head-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "head-cell-block-size": "calc(var(--var-spacing-base) * 3.5)",
-            "head-filter-item-margin-block": "calc(var(--var-spacing-base) * 0.25)",
-            "properties-icon-size": "calc(var(--var-spacing-base) * 0.875)",
-            "properties-trigger-min-block-size": "calc(var(--var-spacing-base) * 2.75)",
-            "properties-list-min-inline-size": "calc(var(--var-spacing-base) * 14)",
-            "properties-list-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "properties-item-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "properties-handle-padding": "calc(var(--var-spacing-base) * 0.25)",
-            "divider-width": "calc(var(--var-spacing-base) * 1)",
-            "divider-width-active": "calc(var(--var-spacing-base) * 0.5)",
-            "resizer-inline-size": "calc(var(--var-spacing-base) * 0.75)",
-            "resizer-block-size": "calc(var(--var-spacing-base) * 3)",
-            "resizer-focus-ring-width": "calc(var(--var-border-hairline) * 2)",
-            "resizer-focus-ring-offset": "calc(var(--var-spacing-base) * 0.125)",
-            "pagination-gap": "calc(var(--var-spacing-base) * 1)",
-            "pagination-padding": "calc(var(--var-spacing-base) * 0.75)",
-            "pagination-items-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "pagination-item-border-width": "calc(var(--var-border-hairline) * 2)",
-            "pagination-item-padding-inline": "calc(var(--var-spacing-base) * 0.75)",
-            "pagination-item-padding-block": "calc(var(--var-spacing-base) * 0.25)",
-            "pagination-item-transition-duration": "375ms",
-            "pagination-item-transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-            "metadata-margin-block-end": "calc(var(--var-spacing-base) * 0.25)",
-            "metadata-gap-inline": "calc(var(--var-spacing-base) * 1)",
-            "metadata-gap-block": "calc(var(--var-spacing-base) * 0.25)",
-            "metadata-min-inline-size": "1ch",
-            "operations-gap": "calc(var(--var-spacing-base) * 1)",
-            "operations-padding-block": "calc(var(--var-spacing-base) * 0.5)",
-            "pill-radius": "calc(var(--var-radius, var(--var-radius-base)) * 1)",
-            "pill-padding-inline": "calc(var(--var-spacing-base) * 1)",
-            "pill-padding-block": "calc(var(--var-spacing-base) * 0.125)",
-            "filter-dot-size": "calc(var(--var-spacing-base) * 0.75)",
-            "filter-dot-margin-inline-end": "calc(var(--var-spacing-base) * 0.5)",
-            "inline-placeholder-color": "hsla(201, 49%, 36%, 0.7)",
-            "loading-block-size": "calc(var(--var-spacing-base) * 3.5)",
-            "loading-bar-block-size": "calc(var(--var-spacing-base) * 0.5)",
-            "loading-bar-radius": "calc(var(--var-radius, var(--var-radius-base)) / 3)",
-            "loading-bar-opacity": "0.6",
-            "loading-bar-pulse-duration": "2s",
-            "loading-bar-pulse-timing": "cubic-bezier(0.4, 0, 0.6, 1)",
-            "loading-bar-pulse-opacity": "0.5",
-            "empty-block-size": "calc(var(--var-spacing-base) * 12)",
-            "scroll-sentinel-block-size": "calc(var(--var-spacing-base) * 0.125)",
-            "header-background": "hsla(0, 0%, 100%)",
-        },
-        shortcut: {
-            "content-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "content-font-size": "calc(var(--var-fontsize) * 0.875)",
-            "icon-size": "calc(var(--var-spacing-base) * 0.75)",
-        },
-        wizard: {
-            "surface-inline-size": "calc(var(--var-spacing-base) * 20)",
-            "surface-max-inline-size": "calc(var(--var-spacing-base) * 24)",
-            "surface-gap": "calc(var(--var-spacing-base) * 0.75)",
-            "surface-radius": "calc(var(--var-radius, 0px) + calc(var(--var-radius-base) / 2))",
-            "surface-padding": "calc(var(--var-spacing-base) * 1)",
-            "surface-background": "hsla(0, 0%, 100%)",
-            "surface-foreground": "hsla(240, 10%, 4%)",
-            "surface-border": "hsla(240, 6%, 90%)",
-            "overlay-background": "hsla(240, 10%, 4%, 0.7)",
-            "footer-padding-block-start": "calc(var(--var-spacing-base) * 0.5)",
-            "label-font-size": "calc(var(--var-fontsize) * 0.75)",
-            "label-foreground": "hsla(240, 4%, 46%)",
-            "label-foreground-hover": "hsla(221, 15%, 23%)",
-            "actions-gap": "calc(var(--var-spacing-base) * 0.5)",
-            "counter-inset-inline-end": "calc(var(--var-spacing-base) * 0.5)",
-            "counter-inset-block-start": "calc(var(--var-spacing-base) * 0.5)",
-            "focus-outline-width": "calc(var(--var-spacing-base) * 0.125)",
-            "focus-outline-offset": "calc(var(--var-spacing-base) * 0.125)",
-        },
-        skeleton: {
-            radius: "calc(var(--var-radius, var(--var-radius-base)) / 3)",
-            "cell-block-size": "calc(var(--var-spacing-base) * 1.5)",
-            "cell-inline-size": "calc(100% * 0.833333)",
-            "block-size": "calc(var(--var-spacing-base) * 2)",
-            "block-inline-size": "calc(var(--var-spacing-base) * 8)",
-            "list-gap": "calc(var(--var-spacing-base) * 1.5)",
-            "pulse-duration": "2s",
-            "pulse-opacity": "0.5",
-        },
-        stats: {
-            rounded: "calc(var(--var-radius-base) * 1)",
-            p: "calc(var(--var-spacing-base) * 1.5)",
-            gap: "calc(var(--var-spacing-base) * 1)",
-            "icon-size": "calc(var(--var-spacing-base) * 2.5)",
-            "icon-p": "calc(var(--var-spacing-base) * 2)",
-            "inner-gap": "calc(var(--var-spacing-base) * 0.25)",
-            "footer-px": "calc(var(--var-spacing-base) * 1.5)",
-            "footer-py": "calc(var(--var-spacing-base) * 0.5)",
-            "title-font-size": "1rem",
-            "value-font-size": "2.25rem",
-            background: "var(--var-color-background)",
-            "border-color": "var(--var-color-border)",
-            "icon-background": "var(--var-color-primary)",
-            "icon-foreground": "var(--var-color-primary-foreground)",
-        },
-    },
-    spacing: {
-        base: "1rem",
-        hairline: "calc(var(--var-spacing-base) * 0.0625)",
-        lg: "calc(var(--var-spacing-base) * 1.125)",
-        sm: "calc(var(--var-spacing-base) * 0.75)",
-        dialog: "calc(var(--var-spacing-base) * 20)",
-    },
-    rounded: {
-        pill: "calc(var(--var-radius-base) * 2)",
-        full: "9999px",
-    },
-    shadow: {
-        card: "0px 1px 2px 1px transparent",
-        floating: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-        notification: "1px 2px 2px 2px hsla(210, 25%, 40%, 0.15)",
-        table: "0px 1px 1px 1px hsla(210, 0%, 0%, 0.1)",
-    },
-    layer: {
-        normal: "1",
-        calendar: "2",
-        tooltip: "20",
-        overlay: "21",
-        floating: "22",
-        navbar: "19",
-        wizard: "100",
-    },
-} satisfies ThemeTokens;
+const assertSafeCssValue = (value: string) => {
+  if (value.trim() === "") throw new Error("CSS values cannot be empty.");
+  if (/<\/style/i.test(value))
+    throw new Error("CSS values cannot contain a closing style tag.");
 
-export const defaultDarkThemeTokens = {
-    colors: {
-        background: "hsla(240, 10%, 8%)",
-        foreground: "hsla(240, 5%, 96%)",
-        border: "hsla(240, 4%, 16%)",
-        ring: "hsla(201, 49%, 65%)",
-        disabled: "hsla(240, 4%, 16%)",
-        muted: {
-            DEFAULT: "hsla(240, 4%, 16%)",
-            foreground: "hsla(240, 5%, 65%)",
-        },
-        primary: {
-            DEFAULT: "hsla(201, 49%, 54%)",
-            foreground: "hsla(240, 6%, 10%)",
-            subtle: "hsla(201, 49%, 36%)",
-            hover: "hsla(201, 49%, 22%)",
-        },
-        secondary: {
-            DEFAULT: "hsla(240, 5%, 96%)",
-            foreground: "hsla(240, 5%, 96%)",
-            subtle: "hsla(240, 4%, 20%)",
-            hover: "hsla(240, 4%, 25%)",
-        },
-        info: {
-            subtle: "hsla(199, 89%, 15%)",
-        },
-        danger: {
-            subtle: "hsla(0, 84%, 15%)",
-        },
-        warn: {
-            subtle: "hsla(38, 92%, 15%)",
-            foreground: "hsla(240, 10%, 4%)",
-        },
-        success: {
-            subtle: "hsla(142, 71%, 15%)",
-            foreground: "hsla(240, 10%, 4%)",
-        },
-    },
-    components: {
-        button: {
-            secondary: {
-                background: "hsla(0, 0%, 100%)",
-                foreground: "hsla(240, 10%, 4%)",
-            },
-        },
-        calendar: {
-            "day-button-background-hover": "hsla(240, 4%, 16%, 0.48)",
-            "focus-border": "hsla(201, 49%, 65%, 0.78)",
-            "focus-ring": "hsla(201, 49%, 65%, 0.18)",
-            "today-border": "hsla(201, 49%, 65%, 0.38)",
-            "outside-month-foreground": "hsla(240, 5%, 65%, 0.42)",
-            "selected-ring": "hsla(201, 49%, 65%, 0.14)",
-            "selected-background-hover": "hsla(201, 49%, 54%, 0.92)",
-            "range-border": "hsla(201, 49%, 65%, 0.28)",
-            "range-background": "hsla(201, 49%, 65%, 0.08)",
-            "nav-button-border-hover": "hsla(201, 49%, 65%, 0.28)",
-            "nav-button-background-hover": "hsla(201, 49%, 65%, 0.1)",
-            "select-background-hover": "hsla(240, 4%, 16%, 0.42)",
-        },
-        list: {
-            "overlay-background": "hsla(240, 10%, 4%, 0.78)",
-        },
-        modal: {
-            "overlay-background": "hsla(240, 10%, 4%, 0.82)",
-        },
-        dropdown: {
-            "surface-background": "hsla(240, 10%, 8%)",
-            "surface-foreground": "hsla(240, 5%, 96%)",
-            "surface-border": "hsla(240, 4%, 16%)",
-        },
-        menu: {
-            "surface-background": "hsla(240, 10%, 8%)",
-            "surface-foreground": "hsla(240, 5%, 96%)",
-            "surface-border": "hsla(240, 4%, 16%)",
-            "item-active-background": "hsla(201, 49%, 54%)",
-            "item-active-foreground": "hsla(240, 6%, 10%)",
-        },
-        autocomplete: {
-            "option-background-hover": "hsla(240, 4%, 16%)",
-            "option-active-background": "hsla(201, 49%, 22%)",
-            "option-active-foreground": "hsla(240, 6%, 10%)",
-            "option-selected-background": "hsla(240, 4%, 16%)",
-            "option-selected-foreground": "hsla(240, 5%, 96%)",
-            "panel-background": "hsla(240, 10%, 8%)",
-            "panel-border": "hsla(240, 4%, 16%)",
-            "panel-foreground": "hsla(240, 5%, 96%)",
-            "empty-border": "hsla(221, 10%, 17%)",
-            "empty-foreground": "hsla(240, 4%, 16%)",
-        },
-        "multi-select": {
-            "option-background-hover": "hsla(240, 4%, 16%)",
-            "option-selected-background": "hsla(240, 4%, 16%)",
-            "option-selected-foreground": "hsla(240, 5%, 96%)",
-        },
-        "free-text": {
-            "placeholder-foreground": "hsla(240, 5%, 65%)",
-            "error-placeholder-foreground": "hsla(0, 84%, 15%)",
-        },
-        radiobox: {
-            "control-foreground": "hsla(201, 49%, 54%)",
-            "control-background": "hsla(240, 10%, 8%)",
-            "control-border": "hsla(240, 4%, 16%)",
-            "focus-ring": "hsla(201, 49%, 54%)",
-        },
-        checkbox: {
-            "control-foreground": "hsla(201, 49%, 54%)",
-            "control-background": "hsla(240, 10%, 8%)",
-            "control-border": "hsla(240, 4%, 16%)",
-            "focus-ring": "hsla(201, 49%, 54%)",
-        },
-        switch: {
-            "track-background": "hsla(240, 4%, 16%, 0.72)",
-            "track-checked-background": "hsla(201, 49%, 54%, 0.86)",
-            "thumb-background": "hsla(240, 5%, 65%)",
-            "thumb-checked-background": "hsla(0, 0%, 100%, 0.96)",
-        },
-        slider: {
-            "thumb-background": "hsla(0, 0%, 100%)",
-        },
-        wizard: {
-            "surface-background": "hsla(240, 10%, 8%)",
-            "surface-foreground": "hsla(240, 5%, 96%)",
-            "surface-border": "hsla(240, 4%, 16%)",
-            "overlay-background": "hsla(0, 0%, 0%, 0.7)",
-            "label-foreground": "hsla(240, 5%, 65%)",
-            "label-foreground-hover": "hsla(240, 5%, 96%)",
-        },
-        command: {
-            "surface-background": "hsla(240, 10%, 8%)",
-            "surface-foreground": "hsla(240, 5%, 96%)",
-            "surface-border": "hsla(240, 4%, 16%)",
-            "group-label-foreground": "hsla(240, 5%, 96%)",
-            "item-background-hover": "hsla(240, 4%, 16%)",
-            "empty-foreground": "hsla(240, 5%, 96%)",
-        },
-        tooltip: {
-            "surface-background": "hsla(0, 0%, 100%)",
-            "surface-foreground": "hsla(240, 10%, 4%)",
-            "surface-border": "hsla(221, 10%, 17%)",
-        },
-        notification: {
-            "close-foreground": "hsla(240, 5%, 96%, 0.4)",
-            "close-background-hover": "hsla(240, 5%, 96%, 0.1)",
-            "badge-background": "hsla(240, 10%, 8%, 0.8)",
-            "badge-foreground": "hsla(240, 5%, 96%, 0.5)",
-            "badge-foreground-hover": "hsla(240, 5%, 96%, 0.8)",
-        },
-        table: {
-            "header-background": "hsla(240, 10%, 8%)",
-            "inline-placeholder-color": "hsla(201, 49%, 65%, 0.7)",
-        },
-        "page-calendar": {
-            "today-background-hover": "hsla(240, 4%, 16%, 0.5)",
-            "slot-border": "hsla(240, 4%, 16%, 0.5)",
-            "slot-background-hover": "hsla(240, 4%, 16%, 0.2)",
-            "cell-background-hover": "hsla(240, 4%, 16%, 0.2)",
-        },
-        tag: {
-            primary: {
-                background: "hsla(201, 49%, 54%)",
-                foreground: "hsla(240, 6%, 10%)",
-            },
-            info: {
-                background: "hsla(199, 89%, 48%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            warn: {
-                background: "hsla(38, 92%, 50%)",
-                foreground: "hsla(240, 10%, 4%)",
-            },
-            muted: {
-                background: "hsla(240, 4%, 16%)",
-                foreground: "hsla(240, 5%, 65%)",
-            },
-            danger: {
-                background: "hsla(0, 84%, 60%)",
-                foreground: "hsla(0, 0%, 100%)",
-            },
-            success: {
-                background: "hsla(142, 71%, 45%)",
-                foreground: "hsla(240, 10%, 4%)",
-            },
-            secondary: {
-                background: "hsla(0, 0%, 100%)",
-                foreground: "hsla(240, 10%, 4%)",
-            },
-            disabled: {
-                background: "hsla(240, 4%, 16%)",
-                foreground: "hsla(240, 5%, 65%)",
-            },
-            neutral: {
-                background: "transparent",
-                foreground: "hsla(240, 5%, 96%)",
-                border: "hsla(240, 4%, 16%)",
-            },
-        },
-        alert: {
-            primary: {
-                foreground: "hsla(199, 89%, 80%)",
-                border: "hsla(199, 89%, 25%)",
-                background: "hsla(199, 89%, 12%)",
-            },
-            danger: {
-                foreground: "hsla(0, 84%, 80%)",
-                border: "hsla(0, 84%, 25%)",
-                background: "hsla(0, 84%, 12%)",
-            },
-            info: {
-                foreground: "hsla(199, 89%, 80%)",
-                border: "hsla(199, 89%, 25%)",
-                background: "hsla(199, 89%, 12%)",
-            },
-            success: {
-                foreground: "hsla(142, 71%, 80%)",
-                border: "hsla(142, 71%, 16%)",
-                background: "hsla(142, 71%, 12%)",
-            },
-            warn: {
-                foreground: "hsla(38, 92%, 80%)",
-                border: "hsla(38, 92%, 25%)",
-                background: "hsla(38, 92%, 12%)",
-            },
-        },
-    },
-    spacing: {},
-    rounded: {},
-    shadow: {
-        card: "0px 1px 1px 1px transparent",
-        table: "0px 1px 1px 1px hsla(210, 25%, 20%, 0.1)",
-        notification: "1px 2px 2px 2px hsla(210, 15%, 20%, 0.15)",
-    },
-    layer: {},
-} satisfies ThemeTokens;
-
-const groupPrefixes = {
-    colors: ["color"],
-    components: [],
-    spacing: ["spacing"],
-    rounded: ["rounded"],
-    shadow: ["shadow"],
-    layer: ["layer"],
-} satisfies Record<keyof Required<ThemeTokens>, readonly string[]>;
-
-const isTokenTree = (value: string | TokenTree): value is TokenTree => typeof value !== "string";
-
-const mergeTokenTree = (base: TokenTree | undefined, override: TokenTree | undefined): TokenTree | undefined => {
-    if (!base) return override;
-    if (!override) return base;
-
-    const merged: Record<string, string | TokenTree> = { ...base };
-    for (const [key, value] of Object.entries(override)) {
-        const existing = merged[key];
-        merged[key] = typeof existing === "string" || typeof value === "string" ? value : (mergeTokenTree(existing, value) ?? value);
+  let quote = "";
+  let escaped = false;
+  let comment = false;
+  let parentheses = 0;
+  for (let index = 0; index < value.length; index++) {
+    const character = value[index];
+    const next = value[index + 1];
+    if (comment) {
+      if (character === "*" && next === "/") {
+        comment = false;
+        index++;
+      }
+      continue;
     }
-    return merged;
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (character === "\\") escaped = true;
+      else if (character === quote) quote = "";
+      continue;
+    }
+    if (character === "/" && next === "*") {
+      comment = true;
+      index++;
+      continue;
+    }
+    if (character === "\\") {
+      if (index + 1 >= value.length)
+        throw new Error("CSS value cannot end with an escape.");
+      index++;
+      continue;
+    }
+    if (character === '"' || character === "'") {
+      quote = character;
+      continue;
+    }
+    if (character === "(") {
+      parentheses++;
+      continue;
+    }
+    if (character === ")") {
+      if (parentheses === 0)
+        throw new Error("CSS value has an unmatched closing parenthesis.");
+      parentheses--;
+      continue;
+    }
+    if (
+      parentheses === 0 &&
+      character === "!" &&
+      /^!\s*important\b/i.test(value.slice(index))
+    )
+      throw new Error("CSS values cannot set !important.");
+    if (character === ";" && parentheses === 0)
+      throw new Error("CSS value cannot contain multiple declarations.");
+    if (character === "{" || character === "}")
+      throw new Error("CSS value cannot contain rule boundaries.");
+  }
+  if (quote || comment || parentheses !== 0)
+    throw new Error("CSS value contains an unclosed boundary.");
 };
 
-export const mergeThemeTokens = (base: ThemeTokens = defaultLightThemeTokens, override: ThemeTokens = {}): ThemeTokens => ({
-    colors: mergeTokenTree(base.colors, override.colors),
-    components: mergeTokenTree(base.components, override.components),
-    spacing: mergeTokenTree(base.spacing, override.spacing),
-    rounded: mergeTokenTree(base.rounded, override.rounded),
-    shadow: mergeTokenTree(base.shadow, override.shadow),
-    layer: mergeTokenTree(base.layer, override.layer),
+const cssValueSchema = z.string().superRefine((value, context) => {
+  try {
+    assertSafeCssValue(value);
+  } catch (error) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: error instanceof Error ? error.message : "Invalid CSS value.",
+    });
+  }
 });
+const optionalValueSchema = z.union([
+  cssValueSchema,
+  z.number().finite(),
+  z.undefined(),
+]);
+const optionalStringSchema = z.union([cssValueSchema, z.undefined()]);
+const tokensSchema = z.record(optionalValueSchema).optional();
+const colorsSchema = z.record(optionalStringSchema).optional();
+const componentsSchema = z.record(z.record(optionalStringSchema)).optional();
+const themeOverridesSchema = z
+  .object({
+    tokens: tokensSchema,
+    colors: colorsSchema,
+    components: componentsSchema,
+  })
+  .strict();
+const themeNameSchema = z.union([
+  z.literal("default"),
+  z.string().regex(/^[a-z][a-z0-9_-]*$/),
+]);
+const colorSchemeSchema = z.enum(["light", "dark", "normal"]);
+const themeConfigurationSchema = z
+  .object({
+    name: themeNameSchema,
+    tokens: tokensSchema,
+    colors: colorsSchema,
+    components: componentsSchema,
+    colorScheme: colorSchemeSchema.optional(),
+  })
+  .strict();
+const configureOptionsSchema = z
+  .object({
+    document: z
+      .custom<Document>(
+        (value) =>
+          typeof value === "object" &&
+          value !== null &&
+          "head" in value &&
+          "getElementById" in value &&
+          "createElement" in value &&
+          "querySelectorAll" in value,
+      )
+      .optional(),
+    nonce: z.string().optional(),
+  })
+  .strict();
 
-const tokenName = (parts: readonly string[]) => `--var-${parts.filter((part) => part !== "DEFAULT").join("-")}` as `--var-${string}`;
+const tokenLookup: Record<string, true> = Object.fromEntries(
+  themeTokenRegistry.tokens.map((token) => [token, true]),
+);
+const colorLookup: Record<string, true> = Object.fromEntries(
+  themeTokenRegistry.colors.map((token) => [token, true]),
+);
+const componentLookups: Record<
+  string,
+  Record<string, true>
+> = Object.fromEntries(
+  Object.entries(themeTokenRegistry.components).map(([component, tokens]) => [
+    component,
+    Object.fromEntries(tokens.map((token) => [token, true])),
+  ]),
+);
+const componentLookup: Record<string, true> = Object.fromEntries(
+  Object.keys(componentLookups).map((component) => [component, true]),
+);
 
-const collectProperties = (tokens: TokenTree, parts: readonly string[], properties: ThemeCssProperties) => {
-    for (const [key, value] of Object.entries(tokens)) {
-        const nextParts = [...parts, key];
-        if (isTokenTree(value)) collectProperties(value, nextParts, properties);
-        else properties[tokenName(nextParts)] = value;
+const assertKnown = (
+  name: string,
+  lookup: Record<string, true>,
+  group: string,
+) => {
+  if (lookup[name] !== true)
+    throw new TypeError(`Unknown ${group} token: ${name}.`);
+};
+
+const flattenOverrides = (
+  overrides: ParsedOverrides | ParsedConfiguration,
+): ThemeCssProperties => {
+  const properties: Record<string, string> = {};
+  for (const [token, value] of Object.entries(overrides.tokens ?? {})) {
+    if (value === undefined) continue;
+    const isPrimitive = token === "spacing" || token === "rounding";
+    if (isPrimitive) {
+      if (typeof value === "number" && !Number.isFinite(value))
+        throw new TypeError(`tokens.${token} must be a finite number.`);
+      if (typeof value !== "number" && typeof value !== "string")
+        throw new TypeError(`tokens.${token} must be a number or CSS string.`);
+    } else {
+      assertKnown(token, tokenLookup, "shared");
+      if (typeof value !== "string")
+        throw new TypeError(`tokens.${token} must be a CSS string.`);
     }
-};
-
-export const createThemeProperties = (theme: ThemeTokens = {}, options: ThemeCssOptions = {}): ThemeCssProperties => {
-    const properties: ThemeCssProperties = {};
-    const collect = (source: ThemeTokens) => {
-        for (const [group, prefix] of Object.entries(groupPrefixes)) {
-            const tokens = source[group as keyof ThemeTokens];
-            if (tokens) collectProperties(tokens, prefix, properties);
-        }
-    };
-
-    // Implicit library geometry resolves at the element, not at the theme scope.
-    // Explicit base/theme entries must survive even when equal to a default.
-    collect(defaultLightThemeTokens);
-    for (const key of Object.keys(defaultGeometryTokens)) delete properties[key as keyof ThemeCssProperties];
-    delete properties["--var-spacing-base"];
-    if (options.base) {
-        for (const key of Object.keys(properties)) delete properties[key as keyof ThemeCssProperties];
-        collect(options.base);
+    const property =
+      token === "spacing"
+        ? "--var-spacing-base"
+        : token === "rounding"
+          ? "--var-radius-base"
+          : `--var-${token}`;
+    properties[property] = typeof value === "number" ? `${value}px` : value;
+  }
+  for (const [token, value] of Object.entries(overrides.colors ?? {})) {
+    if (value === undefined) continue;
+    assertKnown(token, colorLookup, "color");
+    if (typeof value !== "string")
+      throw new TypeError(`colors.${token} must be a CSS string.`);
+    properties[`--var-color-${token}`] = value;
+  }
+  for (const [component, values] of Object.entries(
+    overrides.components ?? {},
+  )) {
+    assertKnown(component, componentLookup, "component");
+    for (const [token, value] of Object.entries(values ?? {})) {
+      if (value === undefined) continue;
+      assertKnown(
+        token,
+        componentLookups[component],
+        `components.${component}`,
+      );
+      if (typeof value !== "string")
+        throw new TypeError(
+          `components.${component}.${token} must be a CSS string.`,
+        );
+      properties[`--var-${component}-${token}`] = value;
     }
-    collect(theme);
-    return properties;
+  }
+  return Object.fromEntries(
+    Object.entries(properties).sort(([left], [right]) =>
+      left.localeCompare(right),
+    ),
+  ) as ThemeCssProperties;
 };
 
-const cssEscape = (value: string) => value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
+export const createThemeProperties = (
+  overrides: ThemeTokenOverrides = {},
+): ThemeCssProperties =>
+  flattenOverrides(themeOverridesSchema.parse(overrides));
 
-const createSelector = (options: ThemeCssOptions) => {
-    if (options.selector) return options.selector;
-    if (options.name) return `[${THEME_ATTRIBUTE}="${cssEscape(options.name)}"]`;
-    return ":root";
+const normalizeConfiguration = (
+  configuration: ThemeConfiguration,
+): NormalizedThemeConfiguration => {
+  const parsed: ParsedConfiguration =
+    themeConfigurationSchema.parse(configuration);
+  return {
+    name: parsed.name,
+    colorScheme: parsed.colorScheme,
+    properties: flattenOverrides(parsed),
+  };
 };
 
-export const createThemeCss = (theme: ThemeTokens = {}, options: ThemeCssOptions = {}) => {
-    const selector = createSelector(options);
-    const properties = createThemeProperties(theme, options);
-    const declarations = Object.entries(properties)
-        .map(([key, value]) => `    ${key}: ${value};`)
-        .join("\n");
-    const content = `${selector} {\n${declarations}\n}`;
-
-    if (options.layer !== true) return content;
-    return `@layer var.tokens, var.base, var.components, var.utilities;\n\n@layer var.tokens {\n${content}\n}`;
+const serializeConfiguration = (
+  configuration: NormalizedThemeConfiguration,
+): string => {
+  const selector =
+    configuration.name === "default" ? ":root" : `html.${configuration.name}`;
+  const declarations = Object.entries(configuration.properties).map(
+    ([property, value]) => `    ${property}: ${value};`,
+  );
+  if (configuration.colorScheme !== undefined)
+    declarations.push(`    color-scheme: ${configuration.colorScheme};`);
+  return [
+    "@layer var.tokens, var.theme, var.base, var.components, var.utilities;",
+    "",
+    "@layer var.theme {",
+    `  ${selector} {`,
+    ...declarations,
+    "  }",
+    "}",
+  ].join("\n");
 };
 
-export const applyTheme = (target: HTMLElement | null | undefined, theme: ThemeTokens = {}, options: ThemeCssOptions = {}) => {
-    if (!target) return;
-    const properties = createThemeProperties(theme, options);
-    for (const [key, value] of Object.entries(properties)) target.style.setProperty(key, value);
-};
+export const createThemeCss = (configuration: ThemeConfiguration): string =>
+  serializeConfiguration(normalizeConfiguration(configuration));
 
-export const registerTheme = (name: string, theme: ThemeTokens = {}, options: ThemeStyleElementOptions = {}) => {
-    const css = createThemeCss(theme, { ...options, name });
-    const ownerDocument = options.document ?? globalThis.document;
-    if (!ownerDocument) return css;
+const STYLE_OWNER_ATTRIBUTE = "data-theme-owner";
+const STYLE_NAME_ATTRIBUTE = "data-theme-name";
+const STYLE_OWNER_VALUE = "theme-runtime";
 
-    const id = options.id ?? `g4rcez-theme-${name}`;
-    let style = ownerDocument.getElementById(id) as HTMLStyleElement | null;
-    if (!style) {
-        style = ownerDocument.createElement("style");
-        style.id = id;
-        style.dataset.g4Theme = name;
-        ownerDocument.head.append(style);
+export const configureTheme = (
+  configuration: ThemeConfiguration,
+  options: ConfigureThemeOptions = {},
+): string => {
+  const parsedOptions: ParsedConfigureOptions =
+    configureOptionsSchema.parse(options);
+  const normalized = normalizeConfiguration(configuration);
+  const css = serializeConfiguration(normalized);
+  const doc =
+    parsedOptions.document ??
+    (typeof document === "undefined" ? undefined : document);
+  if (!doc) return css;
+  if (!doc.head)
+    throw new TypeError(
+      "document must have a head element to register a theme.",
+    );
+  const id = `g4rcez-theme-${normalized.name}`;
+  const matches = doc.querySelectorAll(`#${id}`);
+  if (matches.length > 1)
+    throw new Error(`Multiple elements use the reserved theme style id ${id}.`);
+  const existing = matches.item(0);
+  if (existing) {
+    if (
+      existing.localName !== "style" ||
+      existing.getAttribute(STYLE_OWNER_ATTRIBUTE) !== STYLE_OWNER_VALUE ||
+      existing.getAttribute(STYLE_NAME_ATTRIBUTE) !== normalized.name
+    ) {
+      throw new Error(
+        `Cannot register theme ${normalized.name}: element #${id} is not owned by the theme runtime.`,
+      );
     }
+    const style = existing as HTMLStyleElement;
     style.textContent = css;
+    if (parsedOptions.nonce !== undefined) style.nonce = parsedOptions.nonce;
     return css;
+  }
+
+  const style = doc.createElement("style");
+  style.id = id;
+  style.setAttribute(STYLE_OWNER_ATTRIBUTE, STYLE_OWNER_VALUE);
+  style.setAttribute(STYLE_NAME_ATTRIBUTE, normalized.name);
+  if (parsedOptions.nonce !== undefined) style.nonce = parsedOptions.nonce;
+  style.textContent = css;
+  doc.head.appendChild(style);
+  return css;
 };

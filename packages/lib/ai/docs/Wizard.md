@@ -59,13 +59,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                    | CSS Variable            | Purpose                                     |
 | ------------------------ | ----------------------- | ------------------------------------------- |
-| `text-floating-overlay`  | `--floating-overlay`    | SVG mask fill color (`/70` opacity applied) |
-| `bg-floating-background` | `--floating-background` | Step tooltip surface background             |
-| `border-floating-border` | `--floating-border`     | Step tooltip border and footer divider      |
-| `z-wizard`               | `--z-wizard`            | Z-index for the overlay layer               |
-| `z-floating`             | `--z-floating`          | Z-index for the step tooltip                |
-| `text-muted-foreground`  | `--muted-foreground`    | Step counter and skip button text           |
-| `text-foreground`        | `--foreground`          | Skip button hover text                      |
+| CSS override | `--var-wizard-overlay-background` | SVG mask fill, including opacity |
+| CSS override | `--var-wizard-surface-background` | Step tooltip surface |
+| CSS override | `--var-wizard-surface-border` | Tooltip border, arrow stroke, and footer divider |
+| `z-wizard` | `--var-layer-wizard` | Layer base; the wizard root uses `calc(var(--var-layer-wizard) + 1)` |
+| CSS override | `--var-wizard-label-foreground` | Step counter and skip button text |
+| CSS override | `--var-wizard-label-foreground-hover` | Skip button hover text |
 
 ## Examples
 

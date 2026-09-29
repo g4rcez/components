@@ -2,7 +2,7 @@
 import { isValid } from "date-fns";
 import { parse } from "qs";
 import React, { type ComponentProps, useCallback, useEffect, useRef, useState } from "react";
-import { type AllPaths, getPath, Is } from "sidekicker";
+import { getPath, Is } from "sidekicker";
 import { LocalStorage } from "storage-manager-js";
 import { z, ZodNumber } from "zod";
 import {
@@ -16,6 +16,7 @@ import {
     type SwitchProps,
     type TextareaProps,
 } from "../components";
+import type { AllPaths } from "../lib/path-types";
 import type { Any, SetState } from "../types";
 
 /**

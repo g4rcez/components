@@ -6,17 +6,17 @@
     inline-size: 100%;
     max-block-size: var(--var-autocomplete-list-max-block-size, calc(var(--var-spacing-base) * 24));
     overscroll-behavior: contain;
-    border-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
 }
 
 .__autocomplete__item:first-child {
-    border-start-start-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
-    border-start-end-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-start-start-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
+    border-start-end-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
 }
 
 .__autocomplete__item:last-child {
-    border-end-start-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
-    border-end-end-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-end-start-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
+    border-end-end-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
 }
 
 .__autocomplete__option {
@@ -139,7 +139,7 @@
     border-style: solid;
     border-width: var(--var-border-hairline);
     border-color: var(--var-autocomplete-panel-border);
-    border-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
     background-color: var(--var-autocomplete-panel-background);
     padding: 0;
     color: var(--var-autocomplete-panel-foreground);
@@ -178,7 +178,7 @@
     max-block-size: 100%;
     overscroll-behavior: contain;
     border-color: var(--var-autocomplete-panel-border);
-    border-radius: var(--var-autocomplete-panel-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-autocomplete-panel-radius, calc(var(--var-radius-base) / 2));
     background-color: var(--var-autocomplete-panel-background);
     padding: 0;
     color: var(--var-autocomplete-panel-foreground);

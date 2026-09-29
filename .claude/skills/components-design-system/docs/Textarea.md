@@ -41,17 +41,16 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                                              | CSS Variable         | Purpose                                              |
 | -------------------------------------------------- | -------------------- | ---------------------------------------------------- |
-| `placeholder-input-mask`                           | `--input-mask`       | Placeholder text color                               |
-| `placeholder-input-mask-error` (via `group-error`) | `--input-mask-error` | Placeholder tint in error state                      |
-| `text-foreground`                                  | `--foreground`       | Input text color                                     |
-| `text-danger` (via `group-error`)                  | `--danger`           | Text color in error state                            |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text color |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder color |
+| `text-foreground` | `--var-color-foreground` | Input text color |
+| `text-danger` | `--var-color-danger` | Error text color |
 | `bg-transparent`                                   | —                    | Input background (inherits from field wrapper)       |
-| `focus:ring-primary`                               | `--primary`          | Focus ring                                           |
-| `group-focus-within:border-primary`                | `--primary`          | Border highlight on focus                            |
-| `group-hover:border-primary`                       | `--primary`          | Border highlight on hover                            |
-| `h-input-height`                                   | `--input-height`     | Base height token (overridden by `rows` in practice) |
-| `px-input-padding-x`                               | `--input-padding-x`  | Horizontal padding                                   |
-| `py-input-padding-y`                               | `--input-padding-y`  | Vertical padding                                     |
+| `group-focus-within:border-primary` | `--var-color-primary` | Border highlight on focus |
+| `group-hover:border-primary` | `--var-color-primary` | Border highlight on hover |
+| `h-input-height` | `--var-free-text-control-height` | Shared input height token; textarea height is controlled by `rows` |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
 
 ## Examples
 

@@ -1,5 +1,5 @@
-import type { AllPaths } from "sidekicker";
 import type { Any } from "../types";
+import type { AllPaths } from "./path-types";
 
 export const uuid = (): string => {
     const timestamp = Date.now();

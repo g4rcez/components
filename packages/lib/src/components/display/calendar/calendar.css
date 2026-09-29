@@ -144,7 +144,7 @@
     display: flex;
     justify-content: center;
     overflow: hidden;
-    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius-base) * 0.733333));
     text-align: center;
     flex-direction: column;
 }
@@ -231,7 +231,7 @@
 .__calendar__year-input {
     cursor: pointer;
     appearance: none;
-    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius-base) * 0.733333));
     background-color: transparent;
     color: var(--var-color-foreground);
     text-align: center;
@@ -295,7 +295,7 @@
 }
 
 .__calendar__today-button {
-    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-radius: var(--var-calendar-header-radius, calc(var(--var-radius-base) * 0.733333));
     padding: var(--var-calendar-month-controls-padding-block, calc( var(--var-spacing-base) / 4 )) var(--var-calendar-nav-button-padding, calc(var(--var-spacing-base) / 4));
     transition-property: color, background-color, transform;
     transition-duration: var(--var-calendar-transition-duration);

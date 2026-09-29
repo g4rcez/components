@@ -17,7 +17,6 @@ import type React from "react";
 import { type CSSProperties, Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useResizeObserver } from "../../../hooks/use-resize-observer";
 import { useTranslations } from "../../../hooks/use-translations";
-import { useWindowSize } from "../../../hooks/use-window-size";
 import { noop } from "../../../lib/fns";
 import { Button } from "../../core/button/button";
 import { wizardStyles } from "./wizard.styles";
@@ -66,7 +65,6 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
     const arrowRef = useRef(null);
     const navigationPendingRef = useRef(false);
     const nextButtonRef = useRef<HTMLButtonElement>(null);
-    const { width, height } = useWindowSize();
 
     const labels = {
         next: labelsProp?.next ?? translation.wizardNext,
@@ -122,7 +120,7 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
             window.removeEventListener("scroll", update, { capture: true });
             window.removeEventListener("resize", update, { capture: true });
         };
-    }, [element, width, height]);
+    }, [element]);
 
     useResizeObserver(element as HTMLElement, (entry) => {
         setRect(entry.target.getBoundingClientRect());

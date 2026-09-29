@@ -2,40 +2,49 @@
     "$schema": "https://unpkg.com/knip@6/schema.json",
     "workspaces": {
         ".": {
-            "entry": ["scripts/skills.mjs", "scripts/components-source-aliases.mjs"],
+            "entry": ["scripts/skills.mjs!", "scripts/components-source-aliases.mjs"],
             "project": ["scripts/**/*.{js,mjs,cjs,ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "*.config.{js,mjs,cjs,ts,mts,cts}"],
         },
         "packages/lib": {
             "entry": [
-                "src/index.ts",
-                "src/components/index.ts",
-                "src/components/**/*.{ts,tsx}",
-                "src/styles/**/*.{ts,tsx}",
-                "vite.config.mts",
+                // Vite generates public component subpaths; keep them in production analysis.
+                "src/index.ts!",
+                "src/components/index.ts!",
+                "src/components/**/*.{ts,tsx}!",
+                "src/styles/**/*.{ts,tsx}!",
+                "plugin.tailwind.ts!",
+                "preset.tailwind.ts!",
+                "bin/csscomponents.mjs!",
+                // These are copied from packages/lint by scripts/copy-lint.mjs.
+                "dist/lint/index.mjs!",
+                "dist/lint/tailwind-worker.mjs!",
                 "ai/SKILL.md",
                 "ai/docs/**/*.md",
-                "docs/**/*.{md,mdx,yml,yaml,json,ts,tsx}",
             ],
-            "vite": false,
+            "vite": {
+                "config": ["vite.config.mts", "vite.css.config.mts"],
+            },
             "project": [
-                "src/**/*.{ts,tsx}",
+                "src/**/*.{ts,tsx}!",
+                "bin/**/*.mjs!",
+                "scripts/**/*.mjs",
                 "tests/**/*.{ts,tsx}",
-                "vite.config.mts",
+                "*.config.mts",
+                "*.tailwind.ts!",
                 "tsconfig*.json",
                 "ai/**/*.{md,mdx}",
-                "docs/**/*.{md,mdx,yml,yaml,json,ts,tsx}",
             ],
         },
+        "packages/lint": {
+            "entry": ["src/index.ts!", "src/tailwind/worker.ts!"],
+            "project": ["src/**/*.ts!", "test/**/*.{ts,tsx}", "*.config.ts"],
+            // The Oxlint integration test reads these as input data, not imports.
+            "ignoreFiles": ["test/fixtures/**"],
+        },
         "packages/docs": {
-            "entry": [
-                "src/app/**/*.{ts,tsx}",
-                "src/components/**/*.{ts,tsx}",
-                "src/config/navigation.ts",
-                "next.config.mjs",
-                "tailwind.config.ts",
-                "postcss.config.mjs",
-            ],
-            "project": ["src/**/*.{ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "next.config.mjs", "tailwind.config.ts", "postcss.config.mjs", "tsconfig.json"],
+            // Next.js discovers routes; components and navigation must be imported.
+            "entry": [],
+            "project": ["src/**/*.{ts,tsx}!", "e2e/**/*.{ts,tsx}", "*.{js,mjs,cjs,ts,tsx}", "tsconfig.json"],
         },
         "packages/tailwindcss-v4": {
             "entry": ["src/app/**/*.{ts,tsx}", "next.config.ts", "postcss.config.mjs", "tailwind.config.ts"],

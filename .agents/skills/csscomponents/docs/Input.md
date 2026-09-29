@@ -75,18 +75,18 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                          | CSS Variable         | Purpose                                          |
 | ------------------------------ | -------------------- | ------------------------------------------------ |
-| `h-input-height`               | `--input-height`     | Input height                                     |
-| `px-input-padding-x`           | `--input-padding-x`  | Horizontal padding                               |
-| `py-input-padding-y`           | `--input-padding-y`  | Vertical padding                                 |
-| `mt-input-gap`                 | `--input-gap`        | Gap between field border and error/feedback text |
-| `border-input-border`          | `--input-border`     | Default border color                             |
-| `text-input-label-text`        | `--input-label-text` | Label text color                                 |
-| `text-foreground`              | `--foreground`       | Input text color                                 |
-| `text-primary`                 | `--primary`          | Focus ring, focus/hover border color             |
-| `text-danger`                  | `--danger`           | Error state border, text, and label color        |
-| `text-disabled`                | `--disabled`         | Disabled text and border color                   |
-| `placeholder-input-mask`       | `--input-mask`       | Placeholder text color                           |
-| `placeholder-input-mask-error` | `--input-mask-error` | Placeholder color in error state                 |
+| `h-input-height` | `--var-free-text-control-height` | Default input height |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
+| `mt-input-gap` | `--var-input-field-hint-margin-block-start` | Gap before error/feedback text |
+| `border-input-border` | `--var-color-border` | Default border color |
+| `text-input-label-text` | `--var-input-field-label-font-size` | Label font size, not color |
+| `text-foreground` | `--var-color-foreground` | Input text color |
+| `text-primary` | `--var-color-primary` | Hover/focus border and label accent |
+| `text-danger` | `--var-color-danger` | Error state border, text, and label color |
+| `text-disabled` | `--var-color-disabled` | Disabled text and border color |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text color |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder color |
 
 ## Examples
 

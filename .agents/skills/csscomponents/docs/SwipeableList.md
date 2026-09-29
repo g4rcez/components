@@ -73,7 +73,7 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | Override | Library default |
 | --- | --- |
 | `--var-swipeable-list-root-gap` | `calc(var(--var-spacing-base) * 0.5)` |
-| `--var-swipeable-list-surface-radius` | `calc( var(--var-radius, 0px) + var(--var-radius-base) )` |
+| `--var-swipeable-list-surface-radius` | `var(--var-radius-base)` |
 | `--var-swipeable-list-action-focus-ring-width` | `calc( var(--var-spacing-base) * 0.125 )` |
 | `--var-swipeable-list-action-focus-ring-offset` | `calc( var(--var-spacing-base) * 0.125 )` |
 

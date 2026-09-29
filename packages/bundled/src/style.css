@@ -1,7 +1,8 @@
 :root {
-    color: var(--foreground);
-    background: var(--background);
+    color: var(--var-color-foreground);
+    background: var(--var-color-background);
     font-family: ui-sans-serif, system-ui, sans-serif;
+    --var-radius-base: 0.5rem;
 }
 
 * {
@@ -17,7 +18,7 @@ body {
     display: grid;
     place-items: center;
     padding: 2rem;
-    background: var(--background);
+    background: var(--var-color-background);
 }
 
 .panel {
@@ -27,16 +28,16 @@ body {
     align-items: flex-start;
     gap: 1rem;
     padding: 2rem;
-    color: var(--foreground);
-    background: var(--card-background);
-    border: 1px solid var(--card-border);
-    border-radius: var(--card-radius);
-    box-shadow: var(--shadow-card);
+    color: var(--var-color-foreground);
+    background: var(--var-card-background);
+    border: 1px solid var(--var-card-border);
+    border-radius: var(--var-card-surface-radius);
+    box-shadow: var(--var-shadow-card);
 }
 
 .eyebrow {
     margin: 0;
-    color: var(--muted-foreground);
+    color: var(--var-color-muted-foreground);
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -51,6 +52,6 @@ h1 {
 
 .description {
     margin: 0;
-    color: var(--muted-foreground);
+    color: var(--var-color-muted-foreground);
     line-height: 1.6;
 }

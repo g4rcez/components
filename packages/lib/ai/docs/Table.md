@@ -142,16 +142,13 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                 | CSS Variable         | Purpose                                 |
 | --------------------- | -------------------- | --------------------------------------- |
-| `bg-table-header`     | `--table-header`     | Column header background                |
-| `bg-table-background` | `--table-background` | Table body background                   |
-| `border-table-border` | `--table-border`     | Column separator and row divider color  |
-| `shadow-shadow-table` | `--shadow-table`     | Table card shadow                       |
-| `bg-card-background`  | `--card-background`  | Footer and loading-more bar background  |
-| `text-foreground`     | `--foreground`       | Default cell text color                 |
-| `text-primary`        | `--primary`          | Active filter / sort accent color       |
-| `bg-muted`            | `--muted`            | Hover background for metadata bar items |
+| `bg-table-header` | `--var-table-header-background` | Column header background |
+| `bg-table-background` | `--var-table-background` | Table viewport, footer, and loading cell background |
+| `border-table-border` | `--var-table-border` | Column separators and row dividers |
+| `text-foreground` | `--var-color-foreground` | Group title text and loading bar color |
+| `text-primary` | `--var-color-primary` | Filter/sort action accent |
 
-The `--table-cell-padding` CSS variable controls cell padding (default `0.75rem`). Override it via `className` on `<Table>`.
+The `--var-table-cell-padding` property controls body-cell and header-content padding. Its default is `calc(var(--var-spacing-base) * 0.75)` (`0.75rem` at the default spacing base). Set it on the table or an ancestor scope. Loading and empty-state horizontal padding instead use `--var-table-cell-padding-inline`, defaulting to `calc(var(--var-spacing-base) * 0.5)`.
 
 ## Column Types
 
@@ -319,5 +316,5 @@ import { TrashIcon, PencilIcon } from "@phosphor-icons/react";
 - Column reordering uses `motion/react`'s `Reorder.Group` / `Reorder.Item`, so columns animate smoothly to their new positions.
 - Internal filtering uses `linq-arrays`. Numeric filters operate on `Number.isNaN`-safe values; empty string filters are skipped.
 - `useTablePreferences` merges saved columns back against the current definition so new columns added in code always appear, even if a user has a stale snapshot in storage.
-- The `--table-cell-padding` variable can be set per breakpoint by adding it directly to `className`: `className="[--table-cell-padding:0.5rem] @md:[--table-cell-padding:1rem]"`.
+- Set `--var-table-cell-padding` per breakpoint on an ancestor scope, for example `className="[--var-table-cell-padding:0.5rem] md:[--var-table-cell-padding:1rem]"` on a wrapper around `<Table>`.
 - Pass `getScrollRef={getModalScrollerRef}` (exported from the same subpath) when embedding a `Table` inside a `Modal` to fix virtualization scroll detection.

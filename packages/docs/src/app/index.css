@@ -40,6 +40,7 @@
 @import "@g4rcez/components/notifications.css";
 @import "@g4rcez/components/command-palette.css";
 @import "@g4rcez/components/skeleton.css";
+@import "./themes.css";
 
 @tailwind base;
 @tailwind components;

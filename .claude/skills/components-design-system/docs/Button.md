@@ -51,30 +51,30 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                        | CSS Variable              | Purpose                                |
 | ---------------------------- | ------------------------- | -------------------------------------- |
-| `bg-button-primary-bg`       | `--button-primary-bg`     | Background for primary/main theme      |
-| `text-button-primary-text`   | `--button-primary-text`   | Text color for primary/main theme      |
-| `bg-button-secondary-bg`     | `--button-secondary-bg`   | Background for secondary theme         |
-| `text-button-secondary-text` | `--button-secondary-text` | Text color for secondary theme         |
-| `bg-button-info-bg`          | `--button-info-bg`        | Background for info theme              |
-| `text-button-info-text`      | `--button-info-text`      | Text color for info theme              |
-| `bg-button-warn-bg`          | `--button-warn-bg`        | Background for warn theme              |
-| `text-button-warn-text`      | `--button-warn-text`      | Text color for warn theme              |
-| `bg-button-danger-bg`        | `--button-danger-bg`      | Background for danger theme            |
-| `text-button-danger-text`    | `--button-danger-text`    | Text color for danger theme            |
-| `bg-button-success-bg`       | `--button-success-bg`     | Background for success theme           |
-| `text-button-success-text`   | `--button-success-text`   | Text color for success theme           |
-| `bg-button-muted-bg`         | `--button-muted-bg`       | Background for muted theme             |
-| `text-button-muted-text`     | `--button-muted-text`     | Text color for muted theme             |
-| `bg-disabled`                | `--disabled`              | Background for disabled/loading states |
-| `border-card-border`         | `--card-border`           | Border color for neutral theme         |
-| `rounded-button-radius`      | `--button-radius`         | Default border radius                  |
-| `text-button-text`           | `--button-text`           | Default size font size                 |
-| `text-button-text-big`       | `--button-text-big`       | Big size font size                     |
-| `text-button-text-small`     | `--button-text-small`     | Small size font size                   |
-| `text-button-text-min`       | `--button-text-min`       | Min size font size                     |
-| `text-button-text-tiny`      | `--button-text-tiny`      | Tiny size font size                    |
-| `text-button-text-icon`      | `--button-text-icon`      | Icon size font size                    |
-| `focus-visible:ring-ring`    | `--ring`                  | Focus ring color                       |
+| `bg-button-primary-bg` | `--var-color-primary` | Background for primary/main theme |
+| `text-button-primary-text` | `--var-color-primary-foreground` | Text for primary/main theme |
+| `bg-button-secondary-bg` | `--var-button-secondary-background` | Background for secondary theme |
+| `text-button-secondary-text` | `--var-button-secondary-foreground` | Text for secondary theme |
+| `bg-button-info-bg` | `--var-color-info` | Background for info theme |
+| `text-button-info-text` | `--var-color-info-foreground` | Text for info theme |
+| `bg-button-warn-bg` | `--var-color-warn` | Background for warn theme |
+| `text-button-warn-text` | `--var-color-warn-foreground` | Text for warn theme |
+| `bg-button-danger-bg` | `--var-color-danger` | Background for danger theme |
+| `text-button-danger-text` | `--var-color-danger-foreground` | Text for danger theme |
+| `bg-button-success-bg` | `--var-color-success` | Background for success theme |
+| `text-button-success-text` | `--var-color-success-foreground` | Text for success theme |
+| `bg-button-muted-bg` | `--var-color-muted` | Background for muted theme |
+| `text-button-muted-text` | `--var-color-muted-foreground` | Text for muted theme |
+| `bg-disabled` | `--var-color-disabled` | Background for disabled/loading states |
+| `border-border` | `--var-color-border` | Neutral theme border |
+| `rounded-button-rounded` | `--var-button-rounded` | Default border radius |
+| `text-button-text` | `--var-button-font-size` | Default font size |
+| `text-button-text-big` | `--var-button-big-font-size` | Big font size |
+| `text-button-text-small` | `--var-button-small-font-size` | Small font size |
+| `text-button-text-min` | `--var-button-min-font-size` | Min font size |
+| `text-button-text-tiny` | `--var-button-tiny-font-size` | Tiny font size |
+| `text-button-text-icon` | `--var-button-icon-font-size` | Icon geometry |
+| `focus-visible:ring-ring` | `--var-color-ring` | Focus ring color |
 
 ## Theme Variants
 

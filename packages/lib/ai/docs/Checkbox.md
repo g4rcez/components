@@ -51,11 +51,11 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                | CSS Variable    | Purpose                              |
 | -------------------- | --------------- | ------------------------------------ |
-| `text-primary`       | `--primary`     | Checkbox accent / checked color      |
-| `border-card-border` | `--card-border` | Unchecked border color               |
-| `text-danger`        | `--danger`      | Error message text color             |
-| `text-disabled`      | `--disabled`    | Opacity and cursor on disabled state |
-| `focus:ring-primary` | `--primary`     | Focus ring color                     |
+| CSS override | `--var-checkbox-control-foreground` | Checked control color |
+| CSS override | `--var-checkbox-control-border` | Unchecked border color |
+| `text-danger` | `--var-color-danger` | Error message text color |
+| CSS override | `--var-checkbox-disabled-opacity` | Disabled control opacity |
+| CSS override | `--var-checkbox-focus-ring` | Focus ring color |
 
 ## Variants
 

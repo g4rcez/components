@@ -60,32 +60,32 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | Override | Library default |
 | --- | --- |
 | `--var-autocomplete-list-max-block-size` | `calc(var(--var-spacing-base) * 24)` |
-| `--var-autocomplete-panel-radius` | `calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) )` |
+| `--var-autocomplete-panel-radius` | `calc(var(--var-radius-base) / 2)` |
 | `--var-autocomplete-option-min-block-size` | `calc(var(--var-spacing-base) * 2.5)` |
 | `--var-autocomplete-option-padding` | `calc(var(--var-spacing-base) * 0.625)` |
 
 Popup maximum height and initial estimates scale with density; measured list content keeps its physical size. Virtualizer pixel estimates are not fixed CSS dimensions.
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
 
 | Token                          | CSS Variable            | Purpose                                   |
 | ------------------------------ | ----------------------- | ----------------------------------------- |
-| `h-input-height`               | `--input-height`        | Input height                              |
-| `px-input-padding-x`           | `--input-padding-x`     | Horizontal input padding                  |
-| `py-input-padding-y`           | `--input-padding-y`     | Vertical input padding                    |
-| `border-input-border`          | `--input-border`        | Default field border color                |
-| `placeholder-input-mask`       | `--input-mask`          | Placeholder text color                    |
-| `placeholder-input-mask-error` | `--input-mask-error`    | Placeholder color in error state          |
-| `text-foreground`              | `--foreground`          | Input text color                          |
-| `text-danger`                  | `--danger`              | Text color in error state                 |
-| `text-primary`                 | `--primary`             | Focus/hover border and ring color         |
-| `bg-floating-background`       | `--floating-background` | Dropdown background                       |
-| `border-floating-border`       | `--floating-border`     | Dropdown border color                     |
-| `bg-floating-hover`            | `--floating-hover`      | Option background on hover/keyboard focus |
-| `text-disabled`                | `--disabled`            | Empty message text color                  |
-| `border-tooltip-border`        | `--tooltip-border`      | Separator inside dropdown                 |
-| `z-floating`                   | `--z-floating`          | Z-index for the floating panel            |
-| `shadow-floating`              | `--shadow-floating`     | Drop shadow for the floating panel        |
+| `h-input-height` | `--var-free-text-control-height` | Input height |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal input padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical input padding |
+| `border-input-border` | `--var-color-border` | Default field border color |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text color |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Placeholder color in error state |
+| `text-foreground` | `--var-color-foreground` | Input text color |
+| `text-danger` | `--var-color-danger` | Text color in error state |
+| `text-primary` | `--var-color-primary` | Focus/hover border and ring color |
+| `bg-floating-background` | `--var-dropdown-surface-background` | Dropdown utility; Autocomplete's panel uses `--var-autocomplete-panel-background` |
+| `border-floating-border` | `--var-dropdown-surface-border` | Dropdown border utility; the panel uses `--var-autocomplete-panel-border` |
+| `bg-floating-hover` | `--var-color-muted` | Hover utility; options use `--var-autocomplete-option-background-hover` and `--var-autocomplete-option-active-background` |
+| `text-disabled` | `--var-color-disabled` | Disabled text utility; the empty message uses `--var-autocomplete-empty-foreground` |
+| `border-tooltip-border` | `--var-tooltip-surface-border` | Tooltip border utility; the empty-state separator uses `--var-autocomplete-empty-border` |
+| `z-floating` | `--var-layer-floating` | Z-index for the floating panel |
+| `shadow-floating` | `--var-shadow-floating` | Drop shadow for the floating panel |
 
 ## Examples
 

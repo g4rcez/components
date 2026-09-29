@@ -1,5 +1,4 @@
 "use client";
-
 import { CodeBlock } from "@/components/code-block";
 import { HeroDemo } from "@/components/examples/hero-demo";
 import { FloatingAction } from "@/components/floating-action";

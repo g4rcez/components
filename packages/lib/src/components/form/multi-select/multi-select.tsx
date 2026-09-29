@@ -163,15 +163,11 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             return d;
         }, [map, props.value]);
         const selectedValue = isControlled ? controlledValue : value;
-        const [_label, setLabel] = useState<string[]>(() => {
-            const d = new Set(defaults);
-            return options.reduce<string[]>((acc, x) => (d.has(x.value) ? [...acc, x.label ?? x.value] : acc), []) ?? defaults;
-        });
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
         const [, tick] = useState(0);
         const [h, setH] = useState<number | null>(null);
-        const removeScrollRef = useRemoveScroll<HTMLElement>(open, "block-only");
+        const removeScrollRef = useRemoveScroll<HTMLElement>(open);
 
         const innerOptions = useMemo<MultiSelectItemProps[]>(
             () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
@@ -289,7 +285,6 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             const opts = clone.map((x) => x.value);
             input?.setAttribute("data-value", JSON.stringify(opts));
             if (onChangeOptions) onChangeOptions(opts);
-            setLabel((prev) => prev.concat(opt.label ?? ""));
             setShadow("");
             setIndex(i);
             searchInputRef.current?.focus();

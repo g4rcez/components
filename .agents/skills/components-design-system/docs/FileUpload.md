@@ -51,11 +51,11 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                | CSS Variable        | Purpose                                                         |
 | -------------------- | ------------------- | --------------------------------------------------------------- |
-| `border-card-border` | `--card-border`     | Border between file list items and default drop zone border     |
-| `bg-card-background` | `--card-background` | Drop zone background when files are present                     |
-| `text-foreground`    | `--foreground`      | General text color                                              |
-| `text-primary`       | `--primary`         | Folder icon color and "browse" link color in default idle state |
-| `text-danger`        | `--danger`          | Delete button hover color                                       |
+| `border-border` | `--var-color-border` | File item separators and default drop zone border |
+| `bg-background` | `--var-color-background` | Active drop zone background |
+| `text-foreground` | `--var-color-foreground` | General text color |
+| `text-primary` | `--var-color-primary` | Idle accent color |
+| `text-danger` | `--var-color-danger` | Delete action hover color |
 
 ## Drag and Drop States
 

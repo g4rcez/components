@@ -52,7 +52,7 @@
     inline-size: var(--var-page-calendar-badge-size, calc(var(--var-spacing-base) * 3));
     block-size: var(--var-page-calendar-badge-size, calc(var(--var-spacing-base) * 3));
     overflow: hidden;
-    border-radius: var(--var-page-calendar-badge-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.666667));
+    border-radius: var(--var-page-calendar-badge-radius, calc(var(--var-radius-base) * 0.666667));
     font-size: var(--var-page-calendar-week-label-text);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .__page-calendar-header__today-button {
-    border-radius: var(--var-page-calendar-today-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.5));
+    border-radius: var(--var-page-calendar-today-radius, calc(var(--var-radius-base) * 0.5));
     padding-block: var(--var-page-calendar-today-padding-block, calc( var(--var-spacing-base) * 0.375 ));
     padding-inline: var(--var-page-calendar-today-padding-inline, calc( var(--var-spacing-base) * 0.75 ));
     font-size: var(--var-page-calendar-today-font-size);
@@ -131,17 +131,17 @@
 
 .__page-calendar-header__view-switch {
     display: flex;
-    border-radius: var(--var-page-calendar-view-switch-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.5));
+    border-radius: var(--var-page-calendar-view-switch-radius, calc(var(--var-radius-base) * 0.5));
 }
 
 .__page-calendar-header__view-button:first-child {
-    border-start-start-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
-    border-end-start-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-start-start-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
+    border-end-start-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
 }
 
 .__page-calendar-header__view-button:last-child {
-    border-start-end-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
-    border-end-end-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-start-end-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
+    border-end-end-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
 }
 
 .__page-calendar-header__filters {
@@ -169,7 +169,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     border-width: var(--var-border-hairline);
-    border-radius: var(--var-page-calendar-pill-radius, calc(var(--var-radius, var(--var-radius-base)) / 3));
+    border-radius: var(--var-page-calendar-pill-radius, calc(var(--var-radius-base) / 3));
     padding-inline: var(--var-page-calendar-pill-padding-inline, calc(var(--var-spacing-base) * 0.5));
     block-size: var(--var-page-calendar-pill-block-size, calc(var(--var-spacing-base) * 1.25));
     font-size: var(--var-page-calendar-pill-font-size);

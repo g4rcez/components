@@ -1,9 +1,7 @@
 import forms from "@tailwindcss/forms";
 import type { Config } from "tailwindcss";
 import { createDesignTokens, parsers } from "./src/styles/design-tokens.ts";
-import { defaultTokens } from "./src/styles/default-tokens.ts";
-import { components } from "./src/styles/components.ts";
-import { defaultLightTheme as theme } from "./src/styles/theme.ts";
+import { themeTokenRegistry } from "./src/styles/theme-registry.generated.ts";
 import customPlugins from "./plugin.tailwind.ts";
 import { geometryToken } from "./src/styles/geometry-defaults.ts";
 
@@ -244,24 +242,27 @@ const spacing = {
     lg: cssVar("spacing-lg"),
     sm: cssVar("spacing-sm"),
     dialog: cssVar("spacing-dialog"),
-    "field-height": defaultTokens.spacing["field-height"],
+    "field-height": cssVar("spacing-field-height"),
     "field-label": cssVar("input-field-label-font-size"),
     "input-height": cssVar("free-text-control-height"),
     "input-padding-x": cssVar("free-text-surface-padding-inline"),
     "input-padding-y": cssVar("free-text-surface-padding-block"),
     "input-inline": cssVar("input-field-slot-padding-inline-start"),
-    "input-gap": defaultTokens.spacing["input-gap"],
+    "input-gap": cssVar("input-field-hint-margin-block-start"),
 } as const;
+
+const themedShadow = (name: "notification" | "table") =>
+    `var(--var-shadow-${name}, var(--var-shadow-${name}-shape) var(--var-color-shadow-${name}))`;
 
 const shadows = {
     card: cssVar("shadow-card"),
     floating: cssVar("shadow-floating"),
-    notification: cssVar("shadow-notification"),
-    table: cssVar("shadow-table"),
+    notification: themedShadow("notification"),
+    table: themedShadow("table"),
     "shadow-card": cssVar("shadow-card"),
     "shadow-floating": cssVar("shadow-floating"),
-    "shadow-notification": cssVar("shadow-notification"),
-    "shadow-table": cssVar("shadow-table"),
+    "shadow-notification": themedShadow("notification"),
+    "shadow-table": themedShadow("table"),
 } as const;
 
 const componentBorderRadius: Record<string, string> = {
@@ -281,28 +282,148 @@ const componentFontSize: Record<string, string> = {
     "input-label-text": cssVar("input-field-label-font-size"),
 };
 
-for (const [component, attrs] of Object.entries(components)) {
-    if (!attrs || typeof attrs !== "object") continue;
+// Historical utility names remain public; only their CSS token targets are translated.
+const componentTokenNames: Record<string, string> = {
+    "card-rounded": "card-surface-radius",
+    "card-padding-x": "card-content-padding-inline",
+    "card-padding-y": "card-surface-padding-block",
+    "card-gap": "card-content-gap",
+    "card-title-pb": "card-title-padding-block-end",
+    "card-title-mb": "card-title-margin-block-end",
+    "card-stats-icon-col-w": "card-stats-icon-column-width",
+    "card-stats-icon-col-p": "card-stats-icon-column-padding",
+    "card-stats-content-py": "card-stats-content-padding-block",
+    "card-title-text": "card-title-font-size",
+    "button-padding-icon": "button-icon-p",
+    "button-padding-x": "button-px",
+    "button-padding-y": "button-py",
+    "button-radius-rough": "button-rough-rounded",
+    "button-radius-squared": "button-squared-rounded",
+    "button-text": "button-font-size",
+    "button-text-icon": "button-icon-font-size",
+    "alert-rounded": "alert-surface-radius",
+    "alert-p": "alert-surface-padding",
+    "alert-gap": "alert-content-gap",
+    "alert-close-top": "alert-close-inset-block-start",
+    "alert-close-right": "alert-close-inset-inline-end",
+    "stats-title-text": "stats-title-font-size",
+    "stats-value-text": "stats-value-font-size",
+    "notification-rounded": "notification-surface-radius",
+    "notification-p": "notification-content-padding",
+    "notification-gap": "notification-content-gap",
+    "notification-inner-gap": "notification-text-gap",
+    "notification-close-p": "notification-close-padding",
+    "notification-list-gap": "notification-viewport-gap",
+    "notification-badge-px": "notification-badge-padding-inline",
+    "notification-badge-py": "notification-badge-padding-block",
+    "notification-list-top": "notification-viewport-inset-block-start",
+    "notification-list-max-w": "notification-viewport-max-inline-size",
+    "notification-badge-text": "notification-badge-font-size",
+    "calendar-cell-p": "calendar-day-cell-padding",
+    "calendar-day-size": "calendar-day-button-size",
+    "calendar-nav-p": "calendar-nav-button-padding",
+    "calendar-weekday-py": "calendar-weekday-padding-block",
+    "calendar-table-mt": "calendar-table-margin-block-start",
+    "calendar-datetime-my": "calendar-datetime-margin-block",
+    "calendar-footer-mt": "calendar-footer-margin-block-start",
+    "calendar-nav-gap": "calendar-month-controls-gap",
+    "calendar-nav-py": "calendar-month-controls-padding-block",
+    "calendar-year-w": "calendar-year-input-width",
+    "calendar-icon-size": "calendar-nav-icon-size",
+    "calendar-weekday-text": "calendar-weekday-font-size",
+    "calendar-cell-text": "calendar-day-button-font-size",
+    "skeleton-rounded": "skeleton-radius",
+    "skeleton-height": "skeleton-block-size",
+    "skeleton-width": "skeleton-block-inline-size",
+    "skeleton-cell-h": "skeleton-cell-block-size",
+    "typography-base": "typography-paragraph-font-size",
+    "typography-2xl": "typography-page-title-font-size",
+    "switch-track-h": "switch-track-block-size",
+    "switch-track-w": "switch-track-inline-size",
+    "switch-gap": "switch-label-gap",
+    "switch-label-text": "switch-label-font-size",
+    "switch-hint-text": "switch-error-font-size",
+    "switch-hint-mt": "switch-error-margin-block-start",
+    "slider-control-h": "slider-control-block-size",
+    "slider-track-h": "slider-track-block-size",
+    "progress-track-h": "progress-track-block-size",
+    "progress-rounded": "progress-track-radius",
+    "empty-gap": "empty-surface-gap",
+    "empty-px": "empty-surface-padding-inline",
+    "empty-py": "empty-surface-padding-block",
+    "list-rounded": "list-detail-card-radius",
+    "list-card-p": "list-detail-card-padding",
+    "list-card-py": "list-detail-card-padding-block",
+    "list-card-pb": "list-detail-card-padding-block-end",
+    "list-card-gap": "list-detail-card-gap",
+    "list-close-p": "list-close-button-padding",
+    "list-item-py": "list-item-padding-block",
+    "list-item-gap": "list-item-content-gap",
+    "list-avatar-px": "list-avatar-frame-padding-inline",
+    "list-body-py": "list-item-body-padding-block",
+    "list-title-text": "list-title-font-size",
+    "step-size": "step-marker-size",
+    "step-label-px": "step-label-padding-inline",
+    "step-connector-h": "step-connector-block-size",
+    "shortcut-gap": "shortcut-content-gap",
+    "shortcut-text": "shortcut-content-font-size",
+    "info-gap": "typography-info-gap",
+    "info-label-text": "typography-info-label-font-size",
+    "info-value-text": "typography-info-value-font-size",
+    "info-secondary-text": "typography-info-secondary-font-size",
+};
+
+for (const size of ["big", "min", "small", "tiny"]) {
+    componentTokenNames[`button-height-${size}`] = `button-${size}-height`;
+    componentTokenNames[`button-padding-x-${size}`] = `button-${size}-px`;
+    componentTokenNames[`button-padding-y-${size}`] = `button-${size}-py`;
+    componentTokenNames[`button-text-${size}`] = `button-${size}-font-size`;
+}
+
+const componentToken = (key: string) =>
+    cssVar(componentTokenNames[key] ?? (key.startsWith("input-free-text-") ? key.slice("input-".length) : key));
+
+const registerComponentUtility = (key: string, attr: string, value: string) => {
+    const isRadius = attr === "radius" || attr === "rounded" || attr.endsWith("-radius") || attr.endsWith("-rounded");
+    const isBorderWidth = attr === "border" || attr.endsWith("-border") || attr.endsWith("-border-width");
+    const isFontSize = attr === "text" || attr.endsWith("-text") || attr.startsWith("text-") || attr.endsWith("-font-size") || attr === "font-size";
+
+    if (isRadius) componentBorderRadius[key] = value;
+    if (isBorderWidth) componentBorderWidth[key] = value;
+    if (isFontSize) componentFontSize[key] = value;
+    componentSpacing[key] = value;
+};
+// Historical info-* utilities resolve to tokens owned by typography.
+const componentUtilityOwners = [...new Set([...Object.keys(themeTokenRegistry.components), "input", "info"])].toSorted((left, right) => right.length - left.length);
+for (const [component, attrs] of Object.entries(themeTokenRegistry.components)) {
     if (component === "typography") {
-        for (const [attr, value] of Object.entries(attrs)) {
+        for (const attr of attrs) {
+            const value = componentToken(`typography-${attr}`);
             componentFontSize[attr] = value;
             componentFontSize[`typography-${attr}`] = value;
         }
         continue;
     }
 
-    for (const [attr, value] of Object.entries(attrs)) {
-        const key = `${component}-${attr}`;
-        const isRadius = attr === "radius" || attr === "rounded" || attr.endsWith("-radius") || attr.endsWith("-rounded");
-        const isBorderWidth = attr === "border" || attr.endsWith("-border") || attr.endsWith("-border-width");
-        const isFontSize =
-            attr === "text" || attr.endsWith("-text") || attr.startsWith("text-") || attr.endsWith("-font-size") || attr === "font-size";
+    for (const attr of attrs) registerComponentUtility(`${component}-${attr}`, attr, componentToken(`${component}-${attr}`));
+}
 
-        if (isRadius) componentBorderRadius[key] = value;
-        if (isBorderWidth) componentBorderWidth[key] = value;
-        if (isFontSize) componentFontSize[key] = value;
-        componentSpacing[key] = value;
+for (const [key, token] of Object.entries(componentTokenNames)) {
+    const component = componentUtilityOwners.find((name) => key.startsWith(`${name}-`));
+    if (!component) throw new Error(`No Tailwind component owner for semantic utility ${key}.`);
+    const attr = key.slice(component.length + 1);
+    const value = cssVar(token);
+    if (component === "typography") {
+        componentFontSize[attr] = value;
+        componentFontSize[key] = value;
+        continue;
     }
+    registerComponentUtility(key, attr, value);
+}
+
+for (const attr of themeTokenRegistry.components["free-text"] ?? []) {
+    const key = `input-free-text-${attr}`;
+    registerComponentUtility(key, `free-text-${attr}`, componentToken(key));
 }
 
 componentBorderRadius["card-radius"] = cssVar("card-surface-radius");
@@ -331,7 +452,6 @@ const config: Partial<Config> = {
             maxHeight: { ...spacing, ...componentSpacing },
             borderColor: { ...COLORS, DEFAULT: COLORS.card.border },
             borderRadius: {
-                ...createDesignTokens(theme.rounded, parsers.cssVariable, "var-rounded-"),
                 ...componentBorderRadius,
             },
             borderWidth: { ...componentBorderWidth },
@@ -349,6 +469,6 @@ const config: Partial<Config> = {
     plugins: [forms({ strategy: "class" }), customPlugins],
 };
 
-export { createDesignTokens, parsers, theme, config, customPlugins };
+export { createDesignTokens, parsers, config, customPlugins };
 
 export default config;

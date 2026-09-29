@@ -5,7 +5,7 @@ description: >
     HTML elements or hand-rolled UI to this design system, building any React UI
     that should use @g4rcez/components, or when the user's project already has
     @g4rcez/components as a dependency. Covers installation, plain CSS setup,
-    theming with createTokenStyles/TokenRemap, ComponentsProvider/tweaks,
+    plain CSS and configureTheme, ComponentsProvider/tweaks,
     parsers, the full component catalog (components,
     hooks, React, UI, design-system, tokens, forms, modals,
     notifications, tables, calendar, theming), and native-element migration.
@@ -86,22 +86,22 @@ Customize by overriding variables at the narrowest useful scope:
 </div>
 ```
 
-Use scoped wrapper variables for demos and token playgrounds. Use `createTokenStyles()`/`createCssProperties()` for app-wide themes. Do not customize by targeting generated selectors or by adding hardcoded colors/sizes.
+Use scoped wrapper variables for local changes and plain `:root` / `html.dark` CSS or `configureTheme(config, options?)` for root-level overrides. Do not target generated selectors or hardcode component styling.
 
-Current CSS uses the `--var-*` namespace (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Preserve explicit legacy fallbacks where the component still supports them, such as Stats.
+Use only canonical `--var-*` properties (`--var-button-height`, `--var-color-primary`, `--var-rounded-full`). Retired radius and unprefixed/component aliases are not compatibility fallbacks; use each component's current reference and `themeTokenRegistry`.
 
-Library geometry derives from one `--var-spacing-base` and an independent `--var-radius-base`, both defaulting to `1rem`. Override either on a wrapper; use `--var-radius-base: 0px` for square default corners. Typography and full-circle primitives remain independent. Explicit component values, including zero and literal sizes, always win.
+Library geometry derives from `--var-spacing-base` and `--var-radius-base`. Their shipped values come from foundation CSS; numeric `spacing` and `rounding` in `configureTheme` mean pixels (including zero), or use explicit CSS strings. Typography and full-circle primitives remain independent. Explicit component values, including zero and literal sizes, always win.
 
-Derived semantic defaults are use-site CSS fallbacks, not root custom-property declarations, so nested base overrides remain reactive. Inspect exported `defaultGeometryTokens`, `defaultGeometryBases`, or `defaultLightThemeTokens` instead of reading default custom properties with `getComputedStyle()`. Runtime theme helpers omit implicit geometry but preserve every explicitly supplied entry; passing a complete default object explicitly pins its formulas to that scope. Legacy theme generators preserve supplied values and remaps. See `ai/docs/geometry-tokens.md` for the radius appearance change, provider variants, compatibility paths, and exceptions.
+Derived semantic defaults are use-site CSS fallbacks, not root custom-property declarations, so nested base overrides remain reactive. Inspect exported `defaultGeometryTokens`, `defaultGeometryBases`, or `defaultLightThemeTokens` instead of reading default custom properties with `getComputedStyle()`. See `ai/docs/geometry-tokens.md` for geometry behavior and scope boundaries.
 
 ---
 
 ## 3 — Theme scope
 
-Defaults render light variables on `:root`. Apply a named theme scope to switch variables at runtime:
+Built-in light and dark colors are supplied by foundation CSS. Activate dark mode by putting `.dark` on `<html>`; JavaScript configuration registers overrides but never changes classes. The application owns activation:
 
-```tsx
-<html data-theme="dark">...</html>
+```html
+<html class="dark">...</html>
 ```
 
 ### ComponentsProvider (optional)
@@ -118,50 +118,66 @@ export default function App({ children }) {
 
 ---
 
-## 3 — Theme Setup with createTokenStyles
+## 4 — Theme customization
 
-Use `createTokenStyles` to generate scoped CSS strings for light and dark themes, then inject them into `<head>` via a `<style>` element.
-
-```ts
-import { createTokenStyles, createCssProperties, type TokenRemap } from "@g4rcez/components";
-```
-
-- `createTokenStyles(theme, map?)` — returns a scoped CSS string, e.g. `html { --primary: … }`
-- `createCssProperties(theme, map?)` — returns an inline style object with CSS custom properties
-- When `map.name` is set (e.g. `"dark"`), the output scopes to `html.dark { … }`
-- Use `createTokenStyles` for `<style>` injection; use `createCssProperties` for inline `style` props
-
-### Two-theme pattern (light + dark)
-
-```tsx
-import { createTokenStyles, type TokenRemap, defaultLightTheme, defaultDarkTheme } from "@g4rcez/components";
-
-const tokenRemap: TokenRemap = {
-    colors: (t) => {
-        // Strip hsla( wrapper so opacity utility classes (bg-primary/50) work
-        t.value = t.value.replace("hsla(", "").replace(/\)$/, "");
-        return t;
-    },
-};
-
-const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
-const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
-
-// Inject stylesLight and stylesDark as <style> elements in your layout <head>.
-// Both are internally-generated CSS strings (design tokens only), not user input.
-```
-
----
-
-## 4 — TokenRemap
-
-`TokenRemap` transforms each design token value before it is emitted as a CSS custom property.
+Use sparse `configureTheme` overrides or ordinary CSS. Built-in colors remain in foundation CSS; configuration should contain only intentional overrides. This is the breaking CSS-token API, not a second full-object injection path.
 
 ```ts
-export type TokenRemap = Partial<Record<"colors" | "spacing" | "rounded" | "customTokens" | "zIndex", (t: Token) => Token> & { name: string }>;
+import { configureTheme } from "@g4rcez/components";
+
+configureTheme({
+    name: "default",
+    tokens: { spacing: 16, rounding: 0 },
+});
+
+configureTheme({
+    name: "dark",
+    colors: { primary: "hsla(201, 49%, 60%, 1)" },
+    components: { button: { "secondary-background": "hsla(240, 6%, 15%, 1)" } },
+});
 ```
 
-Stripping `hsla(…)` in the colors transformer is required for opacity utility classes (`bg-primary/50`) — they expect raw channel values (`210 40% 60%`), not a wrapped `hsla(210 40% 60%)`.
+`default` writes a `:root` override; named themes write to `html.<name>`. Names match `[a-z][a-z0-9_-]*`; keep at most one named-theme class active and preserve unrelated classes. Only `tokens.spacing` and `tokens.rounding` accept finite numbers, interpreted as pixels (including zero). All other values are CSS strings; colors are complete CSS values, never stripped channels. Use shallow CSS suffix keys, not nested `DEFAULT` leaves.
+
+Each call is a sparse override set; `undefined` is omitted. Reconfiguring a name replaces its previous overrides, not a deep merge. `configureTheme({ name: "dark" })` clears that managed override set, including `colorScheme`, without changing the active class, built-in dark CSS, or another theme. A partial dark override leaves other built-in dark colors intact unless higher-priority shared overrides replace them.
+
+Equivalent ordinary CSS needs no JavaScript:
+
+```css
+:root {
+    --var-spacing-base: 16px;
+    --var-radius-base: 0px;
+}
+
+html.dark {
+    --var-color-primary: hsla(201, 49%, 60%, 1);
+    --var-button-secondary-background: hsla(240, 6%, 15%, 1);
+}
+```
+
+Normal declarations cascade from `var.tokens` defaults to `var.theme` configuration to unlayered application CSS, then consumer inline styles. Within a layer, `html.dark` beats `:root`; layer priority comes before specificity, so unlayered `:root` even beats configured `html.dark`. Configured default colors also beat built-in dark colors; configure the dark scope explicitly if that color should differ. Use `html.dark` for CSS values that should apply only in dark mode. JavaScript does not change classes or root inline properties.
+
+### Custom themes and inspection
+
+`ThemeConfiguration` adds `name` and optional `colorScheme: "light" | "dark" | "normal"` to `ThemeTokenOverrides` (`tokens`, `colors`, `components`). `ThemeComponentOverrides` types component values. These types, helpers, and `themeTokenRegistry` are exported from the package root and `/theme`.
+
+A custom name inherits the default palette, not another named theme. To start dark, explicitly spread `defaultDarkThemeTokens.colors` and `defaultDarkThemeTokens.components` into the configuration and set `colorScheme: "dark"` for native controls; activation remains application-owned. `defaultDarkThemeTokens` contains effective global/component colors only. `defaultLightThemeTokens` includes shared defaults and light colors. They are inspection data: injecting all defaults explicitly pins values and can freeze derived geometry.
+
+Global color changes do not automatically regenerate independent component palettes. Notification/Table shadows separate shared `tokens["shadow-<name>-shape"]` and `colors["shadow-<name>"]`; explicit `tokens["shadow-<name>"]` full-shadow overrides win over that composition. Card/Floating retain shared full-shadow controls.
+
+### SSR, hydration, and CSP
+
+`createThemeCss(config)` is pure. Emit its CSS in a server `<head>` style with `id="g4rcez-theme-<name>"`, `data-g4rcez-theme-owner="theme-runtime"`, and `data-g4rcez-theme-name="<name>"`, plus the request's CSP nonce when needed. Render the active root class before paint. `configureTheme(config, { document?, nonce? })` returns CSS and registers it when a document exists; hydration updates the matching owned style in place. Duplicate IDs or conflicting non-owned elements throw. Later updates preserve an existing nonce when `nonce` is omitted; the API does not generate nonces or set CSP policy.
+
+Values are developer-authored CSS, not sanitized user input. Unknown supplied keys, invalid shapes, names, and declaration/rule/style-tag boundary escapes are rejected before registration. See `ai/docs/theme-customization.md` for the full owned-style SSR example, supported paths, precedence, and migration table.
+
+### Local scope and geometry
+
+Use wrapper custom properties or `createThemeProperties({ tokens: { spacing: 12, rounding: 0 } })` for local previews. This pure helper takes sparse `ThemeTokenOverrides`, not a name/color scheme, and emits no implicit defaults. Wrapper styles do not reach portals rendered elsewhere; root themes naturally reach body portals. Spacing and rounding bases remain reactive through use-site fallbacks; explicit component values remain authoritative. Named theme configuration is root-only and does not promise arbitrary nested typography/color-base recomputation.
+
+### Breaking-release migration
+
+Replace retired root registration and full-object serializers with `configureTheme`/`createThemeCss`, and local injection with `createThemeProperties` or CSS. Migrate old nested theme shapes to shallow `tokens`, `colors`, and canonical `components`; replace theme-attribute activation with `.dark` on `<html>`, and replace retired aliases with canonical properties. Import from the package root or `@g4rcez/components/theme`; the removed `/styles` and `/themes` theme entry points are not re-exported. Component `data-theme` variants remain unrelated and supported. Do not retain old signatures, channel stripping, or competing rounding inputs. Built-in dark now shares the default Card shadow shape. See the canonical theme reference for explicit old-to-new migration paths.
 
 ---
 
@@ -183,6 +199,10 @@ const tweaks: Tweaks = {
     {children}
 </ComponentsProvider>;
 ```
+
+The provider is not required for styling or root theme activation. Its `components` prop accepts canonical `ThemeComponentOverrides`; `injectComponentTokens` opts into scoped wrapper CSS and supported size-variant derivation. Without that option, component values remain context only. Provider wrappers do not guarantee CSS inheritance for outside portals.
+
+The optional Tailwind preset reads the same canonical variables and complete CSS colors; no channel stripping or additional default injection is needed. Parsers and low-level preset transformations retain their distinct uses, not app-wide theme serialization. New applications can use the plain CSS setup without a preset.
 
 ---
 

@@ -5,7 +5,7 @@
     gap: var(--var-tag-surface-gap, calc(var(--var-spacing-base) * 0.375));
     box-sizing: border-box;
     border: 0 solid transparent;
-    border-radius: var(--var-tag-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 2.666667));
+    border-radius: var(--var-tag-surface-radius, calc(var(--var-radius-base) * 2.666667));
     white-space: nowrap;
     font-weight: var(--var-font-weight-medium);
     vertical-align: middle;

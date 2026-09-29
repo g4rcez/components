@@ -63,20 +63,22 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                          | CSS Variable                               | Purpose                                |
 | ------------------------------ | ------------------------------------------ | -------------------------------------- |
-| `field-min-inline-size`        | `--var-multi-select-field-min-inline-size` | Minimum width of the MultiSelect field |
-| `placeholder-input-mask`       | `--input-mask`                             | Placeholder text color                 |
-| `placeholder-input-mask-error` | `--input-mask-error`                       | Placeholder color in error state       |
-| `border-input-border`          | `--input-border`                           | Search input bottom border in dropdown |
-| `bg-floating-background`       | `--floating-background`                    | Dropdown panel background              |
-| `border-floating-border`       | `--floating-border`                        | Dropdown panel border                  |
-| `bg-floating-hover`            | `--floating-hover`                         | Option row hover/active background     |
-| `text-foreground`              | `--foreground`                             | Option text color                      |
-| `text-input-placeholder`       | `--input-placeholder`                      | Placeholder li color                   |
-| `text-disabled`                | `--disabled`                               | Empty-state text color                 |
-| `focus:ring-primary`           | `--primary`                                | Keyboard focus ring                    |
-| `h-input-height`               | `--input-height`                           | Trigger element height (2.5 rem)       |
-| `px-input-padding-x`           | `--input-padding-x`                        | Horizontal padding                     |
-| `py-input-padding-y`           | `--input-padding-y`                        | Vertical padding                       |
+| CSS override | `--var-multi-select-field-min-inline-size` | Minimum field width |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text color |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder color |
+| `border-input-border` | `--var-color-border` | Search input bottom border |
+| `bg-floating-background` | `--var-dropdown-surface-background` | Dropdown panel background |
+| `border-floating-border` | `--var-dropdown-surface-border` | Dropdown panel border |
+| CSS override | `--var-multi-select-option-background-hover` | Option hover/focus background |
+| CSS override | `--var-multi-select-option-selected-background` | Selected option background |
+| CSS override | `--var-multi-select-option-selected-foreground` | Selected option text |
+| `text-floating-foreground` | `--var-dropdown-surface-foreground` | Default option text |
+| `text-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder li color |
+| `text-disabled` | `--var-color-disabled` | Empty-state text |
+| `focus:ring-ring` | `--var-color-ring` | Field focus ring color |
+| `h-input-height` | `--var-free-text-control-height` | Default trigger height |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
 
 ## Examples
 

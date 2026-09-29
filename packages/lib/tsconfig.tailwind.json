@@ -28,6 +28,6 @@
         "strictPropertyInitialization": true,
         "target": "ES2020"
     },
-    "include": ["./src/styles", "./preset.tailwind.ts", "./plugin.tailwind.ts"],
+    "include": ["./preset.tailwind.ts", "./plugin.tailwind.ts"],
     "exclude": ["node_modules", "docs"]
 }

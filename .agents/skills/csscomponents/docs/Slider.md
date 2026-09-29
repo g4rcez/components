@@ -48,11 +48,11 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                       | CSS Variable     | Purpose                           |
 | --------------------------- | ---------------- | --------------------------------- |
-| `bg-background`             | `--background`   | Track background (unfilled area)  |
-| `bg-primary`                | `--primary`      | Indicator fill (filled area)      |
-| `border-input-border`       | `--input-border` | Thumb border color                |
-| `bg-input-switch`           | `--input-switch` | Thumb fill color (checked/active) |
-| `focus-within:ring-primary` | `--primary`      | Focus ring on thumb               |
+| `bg-background` | `--var-color-background` | Unfilled track background |
+| `bg-primary` | `--var-color-primary` | Filled track background |
+| `border-input-border` | `--var-color-border` | Thumb border |
+| CSS override | `--var-slider-thumb-background` | Thumb fill |
+| `focus-within:ring-ring` | `--var-color-ring` | Thumb focus outline color |
 
 ## Variants
 

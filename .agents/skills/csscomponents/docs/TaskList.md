@@ -33,9 +33,9 @@ Accepts all standard HTML `<fieldset>` attributes.
 
 | Token             | CSS Variable   | Purpose                               |
 | ----------------- | -------------- | ------------------------------------- |
-| `border-border`   | `--border`     | Optional border around the task group |
-| `bg-background`   | `--background` | Container background                  |
-| `text-foreground` | `--foreground` | Task label text                       |
+| `border-border` | `--var-color-border` | Optional task group border color |
+| `bg-background` | `--var-color-background` | Optional container background |
+| `text-foreground` | `--var-color-foreground` | Optional task label text color |
 
 ## Examples
 

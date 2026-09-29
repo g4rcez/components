@@ -48,6 +48,50 @@ describe("MultiSelect", () => {
         expect(onChangeOptions).toHaveBeenLastCalledWith([]);
     });
 
+    it("derives tags and callback values from repeated selection and removal", async () => {
+        const user = userEvent.setup();
+        const onChangeOptions = vi.fn();
+        render(
+            <ComponentsProvider>
+                <MultiSelect title="Tags" options={options} onChangeOptions={onChangeOptions} />
+            </ComponentsProvider>
+        );
+
+        await user.click(screen.getByRole("combobox", { name: "Tags" }));
+        for (let cycle = 0; cycle < 2; cycle += 1) {
+            await user.click(await screen.findByRole("option", { name: "Alpha" }));
+            expect(onChangeOptions).toHaveBeenLastCalledWith(["alpha"]);
+            expect(screen.getByRole("button", { name: "Remove Alpha" })).toBeInTheDocument();
+            await user.click(screen.getByRole("button", { name: "Remove Alpha" }));
+            expect(onChangeOptions).toHaveBeenLastCalledWith([]);
+            expect(screen.queryByRole("button", { name: "Remove Alpha" })).not.toBeInTheDocument();
+        }
+    });
+
+    it("changes controlled tags only when the parent accepts a selection", async () => {
+        const user = userEvent.setup();
+        const onChangeOptions = vi.fn();
+        const view = (value: string[]) => (
+            <ComponentsProvider>
+                <MultiSelect title="Tags" options={options} value={value} onChangeOptions={onChangeOptions} />
+            </ComponentsProvider>
+        );
+        const { rerender } = render(view([]));
+
+        await user.click(screen.getByRole("combobox", { name: "Tags" }));
+        await user.click(await screen.findByRole("option", { name: "Alpha" }));
+        expect(onChangeOptions).toHaveBeenLastCalledWith(["alpha"]);
+        expect(screen.queryByRole("button", { name: "Remove Alpha" })).not.toBeInTheDocument();
+
+        rerender(view(["alpha"]));
+        await user.click(screen.getByRole("button", { name: "Remove Alpha" }));
+        expect(onChangeOptions).toHaveBeenLastCalledWith([]);
+        expect(screen.getByRole("button", { name: "Remove Alpha" })).toBeInTheDocument();
+
+        rerender(view([]));
+        expect(screen.queryByRole("button", { name: "Remove Alpha" })).not.toBeInTheDocument();
+    });
+
     it("keeps the minimum-width field slot after selecting a tag", async () => {
         const user = userEvent.setup();
         const { container } = render(

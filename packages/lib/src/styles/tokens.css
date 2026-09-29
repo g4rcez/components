@@ -1,18 +1,26 @@
+@layer var.tokens, var.theme, var.base, var.components, var.utilities;
+
+@layer var.tokens {
 :root {
   /* Derived geometry defaults live at use sites; see defaultGeometryTokens. */
   --var-radius-base: 1rem;
-  --var-fontsize: 1rem;
   --var-spacing-base: 1rem;
+  --var-spacing-field-height: calc(var(--var-spacing-base) * 1.5);
+  --var-fontsize: 1rem;
   --var-font-weight-medium: 500;
   --var-font-weight-semibold: 600;
   --var-font-weight-bold: 700;
   --var-border-hairline: 0.0625rem;
   --var-motion-duration-normal: 300ms;
   --var-motion-timing-linear: linear;
+  --var-typography-xs: calc(var(--var-fontsize) * 0.75);
   --var-typography-sm: calc(var(--var-fontsize) * 0.875);
   --var-typography-lg: calc(var(--var-fontsize) * 1.25);
-  --var-typography-lg-weight: 500;
   --var-typography-xl: calc(var(--var-fontsize) * 1.5);
+  --var-typography-3xl: calc(var(--var-fontsize) * 2.25);
+  --var-typography-4xl: calc(var(--var-fontsize) * 3);
+  --var-typography-5xl: calc(var(--var-fontsize) * 3.75);
+  --var-typography-lg-weight: 500;
   --var-typography-paragraph-font-size: calc(var(--var-fontsize) * 1);
   --var-typography-paragraph-line-height: 1.375;
   --var-typography-info-label-font-size: calc(var(--var-fontsize) * 1);
@@ -21,6 +29,7 @@
   --var-typography-info-secondary-font-size: calc(var(--var-fontsize) * 1);
   --var-typography-page-title-font-size: calc(var(--var-fontsize) * 1.875);
   --var-typography-page-title-letter-spacing: 0.025em;
+  --var-toolbar-rounded: calc(var(--var-radius-base) * 0.5);
 
   --var-rounded-full: 9999px;
 
@@ -265,7 +274,6 @@
   --var-color-muted: hsla(240, 5%, 96%);
   --var-color-muted-foreground: hsla(240, 4%, 46%);
   --var-color-primary: hsla(201, 49%, 36%);
-  --var-ring: hsla(201, 49%, 36%);
   --var-color-primary-foreground: hsla(221, 6%, 90%);
   --var-color-primary-subtle: hsla(201, 49%, 28%);
   --var-color-primary-hover: hsla(201, 49%, 22%);
@@ -293,8 +301,10 @@
   --var-shadow-card: 0px 1px 2px 1px transparent;
   --var-shadow-floating:
     0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --var-shadow-notification: 1px 2px 2px 2px hsla(210, 25%, 40%, 0.15);
-  --var-shadow-table: 0px 1px 1px 1px hsla(210, 0%, 0%, 0.1);
+  --var-shadow-notification-shape: 1px 2px 2px 2px;
+  --var-color-shadow-notification: hsla(210, 25%, 40%, 0.15);
+  --var-shadow-table-shape: 0px 1px 1px 1px;
+  --var-color-shadow-table: hsla(210, 0%, 0%, 0.1);
 
   --var-card-background: hsla(0, 0%, 100%);
   --var-card-border: hsla(240, 6%, 90%);
@@ -384,7 +394,6 @@
   --var-stats-icon-foreground: var(--var-color-primary-foreground);
 }
 
-[data-theme="dark"],
 html.dark {
   color-scheme: dark;
 
@@ -396,7 +405,6 @@ html.dark {
   --var-color-muted: hsla(240, 4%, 16%);
   --var-color-muted-foreground: hsla(240, 5%, 65%);
   --var-color-primary: hsla(201, 49%, 54%);
-  --var-ring: hsla(201, 49%, 54%);
   --var-color-primary-foreground: hsla(240, 6%, 10%);
   --var-color-primary-subtle: hsla(201, 49%, 36%);
   --var-color-primary-hover: hsla(201, 49%, 22%);
@@ -529,9 +537,8 @@ html.dark {
   --var-color-warn-foreground: hsla(240, 10%, 4%);
   --var-color-success-subtle: hsla(142, 71%, 15%);
   --var-color-success-foreground: hsla(240, 10%, 4%);
-  --var-shadow-card: 0px 1px 1px 1px transparent;
-  --var-shadow-table: 0px 1px 1px 1px hsla(210, 25%, 20%, 0.1);
-  --var-shadow-notification: 1px 2px 2px 2px hsla(210, 15%, 20%, 0.15);
+  --var-color-shadow-table: hsla(210, 25%, 20%, 0.1);
+  --var-color-shadow-notification: hsla(210, 15%, 20%, 0.15);
   --var-alert-primary-foreground: hsla(199, 89%, 80%);
   --var-alert-primary-border: hsla(199, 89%, 25%);
   --var-alert-primary-background: hsla(199, 89%, 12%);
@@ -547,4 +554,5 @@ html.dark {
   --var-alert-warn-foreground: hsla(38, 92%, 80%);
   --var-alert-warn-border: hsla(38, 92%, 25%);
   --var-alert-warn-background: hsla(38, 92%, 12%);
+}
 }

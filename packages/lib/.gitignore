@@ -245,6 +245,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-./lib
+/lib
 ./build
 ./dist

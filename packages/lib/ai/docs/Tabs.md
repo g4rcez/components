@@ -55,11 +55,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                | CSS Variable        | Purpose                             |
 | -------------------- | ------------------- | ----------------------------------- |
-| `bg-card-background` | `--card-background` | Tab panel surface                   |
-| `border-card-border` | `--card-border`     | Tab bar bottom line and card border |
-| `border-primary`     | `--primary`         | Active tab bottom indicator         |
-| `text-primary`       | `--primary`         | Active tab text color               |
-| `text-disabled`      | `--disabled`        | Disabled tab text                   |
+| `bg-card-background` | `--var-card-background` | Composed Card surface |
+| `border-card-border` | `--var-card-border` | Composed Card border |
+| `bg-border` | `--var-color-border` | Tab bar divider |
+| `bg-primary` | `--var-color-primary` | Active indicator |
+| `text-primary` | `--var-color-primary` | Active tab text |
+| `text-muted-foreground` | `--var-color-muted-foreground` | Disabled tab text |
 
 ## Examples
 

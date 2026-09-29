@@ -39,21 +39,25 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 
 | Override | Library default |
 | --- | --- |
-| `--var-alert-surface-radius` | `calc( var(--var-radius, calc(var(--var-radius-base) / 2)) - calc(var(--var-radius-base) / 4) )` |
+| `--var-alert-surface-radius` | `calc(var(--var-radius-base) / 4)` |
 | `--var-alert-surface-padding` | `calc(var(--var-spacing-base) * 1)` |
 | `--var-alert-content-gap` | `calc(var(--var-spacing-base) / 2)` |
 | `--var-alert-close-inset-inline-end` | `calc(var(--var-spacing-base) * 0.75)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Tailwind utility mappings and component tokens. Customize the canonical CSS variables in your theme; theme-specific targets are listed separately below.
 
 | Token                         | CSS Variable             | Purpose                    |
 | ----------------------------- | ------------------------ | -------------------------- |
-| `bg-alert-{theme}-bg`         | `--alert-{theme}-bg`     | Background per theme       |
-| `text-alert-{theme}-text`     | `--alert-{theme}-text`   | Text color per theme       |
-| `border-alert-{theme}-border` | `--alert-{theme}-border` | Border color per theme     |
-| `border-card-border`          | `--card-border`          | Border for `neutral` theme |
-| `text-foreground`             | `--foreground`           | Close button color         |
-| `text-danger`                 | `--danger`               | Close button hover color   |
+| `bg-alert-{theme}-bg` | `--var-alert-{theme}-background` | Background for `primary`, `info`, `warn`, `danger`, `success` |
+| `text-alert-{theme}-text` | `--var-alert-{theme}-foreground` | Text for `primary`, `info`, `warn`, `danger`, `success` |
+| `border-alert-{theme}-border` | `--var-alert-{theme}-border` | Border for `primary`, `info`, `warn`, `danger`, `success` |
+| `bg-alert-secondary-bg`, `border-alert-secondary-border` | `--var-color-secondary` | Secondary background and border |
+| `text-alert-secondary-text` | `--var-color-secondary-foreground` | Secondary text |
+| `bg-alert-neutral-bg` | `--var-color-background` | Neutral background |
+| `text-alert-neutral-text`, `text-foreground` | `--var-color-foreground` | Neutral text and close button color |
+| `border-alert-neutral-border` | `--var-color-border` | Neutral border |
+| `border-card-border` | `--var-card-border` | Card border utility; not the Alert neutral border |
+| `text-danger` | `--var-color-danger` | Close button hover color |
 
 Themes: `primary`, `secondary`, `info`, `warn`, `danger`, `success`, `neutral`.
 

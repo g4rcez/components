@@ -124,6 +124,53 @@ git checkout -b docs/update-readme
 4. **Test Locally**: Ensure everything works
 5. **Format Code**: Run `pnpm format`
 
+### Dead-code analysis
+
+Run both modes from the repository root using the installed Knip binary:
+
+```bash
+node node_modules/knip/bin/knip.js --no-progress
+node node_modules/knip/bin/knip.js --production --no-progress
+```
+
+These are the direct equivalents of `pnpm knip` and `pnpm knip:production`.
+They bypass pnpm's automatic installation and lifecycle hooks; they do not
+install missing dependencies. Use an existing dependency installation.
+
+The library's copied lint bundle must also be current: `packages/lib/dist/lint`
+is produced by the library build's `lib:lint` step. Knip analyzes its index and
+worker as shipped library entries so their runtime dependencies, including
+`oxc-parser`, are attributed to the publishing package. A missing or stale
+bundle makes that part of the report incomplete; do not remove dependencies
+based on it. Analyze after the normal build gate, not against half-written
+build output.
+
+`knip.jsonc` intentionally models these entry categories:
+
+- Public library source entries, including dynamically generated component
+  subpaths, styles, Tailwind integrations, and the CLI. The trailing `!` keeps
+  shipped entries and source files in production analysis.
+- The root skills CLI, build scripts, and configuration inputs. Library
+  `.mjs` scripts and binaries are included in the project graph.
+- Vite/Vitest configuration, which supplies library test discovery and
+  `tests/setup.ts`; lint-package tests use Vitest discovery too.
+- The lint package's public source entry and URL-loaded worker. Files under
+  `packages/lint/test/fixtures` are filesystem inputs to the Oxlint integration
+  test, so only their unused-file reports are excluded, within that workspace.
+- Docs routes discovered by the Next.js plugin. Docs components, examples,
+  and navigation are not standalone entries: routes must reach them through
+  imports.
+
+Keep package-root output ignores anchored (for example, `/lib` rather than
+`./lib` in `packages/lib/.gitignore`). Knip 6.14.2 interprets the latter as a
+recursive directory ignore and skips `src/lib`, falsely reporting dependencies
+such as `class-variance-authority` and `clsx` as unused.
+
+Treat findings as review candidates, not an automatic deletion list. A clean
+report does not authorize removing public exports. Investigate new findings
+and document genuine remaining issues; do not add blanket dependency ignores
+or declare every docs component an entry to make the command pass.
+
 ## Component Development
 
 ### Creating a New Component

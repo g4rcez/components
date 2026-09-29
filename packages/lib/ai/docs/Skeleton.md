@@ -46,7 +46,7 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 
 | Override | Library default |
 | --- | --- |
-| `--var-skeleton-radius` | `calc(var(--var-radius, var(--var-radius-base)) / 3)` |
+| `--var-skeleton-radius` | `calc(var(--var-radius-base) / 3)` |
 | `--var-skeleton-cell-block-size` | `calc(var(--var-spacing-base) * 1.5)` |
 | `--var-skeleton-block-inline-size` | `calc(var(--var-spacing-base) * 8)` |
 | `--var-skeleton-block-size` | `calc(var(--var-spacing-base) * 2)` |

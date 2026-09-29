@@ -43,17 +43,17 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                 | CSS Variable         | Purpose                                     |
 | --------------------- | -------------------- | ------------------------------------------- |
-| `border-card-border`  | `--card-border`      | Row separator border and overlay border     |
-| `bg-card-background`  | `--card-background`  | Overlay card background                     |
-| `rounded-card-radius` | `--card-radius`      | Overlay card border radius                  |
-| `shadow-shadow-card`  | `--shadow-card`      | Overlay card drop shadow                    |
-| `text-foreground`     | `--foreground`       | Default row and overlay text color          |
-| `text-secondary`      | `--secondary`        | Description text color in rows and overlay  |
-| `text-primary`        | `--primary`          | Row title hover color                       |
-| `text-danger`         | `--danger`           | Close button hover color                    |
-| `bg-floating-overlay` | `--floating-overlay` | Overlay backdrop tint (used at 70% opacity) |
-| `z-floating`          | `--z-floating`       | `z-index` for the overlay (value: 22)       |
-| `z-overlay`           | `--z-overlay`        | `z-index` for the backdrop scrim            |
+| `border-border` | `--var-color-border` | Row separator and overlay border |
+| `bg-background` | `--var-color-background` | Overlay card background |
+| `rounded-list-rounded` | `--var-list-detail-card-radius` | Overlay card border radius |
+| `shadow-shadow-card` | `--var-shadow-card` | Overlay card drop shadow |
+| `text-foreground` | `--var-color-foreground` | Row body text |
+| `text-muted-foreground` | `--var-color-muted-foreground` | Description text |
+| `text-primary` | `--var-color-primary` | Row action hover color |
+| `text-danger` | `--var-color-danger` | Close button hover/focus color |
+| CSS override | `--var-list-overlay-background` | Backdrop tint, including opacity |
+| `z-floating` | `--var-layer-floating` | Overlay layer (default: 22) |
+| `z-overlay` | `--var-layer-overlay` | Backdrop layer |
 
 ## Examples
 

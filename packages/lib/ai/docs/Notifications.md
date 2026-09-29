@@ -95,21 +95,24 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 
 | Override | Library default |
 | --- | --- |
-| `--var-notification-surface-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 1.333333)` |
+| `--var-notification-surface-radius` | `calc(var(--var-radius-base) * 1.333333)` |
 | `--var-notification-surface-backdrop-blur` | `calc( var(--var-spacing-base) * 0.75 )` |
 | `--var-notification-content-gap` | `calc(var(--var-spacing-base) * 0.75)` |
 | `--var-notification-content-padding` | `calc(var(--var-spacing-base) * 1)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
 
 | Token                         | CSS Variable             | Purpose                         |
 | ----------------------------- | ------------------------ | ------------------------------- |
-| `bg-card-background`          | `--card-background`      | Default notification background |
-| `border-card-border`          | `--card-border`          | Default notification border     |
-| `text-foreground`             | `--foreground`           | Default notification text       |
-| `bg-alert-{theme}-bg`         | `--alert-{theme}-bg`     | Themed background               |
-| `text-alert-{theme}-text`     | `--alert-{theme}-text`   | Themed text                     |
-| `border-alert-{theme}-border` | `--alert-{theme}-border` | Themed border                   |
+| `bg-card-background` | `--var-card-background` | Card background utility; default notifications use `--var-color-background` |
+| `border-card-border` | `--var-card-border` | Card border utility; default notifications use `--var-color-border` |
+| `text-foreground` | `--var-color-foreground` | Default notification text |
+| `bg-alert-{theme}-bg` | `--var-alert-{theme}-background` | Background for `info`, `warn`, `danger`, `success` |
+| `text-alert-{theme}-text` | `--var-alert-{theme}-foreground` | Text for `info`, `warn`, `danger`, `success` |
+| `border-alert-{theme}-border` | `--var-alert-{theme}-border` | Border for `info`, `warn`, `danger`, `success` |
+| `bg-alert-muted-bg` | `--var-color-muted` | Muted background |
+| `text-alert-muted-text` | `--var-color-muted-foreground` | Muted text |
+| `border-alert-muted-border` | `--var-color-border` | Muted border |
 
 ## Examples
 

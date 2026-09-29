@@ -89,11 +89,10 @@ Tokens these components read. Customize by overriding these CSS variables in you
 
 | Token            | CSS Variable     | Purpose                                  |
 | ---------------- | ---------------- | ---------------------------------------- |
-| `text-secondary` | `--secondary`    | Description and subtitle text color      |
-| `text-disabled`  | `--disabled`     | Disabled value text in `Info`            |
-| `mb-kilo`        | `--spacing-kilo` | Bottom margin on `Description`           |
-| `gap-mega`       | `--spacing-mega` | Gap in `PageHeader` between sections     |
-| `gap-kilo`       | `--spacing-kilo` | Gap between action items in `PageHeader` |
+| `text-muted-foreground` | `--var-color-muted-foreground` | Description, subtitle, and disabled `Info` value text |
+| CSS override | `--var-typography-description-margin-block-end` | Description bottom margin |
+| CSS override | `--var-typography-page-header-gap` | PageHeader section gap |
+| CSS override | `--var-typography-page-header-actions-gap` | PageHeader action gap |
 
 ## Examples
 

@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "6.0.15",
+    "version": "7.0.0",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -115,18 +115,6 @@
             "import": "./dist/styles/style-manifest.mjs",
             "default": "./dist/styles/style-manifest.mjs"
         },
-        "./themes": {
-            "source": "./src/styles/theme.ts",
-            "types": "./dist/styles/theme.d.ts",
-            "import": "./dist/styles/theme.mjs",
-            "default": "./dist/styles/theme.mjs"
-        },
-        "./styles": {
-            "source": "./src/styles/design-tokens.ts",
-            "types": "./dist/styles/design-tokens.d.ts",
-            "import": "./dist/styles/design-tokens.mjs",
-            "default": "./dist/styles/design-tokens.mjs"
-        },
         "./theme": {
             "source": "./src/styles/theme-runtime.ts",
             "types": "./dist/styles/theme-runtime.d.ts",
@@ -144,141 +132,386 @@
             "import": "./dist/components/*.mjs",
             "default": "./dist/components/*.mjs"
         },
+        "./components/core/button": {
+            "types": "./dist/components/core/button/button.d.ts",
+            "import": "./dist/components/core/button.mjs",
+            "default": "./dist/components/core/button.mjs"
+        },
+        "./components/core/heading": {
+            "types": "./dist/components/core/heading/heading.d.ts",
+            "import": "./dist/components/core/heading.mjs",
+            "default": "./dist/components/core/heading.mjs"
+        },
+        "./components/core/polymorph": {
+            "types": "./dist/components/core/polymorph/polymorph.d.ts",
+            "import": "./dist/components/core/polymorph.mjs",
+            "default": "./dist/components/core/polymorph.mjs"
+        },
+        "./components/core/render-on-view": {
+            "types": "./dist/components/core/render-on-view/render-on-view.d.ts",
+            "import": "./dist/components/core/render-on-view.mjs",
+            "default": "./dist/components/core/render-on-view.mjs"
+        },
+        "./components/core/resizable": {
+            "types": "./dist/components/core/resizable/resizable.d.ts",
+            "import": "./dist/components/core/resizable.mjs",
+            "default": "./dist/components/core/resizable.mjs"
+        },
+        "./components/core/slot": {
+            "types": "./dist/components/core/slot/slot.d.ts",
+            "import": "./dist/components/core/slot.mjs",
+            "default": "./dist/components/core/slot.mjs"
+        },
+        "./components/core/tag": {
+            "types": "./dist/components/core/tag/tag.d.ts",
+            "import": "./dist/components/core/tag.mjs",
+            "default": "./dist/components/core/tag.mjs"
+        },
+        "./components/core/typography": {
+            "types": "./dist/components/core/typography/typography.d.ts",
+            "import": "./dist/components/core/typography.mjs",
+            "default": "./dist/components/core/typography.mjs"
+        },
+        "./components/display/alert": {
+            "types": "./dist/components/display/alert/alert.d.ts",
+            "import": "./dist/components/display/alert.mjs",
+            "default": "./dist/components/display/alert.mjs"
+        },
+        "./components/display/calendar": {
+            "types": "./dist/components/display/calendar/calendar.d.ts",
+            "import": "./dist/components/display/calendar.mjs",
+            "default": "./dist/components/display/calendar.mjs"
+        },
+        "./components/display/card": {
+            "types": "./dist/components/display/card/card.d.ts",
+            "import": "./dist/components/display/card.mjs",
+            "default": "./dist/components/display/card.mjs"
+        },
+        "./components/display/collapse": {
+            "types": "./dist/components/display/collapse/collapse.d.ts",
+            "import": "./dist/components/display/collapse.mjs",
+            "default": "./dist/components/display/collapse.mjs"
+        },
+        "./components/display/empty": {
+            "types": "./dist/components/display/empty/empty.d.ts",
+            "import": "./dist/components/display/empty.mjs",
+            "default": "./dist/components/display/empty.mjs"
+        },
+        "./components/display/list": {
+            "types": "./dist/components/display/list/list.d.ts",
+            "import": "./dist/components/display/list.mjs",
+            "default": "./dist/components/display/list.mjs"
+        },
+        "./components/display/masonry": {
+            "types": "./dist/components/display/masonry/masonry.d.ts",
+            "import": "./dist/components/display/masonry.mjs",
+            "default": "./dist/components/display/masonry.mjs"
+        },
+        "./components/display/notifications": {
+            "types": "./dist/components/display/notifications/notifications.d.ts",
+            "import": "./dist/components/display/notifications.mjs",
+            "default": "./dist/components/display/notifications.mjs"
+        },
+        "./components/display/progress": {
+            "types": "./dist/components/display/progress/progress.d.ts",
+            "import": "./dist/components/display/progress.mjs",
+            "default": "./dist/components/display/progress.mjs"
+        },
+        "./components/display/shortcut": {
+            "types": "./dist/components/display/shortcut/shortcut.d.ts",
+            "import": "./dist/components/display/shortcut.mjs",
+            "default": "./dist/components/display/shortcut.mjs"
+        },
+        "./components/display/skeleton": {
+            "types": "./dist/components/display/skeleton/skeleton.d.ts",
+            "import": "./dist/components/display/skeleton.mjs",
+            "default": "./dist/components/display/skeleton.mjs"
+        },
+        "./components/display/spinner": {
+            "types": "./dist/components/display/spinner/spinner.d.ts",
+            "import": "./dist/components/display/spinner.mjs",
+            "default": "./dist/components/display/spinner.mjs"
+        },
+        "./components/display/stats": {
+            "types": "./dist/components/display/stats/stats.d.ts",
+            "import": "./dist/components/display/stats.mjs",
+            "default": "./dist/components/display/stats.mjs"
+        },
+        "./components/display/step": {
+            "types": "./dist/components/display/step/step.d.ts",
+            "import": "./dist/components/display/step.mjs",
+            "default": "./dist/components/display/step.mjs"
+        },
+        "./components/display/swipeable-list": {
+            "types": "./dist/components/display/swipeable-list/swipeable-list.d.ts",
+            "import": "./dist/components/display/swipeable-list.mjs",
+            "default": "./dist/components/display/swipeable-list.mjs"
+        },
+        "./components/display/tabs": {
+            "types": "./dist/components/display/tabs/tabs.d.ts",
+            "import": "./dist/components/display/tabs.mjs",
+            "default": "./dist/components/display/tabs.mjs"
+        },
+        "./components/display/timeline": {
+            "types": "./dist/components/display/timeline/timeline.d.ts",
+            "import": "./dist/components/display/timeline.mjs",
+            "default": "./dist/components/display/timeline.mjs"
+        },
+        "./components/floating/command-palette": {
+            "types": "./dist/components/floating/command-palette/command-palette.d.ts",
+            "import": "./dist/components/floating/command-palette.mjs",
+            "default": "./dist/components/floating/command-palette.mjs"
+        },
+        "./components/floating/dropdown": {
+            "types": "./dist/components/floating/dropdown/dropdown.d.ts",
+            "import": "./dist/components/floating/dropdown.mjs",
+            "default": "./dist/components/floating/dropdown.mjs"
+        },
+        "./components/floating/expand": {
+            "types": "./dist/components/floating/expand/expand.d.ts",
+            "import": "./dist/components/floating/expand.mjs",
+            "default": "./dist/components/floating/expand.mjs"
+        },
+        "./components/floating/menu": {
+            "types": "./dist/components/floating/menu/menu.d.ts",
+            "import": "./dist/components/floating/menu.mjs",
+            "default": "./dist/components/floating/menu.mjs"
+        },
+        "./components/floating/modal": {
+            "types": "./dist/components/floating/modal/modal.d.ts",
+            "import": "./dist/components/floating/modal.mjs",
+            "default": "./dist/components/floating/modal.mjs"
+        },
+        "./components/floating/toolbar": {
+            "types": "./dist/components/floating/toolbar/toolbar.d.ts",
+            "import": "./dist/components/floating/toolbar.mjs",
+            "default": "./dist/components/floating/toolbar.mjs"
+        },
+        "./components/floating/tooltip": {
+            "types": "./dist/components/floating/tooltip/tooltip.d.ts",
+            "import": "./dist/components/floating/tooltip.mjs",
+            "default": "./dist/components/floating/tooltip.mjs"
+        },
+        "./components/floating/wizard": {
+            "types": "./dist/components/floating/wizard/wizard.d.ts",
+            "import": "./dist/components/floating/wizard.mjs",
+            "default": "./dist/components/floating/wizard.mjs"
+        },
+        "./components/form/autocomplete": {
+            "types": "./dist/components/form/autocomplete/autocomplete.d.ts",
+            "import": "./dist/components/form/autocomplete.mjs",
+            "default": "./dist/components/form/autocomplete.mjs"
+        },
+        "./components/form/checkbox": {
+            "types": "./dist/components/form/checkbox/checkbox.d.ts",
+            "import": "./dist/components/form/checkbox.mjs",
+            "default": "./dist/components/form/checkbox.mjs"
+        },
+        "./components/form/date-picker": {
+            "types": "./dist/components/form/date-picker/date-picker.d.ts",
+            "import": "./dist/components/form/date-picker.mjs",
+            "default": "./dist/components/form/date-picker.mjs"
+        },
+        "./components/form/file-upload": {
+            "types": "./dist/components/form/file-upload/file-upload.d.ts",
+            "import": "./dist/components/form/file-upload.mjs",
+            "default": "./dist/components/form/file-upload.mjs"
+        },
+        "./components/form/form": {
+            "types": "./dist/components/form/form/form.d.ts",
+            "import": "./dist/components/form/form.mjs",
+            "default": "./dist/components/form/form.mjs"
+        },
+        "./components/form/free-text": {
+            "types": "./dist/components/form/input/free-text.d.ts",
+            "import": "./dist/components/form/free-text.mjs",
+            "default": "./dist/components/form/free-text.mjs"
+        },
+        "./components/form/input": {
+            "types": "./dist/components/form/input/input.d.ts",
+            "import": "./dist/components/form/input.mjs",
+            "default": "./dist/components/form/input.mjs"
+        },
+        "./components/form/input-field": {
+            "types": "./dist/components/form/input/input-field.d.ts",
+            "import": "./dist/components/form/input-field.mjs",
+            "default": "./dist/components/form/input-field.mjs"
+        },
+        "./components/form/multi-select": {
+            "types": "./dist/components/form/multi-select/multi-select.d.ts",
+            "import": "./dist/components/form/multi-select.mjs",
+            "default": "./dist/components/form/multi-select.mjs"
+        },
+        "./components/form/radiobox": {
+            "types": "./dist/components/form/radiobox/radiobox.d.ts",
+            "import": "./dist/components/form/radiobox.mjs",
+            "default": "./dist/components/form/radiobox.mjs"
+        },
+        "./components/form/select": {
+            "types": "./dist/components/form/select/select.d.ts",
+            "import": "./dist/components/form/select.mjs",
+            "default": "./dist/components/form/select.mjs"
+        },
+        "./components/form/slider": {
+            "types": "./dist/components/form/slider/slider.d.ts",
+            "import": "./dist/components/form/slider.mjs",
+            "default": "./dist/components/form/slider.mjs"
+        },
+        "./components/form/switch": {
+            "types": "./dist/components/form/switch/switch.d.ts",
+            "import": "./dist/components/form/switch.mjs",
+            "default": "./dist/components/form/switch.mjs"
+        },
+        "./components/form/task-list": {
+            "types": "./dist/components/form/task-list/task-list.d.ts",
+            "import": "./dist/components/form/task-list.mjs",
+            "default": "./dist/components/form/task-list.mjs"
+        },
+        "./components/form/textarea": {
+            "types": "./dist/components/form/input/textarea.d.ts",
+            "import": "./dist/components/form/textarea.mjs",
+            "default": "./dist/components/form/textarea.mjs"
+        },
+        "./components/page-calendar": {
+            "types": "./dist/components/page-calendar/page-calendar.d.ts",
+            "import": "./dist/components/page-calendar.mjs",
+            "default": "./dist/components/page-calendar.mjs"
+        },
         "./tag": {
             "source": "./src/components/core/tag/tag.tsx",
-            "types": "./dist/components/core/tag.d.ts",
+            "types": "./dist/components/core/tag/tag.d.ts",
             "import": "./dist/components/core/tag.mjs",
             "default": "./dist/components/core/tag.mjs"
         },
         "./button": {
             "source": "./src/components/core/button/button.tsx",
-            "types": "./dist/components/core/button.d.ts",
+            "types": "./dist/components/core/button/button.d.ts",
             "import": "./dist/components/core/button.mjs",
             "default": "./dist/components/core/button.mjs"
         },
         "./form": {
             "source": "./src/components/form/form/form.tsx",
-            "types": "./dist/components/form/form.d.ts",
+            "types": "./dist/components/form/form/form.d.ts",
             "import": "./dist/components/form/form.mjs",
             "default": "./dist/components/form/form.mjs"
         },
         "./radiobox": {
             "source": "./src/components/form/radiobox/radiobox.tsx",
-            "types": "./dist/components/form/radiobox.d.ts",
+            "types": "./dist/components/form/radiobox/radiobox.d.ts",
             "import": "./dist/components/form/radiobox.mjs",
             "default": "./dist/components/form/radiobox.mjs"
         },
         "./date-picker": {
             "source": "./src/components/form/date-picker/date-picker.tsx",
-            "types": "./dist/components/form/date-picker.d.ts",
+            "types": "./dist/components/form/date-picker/date-picker.d.ts",
             "import": "./dist/components/form/date-picker.mjs",
             "default": "./dist/components/form/date-picker.mjs"
         },
         "./task-list": {
             "source": "./src/components/form/task-list/task-list.tsx",
-            "types": "./dist/components/form/task-list.d.ts",
+            "types": "./dist/components/form/task-list/task-list.d.ts",
             "import": "./dist/components/form/task-list.mjs",
             "default": "./dist/components/form/task-list.mjs"
         },
         "./checkbox": {
             "source": "./src/components/form/checkbox/checkbox.tsx",
-            "types": "./dist/components/form/checkbox.d.ts",
+            "types": "./dist/components/form/checkbox/checkbox.d.ts",
             "import": "./dist/components/form/checkbox.mjs",
             "default": "./dist/components/form/checkbox.mjs"
         },
         "./input": {
             "source": "./src/components/form/input/input.tsx",
-            "types": "./dist/components/form/input.d.ts",
+            "types": "./dist/components/form/input/input.d.ts",
             "import": "./dist/components/form/input.mjs",
             "default": "./dist/components/form/input.mjs"
         },
         "./autocomplete": {
             "source": "./src/components/form/autocomplete/autocomplete.tsx",
-            "types": "./dist/components/form/autocomplete.d.ts",
+            "types": "./dist/components/form/autocomplete/autocomplete.d.ts",
             "import": "./dist/components/form/autocomplete.mjs",
             "default": "./dist/components/form/autocomplete.mjs"
         },
         "./switch": {
             "source": "./src/components/form/switch/switch.tsx",
-            "types": "./dist/components/form/switch.d.ts",
+            "types": "./dist/components/form/switch/switch.d.ts",
             "import": "./dist/components/form/switch.mjs",
             "default": "./dist/components/form/switch.mjs"
         },
         "./file-upload": {
             "source": "./src/components/form/file-upload/file-upload.tsx",
-            "types": "./dist/components/form/file-upload.d.ts",
+            "types": "./dist/components/form/file-upload/file-upload.d.ts",
             "import": "./dist/components/form/file-upload.mjs",
             "default": "./dist/components/form/file-upload.mjs"
         },
         "./select": {
             "source": "./src/components/form/select/select.tsx",
-            "types": "./dist/components/form/select.d.ts",
+            "types": "./dist/components/form/select/select.d.ts",
             "import": "./dist/components/form/select.mjs",
             "default": "./dist/components/form/select.mjs"
         },
         "./expand": {
             "source": "./src/components/floating/expand/expand.tsx",
-            "types": "./dist/components/floating/expand.d.ts",
+            "types": "./dist/components/floating/expand/expand.d.ts",
             "import": "./dist/components/floating/expand.mjs",
             "default": "./dist/components/floating/expand.mjs"
         },
         "./dropdown": {
             "source": "./src/components/floating/dropdown/dropdown.tsx",
-            "types": "./dist/components/floating/dropdown.d.ts",
+            "types": "./dist/components/floating/dropdown/dropdown.d.ts",
             "import": "./dist/components/floating/dropdown.mjs",
             "default": "./dist/components/floating/dropdown.mjs"
         },
         "./modal": {
             "source": "./src/components/floating/modal/modal.tsx",
-            "types": "./dist/components/floating/modal.d.ts",
+            "types": "./dist/components/floating/modal/modal.d.ts",
             "import": "./dist/components/floating/modal.mjs",
             "default": "./dist/components/floating/modal.mjs"
         },
         "./tooltip": {
             "source": "./src/components/floating/tooltip/tooltip.tsx",
-            "types": "./dist/components/floating/tooltip.d.ts",
+            "types": "./dist/components/floating/tooltip/tooltip.d.ts",
             "import": "./dist/components/floating/tooltip.mjs",
             "default": "./dist/components/floating/tooltip.mjs"
         },
         "./notifications": {
             "source": "./src/components/display/notifications/notifications.tsx",
-            "types": "./dist/components/display/notifications.d.ts",
+            "types": "./dist/components/display/notifications/notifications.d.ts",
             "import": "./dist/components/display/notifications.mjs",
             "default": "./dist/components/display/notifications.mjs"
         },
         "./timeline": {
             "source": "./src/components/display/timeline/timeline.tsx",
-            "types": "./dist/components/display/timeline.d.ts",
+            "types": "./dist/components/display/timeline/timeline.d.ts",
             "import": "./dist/components/display/timeline.mjs",
             "default": "./dist/components/display/timeline.mjs"
         },
         "./list": {
             "source": "./src/components/display/list/list.tsx",
-            "types": "./dist/components/display/list.d.ts",
+            "types": "./dist/components/display/list/list.d.ts",
             "import": "./dist/components/display/list.mjs",
             "default": "./dist/components/display/list.mjs"
         },
         "./swipeable-list": {
             "source": "./src/components/display/swipeable-list/swipeable-list.tsx",
-            "types": "./dist/components/display/swipeable-list.d.ts",
+            "types": "./dist/components/display/swipeable-list/swipeable-list.d.ts",
             "import": "./dist/components/display/swipeable-list.mjs",
             "default": "./dist/components/display/swipeable-list.mjs"
         },
         "./calendar": {
             "source": "./src/components/display/calendar/calendar.tsx",
-            "types": "./dist/components/display/calendar.d.ts",
+            "types": "./dist/components/display/calendar/calendar.d.ts",
             "import": "./dist/components/display/calendar.mjs",
             "default": "./dist/components/display/calendar.mjs"
         },
         "./masonry": {
             "source": "./src/components/display/masonry/masonry.tsx",
-            "types": "./dist/components/display/masonry.d.ts",
+            "types": "./dist/components/display/masonry/masonry.d.ts",
             "import": "./dist/components/display/masonry.mjs",
             "default": "./dist/components/display/masonry.mjs"
         },
         "./card": {
             "source": "./src/components/display/card/card.tsx",
-            "types": "./dist/components/display/card.d.ts",
+            "types": "./dist/components/display/card/card.d.ts",
             "import": "./dist/components/display/card.mjs",
             "default": "./dist/components/display/card.mjs"
         },
@@ -290,25 +523,25 @@
         },
         "./menu": {
             "source": "./src/components/floating/menu/menu.tsx",
-            "types": "./dist/components/floating/menu.d.ts",
+            "types": "./dist/components/floating/menu/menu.d.ts",
             "import": "./dist/components/floating/menu.mjs",
             "default": "./dist/components/floating/menu.mjs"
         },
         "./tabs": {
             "source": "./src/components/display/tabs/tabs.tsx",
-            "types": "./dist/components/display/tabs.d.ts",
+            "types": "./dist/components/display/tabs/tabs.d.ts",
             "import": "./dist/components/display/tabs.mjs",
             "default": "./dist/components/display/tabs.mjs"
         },
         "./stats": {
             "source": "./src/components/display/stats/stats.tsx",
-            "types": "./dist/components/display/stats.d.ts",
+            "types": "./dist/components/display/stats/stats.d.ts",
             "import": "./dist/components/display/stats.mjs",
             "default": "./dist/components/display/stats.mjs"
         },
         "./alert": {
             "source": "./src/components/display/alert/alert.tsx",
-            "types": "./dist/components/display/alert.d.ts",
+            "types": "./dist/components/display/alert/alert.d.ts",
             "import": "./dist/components/display/alert.mjs",
             "default": "./dist/components/display/alert.mjs"
         },
@@ -335,7 +568,7 @@
         },
         "./slider": {
             "source": "./src/components/form/slider/slider.tsx",
-            "types": "./dist/components/form/slider.d.ts",
+            "types": "./dist/components/form/slider/slider.d.ts",
             "import": "./dist/components/form/slider.mjs",
             "default": "./dist/components/form/slider.mjs"
         },
@@ -365,7 +598,7 @@
         },
         "./step": {
             "source": "./src/components/display/step/step.tsx",
-            "types": "./dist/components/display/step.d.ts",
+            "types": "./dist/components/display/step/step.d.ts",
             "import": "./dist/components/display/step.mjs",
             "default": "./dist/components/display/step.mjs"
         },
@@ -383,7 +616,7 @@
         },
         "./empty": {
             "source": "./src/components/display/empty/empty.tsx",
-            "types": "./dist/components/display/empty.d.ts",
+            "types": "./dist/components/display/empty/empty.d.ts",
             "import": "./dist/components/display/empty.mjs",
             "default": "./dist/components/display/empty.mjs"
         },
@@ -409,7 +642,7 @@
         },
         "./textarea": {
             "source": "./src/components/form/input/textarea.tsx",
-            "types": "./dist/components/form/textarea.d.ts",
+            "types": "./dist/components/form/input/textarea.d.ts",
             "import": "./dist/components/form/textarea.mjs",
             "default": "./dist/components/form/textarea.mjs"
         },
@@ -429,7 +662,7 @@
         },
         "./polymorph": {
             "source": "./src/components/core/polymorph/polymorph.tsx",
-            "types": "./dist/components/core/polymorph.d.ts",
+            "types": "./dist/components/core/polymorph/polymorph.d.ts",
             "import": "./dist/components/core/polymorph.mjs",
             "default": "./dist/components/core/polymorph.mjs"
         },
@@ -447,7 +680,7 @@
         },
         "./typography": {
             "source": "./src/components/core/typography/typography.tsx",
-            "types": "./dist/components/core/typography.d.ts",
+            "types": "./dist/components/core/typography/typography.d.ts",
             "import": "./dist/components/core/typography.mjs",
             "default": "./dist/components/core/typography.mjs"
         },
@@ -461,7 +694,7 @@
         },
         "./spinner": {
             "source": "./src/components/display/spinner/spinner.tsx",
-            "types": "./dist/components/display/spinner.d.ts",
+            "types": "./dist/components/display/spinner/spinner.d.ts",
             "import": "./dist/components/display/spinner.mjs",
             "default": "./dist/components/display/spinner.mjs"
         },
@@ -475,7 +708,7 @@
         },
         "./wizard": {
             "source": "./src/components/floating/wizard/wizard.tsx",
-            "types": "./dist/components/floating/wizard.d.ts",
+            "types": "./dist/components/floating/wizard/wizard.d.ts",
             "import": "./dist/components/floating/wizard.mjs",
             "default": "./dist/components/floating/wizard.mjs"
         },
@@ -489,7 +722,7 @@
         },
         "./progress": {
             "source": "./src/components/display/progress/progress.tsx",
-            "types": "./dist/components/display/progress.d.ts",
+            "types": "./dist/components/display/progress/progress.d.ts",
             "import": "./dist/components/display/progress.mjs",
             "default": "./dist/components/display/progress.mjs"
         },
@@ -503,7 +736,7 @@
         },
         "./toolbar": {
             "source": "./src/components/floating/toolbar/toolbar.tsx",
-            "types": "./dist/components/floating/toolbar.d.ts",
+            "types": "./dist/components/floating/toolbar/toolbar.d.ts",
             "import": "./dist/components/floating/toolbar.mjs",
             "default": "./dist/components/floating/toolbar.mjs"
         },
@@ -525,7 +758,7 @@
         },
         "./input-field": {
             "source": "./src/components/form/input/input-field.tsx",
-            "types": "./dist/components/form/input-field.d.ts",
+            "types": "./dist/components/form/input/input-field.d.ts",
             "import": "./dist/components/form/input-field.mjs",
             "default": "./dist/components/form/input-field.mjs"
         },
@@ -543,7 +776,7 @@
         },
         "./multi-select": {
             "source": "./src/components/form/multi-select/multi-select.tsx",
-            "types": "./dist/components/form/multi-select.d.ts",
+            "types": "./dist/components/form/multi-select/multi-select.d.ts",
             "import": "./dist/components/form/multi-select.mjs",
             "default": "./dist/components/form/multi-select.mjs"
         },
@@ -553,7 +786,7 @@
         },
         "./render-on-view": {
             "source": "./src/components/core/render-on-view/render-on-view.tsx",
-            "types": "./dist/components/core/render-on-view.d.ts",
+            "types": "./dist/components/core/render-on-view/render-on-view.d.ts",
             "import": "./dist/components/core/render-on-view.mjs",
             "default": "./dist/components/core/render-on-view.mjs"
         },
@@ -567,7 +800,7 @@
         },
         "./command-palette": {
             "source": "./src/components/floating/command-palette/command-palette.tsx",
-            "types": "./dist/components/floating/command-palette.d.ts",
+            "types": "./dist/components/floating/command-palette/command-palette.d.ts",
             "import": "./dist/components/floating/command-palette.mjs",
             "default": "./dist/components/floating/command-palette.mjs"
         },
@@ -656,18 +889,20 @@
     },
     "scripts": {
         "watch": "vite build --watch --minify false",
+"tokens:generate": "node ./scripts/generate-theme-registry.mjs",
+"tokens:check": "node ./scripts/generate-theme-registry.mjs --check",
         "prepublishOnly": "npm run build",
-        "build": "cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
+"build": "npm run tokens:generate && cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
         "lib:lint": "pnpm --filter @g4rcez/lint build && node ./scripts/copy-lint.mjs",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
-        "lib:types": "tsc -p tsconfig.lib.json && node ./scripts/flatten-component-types.mjs",
-        "preset": "tsc -p tsconfig.styles.json && tsc -p tsconfig.tailwind.json",
+        "lib:types": "tsc -p tsconfig.lib.json",
+        "preset": "tsc -p tsconfig.tailwind.json",
         "test": "vitest run",
         "test:watch": "vitest watch",
         "styles:imports": "node ./bin/csscomponents.mjs",
-        "lib:css:v6": "vite build --config vite.css.config.mts && node ./scripts/write-css-sourcemaps.mjs",
+        "lib:css:v6": "vite build --config vite.css.config.mts",
         "lib:style-manifest": "node ./scripts/build-style-manifest.mjs"
     },
     "dependencies": {

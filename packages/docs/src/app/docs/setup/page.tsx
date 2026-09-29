@@ -12,13 +12,15 @@ import {
     SquaresFourIcon,
     UsersThreeIcon,
 } from "@phosphor-icons/react";
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useId, useMemo, useState } from "react";
 import { Alert, Button, Card, Empty, Stats, StatsCard, Step, Steps, Tab, Tabs, Tag, Timeline, TimelineItem } from "@g4rcez/components";
 import {
-    type DesignTokens,
-    createCssProperties,
-    defaultDarkTheme,
-    defaultLightTheme,
+    type ThemeConfiguration,
+    type ThemeTokenOverrides,
+    createThemeProperties,
+    defaultDarkThemeTokens,
+    defaultLightThemeTokens,
+    themeTokenRegistry,
     Checkbox,
     Input,
     Progress,
@@ -32,115 +34,143 @@ import { CodeBlock } from "@/components/code-block";
 
 type Mode = "dark" | "light";
 
-type Path = readonly (string | number)[];
-
-const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
-
-const setLeaf = <T,>(obj: T, path: Path, value: string): T => {
-    if (path.length === 0) return value as unknown as T;
-    const [head, ...rest] = path;
-    const source = obj as unknown as Record<string | number, unknown>;
-    const next: Record<string | number, unknown> = Array.isArray(obj)
-        ? ([...(obj as unknown[])] as unknown as Record<string | number, unknown>)
-        : { ...source };
-    next[head] = setLeaf(next[head], rest, value);
-    return next as unknown as T;
-};
+type Path = readonly string[];
+type Drafts = Record<string, string>;
+type LeafRow = { path: Path; value: string };
 
 const labelize = (path: Path) => path.join(".");
 
-const serializeTheme = (constName: string, theme: DesignTokens) =>
-    `import { DesignTokens } from "@g4rcez/components";
-
-export const ${constName}: DesignTokens = ${JSON.stringify(theme, null, 2)};
-`;
-
-const tailwindSnippet = `import type { Config } from "tailwindcss";
-import { createDesignTokens, parsers } from "@g4rcez/components";
-import { LIGHT_THEME } from "./theme/light";
-
-const COLORS = createDesignTokens(
-  LIGHT_THEME.colors,
-  parsers.formatWithVar("hsla"),
-);
-
-const config: Config = {
-  content: ["./src/**/*.{ts,tsx}"],
-  theme: { extend: { colors: COLORS } },
+const getLeaf = (source: unknown, path: Path): string | undefined => {
+    let value = source;
+    for (const key of path) {
+        if (!value || typeof value !== "object" || !(key in value)) return undefined;
+        value = (value as Record<string, unknown>)[key];
+    }
+    return typeof value === "string" || typeof value === "number" ? String(value) : undefined;
 };
 
-export default config;
-`;
+// Paths come only from the public registry, never from free-form input.
+const setLeaf = (source: ThemeTokenOverrides, path: Path, value: string): ThemeTokenOverrides => {
+    const [group, key, token] = path;
+    if (group === "tokens") return { ...source, tokens: { ...source.tokens, [key]: value } };
+    if (group === "colors") return { ...source, colors: { ...source.colors, [key]: value } };
+    const component = key as keyof NonNullable<ThemeTokenOverrides["components"]>;
+    return {
+        ...source,
+        components: {
+            ...source.components,
+            [component]: { ...source.components?.[component], [token]: value },
+        },
+    };
+};
 
-const providerSnippet = `// src/theme/inject.ts
-import { createTheme } from "@g4rcez/components";
-import { DARK_THEME } from "./dark";
-import { LIGHT_THEME } from "./light";
+const tokenRows: LeafRow[] = [
+    ...["spacing", "rounding", ...themeTokenRegistry.tokens].map((key) => ({
+        path: ["tokens", key],
+        value: getLeaf(defaultLightThemeTokens, ["tokens", key]) ?? "",
+    })),
+    ...themeTokenRegistry.colors.map((key) => ({
+        path: ["colors", key],
+        value: getLeaf(defaultLightThemeTokens, ["colors", key]) ?? "",
+    })),
+    ...Object.entries(themeTokenRegistry.components).flatMap(([component, keys]) =>
+        keys.map((key) => ({
+            path: ["components", component, key],
+            value: getLeaf(defaultLightThemeTokens, ["components", component, key]) ?? "",
+        }))
+    ),
+];
+// The dark inspection projection is color-only, including component colors.
+const colorRows = tokenRows.filter((row) => getLeaf(defaultDarkThemeTokens, row.path) !== undefined);
+const sharedRows = tokenRows.filter((row) => getLeaf(defaultDarkThemeTokens, row.path) === undefined);
+const lightPalette = colorRows.reduce((result, row) => setLeaf(result, row.path, row.value), {} as ThemeTokenOverrides);
 
-export const themeCss = [
-  createTheme(LIGHT_THEME),
-  createTheme(DARK_THEME, "dark"),
-].join("\\n");
-
-// app/layout.tsx
-import { themeCss } from "@/theme/inject";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <style id="theme-tokens">{themeCss}</style>
-      </head>
-      <body>{children}</body>
-    </html>
-  );
-}
-
-// Toggle the "dark" class on <html> to switch themes.
-`;
-
-type LeafRow = { path: Path; value: string };
-
-const collectLeaves = (obj: unknown, path: Path = [], acc: LeafRow[] = []): LeafRow[] => {
-    if (typeof obj === "string") {
-        acc.push({ path, value: obj });
-        return acc;
-    }
-    if (obj && typeof obj === "object") {
-        for (const [k, v] of Object.entries(obj)) {
-            collectLeaves(v, [...path, k], acc);
+const compileDrafts = (drafts: Drafts) => {
+    let overrides: ThemeTokenOverrides = {};
+    const errors: Record<string, string> = {};
+    for (const row of tokenRows) {
+        const key = labelize(row.path);
+        const value = drafts[key];
+        if (value === undefined || value.trim() === "") continue;
+        const leaf = setLeaf({}, row.path, value);
+        try {
+            createThemeProperties(leaf);
+            overrides = setLeaf(overrides, row.path, value);
+        } catch {
+            errors[key] = "Enter one complete CSS value, without a declaration or rule. Clear to inherit.";
         }
     }
-    return acc;
+    return { overrides, errors };
 };
+
+const serializeTheme = (constName: string, theme: ThemeConfiguration) =>
+    `import type { ThemeConfiguration } from "@g4rcez/components";
+
+export const ${constName} = ${JSON.stringify(theme, null, 2)} satisfies ThemeConfiguration;
+`;
+
+const runtimeSnippet = `import { configureTheme } from "@g4rcez/components";
+import { DEFAULT_THEME } from "./light";
+import { DARK_THEME } from "./dark";
+
+configureTheme(DEFAULT_THEME);
+configureTheme(DARK_THEME);
+
+// Activation belongs to the app; registration never changes classes.
+document.documentElement.classList.toggle("dark", true);
+
+// Replace only dark overrides, exposing shared overrides and built-in colors.
+// configureTheme({ name: "dark" });
+`;
+
+const cssSnippet = `import { createThemeCss } from "@g4rcez/components";
+import { DEFAULT_THEME } from "./light";
+import { DARK_THEME } from "./dark";
+
+// Pure output: emit into an application stylesheet or server-rendered <head>.
+export const themeCss = [
+  createThemeCss(DEFAULT_THEME),
+  createThemeCss(DARK_THEME),
+].join("\\n");
+
+// Import foundation.css and the component CSS separately.
+// Activate dark mode with <html class="dark">; no provider is required.
+// For runtime hydration, give each style its ownership metadata:
+// id="g4rcez-theme-default" data-theme-owner="theme-runtime"
+// data-theme-name="default" (and the equivalent for "dark").
+`;
 
 type LeafEditorProps = {
     row: LeafRow;
+    value: string;
+    error?: string;
     onChange: (path: Path, value: string) => void;
     swatch: boolean;
 };
 
-function LeafEditor({ row, onChange, swatch }: LeafEditorProps) {
-    const id = labelize(row.path);
+function LeafEditor({ row, value, error, onChange, swatch }: LeafEditorProps) {
+    const id = useId();
     return (
-        <div className="text-typography-xs flex flex-col gap-input-label-mb">
-            <label htmlFor={id} className="font-mono text-input-label-text text-muted-foreground">
-                {id}
-            </label>
+        <div className="text-typography-xs flex min-w-0 flex-col gap-input-label-mb">
             <div className="flex items-center gap-input-slot-gap">
                 {swatch && (
                     <span
                         aria-hidden
                         className="size-input-height shrink-0 rounded-input-radius border border-card-border"
-                        style={{ backgroundColor: row.value }}
+                        style={{ backgroundColor: error ? row.value : value || row.value }}
                     />
                 )}
-                <input
+                <Input
                     id={id}
-                    value={row.value}
+                    title={labelize(row.path)}
+                    value={value}
+                    placeholder={row.value || "Library fallback"}
+                    error={error}
+                    feedback={value ? "Override" : "Inherited — not exported"}
                     onChange={(event) => onChange(row.path, event.target.value)}
                     spellCheck={false}
-                    className="h-input-height w-full rounded-input-radius border border-input-border bg-background px-input-padding-x py-input-padding-y font-mono text-input-text text-foreground placeholder:text-input-placeholder focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    container="min-w-0 flex-1"
+                    className="font-mono"
                 />
             </div>
         </div>
@@ -150,92 +180,58 @@ function LeafEditor({ row, onChange, swatch }: LeafEditorProps) {
 type GroupBlockProps = {
     title: string;
     rows: LeafRow[];
+    drafts: Drafts;
+    errors: Record<string, string>;
     swatch: boolean;
     onChange: (path: Path, value: string) => void;
 };
 
-function GroupBlock({ title, rows, swatch, onChange }: GroupBlockProps) {
+function GroupBlock({ title, rows, drafts, errors, swatch, onChange }: GroupBlockProps) {
     const [open, setOpen] = useState(true);
-    if (rows.length === 0) return null;
+    const id = useId();
     return (
         <Card>
             <header className="-mx-card-padding-x -my-card-padding-y flex items-center justify-between gap-base px-card-padding-x py-card-padding-y">
                 <button
                     type="button"
-                    onClick={() => setOpen((v) => !v)}
+                    onClick={() => setOpen((value) => !value)}
                     aria-expanded={open}
-                    className="flex flex-1 items-center gap-base text-left text-foreground"
+                    aria-controls={id}
+                    className="flex min-w-0 flex-1 items-center gap-base text-left text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
-                    {open ? <CaretDownIcon className="size-4 text-muted-foreground" /> : <CaretRightIcon className="size-4 text-muted-foreground" />}
-                    <span className="text-typography-sm font-mono font-semibold">{title}</span>
+                    {open ? <CaretDownIcon aria-hidden className="size-4 text-muted-foreground" /> : <CaretRightIcon aria-hidden className="size-4 text-muted-foreground" />}
+                    <span className="text-typography-sm break-all font-mono font-semibold">{title}</span>
                 </button>
-                <Tag size="tiny" theme="muted">
-                    {rows.length}
-                </Tag>
+                <Tag size="tiny" theme="muted">{rows.length}</Tag>
             </header>
-            {open && (
-                <div className="mt-card-gap grid grid-cols-1 gap-base border-t border-card-border pt-card-gap md:grid-cols-2 lg:grid-cols-3">
-                    {rows.map((row) => (
-                        <LeafEditor key={labelize(row.path)} row={row} swatch={swatch} onChange={onChange} />
-                    ))}
-                </div>
-            )}
+            <div id={id} hidden={!open}>
+                {open && (
+                    <div className="mt-card-gap grid grid-cols-1 gap-base border-t border-card-border pt-card-gap md:grid-cols-2">
+                        {rows.map((row) => (
+                            <LeafEditor key={labelize(row.path)} row={row} value={drafts[labelize(row.path)] ?? ""}
+                                error={errors[labelize(row.path)]} swatch={swatch} onChange={onChange} />
+                        ))}
+                    </div>
+                )}
+            </div>
         </Card>
     );
 }
 
-type ThemeEditorProps = {
-    theme: DesignTokens;
-    onUpdate: (next: DesignTokens) => void;
-};
-
-function ColorsEditor({ theme, onUpdate }: ThemeEditorProps) {
-    const onChange = (path: Path, value: string) => onUpdate(setLeaf(theme, path, value));
-    const groups = Object.keys(theme.colors) as (keyof DesignTokens["colors"])[];
+function TokenEditor({ rows, ...props }: Omit<GroupBlockProps, "title">) {
+    const groups = new Map<string, LeafRow[]>();
+    for (const row of rows) {
+        const group = row.path.slice(0, -1).join(".");
+        const leaves = groups.get(group) ?? [];
+        leaves.push(row);
+        groups.set(group, leaves);
+    }
     return (
         <div className="flex flex-col gap-base">
-            {groups.map((group) => {
-                const branch = theme.colors[group];
-                const rows = collectLeaves(branch, ["colors", group]);
-                return <GroupBlock key={String(group)} title={`colors.${String(group)}`} rows={rows} swatch onChange={onChange} />;
-            })}
+            {Array.from(groups, ([title, leaves]) => <GroupBlock key={title} title={title} rows={leaves} {...props} />)}
         </div>
     );
 }
-
-function ShadowEditor({ theme, onUpdate }: ThemeEditorProps) {
-    const onChange = (path: Path, value: string) => onUpdate(setLeaf(theme, path, value));
-    const rows = collectLeaves(theme.shadow, ["shadow"]);
-    return <GroupBlock title="shadow" rows={rows} swatch={false} onChange={onChange} />;
-}
-
-function DimensionsEditor({ theme, onUpdate }: ThemeEditorProps) {
-    const onChange = (path: Path, value: string) => onUpdate(setLeaf(theme, path, value));
-    return (
-        <div className="flex flex-col gap-base">
-            <GroupBlock title="spacing" rows={collectLeaves(theme.spacing, ["spacing"])} swatch={false} onChange={onChange} />
-            <GroupBlock title="rounded" rows={collectLeaves(theme.rounded, ["rounded"])} swatch={false} onChange={onChange} />
-            <GroupBlock title="zIndex" rows={collectLeaves(theme.zIndex, ["zIndex"])} swatch={false} onChange={onChange} />
-        </div>
-    );
-}
-
-function ComponentsEditor({ theme, onUpdate }: ThemeEditorProps) {
-    const onChange = (path: Path, value: string) => onUpdate(setLeaf(theme, path, value));
-    const groups = Object.keys(theme.components) as (keyof DesignTokens["components"])[];
-    return (
-        <div className="flex flex-col gap-base">
-            {groups.map((group) => {
-                const branch = theme.components[group];
-                if (!branch) return null;
-                const rows = collectLeaves(branch, ["components", group]);
-                return <GroupBlock key={String(group)} title={`components.${String(group)}`} rows={rows} swatch={false} onChange={onChange} />;
-            })}
-        </div>
-    );
-}
-
-const stripColorWrapper = (value: string) => value.replace(/^\s*hsla?\(\s*/i, "").replace(/\s*\)\s*$/i, "");
 
 const THEMED_VARIANTS = ["primary", "info", "success", "warn", "danger", "neutral", "secondary", "muted"] as const;
 
@@ -250,24 +246,17 @@ const BUTTON_GHOSTS = [
     "ghost-neutral",
 ] as const;
 
-function LivePreview({ theme }: { theme: DesignTokens }) {
-    const style = useMemo<CSSProperties>(
-        () =>
-            createCssProperties(theme, {
-                colors: (t) => ({ ...t, value: stripColorWrapper(t.value) }),
-            }),
-        [theme]
-    );
+function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
     const [previewTab, setPreviewTab] = useState("overview");
     return (
         <div style={style} className="rounded-card-radius border border-card-border bg-background p-card-padding-x text-foreground">
             <div className="flex flex-col gap-base">
                 <header className="flex items-center justify-between gap-base">
                     <div className="flex flex-col gap-card-title-pb">
-                        <h4 className="text-typography-2xl font-bold">Preview · {theme.name}</h4>
-                        <p className="text-typography-sm text-muted-foreground">Live render driven by the current token state.</p>
+                        <h4 className="text-typography-2xl font-bold">Preview · {mode}</h4>
+                        <p className="text-typography-sm text-muted-foreground">Built-in palette with your shared and theme overrides.</p>
                     </div>
-                    <Tag theme="primary">{theme.name}</Tag>
+                    <Tag theme="primary">{mode}</Tag>
                 </header>
 
                 <section className="flex flex-col gap-card-title-pb">
@@ -345,7 +334,7 @@ function LivePreview({ theme }: { theme: DesignTokens }) {
                     <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Surfaces</h5>
                     <div className="grid gap-base md:grid-cols-2">
                         <Card title="Card surface">
-                            <p className="text-typography-sm text-muted-foreground">Background, border and foreground from the colors group.</p>
+                            <p className="text-typography-sm text-muted-foreground">Surface colors can be edited independently in components.card.</p>
                         </Card>
                         <Stats title="Active users" Icon={ChartBarIcon}>
                             12,480
@@ -461,7 +450,7 @@ function LivePreview({ theme }: { theme: DesignTokens }) {
                 <section className="flex flex-col gap-card-title-pb">
                     <div className="flex items-center gap-button-gap text-muted-foreground">
                         <RocketLaunchIcon className="size-4" />
-                        <span className="text-typography-xs">Every component above pulls only from the editor state — no prop overrides.</span>
+                        <span className="text-typography-xs">Scoped preview: overlays portaled outside this panel inherit the site theme, not these local overrides.</span>
                     </div>
                 </section>
             </div>
@@ -471,69 +460,121 @@ function LivePreview({ theme }: { theme: DesignTokens }) {
 
 export default function SetupPage() {
     const [mode, setMode] = useState<Mode>("dark");
-    const [activeTab, setActiveTab] = useState<string>("colors");
-    const [dark, setDark] = useState<DesignTokens>(() => clone(defaultDarkTheme));
-    const [light, setLight] = useState<DesignTokens>(() => clone(defaultLightTheme));
-
-    const activeTheme = mode === "dark" ? dark : light;
-    const setActiveTheme = mode === "dark" ? setDark : setLight;
-
-    const reset = () => {
-        if (mode === "dark") setDark(clone(defaultDarkTheme));
-        else setLight(clone(defaultLightTheme));
+    const [activeTab, setActiveTab] = useState("colors");
+    const [shared, setShared] = useState<Drafts>({});
+    const [light, setLight] = useState<Drafts>({});
+    const [dark, setDark] = useState<Drafts>({});
+    const [status, setStatus] = useState("");
+    const sharedResult = useMemo(() => compileDrafts(shared), [shared]);
+    const lightResult = useMemo(() => compileDrafts(light), [light]);
+    const darkResult = useMemo(() => compileDrafts(dark), [dark]);
+    const defaultResult = useMemo(() => compileDrafts({ ...shared, ...light }), [shared, light]);
+    const active = mode === "dark" ? dark : light;
+    const activeResult = mode === "dark" ? darkResult : lightResult;
+    const update = (scope: "shared" | Mode) => (path: Path, value: string) => {
+        const setter = scope === "shared" ? setShared : scope === "dark" ? setDark : setLight;
+        setter((previous) => {
+            const next = { ...previous };
+            if (value.trim() === "") delete next[labelize(path)];
+            else next[labelize(path)] = value;
+            return next;
+        });
+        setStatus("");
     };
-
-    const darkCode = useMemo(() => serializeTheme("DARK_THEME", dark), [dark]);
-    const lightCode = useMemo(() => serializeTheme("LIGHT_THEME", light), [light]);
+    const reset = () => {
+        if (mode === "dark") setDark({});
+        else {
+            setLight({});
+            setShared({});
+        }
+        setStatus(mode === "dark" ? "Dark overrides cleared. Shared overrides are unchanged." : "Default overrides cleared, including shared tokens. Dark overrides are unchanged.");
+    };
+    const defaultConfig: ThemeConfiguration = { name: "default", ...defaultResult.overrides };
+    const darkConfig: ThemeConfiguration = { name: "dark", ...darkResult.overrides };
+    const hasErrors = [sharedResult, lightResult, darkResult].some((result) => Object.keys(result.errors).length > 0);
+    const previewStyle: CSSProperties = {
+        ...createThemeProperties({ tokens: {
+            spacing: defaultLightThemeTokens.tokens.spacing,
+            rounding: defaultLightThemeTokens.tokens.rounding,
+        } }),
+        ...createThemeProperties(mode === "dark" ? defaultDarkThemeTokens : lightPalette),
+        ...createThemeProperties(defaultResult.overrides),
+        ...(mode === "dark" ? createThemeProperties(darkResult.overrides) : {}),
+        colorScheme: mode,
+    };
+    const paletteRows = colorRows.map((row) => ({
+        ...row,
+        value: (mode === "dark" ? light[labelize(row.path)] : undefined)
+            ?? getLeaf(mode === "dark" ? defaultDarkThemeTokens : defaultLightThemeTokens, row.path)
+            ?? row.value,
+    }));
 
     return (
-        <DocsLayout
-            title="Theme Setup"
-            section="theming"
-            description="Edit every token in both themes, preview the result live, and copy the generated dark.ts / light.ts plus the bootstrap snippets to wire the library into your project."
-        >
+        <DocsLayout title="Theme Setup" section="theming"
+            description="Edit shared tokens once, customize light and dark palettes, and export only your intentional overrides. Empty fields inherit library defaults.">
             <div className="flex flex-col gap-base">
                 <Card>
                     <div className="flex flex-wrap items-center justify-between gap-base">
                         <div className="flex items-center gap-base">
-                            <PaletteIcon className="size-5 text-muted-foreground" />
+                            <PaletteIcon aria-hidden className="size-5 text-muted-foreground" />
                             <div className="flex flex-col gap-card-title-pb">
                                 <span className="text-typography-sm font-semibold">Editing</span>
-                                <span className="text-typography-xs text-muted-foreground">Switch which theme the editor and preview target.</span>
+                                <span className="text-typography-xs text-muted-foreground">Light uses :root (default); dark uses html.dark.</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-button-gap">
-                            <Button theme={mode === "light" ? "primary" : "ghost-muted"} size="small" onClick={() => setMode("light")}>
-                                Light
-                            </Button>
-                            <Button theme={mode === "dark" ? "primary" : "ghost-muted"} size="small" onClick={() => setMode("dark")}>
-                                Dark
-                            </Button>
+                        <div className="flex flex-wrap items-center gap-button-gap">
+                            <Button theme={mode === "light" ? "primary" : "ghost-muted"} size="small"
+                                aria-pressed={mode === "light"} onClick={() => setMode("light")}>Light / default</Button>
+                            <Button theme={mode === "dark" ? "primary" : "ghost-muted"} size="small"
+                                aria-pressed={mode === "dark"} onClick={() => setMode("dark")}>Dark</Button>
                             <Button theme="ghost-muted" size="small" onClick={reset}>
-                                <ArrowsClockwiseIcon className="size-4" />
-                                Reset {mode}
+                                <ArrowsClockwiseIcon aria-hidden className="size-4" />
+                                Reset {mode === "light" ? "default + shared" : "dark"}
                             </Button>
                         </div>
                     </div>
+                    <p className="text-typography-xs mt-card-gap text-muted-foreground">
+                        Shared tokens belong to default and apply in both modes. Default color overrides also apply in dark unless you override them there.
+                        Component palettes are independent; changing primary does not recolor every component.
+                    </p>
+                    <p role="status" className="text-typography-xs">{status}</p>
                 </Card>
-
-                <LivePreview theme={activeTheme} />
-
-                <Tabs active={activeTab} onChange={setActiveTab}>
-                    <Tab id="colors" title="Colors">
-                        <ColorsEditor theme={activeTheme} onUpdate={setActiveTheme} />
+                {hasErrors && <Alert theme="warn" title="Some edits are incomplete">
+                    Fix the marked values or clear them to inherit. The preview skips invalid values; export is unavailable until they are resolved.
+                </Alert>}
+                <LivePreview style={previewStyle} mode={mode} />
+                <Tabs active={activeTab} onChange={(tab) => {
+                    setActiveTab(tab);
+                    if (tab === "named") setMode("dark");
+                }}>
+                    <Tab id="colors" title="Theme colors">
+                        <TokenEditor rows={paletteRows} drafts={active} errors={activeResult.errors} swatch onChange={update(mode)} />
                     </Tab>
-                    <Tab id="shadow" title="Shadow">
-                        <ShadowEditor theme={activeTheme} onUpdate={setActiveTheme} />
+                    <Tab id="shared" title="Shared tokens">
+                        <div className="flex flex-col gap-base">
+                            <p className="text-typography-sm text-muted-foreground">
+                                Spacing, rounding, typography, shadows and component geometry are shared. Enter CSS values such as 16px or 0; clear a field to remove its override.
+                            </p>
+                            <Button theme="ghost-muted" size="small" onClick={() => {
+                                setShared({});
+                                setStatus("Shared overrides cleared. Theme colors and dark overrides are unchanged.");
+                            }}>Reset shared tokens</Button>
+                            <TokenEditor rows={sharedRows} drafts={shared} errors={sharedResult.errors} swatch={false} onChange={update("shared")} />
+                        </div>
                     </Tab>
-                    <Tab id="dimensions" title="Spacing & Z">
-                        <DimensionsEditor theme={activeTheme} onUpdate={setActiveTheme} />
-                    </Tab>
-                    <Tab id="components" title="Components">
-                        <ComponentsEditor theme={activeTheme} onUpdate={setActiveTheme} />
+                    <Tab id="named" title="Dark token overrides">
+                        <div className="flex flex-col gap-base">
+                            <p className="text-typography-sm text-muted-foreground">
+                                Optional non-color overrides for the named dark theme, such as denser spacing. Empty fields inherit shared tokens.
+                                These edits affect the dark preview only.
+                            </p>
+                            <TokenEditor rows={sharedRows.map((row) => ({ ...row, value: shared[labelize(row.path)] ?? row.value }))}
+                                drafts={dark} errors={darkResult.errors} swatch={false} onChange={update("dark")} />
+                        </div>
                     </Tab>
                     <Tab id="output" title="Output">
-                        <OutputPane darkCode={darkCode} lightCode={lightCode} />
+                        {hasErrors ? <p role="status">Resolve incomplete values before copying the configuration.</p> :
+                            <OutputPane darkCode={serializeTheme("DARK_THEME", darkConfig)} lightCode={serializeTheme("DEFAULT_THEME", defaultConfig)} />}
                     </Tab>
                 </Tabs>
             </div>
@@ -541,33 +582,19 @@ export default function SetupPage() {
     );
 }
 
-type OutputPaneProps = {
-    darkCode: string;
-    lightCode: string;
-};
+type OutputPaneProps = { darkCode: string; lightCode: string };
 
 function OutputPane({ darkCode, lightCode }: OutputPaneProps) {
     return (
         <div className="flex flex-col gap-base">
-            <OutputBlock
-                title="src/theme/dark.ts"
-                description="Drop this file into your project. It satisfies the DesignTokens contract exported by the library."
-                Icon={CodeIcon}
-                code={darkCode}
-            />
-            <OutputBlock title="src/theme/light.ts" description="Paired light theme file. Same shape as dark.ts." Icon={CodeIcon} code={lightCode} />
-            <OutputBlock
-                title="tailwind.config.ts"
-                description="Extend Tailwind with the library preset and your generated palette."
-                Icon={RulerIcon}
-                code={tailwindSnippet}
-            />
-            <OutputBlock
-                title="Theme injection"
-                description="Render once near the root to inject :root and html.dark CSS variables. Toggle the dark class on <html> to switch themes."
-                Icon={SquaresFourIcon}
-                code={providerSnippet}
-            />
+            <OutputBlock title="src/theme/light.ts" description="Sparse default configuration: shared tokens and intentional light colors only. No complete defaults are pinned."
+                Icon={CodeIcon} code={lightCode} />
+            <OutputBlock title="src/theme/dark.ts" description="Sparse dark colors and optional dark-only tokens. An empty configuration restores the built-in palette."
+                Icon={CodeIcon} code={darkCode} />
+            <OutputBlock title="Runtime registration" description="Each call replaces that name's override set. Registration and activation are separate."
+                Icon={SquaresFourIcon} code={runtimeSnippet} />
+            <OutputBlock title="Static or server-rendered CSS" description="Pure CSS generation uses the same sparse configurations. Load foundation and component CSS before your application overrides."
+                Icon={RulerIcon} code={cssSnippet} />
         </div>
     );
 }

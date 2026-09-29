@@ -72,9 +72,9 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                     | CSS Variable           | Purpose                           |
 | ------------------------- | ---------------------- | --------------------------------- |
-| `bg-card-border`          | `--card-border`        | Vertical connector line color     |
-| `bg-primary`              | `--primary`            | Icon container default background |
-| `text-primary-foreground` | `--primary-foreground` | Icon default text/icon color      |
+| `bg-border` | `--var-color-border` | Vertical connector color |
+| `bg-primary` | `--var-color-primary` | Default icon background |
+| `text-primary-foreground` | `--var-color-primary-foreground` | Default icon color |
 
 ## Examples
 

@@ -45,7 +45,7 @@
     align-items: center;
     justify-content: space-between;
     block-size: var(--var-command-row-block-size, calc(var(--var-spacing-base) * 2.5));
-    border-radius: var(--var-command-item-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-command-item-radius, calc(var(--var-radius-base) / 2));
     padding: var(--var-command-item-padding, calc(var(--var-spacing-base) * 0.5));
 }
 
@@ -132,7 +132,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: var(--var-command-item-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-command-item-radius, calc(var(--var-radius-base) / 2));
     padding: var(--var-command-item-padding, calc(var(--var-spacing-base) * 0.5));
     color: var(--var-command-empty-foreground);
 }
@@ -142,8 +142,8 @@
     align-items: center;
     block-size: var(--var-command-footer-block-size, calc(var(--var-spacing-base) * 2));
     border-block-start-width: var(--var-border-hairline);
-    border-end-start-radius: var(--var-command-item-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
-    border-end-end-radius: var(--var-command-item-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-end-start-radius: var(--var-command-item-radius, calc(var(--var-radius-base) / 2));
+    border-end-end-radius: var(--var-command-item-radius, calc(var(--var-radius-base) / 2));
     border-color: var(--var-command-surface-border);
     padding: var(--var-command-footer-padding, calc(var(--var-spacing-base) * 0.5));
 }

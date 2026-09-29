@@ -50,12 +50,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                   | CSS Variable         | Purpose                                            |
 | ----------------------- | -------------------- | -------------------------------------------------- |
-| `border-input-border`   | `--input-border`     | Default field border color                         |
-| `text-input-label-text` | `--input-label-text` | Label text color                                   |
-| `text-primary`          | `--primary`          | Label and border color on focus/hover              |
-| `text-danger`           | `--danger`           | Label, border, and error text color in error state |
-| `text-disabled`         | `--disabled`         | Label and border color when disabled               |
-| `mt-input-gap`          | `--input-gap`        | Gap between border and error/feedback text         |
+| `border-input-border` | `--var-color-border` | Default field border color |
+| `text-input-label-text` | `--var-input-field-label-font-size` | Label font size, not color |
+| `text-primary` | `--var-color-primary` | Label and border color on focus/hover |
+| `text-danger` | `--var-color-danger` | Label, border, and error text in error state |
+| `text-disabled` | `--var-color-disabled` | Label and border color when disabled |
+| `mt-input-gap` | `--var-input-field-hint-margin-block-start` | Gap before error/feedback text |
 
 ## Examples
 

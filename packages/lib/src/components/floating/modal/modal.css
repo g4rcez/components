@@ -27,7 +27,7 @@
     position: relative;
     height: min-content;
     max-height: var(--var-modal-dialog-max-block-size, calc(var(--var-spacing-base) * 40));
-    border-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
     padding-block: var(--var-modal-surface-padding-block, calc(var(--var-spacing-base) * 1.5));
 }
 
@@ -40,8 +40,8 @@
     min-inline-size: 0;
     max-inline-size: none;
     inline-size: 100%;
-    border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
-    border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
+    border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
     padding-top: var(--var-modal-sheet-padding-block-start, calc(var(--var-spacing-base) * 1.5));
     padding-bottom: var(--var-modal-sheet-padding-block-end, calc(var(--var-spacing-base) * 1.5));
 }
@@ -50,8 +50,8 @@
     position: absolute;
     right: 0;
     top: 0;
-    border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
-    border-bottom-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
+    border-bottom-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
     padding-block: var(--var-modal-surface-padding-block, calc(var(--var-spacing-base) * 1.5));
 }
 
@@ -59,8 +59,8 @@
     position: absolute;
     left: 0;
     top: 0;
-    border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
-    border-bottom-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 1.333333));
+    border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
+    border-bottom-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
     padding-block: var(--var-modal-surface-padding-block, calc(var(--var-spacing-base) * 1.5));
 }
 
@@ -68,7 +68,7 @@
     position: absolute;
     isolation: isolate;
     z-index: var(--var-layer-calendar);
-    border-radius: var(--var-modal-resizer-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.666667));
+    border-radius: var(--var-modal-resizer-radius, calc(var(--var-radius-base) * 0.666667));
 }
 
 .__modal__resizer:focus-visible {
@@ -195,7 +195,7 @@
 }
 
 .__modal__close-button {
-    border-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
     padding: var(--var-modal-close-button-padding, calc(var(--var-spacing-base) * 0.5));
     opacity: var(--var-modal-close-button-opacity);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;

@@ -1,13 +1,13 @@
 .__toolbar,
 .__floating-toolbar__slot-1 {
     position: sticky;
-    bottom: var(--var-toolbar-bottom, var(--toolbar-bottom));
+    bottom: var(--var-toolbar-bottom);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0;
     box-sizing: border-box;
-    padding: var(--var-toolbar-p, var(--toolbar-p));
+    padding: var(--var-toolbar-p);
 }
 
 .__toolbar > :is(button, .__button) {

@@ -41,7 +41,7 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 
 | Override | Library default |
 | --- | --- |
-| `--var-dropdown-surface-radius` | `calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) )` |
+| `--var-dropdown-surface-radius` | `calc(var(--var-radius-base) / 2)` |
 | `--var-dropdown-surface-padding` | `calc(var(--var-spacing-base) * 1)` |
 | `--var-dropdown-header-margin-block-end` | `calc(var(--var-spacing-base) / 2)` |
 
@@ -49,12 +49,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                      | CSS Variable            | Purpose                        |
 | -------------------------- | ----------------------- | ------------------------------ |
-| `bg-floating-background`   | `--floating-background` | Panel surface background       |
-| `border-floating-border`   | `--floating-border`     | Panel border and arrow stroke  |
-| `fill-floating-background` | `--floating-background` | Arrow fill color               |
-| `z-floating`               | `--z-floating`          | Z-index for the floating panel |
-| `shadow-shadow-floating`   | `--shadow-floating`     | Panel drop shadow              |
-| `rounded-lg`               | —                       | Panel corner radius            |
+| `bg-floating-background` | `--var-dropdown-surface-background` | Panel surface background |
+| `border-floating-border` | `--var-dropdown-surface-border` | Panel border and arrow stroke |
+| `fill-floating-background` | `--var-dropdown-surface-background` | Arrow fill color |
+| `z-floating` | `--var-layer-floating` | Z-index for the floating panel |
+| `shadow-shadow-floating` | `--var-shadow-floating` | Panel drop shadow |
+| `rounded-dropdown-surface-radius` | `--var-dropdown-surface-radius` | Panel corner radius |
 
 ## Examples
 

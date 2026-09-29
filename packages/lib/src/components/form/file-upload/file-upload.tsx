@@ -15,11 +15,10 @@ import prettyBytes from "pretty-bytes";
 import type React from "react";
 import { cloneElement, createContext, Fragment, useContext, useEffect, useState } from "react";
 import { type DropzoneOptions, type DropzoneProps, useDropzone } from "react-dropzone";
-import type { Override } from "sidekicker";
 import { defaultTranslations } from "../../../config/default-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
-import type { SetState } from "../../../types";
+import type { Override, SetState } from "../../../types";
 import { Modal } from "../../floating/modal/modal";
 import { fileUploadStyles } from "./file-upload.styles";
 

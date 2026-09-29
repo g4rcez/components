@@ -3,6 +3,7 @@
     "compilerOptions": {
         "incremental": false,
         "noEmit": false,
+        "emitDeclarationOnly": true,
         "rootDir": "./src",
         "allowImportingTsExtensions": false,
     },

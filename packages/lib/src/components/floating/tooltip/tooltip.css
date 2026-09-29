@@ -5,7 +5,7 @@
     border-style: solid;
     border-width: var(--var-border-hairline);
     border-color: var(--var-tooltip-surface-border);
-    border-radius: var(--var-tooltip-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-tooltip-surface-radius, calc(var(--var-radius-base) / 2));
     background-color: var(--var-tooltip-surface-background);
     padding: var(--var-tooltip-surface-padding, calc(var(--var-spacing-base) * 0.75));
     color: var(--var-tooltip-surface-foreground);

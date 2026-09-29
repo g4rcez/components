@@ -249,35 +249,48 @@ For the complete, source-aligned component props and examples, see [`packages/li
 
 ### Theme System
 
-Themes are runtime CSS variables. Defaults ship in `tokens.css`: light variables on `:root`, and dark variables on `[data-theme="dark"]`.
-
-```tsx
-import { applyTheme, registerTheme } from "@g4rcez/components/theme";
-
-applyTheme(document.documentElement, {
-    colors: {
-        primary: { DEFAULT: "oklch(62.8% 0.257 29.23)" },
-    },
-    components: {
-        button: { rounded: "0.75rem" },
-    },
-});
-
-registerTheme("brand", {
-    colors: {
-        primary: { DEFAULT: "rebeccapurple" },
-    },
-});
-```
-
-You can also override variables directly in CSS:
+Foundation CSS supplies light colors on `:root` and dark colors on `html.dark`. The application activates dark mode with `<html class="dark">`; configuring a theme never changes classes. CSS-only setup needs no JavaScript or provider:
 
 ```css
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
+
 :root {
-    --var-color-primary: rebeccapurple;
-    --var-button-rounded: 0.75rem;
+    --var-spacing-base: 16px;
+    --var-radius-base: 0px;
+}
+
+html.dark {
+    --var-color-primary: hsla(201, 49%, 60%, 1);
 }
 ```
+
+The equivalent sparse JavaScript API uses the same canonical properties:
+
+```ts
+import { configureTheme } from "@g4rcez/components";
+
+configureTheme({ name: "default", tokens: { spacing: 16, rounding: 0 } });
+configureTheme({
+    name: "dark",
+    colors: { primary: "hsla(201, 49%, 60%, 1)" },
+    components: { button: { rounded: "0.75rem" } },
+});
+```
+
+`default` targets `:root`; named themes target `html.<name>`. Only `tokens.spacing` and `tokens.rounding` accept numbers, interpreted as pixels (including zero). Other values are CSS strings, and colors retain their full CSS syntax.
+
+Each call replaces that name's entire override set: omitted previous values are removed. `configureTheme({ name: "dark" })` clears managed dark overrides without removing built-in dark colors or changing activation. Default configuration can supply shared geometry while dark overrides only colors.
+
+Normal declarations cascade from library defaults (`var.tokens`) to configuration (`var.theme`) to unlayered application CSS, then consumer inline styles. Layer priority precedes specificity: unlayered `:root` overrides even configured `html.dark`. Configured default colors also override built-in dark colors unless explicitly configured for dark.
+
+Use `createThemeCss(config)` for pure SSR/static CSS, with owned style ID `g4rcez-theme-<name>`, `data-g4rcez-theme-owner="theme-runtime"`, and `data-g4rcez-theme-name="<name>"`. Pass a CSP nonce on server styles and initial client registration as needed. Matching styles are updated in place during hydration; later calls preserve an omitted nonce. Emit the active root class before first paint.
+
+Use `createThemeProperties({ tokens?, colors?, components? })` for sparse wrapper inline properties. Root themes reach body portals; wrappers reach only DOM descendants. Custom theme names do not inherit dark automatically: explicitly copy the color-only `defaultDarkThemeTokens` groups when needed. `defaultLightThemeTokens` and the geometry exports are inspection data, not required full-default injection.
+
+**Breaking release (v7):** Replace retired theme registration and full-object serializers with the sparse APIs; move theme imports from `/styles` or `/themes` to the package root or `/theme`; migrate root theme attributes to classes; and replace the retired `--var-radius` input with `tokens.rounding` or `--var-radius-base`. Remove unprefixed legacy theme aliases. The built-in dark Card shadow is normalized to the shared transparent `0px 1px 2px 1px` shape; this intentionally removes its former dark-only geometry. Keep `--var-shadow-card` as a full-shadow override. Notification and Table shadow geometry is shared while its color varies by built-in theme; retain full overrides on `--var-shadow-notification` / `--var-shadow-table`, or customize `--var-shadow-notification-shape` / `--var-shadow-table-shape` and `--var-color-shadow-notification` / `--var-color-shadow-table`. Provider component overrides and optional Tailwind preset utilities use canonical properties; neither is required for CSS styling.
+
+See [Theme customization](packages/lib/ai/docs/theme-customization.md) for complete reset, custom theme, SSR ownership/nonce, provider/preset, shadow shape/color, and migration examples, and [Geometry tokens](packages/lib/ai/docs/geometry-tokens.md) for reactive density and rounding.
 
 ### Public CSS Contract
 
@@ -295,6 +308,10 @@ Components expose semver-protected selectors:
 ```
 
 Use semantic `--var-*` tokens for durable customization; use selectors for advanced overrides.
+
+Published CSS chunks include source maps with embedded source content. Enable CSS
+source maps in browser developer tools to trace minified component rules and
+inlined foundation rules back to their original stylesheets.
 
 ### Why plain CSS is the default
 
@@ -355,6 +372,33 @@ pnpm test
 # Watch mode
 pnpm test:watch
 ```
+
+### Package maintenance
+
+- Build the library before running `tests/package-types.test.ts` or
+  `tests/css-sourcemaps.test.ts`; these tests exercise the published `dist` files.
+- The library TypeScript pass emits declarations only, preserving the `src`
+  directory layout under `dist`. Point new `types` exports at those original
+  declaration paths, not at JavaScript bundle paths. Keep existing `components/*`
+  aliases working with explicit type targets when a bundle has a flattened name.
+  The separate Tailwind compiler emits only the CommonJS preset/plugin entries
+  and their dependencies under `dist/preset`.
+- Public path constraints are owned by the package's private `lib/path-types`
+  module. Keep runtime utility dependencies out of emitted type signatures when
+  local types already express the contract. The published consumer test checks
+  the full declaration graph with `skipLibCheck: false`, including accepted and
+  rejected table/form paths and FileUpload's Dropzone prop overrides.
+- The CSS Vite configuration owns entry discovery, Vite/PostCSS import bundling,
+  and Lightning CSS minification with composed source maps. Do not copy
+  declarations or synthesize maps in post-build scripts.
+- Knip models public library/CLI entries, the copied lint bundle, test setup and
+  Next-discovered routes. See [CONTRIBUTING.md](CONTRIBUTING.md) for the installed
+  analyzer commands and build prerequisites. Keep docs components reachable from
+  routes and each workspace's dependencies tied to its actual imports.
+- Internal cleanup removed disconnected docs components and unused docs
+  dependencies, MultiSelect's unread label history, unused document-scroll-lock
+  machinery, and Wizard's redundant window-dimension subscription. Popup wheel
+  containment and Wizard's direct resize/scroll geometry tracking remain in place.
 
 ## 🤝 Contributing
 

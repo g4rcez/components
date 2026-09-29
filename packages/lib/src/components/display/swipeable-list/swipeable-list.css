@@ -20,7 +20,7 @@
     isolation: isolate;
     overflow: hidden;
     box-sizing: border-box;
-    border-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
+    border-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
     background-color: var(--var-color-muted);
 }
 
@@ -35,7 +35,7 @@
     display: flex;
     overflow: hidden;
     box-sizing: border-box;
-    border-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
+    border-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
 }
 
 .__swipeable-list__action-group {
@@ -46,14 +46,14 @@
 }
 
 .__swipeable-list__action-group--left {
-    border-start-start-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
-    border-end-start-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
+    border-start-start-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
+    border-end-start-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
 }
 
 .__swipeable-list__action-group--right {
     margin-inline-start: auto;
-    border-start-end-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
-    border-end-end-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
+    border-start-end-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
+    border-end-end-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
 }
 
 .__swipeable-list__action {
@@ -188,7 +188,7 @@
     cursor: grab;
     touch-action: pan-y;
     border: var(--var-border-hairline) solid var(--var-color-border);
-    border-radius: var(--var-swipeable-list-surface-radius, calc( var(--var-radius, 0px) + var(--var-radius-base) ));
+    border-radius: var(--var-swipeable-list-surface-radius, var(--var-radius-base));
     background-color: var(--var-card-background);
     padding-block: var(--var-swipeable-list-surface-padding-block, calc(var(--var-spacing-base) * 0.75));
     padding-inline: var(--var-swipeable-list-surface-padding-inline, calc(var(--var-spacing-base) * 1));

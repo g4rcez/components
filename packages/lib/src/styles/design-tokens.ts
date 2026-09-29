@@ -1,110 +1,46 @@
-import type { CSSProperties } from "react";
-import type { DesignTokens, DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types.ts";
+import type { DesignTokensBuilder, DesignTokensParser, GeneralTokens, Token } from "./theme.types.ts";
 
 export const parsers = {
-    hex: (v: string) => v,
-    raw: (v: string) => v,
-    hsl: (v: string) => `hsl(${v})` as const,
-    rgb: (v: string) => `rgb(${v})` as const,
-    z: (_, __, k) => `var(--z-${k})` as const,
-    hsla: (v: string) => `hsla(${v})` as const,
-    rgba: (v: string) => `rgba(${v})` as const,
-    cssVariable: (_, __, k) => `var(--${k})` as const,
-    formatWithVar: (format: string) => (_: string, __: string, v: string) => `${format}(var(--${v}), <alpha-value>)` as const,
+    hex: (value: string) => value,
+    raw: (value: string) => value,
+    hsl: (value: string) => `hsl(${value})` as const,
+    rgb: (value: string) => `rgb(${value})` as const,
+    z: (_value, _key, token) => `var(--z-${token})` as const,
+    hsla: (value: string) => `hsla(${value})` as const,
+    rgba: (value: string) => `rgba(${value})` as const,
+    cssVariable: (_value, _key, token) => `var(--${token})` as const,
+    formatWithVar: (format: string) => (_value: string, _key: string, token: string) => `${format}(var(--${token}), <alpha-value>)` as const,
 } satisfies Record<string, DesignTokensParser>;
 
-export const reduceTokens = <T extends GeneralTokens>(colors: T, parse: DesignTokensBuilder, prefix: string = "", append: string = ""): Token[] =>
-    Object.entries(colors).reduce<Token[]>((acc, [key, value]) => {
+export const reduceTokens = <T extends GeneralTokens>(
+    tokens: T,
+    parse: DesignTokensBuilder,
+    prefix: string = "",
+    append: string = ""
+): Token[] =>
+    Object.entries(tokens).reduce<Token[]>((acc, [key, value]) => {
         const combine = append === "" ? `${prefix}${key}` : `${append}-${key}`;
         if (typeof value === "string") {
-            const k = append === "" ? `${prefix}${key}` : key;
-            return acc.concat(parse(value, k, combine));
+            const name = append === "" ? `${prefix}${key}` : key;
+            return acc.concat(parse(value, name, combine));
         }
         return acc.concat(reduceTokens(value, parse, prefix, combine));
     }, []);
 
 export const createDesignTokens = <T extends GeneralTokens, Fn extends DesignTokensParser>(
-    colors: T,
+    tokens: T,
     parse: Fn,
     prefix: string = "",
     append: string = ""
 ): T =>
-    Object.entries(colors).reduce<T>((acc, [key, value]) => {
+    Object.entries(tokens).reduce<T>((acc, [key, value]) => {
         const combine = append === "" ? `${prefix}${key}` : `${append}-${key}`;
         if (typeof value === "string") {
-            const k = append === "" ? `${prefix}${key}` : key;
-            return { ...acc, [k]: parse(value, key, combine) };
+            const name = append === "" ? `${prefix}${key}` : key;
+            return { ...acc, [name]: parse(value, key, combine) };
         }
         return {
             ...acc,
             [key]: createDesignTokens(value, parse, prefix, combine),
         };
     }, {} as T);
-
-const modifiers = {
-    default: (variables: string) => `:root { ${variables} }`,
-    dark: (variables: string) => `html.dark {${variables}}`,
-};
-
-const createStyleContent = (
-    tokens: Token[],
-    modifiers: {
-        result: (str: string) => string;
-        value?: (k: string, v: string) => string;
-    }
-) => {
-    const v = modifiers.value || ((_: string, s: string) => s);
-    const content = tokens.map((token) => `${token.key}: ${v(token.key, token.value)}`).join(";");
-    return modifiers.result(content);
-};
-
-export const createStyles = {
-    default: (tokens: Token[]) => createStyleContent(tokens, { result: modifiers.default }),
-    dark: (tokens: Token[]) => createStyleContent(tokens, { result: modifiers.dark }),
-};
-
-type TokenParsersType = "colors" | "spacing" | "rounded" | "components" | "customTokens" | "zIndex";
-
-type TokenCustomParser = (t: Token) => Token;
-
-export type TokenRemap = Partial<Record<TokenParsersType, TokenCustomParser> & { name: string }>;
-
-const fn =
-    (p?: TokenCustomParser): DesignTokensBuilder =>
-    (value, _, key) => {
-        const r = { key: `--${key}`, value: `${value}` };
-        return p ? p(r) : r;
-    };
-
-const zIndexParser = (t: Token): Token => ({
-    key: t.key.replace(/^--/, "--z-"),
-    value: t.value,
-});
-
-const createTokens = (theme: DesignTokens, map?: TokenRemap) => {
-    const colors = reduceTokens(theme.colors, fn(map?.colors));
-    const spacing = reduceTokens(theme.spacing, fn(map?.spacing));
-    const rounded = reduceTokens(theme.rounded, fn(map?.rounded));
-    const shadow = reduceTokens(theme.shadow, fn(map?.rounded));
-    const zIndex = reduceTokens(theme.zIndex, fn(map?.zIndex ?? zIndexParser));
-    const components = theme.components ? reduceTokens(theme.components, fn(map?.components)) : [];
-    const customTokens = theme.custom ? reduceTokens(theme.custom, fn(map?.customTokens)) : [];
-    return colors.concat(spacing, rounded, components, customTokens, zIndex, shadow);
-};
-
-export const createTheme = (theme: DesignTokens, name?: string) =>
-    createStyleContent(createTokens(theme), {
-        result: (variables: string) => `html${name ? `.${name}` : ""} {${variables}}`,
-        value: (_, v) => v.replace("hsla(", "").replace(")", ""),
-    });
-
-export const createCssProperties = (theme: DesignTokens, map?: TokenRemap): CSSProperties => {
-    const tokens = createTokens(theme, map);
-    return tokens.reduce<CSSProperties>((acc, el) => ({ ...acc, [el.key]: el.value }), {});
-};
-
-export const createTokenStyles = (theme: DesignTokens, map?: TokenRemap) =>
-    createStyleContent(createTokens(theme, map), {
-        result: (variables: string) => `html${map?.name ? `.${map.name}` : ""} {${variables}}`,
-        value: (_, v) => v,
-    });

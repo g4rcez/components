@@ -43,19 +43,19 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 
 | Override | Library default |
 | --- | --- |
-| `--var-tooltip-surface-radius` | `calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) )` |
+| `--var-tooltip-surface-radius` | `calc(var(--var-radius-base) / 2)` |
 | `--var-tooltip-surface-padding` | `calc(var(--var-spacing-base) * 0.75)` |
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                     | CSS Variable           | Purpose                               |
 | ------------------------- | ---------------------- | ------------------------------------- |
-| `bg-tooltip-background`   | `--tooltip-background` | Tooltip popup background              |
-| `text-tooltip-foreground` | `--tooltip-foreground` | Tooltip popup text color              |
-| `border-tooltip-border`   | `--tooltip-border`     | Tooltip popup border and arrow stroke |
-| `fill-tooltip-background` | `--tooltip-background` | Arrow fill color                      |
-| `z-tooltip`               | `--z-tooltip`          | Z-index of the tooltip popup          |
-| `shadow-shadow-floating`  | `--shadow-floating`    | Tooltip drop shadow                   |
+| `bg-tooltip-background` | `--var-tooltip-surface-background` | Tooltip popup background |
+| `text-tooltip-foreground` | `--var-tooltip-surface-foreground` | Tooltip popup text color |
+| `border-tooltip-border` | `--var-tooltip-surface-border` | Tooltip popup border and arrow stroke |
+| `fill-tooltip-background` | `--var-tooltip-surface-background` | Arrow fill color |
+| `z-tooltip` | `--var-layer-tooltip` | Z-index of the tooltip popup |
+| `shadow-shadow-floating` | `--var-shadow-floating` | Tooltip drop shadow |
 
 ## Placement Options
 

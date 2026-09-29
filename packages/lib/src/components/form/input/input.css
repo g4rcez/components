@@ -214,7 +214,7 @@
     align-items: center;
     column-gap: var(--var-input-field-control-column-gap, calc(var(--var-spacing-base) * 0.5));
     row-gap: var(--var-input-field-control-row-gap, calc(var(--var-spacing-base) * 0.25));
-    border-radius: var(--var-input-field-control-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.375));
+    border-radius: var(--var-input-field-control-radius, calc(var(--var-radius-base) * 0.375));
     border-color: var(--var-color-border);
     background-color: transparent;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -362,7 +362,7 @@
 }
 
 .__free-text__surface {
-    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.375));
+    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius-base) * 0.375));
     background-color: transparent;
     padding-inline: var(--var-free-text-surface-padding-inline, calc(var(--var-spacing-base) * 0.5));
     padding-block: var(--var-free-text-surface-padding-block, calc(var(--var-spacing-base) * 0.25));

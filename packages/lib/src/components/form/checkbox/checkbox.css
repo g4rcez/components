@@ -64,7 +64,7 @@
   border-style: solid;
   border-width: var(--var-checkbox-control-border-width, calc(var(--var-spacing-base) * 0.0625));
   border-color: var(--var-checkbox-control-border);
-  border-radius: var(--var-checkbox-control-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.25));
+  border-radius: var(--var-checkbox-control-radius, calc(var(--var-radius-base) * 0.25));
   background-color: var(--var-checkbox-control-background);
   background-origin: border-box;
   box-shadow: none;

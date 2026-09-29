@@ -1,39 +1,46 @@
 "use client";
-
-import { ComponentsProvider, createTokenStyles, defaultDarkTheme, defaultLightTheme, type TokenRemap, type Tweaks } from "@g4rcez/components";
+import { ComponentsProvider, configureTheme, createThemeCss, type Tweaks } from "@g4rcez/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { PropsWithChildren } from "react";
+import { useEffect, type PropsWithChildren } from "react";
+import { docsThemes } from "@/config/theme";
 import { Header } from "./header";
 import { Navigation } from "./navigation";
-
-const tokenRemap: TokenRemap = {
-    colors: (token) => {
-        token.value = token.value.replace("hsla(", "").replace(/\)$/, "");
-        return token;
-    },
-};
 
 const tweaks: Tweaks = {
     input: { iconFeedback: true },
     table: { filters: false, sorters: false, operations: false, sticky: 64 },
 };
 
+const themeStyles = docsThemes.map((theme) => ({
+    id: `g4rcez-theme-${theme.name}`,
+    name: theme.name,
+    css: createThemeCss(theme),
+}));
+
 export const RootLayout = (props: PropsWithChildren) => {
     const pathname = usePathname();
     const isLandingPage = pathname === "/";
 
-    const stylesLight = createTokenStyles(defaultLightTheme, tokenRemap);
-    const stylesDark = createTokenStyles(defaultDarkTheme, { ...tokenRemap, name: "dark" });
+    useEffect(() => {
+        for (const theme of docsThemes) configureTheme(theme);
+    }, []);
 
     return (
         <html lang="en" className="dark scroll-smooth bg-background proportional-nums text-foreground antialiased">
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                {themeStyles.map(({ id, name, css }) => (
+                    <style
+                        key={name}
+                        id={id}
+                        data-theme-owner="theme-runtime"
+                        data-theme-name={name}
+                        dangerouslySetInnerHTML={{ __html: css }}
+                    />
+                ))}
                 <title>Components — Modern React UI Library</title>
-                <style>{stylesLight}</style>
-                <style>{stylesDark}</style>
             </head>
             <body className="docs-body">
                 <Link href="#main-content" className="docs-skip-link">

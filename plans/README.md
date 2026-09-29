@@ -13,6 +13,15 @@ its status row when complete.
 | 001 | Validate skills installer paths before recursive deletion | P1 | S | — | DONE |
 | 002 | Make the docs production start script launchable | P1 | S | — | DONE |
 | 003 | Preserve CSS imports for aliased component imports | P2 | M | — | DONE |
+| 004 | Make dead-code analysis reflect real entry points | P2 | S | — | DONE |
+| 005 | Remove seven disconnected docs components | P2 | S | — | DONE |
+| 006 | Preserve original declarations and emit JavaScript once | P1 | M | 012 strict-type boundary | DONE |
+| 007 | Remove unread MultiSelect label history | P1 | S | — | DONE |
+| 008 | Remove three unused docs dependency edges | P2 | S | — | DONE |
+| 009 | Retain wheel containment and remove unused document locking | P2 | S | — | DONE |
+| 010 | Give Wizard geometry one window-resize subscription | P2 | S | — | DONE |
+| 011 | Use a single CSS pipeline with accurate sourcemaps | P2 | M | — | DONE |
+| 012 | Own public path types without invalid dependency declarations | P1 | M | 006 declaration layout implementation | DONE |
 
 Status values: `TODO` | `IN PROGRESS` | `DONE` | `BLOCKED` (with a one-line
 reason) | `REJECTED` (with a one-line rationale).
@@ -27,10 +36,24 @@ reason) | `REJECTED` (with a one-line rationale).
 - Plan 003 should land with its regression tests because CSS import rewriting is
   a public developer-tool behavior.
 
+- Plans 004–011 were authorized for execution on 2026-09-28 at `e525534`.
+  The index was clean and the `main` working tree had no pre-existing changes.
+  Exact-module deletion is independently vetted; 004 supplies the general
+  analysis baseline. Packaging changes (006, 011), docs cleanup (005, 008),
+  and component cleanup (007, 009, 010) have separate implementation owners.
+  All builds/tests run after the parallel edits settle. Reviewer owns verdicts.
+  The optional combobox extraction and compatibility-fixture redesign are not
+  part of these eight plans.
+- Plan 012 was explicitly authorized after full strict consumer compilation
+  exposed existing sidekicker declaration defects. 006 and 012 were implemented
+  and verified as one cutover, not sequential DONE gates.
+
 ## Findings considered and rejected
 
-- Unresolved relative imports in library tests: a read-only scan found no
-  unresolved relative test imports in the current tree; no plan needed.
+- The earlier audit's conclusion about unresolved test imports is superseded:
+  the 2026-09-28 full suite found `tests/button.test.tsx` importing the missing
+  `../src/components/core/button` entry. That unrelated test was not changed by
+  these plans.
 - Source-versus-distribution imports in development and production: intentional
   repository behavior, documented by the Next source-alias setup and recent
   production build; not a finding.
@@ -41,6 +64,10 @@ reason) | `REJECTED` (with a one-line rationale).
 - Explainable CSS detection output: useful direction, but Plan 003 first fixes
   the confirmed alias-detection correctness gap; keep provenance output as a
   later design/spike decision.
+- Blind deletion of Knip's reported CVA, clsx, parser, test setup and fixture
+  candidates: rejected because live consumers or test inputs exist.
+- Merging Autocomplete and MultiSelect into a universal control: not selected;
+  their navigation, touch and selection contracts intentionally differ.
 
 ## Audit limits
 
@@ -50,3 +77,67 @@ or verify deployment on a hosting provider. The delegated audit workflow was
 stopped because its reviewer requested an unavailable `lsp_diagnostics` tool;
 the three plans above are based on direct inspection and verified evidence, not
 on unvetted delegated findings.
+
+## Execution review — 2026-09-28
+
+Verdict: **APPROVE plans 004–012**, with the workspace-wide verification limits
+below. Work remains unstaged on `main`; no branch/worktree, commit, push or PR.
+
+### Observed evidence
+
+- Final library `npm run build` succeeded using installed tools and automatic
+  pnpm installation disabled.
+- Reviewer focused Vitest run: **17 files, 106 tests passed**, covering published
+  declaration resolution/full strict consumer compilation, CSS source mapping,
+  skills synchronization, form/table/file-upload types and behavior, MultiSelect,
+  autocomplete, wheel containment, modal behavior, and Wizard geometry.
+- Strict consumer compilation retains `strict: true`, `skipLibCheck: false`,
+  and no diagnostic filtering. It imports the complete typed public surface.
+- All 125 original runtime/source export mappings remain unchanged. The 49
+  explicit wildcard type aliases retain their prior runtime targets.
+- Distribution inventory changed from 1,324 files / 8,055,753 bytes to 850 files /
+  7,267,904 bytes. Duplicate component JS/JSX: zero. Required Tailwind CommonJS
+  files: 11. CSS outputs: 50. These are uncompressed build-output measurements,
+  not browser bundle or package tarball estimates.
+- Reviewer Node smoke exercised root `path` nested/array/tuple behavior, loaded
+  FileUpload/Table/useForm exports, and compiled real Tailwind preset/plugin
+  utility output. Source-map consumer resolved Button and aggregate Button to
+  original line 23, foundation html to original base line 7.
+- Docs production build initially passed (all 60 routes), and browser smoke
+  covered landing/Input/Buttons at desktop and mobile, repeated MultiSelect
+  selection/deselection/clear, nested modal autocomplete selection and retained
+  body scroll lock, popup wheel cancellation, and Wizard resize/scroll/next-step
+  alignment and focus. No browser runtime errors observed.
+- Docs lint passed; library lint reported existing warnings, no errors.
+- Final `node scripts/skills.mjs check` passed.
+- Knip full and production checks correctly retain CVA/clsx/parser dependencies
+  and exclude test setup/fixture false positives. Both still exit 1 for remaining
+  unrelated candidates: touch.ts, react-use-measure, use-sync-external-store,
+  Tailwind integration dependency candidates, internal exports/types and aliases.
+  These were not blindly removed or hidden.
+
+### Workspace-wide limits and concurrent edits
+
+- Initial full suite was not green: 54 files passed / 8 failed, 295 tests passed /
+  26 failed. The two newly introduced failing checks (Wizard observer fixture and
+  strict external declarations) were corrected and pass in final focused tests.
+  Other reported failures concern the existing Button test import, legacy token/
+  utility-class assertions, list accessibility, and a lint publish-test timeout.
+  No final all-suite pass is claimed.
+- Concurrent, non-executor theme/documentation changes appeared after the clean
+  baseline: bundled fixture, docs root-layout/toggle-mode, Tailwind app layout,
+  canonical theme guidance/skill source and their derived copies. They were
+  preserved and are excluded from this execution's authored change summary.
+  The final build synchronized 12 derived files from those concurrent inputs;
+  no manual changes to derived skill copies were made.
+- The final docs rebuild on the combined working tree failed at
+  `packages/docs/src/components/root-layout.tsx:40`: `<Navigation />` has no
+  imported binding. That concurrently edited file is outside the executor scope
+  and remains untouched. Earlier docs build/browser proof predates this blocker;
+  the current combined docs tree is not claimed deployable.
+- Reviewed unchanged canonical references include MultiSelect, Autocomplete,
+  Wizard, Button, PageCalendar, Shortcut, Input, InputField, Textarea, Table, Form,
+  FileUpload, Alert, Modal, Card, Tag, TaskList and style-dependencies. Independent
+  concurrent edits to geometry/index references are not attributed to this work.
+- Dependency vulnerability upgrades and the optional combobox/compatibility
+  fixture redesigns were not selected or implemented.

@@ -60,15 +60,15 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                                     | CSS Variable          | Purpose                          |
 | ----------------------------------------- | --------------------- | -------------------------------- |
-| `text-foreground`                         | `--foreground`        | Selected option text color       |
-| `text-input-placeholder`                  | `--input-placeholder` | Color when no option is selected |
-| `placeholder-input-placeholder`           | `--input-placeholder` | Placeholder styling              |
-| `bg-input-mask-error` (via `group-error`) | `--input-mask-error`  | Placeholder tint in error state  |
-| `text-danger` (via `group-error`)         | `--danger`            | Text color in error state        |
-| `hover:text-primary`                      | `--primary`           | Caret icon hover color           |
-| `h-input-height`                          | `--input-height`      | Control height (2.5 rem)         |
-| `px-input-padding-x`                      | `--input-padding-x`   | Horizontal padding               |
-| `py-input-padding-y`                      | `--input-padding-y`   | Vertical padding                 |
+| `text-foreground` | `--var-color-foreground` | Selected option text |
+| `text-input-placeholder` | `--var-free-text-placeholder-foreground` | Text when no option is selected |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder text |
+| `text-danger` | `--var-color-danger` | Error text |
+| `hover:text-primary` | `--var-color-primary` | Caret hover color |
+| `h-input-height` | `--var-free-text-control-height` | Default control height |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
 
 ## Examples
 

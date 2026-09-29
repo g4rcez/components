@@ -11,8 +11,6 @@ export * from "./lib/dom";
 export * from "./lib/dict";
 export * from "./lib/fns";
 export * from "./styles/design-tokens";
-export * from "./styles/components";
-export * from "./styles/theme";
 export * from "./styles/theme-runtime";
 export * from "./styles/theme.types";
 export type * from "./types";

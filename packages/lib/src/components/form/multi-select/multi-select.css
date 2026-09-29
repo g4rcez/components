@@ -35,8 +35,8 @@
 }
 
 .__multi-select__list:last-child {
-    border-start-start-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
-    border-start-end-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-start-start-radius: var(--var-dropdown-surface-radius, calc(var(--var-radius-base) / 2));
+    border-start-end-radius: var(--var-dropdown-surface-radius, calc(var(--var-radius-base) / 2));
 }
 
 .__multi-select__item {
@@ -89,7 +89,7 @@
 }
 
 .__multi-select__surface {
-    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius, var(--var-radius-base)) * 0.375));
+    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius-base) * 0.375));
     background-color: transparent;
     padding-inline: var(--var-free-text-surface-padding-inline, calc(var(--var-spacing-base) * 0.5));
     padding-block: var(--var-free-text-surface-padding-block, calc(var(--var-spacing-base) * 0.25));
@@ -144,7 +144,7 @@
     overflow: clip;
     overscroll-behavior: contain;
     border-color: var(--var-dropdown-surface-border);
-    border-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-radius: var(--var-dropdown-surface-radius, calc(var(--var-radius-base) / 2));
     background-color: var(--var-dropdown-surface-background);
     padding: 0;
     color: var(--var-dropdown-surface-foreground);
@@ -260,8 +260,8 @@
     align-items: center;
     gap: var(--var-multi-select-footer-gap, calc(var(--var-spacing-base) * 0.5));
     overflow-x: auto;
-    border-end-start-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
-    border-end-end-radius: var(--var-dropdown-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 2) ));
+    border-end-start-radius: var(--var-dropdown-surface-radius, calc(var(--var-radius-base) / 2));
+    border-end-end-radius: var(--var-dropdown-surface-radius, calc(var(--var-radius-base) / 2));
     background-color: var(--var-dropdown-surface-background);
     padding: var(--var-multi-select-option-padding, calc(var(--var-spacing-base) * 0.625));
 }

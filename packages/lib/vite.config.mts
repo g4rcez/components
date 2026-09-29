@@ -53,9 +53,7 @@ export default defineConfig(
                 entry: {
                     ...(await getComponentEntries("src/components")),
                     index: "./src/index.ts",
-                    "styles/theme": "./src/styles/theme.ts",
                     "styles/tokens": "./src/styles/tokens.ts",
-                    "styles/design-tokens": "./src/styles/design-tokens.ts",
                     "styles/theme-runtime": "./src/styles/theme-runtime.ts",
                     "styles/style-manifest": "./src/styles/style-manifest.ts",
                 },

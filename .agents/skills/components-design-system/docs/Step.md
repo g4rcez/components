@@ -67,15 +67,15 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                                   | CSS Variable                          | Purpose                            |
 | --------------------------------------- | ------------------------------------- | ---------------------------------- |
-| `bg-primary` / `border-primary`         | `--primary-DEFAULT`                   | Active step fill and border        |
-| `text-primary-foreground`               | `--primary-foreground`                | Active step text                   |
-| `bg-success` / `border-success`         | `--success-DEFAULT`                   | Complete step fill and border      |
-| `text-success-foreground`               | `--success-foreground`                | Complete step check icon           |
-| `bg-danger` / `border-danger`           | `--danger-DEFAULT` / `--danger-hover` | Error step fill and border         |
-| `text-danger-foreground`                | `--danger-foreground`                 | Error step X icon                  |
-| `text-disabled`                         | `--disabled`                          | Inactive step text                 |
-| `bg-card-border` / `border-card-border` | `--card-border`                       | Connector line and inactive border |
-| `bg-background`                         | `--background`                        | Inactive step background           |
+| `bg-primary` / `border-primary` | `--var-color-primary` | Active fill and border |
+| `text-primary-foreground` | `--var-color-primary-foreground` | Active text |
+| `bg-success` / `border-success` | `--var-color-success` | Complete fill, border, and connector |
+| `text-success-foreground` | `--var-color-success-foreground` | Complete check icon |
+| `bg-danger` / `border-danger-hover` | `--var-color-danger` / `--var-color-danger-hover` | Error fill and border |
+| `text-danger-foreground` | `--var-color-danger-foreground` | Error X icon |
+| `text-disabled` | `--var-color-disabled` | Inactive text |
+| `bg-border` / `border-border` | `--var-color-border` | Default connector and inactive border |
+| `bg-background` | `--var-color-background` | Inactive background |
 
 ## Examples
 

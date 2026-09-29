@@ -7,7 +7,7 @@
     width: 100%;
     gap: var(--var-card-content-gap, calc(var(--var-spacing-base) * 1));
     border-color: var(--var-card-border);
-    border-radius: var(--var-card-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) ));
+    border-radius: var(--var-card-surface-radius, calc(var(--var-radius-base) / 4));
     background-color: var(--var-card-background);
     padding-block: var(--var-card-surface-padding-block, calc(var(--var-spacing-base) * 0.75));
     box-shadow: var(--var-shadow-card);
@@ -93,7 +93,7 @@
     width: 100%;
     align-items: center;
     gap: var(--var-card-content-gap, calc(var(--var-spacing-base) * 1));
-    border-radius: var(--var-card-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) ));
+    border-radius: var(--var-card-surface-radius, calc(var(--var-radius-base) / 4));
     padding-inline: 0;
 }
 
@@ -113,8 +113,8 @@
     justify-content: center;
     align-self: stretch;
     width: var(--var-card-stats-icon-column-width, calc(var(--var-spacing-base) * 5));
-    border-top-left-radius: var(--var-card-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) ));
-    border-bottom-left-radius: var(--var-card-surface-radius, calc( var(--var-radius, 0px) + calc(var(--var-radius-base) / 4) ));
+    border-top-left-radius: var(--var-card-surface-radius, calc(var(--var-radius-base) / 4));
+    border-bottom-left-radius: var(--var-card-surface-radius, calc(var(--var-radius-base) / 4));
     background-color: var(--var-color-primary);
     padding: var(--var-card-stats-icon-column-padding, calc(var(--var-spacing-base) * 1));
     color: var(--var-color-primary-foreground);

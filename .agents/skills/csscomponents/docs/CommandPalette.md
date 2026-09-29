@@ -80,11 +80,12 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                    | CSS Variable            | Purpose                                |
 | ------------------------ | ----------------------- | -------------------------------------- |
-| `bg-floating-background` | `--floating-background` | Palette surface background             |
-| `border-floating-border` | `--floating-border`     | Palette surface border                 |
-| `bg-floating-hover`      | `--floating-hover`      | Hovered/active command item background |
-| `z-floating`             | `--z-floating`          | Z-index for the search header          |
-| `text-secondary`         | `--secondary`           | Group label and empty state text color |
+| CSS override | `--var-command-surface-background` | Palette surface background |
+| CSS override | `--var-command-surface-border` | Palette surface border |
+| CSS override | `--var-command-item-background-hover` | Hovered/active command background |
+| `z-floating` | `--var-layer-floating` | Search header z-index |
+| CSS override | `--var-command-group-label-foreground` | Group label text |
+| CSS override | `--var-command-empty-foreground` | Empty state text |
 
 ## Examples
 

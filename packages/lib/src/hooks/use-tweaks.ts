@@ -1,11 +1,7 @@
 import { useContext } from "react";
 import { Context } from "../config/context";
-import { Tweaks } from "../config/default-tweaks";
+import { defaultTweaks, type Tweaks } from "../config/default-tweaks";
 
-export const useTweaks = (): Tweaks => {
-    const ctx = useContext(Context);
-    if (!ctx) throw new Error("ComponentsProvider must be used");
-    return ctx.tweaks!;
-};
+export const useTweaks = (): Tweaks => useContext(Context)?.tweaks ?? defaultTweaks;
 
 export const useTableTweaks = () => useTweaks().table;

@@ -66,20 +66,20 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | `--var-modal-surface-min-inline-size` | `calc(var(--var-spacing-base) * 20)` |
 | `--var-modal-surface-gap` | `calc(var(--var-spacing-base) * 1)` |
 | `--var-modal-dialog-max-block-size` | `calc(var(--var-spacing-base) * 40)` |
-| `--var-modal-surface-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 1.333333)` |
+| `--var-modal-surface-radius` | `calc(var(--var-radius-base) * 1.333333)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
 
 | Token                    | CSS Variable            | Purpose                                            |
 | ------------------------ | ----------------------- | -------------------------------------------------- |
-| `bg-floating-background` | `--floating-background` | Modal surface background                           |
-| `border-floating-border` | `--floating-border`     | Modal border, header/footer dividers, resizer      |
-| `bg-floating-overlay`    | `--floating-overlay`    | Backdrop color (with `/70` opacity)                |
-| `z-overlay`              | `--z-overlay`           | Z-index of the backdrop                            |
-| `z-floating`             | `--z-floating`          | Z-index of the modal surface and close button      |
-| `w-dialog`               | `--dialog`              | Default max-width for dialog type (`max-w-dialog`) |
-| `text-foreground`        | `--foreground`          | Body text color                                    |
-| `text-danger`            | `--danger`              | Close button hover color                           |
+| `bg-floating-background` | `--var-dropdown-surface-background` | Dropdown background utility; the modal surface uses `--var-color-background` |
+| `border-floating-border` | `--var-dropdown-surface-border` | Dropdown border utility; modal borders, dividers, and resizer use `--var-color-border` |
+| `bg-floating-overlay` | `--var-modal-overlay-background` | Backdrop color, including its token-defined alpha |
+| `z-overlay` | `--var-layer-overlay` | Z-index of the backdrop |
+| `z-floating` | `--var-layer-floating` | Z-index of the modal surface and close button |
+| `w-dialog` | `--var-spacing-dialog` | Dialog width utility; not a default modal max-width |
+| `text-foreground` | `--var-color-foreground` | Body text color |
+| `text-danger` | `--var-color-danger` | Close button hover color |
 
 ## Examples
 

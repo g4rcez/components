@@ -93,11 +93,11 @@
 }
 
 .__button--rounded-default {
-    border-radius: var(--var-button-rounded, calc(var(--var-radius, var(--var-radius-base)) * 0.733333));
+    border-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
 }
 
 .__button--rounded-rough {
-    border-radius: var(--var-button-rough-rounded, calc(var(--var-radius, var(--var-radius-base)) / 6));
+    border-radius: var(--var-button-rough-rounded, calc(var(--var-radius-base) / 6));
 }
 
 .__button--rounded-squared {

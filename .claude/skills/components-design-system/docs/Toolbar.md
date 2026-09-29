@@ -30,13 +30,11 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | CSS Variable | Purpose |
 | --- | --- |
-| `--var-color-background` | Shared toolbar surface |
-| `--var-color-border` | Shared border |
-| `--var-border-hairline` | Border width |
-| `--var-toolbar-bottom` | Sticky bottom offset; legacy `--toolbar-bottom` fallback |
-| `--var-toolbar-rounded` | Toolbar surface corners; legacy `--toolbar-radius` fallback |
-| `--var-toolbar-p` | Compact surface padding; legacy `--toolbar-p` fallback |
+| `--var-toolbar-bottom` | Sticky bottom offset |
+| `--var-toolbar-p` | Toolbar padding |
 | `--var-layer-normal` | Keeps focused buttons above adjacent controls |
+
+The toolbar root does not paint a surface or border and does not consume a radius token. Connected controls retain their own outer corners. The offset and padding read only the canonical properties above, without legacy-name fallbacks.
 
 The root selector is `.__toolbar`. Connected styling targets direct native buttons and direct `.__button` elements, including polymorphic button links. Wrapping controls in a layout element opts out of connected styling. Load `button.css` separately when composing with `Button`; toolbar CSS does not replace button styles.
 

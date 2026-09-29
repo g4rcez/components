@@ -6,7 +6,7 @@ package: "@g4rcez/components"
 
 # @g4rcez/components — Component Index
 
-A design system library built on React, utility CSS, and design tokens.
+A React design system built on plain CSS, stable component selectors, and semantic design tokens.
 
 **Installation:**
 
@@ -16,13 +16,30 @@ npm install @g4rcez/components
 
 **Setup:**
 
-```tsx
-import "@g4rcez/components/index.css";
+```css
+/* In an application stylesheet; alternatively import index.css for all components. */
+@import "@g4rcez/components/foundation.css";
+@import "@g4rcez/components/button.css";
 ```
 
-## Geometry and default lookup
+## Theme and geometry customization
 
-Read [Geometry tokens](geometry-tokens.md) for independent spacing/radius bases, scoped overrides, and migration notes. Import `defaultGeometryTokens`, `defaultGeometryBases`, and `defaultLightThemeTokens` from `@g4rcez/components` to inspect defaults; derived geometry is no longer declared on `:root`.
+Read [Theme customization](theme-customization.md) for CSS-only setup, sparse overrides and reset/replacement, custom themes, root activation, cascade precedence, SSR hydration/nonce ownership, provider/preset integration, shadow controls, and breaking-release migration. Read [Geometry tokens](geometry-tokens.md) for spacing/rounding bases, reactive geometry fallbacks, and wrapper/portal boundaries.
+
+Import the theme API from `@g4rcez/components` or `@g4rcez/components/theme`:
+
+| Export | Purpose |
+| --- | --- |
+| `configureTheme` | Register/replace sparse named root overrides; return CSS without activating the theme |
+| `createThemeCss` | Pure CSS serialization for SSR/static output |
+| `createThemeProperties` | Pure sparse `{ tokens?, colors?, components? }` to custom-property object conversion |
+| `defaultLightThemeTokens` | Generated shared defaults and light palette for inspection |
+| `defaultDarkThemeTokens` | Generated effective global/component dark colors, without shared geometry |
+| `themeTokenRegistry` | Supported shared, color, and component key inventory |
+| `defaultGeometryTokens`, `defaultGeometryBases` | Geometry inspection data, not automatic root declarations |
+| `ThemeConfiguration`, `ThemeTokenOverrides`, `ThemeComponentOverrides` | Typed configuration and sparse override groups |
+
+Defaults are supplied by foundation CSS, not mandatory JavaScript initialization. Activate dark with `.dark` on `<html>`; the API does not toggle it.
 
 ## All Components
 
@@ -165,16 +182,7 @@ Read [Geometry tokens](geometry-tokens.md) for independent spacing/radius bases,
 
 ## Design Token Quick Reference
 
-All components use CSS custom properties for theming. Override in your `@theme` block:
-
-```css
-@theme {
-    --primary: oklch(0.6 0.2 250); /* primary color */
-    --danger: oklch(0.6 0.2 30); /* danger/error color */
-    --button-primary-bg: var(--primary);
-    --button-primary-text: var(--primary-foreground);
-}
-```
+Use canonical `--var-*` properties in plain CSS, or use `configureTheme` for sparse root-level overrides. The default scope is `:root`; dark activation is `.dark` on `<html>`. See [Theme customization](theme-customization.md) for examples and precedence.
 
 See individual component docs for the full token list per component.
 
@@ -182,10 +190,7 @@ See individual component docs for the full token list per component.
 
 ## Setup
 
-```tsx
-// 1. Import the stylesheet in your app root
-import "@g4rcez/components/index.css";
-
-// 2. Apply theme class on your root element
-<div className="light"> ... </div>; // or "dark"
+```css
+/* Import in an application stylesheet. */
+@import "@g4rcez/components/index.css";
 ```

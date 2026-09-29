@@ -122,7 +122,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [index, setIndex] = useState<number | null>(null);
         const listRef = useRef<Array<HTMLElement | null>>(EMPTY_NODES);
         const [, tick] = useState(0);
-        const removeScrollRef = useRemoveScroll(open, "block-only");
+        const removeScrollRef = useRemoveScroll(open);
 
         const innerOptions = useMemo<AutocompleteItemProps[]>(
             () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),

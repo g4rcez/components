@@ -9,7 +9,6 @@ export const ToggleMode = () => {
     const onClick = () => {
         const newMode = mode === "light" ? "dark" : "light";
         setMode(newMode);
-        document.documentElement.dataset.g4Theme = newMode;
         if (newMode === "dark") document.documentElement.classList.add("dark");
         else document.documentElement.classList.remove("dark");
     };

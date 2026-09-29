@@ -1,6 +1,6 @@
 .__skeleton {
     box-sizing: border-box;
-    border-radius: var(--var-skeleton-radius, calc(var(--var-radius, var(--var-radius-base)) / 3));
+    border-radius: var(--var-skeleton-radius, calc(var(--var-radius-base) / 3));
     background-color: var(--var-color-muted);
     animation: skeleton-pulse var(--var-skeleton-pulse-duration) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

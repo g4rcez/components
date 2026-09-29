@@ -44,10 +44,10 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                 | CSS Variable    | Purpose                                  |
 | --------------------- | --------------- | ---------------------------------------- |
-| `border-card-border`  | `--card-border` | Default border color of the radio circle |
-| `text-primary`        | `--primary`     | Checked fill color (via `accent-color`)  |
-| `focus:ring-primary`  | `--primary`     | Focus ring color                         |
-| `disabled:opacity-70` | —               | Reduced opacity for disabled state       |
+| CSS override | `--var-radiobox-control-border` | Default radio circle border |
+| CSS override | `--var-radiobox-control-foreground` | Checked control color |
+| CSS override | `--var-radiobox-focus-ring` | Focus ring color |
+| CSS override | `--var-radiobox-disabled-opacity` | Disabled control opacity |
 
 ## Examples
 

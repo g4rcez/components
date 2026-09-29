@@ -1,11 +1,11 @@
 "use client";
 import type React from "react";
 import { useCallback, useRef } from "react";
-import type { AllPaths } from "sidekicker";
 import { LocalStorage } from "storage-manager-js";
 import { useReducer } from "use-typed-reducer";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { isSsr } from "../../lib/fns";
+import type { AllPaths } from "../../lib/path-types";
 import type { Any, Label, POJO, SetState } from "../../types";
 import type { OptionProps } from "../form/select/select";
 import type { FilterConfig } from "./filter";

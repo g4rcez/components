@@ -2,34 +2,18 @@ import { act, render, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDebounce } from "../src/hooks/use-debounce";
-import { useIsCoarseDevice } from "../src/hooks/use-is-coarse-device";
 import { useReactive } from "../src/hooks/use-reactive";
 import { useRemoveScroll } from "../src/hooks/use-remove-scroll";
 import { mergeRefs } from "../src/lib/dom";
 import { path, splitInto } from "../src/lib/fns";
 
-const originalMatchMedia = window.matchMedia;
-
-class MatchMediaList {
-    matches = false;
-    media = "(pointer: coarse)";
-    onchange: ((this: MediaQueryList, event: MediaQueryListEvent) => void) | null = null;
-    addEventListener = vi.fn();
-    removeEventListener = vi.fn();
-    addListener = vi.fn();
-    removeListener = vi.fn();
-    dispatchEvent = vi.fn(() => true);
-}
-
 describe("hook and utility contracts", () => {
     beforeEach(() => {
         vi.useRealTimers();
-        window.matchMedia = vi.fn(() => new MatchMediaList()) as unknown as typeof window.matchMedia;
     });
 
     afterEach(() => {
         vi.useRealTimers();
-        window.matchMedia = originalMatchMedia;
         vi.restoreAllMocks();
     });
 
@@ -59,90 +43,51 @@ describe("hook and utility contracts", () => {
         unmount();
     });
 
-    it("restores scroll styles on disable and unmount, and leaves block-only unchanged", () => {
+    it.each(["", "100px"])("contains wheel events only while enabled (height %s)", (height) => {
         const root = document.documentElement;
-        root.style.overflowY = "scroll";
-        root.style.padding = "4px";
-        root.style.paddingRight = "8px";
-        const previous = {
-            overflowY: root.style.overflowY,
-            padding: root.style.padding,
-            paddingRight: root.style.paddingRight,
+        const originalStyle = root.getAttribute("style");
+        const ScrollConsumer = ({ enabled }: { enabled: boolean }) => {
+            const ref = useRemoveScroll<HTMLDivElement>(enabled);
+            return <div ref={ref} data-testid="popup" style={{ height }} />;
         };
-        Object.defineProperty(root, "scrollHeight", { configurable: true, value: 200 });
-        Object.defineProperty(root, "clientHeight", { configurable: true, value: 100 });
-
-        const ScrollConsumer = ({ remove, removeStyle = "overflow-hidden" }: { remove: boolean; removeStyle?: "overflow-hidden" | "block-only" }) => {
-            const ref = useRemoveScroll<HTMLDivElement>(remove, removeStyle);
-            return <div ref={ref} />;
-        };
-
-        const { rerender, unmount } = render(<ScrollConsumer remove />);
-        expect(root.style.overflowY).toBe("hidden");
-        expect(root.style.padding).not.toBe(previous.padding);
-
-        rerender(<ScrollConsumer remove={false} />);
-        expect(root.style.overflowY).toBe(previous.overflowY);
-        expect(root.style.padding).toBe(previous.padding);
-        expect(root.style.paddingRight).toBe(previous.paddingRight);
-
-        rerender(<ScrollConsumer remove />);
-        unmount();
-        expect(root.style.overflowY).toBe(previous.overflowY);
-        expect(root.style.padding).toBe(previous.padding);
-        expect(root.style.paddingRight).toBe(previous.paddingRight);
-
-        render(<ScrollConsumer remove removeStyle="block-only" />);
-        expect(root.style.overflowY).toBe(previous.overflowY);
-        expect(root.style.padding).toBe(previous.padding);
-    });
-
-    it("keeps a shared scroll lock until every consumer unmounts", () => {
-        const root = document.documentElement;
-        root.style.overflowY = "scroll";
-        root.style.padding = "4px";
-        root.style.paddingRight = "8px";
-        const previous = {
-            overflowY: root.style.overflowY,
-            padding: root.style.padding,
-            paddingRight: root.style.paddingRight,
-        };
-        Object.defineProperty(root, "scrollHeight", { configurable: true, value: 200 });
-        Object.defineProperty(root, "clientHeight", { configurable: true, value: 100 });
-
-        const ScrollConsumer = () => {
-            const ref = useRemoveScroll<HTMLDivElement>(true);
-            return <div ref={ref} />;
+        const { getByTestId, rerender, unmount } = render(<ScrollConsumer enabled={false} />);
+        const popup = getByTestId("popup");
+        vi.spyOn(popup, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 0, 200, height ? 60 : 100));
+        let scrollHeight = 100;
+        Object.defineProperty(popup, "scrollHeight", { configurable: true, get: () => scrollHeight });
+        const wheel = () => {
+            const event = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 10 });
+            popup.dispatchEvent(event);
+            return event.defaultPrevented;
         };
 
-        const first = render(<ScrollConsumer />);
-        const second = render(<ScrollConsumer />);
-        first.unmount();
-        expect(root.style.overflowY).toBe("hidden");
-        second.unmount();
-        expect(root.style.overflowY).toBe(previous.overflowY);
-        expect(root.style.padding).toBe(previous.padding);
-        expect(root.style.paddingRight).toBe(previous.paddingRight);
-    });
+        try {
+            // An enclosing overlay owns these document styles, not the popup.
+            root.style.overflowY = "hidden";
+            root.style.paddingRight = "15px";
+            const lockedStyle = root.getAttribute("style");
+            expect(wheel()).toBe(false);
 
-    it("uses the coarse-pointer media query and removes its listener", () => {
-        const media = new MatchMediaList();
-        media.matches = true;
-        const listener = vi.fn();
-        media.addEventListener.mockImplementation((_type, callback) => listener.mockImplementation(callback as never));
-        const matchMedia = vi.spyOn(window, "matchMedia").mockReturnValue(media as unknown as MediaQueryList);
+            rerender(<ScrollConsumer enabled />);
+            expect(wheel()).toBe(true);
+            scrollHeight = 200;
+            expect(wheel()).toBe(false);
+            scrollHeight = 100;
+            expect(root.getAttribute("style")).toBe(lockedStyle);
 
-        const { result, unmount } = renderHook(() => useIsCoarseDevice());
-
-        expect(matchMedia).toHaveBeenCalledWith("(pointer: coarse)");
-        expect(result.current).toBe(true);
-
-        const changeListener = media.addEventListener.mock.calls[0]?.[1] as ((event: MediaQueryListEvent) => void) | undefined;
-        act(() => changeListener?.({ matches: false } as MediaQueryListEvent));
-        expect(result.current).toBe(false);
-
-        unmount();
-        expect(media.removeEventListener).toHaveBeenCalledWith("change", changeListener);
+            rerender(<ScrollConsumer enabled={false} />);
+            expect(wheel()).toBe(false);
+            expect(root.getAttribute("style")).toBe(lockedStyle);
+            rerender(<ScrollConsumer enabled />);
+            expect(wheel()).toBe(true);
+            unmount();
+            expect(wheel()).toBe(false);
+            expect(root.getAttribute("style")).toBe(lockedStyle);
+        } finally {
+            unmount();
+            if (originalStyle === null) root.removeAttribute("style");
+            else root.setAttribute("style", originalStyle);
+        }
     });
 
     it("preserves falsy reactive initial values and ignores nullish refs", () => {

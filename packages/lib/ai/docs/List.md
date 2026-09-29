@@ -49,24 +49,24 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | --- | --- |
 | `--var-list-detail-card-min-inline-size` | `calc(var(--var-spacing-base) * 20)` |
 | `--var-list-detail-card-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-list-detail-card-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 1.333333)` |
+| `--var-list-detail-card-radius` | `calc(var(--var-radius-base) * 1.333333)` |
 | `--var-list-detail-card-padding` | `calc(var(--var-spacing-base) * 1.5)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
 
 | Token                 | CSS Variable         | Purpose                                                             |
 | --------------------- | -------------------- | ------------------------------------------------------------------- |
-| `border-card-border`  | `--card-border`      | Row separator and overlay card border                               |
-| `bg-card-background`  | `--card-background`  | Overlay card background color                                       |
-| `rounded-list-radius` | `--list-radius`      | Overlay card corner radius                                          |
-| `shadow-shadow-card`  | `--shadow-card`      | Overlay card drop shadow                                            |
-| `text-foreground`     | `--foreground`       | Default text color for row and overlay content                      |
-| `text-secondary`      | `--secondary`        | Description text color                                              |
-| `text-primary`        | `--primary`          | Row title hover color and avatar focus ring                         |
-| `text-danger`         | `--danger`           | Close button hover color in the overlay                             |
-| `bg-floating-overlay` | `--floating-overlay` | Semi-transparent backdrop behind the overlay (used at 70 % opacity) |
-| `z-floating`          | `--z-floating`       | `z-index` for the overlay card (value: 22)                          |
-| `z-overlay`           | `--z-overlay`        | `z-index` for the backdrop scrim                                    |
+| `border-card-border` | `--var-card-border` | Card border utility; row separators and the overlay card use `--var-color-border` |
+| `bg-card-background` | `--var-card-background` | Card background utility; the overlay card uses `--var-color-background` |
+| `rounded-list-rounded` | `--var-list-detail-card-radius` | Overlay card corner radius |
+| `shadow-shadow-card` | `--var-shadow-card` | Overlay card drop shadow |
+| `text-foreground` | `--var-color-foreground` | Default text color for row and overlay content |
+| `text-secondary` | `--var-color-secondary` | Secondary text utility; descriptions use `--var-color-muted-foreground` |
+| `text-primary` | `--var-color-primary` | Row title hover color and avatar focus ring |
+| `text-danger` | `--var-color-danger` | Close button hover color in the overlay |
+| `bg-floating-overlay` | `--var-modal-overlay-background` | Modal backdrop utility; the list backdrop uses `--var-list-overlay-background` with its own alpha |
+| `z-floating` | `--var-layer-floating` | `z-index` for the overlay card |
+| `z-overlay` | `--var-layer-overlay` | `z-index` for the backdrop scrim |
 
 ## Examples
 

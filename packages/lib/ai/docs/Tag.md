@@ -39,38 +39,38 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | Override | Library default |
 | --- | --- |
 | `--var-tag-surface-gap` | `calc(var(--var-spacing-base) * 0.375)` |
-| `--var-tag-surface-radius` | `calc(var(--var-radius, var(--var-radius-base)) * 2.666667)` |
+| `--var-tag-surface-radius` | `calc(var(--var-radius-base) * 2.666667)` |
 | `--var-tag-indicator-size` | `calc(var(--var-spacing-base) * 0.5)` |
 | `--var-tag-default-min-block-size` | `calc(var(--var-spacing-base) * 2)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
 
 | Token                     | CSS Variable           | Purpose                                |
 | ------------------------- | ---------------------- | -------------------------------------- |
-| `bg-tag-primary-bg`       | `--tag-primary-bg`     | Background for primary theme           |
-| `text-tag-primary-text`   | `--tag-primary-text`   | Text color for primary theme           |
-| `bg-tag-secondary-bg`     | `--tag-secondary-bg`   | Background for secondary theme         |
-| `text-tag-secondary-text` | `--tag-secondary-text` | Text color for secondary theme         |
-| `bg-tag-info-bg`          | `--tag-info-bg`        | Background for info theme              |
-| `text-tag-info-text`      | `--tag-info-text`      | Text color for info theme              |
-| `bg-tag-warn-bg`          | `--tag-warn-bg`        | Background for warn theme              |
-| `text-tag-warn-text`      | `--tag-warn-text`      | Text color for warn theme              |
-| `bg-tag-danger-bg`        | `--tag-danger-bg`      | Background for danger theme            |
-| `text-tag-danger-text`    | `--tag-danger-text`    | Text color for danger theme            |
-| `bg-tag-success-bg`       | `--tag-success-bg`     | Background for success theme           |
-| `text-tag-success-text`   | `--tag-success-text`   | Text color for success theme           |
-| `bg-tag-muted-bg`         | `--tag-muted-bg`       | Background for muted theme             |
-| `text-tag-muted-text`     | `--tag-muted-text`     | Text color for muted theme             |
-| `bg-disabled`             | `--disabled`           | Background for disabled/loading states |
-| `border-card-border`      | `--card-border`        | Border color for neutral theme         |
-| `rounded-tag-radius`      | `--tag-radius`         | Tag border radius                      |
-| `bg-primary`              | `--primary`            | Dot color for primary indicator        |
-| `bg-secondary`            | `--secondary`          | Dot color for secondary indicator      |
-| `bg-info`                 | `--info`               | Dot color for info indicator           |
-| `bg-warn`                 | `--warn`               | Dot color for warn indicator           |
-| `bg-danger`               | `--danger`             | Dot color for danger indicator         |
-| `bg-success`              | `--success`            | Dot color for success indicator        |
-| `bg-muted`                | `--muted`              | Dot color for muted indicator          |
+| `bg-tag-primary-bg` | `--var-tag-primary-background` | Background for primary theme |
+| `text-tag-primary-text` | `--var-tag-primary-foreground` | Text color for primary theme |
+| `bg-tag-secondary-bg` | `--var-tag-secondary-background` | Background for secondary theme |
+| `text-tag-secondary-text` | `--var-tag-secondary-foreground` | Text color for secondary theme |
+| `bg-tag-info-bg` | `--var-tag-info-background` | Background for info theme |
+| `text-tag-info-text` | `--var-tag-info-foreground` | Text color for info theme |
+| `bg-tag-warn-bg` | `--var-tag-warn-background` | Background for warn theme |
+| `text-tag-warn-text` | `--var-tag-warn-foreground` | Text color for warn theme |
+| `bg-tag-danger-bg` | `--var-tag-danger-background` | Background for danger theme |
+| `text-tag-danger-text` | `--var-tag-danger-foreground` | Text color for danger theme |
+| `bg-tag-success-bg` | `--var-tag-success-background` | Background for success theme |
+| `text-tag-success-text` | `--var-tag-success-foreground` | Text color for success theme |
+| `bg-tag-muted-bg` | `--var-tag-muted-background` | Background for muted theme |
+| `text-tag-muted-text` | `--var-tag-muted-foreground` | Text color for muted theme |
+| `bg-disabled` | `--var-color-disabled` | Disabled utility; disabled/loading tags use `--var-tag-disabled-background` |
+| `border-card-border` | `--var-card-border` | Card border utility; neutral tags use `--var-tag-neutral-border` |
+| `rounded-tag-surface-radius` | `--var-tag-surface-radius` | Tag border radius |
+| `bg-primary` | `--var-color-primary` | Dot color for primary indicator |
+| `bg-secondary` | `--var-color-secondary` | Dot color for secondary indicator |
+| `bg-info` | `--var-color-info` | Dot color for info indicator |
+| `bg-warn` | `--var-color-warn` | Dot color for warn indicator |
+| `bg-danger` | `--var-color-danger` | Dot color for danger indicator |
+| `bg-success` | `--var-color-success` | Dot color for success indicator |
+| `bg-muted` | `--var-color-muted` | Dot color for muted indicator |
 
 ## Theme Variants
 

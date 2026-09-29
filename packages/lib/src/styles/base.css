@@ -6,13 +6,8 @@
 
 html {
     -webkit-text-size-adjust: 100%;
-    color-scheme: light;
 }
 
-[data-theme="dark"],
-html.dark {
-    color-scheme: dark;
-}
 
 input,
 select,

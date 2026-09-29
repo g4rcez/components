@@ -93,16 +93,14 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 | Token                     | CSS Variable           | Purpose                                            |
 | ------------------------- | ---------------------- | -------------------------------------------------- |
-| `bg-primary`              | `--primary`            | Today indicator background, selected day highlight |
-| `text-primary-foreground` | `--primary-foreground` | Text on today / selected day indicator             |
-| `bg-card`                 | `--card`               | Non-today day indicator background in header       |
-| `text-foreground`         | `--foreground`         | Default text in day cells and header               |
-| `text-muted-foreground`   | `--muted-foreground`   | Week label, hour labels, secondary text            |
-| `border-border`           | `--border`             | Grid cell borders, day view hour-slot dividers     |
-| `border-card-border`      | `--card-border`        | Day and week view column borders                   |
-| `bg-muted`                | `--muted`              | Hover background on time slots                     |
-| `z-calendar`              | `--z-calendar`         | `z-index` for the column resizer handle (value: 2) |
-| `z-floating`              | `--z-floating`         | `z-index` for floating overlays (value: 22)        |
+| `bg-primary` | `--var-color-primary` | Today and selected day background |
+| `text-primary-foreground` | `--var-color-primary-foreground` | Text on today / selected day |
+| `bg-background` | `--var-color-background` | Non-today header date badge background |
+| `text-foreground` | `--var-color-foreground` | Default day and header text |
+| `text-muted-foreground` | `--var-color-muted-foreground` | Hour labels and secondary text |
+| `border-border` | `--var-color-border` | Day header and time-grid column borders |
+| CSS override | `--var-page-calendar-slot-border` | Day/week hour-slot dividers |
+| CSS override | `--var-page-calendar-slot-background-hover` | Time-slot hover background |
 
 ## Views
 
