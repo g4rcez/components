@@ -74,6 +74,36 @@ describe("SwipeableList virtualization", () => {
         });
     });
 
+    it.each([
+        { side: "left" as const },
+        { side: "right" as const },
+    ])("reveals and activates the closed $side action by keyboard", async ({ side }) => {
+        const user = userEvent.setup();
+        const action = {
+            id: side,
+            label: side === "left" ? "Archive" : "Restore",
+            icon: <span aria-hidden>×</span>,
+        };
+        const item: SwipeableListItem =
+            side === "left" ? { id: "focus-row", leftActions: [action] } : { id: "focus-row", rightActions: [action] };
+        const onAction = vi.fn();
+
+        renderVirtualized([item], { onAction });
+
+        await user.tab();
+
+        const button = screen.getByRole("button", { name: action.label });
+        expect(button).toHaveFocus();
+        expect(button.parentElement).toHaveAttribute("aria-hidden", "false");
+        expect(button.parentElement).not.toHaveAttribute("inert");
+        expect(button).toHaveAttribute("tabindex", "0");
+
+        await user.keyboard("{Enter}");
+
+        expect(onAction).toHaveBeenCalledTimes(1);
+        expect(onAction).toHaveBeenCalledWith({ item, action, side });
+    });
+
     it("exposes only the revealed action group to assistive technology", () => {
         const item: SwipeableListItem = {
             ...items[0],

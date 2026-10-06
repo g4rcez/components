@@ -216,7 +216,9 @@ function SignUpForm() {
 
 - Renders a semantic `<input>` wrapped in a `<fieldset>` with an associated `<label>` (via `InputField`).
 - `aria-disabled`, `aria-readonly`, and `aria-busy` are set automatically from props.
-- Error messages appear as a visible `<p>` below the field after the user has interacted with it (`data-initialized="true"`).
+- Caller-provided `aria-describedby` IDs are preserved and combined with IDs for populated error and feedback messages.
+- Custom errors set `aria-invalid`; native constraint invalidity is exposed after interaction while the field is blurred. An explicit caller `aria-invalid` is preserved when neither state applies.
+- A supplied custom error appears in a visible `<p>` below the field; native validation styling is enabled after first focus (`data-initialized="true"`).
 - Focus ring uses `focus:ring-primary` for consistent, visible keyboard indication.
 - The `hiddenLabel` prop keeps the label in the accessibility tree while hiding it visually.
 

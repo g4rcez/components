@@ -24,6 +24,13 @@
     box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
 }
 
+@media (forced-colors: active) {
+    .__button[data-component="button"]:focus-visible {
+        outline: var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) solid ButtonText;
+        box-shadow: none;
+    }
+}
+
 .__button:disabled,
 .__button[aria-disabled="true"] {
     cursor: not-allowed;
@@ -258,5 +265,13 @@
 @keyframes var-button-pulse {
     50% {
         opacity: 0.5;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__button[data-loading="true"],
+    .__button--theme-loading {
+        animation: none;
+        transition-duration: 1ms;
     }
 }

@@ -18,6 +18,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { forwardRef, Fragment, type PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type ContextProp, type ItemProps, type ListProps, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useRemoveScroll } from "../../../hooks/use-remove-scroll";
 import { useTranslations } from "../../../hooks/use-translations";
 import { Dict } from "../../../lib/dict";
@@ -47,6 +48,7 @@ export type MultiSelectProps = Override<
         options: MultiSelectItemProps[];
         renderTag?: (option: MultiSelectItemProps) => React.ReactNode;
         onChangeOptions?: (options: string[]) => void;
+        translations?: TranslationOverrides;
     }
 >;
 
@@ -81,8 +83,8 @@ const Item = forwardRef<HTMLDivElement, ItemProps<MultiSelectItemProps> & Contex
 
 const components = { List, Item };
 
-const OverflowControl = (props: PropsWithChildren<{ label?: string; tagSize: "small" | "tiny" }>) => {
-    const translate = useTranslations();
+const OverflowControl = (props: PropsWithChildren<{ label?: string; tagSize: "small" | "tiny"; translations?: TranslationOverrides }>) => {
+    const translate = useTranslations(props.translations);
     const ref = useRef<HTMLSpanElement>(null);
     const countable = React.Children.count(props.children);
     const [normalView, setNormalView] = useState(false);
@@ -131,6 +133,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             dynamicOption = false,
             onChangeOptions,
             renderTag,
+            translations,
             ...props
         }: MultiSelectProps,
         externalRef
@@ -142,7 +145,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
         const searchInputRef = useRef<HTMLInputElement>(null);
         const isControlled = props.value !== undefined;
         const defaults = props.value ?? props.defaultValue ?? EMPTY_VALUES;
-        const translation = useTranslations();
+        const translation = useTranslations(translations);
         const generatedId = useId();
         const [open, setOpen] = useState(false);
         const [shadow, setShadow] = useState("");
@@ -452,7 +455,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
                     )}
                 >
                     {values.length > 0 ? null : <span className={multiSelectStyles.slots["placeholder-text"]}>{props.placeholder}</span>}
-                    <OverflowControl label={selectedLabel} tagSize={tagSize}>
+                    <OverflowControl label={selectedLabel} tagSize={tagSize} translations={translations}>
                         {tags}
                     </OverflowControl>
                 </div>

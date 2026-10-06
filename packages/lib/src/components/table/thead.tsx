@@ -3,6 +3,7 @@ import { AnimatePresence, motion, type PanInfo, Reorder, useDragControls, useMot
 import { Order } from "linq-arrays";
 import { DotsSixVerticalIcon, PlusIcon, MagnifyingGlassIcon, MagnifyingGlassMinusIcon, GearFineIcon } from "@phosphor-icons/react";
 import React, { Fragment, useCallback, useMemo, useRef } from "react";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
 import { useTweaks } from "../../hooks/use-tweaks";
 import { css } from "../../lib/dom";
@@ -19,6 +20,7 @@ type TableHeaderProps<T extends object> = {
     loading: boolean;
     headers: Col<T>[];
     columns: Col<T>[];
+    translations?: TranslationOverrides;
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "setSorters" | "sorters" | "inlineSorter" | "inlineFilter">;
 
 type HeaderChildProps<T extends object> = {
@@ -27,6 +29,7 @@ type HeaderChildProps<T extends object> = {
     header: Col<T>;
     columns: Col<T>[];
     loading: boolean;
+    translations?: TranslationOverrides;
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "sorters" | "setSorters" | "inlineFilter" | "inlineSorter">;
 
 type PropertiesItemProps<T extends object> = {
@@ -34,6 +37,7 @@ type PropertiesItemProps<T extends object> = {
     columns: Col<T>[];
     ownerId: Col<T>["id"];
     setCols: TableOperationProps<T>["setCols"];
+    translations?: TranslationOverrides;
 };
 
 const moveColumn = <T extends object>(columns: Col<T>[], column: Col<T>, offset: -1 | 1) => {
@@ -47,7 +51,7 @@ const moveColumn = <T extends object>(columns: Col<T>[], column: Col<T>, offset:
 };
 
 const PropertiesItem = <T extends object>(props: PropertiesItemProps<T>) => {
-    const translations = useTranslations();
+    const translations = useTranslations(props.translations);
     const controls = useDragControls();
     const y = useMotionValue(0);
     const label = getLabel(props.column);
@@ -92,8 +96,8 @@ const PropertiesItem = <T extends object>(props: PropertiesItemProps<T>) => {
     );
 };
 
-const ColumnProperties = <T extends object>(props: Pick<PropertiesItemProps<T>, "columns" | "ownerId" | "setCols">) => {
-    const translations = useTranslations();
+const ColumnProperties = <T extends object>(props: Pick<PropertiesItemProps<T>, "columns" | "ownerId" | "setCols" | "translations">) => {
+    const translations = useTranslations(props.translations);
     return (
         <Dropdown
             arrow
@@ -111,7 +115,14 @@ const ColumnProperties = <T extends object>(props: Pick<PropertiesItemProps<T>, 
         >
             <Reorder.Group as="ul" axis="y" values={props.columns} onReorder={props.setCols} className={tableHeadStyles.slots["properties-list"]}>
                 {props.columns.map((column) => (
-                    <PropertiesItem key={String(column.id)} column={column} columns={props.columns} ownerId={props.ownerId} setCols={props.setCols} />
+                    <PropertiesItem
+                        key={String(column.id)}
+                        column={column}
+                        columns={props.columns}
+                        ownerId={props.ownerId}
+                        setCols={props.setCols}
+                        translations={props.translations}
+                    />
                 ))}
             </Reorder.Group>
         </Dropdown>
@@ -125,12 +136,12 @@ const reorderVisibleColumns = <T extends object>(columns: Col<T>[], visibleColum
 
 const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
     const tweaks = useTweaks();
-    const translation = useTranslations();
+    const translation = useTranslations(props.translations);
     const ownFilters = props.filters.filter((x) => x.name === props.header.id);
     const hasFilters = ownFilters.length > 0;
     const defaultAllowSort = props.header.allowSort ?? tweaks.table.sorters ?? true;
     const defaultAllowFilter = props.header.allowFilter ?? tweaks.table.filters ?? true;
-    const operators = useOperators();
+    const operators = useOperators(props.translations);
     const FilterIcon = hasFilters ? MagnifyingGlassIcon : MagnifyingGlassMinusIcon;
     const th = useRef<HTMLTableCellElement | null>(null);
 
@@ -163,8 +174,8 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
 
     const label = getLabel(props.header);
     const textLabel = typeof label === "string" ? label : String(props.header.id);
-    const propertiesProps = useRef({ columns: props.columns, ownerId: props.header.id, setCols: props.setCols });
-    propertiesProps.current = { columns: props.columns, ownerId: props.header.id, setCols: props.setCols };
+    const propertiesProps = useRef({ columns: props.columns, ownerId: props.header.id, setCols: props.setCols, translations: props.translations });
+    propertiesProps.current = { columns: props.columns, ownerId: props.header.id, setCols: props.setCols, translations: props.translations };
 
     const Properties = useMemo(() => {
         const BoundProperties = () => <ColumnProperties {...propertiesProps.current} />;
@@ -223,7 +234,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                     <Fragment>
                                         {ownFilters.map((filter) => (
                                             <li key={`thead-filter-${filter.id}`} className={tableHeadStyles.slots["filter-item"]}>
-                                                <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} />
+                                                <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} translations={props.translations} />
                                             </li>
                                         ))}
                                     </Fragment>
@@ -246,7 +257,7 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     ) : null}
                     <span className={tableHeadStyles.slots.label}>{headerContent}</span>
                     {props.inlineSorter && defaultAllowSort ? (
-                        <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} />
+                        <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} translations={props.translations} />
                     ) : null}
                 </span>
             </span>
@@ -329,6 +340,7 @@ export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
                         inlineFilter={props.inlineFilter}
                         inlineSorter={props.inlineSorter}
                         isLast={index === props.headers.length - 1}
+                        translations={props.translations}
                         key={`header-child-item-${header.id as string}`}
                     />
                 ))}

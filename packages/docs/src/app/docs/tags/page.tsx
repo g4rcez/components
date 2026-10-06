@@ -8,7 +8,7 @@ export default function TagsPage() {
         <DocsLayout title="Tags" section="display" description="Chips, labels, or tags – a versatile component for displaying metadata or status.">
             <ComponentDemo
                 title="Tag Themes"
-                description="Demonstrates various tag themes, from primary to muted, for different contexts."
+                description="Demonstrates various tag themes, including the loading state."
                 code={`"use client";
 import { Tag } from "@g4rcez/components";
 
@@ -23,6 +23,7 @@ function TagThemes() {
       <Tag theme="secondary">secondary</Tag>
       <Tag theme="success">success</Tag>
       <Tag theme="warn">warn</Tag>
+      <Tag loading>Loading</Tag>
     </div>
   );
 }`}
@@ -36,6 +37,7 @@ function TagThemes() {
                     <Tag theme="secondary">secondary</Tag>
                     <Tag theme="success">success</Tag>
                     <Tag theme="warn">warn</Tag>
+                    <Tag loading>Loading</Tag>
                 </Card>
             </ComponentDemo>
 

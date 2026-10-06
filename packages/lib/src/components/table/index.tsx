@@ -1,8 +1,12 @@
 "use client";
 import { AnimatePresence } from "motion/react";
 import { type ComponentProps, useEffect, useId, useMemo } from "react";
+import { useContext } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
+import { Context } from "../../config/context";
+import type { TranslationOverrides } from "../../hooks/use-translations";
+import { defaultTranslations } from "../../config/default-translations";
 import type { FilterConfig } from "./filter";
 import type { GroupItem } from "./group";
 import { InnerTable, type InnerTableProps } from "./inner-table";
@@ -14,6 +18,7 @@ import { tableRootStyles } from "./index.styles";
 
 export type TableProps<T extends Record<string, unknown>> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
+    translations?: TranslationOverrides;
 } & Partial<
         TableOperationProps<T> & {
             loading: boolean;
@@ -37,7 +42,13 @@ type DispatcherFun<T extends object> = T | ((prev: T) => T);
 const compareAndExec = <T extends unknown[]>(prev: T, state: T, exec?: (t: T) => void) => (prev === state ? undefined : exec?.(state));
 
 export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) => {
+    const { translations, ...tableProps } = props;
     const groupIdPrefix = useId();
+    const context = useContext(Context);
+    const translationContext = useMemo(
+        () => (translations ? { ...context, map: { ...defaultTranslations, ...context?.map, ...translations } } : context),
+        [context, translations]
+    );
     const tweaks = useTweaks();
     const contextState = useMemo(
         (): TableContextProps => ({
@@ -93,7 +104,8 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
     const visibleCols = useMemo(() => state.cols.filter((col) => col.visible !== false), [state.cols]);
 
     return (
-        <TableProvider value={contextState}>
+        <Context.Provider value={translationContext}>
+            <TableProvider value={contextState}>
             <AnimatePresence propagate initial={false}>
                 {operations ? (
                     <Metadata
@@ -114,7 +126,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                 ) : null}
                 {state.groups.length === 0 ? (
                     <InnerTable
-                        {...props}
+                        {...tableProps}
                         index={0}
                         cols={visibleCols}
                         allCols={state.cols}
@@ -147,7 +159,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                                     </h2>
                                 ) : null}
                                 <InnerTable
-                                    {...props}
+                                    {...tableProps}
                                     sticky={props.sticky ?? undefined}
                                     group={group}
                                     index={index}
@@ -173,6 +185,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                     </div>
                 )}
             </AnimatePresence>
-        </TableProvider>
+            </TableProvider>
+        </Context.Provider>
     );
 };

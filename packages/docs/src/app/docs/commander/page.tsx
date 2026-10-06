@@ -13,35 +13,85 @@ import {
     GearIcon,
     TerminalIcon,
 } from "@phosphor-icons/react";
+import type React from "react";
 import { useState } from "react";
 import { type CommandItemTypes, useNotification, Button, CommandPalette } from "@g4rcez/components";
 
-const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({ command }) => {
+const previewRows = [
+    { title: "Command palette", status: "In progress" },
+    { title: "Project filters", status: "In review" },
+    { title: "Keyboard shortcuts", status: "Ready" },
+] as const;
+
+const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({ command, text }) => {
+    if (command.type !== "shortcut") return null;
+
+    const Title = command.title;
+    const title = typeof Title === "function" ? <Title text={text} /> : Title;
+    const hint = Array.isArray(command.hint) ? command.hint.join(" · ") : command.hint;
+
     return (
-        <div className="flex w-64 flex-col gap-3 border-l border-floating-border p-4">
-            {command.type === "group" ? (
-                <p className="text-sm font-semibold text-foreground">
-                    {typeof command.title === "function" ? command.title({ text: "" }) : command.title}
-                </p>
-            ) : (
-                <>
-                    {command.Icon && (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">{command.Icon}</div>
-                    )}
-                    <p className="text-sm font-semibold text-foreground">
-                        {typeof command.title === "function" ? command.title({ text: "" }) : command.title}
-                    </p>
-                    {command.shortcut && (
-                        <span className="inline-flex w-fit items-center rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
-                            {command.shortcut}
-                        </span>
-                    )}
-                    {command.hint && (
-                        <p className="text-xs text-muted-foreground">{Array.isArray(command.hint) ? command.hint.join(" · ") : command.hint}</p>
-                    )}
-                </>
-            )}
-        </div>
+        <article className="flex min-w-0 flex-col gap-base">
+            <div className="flex min-h-24 items-end justify-between gap-base overflow-hidden rounded-card-radius bg-muted p-base">
+                <div className="min-w-0">
+                    <p className="text-typography-xs font-semibold text-foreground">Workspace</p>
+                    <p className="mt-1 text-typography-sm text-foreground/80">A page in your team space</p>
+                </div>
+                <FolderIcon aria-hidden="true" className="shrink-0 text-primary/20" size={64} />
+            </div>
+            <header className="flex min-w-0 items-start gap-sm">
+                <div
+                    aria-hidden="true"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"
+                >
+                    {command.Icon ?? <FolderIcon size={20} />}
+                </div>
+                <div className="min-w-0 flex-1">
+                    <p className="text-typography-xs font-medium text-muted-foreground">Workspace page</p>
+                    <h2 className="mt-1 break-words text-typography-xl font-semibold text-foreground">{title}</h2>
+                </div>
+                {command.shortcut ? (
+                    <kbd className="inline-flex shrink-0 items-center rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y font-mono text-typography-xs text-muted-foreground">
+                        {command.shortcut}
+                    </kbd>
+                ) : null}
+            </header>
+            {hint ? <p className="text-typography-sm leading-relaxed text-muted-foreground">{hint}</p> : null}
+            <section
+                aria-label="Recently updated workspace pages"
+                className="min-w-0 overflow-hidden rounded-card-radius border border-floating-border bg-floating-background"
+            >
+                <div className="flex items-center justify-between gap-sm border-b border-floating-border px-base py-sm">
+                    <h3 className="text-typography-sm font-semibold text-foreground">Recent work</h3>
+                    <span className="text-typography-xs text-muted-foreground">Example data</span>
+                </div>
+                <table className="w-full table-fixed border-collapse text-left text-typography-xs">
+                    <caption className="sr-only">Example workspace pages and their status</caption>
+                    <thead>
+                        <tr className="border-b border-floating-border text-muted-foreground">
+                            <th scope="col" className="w-2/3 px-base py-sm font-medium">
+                                Page
+                            </th>
+                            <th scope="col" className="px-base py-sm font-medium">
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {previewRows.map((row) => (
+                            <tr className="border-b border-floating-border last:border-0" key={row.title}>
+                                <td className="truncate px-base py-sm font-medium text-foreground">{row.title}</td>
+                                <td className="px-base py-sm">
+                                    <span className="inline-flex max-w-full truncate rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y text-foreground">
+                                        {row.status}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </section>
+        </article>
     );
 };
 
@@ -50,6 +100,7 @@ export default function CommanderPage() {
     const [open2, setOpen2] = useState(false);
     const [open3, setOpen3] = useState(false);
     const notification = useNotification();
+    const [projectsOnly, setProjectsOnly] = useState(false);
 
     const allCommands = [
         {
@@ -259,6 +310,9 @@ export default function CommanderPage() {
             action: () => setOpen3(false),
         },
     ];
+    const visiblePreviewCommands = projectsOnly
+        ? previewCommands.filter((command) => command.type === "shortcut" && command.title === "Projects")
+        : previewCommands;
 
     return (
         <DocsLayout
@@ -370,45 +424,109 @@ function EmptyStateExample() {
 
             <ComponentDemo
                 title="With Preview Panel"
-                description="Navigate commands with arrow keys to see a contextual preview panel on the right."
+                description="The first available command appears in the page preview on open. Use the arrow keys to explore its cover, details, and database; the Projects filter is consumer-owned."
                 code={`import { CommandPalette, Button } from "@g4rcez/components";
+import type React from "react";
 import type { CommandItemTypes } from "@g4rcez/components";
-import { SquaresFourIcon, FolderIcon, GearIcon, MagnifyingGlassIcon, SignOutIcon } from "@phosphor-icons/react";
+import { SquaresFourIcon, FolderIcon, GearIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
-const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({ command }) => {
-  if (command.type === "group") return <div className="w-64 p-4">{command.title}</div>;
+const previewRows = [
+  { title: "Command palette", status: "In progress" },
+  { title: "Project filters", status: "In review" },
+  { title: "Keyboard shortcuts", status: "Ready" },
+] as const;
+
+const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({ command, text }) => {
+  if (command.type !== "shortcut") return null;
+  const Title = command.title;
+  const title = typeof Title === "function" ? <Title text={text} /> : Title;
+  const hint = Array.isArray(command.hint) ? command.hint.join(" · ") : command.hint;
+
   return (
-    <div className="w-64 border-l border-floating-border p-4 flex flex-col gap-3">
-      {command.Icon && (
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-          {command.Icon}
+    <article className="flex min-w-0 flex-col gap-base">
+      <div className="flex min-h-24 items-end justify-between gap-base overflow-hidden rounded-card-radius bg-muted p-base">
+        <div className="min-w-0">
+          <p className="text-typography-xs font-semibold text-foreground">Workspace</p>
+          <p className="mt-1 text-typography-sm text-foreground/80">A page in your team space</p>
         </div>
-      )}
-      <p className="text-sm font-semibold">{command.title}</p>
-      {command.shortcut && (
-        <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
-          {command.shortcut}
-        </span>
-      )}
-      {command.hint && <p className="text-xs text-muted-foreground">{command.hint}</p>}
-    </div>
+        <FolderIcon aria-hidden="true" className="shrink-0 text-primary/20" size={64} />
+      </div>
+      <header className="flex min-w-0 items-start gap-sm">
+        <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+          {command.Icon ?? <FolderIcon size={20} />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-typography-xs font-medium text-muted-foreground">Workspace page</p>
+          <h2 className="mt-1 break-words text-typography-xl font-semibold text-foreground">{title}</h2>
+        </div>
+        {command.shortcut && (
+          <kbd className="inline-flex shrink-0 items-center rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y font-mono text-typography-xs text-muted-foreground">
+            {command.shortcut}
+          </kbd>
+        )}
+      </header>
+      {hint && <p className="text-typography-sm leading-relaxed text-muted-foreground">{hint}</p>}
+      <section aria-label="Recently updated workspace pages" className="min-w-0 overflow-hidden rounded-card-radius border border-floating-border bg-floating-background">
+        <div className="flex items-center justify-between gap-sm border-b border-floating-border px-base py-sm">
+          <h3 className="text-typography-sm font-semibold text-foreground">Recent work</h3>
+          <span className="text-typography-xs text-muted-foreground">Example data</span>
+        </div>
+        <table className="w-full table-fixed border-collapse text-left text-typography-xs">
+          <caption className="sr-only">Example workspace pages and their status</caption>
+          <thead>
+            <tr className="border-b border-floating-border text-muted-foreground">
+              <th scope="col" className="w-2/3 px-base py-sm font-medium">Page</th>
+              <th scope="col" className="px-base py-sm font-medium">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {previewRows.map((row) => (
+              <tr className="border-b border-floating-border last:border-0" key={row.title}>
+                <td className="truncate px-base py-sm font-medium text-foreground">{row.title}</td>
+                <td className="px-base py-sm">
+                  <span className="inline-flex max-w-full truncate rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y text-foreground">
+                    {row.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </article>
   );
 };
 
 function PreviewExample() {
   const [open, setOpen] = useState(false);
-
-  const commands = [
+  const [projectsOnly, setProjectsOnly] = useState(false);
+  const allCommands: CommandItemTypes[] = [
     { type: "shortcut", title: "Dashboard", shortcut: "Alt+d", Icon: <SquaresFourIcon size={20} />, hint: "Navigate to your personal dashboard.", action: () => setOpen(false) },
-    { type: "shortcut", title: "Projects",  shortcut: "Alt+p", Icon: <FolderIcon size={20} />,           hint: "Browse and manage all your projects.",  action: () => setOpen(false) },
-    { type: "shortcut", title: "Settings",  shortcut: "Alt+s", Icon: <GearIcon size={20} />,         hint: "Configure your account preferences.",    action: () => setOpen(false) },
+    { type: "shortcut", title: "Projects", shortcut: "Alt+p", Icon: <FolderIcon size={20} />, hint: "Browse and manage your projects.", action: () => setOpen(false) },
+    { type: "shortcut", title: "Settings", shortcut: "Alt+s", Icon: <GearIcon size={20} />, hint: "Configure your account preferences.", action: () => setOpen(false) },
   ];
+  const commands = projectsOnly ? allCommands.filter((command) => command.type === "shortcut" && command.title === "Projects") : allCommands;
 
   return (
     <>
       <Button onClick={() => setOpen(true)}>Open Commander</Button>
-      <CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} Preview={CommandPreview} />
+      <CommandPalette
+        open={open}
+        commands={commands}
+        onChangeVisibility={setOpen}
+        filters={
+          <button
+            type="button"
+            aria-pressed={projectsOnly}
+            className={\`rounded border border-floating-border px-3 py-1.5 text-sm \${projectsOnly ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}\`}
+            onClick={() => setProjectsOnly((enabled) => !enabled)}
+          >
+            Projects only
+          </button>
+        }
+        Preview={CommandPreview}
+      />
     </>
   );
 }`}
@@ -416,7 +534,7 @@ function PreviewExample() {
                 <div className="flex flex-col items-center gap-4">
                     <Button onClick={() => setOpen3(true)}>Open Commander</Button>
                     <p className="text-xs text-muted-foreground">
-                        Use <span className="font-bold text-primary">↑ ↓ arrow keys</span> to highlight a command and see the preview
+                        Use <span className="font-bold text-primary">↑ ↓ arrow keys</span> to update the preview, or use the collapsible Projects filter.
                     </p>
                 </div>
             </ComponentDemo>
@@ -434,7 +552,22 @@ function PreviewExample() {
                 onChangeVisibility={setOpen2}
                 emptyMessage="No commands match your search. Try a different term."
             />
-            <CommandPalette open={open3} Preview={CommandPreview} commands={previewCommands} onChangeVisibility={setOpen3} />
+            <CommandPalette
+                open={open3}
+                Preview={CommandPreview}
+                filters={
+                    <button
+                        type="button"
+                        aria-pressed={projectsOnly}
+                        className={`rounded border border-floating-border px-3 py-1.5 text-sm ${projectsOnly ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}`}
+                        onClick={() => setProjectsOnly((enabled) => !enabled)}
+                    >
+                        Projects only
+                    </button>
+                }
+                commands={visiblePreviewCommands}
+                onChangeVisibility={setOpen3}
+            />
         </DocsLayout>
     );
 }

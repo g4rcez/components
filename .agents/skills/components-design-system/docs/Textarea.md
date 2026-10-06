@@ -127,7 +127,8 @@ export default function MultiFieldForm() {
 ## Accessibility
 
 - Rendered inside an `InputField` which wraps the element with `<fieldset>` and a `<label>` linked via `id`/`for`.
-- Supports `aria-required`, `aria-invalid`, `aria-disabled`, and `aria-readonly` via prop spread.
+- Caller-provided `aria-describedby` IDs are preserved and combined with IDs for populated error and feedback messages.
+- Custom errors set `aria-invalid`; native constraint invalidity is exposed after interaction while the field is blurred. An explicit caller `aria-invalid` is preserved when neither state applies.
 - Keyboard navigation follows standard `<textarea>` behavior (Tab to focus, Shift+Tab to leave).
 - When `enterKeyHint="next"` and a `next` id is provided, pressing Enter moves focus to the target element.
 

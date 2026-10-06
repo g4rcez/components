@@ -19,6 +19,7 @@ import { forwardRef, Fragment, useCallback, useEffect, useId, useMemo, useRef, u
 import { Is } from "sidekicker";
 import MaskInput from "the-mask-input";
 import { useLocale } from "../../../hooks/use-locale";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import type { Override } from "../../../types";
@@ -50,6 +51,7 @@ type DatePickerBaseProps = Omit<
             clickToClose?: boolean;
             rangePresets?: DatePickerPreset[];
             rangeLabels?: DatePickerRangeLabels;
+            translations?: TranslationOverrides;
         }
     >,
     "currency" | "date" | "range" | "rangeMode" | "onChange"
@@ -261,7 +263,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
         const locale = useLocale(inputLocal);
         const labelId = useId();
         const rangeId = props.id ?? props.name ?? labelId;
-        const translation = useTranslations();
+        const translation = useTranslations(props.translations);
         const datetimeFormat = useMemo(() => new Intl.DateTimeFormat(locale, type === "datetime" ? DATE_TIME_FORMAT : DATE_FORMAT), [locale, type]);
         const rangeMode = inputRangeMode || range !== undefined;
         const [innerDate, setInnerDate] = useState(date || undefined);
@@ -450,7 +452,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
             <Calendar
                 {...(props as unknown as CalendarProps)}
                 locale={locale}
-                changeOnlyOnClick
+                translations={props.translations}
                 date={calendarDate}
                 markRange={markRange}
                 markToday={markToday}

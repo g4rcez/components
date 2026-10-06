@@ -123,6 +123,7 @@ describe("floating and command contracts", () => {
 
         const combobox = await screen.findByRole("combobox", { name: /command palette search/i });
         expect(onChangeText).not.toHaveBeenCalled();
+        expect(screen.queryByText("Nothing here")).not.toBeInTheDocument();
         await user.type(combobox, "missing");
         expect(onChangeText).toHaveBeenLastCalledWith("missing");
         expect(screen.getByText("Nothing here")).toBeInTheDocument();
@@ -132,6 +133,27 @@ describe("floating and command contracts", () => {
         expect(action).toHaveBeenCalledTimes(1);
         expect(onChangeText).toHaveBeenLastCalledWith("from action");
     });
+    it("preserves rich command titles when filtering by hints", async () => {
+        const user = userEvent.setup();
+        function AlphaTitle() {
+            return <span>Alpha visual title</span>;
+        }
+        function BetaTitle() {
+            return <span>Beta visual title</span>;
+        }
+        const commands: CommandItemTypes[] = [
+            { type: "shortcut", title: <AlphaTitle />, hint: "shared alias", action: vi.fn() },
+            { type: "shortcut", title: <BetaTitle />, hint: "shared alias", action: vi.fn() },
+        ];
+
+        render(<CommandPalette open commands={commands} onChangeVisibility={() => {}} />);
+
+        await user.type(await screen.findByRole("combobox"), "alias");
+
+        expect(screen.getByText("Alpha visual title")).toBeInTheDocument();
+        expect(screen.getByText("Beta visual title")).toBeInTheDocument();
+    });
+
 
     it("exposes one localized loading status for CommandPalette placeholders", async () => {
         render(

@@ -25,7 +25,7 @@ import { Tag } from "@g4rcez/components/tag";
 | `size`      | `"icon" \| "small" \| "default" \| "big" \| "tiny"`                                                                                    | `"default"` | Size of the tag                            |
 | `icon`      | `React.ReactNode`                                                                                                                      | -           | Icon to display inside the tag             |
 | `indicator` | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral"`                                        | -           | Shows a small colored dot before the label |
-| `loading`   | `boolean`                                                                                                                              | `false`     | Overrides theme with pulse animation       |
+| `loading`   | `boolean`                                                                                                                              | `false`     | Overrides the theme with a loading appearance; its pulse is omitted when reduced motion is preferred |
 | `as`        | `React.ElementType`                                                                                                                    | `"span"`    | HTML element to render as                  |
 | `className` | `string`                                                                                                                               | -           | Additional CSS classes                     |
 | `children`  | `React.ReactNode`                                                                                                                      | -           | Tag content                                |
@@ -84,7 +84,7 @@ Tailwind utility mappings and component tokens. Where a historical utility targe
 - `neutral`: Transparent with card border
 - `custom`: No default styling — supply all classes via `className`
 - `disabled`: Disabled appearance with reduced opacity
-- `loading`: Pulse animation (also triggered by the `loading` boolean prop)
+- `loading`: Muted loading appearance (also triggered by the `loading` boolean prop); its pulse is omitted when reduced motion is preferred
 
 ## Examples
 
@@ -227,7 +227,7 @@ import { BellIcon } from "@phosphor-icons/react";
 
 ## Notes
 
-- The `loading` prop overrides the `theme` value and applies the loading animation
+- The `loading` prop overrides the `theme` value and applies the loading appearance; its pulse is omitted when reduced motion is preferred
 - Once `loading` becomes `false`, the original `theme` is restored
 - The component forwards refs to the underlying element
 - All standard HTML attributes for the target element are forwarded

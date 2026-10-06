@@ -25,10 +25,12 @@ Inherits all standard HTML `input[type="checkbox"]` attributes, plus:
 | ----------- | -------------------------------------------------------------- | ----------- | ---------------------------------------------------- |
 | `children`  | `React.ReactNode`                                              | —           | Label text or element displayed next to the switch.  |
 | `onCheck`   | `(nextValue: boolean) => void`                                 | —           | Called with the new boolean value after toggling.    |
-| `error`     | `string`                                                       | —           | Error message displayed below the switch.            |
+| `error`     | `string`                                                       | —           | Error message displayed below the switch; it wraps within the available width. |
 | `loading`   | `boolean`                                                      | `false`     | Disables the switch and signals a pending operation. |
 | `container` | `string`                                                       | —           | Additional CSS classes for the outer `<fieldset>`.   |
 | `size`      | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"default"` | Shared control size.                                 |
+| `aria-label`       | `string`                                                       | —           | Accessible name for the visual switch when no nonempty child label is present. |
+| `aria-labelledby`  | `string`                                                       | —           | ID reference for the visual switch name when no nonempty child label is present. |
 
 ## Design Tokens
 
@@ -73,6 +75,12 @@ export default function NotificationsToggle() {
         </Switch>
     );
 }
+```
+
+### Switch Without Visible Label
+
+```tsx
+<Switch aria-label="Enable location sharing" />
 ```
 
 ### Controlled switch
@@ -150,7 +158,7 @@ export default function PrivacySettings() {
 
 - A hidden `<input type="checkbox">` ensures correct native form submission and value reading.
 - The visual toggle is a `<button role="switch">` with `aria-checked` reflecting the current state.
-- `aria-labelledby` links the button to the rendered label element.
+- A nonempty child label names the switch button. When there is no visible child label, `aria-label` or `aria-labelledby` names the button; these props are not assigned to the hidden checkbox.
 - Space and Enter toggle the switch via the button's `onClick` handler.
 - When `loading` or `disabled` is true, both the hidden input and the button receive `disabled`, preventing interaction.
 

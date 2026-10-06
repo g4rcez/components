@@ -1,9 +1,9 @@
-import { useTranslations } from "../../../hooks/use-translations";
+import { useTranslations, type TranslationOverrides } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import { spinnerStyles } from "./spinner.styles";
 
-export const Spinner = (props: { className?: string }) => {
-    const t = useTranslations();
+export const Spinner = (props: { className?: string; translations?: TranslationOverrides }) => {
+    const t = useTranslations(props.translations);
     return (
         <span
             role="status"

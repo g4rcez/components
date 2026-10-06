@@ -91,7 +91,7 @@ function DisabledAndError() {
       <Switch name="locked" disabled defaultChecked>
         Feature locked (enabled)
       </Switch>
-      <Switch name="broken" error="This setting cannot be changed right now.">
+      <Switch name="broken" error="This setting cannot be changed until the account security review is complete and an administrator approves the update.">
         Experimental feature
       </Switch>
     </div>
@@ -103,7 +103,7 @@ function DisabledAndError() {
                         <Switch name="locked" disabled defaultChecked>
                             Feature locked (enabled)
                         </Switch>
-                        <Switch name="broken" error="This setting cannot be changed right now.">
+                        <Switch name="broken" error="This setting cannot be changed until the account security review is complete and an administrator approves the update.">
                             Experimental feature
                         </Switch>
                     </div>

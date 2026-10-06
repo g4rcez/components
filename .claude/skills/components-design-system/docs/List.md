@@ -32,6 +32,7 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 | Prop          | Type                             | Default | Description                                                                                                                      |
 | ------------- | -------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | `Label`                          | —       | Primary heading shown in the list row and in the overlay header.                                                                 |
+| `titleText`   | `string`                         | —       | Optional plain-text alternative for the localized open-action label when a non-string title has no clear rendered text. |
 | `description` | `Label`                          | —       | Secondary text rendered below the title in both the row and the overlay.                                                         |
 | `children`    | `Label`                          | —       | Content rendered inside the expanded overlay below the header section.                                                           |
 | `avatar`      | `Label`                          | —       | Optional leading node (image, icon, or element) displayed before the title in the row.                                           |
@@ -200,6 +201,7 @@ export function NotificationFeed() {
 
 - The list renders as `<ul role="list">`.
 - Each row title/description area is a `<button>`, making it keyboard focusable and activatable with `Enter` or `Space`.
+- Row controls use the rendered title as their accessible name and the rendered description as their accessible description; provide `titleText` only when a non-string title cannot supply a clear action label.
 - The overlay uses `FloatingFocusManager` to trap focus and `FloatingOverlay` with `lockScroll` to block background interaction.
 - Pressing `Escape`, clicking outside, or clicking the close button dismisses the overlay.
 - The close button inside the overlay is a focusable `<button>` with an `XIcon`.

@@ -27,3 +27,9 @@
         opacity: var(--var-skeleton-pulse-opacity);
     }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .__skeleton {
+        animation: none;
+    }
+}

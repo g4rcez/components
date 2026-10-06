@@ -1,6 +1,6 @@
 ---
 title: Spinner
-description: Accessible animated loading indicator for indeterminate work, with an optional full-container wrapper.
+description: Accessible loading indicator for indeterminate work with a reduced-motion static state, plus an optional full-container wrapper.
 package: "@g4rcez/components"
 export: "{ Spinner, Loading }"
 import: "import { Spinner, Loading } from '@g4rcez/components'"
@@ -9,7 +9,7 @@ category: display
 
 # Spinner
 
-`Spinner` indicates work with an unknown completion time. `Loading` centers a spinner in a full-size container.
+`Spinner` indicates work with an unknown completion time. Its rotation is disabled when reduced motion is preferred. `Loading` centers a spinner in a full-size container.
 
 ## Import
 
@@ -95,5 +95,5 @@ The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__s
 
 ## Notes
 
-- The spinner uses a border arc and CSS animation; it does not report numeric progress.
+- The spinner uses a border arc and CSS animation; rotation is disabled when reduced motion is preferred. It does not report numeric progress.
 - The default translation is `Loading` in the default locale and changes with `ComponentsProvider` translations.

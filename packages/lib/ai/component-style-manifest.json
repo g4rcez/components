@@ -1059,9 +1059,13 @@
         "search-icon-frame": "__command-palette__search-icon-frame",
         "search-icon": "__command-palette__search-icon",
         "input": "__command-palette__input",
+        "controls": "__command-palette__controls",
+        "filters": "__command-palette__filters",
         "loading-list": "__command-palette__loading-list",
         "content": "__command-palette__content",
         "list": "__command-palette__list",
+        "preview": "__command-palette__preview",
+        "preview-empty": "__command-palette__preview-empty",
         "empty": "__command-palette__empty",
         "footer": "__command-palette__footer"
       },

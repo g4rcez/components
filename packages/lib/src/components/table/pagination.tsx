@@ -1,5 +1,6 @@
 import type React from "react";
 import { Fragment, useId, useMemo } from "react";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
 import { Polymorph } from "../core/polymorph/polymorph";
@@ -27,9 +28,9 @@ export function createPaginationItems(current: number, max: number) {
     return Array.from(new Set(items));
 }
 
-export const Pagination = (pagination: TablePagination) => {
+export const Pagination = (pagination: TablePagination & { translations?: TranslationOverrides }) => {
     const id = useId();
-    const translation = useTranslations();
+    const translation = useTranslations(pagination.translations);
     const pageNavigation = useMemo(() => createPaginationItems(pagination.current, pagination.pages), [pagination]);
     const hasNext = pagination.current < pagination.pages;
     const Link: React.ElementType = pagination.asLink ?? "button";

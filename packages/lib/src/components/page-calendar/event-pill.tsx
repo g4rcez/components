@@ -1,5 +1,6 @@
 import { Button } from "../core/button/button";
 import { css } from "../../lib/dom";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
 import type { CalendarEvent } from "./page-calendar.types";
 import { formatEventTime } from "./page-calendar.utils";
@@ -9,10 +10,11 @@ type EventPillProps = {
     compact?: boolean;
     onClick: () => void;
     event: CalendarEvent;
+    translations?: TranslationOverrides;
 };
 
-export function EventPill({ event, onClick, compact = false }: EventPillProps) {
-    const t = useTranslations();
+export function EventPill({ event, onClick, compact = false, translations }: EventPillProps) {
+    const t = useTranslations(translations);
     const props = {
         className: css(pageCalendarEventPillStyles.slots.button, event.className),
     };

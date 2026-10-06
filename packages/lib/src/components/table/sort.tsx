@@ -2,6 +2,7 @@
 import { SortAscendingIcon, SortDescendingIcon, CaretUpDownIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import type React from "react";
 import { Fragment, useState } from "react";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
 import type { Any, Label } from "../../types";
@@ -46,6 +47,7 @@ type Props<T extends Any> = TableConfiguration<
         cols: Col<T>[];
         sorters: Sorter<T>[];
         set: React.Dispatch<React.SetStateAction<Sorter<T>[]>>;
+        translations?: TranslationOverrides;
     }
 >;
 
@@ -57,7 +59,7 @@ const createSorter = <T extends Any>(col: Col<T>, label: string, order: Order): 
 });
 
 export const Sort = <T extends Any>(props: Props<T>) => {
-    const translation = useTranslations();
+    const translation = useTranslations(props.translations);
 
     const orders = {
         asc: { label: translation.tableSortAsc, value: Order.Asc },
@@ -134,10 +136,13 @@ export const Sort = <T extends Any>(props: Props<T>) => {
     );
 };
 
-type SorterHeadProps<T extends Any> = Pick<TableOperationProps<T>, "sorters" | "setSorters"> & { col: Col<T> };
+type SorterHeadProps<T extends Any> = Pick<TableOperationProps<T>, "sorters" | "setSorters"> & {
+    col: Col<T>;
+    translations?: TranslationOverrides;
+};
 
 export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
-    const translations = useTranslations();
+    const translations = useTranslations(props.translations);
     const [status, setStatus] = useState(() => {
         const sorter = props.sorters.find((sort) => sort.value === props.col.id);
         return sorter ? sorter.type : Order.Undefined;

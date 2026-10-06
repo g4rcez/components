@@ -1,4 +1,5 @@
 "use client";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import {
     add,
     eachDayOfInterval,
@@ -78,6 +79,7 @@ type CalendarBaseProps = Partial<{
     disabledDate: (date: Date) => boolean;
     RenderOnDay: React.FC<{ date: Date }>;
     labelRange: { to: string; from: string };
+    translations?: TranslationOverrides;
 }>;
 
 export type CalendarProps<T extends DatepickerType = "date"> = CalendarBaseProps & {
@@ -273,7 +275,7 @@ export const Calendar = <T extends DatepickerType = "date">({
     ...props
 }: CalendarProps<T>) => {
     const id = useRef(uuid());
-    const translations = useTranslations();
+    const translations = useTranslations(props.translations);
     const currentLocale = useLocale(locale);
     const calendarType = type ?? "date";
     const root = useRef<HTMLDivElement>(null);

@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "motion/react";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import React, { Fragment, useCallback, useId, useState, type PropsWithChildren } from "react";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
@@ -9,6 +10,7 @@ import { listStyles } from "./list.styles";
 
 type AnimatedItemProps = {
     title: Label;
+    titleText?: string;
     avatar?: Label;
     children: Label;
     description: Label;
@@ -17,26 +19,27 @@ type AnimatedItemProps = {
 
 type IdAnimatedItem = AnimatedItemProps & { id: string };
 
-type AnimatedListProps = object;
+type AnimatedListProps = { translations?: TranslationOverrides };
 
 type FloatItemProps = {
     setter: () => void;
     item: IdAnimatedItem | null;
+    translations?: TranslationOverrides;
 };
 
-const FloatItem = ({ item, setter }: FloatItemProps) => {
-    const translations = useTranslations();
+const FloatItem = ({ item, setter, translations: translationOverrides }: FloatItemProps) => {
+    const translations = useTranslations(translationOverrides);
     const detailContentClassName = listStyles.slots["item-content"];
     const headerClassName = listStyles.slots.header;
     const ariaDescription = typeof item?.description === "string" ? item.description : undefined;
-    const title = item ? String(item.title) : translations.listCloseDetails;
+    const title = item ? item.title : translations.listCloseDetails;
 
     return (
         <Modal
+            translations={translationOverrides}
             title={title}
             closeOnFocusOut
             closable={false}
-            ariaTitle={title}
             overlayClickClose
             open={item !== null}
             ariaDescription={ariaDescription}
@@ -59,7 +62,7 @@ const FloatItem = ({ item, setter }: FloatItemProps) => {
 };
 
 export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
-    const translations = useTranslations();
+    const translations = useTranslations(props.translations);
     const [selected, setSelected] = useState<IdAnimatedItem | null>(null);
     const id = useId();
     const itemContentClassName = listStyles.slots["item-content"];
@@ -72,11 +75,18 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
 
     return (
         <Fragment>
-            <FloatItem item={selected} setter={clear} />
+            <FloatItem item={selected} setter={clear} translations={props.translations} />
             <ul role="list" className={listStyles.className({})}>
                 {items.map((x, index) => {
                     const item = (x as React.ReactElement<AnimatedItemProps>).props;
                     const innerId = `${id}-${index}`;
+                    const titleId = `${innerId}-title`;
+                    const descriptionId = `${innerId}-description`;
+                    const actionLabel = typeof item.title === "string" ? item.title : item.titleText;
+                    const actionLabelProps =
+                        actionLabel !== undefined
+                            ? { "aria-label": translations.listOpenDetails(actionLabel) }
+                            : { "aria-labelledby": titleId };
                     const setter = () => setSelected({ ...item, id: innerId });
                     const Leading = item.leading;
                     return (
@@ -90,7 +100,8 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                                                     <button
                                                         type="button"
                                                         onClick={setter}
-                                                        aria-label={translations.listOpenDetails(String(item.title))}
+                                                        {...actionLabelProps}
+                                                        aria-describedby={descriptionId}
                                                         className={listStyles.slots["avatar-button"]}
                                                     >
                                                         {item.avatar}
@@ -103,11 +114,14 @@ export const AnimatedList = (props: PropsWithChildren<AnimatedListProps>) => {
                                                 <button
                                                     type="button"
                                                     onClick={setter}
-                                                    aria-label={translations.listOpenDetails(String(item.title))}
+                                                    {...actionLabelProps}
+                                                    aria-describedby={descriptionId}
                                                     className={listStyles.slots["item-action"]}
                                                 >
-                                                    <h3>{item.title}</h3>
-                                                    <p className={listStyles.slots.description}>{item.description}</p>
+                                                    <h3 id={titleId}>{item.title}</h3>
+                                                    <p id={descriptionId} className={listStyles.slots.description}>
+                                                        {item.description}
+                                                    </p>
                                                 </button>
                                                 {Leading ? <Leading open={setter} /> : null}
                                             </div>

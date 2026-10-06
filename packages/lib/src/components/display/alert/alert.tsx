@@ -2,6 +2,7 @@
 import { CheckCircleIcon, InfoIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
 import type React from "react";
 import { cloneElement, forwardRef } from "react";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import type { ComponentStyleProps } from "../../../lib/component-styles";
@@ -16,15 +17,16 @@ export type AlertProps<T extends React.ElementType = "div"> = PolymorphicProps<
         container: string;
         Icon: React.ReactElement;
         onClose: (nextState: boolean) => void;
+        translations: TranslationOverrides;
     }>,
     T
 >;
 
 export const Alert: <T extends React.ElementType = "div">(props: AlertProps<T>) => React.ReactNode = forwardRef(function Alert(
-    { className, theme, Icon, onClose, open = true, container, ...props }: AlertProps,
+    { className, theme, Icon, onClose, open = true, container, translations, ...props }: AlertProps,
     ref: React.Ref<"div">
 ) {
-    const t = useTranslations();
+    const t = useTranslations(translations);
     const resolvedTheme = theme ?? alertStyles.defaults.theme;
     const close = () => onClose?.(false);
     const liveRole = resolvedTheme === "danger" || resolvedTheme === "warn" ? "alert" : "status";

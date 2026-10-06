@@ -35,6 +35,7 @@ import React, {
     useState,
 } from "react";
 import { useFloatingRef } from "../../../hooks/use-floating-ref";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useMediaQuery } from "../../../hooks/use-media-query";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
@@ -166,7 +167,7 @@ export type ModalProps = Override<
         open: boolean;
         onChange: (nextState: boolean) => void;
     } & ModalAccessibleNameProps &
-        ModalOptions
+        ModalOptions & { translations?: TranslationOverrides }
 >;
 
 type DraggableProps = {
@@ -177,6 +178,7 @@ type DraggableProps = {
     onChange: (nextState: boolean) => void;
     value: MotionValue<number | undefined>;
     parent: React.RefObject<HTMLElement | null>;
+    translations?: TranslationOverrides;
 };
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: 0 };
@@ -197,7 +199,7 @@ const getViewportSize = (axis: "inline" | "block", fallback: number) => {
 const getModalMaxSize = (axis: "inline" | "block", fallback: number) => getViewportSize(axis, fallback) * modalMaxViewportRatio;
 
 const Draggable = (props: DraggableProps) => {
-    const translations = useTranslations();
+    const translations = useTranslations(props.translations);
 
     const getKeyboardResize = (delta: number) => {
         const element = props.parent.current;
@@ -345,11 +347,12 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
             initialFocus,
             role: modalRole = "dialog",
             interactions: outInteractions = noop,
+            translations,
             ...props
         },
         externalRef: ForwardedRef<ModalRef>
     ) => {
-        const t = useTranslations();
+        const t = useTranslations(translations);
         const root = useFloatingRef();
         const removeScrollRef = useRef<HTMLDivElement>(null);
         const modalId = useId();
@@ -533,6 +536,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                             instructionsId={resizeDescriptionId}
                                                             position={position as DrawerPosition}
                                                             parent={floating.refs.floating}
+                                                            translations={translations}
                                                         />
                                                     </>
                                                 ) : null}
@@ -603,8 +607,8 @@ let confirmGlobal: ConfirmContextType = async <T,>(_: ConfirmOptions): Promise<T
 
 Modal.confirm = <T,>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as unknown as Promise<T>;
 
-export const ModalConfirmProvider = ({ children }: { children: React.ReactNode }) => {
-    const translations = useTranslations();
+export const ModalConfirmProvider = ({ children, translations: translationOverrides }: { children: React.ReactNode; translations?: TranslationOverrides }) => {
+    const translations = useTranslations(translationOverrides);
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState<Partial<ConfirmOptions>>({});
     const [resolve, setResolve] = useState<(value: boolean) => void>(() => {});

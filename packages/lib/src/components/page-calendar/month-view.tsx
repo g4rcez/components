@@ -1,4 +1,5 @@
 import { isSameMonth, isToday } from "date-fns";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useLocale } from "../../hooks/use-locale";
 import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
@@ -16,11 +17,12 @@ type MonthViewProps = {
     onDayClick: (date: Date) => void;
     eventsByDate: Map<string, CalendarEvent[]>;
     onEventClick: (event: CalendarEvent) => void;
+    translations?: TranslationOverrides;
 };
 
-export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDayClick }: MonthViewProps) {
+export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDayClick, translations }: MonthViewProps) {
     const locale = useLocale();
-    const t = useTranslations();
+    const t = useTranslations(translations);
     const WEEKDAY_LABELS = useMemo(() => getWeekDays(new Date()), []);
     const selectedDateKey = toDateKey(currentDate);
     const selectedDayIndex = useMemo(() => {
@@ -130,7 +132,7 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                                     onClick={(event) => event.stopPropagation()}
                                                     onKeyDown={(event) => event.stopPropagation()}
                                                 >
-                                                    <EventPill compact event={event} onClick={() => onEventClick(event)} />
+                                                    <EventPill compact event={event} onClick={() => onEventClick(event)} translations={translations} />
                                                 </div>
                                             ))}
                                         </div>

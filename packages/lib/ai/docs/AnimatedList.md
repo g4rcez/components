@@ -30,6 +30,7 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 | Prop          | Type                             | Default | Description                                                                                                                                 |
 | ------------- | -------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | `Label`                          | —       | Primary heading shown in the list row and the overlay header.                                                                               |
+| `titleText`   | `string`                         | —       | Optional plain-text alternative for the localized open-action label when a non-string title has no clear rendered text. |
 | `description` | `Label`                          | —       | Secondary text shown below the title in both the row and overlay header.                                                                    |
 | `children`    | `Label`                          | —       | Content rendered inside the expanded overlay below the header.                                                                              |
 | `avatar`      | `Label`                          | —       | Optional node (icon, image, or element) shown at the leading edge of the row.                                                               |
@@ -187,6 +188,7 @@ export function ActivityFeed() {
 
 - The list renders as a semantic `<ul role="list">`.
 - Each item's title/description area is a `<button>` that triggers the overlay, making it keyboard accessible.
+- Row controls use the rendered title as their accessible name and the rendered description as their accessible description; provide `titleText` only when a non-string title cannot supply a clear action label.
 - The overlay uses `FloatingFocusManager` to trap focus and `FloatingOverlay` with `lockScroll` to prevent background interaction.
 - Pressing `Escape` or clicking outside the overlay dismisses it.
 - The close button inside the overlay is a focusable `<button>` element.

@@ -48,13 +48,14 @@ export type ButtonProps<T extends React.ElementType = "button"> = PropsWithChild
  * @returns A styled button component
  */
 export const Button: <T extends React.ElementType = "button">(_: ButtonProps<T>) => React.ReactNode = forwardRef(function Button(
-    { className, icon, loading, theme, type = "button", size, rounded, ...props }: ButtonProps,
+    { className, icon, loading, theme, type = "button", size, rounded, ...props }: ButtonProps<React.ElementType>,
     ref: React.Ref<"button">
 ) {
     const disabled = loading || props.disabled;
     return (
         <Polymorph
             {...props}
+            {...(disabled && props.as === "a" ? { href: undefined } : {})}
             ref={ref}
             type={type}
             disabled={disabled}

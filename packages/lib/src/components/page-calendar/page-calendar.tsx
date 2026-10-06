@@ -1,3 +1,4 @@
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { pageCalendarStyles } from "./page-calendar.styles";
@@ -22,6 +23,7 @@ type PageCalendarProps<T extends CalendarEventBase> = {
     onEventClick?: (event: CalendarEvent) => void;
     renderEvent?: (event: CalendarEvent<T>) => ReactNode;
     onChangeFilters?: (filters: CalendarFilter[]) => void;
+    translations?: TranslationOverrides;
 };
 
 const noop: CalendarFilter[] = [];
@@ -39,8 +41,9 @@ export function PageCalendar<T extends CalendarEventBase>({
     loading = false,
     defaultView = "month",
     onChangeFilters: onActiveFiltersChange,
+    translations,
 }: PageCalendarProps<T>) {
-    const t = useTranslations();
+    const t = useTranslations(translations);
     const [currentView, setCurrentView] = useState<ViewMode>(defaultView);
     const [currentDate, setCurrentDate] = useState<Date>(() => defaultDate ?? new Date());
     const [internalFilters, setInternalFilters] = useState<CalendarFilter[]>(filters);
@@ -96,6 +99,7 @@ export function PageCalendar<T extends CalendarEventBase>({
                 setCurrentDate={setCurrentDate}
                 setCurrentView={setCurrentView}
                 onToggleFilter={toggleFilter}
+                translations={translations}
             />
             {loading ? (
                 <Loading />
@@ -108,6 +112,7 @@ export function PageCalendar<T extends CalendarEventBase>({
                             eventsByDate={eventsByDate}
                             onDayClick={handleDayClick}
                             onEventClick={handleEventClick}
+                            translations={translations}
                         />
                     )}
                     {currentView === "week" && (
@@ -117,6 +122,7 @@ export function PageCalendar<T extends CalendarEventBase>({
                             onSlotClick={onSlotClick}
                             eventsByDate={eventsByDate}
                             onEventClick={handleEventClick}
+                            translations={translations}
                         />
                     )}
                     {currentView === "day" && (
@@ -127,6 +133,7 @@ export function PageCalendar<T extends CalendarEventBase>({
                             eventsByDate={eventsByDate}
                             onDateChange={setCurrentDate}
                             onEventClick={handleEventClick}
+                            translations={translations}
                         />
                     )}
                 </>

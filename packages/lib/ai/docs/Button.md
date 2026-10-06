@@ -25,7 +25,7 @@ import { Button } from "@g4rcez/components/button";
 | `size`      | `"icon" \| "min" \| "small" \| "default" \| "big" \| "tiny"`                                                                                                                                                                                                                                   | `"default"` | Size of the button                                                |
 | `rounded`   | `"rough" \| "squared" \| "default" \| "circle"`                                                                                                                                                                                                                                                | `"default"` | Border radius style                                               |
 | `icon`      | `React.ReactNode`                                                                                                                                                                                                                                                                              | -           | Icon to display before button content                             |
-| `loading`   | `boolean`                                                                                                                                                                                                                                                                                      | `false`     | Shows loading state with pulse animation and disables interaction |
+| `loading`   | `boolean`                                                                                                                                                                                                                                                                                      | `false`     | Shows a disabled loading state; the pulse is omitted when reduced motion is preferred |
 | `disabled`  | `boolean`                                                                                                                                                                                                                                                                                      | `false`     | Disables the button                                               |
 | `as`        | `React.ElementType`                                                                                                                                                                                                                                                                            | `"button"`  | HTML element to render as                                         |
 | `type`      | `string`                                                                                                                                                                                                                                                                                       | `"button"`  | Button type attribute                                             |
@@ -99,7 +99,7 @@ Transparent background with colored text; shows a tinted background on hover.
 
 - `raw`: No default styling — supply all classes via `className`
 - `disabled`: Disabled visual appearance (use the `disabled` prop for full behavior)
-- `loading`: Pulse animation with muted background
+- `loading`: Muted loading appearance; its pulse is omitted when reduced motion is preferred
 
 ## Examples
 
@@ -184,7 +184,8 @@ import { PlusIcon } from "@phosphor-icons/react";
 - Sets `aria-disabled` when `disabled` or `loading` is true
 - Sets `aria-busy` during loading state
 - Click handlers are automatically removed while loading or disabled
-- Supports visible focus rings via `focus-visible:ring-4 focus-visible:ring-ring`
+- For `as="a"`, disabled or loading states omit `href` so native link activation cannot navigate
+- Supports visible focus rings via `focus-visible:ring-4 focus-visible:ring-ring`; forced-colors mode uses a system-color outline
 - Keyboard navigation is fully supported
 
 ## Data Attributes

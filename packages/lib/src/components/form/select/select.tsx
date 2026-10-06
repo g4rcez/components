@@ -2,6 +2,7 @@
 import { CaretDownIcon } from "@phosphor-icons/react";
 import type React from "react";
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef } from "react";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css, initializeInputDataset, mergeRefs } from "../../../lib/dom";
 import type { Override } from "../../../types";
@@ -22,6 +23,7 @@ export type SelectProps = Override<
     {
         options: OptionProps[];
         selectContainer?: string;
+        translations?: TranslationOverrides;
     }
 >;
 
@@ -45,11 +47,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             right,
             left,
             error,
+            translations,
             ...props
         }: SelectProps,
         ref
     ) => {
-        const translation = useTranslations();
+        const translation = useTranslations(translations);
         const inputRef = useRef<HTMLSelectElement>(null);
         const generatedId = useId();
         const id = props.id ?? props.name ?? generatedId;

@@ -56,6 +56,12 @@ Testing is primarily focused on `packages/lib`.
 - **CSS Classes**: `kebab-case` (Tailwind)
 - **Test Files**: `*.test.tsx`
 
+### Component Reuse
+
+- Before creating a new component or writing custom CSS for standard UI behavior, inspect the existing `packages/lib/src/components` catalog and relevant component references.
+- MUST reuse or compose an existing library component whenever its API satisfies the requirement. Use its provided themes, sizes, variants, and props instead of recreating behavior or appearance with native markup, custom CSS, or a duplicate component.
+- Create a new component or component-specific styles only when no existing component or API meets the requirement; keep unique layout styling token-driven.
+
 ### Component Implementation (Library)
 
 Follow this template for new components in `packages/lib`:

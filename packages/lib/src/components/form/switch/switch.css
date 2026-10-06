@@ -103,7 +103,6 @@
     margin-block-start: var(--var-switch-error-margin-block-start, calc(var(--var-spacing-base) * 0.25));
     color: var(--var-color-danger);
     font-size: var(--var-switch-error-font-size);
-    white-space: nowrap;
 }
 
 .__switch__error:empty {

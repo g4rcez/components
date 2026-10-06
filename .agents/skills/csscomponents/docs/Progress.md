@@ -29,6 +29,8 @@ import { Progress } from "@g4rcez/components";
 | `container`     | `string` | —       | Class for the progress track.                                                  |
 | `className`     | `string` | —       | Class for the indicator.                                                       |
 | `textClassName` | `string` | —       | Class for the label.                                                           |
+| `aria-label`      | `string` | —       | Accessible name used when no nonempty visible `label` is rendered.             |
+| `aria-labelledby` | `string` | —       | ID reference used when no nonempty visible `label` is rendered.                 |
 
 If `value` and `percent` are both absent, or `max <= min`, the track is rendered without an indicator or label. Values outside the range are clamped for the visual percentage.
 
@@ -58,6 +60,16 @@ The component ships `@g4rcez/components/progress.css`. Its stable selectors are 
 ```tsx
 <Progress min={0} max={4} value={3} label="Step 3 of 4" />
 ```
+
+### Accessible Names
+
+<>
+    <Progress value={75} label="Upload progress" />
+    <Progress value={75} aria-label="Download progress" />
+    <span id="sync-progress-label">Sync progress</span>
+    <Progress value={75} aria-labelledby="sync-progress-label" />
+</>
+
 
 ### Animated progress
 
@@ -91,8 +103,8 @@ Use a `Spinner` or another pending-state indicator when no numeric progress is a
 
 ## Accessibility
 
-- Base UI provides the progressbar semantics and value attributes.
-- The label is supplementary text inside the progress root; do not use it as the only status announcement for rapidly changing progress.
+- A nonempty `label` is referenced as the progressbar's accessible name when a value is rendered. The default percentage text does not name the progressbar.
+- When no visible `label` is rendered, provide `aria-label` or `aria-labelledby` on `Progress`.
 - Pair long-running progress with a visible status message when users need more detail.
 
 ## Data Attributes

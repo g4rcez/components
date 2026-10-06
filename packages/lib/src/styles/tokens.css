@@ -285,7 +285,7 @@
   --var-color-info-foreground: hsla(0, 0%, 100%);
   --var-color-info-subtle: hsla(199, 89%, 96%);
   --var-color-info-hover: hsla(199, 89%, 40%);
-  --var-color-warn: hsla(38, 92%, 50%);
+  --var-color-warn: hsla(38, 92%, 32%);
   --var-color-warn-foreground: hsla(0, 0%, 100%);
   --var-color-warn-subtle: hsla(38, 92%, 96%);
   --var-color-warn-hover: hsla(38, 92%, 45%);
@@ -409,7 +409,7 @@ html.dark {
   --var-color-primary-subtle: hsla(201, 49%, 36%);
   --var-color-primary-hover: hsla(201, 49%, 22%);
   --var-color-secondary: hsla(240, 5%, 96%);
-  --var-color-secondary-foreground: hsla(240, 5%, 96%);
+  --var-color-secondary-foreground: hsla(240, 10%, 4%);
   --var-color-secondary-subtle: hsla(240, 4%, 20%);
   --var-color-secondary-hover: hsla(240, 4%, 25%);
   --var-card-background: hsla(221, 16%, 9%);
@@ -446,7 +446,7 @@ html.dark {
 
   --var-autocomplete-option-background-hover: hsla(240, 4%, 16%);
   --var-autocomplete-option-active-background: hsla(201, 49%, 22%);
-  --var-autocomplete-option-active-foreground: hsla(240, 6%, 10%);
+  --var-autocomplete-option-active-foreground: hsla(240, 5%, 96%);
   --var-autocomplete-option-selected-background: hsla(240, 4%, 16%);
   --var-autocomplete-option-selected-foreground: hsla(240, 5%, 96%);
   --var-autocomplete-panel-background: hsla(240, 10%, 8%);
@@ -533,6 +533,7 @@ html.dark {
   --var-tag-neutral-border: hsla(240, 4%, 16%);
   --var-color-info-subtle: hsla(199, 89%, 15%);
   --var-color-danger-subtle: hsla(0, 84%, 15%);
+  --var-color-warn: hsla(38, 92%, 50%);
   --var-color-warn-subtle: hsla(38, 92%, 15%);
   --var-color-warn-foreground: hsla(240, 10%, 4%);
   --var-color-success-subtle: hsla(142, 71%, 15%);

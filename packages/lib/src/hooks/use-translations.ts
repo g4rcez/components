@@ -2,8 +2,12 @@ import { useContext } from "react";
 import { Context } from "../config/context";
 import { defaultTranslations } from "../config/default-translations";
 
-export const useTranslations = () => {
+import type { Translations } from "../config/default-translations";
+
+export type TranslationOverrides = Partial<Translations>;
+
+export const useTranslations = (overrides?: TranslationOverrides): Translations => {
     const ctx = useContext(Context);
-    if (!ctx) return defaultTranslations;
-    return ctx.map!;
+    if (!overrides) return ctx?.map ?? defaultTranslations;
+    return { ...defaultTranslations, ...ctx?.map, ...overrides };
 };

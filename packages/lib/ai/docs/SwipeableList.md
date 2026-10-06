@@ -136,7 +136,8 @@ const [open, setOpen] = useState<SwipeableListValue | null>(null);
 
 ## Accessibility
 
-- Rows expose action buttons with the supplied labels and support keyboard activation.
+- Each enabled action button is reachable by Tab while its row is closed. Focusing an action reveals that row's rail; once open, the opposite rail is excluded from the tab order and hidden from assistive technology.
+- Native action buttons support Enter and Space; disabled actions remain disabled.
 - The surface uses `touch-action: pan-y`, so vertical page scrolling remains available on touch devices.
 - `useReducedMotion` reduces row animation when the user requests reduced motion.
 - Add an accessible name to custom content when its visible title is not sufficient.

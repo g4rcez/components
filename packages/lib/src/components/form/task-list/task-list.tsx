@@ -1,11 +1,12 @@
 "use client";
-import { stagger, useAnimate } from "motion/react";
+import { stagger, useAnimate, useReducedMotion } from "motion/react";
 import { type ComponentProps, type PropsWithChildren, useEffect } from "react";
 import { css } from "../../../lib/dom";
 import { taskListStyles } from "./task-list.styles";
 
 export const TaskList = ({ className, ...props }: PropsWithChildren<ComponentProps<"fieldset">>) => {
     const [ref, animate] = useAnimate();
+    const reduce = useReducedMotion();
 
     useEffect(() => {
         const container = ref.current as HTMLFieldSetElement | null;
@@ -15,7 +16,7 @@ export const TaskList = ({ className, ...props }: PropsWithChildren<ComponentPro
             const items = Array.from(container.querySelectorAll("input[data-task=true]")) as HTMLInputElement[];
             const allTaskChecked = items.every((el) => el.checked);
             const index = items.indexOf(input);
-            if (allTaskChecked && index !== -1) {
+            if (allTaskChecked && index !== -1 && !reduce) {
                 animate(
                     "input",
                     { scale: [1, 1.35, 1], rotate: [0, 20, -20, 0] },
@@ -28,7 +29,7 @@ export const TaskList = ({ className, ...props }: PropsWithChildren<ComponentPro
         };
         container.addEventListener("change", handler);
         return () => container.removeEventListener("change", handler);
-    }, [ref, animate]);
+    }, [ref, animate, reduce]);
 
     return <fieldset {...props} className={css(taskListStyles.className(), className)} data-component="task-list" ref={ref} />;
 };

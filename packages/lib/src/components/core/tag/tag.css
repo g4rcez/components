@@ -142,3 +142,11 @@
         opacity: var(--var-tag-loading-pulse-opacity);
     }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .__tag[data-loading="true"],
+    .__tag--theme-loading {
+        animation: none;
+        transition-duration: 1ms;
+    }
+}

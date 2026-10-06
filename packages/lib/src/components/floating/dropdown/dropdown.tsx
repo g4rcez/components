@@ -30,6 +30,8 @@ type DropdownProps = {
     onChange?: (nextValue: boolean) => void;
     trigger: React.ReactElement | React.ReactNode;
     title?: React.ReactNode | React.ReactElement | string;
+    "aria-label"?: string;
+    "aria-labelledby"?: string;
 };
 
 const updatePositionOnce: typeof autoUpdate = (_reference, _floating, update) => {
@@ -39,6 +41,8 @@ const updatePositionOnce: typeof autoUpdate = (_reference, _floating, update) =>
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const headingId = useId();
+    const hasTitle =
+        typeof props.title === "string" ? props.title.trim().length > 0 : typeof props.title === "number" || Boolean(props.title);
     const isControlled = props.open !== undefined;
     const [innerOpen, setInnerOpen] = useState(false);
     const open = isControlled ? props.open : innerOpen;
@@ -92,9 +96,10 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                         <div
                             className={dropdownStyles.className({})}
                             ref={refs.setFloating}
-                            aria-labelledby={headingId}
-                            style={floatingStyles as unknown as React.CSSProperties}
                             {...getFloatingProps()}
+                            aria-label={hasTitle ? undefined : props["aria-label"]}
+                            aria-labelledby={hasTitle ? headingId : props["aria-labelledby"]}
+                            style={floatingStyles as unknown as React.CSSProperties}
                         >
                             <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={dropdownStyles.slots.arrow} />
                             <header className={dropdownStyles.slots.header}>

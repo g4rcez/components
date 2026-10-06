@@ -2,6 +2,7 @@ import { Button } from "../core/button/button";
 import { css } from "../../lib/dom";
 import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
 import { CaretLeftIcon, CaretRightIcon, PlusCircleIcon, CalendarIcon } from "@phosphor-icons/react";
 import { addDays, addMonths, addWeeks, isToday, subDays, subMonths, subWeeks } from "date-fns";
@@ -21,6 +22,7 @@ type CalendarHeaderProps = {
     setCurrentDate: SetState<Date>;
     setCurrentView: SetState<ViewMode>;
     onToggleFilter: (id: string) => void;
+    translations?: TranslationOverrides;
 };
 
 export function CalendarHeader({
@@ -32,9 +34,10 @@ export function CalendarHeader({
     setCurrentView,
     onToggleFilter,
     onAddEvent,
+    translations,
 }: CalendarHeaderProps) {
     const locale = useLocale();
-    const t = useTranslations();
+    const t = useTranslations(translations);
     const isDateToday = isToday(currentDate);
 
     const VIEWS = useMemo(

@@ -1,4 +1,5 @@
 import type { Symbols } from "linq-arrays";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import Linq from "linq-arrays";
 import { AnimatePresence } from "motion/react";
 import React, {
@@ -62,7 +63,7 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
         Aside?: React.FC<CellAsideElement<T>>;
         getScrollRef?: () => HTMLElement | undefined;
         getRowProps?: (_: T) => ComponentProps<"tr">;
-        setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
+        translations?: TranslationOverrides;
     };
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & ContextProp<unknown>>(
@@ -133,14 +134,17 @@ const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
 
 const loadingArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-const LoadingStatus = () => {
-    const translations = useTranslations();
+const LoadingStatus = (props: { translations?: TranslationOverrides }) => {
+    const translations = useTranslations(props.translations);
     return <div role="status" aria-busy="true" aria-label={translations.skeletonLoading} />;
 };
 
-const EmptyContent = (props: { loading?: boolean }) => (
-    <div className={tableInnerTableStyles.slots.empty}>{props.loading ? <Skeleton /> : <Empty />}</div>
+const EmptyContent = (props: { loading?: boolean; translations?: TranslationOverrides }) => (
+    <div className={tableInnerTableStyles.slots.empty}>
+        {props.loading ? <Skeleton translations={props.translations} /> : <Empty translations={props.translations} />}
+    </div>
 );
+
 
 const EmptyCell = () => <Fragment />;
 
@@ -171,6 +175,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
     pagination = null,
     useControl = false,
     sticky,
+    translations,
     ...props
 }: InnerTableProps<T>) => {
     const ref = useRef<HTMLDivElement | null>(null);
@@ -229,7 +234,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
 
     return (
         <div ref={setViewportRef} className={tableInnerTableStyles.slots.viewport}>
-            {props.loading && !empty ? <LoadingStatus /> : null}
+            {props.loading && !empty ? <LoadingStatus translations={translations} /> : null}
             <TableVirtuoso
                 components={components}
                 totalCount={rows.length}
@@ -250,12 +255,13 @@ export const InnerTable = <T extends Record<string, unknown>>({
                         loading={!!props.loading}
                         inlineFilter={props.inlineFilter}
                         inlineSorter={props.inlineSorter}
+                        translations={translations}
                     />
                 )}
             />
-            {empty ? <EmptyContent loading={props.loading} /> : null}
+            {empty ? <EmptyContent loading={props.loading} translations={translations} /> : null}
             <div aria-hidden="true" ref={ref} className={tableInnerTableStyles.slots.sentinel} />
-            {pagination !== null ? <Pagination {...pagination} /> : null}
+            {pagination !== null ? <Pagination {...pagination} translations={translations} /> : null}
         </div>
     );
 };

@@ -28,9 +28,11 @@ import { CommandPalette } from "@g4rcez/components";
 | `loading`            | `boolean`                                                              | `false`     | Show loading skeleton while commands load      |
 | `emptyMessage`       | `Label`                                                                | —           | Message shown when no results match            |
 | `footer`             | `React.ReactElement`                                                   | —           | Custom footer content                          |
+| `filters`            | `React.ReactNode`                                                    | —           | Optional consumer-provided filter controls; the palette renders the content but does not filter commands. |
 | `onChangeText`       | `(text: string) => void`                                               | —           | Search text change handler                     |
-| `Preview`            | `React.FC<{ command: CommandItemTypes; text: string }>`                | —           | Preview panel component for the active command |
+| `Preview`            | `React.FC<{ command: CommandItemTypes; text: string }>`                | —           | Optional preview panel for the active command; users can collapse it when provided. |
 | `Icon`               | `React.FC<IconProps & { text: string; Default: React.FC<IconProps> }>` | —           | Custom search icon                             |
+| `translations`       | `TranslationOverrides`                                                 | —           | Override the palette, filter, and preview accessibility labels. |
 
 ## Command Types
 
@@ -39,7 +41,7 @@ import { CommandPalette } from "@g4rcez/components";
 ```tsx
 type CommandShortcutItem = {
     type: "shortcut";
-    title: string | ((props: { text: string }) => string);
+    title: string | React.ReactElement | React.ComponentType<{ text: string }>;
     hint?: string | string[];
     shortcut?: string;
     Icon?: React.ReactElement;
@@ -58,7 +60,7 @@ type CommandShortcutItem = {
 ```tsx
 type CommandGroupItem = {
     type: "group";
-    title: string | ((props: { text: string }) => string);
+    title: string | React.ReactElement | React.ComponentType<{ text: string }>;
     items: CommandItemTypes[];
 };
 ```
@@ -73,8 +75,11 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | --- | --- |
 | `--var-command-dialog-max-inline-size-md` | `calc(var(--var-spacing-base) * 40)` |
 | `--var-command-dialog-max-inline-size-lg` | `calc(var(--var-spacing-base) * 48)` |
+| `--var-command-list-max-block-size` | `calc(var(--var-spacing-base) * 24)` |
 | `--var-command-row-block-size` | `calc(var(--var-spacing-base) * 2.5)` |
 | `--var-command-group-padding-block-start` | `calc(var(--var-spacing-base) * 0.5)` |
+
+With `Preview`, desktop palettes can grow to 94vw (capped at 96 spacing units) and use a side-by-side results/preview layout from 1024px. Narrower layouts stack the preview below the results.
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
@@ -135,6 +140,47 @@ function BasicCommandPalette() {
     return <CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} />;
 }
 ```
+
+### Preview and consumer-provided filters
+
+Pass your own filter controls through `filters`. CommandPalette only renders and collapses this content; use your application state to decide which commands to pass. When `Preview` is provided, the palette shows a side panel for the active command and includes independent controls to hide the preview and filters.
+
+```tsx
+import { useState } from "react";
+import { CommandPalette } from "@g4rcez/components";
+
+function ProjectCommandPalette() {
+    const [open, setOpen] = useState(false);
+    const [projectsOnly, setProjectsOnly] = useState(false);
+    const allCommands = [
+        { type: "shortcut" as const, title: "Open project", category: "project", action: ({ setOpen }: { setOpen: (open: boolean) => void }) => setOpen(false) },
+        { type: "shortcut" as const, title: "Open preferences", category: "settings", action: ({ setOpen }: { setOpen: (open: boolean) => void }) => setOpen(false) },
+    ];
+    const commands = projectsOnly ? allCommands.filter((command) => command.category === "project") : allCommands;
+
+    return (
+        <CommandPalette
+            open={open}
+            commands={commands}
+            onChangeVisibility={setOpen}
+            filters={
+                <button type="button" aria-pressed={projectsOnly} onClick={() => setProjectsOnly((enabled) => !enabled)}>
+                    Projects only
+                </button>
+            }
+            Preview={({ command }) => (
+                <article>
+                    <h2>{typeof command.title === "string" ? command.title : "Command"}</h2>
+                    <p>Render application-specific details for this command.</p>
+                </article>
+            )}
+        />
+    );
+}
+```
+
+Omitting `filters` leaves the filter row and its toggle out of the palette. The preview toggle is likewise available only when `Preview` is supplied.
+
 
 ### Grouped Commands
 
@@ -268,20 +314,24 @@ const commands = [
 - Each item renders with `role="option"` and `aria-selected` reflecting the active state.
 - The palette is wrapped in a `Modal` with `ariaTitle="Command palette"` for screen readers.
 - The search input receives `autoFocus` when the palette opens.
+- Layout controls expose their expanded state and controlled region to assistive technology. The preview is a labelled region; consumer-provided filter controls retain their own semantics.
 
 ## Data Attributes
 
-| Attribute                                    | Applied to           | Description                           |
-| -------------------------------------------- | -------------------- | ------------------------------------- |
-| `data-component="command-palette"`           | Root modal container | Identifies the palette root           |
-| `data-component="command-palette-list"`      | `<ul>`               | Identifies the command list           |
-| `data-component="command-palette-item"`      | Each `<button>` item | Identifies individual command buttons |
-| `data-component="command-palette-container"` | List/preview wrapper | Identifies the content area           |
+| Attribute                                          | Applied to             | Description                                      |
+| -------------------------------------------------- | ---------------------- | ------------------------------------------------ |
+| `data-component="command-palette"`                 | Root modal container   | Identifies the palette root                      |
+| `data-has-preview="true"`                          | Root modal container   | Enables the wider preview layout                 |
+| `data-component="command-palette-list"`            | List container         | Identifies the command list                      |
+| `data-component="command-palette-item"`            | Each command option    | Identifies an individual command option          |
+| `data-component="command-palette-container"`       | List/preview wrapper   | Identifies the content area                      |
+| `data-component="command-palette-filters"`         | Filter content wrapper | Identifies the optional consumer-owned filters   |
+| `data-component="command-palette-preview"`         | Preview `<section>`    | Identifies the active command preview region     |
 
 ## Notes
 
 - The component registers global keyboard listeners via `CombiKeys`. All `shortcut` commands are also registered as global hotkeys — they fire even when the palette is closed.
 - Fuzzy search runs over `title`, `shortcut`, and `hint` fields. When `title` is a function, it is called with the current search text to produce a string for matching.
 - Commands with `enabled: false` (or a function returning `false`) are filtered out of results.
-- The `Preview` panel is shown only when `activeIndex` is set and a `Preview` component is provided.
+- When `Preview` is provided, the first visible shortcut is selected and previewed by default, including when search text is empty. Searching updates the preview to the first matching shortcut. The preview shows an instruction when no shortcut is available or commands are loading; its visibility is independent of the optional filter row.
 - The palette is built on top of `Modal`, so it inherits modal accessibility and portal rendering.

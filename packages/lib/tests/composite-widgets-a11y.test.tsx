@@ -200,6 +200,9 @@ describe("composite widget a11y", () => {
 
         const combobox = await screen.findByRole("combobox", { name: /command palette search/i });
         const listbox = await screen.findByRole("listbox");
+        expect(screen.queryByRole("button", { name: /preview|filters/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("region", { name: "Command preview" })).not.toBeInTheDocument();
+        expect(document.querySelector('[data-component="command-palette-filters"]')).toBeNull();
 
         await user.click(combobox);
         await user.keyboard("[ArrowDown]");
@@ -219,6 +222,74 @@ describe("composite widget a11y", () => {
 
         await waitFor(() => expect(screen.queryByRole("combobox", { name: /command palette search/i })).not.toBeInTheDocument());
     });
+    it("renders user-provided filters and toggles them independently from the preview", async () => {
+        const user = userEvent.setup();
+        const filterAction = vi.fn();
+        const commands: CommandItemTypes[] = [
+            { type: "shortcut", title: "Open Alpha", action: vi.fn() },
+            { type: "shortcut", title: "Open Bravo", action: vi.fn() },
+        ];
+
+        render(
+            <ComponentsProvider>
+                <CommandPalette
+                    open
+                    commands={commands}
+                    onChangeVisibility={() => {}}
+                    filters={
+                        <button type="button" onClick={filterAction}>
+                            Only documents
+                        </button>
+                    }
+                    Preview={({ command }) => <p>Preview: {typeof command.title === "string" ? command.title : "Command"}</p>}
+                />
+            </ComponentsProvider>
+        );
+
+        const preview = await screen.findByRole("region", { name: "Command preview" });
+        const filters = screen.getByRole("button", { name: "Only documents" }).closest('[data-component="command-palette-filters"]') as HTMLElement;
+        const combobox = screen.getByRole("combobox", { name: /command palette search/i });
+        const listbox = screen.getByRole("listbox");
+        const firstOption = within(listbox).getByRole("option", { name: "Open Alpha" });
+        const secondOption = within(listbox).getByRole("option", { name: "Open Bravo" });
+        const hidePreview = screen.getByRole("button", { name: "Hide preview" });
+        const hideFilters = screen.getByRole("button", { name: "Hide filters" });
+
+        expect(hidePreview).toHaveAttribute("aria-expanded", "true");
+        expect(hidePreview).toHaveAttribute("aria-controls", preview.id);
+        expect(preview).toHaveTextContent("Preview: Open Alpha");
+        expect(firstOption).toHaveAttribute("aria-selected", "true");
+        expect(combobox).toHaveAttribute("aria-activedescendant", firstOption.id);
+        expect(hideFilters).toHaveAttribute("aria-expanded", "true");
+        expect(hideFilters).toHaveAttribute("aria-controls", filters.id);
+        expect(filters).not.toHaveAttribute("hidden");
+
+        await user.click(screen.getByRole("button", { name: "Only documents" }));
+        expect(filterAction).toHaveBeenCalledTimes(1);
+
+        await user.click(combobox);
+        await user.keyboard("[ArrowDown]");
+        expect(secondOption).toHaveAttribute("aria-selected", "true");
+        expect(preview).toHaveTextContent("Preview: Open Bravo");
+
+        await user.click(hidePreview);
+        expect(preview).toHaveAttribute("hidden");
+        expect(screen.getByRole("button", { name: "Show preview" })).toHaveAttribute("aria-expanded", "false");
+        expect(filters).not.toHaveAttribute("hidden");
+
+        await user.click(hideFilters);
+        expect(filters).toHaveAttribute("hidden");
+        expect(preview).toHaveAttribute("hidden");
+
+        await user.click(screen.getByRole("button", { name: "Show filters" }));
+        expect(filters).not.toHaveAttribute("hidden");
+        await user.click(screen.getByRole("button", { name: "Show preview" }));
+        expect(preview).not.toHaveAttribute("hidden");
+        const previewAccessibility = await axe(preview);
+        const filtersAccessibility = await axe(filters);
+        expect([...previewAccessibility.violations, ...filtersAccessibility.violations]).toEqual([]);
+    });
+
 
     it("keeps CommandPalette arrow navigation inside filtered options", async () => {
         const user = userEvent.setup();

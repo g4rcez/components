@@ -1,4 +1,5 @@
 import type { CSSProperties, ElementType } from "react";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
 import { Polymorph } from "../../core/polymorph/polymorph";
@@ -11,10 +12,11 @@ type SkeletonProps = {
     as?: ElementType;
     style?: CSSProperties;
     decorative?: boolean;
+    translations?: TranslationOverrides;
 };
 
-export const Skeleton = ({ className, as, style, decorative = false }: SkeletonProps) => {
-    const t = useTranslations();
+export const Skeleton = ({ className, as, style, decorative = false, translations }: SkeletonProps) => {
+    const t = useTranslations(translations);
     return (
         <Polymorph
             style={style}
@@ -30,8 +32,8 @@ export const Skeleton = ({ className, as, style, decorative = false }: SkeletonP
 
 const getSkeletonWidth = (index: number) => 60 + ((index * 17) % 41);
 
-export const SkeletonList = (props: { className?: string; rows: number }) => {
-    const t = useTranslations();
+export const SkeletonList = (props: { className?: string; rows: number; translations?: TranslationOverrides }) => {
+    const t = useTranslations(props.translations);
     const rowCount = Math.max(0, Math.floor(props.rows));
     const items = Array.from({ length: rowCount }, (_, index) => (
         <Skeleton key={`skeleton-${index}`} decorative style={{ width: `${getSkeletonWidth(index)}%` }} as="li" />

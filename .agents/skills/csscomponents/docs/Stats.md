@@ -50,6 +50,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | `shadow-shadow-card` | `--var-shadow-card` | Card shadow |
 | CSS override | `--var-stats-icon-background` | Icon container background |
 | CSS override | `--var-stats-icon-foreground` | Icon color |
+| CSS override | `--var-stats-title-font-size` | Title font size |
+| CSS override | `--var-stats-value-font-size` | Value font size |
 
 ## Examples
 

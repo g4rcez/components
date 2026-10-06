@@ -1,3 +1,4 @@
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { isToday } from "date-fns";
 import { css } from "../../lib/dom";
 import { useEffect, useRef, useState } from "react";
@@ -34,6 +35,7 @@ type DayViewProps<T extends CalendarEventBase> = {
     eventsByDate: Map<string, CalendarEvent<T>[]>;
     onEventClick: (event: CalendarEvent<T>) => void;
     renderEvent?: (event: CalendarEvent<T>) => React.ReactNode;
+    translations?: TranslationOverrides;
 };
 
 export function DayView<T extends CalendarEventBase>({
@@ -43,6 +45,7 @@ export function DayView<T extends CalendarEventBase>({
     eventsByDate,
     onDateChange,
     onEventClick,
+    translations,
 }: DayViewProps<T>) {
     const locale = useLocale();
     const currentHourRef = useRef<HTMLDivElement>(null);
@@ -130,7 +133,7 @@ export function DayView<T extends CalendarEventBase>({
                                 onClick={(e) => e.stopPropagation()}
                                 onKeyDown={(e) => e.stopPropagation()}
                             >
-                                <EventPill event={event} onClick={() => handleEventClick(event)} />
+                                <EventPill event={event} onClick={() => handleEventClick(event)} translations={translations} />
                             </div>
                         ))}
                     </div>
@@ -143,6 +146,7 @@ export function DayView<T extends CalendarEventBase>({
                     changeOnlyOnClick
                     RenderOnDay={RenderOnDay}
                     onChange={(d: Date | undefined) => d && onDateChange(d)}
+                    translations={translations}
                 />
                 {selectedEvent && (
                     <div className={pageCalendarDayViewStyles.slots.detail}>

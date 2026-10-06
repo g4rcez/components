@@ -16,6 +16,7 @@ import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { type CSSProperties, Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useResizeObserver } from "../../../hooks/use-resize-observer";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { noop } from "../../../lib/fns";
 import { Button } from "../../core/button/button";
@@ -38,6 +39,7 @@ export type WizardProps = {
     onFinish?: () => void;
     onChange?: (index: number) => void;
     labels?: { next?: string; skip?: string; finish?: string; previous?: string };
+    translations?: TranslationOverrides;
 };
 
 const getRect = (element: Element | null) => {
@@ -55,8 +57,8 @@ const resolveElement = (element: WizardStep["element"]): Element | null => {
     return element;
 };
 
-export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop, onChange = noop, labels: labelsProp }: WizardProps) => {
-    const translation = useTranslations();
+export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop, onChange = noop, labels: labelsProp, translations }: WizardProps) => {
+    const translation = useTranslations(translations);
     const [index, setIndex] = useState(0);
     const currentStep = steps[index];
     const [element, setElement] = useState<Element | null>(null);

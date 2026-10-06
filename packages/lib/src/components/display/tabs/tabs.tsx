@@ -123,7 +123,14 @@ export const Tabs = (props: PropsWithChildren<TabsProps>) => {
                         <header className={tabsStyles.slots.header}>
                             <div className={tabsStyles.slots.divider} />
                             <nav className={tabsStyles.slots.nav}>
-                                <ul role="tablist" onKeyDown={onKeyDown} ref={ref} className={tabsStyles.slots.list}>
+                                <ul
+                                    role="tablist"
+                                    aria-label={props["aria-label"]}
+                                    aria-labelledby={props["aria-labelledby"]}
+                                    onKeyDown={onKeyDown}
+                                    ref={ref}
+                                    className={tabsStyles.slots.list}
+                                >
                                     {items.map((x: React.ReactElement<TabProps>) => {
                                         const inner = x.props;
                                         const current = active === inner.id;

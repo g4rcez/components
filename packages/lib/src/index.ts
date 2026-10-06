@@ -18,4 +18,4 @@ export { ComponentsProvider } from "./hooks/use-components-provider";
 export { createColumns, createOptionCols, ColType, useTablePreferences, getModalScrollerRef } from "./components/table/table-lib";
 export { useColorParser } from "./hooks/use-color-parser";
 export { useLocale } from "./hooks/use-locale";
-export { useTranslations } from "./hooks/use-translations";
+export { useTranslations, type TranslationOverrides } from "./hooks/use-translations";

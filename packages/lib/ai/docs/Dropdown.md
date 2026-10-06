@@ -32,6 +32,8 @@ import { Dropdown } from "@g4rcez/components/dropdown";
 | `onChange`           | `(nextValue: boolean) => void`          | —       | Callback fired when the open state changes                                    |
 | `buttonProps`        | `React.HTMLProps<"button">`             | —       | Additional props forwarded to the trigger `<button>`                          |
 | `children`           | `React.ReactNode`                       | —       | Panel content                                                                 |
+| `aria-label`          | `string`                                | —       | Accessible name for the panel when no nonempty `title` is provided.       |
+| `aria-labelledby`     | `string`                                | —       | ID reference for the panel name when no nonempty `title` is provided.     |
 
 ## Design Tokens
 
@@ -105,6 +107,18 @@ function AccountDropdown() {
         </Dropdown>
     );
 }
+```
+
+### Named Panel Without a Title
+
+```tsx
+<Dropdown
+    trigger={<span aria-hidden="true">⋯</span>}
+    buttonProps={{ "aria-label": "Open filters" }}
+    aria-label="Filter options"
+>
+    <div>Filter controls</div>
+</Dropdown>
 ```
 
 ### Controlled Dropdown
@@ -195,7 +209,7 @@ function FilterDropdown() {
 ## Accessibility
 
 - The trigger is wrapped in a `<button>` element; pass `aria-label` via `buttonProps` when the trigger has no visible text.
-- The panel receives `aria-labelledby` pointing at the heading generated from `title`.
+- A nonempty `title` names the panel. Without one, pass `aria-label` or `aria-labelledby` to name the panel; a title takes precedence over these props.
 - `FloatingFocusManager` traps focus within the panel and restores it to the trigger on close.
 - Clicking outside or pressing `Escape` closes the panel (handled by `useDismiss`).
 - Tab navigation works naturally within the panel content.

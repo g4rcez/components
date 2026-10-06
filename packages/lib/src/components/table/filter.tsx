@@ -2,8 +2,8 @@ import type { Symbols } from "linq-arrays";
 import { FunnelIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import type React from "react";
 import { Fragment, useMemo } from "react";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
-import { css } from "../../lib/dom";
 import { uuid } from "../../lib/fns";
 import type { AllPaths } from "../../lib/path-types";
 import type { Any, Label } from "../../types";
@@ -11,6 +11,7 @@ import { Dropdown } from "../floating/dropdown/dropdown";
 import { Input, type InputTypes } from "../form/input/input";
 import { type OptionProps, Select } from "../form/select/select";
 import { tableFilterStyles } from "./filter.styles";
+import { css } from "../../lib/dom";
 import { type Col, ColType, getLabel, type TableConfiguration, valueFromType } from "./table-lib";
 
 type Operators = {
@@ -46,6 +47,7 @@ type Props<T extends object> = TableConfiguration<
         cols: Col<T>[];
         filters: FilterConfig<T>[];
         set: React.Dispatch<React.SetStateAction<FilterConfig<T>[]>>;
+        translations?: TranslationOverrides;
     }
 >;
 
@@ -71,8 +73,8 @@ export const createFilterFromCol = <T extends Any>(
     };
 };
 
-export const useOperators = () => {
-    const translation = useTranslations();
+export const useOperators = (translations?: TranslationOverrides) => {
+    const translation = useTranslations(translations);
     const operations = useMemo(
         (): Operations =>
             ({
@@ -136,8 +138,8 @@ export const useOperators = () => {
 };
 
 export const Filter = <T extends object>(props: Props<T>) => {
-    const translation = useTranslations();
-    const operators = useOperators();
+    const translation = useTranslations(props.translations);
+    const operators = useOperators(props.translations);
 
     const onAddFilter = () => {
         const col = props.cols.at(0)!;
@@ -254,11 +256,12 @@ type ColumnHeaderFilterProps<T extends object> = {
     filter: FilterConfig<T>;
     onDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
     set: React.Dispatch<React.SetStateAction<FilterConfig<T>[]>>;
+    translations?: TranslationOverrides;
 };
 
-export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set }: ColumnHeaderFilterProps<T>) => {
-    const translation = useTranslations();
-    const operators = useOperators();
+export const ColumnHeaderFilter = <T extends object>({ filter, onDelete, set, translations }: ColumnHeaderFilterProps<T>) => {
+    const translation = useTranslations(translations);
+    const operators = useOperators(translations);
 
     const onSelectOperation = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const operator = e.target.value;

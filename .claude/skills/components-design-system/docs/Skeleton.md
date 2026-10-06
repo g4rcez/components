@@ -9,7 +9,7 @@ category: display
 
 # Skeleton
 
-The skeleton components indicate that content is loading while preserving a stable layout. They render status semantics and use the library's pulse animation.
+The skeleton components indicate that content is loading while preserving a stable layout. They render status semantics and pulse unless the user prefers reduced motion, in which case they remain static.
 
 ## Import
 
@@ -97,7 +97,7 @@ The component ships `@g4rcez/components/skeleton.css`. Stable selectors include 
 
 - Don't use a skeleton for a short operation where a spinner or no indicator is less disruptive.
 - Don't expose placeholder text as if it were completed content.
-- Don't rely on the animation alone to communicate loading; keep the status semantics intact.
+- Don't rely on animation alone to communicate loading; its pulse is omitted when reduced motion is preferred, and status semantics remain intact.
 
 ## Accessibility
 

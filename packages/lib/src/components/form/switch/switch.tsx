@@ -26,6 +26,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             size = "default",
             checked: checkedProp,
             defaultChecked,
+            "aria-label": ariaLabel,
+            "aria-labelledby": ariaLabelledBy,
             ...props
         }: SwitchProps,
         ref
@@ -34,6 +36,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         const errorId = error ? `${props.id || id}-error` : undefined;
         const describedBy = [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
         const ariaInvalid = error ? true : props["aria-invalid"];
+        const hasVisibleLabel = typeof children === "string" ? children.trim().length > 0 : typeof children === "number" || Boolean(children);
         const isControlled = checkedProp !== undefined;
         const [innerChecked, setInnerChecked] = useState(defaultChecked ?? false);
         const checked = isControlled ? checkedProp : innerChecked;
@@ -98,7 +101,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                         aria-invalid={ariaInvalid}
                         aria-describedby={describedBy}
                         data-checked={checked}
-                        aria-labelledby={`${id}-label`}
+                        aria-label={hasVisibleLabel ? undefined : ariaLabel}
+                        aria-labelledby={hasVisibleLabel ? `${id}-label` : ariaLabelledBy}
                         disabled={props.disabled || loading}
                         className={switchStyles.slots.track}
                     >

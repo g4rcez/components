@@ -1,3 +1,4 @@
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { isToday } from "date-fns";
 import { useEffect, useRef } from "react";
 import { useLocale } from "../../hooks/use-locale";
@@ -15,6 +16,7 @@ type WeekViewProps = {
     currentDate: Date;
     onEventClick: (event: CalendarEvent) => void;
     onSlotClick?: (date: Date) => void;
+    translations?: TranslationOverrides;
 };
 
 function getTopOffset(event: CalendarEvent): string {
@@ -23,11 +25,11 @@ function getTopOffset(event: CalendarEvent): string {
     return `calc(${HOUR_HEIGHT} * ${hour + minutes / 60})`;
 }
 
-export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick }: WeekViewProps) {
+export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick, translations }: WeekViewProps) {
     const locale = useLocale();
-    const currentHourRef = useRef<HTMLDivElement>(null);
-    const scrollBodyRef = useRef<HTMLDivElement>(null);
     const hours = getHourSlots();
+    const scrollBodyRef = useRef<HTMLDivElement>(null);
+    const currentHourRef = useRef<HTMLDivElement>(null);
     const selectedDateKey = toDateKey(currentDate);
 
     useEffect(() => {
@@ -106,7 +108,7 @@ export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlot
                                         width: `calc(${100 / columnCount}% - var(--var-spacing-base) * 0.125)`,
                                     }}
                                 >
-                                    <EventPill event={event} onClick={() => onEventClick(event)} />
+                                    <EventPill event={event} onClick={() => onEventClick(event)} translations={translations} />
                                 </div>
                             ))}
                         </div>

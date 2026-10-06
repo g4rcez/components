@@ -1,16 +1,18 @@
 "use client";
 import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
-import { FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
+import { EyeIcon, EyeSlashIcon, FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import type React from "react";
 import { forwardRef, Fragment, useCallback, useEffect, useId, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../../hooks/use-stable-ref";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { CombiKeys } from "../../../lib/combi-keys";
 import { Dict } from "../../../lib/dict";
-import { css, isChildVisible, isReactFC, mergeRefs } from "../../../lib/dom";
+import { css, isChildVisible, mergeRefs } from "../../../lib/dom";
 import { fzf, type MatchValue } from "../../../lib/fzf";
 import type { Label } from "../../../types";
+import { Button } from "../../core/button/button";
 import { Shortcut } from "../../display/shortcut/shortcut";
 import { SkeletonCell } from "../../display/skeleton/skeleton";
 import { Modal } from "../modal/modal";
@@ -25,7 +27,7 @@ type CommandItem<T extends string, P extends object> = P & {
     enabled?: ((props: ViewProps) => boolean) | boolean;
 };
 
-type View = string | ((props: ViewProps) => string);
+type View = string | React.ReactElement | React.ComponentType<ViewProps>;
 
 type CommandShortcutItem = CommandItem<
     "shortcut",
@@ -57,7 +59,7 @@ const commandPaletteItemActiveClassName = `${commandPaletteStyles.slots.item}--a
 
 const Group = (props: { item: CommandGroupItem; text: string }) => (
     <span className={commandPaletteStyles.slots["group-label"]}>
-        {isReactFC(props.item.title) ? <props.item.title text={props.text} /> : props.item.title}
+        {typeof props.item.title === "function" ? <props.item.title text={props.text} /> : props.item.title}
     </span>
 );
 
@@ -87,7 +89,7 @@ const Item = forwardRef<HTMLDivElement, Omit<ItemProps, "onChangeVisibility"> & 
             >
                 <span className={commandPaletteStyles.slots["item-content"]}>
                     {item.Icon ? item.Icon : null}
-                    <span>{isReactFC(item.title) ? <item.title text={text} /> : item.title}</span>
+                    <span>{typeof item.title === "function" ? <item.title text={text} /> : item.title}</span>
                 </span>
                 {item.shortcut ? <Shortcut value={item.shortcut} /> : null}
             </div>
@@ -101,32 +103,40 @@ export type CommandPaletteProps = {
     loading?: boolean;
     emptyMessage?: Label;
     footer?: React.ReactElement;
+    filters?: React.ReactNode;
     commands: CommandItemTypes[];
     onChangeText?: (text: string) => void;
     onChangeVisibility: (next: boolean) => void;
     Preview?: React.FC<{ command: CommandItemTypes; text: string }>;
     Icon?: React.FC<IconProps & { text: string; Default: Icon }>;
+    translations?: TranslationOverrides;
 };
 
 const getFuzzyData = (commands: CommandItemTypes[], value: string) => {
     if (value.length === 0) return commands;
-    const rules: MatchValue<CommandItemTypes>[] = [
+    type SearchableCommand = {
+        index: number;
+        title: string;
+        shortcut?: string;
+        hint?: string | string[];
+    };
+    const rules: MatchValue<SearchableCommand>[] = [
         { key: "title", value },
         { key: "shortcut", value },
         { key: "hint", value },
     ];
-    const normalize = commands.map((x) => ({
-        ...x,
-        title: Is.function(x.title) ? x.title({ text: value }) : x.title,
+    const searchable: SearchableCommand[] = commands.map((command, index) => ({
+        index,
+        title: typeof command.title === "string" ? command.title : "",
+        shortcut: command.type === "shortcut" ? command.shortcut : undefined,
+        hint: command.hint,
     }));
-    const target = normalize.reduce<CommandItemTypes[]>((acc, x) => {
-        const enabled = Is.function(x.enabled) ? x.enabled({ text: value }) : (x.enabled ?? true);
-        if (enabled) acc.push({ ...x, enabled: enabled });
-        return acc;
-    }, []);
-    const filter = fzf(target, "title", rules);
-    const withEnabled = normalize.filter((x) => (Is.function(x.enabled) ? x.enabled({ text: value }) : false));
-    return Dict.unique(filter.concat(withEnabled), (x) => x.title);
+    const filter = fzf(searchable, "index", rules);
+    const withEnabled = searchable.filter(({ index }) => {
+        const enabled = commands[index]!.enabled;
+        return Is.function(enabled) && enabled({ text: value });
+    });
+    return Dict.unique([...filter, ...withEnabled], (item) => item.index).map(({ index }) => commands[index]!);
 };
 
 const loadingSkeleton = [0, 0, 0, 0, 0];
@@ -145,9 +155,9 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     const id = useId();
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
     const searchInputRef = useRef<HTMLInputElement | null>(null);
-    const [text, setText] = useState("");
     const listRef = useRef<Array<HTMLElement | null>>([]);
-    const translations = useTranslations();
+    const [text, setText] = useState("");
+    const translations = useTranslations(props.translations);
     const valueRef = useStableRef(text);
     const { onChangeText } = props;
     const changeText = useCallback(
@@ -158,6 +168,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         [onChangeText]
     );
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [previewVisible, setPreviewVisible] = useState(true);
+    const [filtersVisible, setFiltersVisible] = useState(true);
     useEffect(() => {
         setActiveIndex(null);
     }, [text]);
@@ -184,25 +196,39 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                   },
                   ...fuzzy.filter((x) => x.type !== "group"),
               ];
+    const hasVisibleShortcut = displayItems.some((item) => item.type === "shortcut");
+    const firstShortcutIndex =
+        props.open && props.Preview && !props.loading ? displayItems.findIndex((item) => item.type === "shortcut") : -1;
+    const resolvedActiveIndex =
+        props.open && !props.loading && Is.number(activeIndex) && displayItems[activeIndex]?.type === "shortcut"
+            ? activeIndex
+            : firstShortcutIndex >= 0
+              ? firstShortcutIndex
+              : null;
+    const activeCommand = Is.number(resolvedActiveIndex) ? displayItems[resolvedActiveIndex] : undefined;
+    const previewCommand = activeCommand?.type === "shortcut" ? activeCommand : null;
 
     useEffect(() => {
         listRef.current.length = displayItems.length;
     }, [displayItems.length]);
 
     const listboxId = `${id}-listbox`;
-    const activeOptionId = Is.number(activeIndex) && displayItems[activeIndex]?.type === "shortcut" ? `${id}-option-${activeIndex}` : undefined;
+    const previewId = `${id}-preview`;
+    const filtersId = `${id}-filters`;
+    const activeOptionId =
+        Is.number(resolvedActiveIndex) && displayItems[resolvedActiveIndex]?.type === "shortcut" ? `${id}-option-${resolvedActiveIndex}` : undefined;
 
     const listNav = useListNavigation(root.context, {
         listRef,
         loop: true,
-        activeIndex,
+        activeIndex: resolvedActiveIndex,
         virtual: true,
         allowEscape: false,
         focusItemOnOpen: false,
         focusItemOnHover: true,
         openOnArrowKeyDown: true,
         scrollItemIntoView: false,
-        selectedIndex: activeIndex,
+        selectedIndex: resolvedActiveIndex,
         disabledIndices: (n) => {
             const item = displayItems[n];
             if (item) return item.type === "group";
@@ -243,6 +269,8 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     }, [bindKey, commands, props, valueRef, changeText]);
 
     const Icon = props.Icon ?? FunnelIcon;
+    const Preview = props.Preview;
+    const hasFilters = props.filters !== undefined && props.filters !== null && props.filters !== false;
 
     return (
         <Fragment>
@@ -256,6 +284,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                 ariaTitle={translations.commandPaletteTitle}
                 bodyClassName={commandPaletteStyles.slots.body}
                 data-component="command-palette"
+                data-has-preview={Preview ? "true" : undefined}
                 onChange={props.onChangeVisibility}
                 className={commandPaletteStyles.className({})}
             >
@@ -271,7 +300,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         {...(getReferenceProps({
                             ref: mergeRefs(root.refs.setReference, searchInputRef),
                             onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
-                                const item = Is.number(activeIndex) ? displayItems[activeIndex] : null;
+                                const item = Is.number(resolvedActiveIndex) ? displayItems[resolvedActiveIndex] : null;
                                 const key = e.key;
                                 if (key === "Escape") {
                                     e.preventDefault();
@@ -314,24 +343,68 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         onChange={(e) => changeText(e.target.value)}
                         className={commandPaletteStyles.slots.input}
                     />
+                    {Preview || hasFilters ? (
+                        <div
+                            role="group"
+                            aria-label={translations.commandPaletteViewControls}
+                            className={commandPaletteStyles.slots.controls}
+                        >
+                            {Preview ? (
+                                <Button
+                                    size="icon"
+                                    aria-controls={previewId}
+                                    aria-expanded={previewVisible}
+                                    onClick={() => setPreviewVisible((visible) => !visible)}
+                                    icon={previewVisible ? <EyeIcon aria-hidden="true" /> : <EyeSlashIcon aria-hidden="true" />}
+                                    title={previewVisible ? translations.commandPaletteHidePreview : translations.commandPaletteShowPreview}
+                                    aria-label={previewVisible ? translations.commandPaletteHidePreview : translations.commandPaletteShowPreview}
+                                />
+                            ) : null}
+                            {hasFilters ? (
+                                <Button
+                                    size="icon"
+                                    aria-controls={filtersId}
+                                    aria-expanded={filtersVisible}
+                                    icon={<FunnelIcon aria-hidden="true" />}
+                                    onClick={() => setFiltersVisible((visible) => !visible)}
+                                    title={filtersVisible ? translations.commandPaletteHideFilters : translations.commandPaletteShowFilters}
+                                    aria-label={filtersVisible ? translations.commandPaletteHideFilters : translations.commandPaletteShowFilters}
+                                />
+                            ) : null}
+                        </div>
+                    ) : null}
                 </header>
-                {props.loading ? (
+                {hasFilters ? (
                     <div
-                        data-component="command-palette-list"
-                        className={commandPaletteStyles.slots["loading-list"]}
-                        role="status"
-                        aria-busy="true"
-                        aria-label={translations.commandPaletteLoading}
+                        id={filtersId}
+                        data-component="command-palette-filters"
+                        className={commandPaletteStyles.slots.filters}
+                        hidden={!filtersVisible}
                     >
-                        <div className={commandPaletteStyles.slots["group-row"]}>{translations.commandPaletteLoading}</div>
-                        {loadingSkeleton.map((_, i) => (
-                            <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]} aria-hidden="true">
-                                {SkeletonCell}
-                            </div>
-                        ))}
+                        {props.filters}
                     </div>
-                ) : (
-                    <div className={commandPaletteStyles.slots.content} data-component="command-palette-container">
+                ) : null}
+                <div
+                    className={commandPaletteStyles.slots.content}
+                    data-component="command-palette-container"
+                    data-preview-visible={Preview && previewVisible ? "true" : "false"}
+                >
+                    {props.loading ? (
+                        <div
+                            data-component="command-palette-list"
+                            className={commandPaletteStyles.slots["loading-list"]}
+                            role="status"
+                            aria-busy="true"
+                            aria-label={translations.commandPaletteLoading}
+                        >
+                            <div className={commandPaletteStyles.slots["group-row"]}>{translations.commandPaletteLoading}</div>
+                            {loadingSkeleton.map((_, i) => (
+                                <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]} aria-hidden="true">
+                                    {SkeletonCell}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
                         <div
                             role="listbox"
                             id={listboxId}
@@ -361,17 +434,31 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                     })}
                                     item={item}
                                     text={text}
-                                    active={activeIndex === index}
+                                    active={resolvedActiveIndex === index}
                                     key={`${id}-${item.type}-${index}`}
                                 />
                             ))}
-                            {displayItems.length === 1 ? (
+                            {text.length > 0 && !hasVisibleShortcut ? (
                                 <div className={commandPaletteStyles.slots.empty}>{props.emptyMessage ?? translations.commandPaletteEmpty}</div>
                             ) : null}
                         </div>
-                        {props.Preview && Is.number(activeIndex) ? <props.Preview command={displayItems[activeIndex]} text={text} /> : null}
-                    </div>
-                )}
+                    )}
+                    {Preview ? (
+                        <section
+                            id={previewId}
+                            aria-label={translations.commandPalettePreviewLabel}
+                            data-component="command-palette-preview"
+                            className={commandPaletteStyles.slots.preview}
+                            hidden={!previewVisible}
+                        >
+                            {!props.loading && previewCommand ? (
+                                <Preview command={previewCommand} text={text} />
+                            ) : (
+                                <div className={commandPaletteStyles.slots["preview-empty"]}>{translations.commandPalettePreviewEmpty}</div>
+                            )}
+                        </section>
+                    ) : null}
+                </div>
                 {props.footer ? <footer className={commandPaletteStyles.slots.footer}>{props.footer}</footer> : null}
             </Modal>
         </Fragment>

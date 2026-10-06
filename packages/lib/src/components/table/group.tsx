@@ -5,6 +5,7 @@ import { DotsSixVerticalIcon, TrashIcon, StackMinusIcon } from "@phosphor-icons/
 import type React from "react";
 import { Fragment, useState } from "react";
 import { keys } from "sidekicker";
+import type { TranslationOverrides } from "../../hooks/use-translations";
 import { useTranslations } from "../../hooks/use-translations";
 import { uuid } from "../../lib/fns";
 import { Button } from "../core/button/button";
@@ -27,6 +28,7 @@ type Props<T extends object> = TableConfiguration<
         rows: T[];
         groups: GroupItem<T>[];
         setGroups: React.Dispatch<React.SetStateAction<GroupItem<T>[]>>;
+        translations?: TranslationOverrides;
     }
 >;
 
@@ -71,7 +73,7 @@ const Item = <T extends object>({
 };
 
 export const Group = <T extends object>(props: Props<T>) => {
-    const translations = useTranslations();
+    const translations = useTranslations(props.translations);
     const options = createOptionCols(props.cols);
     const controls = useDragControls();
     const [group, setGroup] = useState(props.groups[0]?.groupName || "");

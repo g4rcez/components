@@ -28,6 +28,8 @@ import { Tabs, Tab } from "@g4rcez/components/tabs";
 | `container` | `string`               | —       | Additional classes for the outer card container     |
 | `className` | `string`               | —       | Additional classes for the card body (content area) |
 | `children`  | `Tab[]`                | —       | `Tab` panel components                              |
+| `aria-label`       | `string`               | —       | Accessible name for the tablist.                    |
+| `aria-labelledby`  | `string`               | —       | ID reference for the tablist's accessible name.     |
 
 ### Tab (Panel)
 
@@ -69,7 +71,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ```tsx
 const [active, setActive] = useState("overview");
 
-<Tabs active={active} onChange={setActive}>
+<Tabs active={active} onChange={setActive} aria-label="Project sections">
     <Tab id="overview" title="Overview">
         <h3>Project Overview</h3>
         <p>This is the overview of your project.</p>
@@ -189,7 +191,8 @@ function DynamicTabs() {
 
 ## Accessibility
 
-- Tab buttons use `aria-current="page"` and `aria-disabled` for screen reader state.
+- Tab buttons expose selection with `aria-selected` and disabled state through the native `disabled` attribute.
+- Name the tablist with `aria-label` or `aria-labelledby` on `Tabs`.
 - Keyboard navigation: `ArrowLeft` / `ArrowRight` moves between tabs; `Tab` key focuses the header row.
 - Disabled tabs are skipped during arrow-key navigation.
 - Tab panels are only rendered when active (unmounted otherwise) — use this for performance but be aware that form state inside inactive panels is lost.

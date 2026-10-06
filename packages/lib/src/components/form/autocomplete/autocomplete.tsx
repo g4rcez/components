@@ -18,6 +18,7 @@ import { forwardRef, Fragment, type PropsWithChildren, type Ref, useEffect, useI
 import { flushSync } from "react-dom";
 import { type ContextProp, type ItemProps, type ListProps, type SizeFunction, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useMediaQuery } from "../../../hooks/use-media-query";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useRemoveScroll } from "../../../hooks/use-remove-scroll";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css, dispatchInput, getRemainingSize, initializeInputDataset, synthesizeChangeEvent } from "../../../lib/dom";
@@ -39,8 +40,8 @@ export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
     emptyMessage?: Label;
     dynamicOption?: boolean;
     options: AutocompleteItemProps[];
+    translations?: TranslationOverrides;
 };
-
 const Frag = (props: PropsWithChildren) => <Fragment>{props.children}</Fragment>;
 
 const transitionStyles = {
@@ -110,7 +111,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const suppressNextFocusOpen = useRef(false);
         const virtuoso = useRef<VirtuosoHandle | null>(null);
         const defaults = props.value ?? props.defaultValue ?? "";
-        const translation = useTranslations();
+        const translation = useTranslations(props.translations);
         const generatedId = useId();
         const isTouchableDevice = useMediaQuery(TOUCH_DEVICE_QUERY, false);
         const isControlled = props.value !== undefined;

@@ -116,6 +116,14 @@ export default function App({ children }) {
 }
 ```
 
+
+Components with built-in text also accept a partial `translations` map for per-instance overrides without a provider. Instance entries override provider values; omitted entries fall back through provider translations to built-in defaults:
+
+```tsx
+<Empty translations={{ emptyDataMessage: "No matching records" }} />
+```
+
+`TranslationOverrides` is exported for typing custom translation maps.
 ---
 
 ## 4 — Theme customization

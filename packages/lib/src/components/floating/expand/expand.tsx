@@ -30,6 +30,7 @@ export const Expand = ({
     const id = useId();
     const titleId = `${id}:title`;
     const wrapperId = `${id}:wrapper`;
+    const triggerId = buttonProps.id || `${id}-trigger`;
     const isControlled = controlledOpen !== undefined;
     const [innerOpen, setInnerOpen] = useState(false);
     const open = isControlled ? controlledOpen : innerOpen;
@@ -61,7 +62,7 @@ export const Expand = ({
                     aria-haspopup="dialog"
                     ref={refs.setReference}
                     transition={expandTransition}
-                    {...getReferenceProps(buttonProps as never)}
+                    {...getReferenceProps({ ...buttonProps, id: triggerId } as never)}
                 >
                     <motion.span layoutId={titleId}>{trigger}</motion.span>
                 </Button>
@@ -71,6 +72,7 @@ export const Expand = ({
                             <FloatingFocusManager guards restoreFocus returnFocus visuallyHiddenDismiss context={context} modal>
                                 <motion.div
                                     {...getFloatingProps()}
+                                    aria-labelledby={buttonProps["aria-labelledby"] ?? triggerId}
                                     ref={refs.setFloating}
                                     layoutId={wrapperId}
                                     transition={expandTransition}

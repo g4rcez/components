@@ -22,6 +22,16 @@ its status row when complete.
 | 010 | Give Wizard geometry one window-resize subscription | P2 | S | — | DONE |
 | 011 | Use a single CSS pipeline with accurate sourcemaps | P2 | M | — | DONE |
 | 012 | Own public path types without invalid dependency declarations | P1 | M | 006 declaration layout implementation | DONE |
+| 013 | Make disabled Button anchors non-navigable | P1 | S | — | DONE |
+| 014 | Make revealed row actions keyboard reachable | P1 | M | — | DONE |
+| 015 | Preserve Input and Textarea error semantics | P1 | M | — | DONE |
+| 016 | Give role-based widgets accessible names | P1 | M | — | DONE |
+| 017 | Correct low-contrast theme token pairs | P1 | M | — | DONE |
+| 018 | Respect reduced-motion preferences | P1 | M | — | DONE |
+| 019 | Preserve Button focus in forced-colors mode | P2 | S | — | DONE |
+| 020 | Preserve ReactNode titles in AnimatedList | P2 | M | — | DONE |
+| 021 | Allow Switch error messages to wrap | P2 | S | — | DONE |
+| 022 | Document Stats typography tokens | P2 | S | — | DONE |
 
 Status values: `TODO` | `IN PROGRESS` | `DONE` | `BLOCKED` (with a one-line
 reason) | `REJECTED` (with a one-line rationale).
@@ -141,3 +151,24 @@ below. Work remains unstaged on `main`; no branch/worktree, commit, push or PR.
   concurrent edits to geometry/index references are not attributed to this work.
 - Dependency vulnerability upgrades and the optional combobox/compatibility
   fixture redesigns were not selected or implemented.
+
+## Additional audit planning — 2026-10-05
+
+Plans 013–022 were written against baseline `b0b11ff` for the selected
+accessibility, theme, motion, and documentation findings. They are independent
+of plans 001–012 and of one another; execute in the priority order listed above.
+All ten remain `TODO`. No library source, generated skill copy, build artifact,
+or test fixture was changed while writing these handoff plans.
+
+### Scope correction and unselected observations
+
+- Forced-colors review narrows the confirmed focus defect to Button: its focus
+  ring is only `box-shadow` and its base `outline` is zero. MDN documents that
+  forced-colors mode removes box shadows and forces outline colors to system
+  colors. Modal, Table, and PageCalendar retain nonzero outlines; no plan changes
+  those styles.
+- Pagination `aria-current` and long filename/toast truncation were not promoted
+  without stronger interaction or browser evidence.
+- This planning pass did not run builds, tests, lint, or browser E2E. Plans that
+  change source CSS explicitly require maintainer build approval, as required by
+  `AGENTS.md`; their E2E commands also invoke that build.

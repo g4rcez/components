@@ -19,28 +19,40 @@ const RowAside = (props: PropsWithChildren) => {
     const ref = useRef<HTMLDivElement>(null);
     const hiddenClassName = `${tableRowStyles.slots.aside}-hidden`;
     const visibleClassName = `${tableRowStyles.slots.aside}-visible`;
-    const [className, setClassName] = useState(hiddenClassName);
-    const ariaHidden = className === hiddenClassName;
+    const [isHovered, setIsHovered] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+    const className = isHovered || isFocused ? visibleClassName : hiddenClassName;
 
-    const onLeave = () => setClassName(hiddenClassName);
-
-    const onEnter = () => {
+    const reveal = () => {
         const child = ref.current;
         const parent = parentRef.current;
         if (child !== null && parent !== null) {
             parent.style.left = `-${child.getBoundingClientRect().width + 4}px`;
         }
-        setClassName(visibleClassName);
+    };
+
+    const onFocus = () => {
+        reveal();
+        setIsFocused(true);
+    };
+
+    const onBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            setIsFocused(false);
+        }
     };
 
     return (
         <div
             ref={parentRef}
-            onMouseEnter={onEnter}
-            onMouseLeave={onLeave}
+            onMouseEnter={() => {
+                reveal();
+                setIsHovered(true);
+            }}
+            onMouseLeave={() => setIsHovered(false)}
+            onFocus={onFocus}
+            onBlur={onBlur}
             data-component="cell-aside"
-            inert={ariaHidden ? true : undefined}
-            tabIndex={ariaHidden ? -1 : undefined}
             className={css(tableRowStyles.slots.aside, tableRowStyles.slots["aside-overlay"], className)}
         >
             <div ref={ref} className={tableRowStyles.slots["aside-content"]}>

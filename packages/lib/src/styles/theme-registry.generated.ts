@@ -911,7 +911,7 @@ export const defaultLightThemeColors = {
     "success-foreground": "hsla(0, 0%, 100%)",
     "success-hover": "hsla(142, 71%, 40%)",
     "success-subtle": "hsla(142, 71%, 96%)",
-    "warn": "hsla(38, 92%, 50%)",
+    "warn": "hsla(38, 92%, 32%)",
     "warn-foreground": "hsla(0, 0%, 100%)",
     "warn-hover": "hsla(38, 92%, 45%)",
     "warn-subtle": "hsla(38, 92%, 96%)"
@@ -937,7 +937,7 @@ export const defaultDarkThemeColors = {
     "primary-subtle": "hsla(201, 49%, 36%)",
     "ring": "hsla(201, 49%, 65%)",
     "secondary": "hsla(240, 5%, 96%)",
-    "secondary-foreground": "hsla(240, 5%, 96%)",
+    "secondary-foreground": "hsla(240, 10%, 4%)",
     "secondary-hover": "hsla(240, 4%, 25%)",
     "secondary-subtle": "hsla(240, 4%, 20%)",
     "shadow-notification": "hsla(210, 15%, 20%, 0.15)",
@@ -1325,7 +1325,7 @@ export const defaultDarkComponentTokens = {
     "autocomplete": {
         "option-background-hover": "hsla(240, 4%, 16%)",
         "option-active-background": "hsla(201, 49%, 22%)",
-        "option-active-foreground": "hsla(240, 6%, 10%)",
+        "option-active-foreground": "hsla(240, 5%, 96%)",
         "option-selected-background": "hsla(240, 4%, 16%)",
         "option-selected-foreground": "hsla(240, 5%, 96%)",
         "panel-background": "hsla(240, 10%, 8%)",

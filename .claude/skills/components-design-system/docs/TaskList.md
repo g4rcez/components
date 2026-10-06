@@ -1,6 +1,6 @@
 ---
 title: TaskList
-description: Fieldset container that triggers a celebratory animation when all child tasks are checked.
+description: Fieldset container with a reduced-motion-aware celebration when all child tasks are checked.
 package: "@g4rcez/components"
 export: "{ TaskList }"
 import: "import { TaskList } from '@g4rcez/components/task-list'"
@@ -9,7 +9,7 @@ category: form
 
 # TaskList
 
-Fieldset container that triggers a celebratory animation when all child tasks are checked.
+Fieldset container that triggers a celebratory animation when all child tasks are checked. Its scale/rotation sequence is skipped when reduced motion is preferred; task state is unchanged.
 
 ## Import
 
@@ -118,7 +118,7 @@ export default function ProjectSubtasks() {
 
 - Renders a semantic `<fieldset>` to group related inputs — pair with a `<legend>` for a fully accessible group label.
 - Inherits all accessibility features of the underlying `Checkbox` component.
-- The completion animation (scale + rotate) is visual-only and does not alter keyboard or screen-reader behavior.
+- The completion animation (scale + rotate) is visual-only, does not alter keyboard or screen-reader behavior, and is skipped when reduced motion is preferred.
 
 ## Data Attributes
 
@@ -129,6 +129,6 @@ export default function ProjectSubtasks() {
 
 ## Notes
 
-- The animation is powered by `motion/react`. When all `input[data-task=true]` elements inside the fieldset are checked, a staggered scale + rotate animation fires starting from the last-checked item's index.
+- The animation is powered by `motion/react`. When all `input[data-task=true]` elements inside the fieldset are checked, a staggered scale + rotate animation fires starting from the last-checked item's index unless reduced motion is preferred.
 - `TaskList` attaches a single `change` event listener on the `<fieldset>` (event delegation) — no per-item wiring is required.
 - The animation runs once per "all complete" event; unchecking an item and re-checking to completion will replay it.

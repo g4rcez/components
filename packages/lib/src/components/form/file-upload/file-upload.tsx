@@ -15,6 +15,7 @@ import prettyBytes from "pretty-bytes";
 import type React from "react";
 import { cloneElement, createContext, Fragment, useContext, useEffect, useState } from "react";
 import { type DropzoneOptions, type DropzoneProps, useDropzone } from "react-dropzone";
+import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { defaultTranslations } from "../../../config/default-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
@@ -36,6 +37,7 @@ type Props = Override<React.ComponentProps<"input">, DropzoneProps> & {
     File?: React.FC<{ file: File }>;
     onDrop?: (file: File[]) => void;
     onDeleteFile?: (file: File) => void;
+    translations?: TranslationOverrides;
 };
 
 const getMimeType = (file: File) => {
@@ -57,8 +59,8 @@ const extensionMap: Record<string, Icon> = {
     mp4: FileVideoIcon,
 };
 
-const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => {
-    const translations = useTranslations();
+const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }>; translations?: TranslationOverrides }) => {
+    const translations = useTranslations(props.translations);
     const [, setManager] = useFileManager();
     const [info, setInfo] = useState({ url: "", type: "", size: "" });
 
@@ -129,11 +131,11 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
     );
 };
 
-const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }> }) => (
+const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }>; translations?: TranslationOverrides }) => (
     <ul className={fileUploadStyles.slots.list}>
         {props.files.map((file, index) => {
             const key = `${file.name}-${file.lastModified}-${file.size}-${index}`;
-            return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} key={key} file={file} />;
+            return <ItemViewer File={props.File} onDeleteFile={props.onDeleteFile} translations={props.translations} key={key} file={file} />;
         })}
     </ul>
 );
@@ -144,6 +146,7 @@ type IdleProps = {
     multiple?: boolean;
     disabled?: boolean;
     onUpload?: () => void;
+    translations?: TranslationOverrides;
 };
 
 const singleFileUploadCopy = {
@@ -156,7 +159,7 @@ const singleFileUploadCopy = {
 const getSingleFileCopy = (single: string, plural: string, defaultPlural: string) => (plural === defaultPlural ? single : plural);
 
 const Idle = (props: IdleProps) => {
-    const t = useTranslations();
+    const t = useTranslations(props.translations);
     const Icon = props.dragging ? FolderOpenIcon : FolderIcon;
     const multiple = props.multiple === true;
     const idleCopy = multiple ? t.uploadIdle : getSingleFileCopy(singleFileUploadCopy.idle, t.uploadIdle, defaultTranslations.uploadIdle);
@@ -208,16 +211,17 @@ type InteractiveAreaProps = {
     onUpload: () => void;
     File?: React.FC<{ file: File }>;
     onDeleteFile?: (file: File) => void;
+    translations?: TranslationOverrides;
 };
 
 const InteractiveArea = (props: InteractiveAreaProps) => {
     if (props.isDragActive) {
-        return <Idle files={props.files} dragging multiple={props.multiple} disabled={props.disabled} onUpload={props.onUpload} />;
+        return <Idle files={props.files} dragging multiple={props.multiple} disabled={props.disabled} onUpload={props.onUpload} translations={props.translations} />;
     }
     if (props.files.length > 0) {
-        return <FilesList File={props.File} onDeleteFile={props.onDeleteFile} files={props.files} />;
+        return <FilesList File={props.File} onDeleteFile={props.onDeleteFile} files={props.files} translations={props.translations} />;
     }
-    return <Fragment>{cloneElement(props.idle, { onUpload: props.onUpload, disabled: props.disabled })}</Fragment>;
+    return <Fragment>{cloneElement(props.idle, { onUpload: props.onUpload, disabled: props.disabled, translations: props.translations })}</Fragment>;
 };
 
 const FileViewer = (props: { item: ContextItem }) => {
@@ -243,7 +247,7 @@ const FileViewer = (props: { item: ContextItem }) => {
 };
 
 export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props) => {
-    const t = useTranslations();
+    const t = useTranslations(props.translations);
     const state = useState<ContextProps>(null);
     const [files, setFiles] = useState<File[]>([]);
     const isControlled = props.files !== undefined;
@@ -314,11 +318,12 @@ export const FileUpload = ({ idle, onDeleteFile, File, onDrop, ...props }: Props
                     File={File}
                     onDeleteFile={onRemoveFile}
                     isDragActive={isDragActive}
-                    idle={idle ?? <Idle dragging={false} multiple={multiple} />}
+                    idle={idle ?? <Idle dragging={false} multiple={multiple} translations={props.translations} />}
                     files={items}
                     multiple={multiple}
                     disabled={disabled}
                     onUpload={open}
+                    translations={props.translations}
                 />
             </div>
         </Context.Provider>

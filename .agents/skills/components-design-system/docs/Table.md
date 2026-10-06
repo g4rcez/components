@@ -304,6 +304,8 @@ import { TrashIcon, PencilIcon } from "@phosphor-icons/react";
 - `aria-busy` on column headers signals loading state to assistive technologies.
 - Empty state renders the `Empty` component with a visible placeholder instead of an empty table body.
 - Virtualization uses `react-virtuoso` with `useWindowScroll` so native keyboard scrolling and focus management continue to work.
+- Focusable descendants in `Aside` participate in the tab sequence while the overlay is visually concealed. Focusing one reveals the overlay; it stays visible until both focus and pointer leave. Hover continues to reveal the overlay.
+- Use native buttons for aside actions so Enter and Space activate them.
 
 ## Data Attributes
 

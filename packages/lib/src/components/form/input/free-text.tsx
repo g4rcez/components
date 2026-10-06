@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { forwardRef, useEffect, useId, useRef } from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type MaskInput from "the-mask-input";
 import type { InputTypes } from "the-mask-input";
 import { css, initializeInputDataset, mergeRefs } from "../../../lib/dom";
@@ -40,6 +40,11 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                 loading,
                 hiddenLabel,
                 size = "normal",
+                onBlur,
+                onChange,
+                onFocus,
+                "aria-describedby": callerDescribedBy,
+                "aria-invalid": callerAriaInvalid,
                 ...props
             },
             ref
@@ -48,6 +53,30 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
             const generatedId = useId();
             const id = props.id ?? props.name ?? generatedId;
             const inputRef = useRef<Html>(null);
+            const hasInteracted = useRef(false);
+            const isFocused = useRef(false);
+            const [nativeInvalid, setNativeInvalid] = useState(false);
+
+            const descriptionIds = new Set(callerDescribedBy?.trim().split(/\s+/).filter(Boolean) ?? []);
+            if (error) descriptionIds.add(`${id}-error`);
+            if (feedback !== null && feedback !== undefined && typeof feedback !== "boolean" && feedback !== "") descriptionIds.add(`${id}-feedback`);
+            const ariaDescribedBy = descriptionIds.size > 0 ? [...descriptionIds].join(" ") : undefined;
+
+            const handleFocus = (event: React.FocusEvent<Html>) => {
+                hasInteracted.current = true;
+                isFocused.current = true;
+                setNativeInvalid(false);
+                onFocus?.(event);
+            };
+            const handleBlur = (event: React.FocusEvent<Html>) => {
+                isFocused.current = false;
+                setNativeInvalid(hasInteracted.current && !event.currentTarget.validity.valid);
+                onBlur?.(event);
+            };
+            const handleChange = (event: React.ChangeEvent<Html>) => {
+                setNativeInvalid(hasInteracted.current && !isFocused.current && !event.currentTarget.validity.valid);
+                onChange?.(event);
+            };
 
             useEffect(() => {
                 if (inputRef.current === null) return;
@@ -113,10 +142,13 @@ export const createFreeText = <const T extends FreeTextTag, const Html extends H
                         type={type}
                         data-next={next}
                         aria-busy={loading}
-                        aria-invalid={!!error}
+                        aria-invalid={error || nativeInvalid ? true : callerAriaInvalid}
                         aria-disabled={props.disabled}
                         aria-readonly={props.readOnly}
-                        aria-describedby={error ? `${id}-error` : undefined}
+                        aria-describedby={ariaDescribedBy}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
                         ref={mergeRefs(ref, inputRef) as unknown as React.Ref<Html>}
                         className={css(
                             freeTextStyles.className({ size }),

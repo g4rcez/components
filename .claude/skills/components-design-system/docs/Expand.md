@@ -49,7 +49,7 @@ The `Expand` component itself only renders the trigger button and an animated wr
 import { PlusIcon } from "@phosphor-icons/react";
 import { Expand } from "@g4rcez/components/expand";
 
-<Expand trigger={<PlusIcon size={16} />} theme="primary" size="icon" rounded="circle">
+<Expand trigger={<PlusIcon size={16} />} aria-label="Create new" theme="primary" size="icon" rounded="circle">
     <div className="w-64 rounded-card-radius border border-border bg-background p-4 shadow-shadow-floating">
         <h3 className="font-bold mb-2 text-foreground">Create New</h3>
         <ul className="space-y-2">
@@ -105,7 +105,7 @@ function ControlledExpand() {
 
 - Use `Expand` when you want the expanded panel to appear to "grow out of" the trigger button — the shared-element transition reinforces spatial context.
 - Apply design-token classes on the expanded content (`bg-background`, `border-border`, `shadow-shadow-floating`) for consistent theming.
-- Provide accessible `trigger` text or an icon with a `sr-only` label.
+- Provide visible trigger text; for an icon-only trigger, pass a localized `aria-label` as an inherited `Button` prop.
 
 ## Don't
 
@@ -117,6 +117,7 @@ function ControlledExpand() {
 ## Accessibility
 
 - The trigger renders as a focusable `<button>` via the `Button` component.
+- By default, the expanded dialog is named from the trigger button. An icon-only trigger can use `aria-label`; when `aria-labelledby` is provided, it is forwarded to both the trigger and dialog.
 - `FloatingFocusManager` with `visuallyHiddenDismiss` and `closeOnFocusOut` manages focus correctly when the panel opens.
 - Pressing `Escape` closes the expanded panel (`useDismiss` with `escapeKey: true`).
 - Clicking outside also closes the panel (`outsidePress: true`).

@@ -169,6 +169,7 @@ const SwipeActionButton = ({
     actionWidth,
     side,
     focusable,
+    onFocus,
     onAction,
     className,
 }: {
@@ -176,6 +177,7 @@ const SwipeActionButton = ({
     actionWidth: number;
     side: SwipeSide;
     focusable: boolean;
+    onFocus: () => void;
     onAction: (action: SwipeAction, side: SwipeSide) => void;
     className?: string;
 }) => {
@@ -185,6 +187,7 @@ const SwipeActionButton = ({
             disabled={action.disabled}
             tabIndex={focusable ? 0 : -1}
             aria-label={typeof action.label === "string" ? action.label : undefined}
+            onFocus={onFocus}
             onClick={() => onAction(action, side)}
             className={css(swipeableListStyles.slots.action, className)}
             style={{ width: actionWidth }}
@@ -359,8 +362,8 @@ const SwipeableListRow = ({
         >
             <div className={css(swipeableListStyles.slots.rail, classNames?.rail)}>
                 <div
-                    aria-hidden={openSide !== "left"}
-                    inert={openSide !== "left" ? true : undefined}
+                    aria-hidden={openSide === null ? undefined : openSide !== "left"}
+                    inert={openSide !== null && openSide !== "left" ? true : undefined}
                     className={css(actionGroupClassName, `${actionGroupClassName}--left`)}
                 >
                     {leftActions.map((action) => (
@@ -369,15 +372,20 @@ const SwipeableListRow = ({
                             action={action}
                             actionWidth={actionWidth}
                             className={classNames?.action}
-                            focusable={openSide === "left"}
+                            focusable={openSide === null || openSide === "left"}
+                            onFocus={() => {
+                                if (openSide !== "left") {
+                                    snapTo("left");
+                                }
+                            }}
                             onAction={handleAction}
                             side="left"
                         />
                     ))}
                 </div>
                 <div
-                    aria-hidden={openSide !== "right"}
-                    inert={openSide !== "right" ? true : undefined}
+                    aria-hidden={openSide === null ? undefined : openSide !== "right"}
+                    inert={openSide !== null && openSide !== "right" ? true : undefined}
                     className={css(actionGroupClassName, `${actionGroupClassName}--right`)}
                 >
                     {rightActions.map((action) => (
@@ -386,7 +394,12 @@ const SwipeableListRow = ({
                             action={action}
                             actionWidth={actionWidth}
                             className={classNames?.action}
-                            focusable={openSide === "right"}
+                            focusable={openSide === null || openSide === "right"}
+                            onFocus={() => {
+                                if (openSide !== "right") {
+                                    snapTo("right");
+                                }
+                            }}
                             onAction={handleAction}
                             side="right"
                         />
