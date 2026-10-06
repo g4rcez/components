@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "7.0.0",
+    "version": "7.0.1",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -889,10 +889,10 @@
     },
     "scripts": {
         "watch": "vite build --watch --minify false",
-"tokens:generate": "node ./scripts/generate-theme-registry.mjs",
-"tokens:check": "node ./scripts/generate-theme-registry.mjs --check",
+        "tokens:generate": "node ./scripts/generate-theme-registry.mjs",
+        "tokens:check": "node ./scripts/generate-theme-registry.mjs --check",
         "prepublishOnly": "npm run build",
-"build": "npm run tokens:generate && cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
+        "build": "npm run tokens:generate && cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
         "lib:lint": "pnpm --filter @g4rcez/lint build && node ./scripts/copy-lint.mjs",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
