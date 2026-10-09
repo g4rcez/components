@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createPaginationItems } from "../src/components/table/pagination";
 import { multiSort, type Sorter } from "../src/components/table/sort";
 
@@ -50,8 +50,63 @@ describe("multiSort", () => {
             { name: "Alice", age: 25, score: 90 },
         ];
         const copy = [...rows];
-        multiSort(copy, []);
+        expect(multiSort(copy, [])).toBe(copy);
         expect(copy).toEqual(rows);
+    });
+
+    it.each([ascending, descending, "undefined" as Sorter<Row>["type"]])("skips secondary fields when the primary differs (%s)", (type) => {
+        const readScore = vi.fn(() => 0);
+        const rows: Row[] = [
+            {
+                name: "Older",
+                age: 30,
+                get score() {
+                    return readScore();
+                },
+            },
+            {
+                name: "Younger",
+                age: 20,
+                get score() {
+                    return readScore();
+                },
+            },
+        ];
+        expect(
+            multiSort(rows, [
+                { id: "age", value: "age", type, label: "Age" },
+                { id: "score", value: "score", type: ascending, label: "Score" },
+            ])
+        ).toBe(rows);
+        expect(rows.map((row) => row.name)).toEqual(type === descending ? ["Older", "Younger"] : ["Younger", "Older"]);
+        expect(readScore).not.toHaveBeenCalled();
+    });
+
+    it("reads secondary fields for descending primary ties and keeps complete ties stable", () => {
+        const readScore = vi.fn(() => 10);
+        const rows: Row[] = [
+            {
+                name: "First",
+                age: 20,
+                get score() {
+                    return readScore();
+                },
+            },
+            {
+                name: "Second",
+                age: 20,
+                get score() {
+                    return readScore();
+                },
+            },
+            { name: "Higher", age: 20, score: 30 },
+        ];
+        multiSort(rows, [
+            { id: "age", value: "age", type: descending, label: "Age" },
+            { id: "score", value: "score", type: descending, label: "Score" },
+        ]);
+        expect(readScore).toHaveBeenCalled();
+        expect(rows.map((row) => row.name)).toEqual(["Higher", "First", "Second"]);
     });
 });
 

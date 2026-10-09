@@ -192,16 +192,17 @@ export function ActivityFeed() {
 - The overlay uses `FloatingFocusManager` to trap focus and `FloatingOverlay` with `lockScroll` to prevent background interaction.
 - Pressing `Escape` or clicking outside the overlay dismisses it.
 - The close button inside the overlay is a focusable `<button>` element.
-- Motion is provided by `motion/react`; wrap the list in your app's reduced-motion configuration when your application needs to disable transitions.
+- Motion is provided by `motion/react` and respects the user's reduced-motion preference automatically.
 
 ## Data Attributes
 
 - `layoutId="item-{id}"` — shared between the list row and the overlay card to drive the expand/collapse shared-element animation.
-- `layoutId="toast-{id}"` — inner content wrapper used for coordinated layout transitions.
+- Title, description, and avatar use matching shared layout IDs scoped to each list instance.
 
 ## Notes
 
-- Animations use `motion/react` shared layout (`layoutId`) so the item smoothly expands from its row position into the centered overlay.
+- Animations use a spring with no bounce to expand the row surface and carry its title, description, and avatar into the overlay. Desktop uses a dialog; narrow viewports use the Modal's responsive sheet.
+- Detail content fades in separately and remains mounted during dismissal so the surface can collapse back into its row. Escape, the close button, and backdrop dismissal restore focus to the opening control.
 - The overlay is rendered in a `FloatingPortal`, outside the normal DOM tree, to avoid stacking-context issues.
 - Only one item can be open at a time; opening a new item first closes the current one.
 - `AnimatedListItem` is a thin shell component — it returns `Fragment` and holds no state. All logic lives in `AnimatedList`, which reads child `props` via `React.Children.toArray`.

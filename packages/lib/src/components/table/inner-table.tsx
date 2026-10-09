@@ -145,7 +145,6 @@ const EmptyContent = (props: { loading?: boolean; translations?: TranslationOver
     </div>
 );
 
-
 const EmptyCell = () => <Fragment />;
 
 const emptyRows: never[] = [];
@@ -181,7 +180,6 @@ export const InnerTable = <T extends Record<string, unknown>>({
     const ref = useRef<HTMLDivElement | null>(null);
     const tweaks = useTable();
     const [scrollParent, setScrollParent] = useState<HTMLElement>();
-    const [, setShowLoadingFooter] = useState(false);
     const setViewportRef = useCallback(
         (viewport: HTMLDivElement | null) => {
             if (!viewport || !getScrollRef) return;
@@ -213,9 +211,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
             const condition = endOfPage.isIntersecting && loadingMoreRef.current;
             if (condition) {
                 onScrollEndRef.current?.();
-                return void setShowLoadingFooter(true);
             }
-            return setShowLoadingFooter(false);
         });
         observer.observe(div);
         return () => observer.disconnect();

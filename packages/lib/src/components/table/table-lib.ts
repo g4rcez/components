@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { LocalStorage } from "storage-manager-js";
 import { useReducer } from "use-typed-reducer";
 import { useStableRef } from "../../hooks/use-stable-ref";
@@ -188,28 +188,28 @@ const mergeCols = <T extends POJO>(cols: Col<T>[], saved?: Col<T>[]) => {
 };
 
 export const useTablePreferences = <T extends POJO>(name: string, cols: Col<T>[], options: Partial<TableGetters<T>> = noop) => {
-    const init: TableGetters<T> | null = isSsr() ? null : (LocalStorage.get(`@components/table-${name}`) as TableGetters<T>) || null;
-    const [state, dispatch] = useReducer(
-        {
+    const [initialState] = useState(() => {
+        const init: TableGetters<T> | null = isSsr() ? null : (LocalStorage.get(`@components/table-${name}`) as TableGetters<T>) || null;
+        return {
             name,
             groups: options.groups || init?.groups || [],
             sorters: options.sorters || init?.sorters || [],
             filters: options.filters || init?.filters || [],
             cols: mergeCols(cols, init?.cols),
-        } as Omit<TableGetters<T>, "rows"> & { name: string },
-        (get) => {
-            const intercept = (partial: Partial<TablePreferenceState<T>>) => {
-                const prev = get.state();
-                const result = { ...prev, ...partial };
-                if (!isSsr()) LocalStorage.set(`@components/table-${prev.name}`, result);
-                return result;
-            };
-            intercept(get.state());
-            return {
-                set: (getters: TableGetters<T>) => intercept(getters),
-            };
-        }
-    );
+        } as Omit<TableGetters<T>, "rows"> & { name: string };
+    });
+    const [state, dispatch] = useReducer(initialState, (get) => {
+        const intercept = (partial: Partial<TablePreferenceState<T>>) => {
+            const prev = get.state();
+            const result = { ...prev, ...partial };
+            if (!isSsr()) LocalStorage.set(`@components/table-${prev.name}`, result);
+            return result;
+        };
+        intercept(get.state());
+        return {
+            set: (getters: TableGetters<T>) => intercept(getters),
+        };
+    });
     return { ...state, ...dispatch, name };
 };
 

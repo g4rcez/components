@@ -74,6 +74,18 @@ const onlyNumbers = (str: string) => str.replace(/[^0-9]/g, "");
 
 const diacritics = (input: string): string => input.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+const fuzzyIncludes = (text: string, search: string): boolean => {
+    if (text === search) return true;
+    if (search.length === 0) return false;
+    let cursor = 0;
+    for (let index = 0; index < search.length; index++) {
+        const foundAt = text.indexOf(search[index]!, cursor);
+        if (foundAt === -1) return false;
+        cursor = foundAt + 1;
+    }
+    return true;
+};
+
 const strCompare = (text: string, value: string, _?: number, match: Match = "FUZZY"): boolean => {
     if (match === "CONTAINS") {
         return text.includes(value);
@@ -91,8 +103,7 @@ const strCompare = (text: string, value: string, _?: number, match: Match = "FUZ
         return text.endsWith(value);
     }
     if (match === "FUZZY") {
-        const r = fuzzyMatch(text, value);
-        return r !== null;
+        return fuzzyIncludes(text, value);
     }
     return false;
 };

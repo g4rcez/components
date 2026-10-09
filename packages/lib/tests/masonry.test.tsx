@@ -221,6 +221,45 @@ describe("Masonry", () => {
         expect(onLayoutChange.mock.calls.at(-1)?.[0].height).toBe(230);
     });
 
+    it("keeps observations and measurements stable when only the callback changes", async () => {
+        const previousCallback = vi.fn();
+        const latestCallback = vi.fn();
+        const children = [<article key="alpha">Alpha</article>, <article key="beta">Beta</article>];
+        const { rerender, unmount } = render(
+            <Masonry columns={2} gutter={10} onLayoutChange={previousCallback}>
+                {children}
+            </Masonry>
+        );
+        await waitFor(() => expect(previousCallback).toHaveBeenCalledTimes(1));
+        const observer = MockResizeObserver.instances[0];
+        const reads = rectSpy.mock.calls.length;
+
+        rerender(
+            <Masonry columns={2} gutter={10} onLayoutChange={latestCallback}>
+                {children}
+            </Masonry>
+        );
+        await waitForFrame();
+
+        expect(MockResizeObserver.instances).toHaveLength(1);
+        expect(observer.disconnect).not.toHaveBeenCalled();
+        expect(observer.observe).toHaveBeenCalledTimes(3);
+        expect(rectSpy).toHaveBeenCalledTimes(reads);
+        expect(latestCallback).not.toHaveBeenCalled();
+
+        itemHeights.set("Beta", 180);
+        observer.trigger();
+        await waitFor(() => expect(latestCallback).toHaveBeenCalledTimes(1));
+        expect(latestCallback.mock.calls[0][0].height).toBe(180);
+        expect(previousCallback).toHaveBeenCalledTimes(1);
+
+        observer.trigger();
+        await waitForFrame();
+        expect(latestCallback).toHaveBeenCalledTimes(1);
+        unmount();
+        expect(observer.disconnect).toHaveBeenCalledTimes(1);
+    });
+
     it("does not re-emit equal layouts when consumers store layout state", async () => {
         const onLayoutChange = vi.fn();
 

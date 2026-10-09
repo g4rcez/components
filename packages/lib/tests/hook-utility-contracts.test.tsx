@@ -43,7 +43,7 @@ describe("hook and utility contracts", () => {
         unmount();
     });
 
-    it.each(["", "100px"])("contains wheel events only while enabled (height %s)", (height) => {
+    it.each(["", "100px", "min(320px, calc(40px * 49))"])("contains wheel events only while enabled (height %s)", (height) => {
         const root = document.documentElement;
         const originalStyle = root.getAttribute("style");
         const ScrollConsumer = ({ enabled }: { enabled: boolean }) => {
@@ -53,6 +53,7 @@ describe("hook and utility contracts", () => {
         const { getByTestId, rerender, unmount } = render(<ScrollConsumer enabled={false} />);
         const popup = getByTestId("popup");
         vi.spyOn(popup, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 0, 200, height ? 60 : 100));
+        Object.defineProperty(popup, "clientHeight", { configurable: true, value: 100 });
         let scrollHeight = 100;
         Object.defineProperty(popup, "scrollHeight", { configurable: true, get: () => scrollHeight });
         const wheel = () => {

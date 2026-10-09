@@ -271,4 +271,6 @@ export function CustomFilterCalendar() {
 - All labels (button text, ARIA strings, week number format) are driven by the i18n translation system. Override via the `translations` prop on the root provider.
 - Event filtering is managed internally; `onChangeFilters` lets you mirror the filter state to an external store without controlling it.
 - The day view mini-calendar renders dots beneath days that have events, matching the `bg-primary` token for visual consistency.
-- The component grows to fill its container (`h-full flex-grow`). Place it inside a flex or grid container with an explicit height.
+- The component grows to fill its container (`h-full flex-grow`). Place it inside a flex or grid container with an explicit height and `min-height: 0`. Apply the height to the calendar's own container, not surrounding documentation or sibling sections.
+- Month view scrolls within the available height; week/day time grids scroll within their view. The day grid shrinks beside its detail panel, and the toolbar wraps when horizontal space is limited.
+- On narrow screens, day view stacks the time grid above the mini-calendar and scrolls the combined view, preserving a usable time-grid viewport.

@@ -791,11 +791,11 @@ export default function PageCalendarDocsPage() {
         <DocsLayout
             section="display"
             title="Page Calendar"
-            className="flex h-[700px] flex-col gap-0"
             description="A full-page calendar with month, week, and day views, event filtering, and custom event rendering."
         >
             <ComponentDemo
                 title="Page Calendar Demo"
+                demoClassName="flex h-[700px] min-h-0 min-w-0 flex-col overflow-hidden"
                 description="A full-page calendar showcasing month, week, and day views with events, filters, and interactive callbacks."
                 code={`"use client";
 import { useState } from "react";

@@ -38,6 +38,7 @@ export type AutocompleteProps = Omit<InputFieldProps<"input">, "value"> & {
     title?: string;
     value?: string;
     emptyMessage?: Label;
+    /** Accept typed values as well as predefined options, committing on selection or blur. */
     dynamicOption?: boolean;
     options: AutocompleteItemProps[];
     translations?: TranslationOverrides;
@@ -125,9 +126,11 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         const [, tick] = useState(0);
         const removeScrollRef = useRemoveScroll(open);
 
+        const matchingOption = useMemo(() => options.find((option) => option.value === shadow || option.label === shadow), [options, shadow]);
         const innerOptions = useMemo<AutocompleteItemProps[]>(
-            () => (dynamicOption && shadow !== "" ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options),
-            [dynamicOption, shadow, options]
+            () =>
+                dynamicOption && shadow !== "" && !matchingOption ? [{ value: shadow, label: shadow, "data-dynamic": "true" }, ...options] : options,
+            [dynamicOption, shadow, options, matchingOption]
         );
         const hasCustomRenderer = useMemo(() => options.some((option) => option.Render), [options]);
 
@@ -222,7 +225,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             return () => clearTimeout(id);
         }, [open, displayList.length]);
 
-        const onSelect = (opt: AutocompleteItemProps, i: number) => {
+        const onSelect = (opt: AutocompleteItemProps, i: number | null, restoreFocus = true) => {
             setValue(opt.value);
             const input = refs.reference.current as HTMLInputElement;
             const origin = hiddenInput.current ?? input;
@@ -238,6 +241,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setClosed();
             setShadow("");
             setIndex(i);
+            if (!restoreFocus) return;
             suppressNextFocusOpen.current = true;
             requestAnimationFrame(() => {
                 if (input.isConnected) input.focus();
@@ -251,6 +255,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             const value = event.target.value;
             setShadow(value);
             setIndex(null);
+            if (dynamicOption && value === "") {
+                onSelect({ value: "", label: "" }, null, false);
+                return setOpen(true);
+            }
             if (!open && value === "") return setOpen(true);
             event.target.name = props.name || "";
             return value ? setOpen(true) : props.onChange?.(event);
@@ -273,6 +281,21 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setShadow("");
         };
 
+        const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+            const nextTarget = event.relatedTarget;
+            if (nextTarget instanceof Node && (fieldset.current?.contains(nextTarget) || refs.floating.current?.contains(nextTarget))) {
+                props.onBlur?.(event);
+                return;
+            }
+            if (dynamicOption && shadow !== "" && !props.disabled) {
+                if (!matchingOption || (!matchingOption.disabled && !matchingOption.hidden)) {
+                    onSelect(matchingOption ?? { value: shadow, label: shadow }, null, false);
+                }
+            }
+            setClosed();
+            props.onBlur?.(event);
+        };
+
         const onClose = () => {
             if (props.disabled) return;
             const input = refs.reference.current as HTMLInputElement;
@@ -287,6 +310,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setValue("");
             setLabel("");
             dispatchInput(origin);
+            if (dynamicOption && origin) props.onChange?.(synthesizeChangeEvent(origin));
             setClosed();
         };
 
@@ -501,6 +525,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     {...getReferenceProps({
                         ...props,
                         onFocus,
+                        onBlur,
                         pattern,
                         onChange,
                         id: shadowId,
@@ -512,6 +537,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                             if (event.defaultPrevented) return;
                             if (event.key === "Escape") {
                                 event.preventDefault();
+                                setShadow("");
                                 return setClosed();
                             }
                             if (event.key === "ArrowDown") {
@@ -529,6 +555,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                                     event.preventDefault();
                                     return onSelect(selected, selectedIndex);
                                 }
+                                if (dynamicOption && shadow !== "" && (!matchingOption || (!matchingOption.disabled && !matchingOption.hidden))) {
+                                    event.preventDefault();
+                                    return onSelect(matchingOption ?? { value: shadow, label: shadow }, null);
+                                }
                                 if (displayList.length === 1 && !displayList[0]?.disabled) {
                                     event.preventDefault();
                                     return onSelect(displayList[0], 0);
@@ -541,7 +571,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     data-name={id}
                     data-target={id}
                     required={required}
-                    value={open ? shadow : options.length === 0 ? "" : label || value}
+                    value={open ? shadow : options.length === 0 && !dynamicOption ? "" : label || value}
                     role="combobox"
                     aria-autocomplete="list"
                     aria-expanded={open}
@@ -582,7 +612,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 />
                 <FloatingPortal preserveTabOrder>
                     {open && !props.disabled ? (
-                        <FloatingFocusManager modal guards returnFocus={false} context={context} initialFocus={-1} visuallyHiddenDismiss>
+                        <FloatingFocusManager
+                            modal={!dynamicOption}
+                            guards={!dynamicOption}
+                            returnFocus={false}
+                            context={context}
+                            initialFocus={-1}
+                            visuallyHiddenDismiss
+                        >
                             <motion.div
                                 {...getFloatingProps({
                                     ref: refs.setFloating,

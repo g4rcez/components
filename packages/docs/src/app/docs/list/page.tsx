@@ -9,7 +9,7 @@ export default function ListPage() {
         <DocsLayout title="AnimatedList" section="display" description="A list component with smooth item animations and detail modals.">
             <ComponentDemo
                 title="Basic AnimatedList Usage"
-                description="Demonstrates a list of animated items that reveal additional content in a modal when clicked."
+                description="Each row expands into a detail dialog or responsive sheet, carrying its title and description through the transition. Close it to return to the row."
                 code={`"use client";
 import { CaretRightIcon } from "@phosphor-icons/react";
 import { Button, AnimatedList, AnimatedListItem } from "@g4rcez/components";

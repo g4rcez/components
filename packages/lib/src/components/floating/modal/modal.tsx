@@ -72,6 +72,14 @@ const overlayAnimation: ModalAnimation = {
     exit: { opacity: 0, transition: { duration: 0.14, ease: modalEaseOut } },
 };
 
+// Shared surfaces already animate from their source geometry; a second transform
+// or fade would hide the morph and interfere with the projection animation.
+const sharedLayoutAnimation: ModalAnimation = {
+    initial: { opacity: 1 },
+    enter: { opacity: 1 },
+    exit: { opacity: 0, transition: { duration: 0.3, ease: [0.7, 0, 1, 1] } },
+};
+
 const drawerAnimation = (closedTransform: string, transformOrigin: string): ModalAnimation => ({
     initial: {
         opacity: 0.96,
@@ -513,7 +521,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                                 animate="enter"
                                                 initial="initial"
                                                 layoutId={layoutId}
-                                                variants={animation}
+                                                variants={layoutId ? sharedLayoutAnimation : animation}
                                                 data-component="modal"
                                                 style={
                                                     type === "drawer"
@@ -607,7 +615,13 @@ let confirmGlobal: ConfirmContextType = async <T,>(_: ConfirmOptions): Promise<T
 
 Modal.confirm = <T,>(options: ConfirmOptions): Promise<T> => confirmGlobal(options) as unknown as Promise<T>;
 
-export const ModalConfirmProvider = ({ children, translations: translationOverrides }: { children: React.ReactNode; translations?: TranslationOverrides }) => {
+export const ModalConfirmProvider = ({
+    children,
+    translations: translationOverrides,
+}: {
+    children: React.ReactNode;
+    translations?: TranslationOverrides;
+}) => {
     const translations = useTranslations(translationOverrides);
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState<Partial<ConfirmOptions>>({});

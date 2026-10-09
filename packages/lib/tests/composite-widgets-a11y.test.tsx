@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it, vi } from "vitest";
@@ -9,6 +9,7 @@ import { Autocomplete } from "../src/components/form/autocomplete/autocomplete";
 import { autocompleteStyles } from "../src/components/form/autocomplete/autocomplete.styles";
 import { MultiSelect } from "../src/components/form/multi-select/multi-select";
 import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette/command-palette";
+import { CombiKeys } from "../src/lib/combi-keys";
 
 Element.prototype.scrollIntoView = function scrollIntoView() {};
 
@@ -290,7 +291,6 @@ describe("composite widget a11y", () => {
         expect([...previewAccessibility.violations, ...filtersAccessibility.violations]).toEqual([]);
     });
 
-
     it("keeps CommandPalette arrow navigation inside filtered options", async () => {
         const user = userEvent.setup();
         const alphaAction = vi.fn();
@@ -329,6 +329,117 @@ describe("composite widget a11y", () => {
         expect(alphaAction).not.toHaveBeenCalled();
         expect(bravoAction).toHaveBeenCalledTimes(1);
         expect(charlieAction).not.toHaveBeenCalled();
+    });
+
+    it("reuses CommandPalette search and shortcuts during navigation and view toggles", async () => {
+        const user = userEvent.setup();
+        const enabled = vi.fn(({ text }: { text: string }) => text === "open");
+        const commands: CommandItemTypes[] = [
+            {
+                type: "group",
+                title: "Navigation",
+                items: [
+                    { type: "shortcut", title: "Open Alpha", action: vi.fn() },
+                    { type: "shortcut", title: "Open Bravo", action: vi.fn() },
+                    { type: "shortcut", title: "Conditional", enabled, action: vi.fn() },
+                ],
+            },
+        ];
+        const register = vi.spyOn(CombiKeys.prototype, "register");
+        try {
+            render(
+                <ComponentsProvider>
+                    <CommandPalette
+                        open
+                        commands={commands}
+                        onChangeVisibility={() => {}}
+                        filters={<span>Filters</span>}
+                        Preview={({ command }) => <span>{typeof command.title === "string" ? command.title : "Preview"}</span>}
+                    />
+                </ComponentsProvider>
+            );
+            const combobox = await screen.findByRole("combobox", { name: /command palette search/i });
+            await user.type(combobox, "open");
+            expect(screen.getByRole("option", { name: "Conditional" })).toBeInTheDocument();
+            const evaluations = enabled.mock.calls.length;
+            const registrations = register.mock.calls.length;
+            expect(evaluations).toBeGreaterThan(0);
+
+            await user.keyboard("[ArrowDown][ArrowUp]");
+            await user.click(screen.getByRole("button", { name: "Hide preview" }));
+            await user.click(screen.getByRole("button", { name: "Hide filters" }));
+
+            expect(enabled).toHaveBeenCalledTimes(evaluations);
+            expect(register).toHaveBeenCalledTimes(registrations);
+
+            fireEvent.change(combobox, { target: { value: "bravo" } });
+            expect(enabled).toHaveBeenCalledTimes(evaluations + 1);
+            expect(screen.queryByRole("option", { name: "Conditional" })).not.toBeInTheDocument();
+            expect(screen.getByRole("option", { name: "Open Bravo" })).toHaveAttribute("aria-selected", "true");
+            expect(register).toHaveBeenCalledTimes(registrations);
+        } finally {
+            register.mockRestore();
+        }
+    });
+
+    it("uses current text and callbacks and replaces changed CommandPalette shortcuts", async () => {
+        const oldVisibility = vi.fn();
+        const visibility = vi.fn();
+        const oldChangeText = vi.fn();
+        const changeText = vi.fn();
+        const action = vi.fn(({ setText }: { setText: (text: string) => void }) => setText("alpha updated"));
+        const replacementAction = vi.fn();
+        const commands: CommandItemTypes[] = [{ type: "shortcut", title: "Alpha", shortcut: "Control + j", action }];
+        const register = vi.spyOn(CombiKeys.prototype, "register");
+        try {
+            const { rerender, unmount } = render(
+                <ComponentsProvider>
+                    <CommandPalette open commands={commands} bind="Control + k" onChangeVisibility={oldVisibility} onChangeText={oldChangeText} />
+                </ComponentsProvider>
+            );
+            const combobox = await screen.findByRole("combobox", { name: /command palette search/i });
+            fireEvent.change(combobox, { target: { value: "alpha" } });
+            const registrations = register.mock.calls.length;
+            rerender(
+                <ComponentsProvider>
+                    <CommandPalette open commands={commands} bind="Control + k" onChangeVisibility={visibility} onChangeText={changeText} />
+                </ComponentsProvider>
+            );
+            expect(register).toHaveBeenCalledTimes(registrations);
+            fireEvent.keyDown(document.body, { key: "j", ctrlKey: true });
+            expect(action).toHaveBeenCalledTimes(1);
+            expect(action).toHaveBeenLastCalledWith(expect.objectContaining({ text: "alpha", setOpen: visibility }));
+            expect(changeText).toHaveBeenLastCalledWith("alpha updated");
+            expect(combobox).toHaveValue("alpha updated");
+            fireEvent.keyDown(document.body, { key: "k", ctrlKey: true });
+            expect(visibility).toHaveBeenLastCalledWith(true);
+            expect(oldVisibility).not.toHaveBeenCalled();
+
+            const replacement: CommandItemTypes[] = [{ type: "shortcut", title: "Bravo", shortcut: "Control + l", action: replacementAction }];
+            rerender(
+                <ComponentsProvider>
+                    <CommandPalette open commands={replacement} bind="Control + p" onChangeVisibility={visibility} onChangeText={changeText} />
+                </ComponentsProvider>
+            );
+            fireEvent.change(combobox, { target: { value: "bravo" } });
+            expect(changeText).toHaveBeenLastCalledWith("bravo");
+            expect(oldChangeText).toHaveBeenCalledTimes(1);
+            expect(screen.getByRole("option", { name: /Bravo/ })).toBeInTheDocument();
+            visibility.mockClear();
+            fireEvent.keyDown(document.body, { key: "j", ctrlKey: true });
+            fireEvent.keyDown(document.body, { key: "k", ctrlKey: true });
+            expect(action).toHaveBeenCalledTimes(1);
+            expect(visibility).not.toHaveBeenCalled();
+            fireEvent.keyDown(document.body, { key: "l", ctrlKey: true });
+            expect(replacementAction).toHaveBeenCalledWith(expect.objectContaining({ text: "bravo" }));
+            fireEvent.keyDown(document.body, { key: "p", ctrlKey: true });
+            expect(visibility).toHaveBeenLastCalledWith(true);
+            unmount();
+            fireEvent.keyDown(document.body, { key: "l", ctrlKey: true });
+            expect(replacementAction).toHaveBeenCalledTimes(1);
+        } finally {
+            register.mockRestore();
+        }
     });
 
     it("uses provider map labels for CommandPalette title, search, placeholder, and results", async () => {

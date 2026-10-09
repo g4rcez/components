@@ -1,6 +1,6 @@
 import type { TranslationOverrides } from "../../hooks/use-translations";
 import { isToday } from "date-fns";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useLocale } from "../../hooks/use-locale";
 import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
@@ -28,6 +28,7 @@ function getTopOffset(event: CalendarEvent): string {
 export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick, translations }: WeekViewProps) {
     const locale = useLocale();
     const hours = getHourSlots();
+    const hourLabels = useMemo(() => getHourSlots().map((hour) => formatHourLabel(hour, locale)), [locale]);
     const scrollBodyRef = useRef<HTMLDivElement>(null);
     const currentHourRef = useRef<HTMLDivElement>(null);
     const selectedDateKey = toDateKey(currentDate);
@@ -72,7 +73,7 @@ export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlot
                 <div className={pageCalendarWeekViewStyles.slots.gutter}>
                     {hours.map((hour) => (
                         <div key={hour} className={pageCalendarWeekViewStyles.slots["hour-row"]} style={{ height: HOUR_HEIGHT }}>
-                            <span className={pageCalendarWeekViewStyles.slots["hour-label"]}>{hour === 0 ? "" : formatHourLabel(hour, locale)}</span>
+                            <span className={pageCalendarWeekViewStyles.slots["hour-label"]}>{hour === 0 ? "" : hourLabels[hour]}</span>
                             {hour === new Date().getHours() && <div ref={currentHourRef} />}
                         </div>
                     ))}
@@ -89,7 +90,7 @@ export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlot
                                     <button
                                         key={hour}
                                         type="button"
-                                        aria-label={formatHourLabel(hour, locale)}
+                                        aria-label={hourLabels[hour]}
                                         className={pageCalendarWeekViewStyles.slots["time-slot"]}
                                         style={{ height: HOUR_HEIGHT }}
                                         onClick={() => onSlotClick?.(slotDate)}

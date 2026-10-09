@@ -1,6 +1,22 @@
 import { addDays, startOfMonth, startOfWeek, getISOWeek } from "date-fns";
 import type { CalendarEvent, CalendarEventBase } from "./page-calendar.types";
 
+const FORMATTER_CACHE_LIMIT = 64;
+const formatters = new Map<string, Intl.DateTimeFormat>();
+
+function getFormatter(locale: string | undefined, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
+    const key = JSON.stringify([locale, options]);
+    const cached = formatters.get(key);
+    if (cached) return cached;
+    const formatter = new Intl.DateTimeFormat(locale, options);
+    if (formatters.size >= FORMATTER_CACHE_LIMIT) {
+        const oldest = formatters.keys().next().value;
+        if (oldest !== undefined) formatters.delete(oldest);
+    }
+    formatters.set(key, formatter);
+    return formatter;
+}
+
 export function toDateKey(d: Date): string {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
@@ -43,43 +59,43 @@ export function getHourSlots(): number[] {
 }
 
 export function formatEventTime(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(date));
+    return getFormatter(locale, { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(date));
 }
 
 export function formatDay(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { day: "numeric" }).format(date);
+    return getFormatter(locale, { day: "numeric" }).format(date);
 }
 
 export function formatWeekDay(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { weekday: "short" }).format(date);
+    return getFormatter(locale, { weekday: "short" }).format(date);
 }
 
 export function formatWeekdayLong(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { weekday: "long" }).format(date);
+    return getFormatter(locale, { weekday: "long" }).format(date);
 }
 
 export function formatWeekdayShort(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { weekday: "short" }).format(date);
+    return getFormatter(locale, { weekday: "short" }).format(date);
 }
 
 export function formatMonthYear(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(date);
+    return getFormatter(locale, { month: "long", year: "numeric" }).format(date);
 }
 
 export function formatMonthShort(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { month: "short" }).format(date);
+    return getFormatter(locale, { month: "short" }).format(date);
 }
 
 export function formatHourLabel(hour: number, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(0, 0, 0, hour));
+    return getFormatter(locale, { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(0, 0, 0, hour));
 }
 
 export function formatFullDate(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { weekday: "long", month: "short", day: "numeric", year: "numeric" }).format(date);
+    return getFormatter(locale, { weekday: "long", month: "short", day: "numeric", year: "numeric" }).format(date);
 }
 
 export function formatTime(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hour12: false }).format(date);
+    return getFormatter(locale, { hour: "2-digit", minute: "2-digit", hour12: false }).format(date);
 }
 
 export function getWeekNumber(date: Date): number {

@@ -28,13 +28,15 @@ export type Sorter<T extends Any> = {
 
 const createSorterFn =
     <T extends Any>(fields: Sorter<T>[]) =>
-    (a: T, b: T) =>
-        fields.reduce<number>((acc, x) => {
+    (a: T, b: T) => {
+        for (const x of fields) {
             const reverse = x.type === "desc" ? -1 : 1;
             const property = x.value;
             const p = a[property] > b[property] ? reverse : a[property] < b[property] ? -reverse : 0;
-            return acc !== 0 ? acc : p;
-        }, 0);
+            if (p !== 0) return p;
+        }
+        return 0;
+    };
 
 export const multiSort = <T extends Any>(array: T[], fields: Sorter<T>[]) => {
     array.sort(createSorterFn(fields));

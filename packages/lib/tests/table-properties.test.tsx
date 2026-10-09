@@ -1,11 +1,11 @@
-import { render, renderHook, screen, waitFor, within } from "@testing-library/react";
+import { act, render, renderHook, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { axe } from "vitest-axe";
 import { LocalStorage } from "storage-manager-js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
-import { createColumns, createOptionCols, type Col, useTablePreferences } from "../src/components/table/table-lib";
+import { createColumns, createOptionCols, type Col, type TableGetters, useTablePreferences } from "../src/components/table/table-lib";
 import { Row as TableRow } from "../src/components/table/row";
 import { TableHeader } from "../src/components/table/thead";
 
@@ -152,5 +152,71 @@ describe("Table column Properties", () => {
         expect(result.current.cols.map((column) => column.id)).toEqual(["status", "name", "email"]);
         expect(result.current.cols[0]?.visible).toBe(false);
         expect(result.current.cols[2]?.visible).not.toBe(false);
+    });
+
+    it("reads and reconciles preferences only at mount while updates still persist", () => {
+        const readColumnId = vi.fn(() => "name" as const);
+        const watchedColumns: Col<Row>[] = [
+            {
+                ...columns[0]!,
+                get id() {
+                    return readColumnId();
+                },
+            },
+            ...columns.slice(1),
+        ];
+        const get = vi.spyOn(LocalStorage, "get").mockReturnValue({ cols: [columns[0]], groups: [], sorters: [], filters: [] });
+        const set = vi.spyOn(LocalStorage, "set").mockImplementation(() => undefined);
+        const { result, rerender } = renderHook(() => useTablePreferences("mount-only", watchedColumns));
+        expect(get).toHaveBeenCalledTimes(1);
+        expect(readColumnId).toHaveBeenCalled();
+        readColumnId.mockClear();
+        set.mockClear();
+
+        rerender();
+        const updatedColumns = result.current.cols.map((col) => ({ ...col, visible: false }));
+        act(() => result.current.set({ ...result.current, cols: updatedColumns, rows: [], pagination: null }));
+
+        expect(result.current.cols).toEqual(updatedColumns);
+        expect(set).toHaveBeenLastCalledWith("@components/table-mount-only", expect.objectContaining({ cols: updatedColumns }));
+        expect(get).toHaveBeenCalledTimes(1);
+        expect(readColumnId).not.toHaveBeenCalled();
+    });
+
+    it("preserves initial overrides, saved group rows, and the original persistence key after prop changes", () => {
+        const saved: TableGetters<Row> = {
+            cols: columns,
+            rows: [],
+            pagination: null,
+            filters: [],
+            sorters: [{ id: "saved", value: "email", label: "Email", type: "desc" as TableGetters<Row>["sorters"][number]["type"] }],
+            groups: [
+                {
+                    ...columns[2]!,
+                    rows: [{ name: "Ada", email: "ada@example.com", status: "Active" }],
+                    index: 0,
+                    groupId: "active",
+                    groupName: "Active",
+                    groupKey: "status",
+                },
+            ],
+        };
+        vi.spyOn(LocalStorage, "get").mockReturnValue(saved);
+        const set = vi.spyOn(LocalStorage, "set").mockImplementation(() => undefined);
+        const options: Partial<TableGetters<Row>> = { sorters: [] };
+        const { result, rerender } = renderHook(({ name, cols, overrides }) => useTablePreferences(name, cols, overrides), {
+            initialProps: { name: "original", cols: columns, overrides: options },
+        });
+        expect(result.current.sorters).toEqual([]);
+        expect(result.current.groups).toEqual(saved.groups);
+        const initialColumns = result.current.cols;
+
+        rerender({ name: "renamed", cols: columns.slice(1), overrides: { groups: [], sorters: saved.sorters } });
+        expect(result.current.name).toBe("renamed");
+        expect(result.current.cols).toBe(initialColumns);
+        expect(result.current.sorters).toEqual([]);
+        expect(result.current.groups).toEqual(saved.groups);
+        act(() => result.current.set({ ...saved, cols: initialColumns }));
+        expect(set).toHaveBeenLastCalledWith("@components/table-original", expect.objectContaining({ groups: saved.groups }));
     });
 });

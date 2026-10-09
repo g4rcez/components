@@ -182,7 +182,7 @@ function BasicAutocomplete() {
 
             <ComponentDemo
                 title="Create a New Option"
-                description="Use dynamicOption to let users add text that is not already in the options. Type a new language, then press Enter or select it to add it to the list."
+                description="Use dynamicOption to select a suggested language or enter a new one without an option validation error. Press Enter, select the option, or leave the field to accept the typed value."
                 code={`"use client";
 import { useState, type ChangeEvent } from "react";
 import { Autocomplete } from "@g4rcez/components";

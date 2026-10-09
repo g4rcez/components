@@ -50,6 +50,129 @@ describe("Autocomplete selection", () => {
         } as unknown as typeof IntersectionObserver;
     });
 
+    it("commits a new dynamic value on blur and submits it without pattern errors", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const { container } = renderWithProvider(
+            <form>
+                <Autocomplete dynamicOption required name="language" title="Language" options={languages} onChange={onChange} />
+                <button type="button">Next field</button>
+            </form>
+        );
+        const combobox = screen.getByRole("combobox", { name: /language/i });
+        const nextField = screen.getByRole("button", { name: "Next field" });
+        await user.type(combobox, "Rust");
+        await user.click(nextField);
+
+        expect(combobox).toHaveValue("Rust");
+        expect(combobox).toBeValid();
+        expect(new FormData(container.querySelector("form") ?? undefined).get("language")).toBe("Rust");
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ target: expect.objectContaining({ value: "Rust" }) }));
+        expect(screen.getByRole("button", { name: "Next field" })).toHaveFocus();
+    });
+
+    it("uses an existing label's value instead of creating a duplicate dynamic option", async () => {
+        const user = userEvent.setup();
+        const { container } = renderWithProvider(<Autocomplete dynamicOption name="language" title="Language" options={languages} />);
+        await user.type(screen.getByRole("combobox", { name: /language/i }), "English");
+        expect(screen.getAllByRole("option", { name: "English" })).toHaveLength(1);
+        await user.keyboard("[Enter]");
+        expect(container.querySelector('input[type="hidden"][name="language"]')).toHaveValue("en-US");
+    });
+
+    it("accepts typed text on Enter even when other suggestions match", async () => {
+        const user = userEvent.setup();
+        const { container } = renderWithProvider(<Autocomplete dynamicOption name="language" title="Language" options={languages} />);
+        await user.type(screen.getByRole("combobox", { name: /language/i }), "Eng");
+        expect(screen.getAllByRole("option").length).toBeGreaterThan(1);
+        await user.keyboard("[Enter]");
+        expect(container.querySelector('input[type="hidden"][name="language"]')).toHaveValue("Eng");
+    });
+
+    it("selects a suggested value instead of committing the search text on option click", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const { container } = renderWithProvider(
+            <Autocomplete dynamicOption name="language" title="Language" options={languages} onChange={onChange} />
+        );
+        await user.type(screen.getByRole("combobox", { name: /language/i }), "Eng");
+        await user.click(screen.getByRole("option", { name: "English" }));
+        expect(container.querySelector('input[type="hidden"][name="language"]')).toHaveValue("en-US");
+        expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it("keeps a dynamic value visible with no predefined options", async () => {
+        const user = userEvent.setup();
+        renderWithProvider(<Autocomplete dynamicOption required title="Language" options={[]} />);
+        const combobox = screen.getByRole("combobox", { name: /language/i });
+        await user.type(combobox, "Rust");
+        await user.keyboard("[Enter]");
+        expect(combobox).toHaveValue("Rust");
+        expect(combobox).toBeValid();
+    });
+
+    it("commits an existing label on keyboard blur and preserves its stored value", async () => {
+        const user = userEvent.setup();
+        const onBlur = vi.fn();
+        const { container } = renderWithProvider(
+            <>
+                <button type="button">Previous field</button>
+                <Autocomplete dynamicOption name="language" title="Language" options={languages} onBlur={onBlur} />
+            </>
+        );
+        await user.type(screen.getByRole("combobox", { name: /language/i }), "English");
+        await user.tab({ shift: true });
+        expect(container.querySelector('input[type="hidden"][name="language"]')).toHaveValue("en-US");
+        expect(screen.getByRole("button", { name: "Previous field" })).toHaveFocus();
+        expect(onBlur).toHaveBeenCalledTimes(1);
+    });
+
+    it("discards pending dynamic text on Escape", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        renderWithProvider(
+            <>
+                <button type="button">Previous field</button>
+                <Autocomplete dynamicOption title="Language" options={languages} defaultValue="en-US" onChange={onChange} />
+            </>
+        );
+        const combobox = screen.getByRole("combobox", { name: /language/i });
+        await user.type(combobox, "Rust");
+        await user.keyboard("[Escape]");
+        await user.tab({ shift: true });
+        expect(combobox).toHaveValue("English");
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it.each(["button", "delete"])("clears controlled dynamic values through %s", async (method) => {
+        const user = userEvent.setup();
+        const ControlledDynamic = () => {
+            const [value, setValue] = useState("Rust");
+            return (
+                <Autocomplete
+                    dynamicOption
+                    name="language"
+                    title="Language"
+                    options={[]}
+                    value={value}
+                    onChange={(event) => setValue(event.target.value)}
+                />
+            );
+        };
+        const { container } = renderWithProvider(<ControlledDynamic />);
+        const combobox = screen.getByRole("combobox", { name: /language/i });
+        if (method === "button") {
+            await user.click(screen.getByRole("button", { name: "Click to clear the value" }));
+        } else {
+            await user.type(combobox, "Rust");
+            await user.clear(combobox);
+            await user.keyboard("[Escape]");
+        }
+        expect(combobox).toHaveValue("");
+        expect(container.querySelector('input[type="hidden"][name="language"]')).toHaveValue("");
+    });
+
     it("keeps the selected option after clicking an item", async () => {
         const user = userEvent.setup();
         const onChange = vi.fn();

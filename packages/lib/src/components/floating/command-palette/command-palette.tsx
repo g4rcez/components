@@ -2,7 +2,7 @@
 import { autoUpdate, useFloating, useInteractions, useListNavigation } from "@floating-ui/react";
 import { EyeIcon, EyeSlashIcon, FunnelIcon, type Icon, type IconProps } from "@phosphor-icons/react";
 import type React from "react";
-import { forwardRef, Fragment, useCallback, useEffect, useId, useRef, useState } from "react";
+import { forwardRef, Fragment, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../../hooks/use-stable-ref";
 import type { TranslationOverrides } from "../../../hooks/use-translations";
@@ -157,22 +157,21 @@ export const CommandPalette = (props: CommandPaletteProps) => {
     const searchInputRef = useRef<HTMLInputElement | null>(null);
     const listRef = useRef<Array<HTMLElement | null>>([]);
     const [text, setText] = useState("");
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const translations = useTranslations(props.translations);
     const valueRef = useStableRef(text);
     const { onChangeText } = props;
     const changeText = useCallback(
         (nextText: string) => {
+            if (nextText !== valueRef.current) setActiveIndex(null);
             setText(nextText);
             onChangeText?.(nextText);
         },
-        [onChangeText]
+        [onChangeText, valueRef]
     );
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const callbacksRef = useStableRef({ changeText, onChangeVisibility: props.onChangeVisibility });
     const [previewVisible, setPreviewVisible] = useState(true);
     const [filtersVisible, setFiltersVisible] = useState(true);
-    useEffect(() => {
-        setActiveIndex(null);
-    }, [text]);
     const bindKey = props.bind ?? "Mod + k";
     const root = useFloating<HTMLInputElement>({
         open: props.open,
@@ -181,24 +180,27 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         onOpenChange: props.onChangeVisibility,
     });
 
-    const commands = props.commands.flatMap((x) => (x.type === "group" ? [x, ...x.items] : [x]));
+    const commands = useMemo(() => props.commands.flatMap((x) => (x.type === "group" ? [x, ...x.items] : [x])), [props.commands]);
 
-    const fuzzy = getFuzzyData(commands, text);
+    const fuzzy = useMemo(() => getFuzzyData(commands, text), [commands, text]);
 
-    const displayItems: CommandItemTypes[] =
-        text === ""
-            ? commands
-            : [
-                  {
-                      type: "group",
-                      title: translations.commandPaletteResults,
-                      items: [],
-                  },
-                  ...fuzzy.filter((x) => x.type !== "group"),
-              ];
-    const hasVisibleShortcut = displayItems.some((item) => item.type === "shortcut");
-    const firstShortcutIndex =
-        props.open && props.Preview && !props.loading ? displayItems.findIndex((item) => item.type === "shortcut") : -1;
+    const displayItems = useMemo<CommandItemTypes[]>(
+        () =>
+            text === ""
+                ? commands
+                : [
+                      {
+                          type: "group",
+                          title: translations.commandPaletteResults,
+                          items: [],
+                      },
+                      ...fuzzy.filter((x) => x.type !== "group"),
+                  ],
+        [commands, fuzzy, text, translations.commandPaletteResults]
+    );
+    const visibleShortcutIndex = useMemo(() => displayItems.findIndex((item) => item.type === "shortcut"), [displayItems]);
+    const hasVisibleShortcut = visibleShortcutIndex >= 0;
+    const firstShortcutIndex = props.open && props.Preview && !props.loading ? visibleShortcutIndex : -1;
     const resolvedActiveIndex =
         props.open && !props.loading && Is.number(activeIndex) && displayItems[activeIndex]?.type === "shortcut"
             ? activeIndex
@@ -252,21 +254,21 @@ export const CommandPalette = (props: CommandPaletteProps) => {
 
     useEffect(() => {
         const combi = new CombiKeys();
-        combi.add(bindKey, () => props.onChangeVisibility?.(true));
+        combi.add(bindKey, () => callbacksRef.current.onChangeVisibility(true));
         commands.forEach((cmd) => {
             if (cmd.type === "group") return;
             if (cmd.type === "shortcut" && cmd.shortcut !== undefined)
                 combi.add(cmd.shortcut, (event) =>
                     cmd.action({
                         event,
-                        setText: changeText,
+                        setText: callbacksRef.current.changeText,
                         text: valueRef.current,
-                        setOpen: props.onChangeVisibility,
+                        setOpen: callbacksRef.current.onChangeVisibility,
                     })
                 );
         });
         return combi.register();
-    }, [bindKey, commands, props, valueRef, changeText]);
+    }, [bindKey, commands, valueRef, callbacksRef]);
 
     const Icon = props.Icon ?? FunnelIcon;
     const Preview = props.Preview;
@@ -344,11 +346,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                         className={commandPaletteStyles.slots.input}
                     />
                     {Preview || hasFilters ? (
-                        <div
-                            role="group"
-                            aria-label={translations.commandPaletteViewControls}
-                            className={commandPaletteStyles.slots.controls}
-                        >
+                        <div role="group" aria-label={translations.commandPaletteViewControls} className={commandPaletteStyles.slots.controls}>
                             {Preview ? (
                                 <Button
                                     size="icon"

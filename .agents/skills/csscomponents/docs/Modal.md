@@ -282,6 +282,6 @@ function DeleteButton() {
 
 - Drawers auto-switch to sheets on viewports narrower than `64rem` unless `forceType={true}`.
 - `resizer` adds a draggable handle: horizontal for drawers, vertical for sheets. Dragging a sheet past 60 % of screen height closes it.
-- `layoutId` enables Framer Motion shared-element transitions between a trigger and the modal surface.
+- `layoutId` enables Framer Motion shared-element transitions between a trigger and the modal surface. Shared surfaces omit the separate dialog/drawer/sheet entrance transform and fade so their source geometry drives the morph; `transition.layout` can customize its timing.
 - `ModalConfirmProvider` sets a module-level `confirmGlobal` function so `Modal.confirm` works outside React trees (e.g., in event handlers).
 - The confirm dialog uses `max-w-dialog` (`w-dialog` token, default `20rem`) and cannot be closed by clicking the overlay.

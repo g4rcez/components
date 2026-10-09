@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { fzf, fuzzyMatch } from "../src/lib/fzf";
 
 describe("fuzzyMatch", () => {
@@ -38,6 +38,58 @@ describe("fzf", () => {
         { id: "2", label: "Banana", value: "banana" },
         { id: "3", label: "Avocado", value: "avocado" },
     ];
+
+    it("preserves scorer membership across repeated characters, empty queries, and normalized text", () => {
+        const strings = [""];
+        let layer = [""];
+        for (let length = 1; length <= 4; length++) {
+            layer = layer.flatMap((prefix) => ["a", "b"].map((letter) => prefix + letter));
+            strings.push(...layer);
+        }
+        strings.push(" ÁbA ", "Àéîôü", " ABBA ", "İstanbul", "😀a😀");
+        const normalize = (value: string) =>
+            value
+                .toLocaleLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim();
+        const candidates = strings.map((label, id) => ({ id, label }));
+        for (const query of strings) {
+            const expected = candidates.filter(({ label }) => label !== "" && fuzzyMatch(normalize(label), normalize(query)) !== null);
+            expect(fzf(candidates, "id", [{ key: "label", value: query }])).toEqual(expected);
+        }
+    });
+
+    it("does not sort scoring candidates when only membership is needed", () => {
+        const sort = vi.spyOn(Array.prototype, "sort");
+        let calls: number;
+        try {
+            fzf([{ id: "1", label: "abacabadabacaba" }], "id", [{ key: "label", value: "aaa" }]);
+            calls = sort.mock.calls.length;
+        } finally {
+            sort.mockRestore();
+        }
+        expect(calls).toBe(0);
+    });
+
+    it("preserves array queries, duplicate IDs, key order, and fallback callbacks", () => {
+        const candidates = Object.freeze([
+            Object.freeze({ id: "same", label: "Alpha", value: "first" }),
+            Object.freeze({ id: "other", label: "Bravo", value: "second" }),
+            Object.freeze({ id: "same", label: "Gamma", value: "third" }),
+        ]);
+        const fallback = vi.fn(() => false);
+        const result = fzf([...candidates], "id", [
+            { key: "label", value: ["apa", "ba", "gma"] },
+            { key: "value", value: "missing", ifNotMatch: fallback },
+        ]);
+        expect(result).toEqual([candidates[2], candidates[1]]);
+        expect(fallback.mock.calls).toEqual([
+            ["missing", "first"],
+            ["missing", "second"],
+            ["missing", "third"],
+        ]);
+    });
 
     it("returns all items when keys is empty", () => {
         expect(fzf(items, "id", [])).toHaveLength(3);

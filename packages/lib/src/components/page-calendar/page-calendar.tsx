@@ -68,8 +68,12 @@ export function PageCalendar<T extends CalendarEventBase>({
 
     const filteredEvents = useMemo(() => {
         if (effectiveFilters.length === 0) return events;
+        const enabledById = new Map<string | undefined, boolean>();
+        for (const filter of effectiveFilters) {
+            if (!enabledById.has(filter.id)) enabledById.set(filter.id, filter.enabled);
+        }
         const get = getFilterId ?? ((e: CalendarEvent<T>) => e?.filterId);
-        return events.filter((e) => effectiveFilters.find((f) => f.id === get(e))?.enabled ?? true);
+        return events.filter((event) => enabledById.get(get(event)) ?? true);
     }, [events, effectiveFilters, getFilterId]);
 
     const eventsByDate = useMemo(() => groupEventsByDate(filteredEvents), [filteredEvents]);

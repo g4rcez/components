@@ -11,6 +11,7 @@ import React, {
     useState,
 } from "react";
 import { css } from "../../../lib/dom";
+import { useStableRef } from "../../../hooks/use-stable-ref";
 import { Polymorph, type PolymorphicProps } from "../../core/polymorph/polymorph";
 import { masonryStyles } from "./masonry.styles";
 
@@ -165,6 +166,7 @@ const MasonryInner = <T extends React.ElementType = "ul">(
     const childrenArray = useMemo(() => React.Children.toArray(children), [children]);
     const [layout, setLayout] = useState<MasonryLayout>(() => createLayout([], [], columns, gutter, 0));
     const layoutRef = useRef(layout);
+    const onLayoutChangeRef = useStableRef(onLayoutChange);
 
     useImperativeHandle(ref, () => rootRef.current as Element, []);
 
@@ -179,8 +181,8 @@ const MasonryInner = <T extends React.ElementType = "ul">(
         if (layoutsEqual(layoutRef.current, nextLayout)) return;
         layoutRef.current = nextLayout;
         setLayout(nextLayout);
-        onLayoutChange?.(nextLayout);
-    }, [childrenArray, columns, gutter, onLayoutChange]);
+        onLayoutChangeRef.current?.(nextLayout);
+    }, [childrenArray, columns, gutter, onLayoutChangeRef]);
 
     const scheduleMeasure = useCallback(() => {
         if (frameRef.current !== null) {

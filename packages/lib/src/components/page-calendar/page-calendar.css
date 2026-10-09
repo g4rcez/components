@@ -5,6 +5,8 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
     gap: var(--var-page-calendar-gap, calc(var(--var-spacing-base) * 1));
     box-sizing: border-box;
 }
@@ -36,6 +38,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--var-page-calendar-header-gap, calc(var(--var-spacing-base) * 1));
+    flex-wrap: wrap;
 }
 
 .__page-calendar-header__date-summary {
@@ -212,12 +215,12 @@
 .__page-calendar-day-view__main {
     display: flex;
     flex: 1 1 0%;
-    min-width: 100%;
+    min-width: 0;
+    min-height: 0;
 }
 
 .__page-calendar-day-view__main {
     flex-direction: column;
-    width: 100%;
 }
 
 .__page-calendar-day-view__header {
@@ -353,6 +356,11 @@
     flex: 1 1 0%;
 }
 
+.__page-calendar-month-view__root {
+    min-height: 0;
+    overflow: auto;
+}
+
 .__page-calendar-month-view__root,
 .__page-calendar-month-view__grid,
 .__page-calendar-month-view__day-cell,
@@ -471,6 +479,8 @@
     flex: 1 1 0%;
     flex-direction: column;
     overflow: hidden;
+    min-width: 0;
+    min-height: 0;
 }
 
 .__page-calendar-week-view__header {
@@ -514,6 +524,7 @@
     flex: 1 1 0%;
     align-items: flex-start;
     overflow-y: auto;
+    min-height: 0;
 }
 
 .__page-calendar-week-view__hour-row {
@@ -601,10 +612,13 @@
     .__page-calendar-day-view__root {
         min-inline-size: 0;
         flex-direction: column;
+        overflow-y: auto;
     }
 
     .__page-calendar-day-view__main {
         min-inline-size: 0;
+        flex: 0 0 auto;
+        block-size: calc(var(--var-spacing-base) * 20);
     }
 
     .__page-calendar-day-view__side-panel {

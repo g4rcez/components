@@ -32,6 +32,14 @@ its status row when complete.
 | 020 | Preserve ReactNode titles in AnimatedList | P2 | M | — | DONE |
 | 021 | Allow Switch error messages to wrap | P2 | S | — | DONE |
 | 022 | Document Stats typography tokens | P2 | S | — | DONE |
+| 023 | Use boolean fuzzy membership without scores | P2 | S | — | DONE |
+| 024 | Stabilize CommandPalette search and keyboard bindings | P2 | M | — | DONE |
+| 025 | Initialize table preferences lazily | P2 | S | — | DONE |
+| 026 | Short-circuit table sort comparisons | P2 | S | — | DONE |
+| 027 | Reuse calendar formatters and hour labels | P2 | S | — | DONE |
+| 028 | Index calendar filters | P2 | S | — | DONE |
+| 029 | Stabilize Masonry observers | P2 | S | — | DONE |
+| 030 | Remove unread table footer state | P2 | S | — | DONE |
 
 Status values: `TODO` | `IN PROGRESS` | `DONE` | `BLOCKED` (with a one-line
 reason) | `REJECTED` (with a one-line rationale).
@@ -172,3 +180,35 @@ or test fixture was changed while writing these handoff plans.
 - This planning pass did not run builds, tests, lint, or browser E2E. Plans that
   change source CSS explicitly require maintainer build approval, as required by
   `AGENTS.md`; their E2E commands also invoke that build.
+
+## Performance execution review — 2026-10-09
+
+Plans 023–030: APPROVE. All eight approved refactors are implemented and reviewed
+against their scopes. Prior Autocomplete changes in seven files were preserved
+byte-for-byte. Branch and HEAD remain unchanged; nothing was staged or committed.
+
+- Independent combined verification: 115 tests passed across 14 files, including
+  the affected components, keyboard/accessibility regressions, Autocomplete,
+  MultiSelect, and skills synchronization. Library TypeScript check passed.
+- Changed-file lint passed with zero errors and one existing CommandPalette
+  `prefer-tag-over-role` warning. `components:skills check` and `git diff --check`
+  passed. JSDOM retains existing canvas/scrollTo notices.
+- Regression instrumentation confirms stable command search/bindings during
+  navigation, mount-only table preference preparation, one filter resolution per
+  event, formatter reuse, stable Masonry observers, and no unread footer updates.
+  A 100-row sort probe reduced secondary-field reads from 198 to zero. No elapsed
+  time or production render improvement is claimed without profiling.
+- Chrome verified command search/navigation, preview/filter toggles, selection,
+  calendar day/week slot labels and selection, event filtering, table column
+  preference persistence, and Masonry remeasurement/resizing through client navigation.
+- Existing docs limitations: directly loading Masonry produces a hydration
+  mismatch from random demo content and a duplicate theme ID error. Client
+  navigation allowed geometry verification. Controlled calendar filter demo
+  callbacks produce an existing render-time parent-update warning. These docs
+  issues are outside the approved performance scopes.
+- Reviewed unchanged canonical references: CommandPalette, Autocomplete,
+  MultiSelect, Table, PageCalendar, and Masonry. No API, source CSS contract, or
+  style dependency changed; documentation sync and full builds were unnecessary
+  and skipped. Production latency benchmarking was not performed.
+- Narrow verification-only scope exceptions allowed worker evidence under
+  `.omo/evidence`; they did not expand component implementation scope.

@@ -26,7 +26,7 @@ import { Autocomplete } from "@g4rcez/components/autocomplete";
 | `value`          | `string`                                                       | -          | Controlled selected value                             |
 | `options`        | `AutocompleteItemProps[]`                                      | -          | List of selectable options                            |
 | `emptyMessage`   | `Label`                                                        | -          | Message displayed when no options match               |
-| `dynamicOption`  | `boolean`                                                      | `false`    | Allow creating new options from typed text            |
+| `dynamicOption`  | `boolean`                                                      | `false`    | Accept typed values on selection or blur, without restricting them to `options` |
 | `onChange`       | `(e: React.ChangeEvent<HTMLInputElement>) => void`             | -          | Change handler                                        |
 | `error`          | `string`                                                       | -          | Error message displayed below the field               |
 | `feedback`       | `Label`                                                        | -          | Success/neutral feedback text below the field         |
@@ -200,6 +200,8 @@ function ContactForm() {
 
 - Provide a meaningful `emptyMessage` so users understand why no results appear.
 - Use `dynamicOption` when users should be able to add values not in the list.
+- With `dynamicOption`, Enter or clicking an option commits it; leaving the field commits typed text. Exact label/value matches use the existing option's value without adding a duplicate. Escape discards the pending edit.
+- New values are delivered through `onChange` and the hidden form input. Persist them in `options` in your handler if they should appear in future suggestions; the component does not mutate `options`.
 - Supply a custom `Render` component when each option needs to show more than its label (e.g., avatars, secondary text).
 - Prefer `Autocomplete` over `Select` for lists of more than ~15 items.
 
@@ -217,7 +219,7 @@ function ContactForm() {
 - Each option button has `aria-selected`, `aria-current`, and `aria-checked` set to reflect the active state.
 - Full keyboard navigation: Arrow Up/Down to move, Enter to select, Escape to close.
 - The caret button includes an `sr-only` label from the translation system.
-- Focus is returned to the trigger input when the dropdown closes.
+- Focus returns to the input after selecting an option; committing on blur preserves focus on the next field. Dynamic mode allows Tab/Shift+Tab to leave the popup.
 
 ## Data Attributes
 
@@ -238,4 +240,5 @@ function ContactForm() {
   platform picker handles option selection.
 - `dynamicOption` continues to render the searchable autocomplete on
   touch-capable devices because native selects cannot create free-text values.
+- Dynamic values remain visible even with `options={[]}`. The predefined-option validation pattern is omitted in dynamic mode; `required` still applies. Clearing or deleting the text emits an empty value through `onChange`.
 - The dropdown width always matches the width of the triggering fieldset.
