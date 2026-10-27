@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -37,6 +39,12 @@ describe("PageCalendar density geometry", () => {
         expect(positionedEvent?.style.top).toContain("--var-page-calendar-hour-block-size");
         expect(positionedEvent?.style.top).toContain("10.5");
         expect(positionedEvent?.style.width).toContain("--var-spacing-base");
+    });
+
+    it("stretches the pill to fill the one-hour event block in day and week views", () => {
+        const css = readFileSync(resolve(__dirname, "../src/components/page-calendar/page-calendar.css"), "utf8");
+        const rule = css.match(/__page-calendar-day-view__event \.__page-calendar-event-pill__button,\s*\.__page-calendar-week-view__event \.__page-calendar-event-pill__button\s*\{([^}]*)\}/);
+        expect(rule?.[1]).toContain("block-size: 100%");
     });
 });
 
