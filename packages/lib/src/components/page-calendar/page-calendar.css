@@ -313,6 +313,12 @@
     position: absolute;
 }
 
+.__page-calendar-day-view__event .__page-calendar-event-pill__button,
+.__page-calendar-week-view__event .__page-calendar-event-pill__button {
+    block-size: 100%;
+    align-items: flex-start;
+}
+
 .__page-calendar-day-view__side-panel {
     display: flex;
     flex-direction: column;
