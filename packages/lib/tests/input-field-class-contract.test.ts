@@ -56,6 +56,12 @@ describe("InputField stable class contract", () => {
         expect(css).toContain(".__input-field__status-indicator");
     });
 
+    it("ships a self-contained field border without a consumer preflight", () => {
+        expect(css).toMatch(/\.__input-field__fieldset\s*\{[^}]*margin: 0;[^}]*padding: 0;[^}]*border: 0;/s);
+        expect(css).toMatch(/\.__input-field__border\s*\{[^}]*border-style: solid;/s);
+        expect(css).toMatch(/\.__free-text__input\s*\{[^}]*border-width: 0;/s);
+    });
+
     it("shows explicit error messages independently of native input validity", () => {
         expect(css).toContain('.__input-field[data-error="true"] .__input-field__error-state');
         expect(css).toContain('.__input-field[data-error="true"] .__input-field__feedback-state');

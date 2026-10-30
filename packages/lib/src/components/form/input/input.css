@@ -13,6 +13,9 @@
 }
 
 .__input-field__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
     display: flex;
     min-block-size: 0;
     min-inline-size: 0;
@@ -251,6 +254,7 @@
 }
 
 .__input-field__border {
+    border-style: solid;
     border-width: var(--var-border-hairline);
 }
 
@@ -340,6 +344,7 @@
 }
 
 .__free-text__input {
+    border-width: 0;
     block-size: var(--var-free-text-control-height, calc(var(--var-spacing-base) * 2.5));
     width: 100%;
     flex: 1 1 0%;
