@@ -11,6 +11,7 @@ const press = (init: KeyboardEventInit, target: EventTarget = window) => {
 describe("CombiKeys", () => {
     afterEach(() => {
         document.body.innerHTML = "";
+        vi.restoreAllMocks();
     });
 
     it("runs the handler and prevents default for a registered combination", () => {
@@ -81,7 +82,6 @@ describe("CombiKeys", () => {
         press({ key: "s", ctrlKey: true });
         expect(fn).toHaveBeenCalledTimes(1);
         stop();
-        vi.restoreAllMocks();
     });
 
     it("maps Mod to Meta on Apple user agents", () => {
@@ -91,6 +91,5 @@ describe("CombiKeys", () => {
         press({ key: "s", metaKey: true });
         expect(fn).toHaveBeenCalledTimes(1);
         stop();
-        vi.restoreAllMocks();
     });
 });
