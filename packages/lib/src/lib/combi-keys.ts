@@ -28,8 +28,7 @@ export class CombiKeys<T extends Combi> {
 
     public add<S extends string, H extends Handler>(combi: S, fn: H) {
         const key = combine(parseCombination(combi));
-        if (this.combinations.find((x) => x.key === key)) return;
-        this.combinations.push({ fn, key });
+        if (!this.combinations.find((x) => x.key === key)) this.combinations.push({ fn, key });
         return this;
     }
 
