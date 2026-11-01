@@ -56,6 +56,14 @@ export function getWeekDays(date: Date, weekStartsOn: WeekStart = 1): Date[] {
     return days;
 }
 
+export const HOUR_HEIGHT = "var(--var-page-calendar-hour-block-size, calc(var(--var-spacing-base) * 3))";
+
+export function getTopOffset(event: CalendarEvent): string {
+    const hour = event.date.getHours();
+    const minutes = event.date.getMinutes();
+    return `calc(${HOUR_HEIGHT} * ${hour + minutes / 60})`;
+}
+
 export function getHourSlots(): number[] {
     return Array.from({ length: 24 }, (_, i) => i);
 }
