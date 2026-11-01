@@ -188,3 +188,67 @@ describe("PageCalendar formatting", () => {
         expect(onSlotClick).toHaveBeenCalledWith(expected);
     });
 });
+
+describe("PageCalendar weekStartsOn", () => {
+    // 2025-01-15 is a Wednesday and 2025-01-01 is also a Wednesday.
+    const renderEnglish = (props: Partial<React.ComponentProps<typeof PageCalendar>> = {}) =>
+        render(
+            <ComponentsProvider locale="en-US">
+                <PageCalendar defaultDate={date} events={[]} {...props} />
+            </ComponentsProvider>
+        );
+
+    it("starts the week on Monday by default", () => {
+        expect(calendarUtils.getWeekDays(date).map(toDateKey)).toEqual([
+            "2025-01-13",
+            "2025-01-14",
+            "2025-01-15",
+            "2025-01-16",
+            "2025-01-17",
+            "2025-01-18",
+            "2025-01-19",
+        ]);
+    });
+
+    it("starts the week on the chosen weekday", () => {
+        expect(calendarUtils.getWeekDays(date, 0).map(toDateKey)[0]).toBe("2025-01-12");
+        expect(calendarUtils.getWeekDays(date, 0).map(toDateKey)[6]).toBe("2025-01-18");
+        expect(calendarUtils.getWeekDays(date, 6).map(toDateKey)[0]).toBe("2025-01-11");
+        expect(calendarUtils.getWeekDays(date, 3).map(toDateKey)[0]).toBe("2025-01-15");
+    });
+
+    it("starts the month grid on Monday by default and keeps 42 days", () => {
+        const days = calendarUtils.getMonthDays(date);
+        expect(days).toHaveLength(42);
+        expect(toDateKey(days[0])).toBe("2024-12-30");
+        expect(toDateKey(days[41])).toBe("2025-02-09");
+    });
+
+    it("starts the month grid on the chosen weekday and keeps 42 days", () => {
+        const sunday = calendarUtils.getMonthDays(date, 0);
+        expect(sunday).toHaveLength(42);
+        expect(toDateKey(sunday[0])).toBe("2024-12-29");
+        expect(toDateKey(sunday[41])).toBe("2025-02-08");
+        expect(toDateKey(calendarUtils.getMonthDays(date, 6)[0])).toBe("2024-12-28");
+        expect(toDateKey(calendarUtils.getMonthDays(date, 3)[0])).toBe("2025-01-01");
+    });
+
+    it("orders the month weekday header from Monday by default", () => {
+        renderEnglish();
+        expect(screen.getAllByRole("columnheader").map((node) => node.textContent)).toEqual(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+        expect(screen.getAllByRole("gridcell")[0].querySelector("button")).toHaveAccessibleName("Monday, Dec 30, 2024");
+    });
+
+    it("orders the month weekday header and grid from Sunday when weekStartsOn is 0", () => {
+        renderEnglish({ weekStartsOn: 0 });
+        expect(screen.getAllByRole("columnheader").map((node) => node.textContent)).toEqual(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+        expect(screen.getAllByRole("gridcell")[0].querySelector("button")).toHaveAccessibleName("Sunday, Dec 29, 2024");
+    });
+
+    it("lists the week view days from the chosen weekday", () => {
+        renderEnglish({ defaultView: "week", weekStartsOn: 0 });
+        expect(screen.getByTitle("Sunday, Jan 12, 2025")).toBeInTheDocument();
+        expect(screen.getByTitle("Saturday, Jan 18, 2025")).toBeInTheDocument();
+        expect(screen.queryByTitle("Sunday, Jan 19, 2025")).not.toBeInTheDocument();
+    });
+});
