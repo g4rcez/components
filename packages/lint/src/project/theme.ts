@@ -39,16 +39,6 @@ type ThemeRead = {
 
 const cache = new Map<string, { signature: string; checkedAt: number; read: ThemeRead }>();
 
-export function parseColorTokens(css: string) {
-    const tokens = new Set<string>();
-    applyColorTokens(css, tokens);
-    return tokens;
-}
-
-function applyColorTokens(css: string, tokens: Set<string>) {
-    applyTokenDeclarations(parseDeclarations(css).declarations, tokens);
-}
-
 // In cascade order: `--color-x: initial` drops x, `--color-*: initial`
 // and `--*: initial` drop everything declared so far.
 function applyTokenDeclarations(declarations: Declaration[], tokens: Set<string>) {
