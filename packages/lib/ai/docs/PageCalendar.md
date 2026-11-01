@@ -24,6 +24,7 @@ import { PageCalendar } from "@g4rcez/components";
 | `events`          | `CalendarEvent<T>[]`                               | —            | Array of event objects to display across all views.                                   |
 | `filters`         | `CalendarFilter[]`                                 | `[]`         | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
 | `defaultView`     | `"month" \| "week" \| "day"`                       | `"month"`    | Initial view rendered when the component mounts.                                      |
+| `weekStartsOn`    | `WeekStart`                                        | `1`          | First day of the week in the week view and month grid. `0` is Sunday, `1` is Monday.  |
 | `defaultDate`     | `Date`                                             | `new Date()` | Initial date the calendar focuses on.                                                 |
 | `loading`         | `boolean`                                          | `false`      | Shows a centered loading spinner instead of the active calendar view.                 |
 | `onEventClick`    | `(event: CalendarEvent) => void`                   | —            | Called when the user clicks an event pill.                                            |
@@ -72,6 +73,12 @@ type CalendarFilter = {
 
 ```ts
 type ViewMode = "month" | "week" | "day";
+```
+
+### WeekStart
+
+```ts
+type WeekStart = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = Sunday, 1 = Monday
 ```
 
 ## Design Tokens
