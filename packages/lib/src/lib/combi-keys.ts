@@ -1,4 +1,4 @@
-export const osxRegex = /Mac|iPod|iPhone|iPad/;
+const osxRegex = /Mac|iPod|iPhone|iPad/;
 
 export const isMac = () => osxRegex.test(navigator.userAgent);
 
