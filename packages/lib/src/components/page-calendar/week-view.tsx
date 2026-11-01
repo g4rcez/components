@@ -6,9 +6,17 @@ import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
 import { css } from "../../lib/dom";
 import { pageCalendarWeekViewStyles } from "./week-view.styles";
-import { getHourSlots, toDateKey, formatWeekdayShort, formatDay, formatHourLabel, formatFullDate, computeEventColumns } from "./page-calendar.utils";
-
-const HOUR_HEIGHT = "var(--var-page-calendar-hour-block-size, calc(var(--var-spacing-base) * 3))";
+import {
+    getHourSlots,
+    toDateKey,
+    formatWeekdayShort,
+    formatDay,
+    formatHourLabel,
+    formatFullDate,
+    computeEventColumns,
+    getTopOffset,
+    HOUR_HEIGHT,
+} from "./page-calendar.utils";
 
 type WeekViewProps = {
     days: Date[];
@@ -18,12 +26,6 @@ type WeekViewProps = {
     onSlotClick?: (date: Date) => void;
     translations?: TranslationOverrides;
 };
-
-function getTopOffset(event: CalendarEvent): string {
-    const hour = event.date.getHours();
-    const minutes = event.date.getMinutes();
-    return `calc(${HOUR_HEIGHT} * ${hour + minutes / 60})`;
-}
 
 export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick, translations }: WeekViewProps) {
     const locale = useLocale();

@@ -18,15 +18,9 @@ import {
     formatFullDate,
     formatTime,
     computeEventColumns,
+    getTopOffset,
+    HOUR_HEIGHT,
 } from "./page-calendar.utils";
-
-const HOUR_HEIGHT = "var(--var-page-calendar-hour-block-size, calc(var(--var-spacing-base) * 3))";
-
-function getTopOffset(event: CalendarEvent): string {
-    const hour = event.date.getHours();
-    const minutes = event.date.getMinutes();
-    return `calc(${HOUR_HEIGHT} * ${hour + minutes / 60})`;
-}
 
 type DayViewProps<T extends CalendarEventBase> = {
     currentDate: Date;
