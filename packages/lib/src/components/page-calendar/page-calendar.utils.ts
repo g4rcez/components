@@ -35,9 +35,11 @@ export function groupEventsByDate<T extends CalendarEventBase>(events: CalendarE
     return map;
 }
 
-export function getMonthDays(date: Date): Date[] {
+export type WeekStart = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+export function getMonthDays(date: Date, weekStartsOn: WeekStart = 1): Date[] {
     const monthStart = startOfMonth(date);
-    const gridStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+    const gridStart = startOfWeek(monthStart, { weekStartsOn });
     const days: Date[] = [];
     for (let i = 0; i < 42; i++) {
         days.push(addDays(gridStart, i));
@@ -45,8 +47,8 @@ export function getMonthDays(date: Date): Date[] {
     return days;
 }
 
-export function getWeekDays(date: Date): Date[] {
-    const weekStart = startOfWeek(date, { weekStartsOn: 1 });
+export function getWeekDays(date: Date, weekStartsOn: WeekStart = 1): Date[] {
+    const weekStart = startOfWeek(date, { weekStartsOn });
     const days: Date[] = [];
     for (let i = 0; i < 7; i++) {
         days.push(addDays(weekStart, i));

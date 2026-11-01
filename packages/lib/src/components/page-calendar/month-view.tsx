@@ -6,7 +6,7 @@ import { css } from "../../lib/dom";
 import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
 import { pageCalendarMonthViewStyles } from "./month-view.styles";
-import { toDateKey, formatDay, getWeekDays, formatWeekDay, formatFullDate } from "./page-calendar.utils";
+import { toDateKey, formatDay, getWeekDays, formatWeekDay, formatFullDate, type WeekStart } from "./page-calendar.utils";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 const daysInWeek = 7;
@@ -18,12 +18,13 @@ type MonthViewProps = {
     eventsByDate: Map<string, CalendarEvent[]>;
     onEventClick: (event: CalendarEvent) => void;
     translations?: TranslationOverrides;
+    weekStartsOn?: WeekStart;
 };
 
-export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDayClick, translations }: MonthViewProps) {
+export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDayClick, translations, weekStartsOn = 1 }: MonthViewProps) {
     const locale = useLocale();
     const t = useTranslations(translations);
-    const WEEKDAY_LABELS = useMemo(() => getWeekDays(new Date()), []);
+    const WEEKDAY_LABELS = useMemo(() => getWeekDays(new Date(), weekStartsOn), [weekStartsOn]);
     const selectedDateKey = toDateKey(currentDate);
     const selectedDayIndex = useMemo(() => {
         const index = days.findIndex((day) => toDateKey(day) === selectedDateKey);

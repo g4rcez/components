@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "../../hooks/use-translations";
 import { pageCalendarStyles } from "./page-calendar.styles";
 import type { CalendarEvent, CalendarEventBase, CalendarFilter, ViewMode } from "./page-calendar.types";
-import { groupEventsByDate, getMonthDays, getWeekDays } from "./page-calendar.utils";
+import { groupEventsByDate, getMonthDays, getWeekDays, type WeekStart } from "./page-calendar.utils";
 import { CalendarHeader } from "./calendar-header";
 import { MonthView } from "./month-view";
 import { WeekView } from "./week-view";
@@ -13,6 +13,8 @@ import { Loading } from "../display/spinner/spinner";
 type PageCalendarProps<T extends CalendarEventBase> = {
     defaultDate?: Date;
     defaultView?: ViewMode;
+    /** First day of the week, from 0 (Sunday) to 6 (Saturday). Defaults to 1 (Monday). */
+    weekStartsOn?: WeekStart;
     filterArea?: ReactNode;
     onAddEvent?: () => void;
     getFilterId?: (event: CalendarEvent<T>) => string | undefined;
@@ -40,6 +42,7 @@ export function PageCalendar<T extends CalendarEventBase>({
     filters = noop,
     loading = false,
     defaultView = "month",
+    weekStartsOn = 1,
     onChangeFilters: onActiveFiltersChange,
     translations,
 }: PageCalendarProps<T>) {
@@ -77,8 +80,8 @@ export function PageCalendar<T extends CalendarEventBase>({
     }, [events, effectiveFilters, getFilterId]);
 
     const eventsByDate = useMemo(() => groupEventsByDate(filteredEvents), [filteredEvents]);
-    const monthDays = useMemo(() => getMonthDays(currentDate), [currentDate]);
-    const weekDays = useMemo(() => getWeekDays(currentDate), [currentDate]);
+    const monthDays = useMemo(() => getMonthDays(currentDate, weekStartsOn), [currentDate, weekStartsOn]);
+    const weekDays = useMemo(() => getWeekDays(currentDate, weekStartsOn), [currentDate, weekStartsOn]);
 
     const handleEventClick = (event: CalendarEvent) => onEventClick?.(event);
 
@@ -117,6 +120,7 @@ export function PageCalendar<T extends CalendarEventBase>({
                             onDayClick={handleDayClick}
                             onEventClick={handleEventClick}
                             translations={translations}
+                            weekStartsOn={weekStartsOn}
                         />
                     )}
                     {currentView === "week" && (
