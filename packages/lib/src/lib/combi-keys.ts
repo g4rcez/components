@@ -3,12 +3,23 @@ const osxRegex = /Mac|iPod|iPhone|iPad/;
 export const isMac = () => osxRegex.test(navigator.userAgent);
 
 const parseCombination = (combination: string): string[] =>
-    combination.split("+").map((k) => {
-        const key = k.trim();
-        if (key === "Mod") return isMac() ? "Meta" : "Control";
-        if (key === "Hyper") return isMac() ? "Meta+Shift+Alt" : "Control+Shift+Alt";
-        return key;
-    });
+    combination
+        .split("+")
+        .map((k): string[] => {
+            const key = k.trim();
+            if (key === "Mod") return [isMac() ? "Meta" : "Control"];
+            if (key === "Hyper") return isMac() ? ["Meta", "Alt", "Shift"] : ["Control", "Alt", "Shift"];
+            return [key];
+        })
+        .flat();
+
+/** The handler writes Shift as an uppercase key, never as a modifier, so a binding must do the same. */
+const withShiftAsCase = (keys: string[]) => {
+    if (!keys.includes("Shift")) return keys;
+    const rest = keys.filter((k) => k !== "Shift");
+    const last = rest.length - 1;
+    return rest.map((k, i) => (i === last ? k.toUpperCase() : k));
+};
 
 type Handler = (e: KeyboardEvent) => void;
 
@@ -27,7 +38,7 @@ export class CombiKeys<T extends Combi> {
     }
 
     public add<S extends string, H extends Handler>(combi: S, fn: H) {
-        const key = combine(parseCombination(combi));
+        const key = combine(withShiftAsCase(parseCombination(combi)));
         if (!this.combinations.find((x) => x.key === key)) this.combinations.push({ fn, key });
         return this;
     }
