@@ -457,6 +457,8 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps<Datepicke
                 markRange={markRange}
                 markToday={markToday}
                 rangeMode={rangeMode}
+                // Range mode must report ranges on click only: the Calendar effect sends a Date on each render, and onChangeDate changes identity on each render, so it loops.
+                changeOnlyOnClick={rangeMode || props.changeOnlyOnClick}
                 onChange={onChangeDate}
                 disabledDate={disabledDate}
                 type={rangeMode ? "range" : type}
