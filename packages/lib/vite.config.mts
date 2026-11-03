@@ -3,8 +3,10 @@ import react from "@vitejs/plugin-react";
 import { glob } from "glob";
 import { join, relative } from "node:path";
 import { defineConfig, ViteUserConfig } from "vitest/config";
+import pkg from "./package.json" with { type: "json" };
 
-const externalPackages = new Set(["react", "react-dom", "use-sync-external-store"]);
+// Consumers install `dependencies` anyway; bundling them duplicates code and module instances.
+const externalPackages = new Set([...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)]);
 
 function isExternalDependency(id: string) {
     return externalPackages.has(id) || [...externalPackages].some((pkg) => id.startsWith(`${pkg}/`));
