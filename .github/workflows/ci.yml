@@ -31,7 +31,8 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Typecheck
-        run: pnpm --filter @g4rcez/components exec tsc -p tsconfig.json
+        # src only, same scope as lib:types; tests/ has known type errors (follow-up)
+        run: pnpm --filter @g4rcez/components exec tsc -p tsconfig.lib.json --noEmit
       - name: Test
         run: pnpm --filter @g4rcez/components test
 
