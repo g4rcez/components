@@ -1,6 +1,6 @@
 import type React from "react";
-import { forwardRef, useId } from "react";
-import { css } from "../../../lib/dom";
+import { forwardRef, useEffect, useId, useRef } from "react";
+import { css, mergeRefs } from "../../../lib/dom";
 import type { Override } from "../../../types";
 import { checkboxStyles } from "./checkbox.styles";
 
@@ -12,12 +12,22 @@ export type CheckboxProps = Override<
         loading?: boolean;
         container?: string;
         labelClassName?: string;
+        /** Shows the mixed state. Screen readers announce it as "mixed". */
+        indeterminate?: boolean;
         size?: "big" | "default" | "min" | "normal" | "small" | "tiny" | "medium" | "large";
     }
 >;
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-    ({ children, asTask = false, labelClassName, loading, error, className = "", size = "normal", container, ...props }: CheckboxProps, ref) => {
+    (
+        { children, asTask = false, labelClassName, loading, error, className = "", size = "normal", container, indeterminate = false, ...props }: CheckboxProps,
+        ref
+    ) => {
+        const inputRef = useRef<HTMLInputElement>(null);
+        // `indeterminate` has no HTML attribute, and a click clears it, so sync the DOM property after every render.
+        useEffect(() => {
+            if (inputRef.current) inputRef.current.indeterminate = indeterminate;
+        });
         const d = props.disabled || loading;
         const generatedId = useId();
         const id = props.id ?? props.name ?? generatedId;
@@ -35,7 +45,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 >
                     <input
                         {...props}
-                        ref={ref}
+                        ref={mergeRefs(ref, inputRef)}
                         disabled={d}
                         type="checkbox"
                         data-task={asTask}

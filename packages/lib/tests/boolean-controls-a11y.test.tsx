@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
+import { createRef } from "react";
 import { describe, expect, it } from "vitest";
 
 import { Checkbox } from "../src/components/form/checkbox/checkbox";
@@ -73,5 +74,16 @@ describe("Boolean controls a11y", () => {
         expect(switchControl).toHaveAccessibleDescription("Custom switch help");
         expect(switchControl).toHaveAttribute("aria-invalid", "spelling");
         expect((await axe(container)).violations).toHaveLength(0);
+    });
+});
+
+describe("Checkbox indeterminate", () => {
+    it("exposes the mixed state and keeps the forwarded ref", () => {
+        const ref = createRef<HTMLInputElement>();
+        render(<Checkbox ref={ref} aria-label="Select all rows" indeterminate readOnly />);
+
+        const checkbox = screen.getByRole("checkbox", { name: "Select all rows" });
+        expect(checkbox).toBePartiallyChecked();
+        expect(ref.current).toBe(checkbox);
     });
 });

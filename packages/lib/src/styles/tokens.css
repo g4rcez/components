@@ -123,7 +123,7 @@
 
   --var-checkbox-control-foreground: hsla(201, 49%, 36%);
   --var-checkbox-control-background: hsla(0, 0%, 100%);
-  --var-checkbox-control-border: hsla(240, 6%, 90%);
+  --var-checkbox-control-border: hsla(240, 5%, 54%);
   --var-checkbox-mark-foreground: hsla(0, 0%, 100%);
   --var-checkbox-focus-ring: hsla(201, 49%, 36%);
   --var-checkbox-disabled-opacity: 0.7;
@@ -245,6 +245,7 @@
   --var-table-loading-bar-pulse-duration: 2s;
   --var-table-loading-bar-pulse-timing: cubic-bezier(0.4, 0, 0.6, 1);
   --var-table-loading-bar-pulse-opacity: 0.5;
+  --var-table-header-font-size: var(--var-typography-sm);
 
   --var-shortcut-content-font-size: calc(var(--var-fontsize) * 0.875);
 
@@ -355,6 +356,8 @@
   --var-table-background: hsla(0, 0%, 100%);
   --var-table-border: hsla(240, 6%, 90%);
   --var-table-header-background: hsla(0, 0%, 100%);
+  --var-table-header-foreground: hsla(240, 4%, 35%);
+  --var-table-row-hover-background: hsla(240, 5%, 98%);
   --var-page-calendar-today-background-hover: hsla(240, 5%, 96%, 0.5);
   --var-page-calendar-slot-border: hsla(240, 6%, 90%, 0.5);
   --var-page-calendar-slot-background-hover: hsla(240, 5%, 96%, 0.2);
@@ -387,6 +390,24 @@
   --var-tag-neutral-background: transparent;
   --var-tag-neutral-foreground: hsla(221, 15%, 23%);
   --var-tag-neutral-border: hsla(240, 6%, 90%);
+  --var-tag-soft-primary-background: hsla(201, 49%, 96%);
+  --var-tag-soft-primary-foreground: hsla(201, 49%, 30%);
+  --var-tag-soft-primary-border: hsla(201, 49%, 88%);
+  --var-tag-soft-info-background: var(--var-color-info-subtle);
+  --var-tag-soft-info-foreground: hsla(199, 89%, 26%);
+  --var-tag-soft-info-border: hsla(199, 89%, 88%);
+  --var-tag-soft-warn-background: var(--var-color-warn-subtle);
+  --var-tag-soft-warn-foreground: hsla(38, 92%, 24%);
+  --var-tag-soft-warn-border: hsla(38, 92%, 88%);
+  --var-tag-soft-danger-background: var(--var-color-danger-subtle);
+  --var-tag-soft-danger-foreground: hsla(0, 84%, 30%);
+  --var-tag-soft-danger-border: hsla(0, 84%, 88%);
+  --var-tag-soft-success-background: var(--var-color-success-subtle);
+  --var-tag-soft-success-foreground: hsla(142, 71%, 22%);
+  --var-tag-soft-success-border: hsla(142, 71%, 88%);
+  --var-tag-soft-neutral-background: var(--var-color-muted);
+  --var-tag-soft-neutral-foreground: hsla(240, 5%, 30%);
+  --var-tag-soft-neutral-border: hsla(240, 6%, 90%);
 
   --var-stats-background: var(--var-color-background);
   --var-stats-border-color: var(--var-color-border);
@@ -469,7 +490,7 @@ html.dark {
 
   --var-checkbox-control-foreground: hsla(201, 49%, 54%);
   --var-checkbox-control-background: hsla(240, 10%, 8%);
-  --var-checkbox-control-border: hsla(240, 4%, 16%);
+  --var-checkbox-control-border: hsla(240, 5%, 45%);
   --var-checkbox-focus-ring: hsla(201, 49%, 54%);
 
   --var-switch-track-background: hsla(240, 4%, 16%, 0.72);
@@ -506,6 +527,8 @@ html.dark {
   --var-table-background: hsla(240, 10%, 8%);
   --var-table-border: hsla(240, 4%, 16%);
   --var-table-header-background: hsla(240, 10%, 8%);
+  --var-table-header-foreground: var(--var-color-muted-foreground);
+  --var-table-row-hover-background: hsla(240, 6%, 12%);
   --var-table-inline-placeholder-color: hsla(201, 49%, 65%, 0.7);
   --var-page-calendar-today-background-hover: hsla(240, 4%, 16%, 0.5);
   --var-page-calendar-slot-border: hsla(240, 4%, 16%, 0.5);
@@ -531,6 +554,19 @@ html.dark {
   --var-tag-neutral-background: transparent;
   --var-tag-neutral-foreground: hsla(240, 5%, 96%);
   --var-tag-neutral-border: hsla(240, 4%, 16%);
+  --var-tag-soft-primary-background: hsla(201, 49%, 15%);
+  --var-tag-soft-primary-foreground: hsla(201, 49%, 80%);
+  --var-tag-soft-primary-border: hsla(201, 49%, 25%);
+  --var-tag-soft-info-foreground: hsla(199, 89%, 80%);
+  --var-tag-soft-info-border: hsla(199, 89%, 25%);
+  --var-tag-soft-warn-foreground: hsla(38, 92%, 80%);
+  --var-tag-soft-warn-border: hsla(38, 92%, 25%);
+  --var-tag-soft-danger-foreground: hsla(0, 84%, 80%);
+  --var-tag-soft-danger-border: hsla(0, 84%, 25%);
+  --var-tag-soft-success-foreground: hsla(142, 71%, 78%);
+  --var-tag-soft-success-border: hsla(142, 71%, 25%);
+  --var-tag-soft-neutral-foreground: hsla(240, 5%, 80%);
+  --var-tag-soft-neutral-border: hsla(240, 4%, 16%);
   --var-color-info-subtle: hsla(199, 89%, 15%);
   --var-color-danger-subtle: hsla(0, 84%, 15%);
   --var-color-warn: hsla(38, 92%, 50%);

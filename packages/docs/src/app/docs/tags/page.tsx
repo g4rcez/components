@@ -42,6 +42,45 @@ function TagThemes() {
             </ComponentDemo>
 
             <ComponentDemo
+                title="Soft appearance"
+                description="Use the soft appearance for a light background with dark text, for example status tags in a table. It applies to primary, info, warn, danger, success and neutral. Every text pair measures 7:1 or more in light and dark."
+                code={`"use client";
+import { Tag } from "@g4rcez/components";
+
+function SoftTags() {
+  return (
+    <div className="flex flex-wrap gap-8">
+      <Tag appearance="soft">primary</Tag>
+      <Tag appearance="soft" theme="info">info</Tag>
+      <Tag appearance="soft" theme="warn">warn</Tag>
+      <Tag appearance="soft" theme="danger">danger</Tag>
+      <Tag appearance="soft" theme="success">success</Tag>
+      <Tag appearance="soft" theme="neutral">neutral</Tag>
+    </div>
+  );
+}`}
+            >
+                <Card title="Soft tags" className="flex flex-wrap gap-8">
+                    <Tag appearance="soft">primary</Tag>
+                    <Tag appearance="soft" theme="info">
+                        info
+                    </Tag>
+                    <Tag appearance="soft" theme="warn">
+                        warn
+                    </Tag>
+                    <Tag appearance="soft" theme="danger">
+                        danger
+                    </Tag>
+                    <Tag appearance="soft" theme="success">
+                        success
+                    </Tag>
+                    <Tag appearance="soft" theme="neutral">
+                        neutral
+                    </Tag>
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
                 title="Small and Tiny Tags"
                 description="Examples of tags in small and tiny sizes, demonstrating different levels of visual prominence."
                 code={`"use client";

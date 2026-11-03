@@ -2,6 +2,7 @@
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
 import { ColType, createColumns, Table, useTablePreferences, uuid } from "@g4rcez/components";
+import { useState } from "react";
 
 type User = { id: string; name: string; type: string; document: string };
 
@@ -63,6 +64,9 @@ const groupedClients = [
 export default function TablePage() {
     const preferences = useTablePreferences("@test-table", cols);
     const groupPreferences = useTablePreferences("@table-groups", cols, { groups: groupedClients });
+    const selectionPreferences = useTablePreferences("@table-row-selection", cols);
+    const borderPreferences = useTablePreferences("@table-border", cols);
+    const [selected, setSelected] = useState<string[]>([]);
     return (
         <DocsLayout
             title="Table"
@@ -75,18 +79,12 @@ export default function TablePage() {
             <ComponentDemo
                 title="Virtual and fast by default"
                 description="The table component uses the react-virtuoso to guarantee a fast and virtualized table, avoiding problems with large datasets"
-                code={`import { Table, Checkbox } from "@g4rcez/components";
-function SelectionTable() {
+                code={`import { Table } from "@g4rcez/components";
+function VirtualTable() {
   return (
     <Table
       cols={cols}
       rows={data}
-      Aside={({ row }) => (
-        <Checkbox 
-          checked={isSelected(row.id)} 
-          onChange={handleSelect} 
-        />
-      )}
       getRowProps={(item) => 
         item.type === "pf" ? { 
           style: { background: "hsla(0, 0%, 14%, 0.5)" } 
@@ -103,6 +101,44 @@ function SelectionTable() {
                     loading={clients.length === 0}
                     getRowProps={(item: User) => (item.type === "pf" ? { className: "bg-muted" } : {})}
                 />
+            </ComponentDemo>
+            <ComponentDemo
+                title="Row selection"
+                description="Set selectable and reference to add a checkbox to each row. The header checkbox selects the rows that pass the active filters, and shows a mixed state when only some are selected. Leave selected undefined to let the table keep the selection."
+                code={`import { Table } from "@g4rcez/components";
+import { useState } from "react";
+
+function SelectableTable() {
+  const [selected, setSelected] = useState<string[]>([]);
+  return (
+    <Table
+      name="clients"
+      cols={cols}
+      rows={clients}
+      reference="id"
+      selectable
+      selected={selected}
+      onSelectionChange={(ids, rows) => setSelected(ids)}
+    />
+  );
+}`}
+            >
+                <Table<User>
+                    {...selectionPreferences}
+                    name="table-row-selection"
+                    rows={clients.slice(0, 20)}
+                    reference="id"
+                    selectable
+                    selected={selected}
+                    onSelectionChange={(ids) => setSelected(ids)}
+                />
+            </ComponentDemo>
+            <ComponentDemo
+                title="Column dividers"
+                description="The default look has horizontal dividers only. Pass border to show the column dividers."
+                code={`<Table name="clients" cols={cols} rows={clients} border />`}
+            >
+                <Table<User> {...borderPreferences} name="table-border" rows={clients.slice(0, 10)} border />
             </ComponentDemo>
             <ComponentDemo
                 title="Grouped rows"

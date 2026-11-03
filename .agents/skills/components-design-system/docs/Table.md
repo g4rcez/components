@@ -40,6 +40,24 @@ import { Table, createColumns, useTablePreferences, ColType } from "@g4rcez/comp
 | `getScrollRef` | `() => HTMLElement \| undefined`   | —       | Returns a custom scroll container instead of `window`.                           |
 | `getRowProps`  | `(row: T) => ComponentProps<"tr">` | —       | Merge arbitrary `<tr>` props (e.g., `onClick`, `className`) per row.             |
 | `set`          | `(v: TableGetters<T>) => void`     | —       | External callback invoked whenever internal table state changes.                 |
+| `border`       | `boolean`                          | `false` | Shows column dividers in header and body (≥768px). The default look has horizontal dividers only. |
+| `selectable`   | `boolean`                          | `false` | Adds a first column with a checkbox per row and a "select all" checkbox. Needs `reference`; without it, no column renders and one `console.error` is logged in development. |
+| `selected`     | `Array<T[keyof T]>`                | —       | Controlled selection: the `reference` values of the selected rows. Leave `undefined` to let the table keep its own selection. |
+| `onSelectionChange` | `(ids: Array<T[keyof T]>, rows: T[]) => void` | — | Called with the full new id list and the matching row objects from `rows`. |
+
+### Row selection
+
+- The row id is `row[reference]`.
+- The header checkbox works on the rows that pass the active filters (per group when grouped): none selected → unchecked, some → indeterminate, all → checked. A click on unchecked or indeterminate selects all of them; a click on checked clears them.
+- Selected ids that the filters hide stay selected and do not count in the header state.
+- With server pagination, "all" means the rows the table has now. The selection stays across pages while the ids stay in `selected`.
+- Checkboxes are disabled while `loading`. The header checkbox is disabled when there are no rows.
+- Accessible names come from the `tableSelectAllLabel` and `tableSelectRowLabel(id)` translation keys.
+
+```tsx
+const [selected, setSelected] = useState<string[]>([]);
+<Table name="clients" cols={cols} rows={clients} reference="id" selectable selected={selected} onSelectionChange={(ids) => setSelected(ids)} />;
+```
 
 ### createColumns
 
@@ -137,14 +155,21 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | `--var-table-group-title-gap` | `calc(var(--var-spacing-base) * 0.25)` |
 | `--var-table-group-title-padding-block` | `calc(var(--var-spacing-base) * 0.5)` |
 | `--var-table-group-title-padding-inline` | `calc(var(--var-spacing-base) * 0.75)` |
+| `--var-table-row-block-size` | `calc(var(--var-spacing-base) * 3)` |
+| `--var-table-selection-column-inline-size` | `calc(var(--var-spacing-base) * 3)` |
+| `--var-table-selection-target-size` | `calc(var(--var-spacing-base) * 2.75)` |
+| `--var-table-pill-min-block-size` | `calc(var(--var-spacing-base) * 2.75)` |
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
 | Token                 | CSS Variable         | Purpose                                 |
 | --------------------- | -------------------- | --------------------------------------- |
 | `bg-table-header` | `--var-table-header-background` | Column header background |
+| — | `--var-table-header-foreground` | Header label, header icons and toolbar labels (7.28:1 light, 7.29:1 dark) |
+| — | `--var-table-header-font-size` | Header label and toolbar text size (`--var-typography-sm`) |
+| — | `--var-table-row-hover-background` | Row background on hover (hover-capable devices only) |
 | `bg-table-background` | `--var-table-background` | Table viewport, footer, and loading cell background |
-| `border-table-border` | `--var-table-border` | Column separators and row dividers |
+| `border-table-border` | `--var-table-border` | Row dividers, toolbar pill borders, and column dividers with `border` |
 | `text-foreground` | `--var-color-foreground` | Group title text and loading bar color |
 | `text-primary` | `--var-color-primary` | Filter/sort action accent |
 
@@ -306,12 +331,17 @@ import { TrashIcon, PencilIcon } from "@phosphor-icons/react";
 - Virtualization uses `react-virtuoso` with `useWindowScroll` so native keyboard scrolling and focus management continue to work.
 - Focusable descendants in `Aside` participate in the tab sequence while the overlay is visually concealed. Focusing one reveals the overlay; it stays visible until both focus and pointer leave. Hover continues to reveal the overlay.
 - Use native buttons for aside actions so Enter and Space activate them.
+- Selection checkboxes are native checkboxes: Tab reaches them and Space toggles them. The "select all" checkbox exposes the mixed state. Rows do not get `aria-selected`, because `role="table"` does not support it; the checkbox state carries the information.
+- Each selection checkbox has a hit target of 44×44px or more.
+- The per-column filter trigger stays in the tab order. It is transparent at rest unless the column has a filter, and shows on header hover or focus.
+- Toolbar triggers read "Sort by: …", "Filter: …" and "Group: …". The visible text is the accessible name. With no value, they show `tableNoneLabel` ("None").
 
 ## Data Attributes
 
 - `data-tableheader="{colId}"` — present on every `<th>`, used by the column-resizing logic to update `style.width`.
 - `data-resized="true"` — set on a `<th>` after the user manually resizes that column.
 - `data-type="resizer"` — identifies the drag handle element within each header cell.
+- `data-border="true" | "false"` — on the table viewport; `true` turns on the column dividers.
 
 ## Notes
 

@@ -1,5 +1,5 @@
 import type { Symbols } from "linq-arrays";
-import { FunnelIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
+import { PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import type React from "react";
 import { Fragment, useMemo } from "react";
 import type { TranslationOverrides } from "../../hooks/use-translations";
@@ -13,6 +13,7 @@ import { type OptionProps, Select } from "../form/select/select";
 import { tableFilterStyles } from "./filter.styles";
 import { css } from "../../lib/dom";
 import { type Col, ColType, getLabel, type TableConfiguration, valueFromType } from "./table-lib";
+import { ToolbarTrigger, toolbarTriggerProps } from "./toolbar-trigger";
 
 type Operators = {
     value: string;
@@ -189,11 +190,14 @@ export const Filter = <T extends object>(props: Props<T>) => {
             <Dropdown
                 arrow
                 title={translation.tableFilterDropdownTitle}
+                buttonProps={toolbarTriggerProps}
                 trigger={
-                    <span className={tableFilterStyles.slots["trigger-label"]}>
-                        <FunnelIcon className={tableFilterStyles.slots["trigger-icon"]} />
-                        {translation.tableFilterLabel} {props.filters.length === 0 ? "" : ` (${props.filters.length})`}
-                    </span>
+                    <ToolbarTrigger
+                        label={translation.tableFilterLabel}
+                        none={translation.tableNoneLabel}
+                        options={props.options}
+                        ids={[...new Set(props.filters.map((filter) => String(filter.name)))]}
+                    />
                 }
             >
                 <ul className={tableFilterStyles.slots.list}>
