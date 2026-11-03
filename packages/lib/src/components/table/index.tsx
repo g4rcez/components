@@ -131,7 +131,10 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
             onChange: (ids) => {
                 if (!controlled) setInnerSelected(ids);
                 const idSet = new Set(ids);
-                onSelectionChange?.(ids, props.rows.filter((row) => idSet.has(row[reference])));
+                onSelectionChange?.(
+                    ids,
+                    props.rows.filter((row) => idSet.has(row[reference]))
+                );
             },
         };
     }, [selectable, reference, selected, controlled, onSelectionChange, props.rows]);
@@ -139,87 +142,87 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
     return (
         <Context.Provider value={translationContext}>
             <TableProvider value={contextState}>
-            <AnimatePresence propagate initial={false}>
-                {operations ? (
-                    <Metadata
-                        cols={state.cols}
-                        rows={props.rows}
-                        options={optionCols}
-                        groups={state.groups}
-                        filters={state.filters}
-                        setCols={dispatch.cols}
-                        sorters={state.sorters}
-                        setGroups={dispatch.groups}
-                        setFilters={dispatch.filters}
-                        setSorters={dispatch.sorters}
-                        pagination={props.pagination ?? null}
-                        inlineFilter={props.inlineFilter ?? true}
-                        inlineSorter={props.inlineSorter ?? true}
-                    />
-                ) : null}
-                {state.groups.length === 0 ? (
-                    <InnerTable
-                        {...tableProps}
-                        index={0}
-                        cols={visibleCols}
-                        allCols={state.cols}
-                        sticky={props.sticky ?? undefined}
-                        options={optionCols}
-                        groups={state.groups}
-                        filters={state.filters}
-                        optionCols={optionCols}
-                        setCols={dispatch.cols}
-                        sorters={state.sorters}
-                        setGroups={dispatch.groups}
-                        setFilters={dispatch.filters}
-                        setSorters={dispatch.sorters}
-                        selection={selection}
-                        onScrollEnd={props.onScrollEnd}
-                        pagination={props.pagination ?? null}
-                        inlineFilter={props.inlineFilter ?? true}
-                        inlineSorter={props.inlineSorter ?? true}
-                    />
-                ) : (
-                    <div className={tableRootStyles.slots.groups}>
-                        {state.groups.map((group, index) => (
-                            <section
-                                aria-labelledby={group.groupTitle ? `${groupIdPrefix}-group-${index}` : undefined}
-                                className={tableRootStyles.slots.group}
-                                key={`group-${group.groupId}`}
-                            >
-                                {group.groupTitle ? (
-                                    <h2 className={tableRootStyles.slots["group-title"]} id={`${groupIdPrefix}-group-${index}`}>
-                                        {group.groupTitle}
-                                    </h2>
-                                ) : null}
-                                <InnerTable
-                                    {...tableProps}
-                                    sticky={props.sticky ?? undefined}
-                                    group={group}
-                                    index={index}
-                                    cols={visibleCols}
-                                    allCols={state.cols}
-                                    pagination={null}
-                                    rows={group.rows}
-                                    options={optionCols}
-                                    groups={state.groups}
-                                    filters={state.filters}
-                                    optionCols={optionCols}
-                                    setCols={dispatch.cols}
-                                    sorters={state.sorters}
-                                    setGroups={dispatch.groups}
-                                    setFilters={dispatch.filters}
-                                    setSorters={dispatch.sorters}
-                                    selection={selection}
-                        onScrollEnd={props.onScrollEnd}
-                                    inlineFilter={props.inlineFilter ?? true}
-                                    inlineSorter={props.inlineSorter ?? true}
-                                />
-                            </section>
-                        ))}
-                    </div>
-                )}
-            </AnimatePresence>
+                <AnimatePresence propagate initial={false}>
+                    {operations ? (
+                        <Metadata
+                            cols={state.cols}
+                            rows={props.rows}
+                            options={optionCols}
+                            groups={state.groups}
+                            filters={state.filters}
+                            setCols={dispatch.cols}
+                            sorters={state.sorters}
+                            setGroups={dispatch.groups}
+                            setFilters={dispatch.filters}
+                            setSorters={dispatch.sorters}
+                            pagination={props.pagination ?? null}
+                            inlineFilter={props.inlineFilter ?? true}
+                            inlineSorter={props.inlineSorter ?? true}
+                        />
+                    ) : null}
+                    {state.groups.length === 0 ? (
+                        <InnerTable
+                            {...tableProps}
+                            index={0}
+                            cols={visibleCols}
+                            allCols={state.cols}
+                            sticky={props.sticky ?? undefined}
+                            options={optionCols}
+                            groups={state.groups}
+                            filters={state.filters}
+                            optionCols={optionCols}
+                            setCols={dispatch.cols}
+                            sorters={state.sorters}
+                            setGroups={dispatch.groups}
+                            setFilters={dispatch.filters}
+                            setSorters={dispatch.sorters}
+                            selection={selection}
+                            onScrollEnd={props.onScrollEnd}
+                            pagination={props.pagination ?? null}
+                            inlineFilter={props.inlineFilter ?? true}
+                            inlineSorter={props.inlineSorter ?? true}
+                        />
+                    ) : (
+                        <div className={tableRootStyles.slots.groups}>
+                            {state.groups.map((group, index) => (
+                                <section
+                                    aria-labelledby={group.groupTitle ? `${groupIdPrefix}-group-${index}` : undefined}
+                                    className={tableRootStyles.slots.group}
+                                    key={`group-${group.groupId}`}
+                                >
+                                    {group.groupTitle ? (
+                                        <h2 className={tableRootStyles.slots["group-title"]} id={`${groupIdPrefix}-group-${index}`}>
+                                            {group.groupTitle}
+                                        </h2>
+                                    ) : null}
+                                    <InnerTable
+                                        {...tableProps}
+                                        sticky={props.sticky ?? undefined}
+                                        group={group}
+                                        index={index}
+                                        cols={visibleCols}
+                                        allCols={state.cols}
+                                        pagination={null}
+                                        rows={group.rows}
+                                        options={optionCols}
+                                        groups={state.groups}
+                                        filters={state.filters}
+                                        optionCols={optionCols}
+                                        setCols={dispatch.cols}
+                                        sorters={state.sorters}
+                                        setGroups={dispatch.groups}
+                                        setFilters={dispatch.filters}
+                                        setSorters={dispatch.sorters}
+                                        selection={selection}
+                                        onScrollEnd={props.onScrollEnd}
+                                        inlineFilter={props.inlineFilter ?? true}
+                                        inlineSorter={props.inlineSorter ?? true}
+                                    />
+                                </section>
+                            ))}
+                        </div>
+                    )}
+                </AnimatePresence>
             </TableProvider>
         </Context.Provider>
     );

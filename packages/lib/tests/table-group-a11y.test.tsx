@@ -137,4 +137,28 @@ describe("table group a11y", () => {
 
         await waitFor(() => expect(getOrder()).toEqual(["inactive", "active"]));
     });
+
+    it("shows the grouped column once in the toolbar pill, not one +N per group value", () => {
+        const second = {
+            ...grouped,
+            groupId: "group-inactive",
+            groupName: "inactive",
+            index: 1,
+            rows: [{ status: "inactive" }],
+        } satisfies GroupItem<Row>;
+
+        render(
+            <ComponentsProvider>
+                <Group
+                    cols={columns}
+                    rows={[{ status: "active" }, { status: "inactive" }]}
+                    groups={[grouped, second]}
+                    setGroups={() => {}}
+                    options={createOptionCols(columns)}
+                />
+            </ComponentsProvider>
+        );
+
+        expect(screen.getByRole("button", { name: /Group/ })).toHaveTextContent(/^Group: Status$/);
+    });
 });

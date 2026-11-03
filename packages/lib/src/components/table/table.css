@@ -703,11 +703,13 @@
     justify-content: center;
     gap: var(--var-table-row-gap, calc(var(--var-spacing-base) * 0.25));
     padding-block-end: var(--var-table-row-padding-block-end, calc(var(--var-spacing-base) * 1));
+    border-block-end: var(--var-table-cell-border) solid var(--var-table-border);
 }
 
 @media (min-width: 768px) {
     .__table-inner-table__row {
         display: table-row;
+        border-block-end-width: 0;
     }
 }
 
