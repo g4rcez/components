@@ -225,6 +225,9 @@
 
 .__table-row__cell {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--var-spacing-base) * 0.25);
     border: 0 solid var(--var-table-border);
     padding: var(--var-table-cell-padding, calc(var(--var-spacing-base) * 0.75));
 }
@@ -245,8 +248,9 @@
 .__table-row__cell-label {
     display: block;
     font-size: var(--var-typography-sm);
-    font-weight: var(--var-font-weight-bold);
+    font-weight: var(--var-font-weight-medium);
     line-height: 1.25;
+    color: var(--var-table-header-foreground);
 }
 
 @media (min-width: 768px) {
