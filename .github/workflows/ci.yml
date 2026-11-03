@@ -31,8 +31,6 @@ jobs:
       - name: Typecheck
         # src only, same scope as lib:types; tests/ has known type errors (follow-up)
         run: pnpm --filter @g4rcez/components exec tsc -p tsconfig.lib.json --noEmit
-      - name: Test
-        run: pnpm --filter @g4rcez/components test
 
   build:
     runs-on: ubuntu-latest
@@ -69,3 +67,6 @@ jobs:
             echo "|---:|---:|---|"
             head -n 25 /tmp/js.tsv /tmp/css.tsv | grep -v '^==>' | grep . | awk -F'\t' '{printf "| %s | %s | %s |\n", $1, $2, $3}'
           } | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Test
+        # after the build: css-sourcemaps, package-types and lint-publish read dist/
+        run: pnpm --filter @g4rcez/components test
