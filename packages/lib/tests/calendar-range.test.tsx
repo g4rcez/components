@@ -77,6 +77,24 @@ describe("Calendar range", () => {
         expect(onChange).toHaveBeenLastCalledWith({ from: earlierDate, to: futureDate });
     });
 
+    it("reports only ranges on click in range mode without changeOnlyOnClick", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+
+        render(
+            <ComponentsProvider>
+                <Calendar locale="en-US" date={new Date(2026, 10, 3)} type="range" rangeMode onChange={onChange} />
+            </ComponentsProvider>
+        );
+
+        await user.click(screen.getByRole("button", { name: "Tuesday, November 10, 2026" }));
+        await user.click(screen.getByRole("button", { name: "Saturday, November 14, 2026" }));
+
+        expect(onChange).toHaveBeenCalledTimes(2);
+        expect(onChange).toHaveBeenNthCalledWith(1, { from: new Date(2026, 10, 10), to: undefined });
+        expect(onChange).toHaveBeenNthCalledWith(2, { from: new Date(2026, 10, 10), to: new Date(2026, 10, 14) });
+    });
+
     it("marks range cells from the previous month shown in the current grid", () => {
         render(
             <ComponentsProvider>

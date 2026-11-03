@@ -29,7 +29,7 @@ import { Calendar } from "@g4rcez/components/calendar";
 | `rangeMode`         | `boolean`                                                                                         | `false`       | Enables two-step `from`/`to` selection. Set this for range selection.        |
 | `markRange`         | `boolean`                                                                                         | `true`        | Highlights the days between the selected range endpoints.                    |
 | `markToday`         | `boolean`                                                                                         | `true`        | Highlights the current day.                                                  |
-| `changeOnlyOnClick` | `boolean`                                                                                         | `false`       | In range mode, delay `onChange` until a complete range is selected by click. |
+| `changeOnlyOnClick` | `boolean`                                                                                         | `false`       | Date mode only: no `onChange` on month or year moves. Ignored in range mode. |
 | `locale`            | `Locales \| undefined`                                                                            | active locale | Locale used for month labels and date formatting.                            |
 | `disabledDate`      | `(date: Date) => boolean`                                                                         | —             | Disables matching dates.                                                     |
 | `onChange`          | `(date: Date \| undefined) => void` or `(range: { from?: Date; to?: Date } \| undefined) => void` | —             | Called when the selected date or range changes.                              |
@@ -41,6 +41,8 @@ import { Calendar } from "@g4rcez/components/calendar";
 | `styles`            | `CalendarStyles`                                                                                  | —             | Class names or class-name callbacks for calendar regions.                    |
 
 `rangeMode` is not inferred from `type="range"`; pass both when using `Calendar` directly. `DatePicker` configures range mode for you.
+
+In range mode, `onChange` receives `{ from, to }` only when a day is clicked or chosen with the keyboard. `changeOnlyOnClick={false}` is ignored with `type="range"`.
 
 ## Design Tokens and CSS
 
@@ -92,7 +94,7 @@ const [range, setRange] = useState<DateRange | undefined>();
 
 - Use `disabledDate` for business rules such as unavailable or past dates.
 - Supply `labelRange` when the endpoint labels need to be more specific than the defaults.
-- Use `changeOnlyOnClick` when partial keyboard range changes should not update application state.
+- In date mode, use `changeOnlyOnClick` when month or year navigation should not update application state.
 - Provide a locale through `ComponentsProvider` or the `locale` prop when month labels must be localized.
 
 ## Don't
