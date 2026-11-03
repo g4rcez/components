@@ -12,7 +12,7 @@
 
 .__empty__icon,
 .__empty__message {
-  color: var(--var-color-disabled);
+  color: var(--var-empty-foreground);
 }
 
 .__empty__icon svg {

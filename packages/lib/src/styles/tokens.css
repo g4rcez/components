@@ -159,6 +159,7 @@
   --var-command-group-label-foreground: hsla(240, 6%, 10%);
   --var-command-item-background-hover: hsla(240, 5%, 96%);
   --var-command-empty-foreground: hsla(240, 6%, 10%);
+  --var-empty-foreground: hsla(240, 5%, 30%);
 
   --var-tooltip-surface-background: hsla(240, 10%, 4%);
   --var-tooltip-surface-foreground: hsla(0, 0%, 100%);
@@ -408,6 +409,9 @@
   --var-tag-soft-neutral-background: var(--var-color-muted);
   --var-tag-soft-neutral-foreground: hsla(240, 5%, 30%);
   --var-tag-soft-neutral-border: hsla(240, 6%, 90%);
+  --var-tag-soft-secondary-background: var(--var-color-secondary-subtle);
+  --var-tag-soft-secondary-foreground: var(--var-color-secondary);
+  --var-tag-soft-secondary-border: hsla(240, 6%, 90%);
 
   --var-stats-background: var(--var-color-background);
   --var-stats-border-color: var(--var-color-border);
@@ -513,6 +517,7 @@ html.dark {
   --var-command-group-label-foreground: hsla(240, 5%, 96%);
   --var-command-item-background-hover: hsla(240, 4%, 16%);
   --var-command-empty-foreground: hsla(240, 5%, 96%);
+  --var-empty-foreground: hsla(240, 5%, 65%);
 
   --var-tooltip-surface-background: hsla(0, 0%, 100%);
   --var-tooltip-surface-foreground: hsla(240, 10%, 4%);
@@ -567,6 +572,7 @@ html.dark {
   --var-tag-soft-success-border: hsla(142, 71%, 25%);
   --var-tag-soft-neutral-foreground: hsla(240, 5%, 80%);
   --var-tag-soft-neutral-border: hsla(240, 4%, 16%);
+  --var-tag-soft-secondary-border: hsla(240, 4%, 25%);
   --var-color-info-subtle: hsla(199, 89%, 15%);
   --var-color-danger-subtle: hsla(0, 84%, 15%);
   --var-color-warn: hsla(38, 92%, 50%);

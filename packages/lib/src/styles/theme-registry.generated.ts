@@ -282,6 +282,7 @@ export const themeTokenRegistry = {
             "title-letter-spacing"
         ],
         "empty": [
+            "foreground",
             "icon-size",
             "surface-gap",
             "surface-padding-block",
@@ -820,6 +821,9 @@ export const themeTokenRegistry = {
             "soft-primary-background",
             "soft-primary-border",
             "soft-primary-foreground",
+            "soft-secondary-background",
+            "soft-secondary-border",
+            "soft-secondary-foreground",
             "soft-success-background",
             "soft-success-border",
             "soft-success-foreground",
@@ -1174,6 +1178,9 @@ export const defaultLightComponentTokens = {
         "item-background-hover": "hsla(240, 5%, 96%)",
         "empty-foreground": "hsla(240, 6%, 10%)"
     },
+    "empty": {
+        "foreground": "hsla(240, 5%, 30%)"
+    },
     "tooltip": {
         "surface-background": "hsla(240, 10%, 4%)",
         "surface-foreground": "hsla(0, 0%, 100%)",
@@ -1222,7 +1229,10 @@ export const defaultLightComponentTokens = {
         "soft-success-border": "hsla(142, 71%, 88%)",
         "soft-neutral-background": "var(--var-color-muted)",
         "soft-neutral-foreground": "hsla(240, 5%, 30%)",
-        "soft-neutral-border": "hsla(240, 6%, 90%)"
+        "soft-neutral-border": "hsla(240, 6%, 90%)",
+        "soft-secondary-background": "var(--var-color-secondary-subtle)",
+        "soft-secondary-foreground": "var(--var-color-secondary)",
+        "soft-secondary-border": "hsla(240, 6%, 90%)"
     },
     "spinner": {
         "spin-duration": "1s"
@@ -1419,6 +1429,9 @@ export const defaultDarkComponentTokens = {
         "item-background-hover": "hsla(240, 4%, 16%)",
         "empty-foreground": "hsla(240, 5%, 96%)"
     },
+    "empty": {
+        "foreground": "hsla(240, 5%, 65%)"
+    },
     "tooltip": {
         "surface-background": "hsla(0, 0%, 100%)",
         "surface-foreground": "hsla(240, 10%, 4%)",
@@ -1544,7 +1557,10 @@ export const defaultDarkComponentTokens = {
         "soft-success-border": "hsla(142, 71%, 25%)",
         "soft-neutral-background": "var(--var-color-muted)",
         "soft-neutral-foreground": "hsla(240, 5%, 80%)",
-        "soft-neutral-border": "hsla(240, 4%, 16%)"
+        "soft-neutral-border": "hsla(240, 4%, 16%)",
+        "soft-secondary-background": "var(--var-color-secondary-subtle)",
+        "soft-secondary-foreground": "var(--var-color-secondary)",
+        "soft-secondary-border": "hsla(240, 4%, 25%)"
     },
     "stats": {
         "background": "var(--var-color-background)",

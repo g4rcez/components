@@ -26,6 +26,33 @@ class StyleContractResizeObserver implements ResizeObserver {
 
 const originalResizeObserver = globalThis.ResizeObserver;
 
+describe("empty and soft secondary tag token contracts", () => {
+    const tokens = readSource("src/styles/tokens.css");
+    const [lightTokens, darkTokens] = tokens.split("html.dark {");
+
+    it("colors the empty state with its own readable token", () => {
+        expect(readSource("src/components/display/empty/empty.css")).toContain("color: var(--var-empty-foreground);");
+        expect(lightTokens).toContain("--var-empty-foreground: hsla(240, 5%, 30%);");
+        expect(darkTokens).toContain("--var-empty-foreground: hsla(240, 5%, 65%);");
+    });
+
+    it("defines the soft secondary tag tokens", () => {
+        expect(lightTokens).toContain("--var-tag-soft-secondary-background: var(--var-color-secondary-subtle);");
+        expect(lightTokens).toContain("--var-tag-soft-secondary-foreground: var(--var-color-secondary);");
+        expect(lightTokens).toContain("--var-tag-soft-secondary-border: hsla(240, 6%, 90%);");
+        expect(darkTokens).toContain("--var-tag-soft-secondary-border: hsla(240, 4%, 25%);");
+    });
+
+    it("styles the soft secondary tag with its tokens", () => {
+        const css = readSource("src/components/core/tag/tag.css");
+
+        expect(css).toContain(".__tag--appearance-soft.__tag--theme-secondary {");
+        expect(css).toContain("color: var(--var-tag-soft-secondary-foreground);");
+        expect(css).toContain("background: var(--var-tag-soft-secondary-background);");
+        expect(css).toContain("border-color: var(--var-tag-soft-secondary-border);");
+    });
+});
+
 describe("component style contracts", () => {
     beforeEach(() => {
         globalThis.ResizeObserver = StyleContractResizeObserver;

@@ -3,6 +3,8 @@ pre-commit:
   commands:
     oxfmt:
       glob: "**/*.{ts,tsx}"
+      exclude:
+        - "**/theme-registry.generated.ts"
       run: pnpm exec oxfmt --write {staged_files}
       stage_fixed: true
     oxlint:
