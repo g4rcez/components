@@ -54,6 +54,16 @@ describe("multiSort", () => {
         expect(copy).toEqual(rows);
     });
 
+    it("does not reorder the input array", () => {
+        const rows: Row[] = [
+            { name: "Charlie", age: 30, score: 80 },
+            { name: "Alice", age: 25, score: 90 },
+        ];
+        const result = multiSort(rows, [{ id: "s1", value: "name", type: ascending, label: "Name" }]);
+        expect(result.map((r) => r.name)).toEqual(["Alice", "Charlie"]);
+        expect(rows.map((r) => r.name)).toEqual(["Charlie", "Alice"]);
+    });
+
     it.each([ascending, descending, "undefined" as Sorter<Row>["type"]])("skips secondary fields when the primary differs (%s)", (type) => {
         const readScore = vi.fn(() => 0);
         const rows: Row[] = [
