@@ -1,4 +1,4 @@
-import postcss from "postcss";
+import postcss, { type AcceptedPlugin } from "postcss";
 import tailwindcss from "tailwindcss";
 import type { Config } from "tailwindcss";
 import resolveConfig from "tailwindcss/resolveConfig";
@@ -13,7 +13,7 @@ const compileUtilities = async (classes: string) => {
         content: [{ raw: `<div class="${classes}"></div>`, extension: "html" }],
     } as Config;
 
-    return postcss([tailwindcss(config)]).process("@tailwind utilities;", { from: undefined });
+    return postcss([tailwindcss(config) as AcceptedPlugin]).process("@tailwind utilities;", { from: undefined });
 };
 
 describe("Tailwind preset", () => {
@@ -85,18 +85,22 @@ describe("Tailwind preset", () => {
     it("keeps legacy radius utility names mapped to canonical CSS properties", async () => {
         const result = await compileUtilities("rounded-card-rounded");
         const declarations: string[] = [];
-        result.root.walkDecls("border-radius", (declaration) => declarations.push(declaration.value));
+        result.root.walkDecls("border-radius", (declaration) => {
+            declarations.push(declaration.value);
+        });
 
         expect(declarations).toStrictEqual(["var(--var-card-surface-radius, calc(var(--var-radius-base) / 4))"]);
     });
 
     it.each(["table", "notification"])("keeps full %s shadow overrides ahead of theme-aware defaults", (name) => {
         const resolved = resolveConfig({ ...preset, content: [] } as Config);
+        const boxShadow: Record<string, string> = resolved.theme.boxShadow;
+        const dropShadow: Record<string, string | string[]> = resolved.theme.dropShadow;
         const value = `var(--var-shadow-${name}, var(--var-shadow-${name}-shape) var(--var-color-shadow-${name}))`;
-        expect(resolved.theme.boxShadow[name]).toBe(value);
-        expect(resolved.theme.boxShadow[`shadow-${name}`]).toBe(value);
-        expect(resolved.theme.dropShadow[name]).toBe(value);
-        expect(resolved.theme.dropShadow[`shadow-${name}`]).toBe(value);
+        expect(boxShadow[name]).toBe(value);
+        expect(boxShadow[`shadow-${name}`]).toBe(value);
+        expect(dropShadow[name]).toBe(value);
+        expect(dropShadow[`shadow-${name}`]).toBe(value);
     });
 
     it.each([

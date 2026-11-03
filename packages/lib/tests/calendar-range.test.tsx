@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Calendar } from "../src/components/display/calendar/calendar";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
@@ -112,5 +112,65 @@ describe("Calendar range", () => {
         expect(dayCell(new Date(2026, 5, 29))).toHaveAttribute("data-in-range", "true");
         expect(dayCell(new Date(2026, 5, 30))).toHaveAttribute("data-in-range", "true");
         expect(dayCell(new Date(2026, 6, 1))).toHaveAttribute("data-in-range", "true");
+    });
+
+    describe("onChange shape in range mode", () => {
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        it("reports a range when Today is clicked", async () => {
+            vi.useFakeTimers({ toFake: ["Date"] });
+            vi.setSystemTime(new Date(2026, 10, 3, 15, 30));
+            const user = userEvent.setup();
+            const onChange = vi.fn();
+
+            render(
+                <ComponentsProvider>
+                    <Calendar locale="en-US" date={new Date(2026, 10, 3)} type="range" rangeMode onChange={onChange} />
+                </ComponentsProvider>
+            );
+
+            await user.click(screen.getByRole("button", { name: "Today" }));
+
+            expect(onChange).toHaveBeenCalledTimes(1);
+            expect(onChange).toHaveBeenCalledWith({ from: new Date(2026, 10, 3), to: undefined });
+        });
+
+        it("uses Today as the first endpoint, then the next day click closes the range", async () => {
+            vi.useFakeTimers({ toFake: ["Date"] });
+            vi.setSystemTime(new Date(2026, 10, 3, 15, 30));
+            const user = userEvent.setup();
+            const onChange = vi.fn();
+
+            render(
+                <ComponentsProvider>
+                    <Calendar locale="en-US" date={new Date(2026, 10, 3)} type="range" rangeMode onChange={onChange} />
+                </ComponentsProvider>
+            );
+
+            await user.click(screen.getByRole("button", { name: "Today" }));
+            await user.click(screen.getByRole("button", { name: "Saturday, November 14, 2026" }));
+
+            expect(onChange).toHaveBeenLastCalledWith({ from: new Date(2026, 10, 3), to: new Date(2026, 10, 14) });
+        });
+
+        it("reports a range when the time input changes", async () => {
+            const user = userEvent.setup();
+            const onChange = vi.fn();
+
+            render(
+                <ComponentsProvider>
+                    <Calendar locale="en-US" date={new Date(2026, 10, 3)} type="datetime" rangeMode onChange={onChange} />
+                </ComponentsProvider>
+            );
+
+            await user.click(screen.getByRole("button", { name: "Tuesday, November 10, 2026" }));
+            onChange.mockClear();
+            await user.type(screen.getByRole("textbox", { name: "Time" }), "1030");
+
+            expect(onChange).toHaveBeenCalled();
+            expect(onChange).toHaveBeenLastCalledWith({ from: new Date(2026, 10, 10), to: undefined });
+        });
     });
 });

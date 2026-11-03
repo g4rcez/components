@@ -5,12 +5,12 @@ import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
-import { ColType } from "../src/components/table/table-lib";
+import { type Col, ColType } from "../src/components/table/table-lib";
 import { Filter, type FilterConfig } from "../src/components/table/filter";
 
 type Row = { status: string };
 
-const columns = [{ id: "status", headerLabel: "Status", type: ColType.Text }];
+const columns: Col<Row>[] = [{ id: "status", thead: "Status", headerLabel: "Status", type: ColType.Text }];
 const filter = {
     id: "filter-status",
     label: "Status",

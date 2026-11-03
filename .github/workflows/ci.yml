@@ -29,8 +29,8 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Typecheck
-        # src only, same scope as lib:types; tests/ has known type errors (follow-up)
-        run: pnpm --filter @g4rcez/components exec tsc -p tsconfig.lib.json --noEmit
+        # src and tests/ (tsconfig.json); the build runs lib:types for src declarations
+        run: pnpm --filter @g4rcez/components typecheck
 
   build:
     runs-on: ubuntu-latest

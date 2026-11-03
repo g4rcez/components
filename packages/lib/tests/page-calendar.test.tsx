@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { Locales } from "the-mask-input";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { PageCalendar } from "../src/components/page-calendar/page-calendar";
@@ -166,7 +167,7 @@ describe("PageCalendar formatting", () => {
         const labels = vi.spyOn(calendarUtils, "formatHourLabel");
         const days = calendarUtils.getWeekDays(date);
         const props = { currentDate: date, eventsByDate: new Map<string, CalendarEvent[]>(), onEventClick: vi.fn(), onSlotClick };
-        const renderView = (locale: string) => (
+        const renderView = (locale: Locales) => (
             <ComponentsProvider locale={locale}>
                 {view === "day" ? <DayView {...props} onDateChange={vi.fn()} /> : <WeekView {...props} days={days} />}
             </ComponentsProvider>
@@ -180,7 +181,7 @@ describe("PageCalendar formatting", () => {
         expect(labels).toHaveBeenCalledTimes(24);
 
         const label = new Intl.DateTimeFormat("ar-EG", { hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(0, 0, 0, 13));
-        const slots = screen.getAllByRole("button", { name: label, exact: true });
+        const slots = screen.getAllByRole("button", { name: label });
         expect(slots).toHaveLength(view === "day" ? 1 : 7);
         await user.click(slots.at(-1)!);
         const expected = new Date(view === "day" ? date : days[6]);
