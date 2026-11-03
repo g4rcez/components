@@ -225,13 +225,18 @@
 
 .__table-row__cell {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--var-spacing-base) * 0.25);
     border: 0 solid var(--var-table-border);
     padding: var(--var-table-cell-padding, calc(var(--var-spacing-base) * 0.75));
+    padding-block: calc(var(--var-spacing-base) * 0.5);
 }
 
 @media (min-width: 768px) {
     .__table-row__cell {
         display: table-cell;
+        padding: var(--var-table-cell-padding, calc(var(--var-spacing-base) * 0.75));
         block-size: var(--var-table-row-block-size, calc(var(--var-spacing-base) * 3));
         vertical-align: middle;
         border-block-end-width: var(--var-table-cell-border);
@@ -245,8 +250,9 @@
 .__table-row__cell-label {
     display: block;
     font-size: var(--var-typography-sm);
-    font-weight: var(--var-font-weight-bold);
+    font-weight: var(--var-font-weight-medium);
     line-height: 1.25;
+    color: var(--var-table-header-foreground);
 }
 
 @media (min-width: 768px) {
