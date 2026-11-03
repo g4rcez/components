@@ -16,10 +16,18 @@ import { type Col, getLabel, type TableOperationProps, useWidthControl } from ".
 
 const dragConstraints = { top: 0, left: 0, right: 0, bottom: -1 };
 
+export type TableHeaderSelection = {
+    checked: boolean;
+    disabled: boolean;
+    indeterminate: boolean;
+    onToggle: () => void;
+};
+
 type TableHeaderProps<T extends object> = {
     loading: boolean;
     headers: Col<T>[];
     columns: Col<T>[];
+    selection?: TableHeaderSelection;
     translations?: TranslationOverrides;
 } & Pick<TableOperationProps<T>, "filters" | "setFilters" | "setCols" | "setSorters" | "sorters" | "inlineSorter" | "inlineFilter">;
 
@@ -208,9 +216,19 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                 )}
             >
                 <span className={tableHeadStyles.slots.actions}>
+                    <span className={tableHeadStyles.slots.label}>{headerContent}</span>
+                    {props.inlineSorter && defaultAllowSort ? (
+                        <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} translations={props.translations} />
+                    ) : null}
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
                             arrow
+                            buttonProps={{
+                                className: css(
+                                    tableHeadStyles.slots["filter-trigger"],
+                                    hasFilters ? `${tableHeadStyles.slots["filter-trigger"]}--active` : undefined
+                                ),
+                            }}
                             trigger={
                                 <span>
                                     <span id={`${props.header.id}-filter-dropdown-button`} className={tableHeadStyles.slots["sr-label"]}>
@@ -254,10 +272,6 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                 </li>
                             </ul>
                         </Dropdown>
-                    ) : null}
-                    <span className={tableHeadStyles.slots.label}>{headerContent}</span>
-                    {props.inlineSorter && defaultAllowSort ? (
-                        <SorterHead col={props.header} setSorters={props.setSorters} sorters={props.sorters} translations={props.translations} />
                     ) : null}
                 </span>
             </span>
@@ -309,7 +323,8 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
 };
 
 export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
-    const { columns, setCols } = props;
+    const { columns, setCols, selection } = props;
+    const translation = useTranslations(props.translations);
     const reorder = useCallback((headers: Col<T>[]) => setCols(reorderVisibleColumns(columns, headers)), [columns, setCols]);
     const [ref, onChange] = useWidthControl(reorder);
     return (
@@ -325,6 +340,19 @@ export const TableHeader = <T extends object>(props: TableHeaderProps<T>) => {
             onReorder={onChange}
             values={props.headers}
         >
+            {selection ? (
+                <th role="columnheader" className={css("typography", tableHeadStyles.slots.cell, tableHeadStyles.slots["selection-cell"])}>
+                    <Checkbox
+                        size="big"
+                        container={tableHeadStyles.slots["selection-control"]}
+                        aria-label={translation.tableSelectAllLabel}
+                        checked={selection.checked}
+                        disabled={selection.disabled}
+                        indeterminate={selection.indeterminate}
+                        onChange={selection.onToggle}
+                    />
+                </th>
+            ) : null}
             <AnimatePresence>
                 {props.headers.map((header, index) => (
                     <HeaderChild<T>

@@ -23,7 +23,7 @@ export type TagProps<T extends React.ElementType = "span"> = PolymorphicProps<
 
 export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => React.ReactNode = forwardRef(function Tag<
     T extends React.ElementType = "span",
->({ className, indicator = undefined, icon, loading, theme, size, ...props }: TagProps<T>, ref: React.Ref<HTMLElement>) {
+>({ className, indicator = undefined, icon, loading, theme, size, appearance, ...props }: TagProps<T>, ref: React.Ref<HTMLElement>) {
     const resolvedTheme = loading ? "loading" : theme;
     const resolvedIndicatorTheme = (indicator === true ? (theme ?? "primary") : indicator) as Themes | undefined;
 
@@ -35,7 +35,7 @@ export const Tag: <T extends React.ElementType = "span">(_: TagProps<T>) => Reac
             data-loading={loading ? true : undefined}
             data-component="tag"
             as={props.as ?? "span"}
-            className={css(tagStyles.className({ size, theme: resolvedTheme }), className)}
+            className={css(tagStyles.className({ size, appearance, theme: resolvedTheme }), className)}
         >
             {resolvedIndicatorTheme ? (
                 <span aria-hidden="true" className={css(tagStyles.slots.indicator, indicatorThemeClass(resolvedIndicatorTheme))} />

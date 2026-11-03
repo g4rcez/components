@@ -26,7 +26,7 @@ import type { FilterConfig } from "./filter";
 import type { GroupItem } from "./group";
 import { tableInnerTableStyles } from "./inner-table.styles";
 import { Pagination } from "./pagination";
-import { Row } from "./row";
+import { Row, type RowSelection } from "./row";
 import { multiSort, type Sorter } from "./sort";
 import type { CellAsideElement, Col, TableOperationProps } from "./table-lib";
 import { useTable } from "./table.context";
@@ -36,6 +36,7 @@ type VirtuosoCtx = {
     cols: Col<Record<string, unknown>>[];
     loading?: boolean;
     loadingMore?: boolean;
+    selection?: RowSelection<Record<string, unknown>>;
     Aside?: React.FC<CellAsideElement<Record<string, unknown>>>;
     getRowProps?: (_: Record<string, unknown>) => ComponentProps<"tr">;
 };
@@ -64,7 +65,14 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
         getScrollRef?: () => HTMLElement | undefined;
         getRowProps?: (_: T) => ComponentProps<"tr">;
         translations?: TranslationOverrides;
+        selection?: TableSelection<T>;
     };
+
+export type TableSelection<T extends Any> = {
+    reference: keyof T;
+    selected: Array<T[keyof T]>;
+    onChange: (ids: Array<T[keyof T]>) => void;
+};
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & ContextProp<unknown>>(
     ({ context: _context, className = "", ...props }, ref) => (
@@ -175,8 +183,11 @@ export const InnerTable = <T extends Record<string, unknown>>({
     useControl = false,
     sticky,
     translations,
+    selection,
+    border = false,
     ...props
 }: InnerTableProps<T>) => {
+    const translation = useTranslations(translations);
     const ref = useRef<HTMLDivElement | null>(null);
     const tweaks = useTable();
     const [scrollParent, setScrollParent] = useState<HTMLElement>();
@@ -219,17 +230,43 @@ export const InnerTable = <T extends Record<string, unknown>>({
 
     const empty = rows.length === 0;
 
+    const selectionState = useMemo(() => {
+        if (!selection) return undefined;
+        const { reference, selected, onChange } = selection;
+        const selectedSet = new Set(selected);
+        const ids = props.loading ? [] : rows.map((row) => row[reference]);
+        const idSet = new Set(ids);
+        const count = ids.filter((id) => selectedSet.has(id)).length;
+        const all = ids.length > 0 && count === ids.length;
+        const row: RowSelection<T> = {
+            isSelected: (item) => selectedSet.has(item[reference]),
+            label: (item, rowIndex) => translation.tableSelectRowLabel(Is.nil(item?.[reference]) ? String(rowIndex + 1) : String(item[reference])),
+            toggle: (item) => {
+                const id = item[reference];
+                onChange(selectedSet.has(id) ? selected.filter((x) => x !== id) : [...selected, id]);
+            },
+        };
+        const header = {
+            checked: all,
+            indeterminate: count > 0 && !all,
+            disabled: ids.length === 0,
+            onToggle: () => onChange(all ? selected.filter((id) => !idSet.has(id)) : [...selected, ...ids.filter((id) => !selectedSet.has(id))]),
+        };
+        return { row, header };
+    }, [selection, props.loading, rows, translation]);
+
     const context = {
         cols: cols,
         Aside: props.Aside,
         loading: props.loading,
         getRowProps: props.getRowProps,
         loadingMore: props.loadingMore,
+        selection: selectionState?.row,
         sticky: sticky || tweaks.sticky,
     };
 
     return (
-        <div ref={setViewportRef} className={tableInnerTableStyles.slots.viewport}>
+        <div ref={setViewportRef} data-border={border} className={tableInnerTableStyles.slots.viewport}>
             {props.loading && !empty ? <LoadingStatus translations={translations} /> : null}
             <TableVirtuoso
                 components={components}
@@ -249,6 +286,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
                         setFilters={setFilters}
                         setSorters={setSorters}
                         loading={!!props.loading}
+                        selection={selectionState?.header}
                         inlineFilter={props.inlineFilter}
                         inlineSorter={props.inlineSorter}
                         translations={translations}

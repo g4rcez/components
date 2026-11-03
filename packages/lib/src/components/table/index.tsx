@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence } from "motion/react";
-import { type ComponentProps, useEffect, useId, useMemo } from "react";
+import { type ComponentProps, useEffect, useId, useMemo, useState } from "react";
 import { useContext } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
@@ -9,7 +9,7 @@ import type { TranslationOverrides } from "../../hooks/use-translations";
 import { defaultTranslations } from "../../config/default-translations";
 import type { FilterConfig } from "./filter";
 import type { GroupItem } from "./group";
-import { InnerTable, type InnerTableProps } from "./inner-table";
+import { InnerTable, type InnerTableProps, type TableSelection } from "./inner-table";
 import { Metadata } from "./metadata";
 import type { Sorter } from "./sort";
 import { type Col, createOptionCols, type TableGetters, type TableOperationProps } from "./table-lib";
@@ -31,8 +31,19 @@ export type TableProps<T extends Record<string, unknown>> = Pick<InnerTableProps
             onScrollEnd: () => void;
             getScrollRef?: () => HTMLElement | undefined;
             getRowProps: (row: T) => ComponentProps<"tr">;
+            /** Adds a first column with a checkbox per row and a "select all" checkbox. Needs `reference`. */
+            selectable: boolean;
+            /** Controlled selection: the `reference` values of the selected rows. Leave undefined for uncontrolled selection. */
+            selected: Array<T[keyof T]>;
+            /** Called with the full new list of selected ids and the matching rows from `rows`. */
+            onSelectionChange: (ids: Array<T[keyof T]>, rows: T[]) => void;
         }
     >;
+
+// The lib has no Node types. Bundlers replace `process.env.NODE_ENV` in app builds.
+declare const process: { env: { NODE_ENV?: string } } | undefined;
+
+const isDevelopment = () => typeof process === "undefined" || process.env.NODE_ENV !== "production";
 
 const dispatcherFun = <Prev extends object, S extends Prev | ((prev: Prev) => Prev)>(prev: Prev, setter: S) =>
     typeof setter === "function" ? setter(prev) : setter;
@@ -103,88 +114,115 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
 
     const visibleCols = useMemo(() => state.cols.filter((col) => col.visible !== false), [state.cols]);
 
+    const { reference, selectable, onSelectionChange } = props;
+    useEffect(() => {
+        if (selectable && reference === undefined && isDevelopment()) {
+            console.error(`Table "${props.name}": \`selectable\` needs \`reference\` to identify rows. The selection column is not rendered.`);
+        }
+    }, [selectable, reference, props.name]);
+    const [innerSelected, setInnerSelected] = useState<Array<T[keyof T]>>([]);
+    const controlled = props.selected !== undefined;
+    const selected = props.selected ?? innerSelected;
+    const selection = useMemo((): TableSelection<T> | undefined => {
+        if (!selectable || reference === undefined) return undefined;
+        return {
+            reference,
+            selected,
+            onChange: (ids) => {
+                if (!controlled) setInnerSelected(ids);
+                const idSet = new Set(ids);
+                onSelectionChange?.(
+                    ids,
+                    props.rows.filter((row) => idSet.has(row[reference]))
+                );
+            },
+        };
+    }, [selectable, reference, selected, controlled, onSelectionChange, props.rows]);
+
     return (
         <Context.Provider value={translationContext}>
             <TableProvider value={contextState}>
-            <AnimatePresence propagate initial={false}>
-                {operations ? (
-                    <Metadata
-                        cols={state.cols}
-                        rows={props.rows}
-                        options={optionCols}
-                        groups={state.groups}
-                        filters={state.filters}
-                        setCols={dispatch.cols}
-                        sorters={state.sorters}
-                        setGroups={dispatch.groups}
-                        setFilters={dispatch.filters}
-                        setSorters={dispatch.sorters}
-                        pagination={props.pagination ?? null}
-                        inlineFilter={props.inlineFilter ?? true}
-                        inlineSorter={props.inlineSorter ?? true}
-                    />
-                ) : null}
-                {state.groups.length === 0 ? (
-                    <InnerTable
-                        {...tableProps}
-                        index={0}
-                        cols={visibleCols}
-                        allCols={state.cols}
-                        sticky={props.sticky ?? undefined}
-                        options={optionCols}
-                        groups={state.groups}
-                        filters={state.filters}
-                        optionCols={optionCols}
-                        setCols={dispatch.cols}
-                        sorters={state.sorters}
-                        setGroups={dispatch.groups}
-                        setFilters={dispatch.filters}
-                        setSorters={dispatch.sorters}
-                        onScrollEnd={props.onScrollEnd}
-                        pagination={props.pagination ?? null}
-                        inlineFilter={props.inlineFilter ?? true}
-                        inlineSorter={props.inlineSorter ?? true}
-                    />
-                ) : (
-                    <div className={tableRootStyles.slots.groups}>
-                        {state.groups.map((group, index) => (
-                            <section
-                                aria-labelledby={group.groupTitle ? `${groupIdPrefix}-group-${index}` : undefined}
-                                className={tableRootStyles.slots.group}
-                                key={`group-${group.groupId}`}
-                            >
-                                {group.groupTitle ? (
-                                    <h2 className={tableRootStyles.slots["group-title"]} id={`${groupIdPrefix}-group-${index}`}>
-                                        {group.groupTitle}
-                                    </h2>
-                                ) : null}
-                                <InnerTable
-                                    {...tableProps}
-                                    sticky={props.sticky ?? undefined}
-                                    group={group}
-                                    index={index}
-                                    cols={visibleCols}
-                                    allCols={state.cols}
-                                    pagination={null}
-                                    rows={group.rows}
-                                    options={optionCols}
-                                    groups={state.groups}
-                                    filters={state.filters}
-                                    optionCols={optionCols}
-                                    setCols={dispatch.cols}
-                                    sorters={state.sorters}
-                                    setGroups={dispatch.groups}
-                                    setFilters={dispatch.filters}
-                                    setSorters={dispatch.sorters}
-                                    onScrollEnd={props.onScrollEnd}
-                                    inlineFilter={props.inlineFilter ?? true}
-                                    inlineSorter={props.inlineSorter ?? true}
-                                />
-                            </section>
-                        ))}
-                    </div>
-                )}
-            </AnimatePresence>
+                <AnimatePresence propagate initial={false}>
+                    {operations ? (
+                        <Metadata
+                            cols={state.cols}
+                            rows={props.rows}
+                            options={optionCols}
+                            groups={state.groups}
+                            filters={state.filters}
+                            setCols={dispatch.cols}
+                            sorters={state.sorters}
+                            setGroups={dispatch.groups}
+                            setFilters={dispatch.filters}
+                            setSorters={dispatch.sorters}
+                            pagination={props.pagination ?? null}
+                            inlineFilter={props.inlineFilter ?? true}
+                            inlineSorter={props.inlineSorter ?? true}
+                        />
+                    ) : null}
+                    {state.groups.length === 0 ? (
+                        <InnerTable
+                            {...tableProps}
+                            index={0}
+                            cols={visibleCols}
+                            allCols={state.cols}
+                            sticky={props.sticky ?? undefined}
+                            options={optionCols}
+                            groups={state.groups}
+                            filters={state.filters}
+                            optionCols={optionCols}
+                            setCols={dispatch.cols}
+                            sorters={state.sorters}
+                            setGroups={dispatch.groups}
+                            setFilters={dispatch.filters}
+                            setSorters={dispatch.sorters}
+                            selection={selection}
+                            onScrollEnd={props.onScrollEnd}
+                            pagination={props.pagination ?? null}
+                            inlineFilter={props.inlineFilter ?? true}
+                            inlineSorter={props.inlineSorter ?? true}
+                        />
+                    ) : (
+                        <div className={tableRootStyles.slots.groups}>
+                            {state.groups.map((group, index) => (
+                                <section
+                                    aria-labelledby={group.groupTitle ? `${groupIdPrefix}-group-${index}` : undefined}
+                                    className={tableRootStyles.slots.group}
+                                    key={`group-${group.groupId}`}
+                                >
+                                    {group.groupTitle ? (
+                                        <h2 className={tableRootStyles.slots["group-title"]} id={`${groupIdPrefix}-group-${index}`}>
+                                            {group.groupTitle}
+                                        </h2>
+                                    ) : null}
+                                    <InnerTable
+                                        {...tableProps}
+                                        sticky={props.sticky ?? undefined}
+                                        group={group}
+                                        index={index}
+                                        cols={visibleCols}
+                                        allCols={state.cols}
+                                        pagination={null}
+                                        rows={group.rows}
+                                        options={optionCols}
+                                        groups={state.groups}
+                                        filters={state.filters}
+                                        optionCols={optionCols}
+                                        setCols={dispatch.cols}
+                                        sorters={state.sorters}
+                                        setGroups={dispatch.groups}
+                                        setFilters={dispatch.filters}
+                                        setSorters={dispatch.sorters}
+                                        selection={selection}
+                                        onScrollEnd={props.onScrollEnd}
+                                        inlineFilter={props.inlineFilter ?? true}
+                                        inlineSorter={props.inlineSorter ?? true}
+                                    />
+                                </section>
+                            ))}
+                        </div>
+                    )}
+                </AnimatePresence>
             </TableProvider>
         </Context.Provider>
     );

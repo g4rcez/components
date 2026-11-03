@@ -26,6 +26,7 @@ import { Checkbox } from "@g4rcez/components/checkbox";
 | `disabled`       | `boolean`                                                                             | `false`    | Disabled state                                                         |
 | `loading`        | `boolean`                                                                             | `false`    | Loading state — disables the checkbox while loading                    |
 | `error`          | `string`                                                                              | -          | Error message rendered below the label                                 |
+| `indeterminate`  | `boolean`                                                                             | `false`    | Shows the mixed state (a dash), for example on a "select all" checkbox |
 | `asTask`         | `boolean`                                                                             | `false`    | Task mode: applies strikethrough to the label when checked             |
 | `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny" \| "medium" \| "large"` | `"normal"` | Checkbox size; the named values map to the library control-size tokens |
 | `container`      | `string`                                                                              | -          | Extra CSS classes for the outer `<label>` wrapper                      |
@@ -52,7 +53,7 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 | Token                | CSS Variable    | Purpose                              |
 | -------------------- | --------------- | ------------------------------------ |
 | CSS override | `--var-checkbox-control-foreground` | Checked control color |
-| CSS override | `--var-checkbox-control-border` | Unchecked border color |
+| CSS override | `--var-checkbox-control-border` | Unchecked border color (3.69:1 light, 3.66:1 dark on the page background) |
 | `text-danger` | `--var-color-danger` | Error message text color |
 | CSS override | `--var-checkbox-disabled-opacity` | Disabled control opacity |
 | CSS override | `--var-checkbox-focus-ring` | Focus ring color |
@@ -187,6 +188,8 @@ function PreferencesForm() {
 - `aria-disabled` and `data-disabled` are applied when `disabled` or `loading` is true.
 - Error messages are rendered as visible text below the label and are discoverable by screen readers.
 - Focus ring is visible for keyboard navigation.
+- `indeterminate` sets the DOM property `input.indeterminate`, so screen readers announce "mixed". The forwarded ref still points to the input.
+- The unchecked border meets the 3:1 contrast minimum for UI parts (WCAG 1.4.11) in light and dark.
 
 ## Data Attributes
 

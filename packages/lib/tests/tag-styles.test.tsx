@@ -30,4 +30,18 @@ describe("Tag v6 styles", () => {
 
         expect(screen.getByText("Custom")).toHaveClass("__tag", "custom-class");
     });
+
+    it("adds the soft appearance class only when asked", () => {
+        render(
+            <>
+                <Tag theme="success" appearance="soft">
+                    Won
+                </Tag>
+                <Tag theme="success">Paid</Tag>
+            </>
+        );
+
+        expect(screen.getByText("Won")).toHaveClass("__tag--appearance-soft", "__tag--theme-success");
+        expect(screen.getByText("Paid")).toHaveClass("__tag--appearance-solid", "__tag--theme-success");
+    });
 });

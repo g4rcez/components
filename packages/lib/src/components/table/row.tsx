@@ -4,13 +4,21 @@ import { Is } from "sidekicker";
 import { css } from "../../lib/dom";
 import { path } from "../../lib/fns";
 import { SkeletonCell } from "../display/skeleton/skeleton";
+import { Checkbox } from "../form/checkbox/checkbox";
 import { tableRowStyles } from "./row.styles";
 import { getLabel, type CellAsideElement, type CellPropsElement, type Col, type ColMatrix } from "./table-lib";
+
+export type RowSelection<T extends Record<string, unknown>> = {
+    isSelected: (row: T) => boolean;
+    toggle: (row: T) => void;
+    label: (row: T, rowIndex: number) => string;
+};
 
 type ItemContentContext<T extends Record<string, unknown>> = {
     cols: Col<T>[];
     loading?: boolean;
     loadingMore?: boolean;
+    selection?: RowSelection<T>;
     Aside?: React.FC<CellAsideElement<T>>;
 };
 
@@ -65,8 +73,21 @@ const RowAside = (props: PropsWithChildren) => {
 export const Row = <T extends Record<string, unknown>>(index: number, row: T, context: ItemContentContext<T>) => {
     const cols = context.cols;
     const loading = context.loading;
+    const selection = context.selection;
     return (
         <Fragment>
+            {selection ? (
+                <td role="cell" className={css(tableRowStyles.slots.cell, tableRowStyles.slots["selection-cell"])}>
+                    <Checkbox
+                        size="big"
+                        container={tableRowStyles.slots["selection-control"]}
+                        aria-label={selection.label(row, index)}
+                        checked={!loading && selection.isSelected(row)}
+                        disabled={loading}
+                        onChange={() => selection.toggle(row)}
+                    />
+                </td>
+            ) : null}
             {cols.map((col, colIndex) => {
                 const matrix: ColMatrix = `${colIndex},${index}`;
                 const value = path(row, col.id);
@@ -80,13 +101,7 @@ export const Row = <T extends Record<string, unknown>>(index: number, row: T, co
                         role="cell"
                         data-matrix={matrix}
                         key={`accessor-${index}-${colIndex}`}
-                        className={css(
-                            "typography",
-                            tableRowStyles.slots.cell,
-                            `${tableRowStyles.base}__border`,
-                            tableRowStyles.slots["cell-content"],
-                            className
-                        )}
+                        className={css("typography", tableRowStyles.slots.cell, tableRowStyles.slots["cell-content"], className)}
                     >
                         {exposeAside ? (
                             <RowAside>

@@ -22,6 +22,7 @@ import { Tag } from "@g4rcez/components/tag";
 | Prop        | Type                                                                                                                                   | Default     | Description                                |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------ |
 | `theme`     | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral" \| "custom" \| "disabled" \| "loading"` | `"primary"` | Visual theme/variant of the tag            |
+| `appearance` | `"solid" \| "soft"` | `"solid"` | `soft` uses a light background, dark text and a hairline border. It applies to `primary`, `info`, `warn`, `danger`, `success` and `neutral`; other themes ignore it |
 | `size`      | `"icon" \| "small" \| "default" \| "big" \| "tiny"`                                                                                    | `"default"` | Size of the tag                            |
 | `icon`      | `React.ReactNode`                                                                                                                      | -           | Icon to display inside the tag             |
 | `indicator` | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral"`                                        | -           | Shows a small colored dot before the label |
@@ -71,6 +72,9 @@ Tailwind utility mappings and component tokens. Where a historical utility targe
 | `bg-danger` | `--var-color-danger` | Dot color for danger indicator |
 | `bg-success` | `--var-color-success` | Dot color for success indicator |
 | `bg-muted` | `--var-color-muted` | Dot color for muted indicator |
+| CSS override | `--var-tag-soft-<theme>-background` | Soft background (`primary`, `info`, `warn`, `danger`, `success`, `neutral`) |
+| CSS override | `--var-tag-soft-<theme>-foreground` | Soft text color; each pair measures 7:1 or more in light and dark |
+| CSS override | `--var-tag-soft-<theme>-border` | Soft hairline border (decorative) |
 
 ## Theme Variants
 
@@ -85,6 +89,11 @@ Tailwind utility mappings and component tokens. Where a historical utility targe
 - `custom`: No default styling — supply all classes via `className`
 - `disabled`: Disabled appearance with reduced opacity
 - `loading`: Muted loading appearance (also triggered by the `loading` boolean prop); its pulse is omitted when reduced motion is preferred
+
+## Appearance
+
+- `solid` (default): the theme colors above.
+- `soft`: light background, dark text and a hairline border, for status tags in dense views such as a `Table`. Example: `<Tag theme="success" appearance="soft">Won</Tag>`. For other hues, use `theme="custom"`.
 
 ## Examples
 

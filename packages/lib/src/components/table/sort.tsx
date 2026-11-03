@@ -10,6 +10,7 @@ import { Dropdown } from "../floating/dropdown/dropdown";
 import { type OptionProps, Select } from "../form/select/select";
 import { tableSortStyles } from "./sort.styles";
 import { type Col, getLabel, type TableConfiguration, type TableOperationProps } from "./table-lib";
+import { ToolbarTrigger, toolbarTriggerProps } from "./toolbar-trigger";
 
 type Keyof<T extends Any> = keyof T extends infer R extends string ? R : never;
 
@@ -94,11 +95,14 @@ export const Sort = <T extends Any>(props: Props<T>) => {
         <Fragment>
             <Dropdown
                 title={translation.tableSortDropdownTitle}
+                buttonProps={toolbarTriggerProps}
                 trigger={
-                    <span className={tableSortStyles.slots["trigger-label"]}>
-                        <CaretUpDownIcon className={tableSortStyles.slots["trigger-icon"]} />
-                        {translation.tableSortOrderByLabel} {props.sorters.length === 0 ? "" : ` (${props.sorters.length})`}
-                    </span>
+                    <ToolbarTrigger
+                        label={translation.tableSortOrderByLabel}
+                        none={translation.tableNoneLabel}
+                        options={props.options}
+                        ids={[...new Set(props.sorters.map((sorter) => String(sorter.value)))]}
+                    />
                 }
             >
                 <ul className={tableSortStyles.slots.list}>

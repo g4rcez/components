@@ -27,6 +27,9 @@ export const tableHeadStyles = defineComponentStyles({
         "add-filter-button",
         "label",
         "resizer",
+        "filter-trigger",
+        "selection-cell",
+        "selection-control",
     ],
     dependencies: ["checkbox", "dropdown", "table-filter", "table-sort"],
 });

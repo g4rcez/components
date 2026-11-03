@@ -225,23 +225,20 @@
 
 .__table-row__cell {
     display: flex;
-    border-collapse: collapse;
-    border-block-width: var(--var-table-cell-border);
-    border-block-style: solid;
-    border-color: var(--var-table-border);
+    border: 0 solid var(--var-table-border);
     padding: var(--var-table-cell-padding, calc(var(--var-spacing-base) * 0.75));
 }
 
 @media (min-width: 768px) {
     .__table-row__cell {
         display: table-cell;
-        border-block-end-width: 0;
-        border-inline-end-width: var(--var-table-cell-border);
-        border-inline-start-color: transparent;
+        block-size: var(--var-table-row-block-size, calc(var(--var-spacing-base) * 3));
+        vertical-align: middle;
+        border-block-end-width: var(--var-table-cell-border);
     }
 
-    .__table-row__cell:last-child {
-        border-inline-end-color: transparent;
+    [data-border="true"] .__table-row__cell:not(:last-child) {
+        border-inline-end-width: var(--var-table-cell-border);
     }
 }
 
@@ -276,10 +273,6 @@
 
 .__table-row__aside-visible {
     opacity: 1;
-}
-
-.__table-row__border {
-    border-width: var(--var-table-cell-border);
 }
 
 /* thead */
@@ -342,10 +335,15 @@
     min-width: 0;
     cursor: grab;
     overflow: clip;
-    border-inline-end-width: var(--var-table-cell-border);
-    border-color: var(--var-table-border);
+    border: 0 solid var(--var-table-border);
+    border-block-end-width: var(--var-table-cell-border);
     background-color: var(--var-table-header-background);
+    color: var(--var-table-header-foreground);
     font-weight: var(--var-font-weight-medium);
+}
+
+[data-border="true"] .__table-head__cell:not(:last-child) {
+    border-inline-end-width: var(--var-table-cell-border);
 }
 
 .__table-head__cell:first-child {
@@ -354,7 +352,6 @@
 
 .__table-head__cell:last-child {
     border-start-end-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
-    border-inline-end-color: transparent;
 }
 
 @media (min-width: 768px) {
@@ -408,7 +405,22 @@
 .__table-head__label {
     pointer-events: auto;
     text-wrap: balance;
-    font-size: var(--var-typography-base);
+    font-size: var(--var-table-header-font-size);
+}
+
+/* The filter trigger stays in the tab order: it shows on hover, on focus, when open, or when the column has a filter. */
+.__table-head__filter-trigger {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity var(--var-motion-duration-normal);
+}
+
+.__table-head__filter-trigger--active,
+.__table-head__filter-trigger[aria-expanded="true"],
+.__table-head__cell:hover .__table-head__filter-trigger,
+.__table-head__cell:focus-within .__table-head__filter-trigger {
+    opacity: 1;
 }
 
 .__table-head__resizer {
@@ -451,6 +463,21 @@
     outline: var(--var-table-resizer-focus-ring-width) solid transparent;
     outline-offset: var(--var-table-resizer-focus-ring-offset, calc(var(--var-spacing-base) * 0.125));
     box-shadow: 0 0 0 var(--var-table-resizer-focus-ring-width) var(--var-color-ring);
+}
+
+/* selection column */
+.__table-row__selection-cell,
+.__table-head__selection-cell {
+    inline-size: var(--var-table-selection-column-inline-size, calc(var(--var-spacing-base) * 3));
+    padding: 0;
+    cursor: default;
+}
+
+.__table-row__selection-control,
+.__table-head__selection-control {
+    min-inline-size: var(--var-table-selection-target-size, calc(var(--var-spacing-base) * 2.75));
+    justify-content: center;
+    margin-inline: auto;
 }
 
 /* pagination */
@@ -527,6 +554,7 @@
     display: flex;
     width: fit-content;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--var-table-operations-gap, calc(var(--var-spacing-base) * 1));
     white-space: nowrap;
     padding-block: var(--var-table-operations-padding-block, calc(var(--var-spacing-base) * 0.5));
@@ -557,6 +585,39 @@
     border-radius: var(--var-table-pill-radius, var(--var-radius-base));
     padding-block: var(--var-table-pill-padding-block, calc(var(--var-spacing-base) * 0.125));
     padding-inline: var(--var-table-pill-padding-inline, calc(var(--var-spacing-base) * 1));
+}
+
+.__table-metadata__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--var-table-inline-gap-tight, calc(var(--var-spacing-base) * 0.25));
+    min-block-size: var(--var-table-pill-min-block-size, calc(var(--var-spacing-base) * 2.75));
+    padding-inline: var(--var-table-pill-padding-inline, calc(var(--var-spacing-base) * 1));
+    border: var(--var-table-cell-border) solid var(--var-table-border);
+    border-radius: var(--var-table-pill-radius, var(--var-radius-base));
+    background-color: transparent;
+    color: var(--var-color-foreground);
+    font-size: var(--var-table-header-font-size);
+    cursor: pointer;
+}
+
+.__table-metadata__trigger:focus-visible {
+    outline: var(--var-table-resizer-focus-ring-width) solid var(--var-color-primary);
+    outline-offset: var(--var-table-resizer-focus-ring-offset, calc(var(--var-spacing-base) * 0.125));
+}
+
+.__table-metadata__trigger-label,
+.__table-metadata__trigger-icon {
+    color: var(--var-table-header-foreground);
+}
+
+.__table-metadata__trigger-value {
+    font-weight: var(--var-font-weight-medium);
+}
+
+.__table-metadata__trigger-icon {
+    inline-size: var(--var-table-sort-icon-size, calc(var(--var-spacing-base) * 0.875));
+    block-size: var(--var-table-sort-icon-size, calc(var(--var-spacing-base) * 0.875));
 }
 
 .__table-metadata__dot {
@@ -642,11 +703,30 @@
     justify-content: center;
     gap: var(--var-table-row-gap, calc(var(--var-spacing-base) * 0.25));
     padding-block-end: var(--var-table-row-padding-block-end, calc(var(--var-spacing-base) * 1));
+    border-block-end: var(--var-table-cell-border) solid var(--var-table-border);
 }
 
 @media (min-width: 768px) {
     .__table-inner-table__row {
         display: table-row;
+        border-block-end-width: 0;
+    }
+}
+
+@media (hover: hover) {
+    .__table-inner-table__row {
+        transition: background-color var(--var-motion-duration-normal);
+    }
+
+    .__table-inner-table__row:hover {
+        background-color: var(--var-table-row-hover-background);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__table-inner-table__row,
+    .__table-head__filter-trigger {
+        transition: none;
     }
 }
 

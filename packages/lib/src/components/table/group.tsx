@@ -1,7 +1,7 @@
 "use client";
 import { LayoutGroup, Reorder, useDragControls, useMotionValue } from "motion/react";
 import Linq from "linq-arrays";
-import { DotsSixVerticalIcon, TrashIcon, StackMinusIcon } from "@phosphor-icons/react";
+import { DotsSixVerticalIcon, TrashIcon } from "@phosphor-icons/react";
 import type React from "react";
 import { Fragment, useState } from "react";
 import { keys } from "sidekicker";
@@ -13,6 +13,7 @@ import { Dropdown } from "../floating/dropdown/dropdown";
 import { Select } from "../form/select/select";
 import { tableGroupStyles } from "./group.styles";
 import { type Col, createOptionCols, type TableConfiguration } from "./table-lib";
+import { ToolbarTrigger, toolbarTriggerProps } from "./toolbar-trigger";
 
 export type GroupItem<T extends object> = Col<T> & {
     rows: T[];
@@ -121,12 +122,14 @@ export const Group = <T extends object>(props: Props<T>) => {
             <Dropdown
                 arrow={false}
                 title={translations.tableGroupLabel}
+                buttonProps={toolbarTriggerProps}
                 trigger={
-                    <span className={tableGroupStyles.slots["trigger-label"]}>
-                        <StackMinusIcon className={tableGroupStyles.slots["trigger-icon"]} />
-                        {translations.tableGroupLabelWithCount}
-                        {props.groups.length > 0 ? ` - ${group}(${props.groups.length})` : ""}
-                    </span>
+                    <ToolbarTrigger
+                        label={translations.tableGroupLabelWithCount}
+                        none={translations.tableNoneLabel}
+                        options={options}
+                        ids={props.groups.length > 0 ? [String(props.groups[0].groupKey)] : []}
+                    />
                 }
             >
                 <div className={tableGroupStyles.slots.controls}>

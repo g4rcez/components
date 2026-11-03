@@ -64,6 +64,19 @@ function TaskCheckboxes() {
                     </TaskList>
                 </Card>
             </ComponentDemo>
+            <ComponentDemo
+                title="Indeterminate"
+                description="Set indeterminate to show the mixed state, for example on a select-all checkbox when only some items are selected. Screen readers announce it as mixed."
+                code={`<Checkbox indeterminate checked={false} onChange={selectAll}>
+  Select all
+</Checkbox>`}
+            >
+                <Card title="Mixed state">
+                    <Checkbox indeterminate readOnly>
+                        Select all
+                    </Checkbox>
+                </Card>
+            </ComponentDemo>
         </DocsLayout>
     );
 }

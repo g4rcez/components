@@ -54,7 +54,7 @@ describe("table filter a11y", () => {
 
         render(<TestApp />);
 
-        await user.click(screen.getByRole("button", { name: /Filters/ }));
+        await user.click(screen.getByRole("button", { name: "Filter: Status" }));
 
         const deleteButton = screen.getByRole("button", { name: "Remove Status filter" });
         expect(deleteButton).toBeInTheDocument();
