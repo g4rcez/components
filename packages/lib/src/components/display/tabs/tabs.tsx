@@ -50,7 +50,7 @@ const moveOn = (ul: HTMLUListElement, direction: "backward" | "forward") => {
 
 const moveToEdge = (ul: HTMLUListElement, edge: "first" | "last") => {
     const items = Array.from(ul.querySelectorAll("li"));
-    const ordered = edge === "first" ? items : [...items].reverse();
+    const ordered = edge === "first" ? items : items.toReversed();
     for (const item of ordered) {
         if (!isElementDisabled(item)) {
             item.querySelector("button")?.focus({ preventScroll: false });

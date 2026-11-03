@@ -252,3 +252,16 @@ describe("PageCalendar weekStartsOn", () => {
         expect(screen.queryByTitle("Sunday, Jan 19, 2025")).not.toBeInTheDocument();
     });
 });
+
+describe("computeEventColumns", () => {
+    it("returns events sorted by time and leaves the input array untouched", () => {
+        const late: CalendarEvent = { id: "late", title: "Late", date: new Date(2025, 0, 15, 15), filterId: "meeting" };
+        const early: CalendarEvent = { id: "early", title: "Early", date: new Date(2025, 0, 15, 9), filterId: "meeting" };
+        const input = [late, early];
+
+        const columns = calendarUtils.computeEventColumns(input);
+
+        expect(columns.map((column) => column.event.id)).toEqual(["early", "late"]);
+        expect(input.map((event) => event.id)).toEqual(["late", "early"]);
+    });
+});

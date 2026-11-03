@@ -119,7 +119,7 @@ export type EventColumn<T extends CalendarEventBase> = {
 };
 
 export function computeEventColumns<T extends CalendarEventBase>(events: CalendarEvent<T>[]): EventColumn<T>[] {
-    const sorted = [...events].sort((a, b) => a.date.getTime() - b.date.getTime());
+    const sorted = events.toSorted((a, b) => a.date.getTime() - b.date.getTime());
     const hourGroups = new Map<number, CalendarEvent<T>[]>();
     for (const event of sorted) {
         const hour = event.date.getHours();
