@@ -24,6 +24,7 @@ import TheMaskInput, { type Locales } from "the-mask-input";
 import { useReducer } from "use-typed-reducer";
 import { useDebounce } from "../../../hooks/use-debounce";
 import { useLocale } from "../../../hooks/use-locale";
+import { useStableRef } from "../../../hooks/use-stable-ref";
 import { useSwipe } from "../../../hooks/use-swipe";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
@@ -282,6 +283,9 @@ export const Calendar = <T extends DatepickerType = "date">({
     const { date, range } = props as { date: Date | undefined; range?: Range };
     const providedDate = date || new Date();
     const monthClicked = useRef<HTMLButtonElement | null>(null);
+    // A range onChange expects a Range, so range mode reports only on click and never sends state.date.
+    const reportOnClick = rangeMode || changeOnlyOnClick;
+    const onChangeRef = useStableRef(onChange);
 
     const [state, dispatch] = useReducer(
         {
@@ -395,7 +399,7 @@ export const Calendar = <T extends DatepickerType = "date">({
                 },
                 (state, _, args) => {
                     const isValidMethod = args.method === "onSelectDate" || args.method === "setToday" || args.method === "onKeyDown";
-                    if (rangeMode && isValidMethod && changeOnlyOnClick) {
+                    if (rangeMode && isValidMethod) {
                         (onChange as OnChangeRange)?.(state.range);
                         return state;
                     }
@@ -415,8 +419,9 @@ export const Calendar = <T extends DatepickerType = "date">({
     const monthString = formatMonth(state.date, currentLocale);
 
     useEffect(() => {
-        if (!changeOnlyOnClick) onChange?.(state.date);
-    }, [currentAsString, changeOnlyOnClick, state.date, onChange]);
+        // onChange is read through a ref: a new onChange identity on each parent render must not report the same date again.
+        if (!reportOnClick) (onChangeRef.current as OnChangeDate | undefined)?.(state.date);
+    }, [currentAsString, reportOnClick, state.date, onChangeRef]);
 
     const defer = useDebounce((y: string) => dispatch.date((prev) => setYear(new Date(prev), +y)), 1200);
 

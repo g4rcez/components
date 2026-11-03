@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
 import { DatePicker, type DateRangeValue } from "../src/components/form/date-picker/date-picker";
@@ -19,6 +19,10 @@ describe("DatePicker range picker", () => {
             unobserve = vi.fn();
             disconnect = vi.fn();
         } as unknown as typeof ResizeObserver;
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     it("edits both dates inside one range control before applying", async () => {
@@ -205,6 +209,24 @@ describe("DatePicker range picker", () => {
         await user.click(screen.getByRole("button", { name: "Apply" }));
 
         await waitFor(() => expect(onChange).toHaveBeenCalledWith(expect.objectContaining(quarter)));
+    });
+
+    it("calls onChange once with the clicked range after Apply", async () => {
+        vi.useFakeTimers({ toFake: ["Date"], now: new Date(2026, 10, 3) });
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+
+        renderWithProvider(
+            <DatePicker name="period" title="Period" type="range" range={null} onChange={onChange} locale="en-US" rangeLabels={{ apply: "Apply" }} />
+        );
+
+        await user.click(screen.getByRole("button", { name: /open a date picker/i }));
+        await user.click(screen.getByRole("button", { name: "Tuesday, November 10, 2026" }));
+        await user.click(screen.getByRole("button", { name: "Saturday, November 14, 2026" }));
+        await user.click(screen.getByRole("button", { name: "Apply" }));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith({ from: new Date(2026, 10, 10), to: new Date(2026, 10, 14) });
     });
 
     it("does not show an Optional label unless optionalText is explicit", () => {
