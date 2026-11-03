@@ -271,8 +271,13 @@ function collectUtilityClasses(file: string): string[] {
         findings.push(`${relative(process.cwd(), file)}:${position.line + 1} ${utilities.join(" ")}`);
     }
 
+    // A slot key such as styles.slots["sr-only"] is a property name, not a class name.
+    function isElementAccessKey(node: ts.Node): boolean {
+        return ts.isElementAccessExpression(node.parent) && node.parent.argumentExpression === node;
+    }
+
     function visit(node: ts.Node) {
-        if ((ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) && isClassContext(node)) {
+        if ((ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) && !isElementAccessKey(node) && isClassContext(node)) {
             check(node.text, node);
         }
 

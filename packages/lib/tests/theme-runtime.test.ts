@@ -91,8 +91,8 @@ describe("theme registration", () => {
         const unrelatedCss = configureTheme({ name: "brand", colorScheme: "light", tokens: { spacing: 12 } }, { document: testDocument });
 
         expect(firstCss).toContain("--var-color-primary: green;");
-        expect(style.getAttribute("data-g4rcez-theme-owner")).toBe("theme-runtime");
-        expect(style.getAttribute("data-g4rcez-theme-name")).toBe("dark");
+        expect(style.getAttribute("data-theme-owner")).toBe("theme-runtime");
+        expect(style.getAttribute("data-theme-name")).toBe("dark");
         expect(style.nonce).toBe("nonce-1");
         expect(unrelatedCss).toContain("html.brand {");
 
@@ -103,7 +103,7 @@ describe("theme registration", () => {
         expect(style.textContent).not.toContain("--var-color-primary:");
         expect(style.textContent).not.toContain("--var-button-height:");
         expect(style.nonce).toBe("nonce-1");
-        expect(testDocument.querySelectorAll("style[data-g4rcez-theme-owner]")).toHaveLength(2);
+        expect(testDocument.querySelectorAll("style[data-theme-owner]")).toHaveLength(2);
 
         configureTheme({ name: "dark" }, { document: testDocument, nonce: "nonce-2" });
         expect(style.nonce).toBe("nonce-2");
@@ -134,6 +134,6 @@ describe("theme registration", () => {
         const css = configureTheme({ name: "dark", tokens: { rounding: 0 } });
 
         expect(css).toContain("--var-radius-base: 0px;");
-        expect(testDocument.querySelector("style[data-g4rcez-theme-owner]")).toBeNull();
+        expect(testDocument.querySelector("style[data-theme-owner]")).toBeNull();
     });
 });

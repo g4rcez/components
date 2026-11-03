@@ -126,9 +126,9 @@ describe("migrated form component class contracts", () => {
     it("keeps radiobox control sizing and colors token-driven", () => {
         const radioboxCss = readFormFile("radiobox/radiobox.css");
 
-        expect(radioboxCss).toContain("block-size: var(--var-radiobox-control-size)");
-        expect(radioboxCss).toContain("inline-size: var(--var-radiobox-control-size)");
-        expect(radioboxCss).toContain("gap: var(--var-radiobox-label-gap)");
+        expect(radioboxCss).toContain("block-size: var(--var-radiobox-control-size, calc(var(--var-spacing-base) * 1))");
+        expect(radioboxCss).toContain("inline-size: var(--var-radiobox-control-size, calc(var(--var-spacing-base) * 1))");
+        expect(radioboxCss).toContain("gap: var(--var-radiobox-label-gap, calc(var(--var-spacing-base) * 0.5))");
         expect(radioboxCss).toContain("color: var(--var-radiobox-control-foreground)");
         expect(radioboxCss).toContain("transition-duration: var(--var-radiobox-transition-duration)");
         expect(radioboxCss).toContain("transform: scale(0.55)");
