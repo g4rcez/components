@@ -150,6 +150,13 @@
     border-width: var(--var-border-hairline);
 }
 
+.__tag--appearance-soft.__tag--theme-secondary {
+    color: var(--var-tag-soft-secondary-foreground);
+    background: var(--var-tag-soft-secondary-background);
+    border-color: var(--var-tag-soft-secondary-border);
+    border-width: var(--var-border-hairline);
+}
+
 .__tag__indicator--theme-primary {
     background: var(--var-color-primary);
 }
