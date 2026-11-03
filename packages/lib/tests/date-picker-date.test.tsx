@@ -16,7 +16,21 @@ describe("DatePicker date mode", () => {
         } as unknown as typeof ResizeObserver;
     });
 
-    it("does not call onChange again when the parent renders with the same date", async () => {
+    it("does not call onChange when an empty picker opens", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(
+            <ComponentsProvider>
+                <DatePicker name="date" title="Date" locale="en-US" onChange={onChange} />
+            </ComponentsProvider>
+        );
+
+        await user.click(screen.getByRole("button", { name: /open a date picker/i }));
+
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("does not call onChange when a picker with a date opens or the parent renders again", async () => {
         const user = userEvent.setup();
         const onChange = vi.fn();
         const picker = () => (
@@ -27,13 +41,25 @@ describe("DatePicker date mode", () => {
         const { rerender } = render(picker());
 
         await user.click(screen.getByRole("button", { name: /open a date picker/i }));
-        expect(onChange).toHaveBeenCalledTimes(1);
-
-        rerender(picker());
         rerender(picker());
         rerender(picker());
 
+        expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("calls onChange once with the clicked date", async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(
+            <ComponentsProvider>
+                <DatePicker name="date" title="Date" locale="en-US" date={date} onChange={onChange} />
+            </ComponentsProvider>
+        );
+
+        await user.click(screen.getByRole("button", { name: /open a date picker/i }));
+        await user.click(screen.getByRole("button", { name: "Tuesday, November 10, 2026" }));
+
         expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith(date);
+        expect(onChange).toHaveBeenCalledWith(new Date(2026, 10, 10));
     });
 });

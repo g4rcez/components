@@ -6,7 +6,13 @@ describe("Button disabled anchors", () => {
     it("omits href and activation when disabled", () => {
         const onClick = vi.fn();
         render(
-            <Button as="a" href="/disabled" disabled onClick={onClick}>
+            <Button
+                as="a"
+                href="/disabled"
+                // @ts-expect-error anchors do not type `disabled`; the test checks the runtime contract
+                disabled
+                onClick={onClick}
+            >
                 Disabled link
             </Button>
         );

@@ -23,6 +23,7 @@ class IntersectionObserverMock implements IntersectionObserver {
     static instances: IntersectionObserverMock[] = [];
     root = null;
     rootMargin = "0px";
+    scrollMargin = "0px";
     thresholds = [];
     observe = vi.fn<(target: Element) => void>();
     unobserve = vi.fn<(target: Element) => void>();

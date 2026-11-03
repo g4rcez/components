@@ -258,6 +258,21 @@ type SelectMode = "from" | "to";
 
 const getToday = () => startOfDay(new Date());
 
+const selectDate = (
+    state: { selectMode: SelectMode | undefined; range: { from: Date | undefined; to: Date | undefined } },
+    date: Date,
+    isRangeMode: boolean
+) => {
+    const selectMode: SelectMode | undefined = state.selectMode === undefined ? undefined : state.selectMode === "from" ? "to" : "from";
+    const range = isRangeMode
+        ? normalizeRange({
+              from: state.selectMode === "from" ? date : state.range.from,
+              to: state.selectMode === "to" ? date : state.range.to,
+          })
+        : state.range;
+    return { date, year: formatYear(date), selectMode, range };
+};
+
 export const Calendar = <T extends DatepickerType = "date">({
     RenderOnDay,
     changeOnlyOnClick = false,
@@ -337,25 +352,10 @@ export const Calendar = <T extends DatepickerType = "date">({
                 };
             },
             onSelectDate: (e: React.MouseEvent<HTMLButtonElement>) => {
-                const state = get.state();
                 const isRangeMode = e.currentTarget.dataset.range === "true";
-                const d = e.currentTarget.dataset.date || "";
-                const date = new Date(d);
-                let selectMode = state.selectMode;
-                if (selectMode !== undefined) selectMode = selectMode === "from" ? "to" : "from";
-                const range = isRangeMode
-                    ? normalizeRange({
-                          from: state.selectMode === "from" ? date : state.range.from,
-                          to: state.selectMode === "to" ? date : state.range.to,
-                      })
-                    : state.range;
-                return {
-                    date,
-                    year: formatYear(date),
-                    selectMode,
-                    range,
-                };
+                return selectDate(get.state(), new Date(e.currentTarget.dataset.date || ""), isRangeMode);
             },
+            setToday: () => selectDate(get.state(), getToday(), true),
             onChangeMonth: (e: React.ChangeEvent<HTMLSelectElement>) => {
                 const value = e.target.value;
                 const array = Array.from(e.target.options);
@@ -418,8 +418,13 @@ export const Calendar = <T extends DatepickerType = "date">({
 
     const monthString = formatMonth(state.date, currentLocale);
 
+    const reportedDate = useRef(currentAsString);
+
     useEffect(() => {
+        // The initial date is not a change, so opening a Calendar does not report it.
         // onChange is read through a ref: a new onChange identity on each parent render must not report the same date again.
+        if (reportedDate.current === currentAsString) return;
+        reportedDate.current = currentAsString;
         if (!reportOnClick) (onChangeRef.current as OnChangeDate | undefined)?.(state.date);
     }, [currentAsString, reportOnClick, state.date, onChangeRef]);
 
@@ -438,6 +443,8 @@ export const Calendar = <T extends DatepickerType = "date">({
     }, 10);
 
     const onSetToday = () => {
+        // In range mode Today picks an endpoint like a day click, so onChange keeps the { from, to } shape.
+        if (rangeMode) return dispatch.setToday();
         const d = getToday();
         dispatch.date(() => d);
         onChange?.(d);
@@ -568,6 +575,8 @@ export const Calendar = <T extends DatepickerType = "date">({
                                 const value = e.target.value;
                                 const match = timeRegex.exec(value);
                                 if (!match) return;
+                                // The range is day based: a time does not change it, but onChange must still receive { from, to }.
+                                if (rangeMode) return (onChange as OnChangeRange | undefined)?.(state.range);
                                 const hour = match.groups!.hour;
                                 const min = match.groups!.min;
                                 const d = set(state.date, {

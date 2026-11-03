@@ -896,6 +896,7 @@
         "lib:lint": "pnpm --filter @g4rcez/lint build && node ./scripts/copy-lint.mjs",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
         "lib:tailwind": "tsc -p tsconfig.tailwind.json",
         "lib:types": "tsc -p tsconfig.lib.json",
         "preset": "tsc -p tsconfig.tailwind.json",

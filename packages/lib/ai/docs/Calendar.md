@@ -42,7 +42,9 @@ import { Calendar } from "@g4rcez/components/calendar";
 
 `rangeMode` is not inferred from `type="range"`; pass both when using `Calendar` directly. `DatePicker` configures range mode for you.
 
-In range mode, `onChange` receives `{ from, to }` only when a day is clicked or chosen with the keyboard. `changeOnlyOnClick={false}` is ignored with `type="range"`.
+In range mode, `onChange` always receives `{ from, to }`: when a day is clicked or chosen with the keyboard, when **Today** is clicked (it picks today as the next endpoint), and when the time input changes (the range does not change). `changeOnlyOnClick={false}` is ignored with `type="range"`.
+
+The initial date is not a change: `onChange` does not run when the Calendar mounts, and so not when a `DatePicker` opens.
 
 ## Design Tokens and CSS
 
