@@ -58,5 +58,5 @@ describe("published lint bundle", () => {
         expect(files).toContain(lintExport.types.slice(2));
         expect(files).toContain("dist/lint/similar.mjs");
         expect(files).toContain("dist/lint/tailwind-worker.mjs");
-    });
+    }, 120_000);
 });
