@@ -39,7 +39,8 @@ describe("published lint bundle", () => {
         const build = run("pnpm", ["--filter", "@g4rcez/components", "run", "lib:lint"], ROOT_DIR);
         expect(build.status, build.stderr).toBe(0);
 
-        const publish = run("npm", ["publish", "--dry-run", "--ignore-scripts", "--json"], PACKAGE_DIR);
+        // pack, not publish: `npm publish --dry-run` fails when the current version is already on the registry.
+        const publish = run("npm", ["pack", "--dry-run", "--ignore-scripts", "--json"], PACKAGE_DIR);
         expect(publish.status, publish.stderr).toBe(0);
 
         const result = publishResult(publish.stdout);
