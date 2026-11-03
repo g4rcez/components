@@ -39,10 +39,7 @@ const createSorterFn =
         return 0;
     };
 
-export const multiSort = <T extends Any>(array: T[], fields: Sorter<T>[]) => {
-    array.sort(createSorterFn(fields));
-    return array;
-};
+export const multiSort = <T extends Any>(array: T[], fields: Sorter<T>[]) => [...array].sort(createSorterFn(fields));
 
 type Props<T extends Any> = TableConfiguration<
     T,

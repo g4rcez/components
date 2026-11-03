@@ -50,7 +50,7 @@ describe("multiSort", () => {
             { name: "Alice", age: 25, score: 90 },
         ];
         const copy = [...rows];
-        expect(multiSort(copy, [])).toBe(copy);
+        expect(multiSort(copy, [])).toEqual(rows);
         expect(copy).toEqual(rows);
     });
 
@@ -72,13 +72,11 @@ describe("multiSort", () => {
                 },
             },
         ];
-        expect(
-            multiSort(rows, [
-                { id: "age", value: "age", type, label: "Age" },
-                { id: "score", value: "score", type: ascending, label: "Score" },
-            ])
-        ).toBe(rows);
-        expect(rows.map((row) => row.name)).toEqual(type === descending ? ["Older", "Younger"] : ["Younger", "Older"]);
+        const result = multiSort(rows, [
+            { id: "age", value: "age", type, label: "Age" },
+            { id: "score", value: "score", type: ascending, label: "Score" },
+        ]);
+        expect(result.map((row) => row.name)).toEqual(type === descending ? ["Older", "Younger"] : ["Younger", "Older"]);
         expect(readScore).not.toHaveBeenCalled();
     });
 
@@ -101,12 +99,12 @@ describe("multiSort", () => {
             },
             { name: "Higher", age: 20, score: 30 },
         ];
-        multiSort(rows, [
+        const result = multiSort(rows, [
             { id: "age", value: "age", type: descending, label: "Age" },
             { id: "score", value: "score", type: descending, label: "Score" },
         ]);
         expect(readScore).toHaveBeenCalled();
-        expect(rows.map((row) => row.name)).toEqual(["Higher", "First", "Second"]);
+        expect(result.map((row) => row.name)).toEqual(["Higher", "First", "Second"]);
     });
 });
 
