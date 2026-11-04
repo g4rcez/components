@@ -19,29 +19,27 @@ import { Progress } from "@g4rcez/components";
 
 ## Props
 
-| Prop            | Type     | Default | Description                                                                    |
-| --------------- | -------- | ------- | ------------------------------------------------------------------------------ |
-| `value`         | `number` | —       | Current progress value. Preferred API.                                         |
-| `percent`       | `number` | —       | Deprecated alias for `value`. `value` takes precedence when both are provided. |
-| `min`           | `number` | `0`     | Minimum value of the progress range.                                           |
-| `max`           | `number` | `100`   | Maximum value of the progress range.                                           |
-| `label`         | `Label`  | —       | Replaces the rounded percentage label.                                         |
-| `container`     | `string` | —       | Class for the progress track.                                                  |
-| `className`     | `string` | —       | Class for the indicator.                                                       |
-| `textClassName` | `string` | —       | Class for the label.                                                           |
+| Prop              | Type     | Default | Description                                                                    |
+| ----------------- | -------- | ------- | ------------------------------------------------------------------------------ |
+| `value`           | `number` | —       | Current progress value. Preferred API.                                         |
+| `percent`         | `number` | —       | Deprecated alias for `value`. `value` takes precedence when both are provided. |
+| `min`             | `number` | `0`     | Minimum value of the progress range.                                           |
+| `max`             | `number` | `100`   | Maximum value of the progress range.                                           |
+| `label`           | `Label`  | —       | Replaces the rounded percentage label.                                         |
+| `container`       | `string` | —       | Class for the progress track.                                                  |
+| `className`       | `string` | —       | Class for the indicator.                                                       |
+| `textClassName`   | `string` | —       | Class for the label.                                                           |
 | `aria-label`      | `string` | —       | Accessible name used when no nonempty visible `label` is rendered.             |
-| `aria-labelledby` | `string` | —       | ID reference used when no nonempty visible `label` is rendered.                 |
+| `aria-labelledby` | `string` | — | ID reference used when no nonempty visible `label` is rendered. |
 
 If `value` and `percent` are both absent, or `max <= min`, the track is rendered without an indicator or label. Values outside the range are clamped for the visual percentage.
 
 ## Design Tokens and CSS
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
+| Override                          | Library default                       |
+| --------------------------------- | ------------------------------------- |
 | `--var-progress-track-block-size` | `calc(var(--var-spacing-base) * 1.5)` |
 | `--var-progress-track-radius` | `calc(var(--var-radius-base) * 0.4)` |
 
@@ -63,19 +61,13 @@ The component ships `@g4rcez/components/progress.css`. Its stable selectors are 
 
 ### Accessible Names
 
-<>
-    <Progress value={75} label="Upload progress" />
-    <Progress value={75} aria-label="Download progress" />
-    <span id="sync-progress-label">Sync progress</span>
-    <Progress value={75} aria-labelledby="sync-progress-label" />
+<> <Progress value={75} label="Upload progress" /> <Progress value={75} aria-label="Download progress" /> <span id="sync-progress-label">Sync progress</span> <Progress value={75} aria-labelledby="sync-progress-label" />
 </>
-
 
 ### Animated progress
 
 ```tsx
 const [value, setValue] = useState(0);
-
 <Progress value={value} />;
 ```
 
@@ -117,3 +109,7 @@ Use a `Spinner` or another pending-state indicator when no numeric progress is a
 
 - The displayed label is `Math.round(percent) %` unless `label` is supplied.
 - The indicator width is controlled by Base UI from the normalized value; the component does not render an indeterminate animation.
+
+```
+
+```

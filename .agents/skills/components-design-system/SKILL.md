@@ -101,7 +101,9 @@ Derived semantic defaults are use-site CSS fallbacks, not root custom-property d
 Built-in light and dark colors are supplied by foundation CSS. Activate dark mode by putting `.dark` on `<html>`; JavaScript configuration registers overrides but never changes classes. The application owns activation:
 
 ```html
-<html class="dark">...</html>
+<html class="dark">
+    ...
+</html>
 ```
 
 ### ComponentsProvider (optional)
@@ -116,15 +118,13 @@ export default function App({ children }) {
 }
 ```
 
-
 Components with built-in text also accept a partial `translations` map for per-instance overrides without a provider. Instance entries override provider values; omitted entries fall back through provider translations to built-in defaults:
 
 ```tsx
 <Empty translations={{ emptyDataMessage: "No matching records" }} />
 ```
 
-`TranslationOverrides` is exported for typing custom translation maps.
----
+## `TranslationOverrides` is exported for typing custom translation maps.
 
 ## 4 — Theme customization
 
@@ -283,6 +283,17 @@ When a task uses a component:
    changing CSS imports.
 6. If a reference is missing or does not answer the question, inspect the package
    export and source before making an assumption.
+
+The mapped references include **Interaction design and acceptance criteria** adapted
+from Marcelo Sales's [Magoo](https://magoo.cc/pt-br), version 1.4.0 (consulted
+2026-10-13). Read those sections when choosing semantics, states, keyboard behavior,
+focus, or feedback. Separate implemented behavior and consumer responsibilities
+from verification targets; the presence of a criterion is not proof that it passes.
+The canonical index maps all 29 published Magoo pages and identifies partial
+coverage. In particular, `Expand` is a floating dialog, not an inline accordion;
+`Tabs` switches panels, not routes. Repository-root `MISSING_COMPONENTS.md` records
+proposed additions, not usable package exports. Reuse existing APIs where they
+already cover the interaction instead of adding a duplicate component.
 
 Load a new component context whenever the component is unfamiliar, the task uses
 non-default props or compound children, behavior depends on focus/keyboard/async

@@ -35,20 +35,27 @@ The component has a plain CSS contract rooted at `.__resizable` and `.__resizabl
 ### Collapsible content
 
 ```tsx
-const [open, setOpen] = useState(false);
+import { useState } from "react";
+import { Button } from "@g4rcez/components/button";
+import { Resizable } from "@g4rcez/components";
 
-<button type="button" aria-expanded={open} onClick={() => setOpen((current) => !current)}>
-    Details
-</button>
-<Resizable open={open} destroyOnUnmount>
-    <div>Content is measured and animated.</div>
-</Resizable>
+const [open, setOpen] = useState(false);
+<>
+    <Button type="button" aria-expanded={open} onClick={() => setOpen((current) => !current)}>
+        Details
+    </Button>
+    <Resizable open={open} destroyOnUnmount>
+        {" "}
+        <div>Content is measured and animated.</div>
+    </Resizable>
+</>;
 ```
 
 ### Dynamic content
 
 ```tsx
 <Resizable>
+    {" "}
     {items.map((item) => (
         <p key={item.id}>{item.label}</p>
     ))}
@@ -59,6 +66,7 @@ const [open, setOpen] = useState(false);
 
 ```tsx
 <Resizable className="border border-border rounded-card-radius">
+    {" "}
     <PanelContent />
 </Resizable>
 ```

@@ -29,29 +29,25 @@ import { Stats } from "@g4rcez/components/stats";
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-stats-rounded` | `calc(var(--var-radius-base) * 1)` |
-| `--var-stats-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-stats-icon-p` | `calc(var(--var-spacing-base) * 2)` |
+| Override                | Library default                       |
+| ----------------------- | ------------------------------------- |
+| `--var-stats-rounded`   | `calc(var(--var-radius-base) * 1)`    |
+| `--var-stats-gap`       | `calc(var(--var-spacing-base) * 1)`   |
+| `--var-stats-icon-p`    | `calc(var(--var-spacing-base) * 2)`   |
 | `--var-stats-icon-size` | `calc(var(--var-spacing-base) * 2.5)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                     | CSS Variable           | Purpose                             |
-| ------------------------- | ---------------------- | ----------------------------------- |
-| CSS override | `--var-stats-background` | Card surface |
-| CSS override | `--var-stats-border-color` | Card border and footer divider |
-| `rounded-stats-rounded` | `--var-stats-rounded` | Corner radius |
-| `shadow-shadow-card` | `--var-shadow-card` | Card shadow |
-| CSS override | `--var-stats-icon-background` | Icon container background |
-| CSS override | `--var-stats-icon-foreground` | Icon color |
-| CSS override | `--var-stats-title-font-size` | Title font size |
-| CSS override | `--var-stats-value-font-size` | Value font size |
+| Token | CSS Variable            | Purpose                       |
+| ----------------------- | ----------------------------- | ------------------------------ |
+| CSS override            | `--var-stats-background`      | Card surface                   |
+| CSS override            | `--var-stats-border-color`    | Card border and footer divider |
+| `rounded-stats-rounded` | `--var-stats-rounded`         | Corner radius                  |
+| `shadow-shadow-card`    | `--var-shadow-card`           | Card shadow                    |
+| CSS override            | `--var-stats-icon-background` | Icon container background      |
+| CSS override            | `--var-stats-icon-foreground` | Icon color                     |
+| CSS override            | `--var-stats-title-font-size` | Title font size                |
+| CSS override            | `--var-stats-value-font-size` | Value font size                |
 
 ## Examples
 
@@ -59,8 +55,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 import { UsersIcon } from "@phosphor-icons/react";
-
 <Stats title="Active Users" Icon={UsersIcon}>
+    {" "}
     1,234
 </Stats>;
 ```
@@ -69,18 +65,18 @@ import { UsersIcon } from "@phosphor-icons/react";
 
 ```tsx
 import { TrendUpIcon, CurrencyDollarIcon } from "@phosphor-icons/react";
-
 <Stats
     title="Revenue"
     Icon={CurrencyDollarIcon}
     iconContainer="bg-success"
     footer={
         <div className="flex items-center gap-1 text-success text-sm font-medium">
-            <TrendUpIcon size={14} />
-            <span>+12% from last month</span>
+            {" "}
+            <TrendUpIcon size={14} /> <span>+12% from last month</span>{" "}
         </div>
     }
 >
+    {" "}
     $45,200.00
 </Stats>;
 ```
@@ -89,8 +85,8 @@ import { TrendUpIcon, CurrencyDollarIcon } from "@phosphor-icons/react";
 
 ```tsx
 import { WarningCircleIcon } from "@phosphor-icons/react";
-
 <Stats title="Error Rate" Icon={WarningCircleIcon} iconContainer="bg-danger">
+    {" "}
     0.3%
 </Stats>;
 ```
@@ -99,16 +95,19 @@ import { WarningCircleIcon } from "@phosphor-icons/react";
 
 ```tsx
 import { UsersIcon, ClockIcon, TargetIcon } from "@phosphor-icons/react";
-
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {" "}
     <Stats title="Users" Icon={UsersIcon}>
-        1.2k
-    </Stats>
+        {" "}
+        1.2k{" "}
+    </Stats>{" "}
     <Stats title="Sessions" Icon={ClockIcon}>
-        450
-    </Stats>
+        {" "}
+        450{" "}
+    </Stats>{" "}
     <Stats title="Conversion" Icon={TargetIcon}>
-        3.2%
+        {" "}
+        3.2%{" "}
     </Stats>
 </div>;
 ```
@@ -118,8 +117,8 @@ import { UsersIcon, ClockIcon, TargetIcon } from "@phosphor-icons/react";
 ```tsx
 import { ChartBarIcon } from "@phosphor-icons/react";
 import { Skeleton } from "@g4rcez/components";
-
 <Stats title="Page Views" Icon={ChartBarIcon}>
+    {" "}
     {isLoading ? <Skeleton className="h-9 w-24" /> : "48,301"}
 </Stats>;
 ```

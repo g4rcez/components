@@ -1641,5 +1641,82 @@
       },
       "compounds": []
     }
+  },
+  "video-player": {
+    "import": "@g4rcez/components/video-player",
+    "css": "@g4rcez/components/video-player.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__video-player",
+      "variants": {},
+      "slots": {},
+      "compounds": []
+    }
+  },
+  "rich-text-editor": {
+    "import": "@g4rcez/components/rich-text-editor",
+    "css": "@g4rcez/components/rich-text-editor.css",
+    "dependencies": [
+      "alert",
+      "button",
+      "free-text",
+      "input",
+      "input-field",
+      "polymorph",
+      "resizable",
+      "select",
+      "textarea",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__rich-text-editor",
+      "variants": {},
+      "slots": {
+        "label": "__rich-text-editor__label",
+        "modes": "__rich-text-editor__modes",
+        "toolbar": "__rich-text-editor__toolbar",
+        "content": "__rich-text-editor__content",
+        "source": "__rich-text-editor__source",
+        "fields": "__rich-text-editor__fields",
+        "help": "__rich-text-editor__help",
+        "image": "__rich-text-editor__image",
+        "image-content": "__rich-text-editor__image-content"
+      },
+      "compounds": []
+    }
+  },
+  "drawing-editor": {
+    "import": "@g4rcez/components/drawing-editor",
+    "css": "@g4rcez/components/drawing-editor.css",
+    "dependencies": [
+      "alert",
+      "button",
+      "checkbox",
+      "free-text",
+      "input",
+      "input-field",
+      "polymorph",
+      "resizable",
+      "select",
+      "textarea",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__drawing-editor",
+      "variants": {},
+      "slots": {
+        "toolbar": "__drawing-editor__toolbar",
+        "workspace": "__drawing-editor__workspace",
+        "viewport": "__drawing-editor__viewport",
+        "stage": "__drawing-editor__stage",
+        "canvas-frame": "__drawing-editor__canvas-frame",
+        "overlay": "__drawing-editor__overlay",
+        "selection": "__drawing-editor__selection",
+        "layers": "__drawing-editor__layers",
+        "layer-list": "__drawing-editor__layer-list",
+        "properties": "__drawing-editor__properties"
+      },
+      "compounds": []
+    }
   }
 }

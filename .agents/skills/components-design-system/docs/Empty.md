@@ -26,20 +26,16 @@ import { Empty } from "@g4rcez/components";
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-empty-surface-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-empty-surface-padding-block` | `calc(var(--var-spacing-base) * 3)` |
+| Override                             | Library default                     |
+| ------------------------------------ | ----------------------------------- |
+| `--var-empty-surface-gap`            | `calc(var(--var-spacing-base) * 1)` |
+| `--var-empty-surface-padding-block`  | `calc(var(--var-spacing-base) * 3)` |
 | `--var-empty-surface-padding-inline` | `calc(var(--var-spacing-base) * 2)` |
-| `--var-empty-icon-size` | `calc(var(--var-spacing-base) * 4)` |
+| `--var-empty-icon-size`              | `calc(var(--var-spacing-base) * 4)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token           | CSS Variable | Purpose                     |
+| Token | CSS Variable    | Purpose      |
 | --------------- | ------------ | --------------------------- |
 | `text-disabled` | `--disabled` | Icon and message text color |
 
@@ -55,7 +51,6 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 import { MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
-
 <Empty Icon={MagnifyingGlassMinusIcon} message="No results found" />;
 ```
 
@@ -63,16 +58,15 @@ import { MagnifyingGlassMinusIcon } from "@phosphor-icons/react";
 
 ```tsx
 import { DatabaseIcon } from "@phosphor-icons/react";
-
 function DataTable({ data }: { data: Item[] }) {
     if (data.length === 0) {
         return (
             <div className="py-12">
-                <Empty Icon={DatabaseIcon} message="No records found" />
+                {" "}
+                <Empty Icon={DatabaseIcon} message="No records found" />{" "}
             </div>
         );
     }
-
     return <table>{/* table content */}</table>;
 }
 ```
@@ -81,21 +75,21 @@ function DataTable({ data }: { data: Item[] }) {
 
 ```tsx
 import { TrayIcon } from "@phosphor-icons/react";
-
 function TaskList({ tasks }: { tasks: Task[] }) {
     return (
         <div className="space-y-4">
-            <h2>My Tasks</h2>
-
+            {" "}
+            <h2>My Tasks</h2>{" "}
             {tasks.length === 0 ? (
                 <Empty Icon={TrayIcon} message="No tasks yet" />
             ) : (
                 <ul>
+                    {" "}
                     {tasks.map((task) => (
                         <TaskItem key={task.id} task={task} />
-                    ))}
+                    ))}{" "}
                 </ul>
-            )}
+            )}{" "}
         </div>
     );
 }
@@ -106,16 +100,18 @@ function TaskList({ tasks }: { tasks: Task[] }) {
 ```tsx
 import { Button } from "@g4rcez/components/button";
 import { FolderPlusIcon } from "@phosphor-icons/react";
-
 function EmptyProjectsList() {
     return (
         <div className="text-center py-12">
-            <Empty Icon={FolderPlusIcon} message="You haven't created any projects yet" />
+            {" "}
+            <Empty Icon={FolderPlusIcon} message="You haven't created any projects yet" />{" "}
             <div className="mt-6">
+                {" "}
                 <Button theme="primary" onClick={handleCreate}>
-                    Create Your First Project
-                </Button>
-            </div>
+                    {" "}
+                    Create Your First Project{" "}
+                </Button>{" "}
+            </div>{" "}
         </div>
     );
 }
@@ -124,24 +120,13 @@ function EmptyProjectsList() {
 ### Contextual Icons
 
 ```tsx
-import {
-  ShoppingCartIcon,
-  HeartIcon,
-  BellIcon,
-  MailIcon,
-} from "@phosphor-icons/react";
-
-// Cart
-<Empty Icon={ShoppingCartIcon} message="Your cart is empty" />
-
-// Favorites
-<Empty Icon={HeartIcon} message="No favorites yet" />
-
-// Notifications
-<Empty Icon={BellIcon} message="No notifications" />
-
-// Messages
-<Empty Icon={MailIcon} message="No messages" />
+import { ShoppingCartIcon, HeartIcon, BellIcon, MailIcon } from "@phosphor-icons/react"; // Cart
+<>
+    <Empty Icon={ShoppingCartIcon} message="Your cart is empty" /> // Favorites
+    <Empty Icon={HeartIcon} message="No favorites yet" /> // Notifications
+    <Empty Icon={BellIcon} message="No notifications" /> // Messages
+    <Empty Icon={MailIcon} message="No messages" />
+</>;
 ```
 
 ## Do
@@ -167,5 +152,5 @@ import {
 
 ## Notes
 
-- The default message is sourced from the active locale translations via `useTranslations()`, so it localizes automatically when the app locale changes.
+- The default message is sourced from the active locale translations via `useTranslations`, so it localizes automatically when the app locale changes.
 - To override the default message permanently, pass an explicit `message` prop.

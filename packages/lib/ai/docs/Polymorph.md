@@ -28,11 +28,10 @@ import { Polymorph } from "@g4rcez/components";
 ## Type Definitions
 
 ```tsx
-export type PolymorphicProps<Props, T extends React.ElementType> = Props & {
-    as?: T;
-} & Omit<React.ComponentPropsWithoutRef<T>, keyof Props | "as" | "ref"> & {
-        ref?: React.ComponentProps<T>["ref"];
-    };
+export type PolymorphicProps<Props, T extends React.ElementType> = Props & { as?: T } & Omit<
+        React.ComponentPropsWithoutRef<T>,
+        keyof Props | "as" | "ref"
+    > & { ref?: React.ComponentProps<T>["ref"] };
 ```
 
 ## Design Tokens
@@ -44,28 +43,29 @@ None — Polymorph itself applies no styles. It is a structural primitive only.
 ### Basic Elements
 
 ```tsx
-<Polymorph>Default span</Polymorph>
-
-<Polymorph as="button" onClick={() => void 0}>
-  Button
-</Polymorph>
-
-<Polymorph as="a" href="https://example.com" target="_blank">
-  External Link
-</Polymorph>
+<>
+    <Polymorph>Default span</Polymorph>{" "}
+    <Polymorph as="button" onClick={() => void 0}>
+        {" "}
+        Button
+    </Polymorph>{" "}
+    <Polymorph as="a" href="https://example.com" target="_blank">
+        {" "}
+        External Link
+    </Polymorph>
+</>
 ```
 
 ### With Refs
 
 ```tsx
 import { useRef } from "react";
-
 const MyComponent = () => {
     const buttonRef = useRef<HTMLButtonElement>(null);
-
     return (
-        <Polymorph as="button" ref={buttonRef} onClick={() => buttonRef.current?.focus()}>
-            Focus Me
+        <Polymorph as="button" ref={buttonRef} onClick={() => buttonRef.current?.focus}>
+            {" "}
+            Focus Me{" "}
         </Polymorph>
     );
 };
@@ -76,7 +76,8 @@ const MyComponent = () => {
 ```tsx
 const DynamicItem = ({ isLink, href }: { isLink: boolean; href?: string }) => (
     <Polymorph as={isLink ? "a" : "button"} href={isLink ? href : undefined} className="text-foreground">
-        {isLink ? "Visit Link" : "Click Button"}
+        {" "}
+        {isLink ? "Visit Link" : "Click Button"}{" "}
     </Polymorph>
 );
 ```
@@ -85,9 +86,7 @@ const DynamicItem = ({ isLink, href }: { isLink: boolean; href?: string }) => (
 
 ```tsx
 import { Polymorph, PolymorphicProps } from "@g4rcez/components";
-
 type CardProps<T extends React.ElementType = "div"> = PolymorphicProps<{ variant?: "default" | "muted" }, T>;
-
 const Card = <T extends React.ElementType = "div">({ as, variant = "default", className, ...props }: CardProps<T>) => (
     <Polymorph
         as={as ?? "div"}
@@ -101,13 +100,10 @@ const Card = <T extends React.ElementType = "div">({ as, variant = "default", cl
 
 ```tsx
 // Valid — button accepts type and disabled
-<Polymorph as="button" type="submit" disabled />
-
-// Valid — anchor accepts href and target
-<Polymorph as="a" href="/link" target="_blank" />
-
-// TypeScript error — href is not valid on button
-// <Polymorph as="button" href="/link" />
+<>
+    <Polymorph as="button" type="submit" disabled /> // Valid — anchor accepts href and target
+    <Polymorph as="a" href="/link" target="_blank" /> // TypeScript error — href is not valid on button // <Polymorph as="button" href="/link" />
+</>
 ```
 
 ## Do

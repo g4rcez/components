@@ -19,14 +19,14 @@ import { Wizard } from "@g4rcez/components";
 
 ## Props
 
-### Wizard
+### Wizard props
 
 | Prop       | Type                                                                   | Default | Description                                        |
 | ---------- | ---------------------------------------------------------------------- | ------- | -------------------------------------------------- |
 | `active`   | `boolean`                                                              | `false` | Controls whether the wizard is visible             |
 | `steps`    | `WizardStep[]`                                                         | —       | Ordered array of step configurations               |
-| `onClose`  | `() => void`                                                           | —       | Callback when the user skips or dismisses the tour |
-| `onFinish` | `() => void`                                                           | —       | Callback when the last step is completed           |
+| `onClose`  | `() => void`                                                             | —       | Callback when the user skips or dismisses the tour |
+| `onFinish` | `() => void`                                                             | —       | Callback when the last step is completed           |
 | `onChange` | `(index: number) => void`                                              | —       | Callback fired when the step index changes         |
 | `labels`   | `{ next?: string; skip?: string; finish?: string; previous?: string }` | —       | Override button labels                             |
 
@@ -38,33 +38,29 @@ import { Wizard } from "@g4rcez/components";
 | `title`       | `React.ReactNode`                                       | —          | Step title displayed in the tooltip                     |
 | `description` | `React.ReactNode`                                       | —          | Step body content                                       |
 | `side`        | `Placement`                                             | `"bottom"` | Tooltip placement relative to the target element        |
-| `onEnter`     | `() => void`                                            | —          | Called when this step becomes active                    |
-| `onNext`      | `() => void`                                            | —          | Called before advancing to the next step                |
-| `onPrevious`  | `() => void`                                            | —          | Called before going back to the previous step           |
+| `onEnter`     | `() => void`                                              | —          | Called when this step becomes active                    |
+| `onNext`      | `() => void`                                              | —          | Called before advancing to the next step                |
+| `onPrevious`  | `() => void`                                              | —          | Called before going back to the previous step           |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-wizard-focus-outline-width` | `calc(var(--var-spacing-base) * 0.125)` |
-| `--var-wizard-focus-outline-offset` | `calc(var(--var-spacing-base) * 0.125)` |
-| `--var-wizard-surface-inline-size` | `calc(var(--var-spacing-base) * 20)` |
+| Override                               | Library default                         |
+| -------------------------------------- | --------------------------------------- |
+| `--var-wizard-focus-outline-width`     | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-wizard-focus-outline-offset`    | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-wizard-surface-inline-size`     | `calc(var(--var-spacing-base) * 20)`    |
 | `--var-wizard-surface-max-inline-size` | `calc(var(--var-spacing-base) * 24)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                    | CSS Variable            | Purpose                                     |
-| ------------------------ | ----------------------- | ------------------------------------------- |
-| CSS override | `--var-wizard-overlay-background` | SVG mask fill, including opacity |
-| CSS override | `--var-wizard-surface-background` | Step tooltip surface |
-| CSS override | `--var-wizard-surface-border` | Tooltip border, arrow stroke, and footer divider |
-| `z-wizard` | `--var-layer-wizard` | Layer base; the wizard root uses `calc(var(--var-layer-wizard) + 1)` |
-| CSS override | `--var-wizard-label-foreground` | Step counter and skip button text |
-| CSS override | `--var-wizard-label-foreground-hover` | Skip button hover text |
+| Token | CSS Variable | Purpose                               |
+| ------------ | ------------------------------------- | -------------------------------------------------------------------- |
+| CSS override | `--var-wizard-overlay-background`     | SVG mask fill, including opacity                                     |
+| CSS override | `--var-wizard-surface-background`     | Step tooltip surface                                                 |
+| CSS override | `--var-wizard-surface-border`         | Tooltip border, arrow stroke, and footer divider                     |
+| `z-wizard`   | `--var-layer-wizard`                  | Layer base; the wizard root uses `calc(var(--var-layer-wizard) + 1)` |
+| CSS override | `--var-wizard-label-foreground`       | Step counter and skip button text                                    |
+| CSS override | `--var-wizard-label-foreground-hover` | Skip button hover text                                               |
 
 ## Examples
 
@@ -74,10 +70,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { useState } from "react";
 import { Wizard } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
-
 function OnboardingTour() {
     const [active, setActive] = useState(false);
-
     const steps = [
         {
             element: "#create-button",
@@ -85,18 +79,12 @@ function OnboardingTour() {
             description: "Use this button to create a new project.",
             side: "bottom" as const,
         },
-        {
-            element: "#notifications-bell",
-            title: "Stay up to date",
-            description: "Check here for the latest updates.",
-            side: "left" as const,
-        },
+        { element: "#notifications-bell", title: "Stay up to date", description: "Check here for the latest updates.", side: "left" as const },
     ];
-
     return (
         <>
-            <Button onClick={() => setActive(true)}>Start Tour</Button>
-
+            {" "}
+            <Button onClick={() => setActive(true)}>Start Tour</Button>{" "}
             <Wizard
                 active={active}
                 steps={steps}
@@ -105,7 +93,7 @@ function OnboardingTour() {
                     setActive(false);
                     console.log("Tour complete");
                 }}
-            />
+            />{" "}
         </>
     );
 }
@@ -117,27 +105,18 @@ function OnboardingTour() {
 import { useRef, useState } from "react";
 import { Wizard } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
-
 function RefTour() {
     const [active, setActive] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
-
-    const steps = [
-        {
-            element: buttonRef,
-            title: "Action Button",
-            description: "Click here to perform the primary action.",
-            side: "right" as const,
-        },
-    ];
-
+    const steps = [{ element: buttonRef, title: "Action Button", description: "Click here to perform the primary action.", side: "right" as const }];
     return (
         <>
+            {" "}
             <Button ref={buttonRef} theme="primary">
-                Primary Action
-            </Button>
-
-            <Wizard active={active} steps={steps} onClose={() => setActive(false)} labels={{ finish: "Got it!", skip: "No thanks" }} />
+                {" "}
+                Primary Action{" "}
+            </Button>{" "}
+            <Wizard active={active} steps={steps} onClose={() => setActive(false)} labels={{ finish: "Got it!", skip: "No thanks" }} />{" "}
         </>
     );
 }
@@ -154,12 +133,7 @@ const steps = [
         onEnter: () => console.log("User reached analytics step"),
         onNext: () => console.log("User advancing past analytics"),
     },
-    {
-        element: "#export-button",
-        title: "Export Data",
-        description: "Download your data at any time.",
-        side: "left" as const,
-    },
+    { element: "#export-button", title: "Export Data", description: "Download your data at any time.", side: "left" as const },
 ];
 ```
 
@@ -171,12 +145,7 @@ const steps = [
     steps={steps}
     onClose={() => setActive(false)}
     onFinish={() => setActive(false)}
-    labels={{
-        next: "Continue",
-        previous: "Back",
-        skip: "Skip tour",
-        finish: "Done",
-    }}
+    labels={{ next: "Continue", previous: "Back", skip: "Skip tour", finish: "Done" }}
 />
 ```
 

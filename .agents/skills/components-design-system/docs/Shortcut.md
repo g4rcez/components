@@ -25,12 +25,10 @@ import { Shortcut } from "@g4rcez/components";
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
+| Override                     | Library default                        |
+| ---------------------------- | -------------------------------------- |
 | `--var-shortcut-content-gap` | `calc(var(--var-spacing-base) * 0.25)` |
 | `--var-shortcut-icon-size` | `calc(var(--var-spacing-base) * 0.75)` |
 
@@ -43,7 +41,7 @@ The component automatically maps keys based on the user's operating system:
 | Key token | macOS                          | Other  |
 | --------- | ------------------------------ | ------ |
 | `Mod`     | `⌘` (CommandIcon, `size={12}`) | `Ctrl` |
-| `Alt`     | `⌥` (OptionIcon, `size={12}`)  | `Alt`  |
+| `Alt` | `⌥` (OptionIcon, `size={12}`) | `Alt` |
 
 All other key tokens are rendered as-is.
 
@@ -59,8 +57,10 @@ All other key tokens are rendered as-is.
 
 ```tsx
 <Tooltip title="Save changes">
+    {" "}
     <div className="flex gap-2 items-center">
-        Save <Shortcut value="Mod + S" />
+        {" "}
+        Save <Shortcut value="Mod + S" />{" "}
     </div>
 </Tooltip>
 ```
@@ -69,24 +69,26 @@ All other key tokens are rendered as-is.
 
 ```tsx
 <div className="flex items-center justify-between w-full">
-    <span>Open command palette</span>
-    <Shortcut value="Mod + K" />
+    {" "}
+    <span>Open command palette</span> <Shortcut value="Mod + K" />
 </div>
 ```
 
 ### Complex Multi-Key Shortcuts
 
 ```tsx
-<Shortcut value="Shift + Alt + P" />
-<Shortcut value="Mod + Shift + L" />
+<>
+    <Shortcut value="Shift + Alt + P" />
+    <Shortcut value="Mod + Shift + L" />
+</>
 ```
 
 ### In a Menu Item
 
 ```tsx
 <div className="flex items-center justify-between px-4 py-2">
-    <span className="text-foreground">New File</span>
-    <Shortcut value="Mod + N" />
+    {" "}
+    <span className="text-foreground">New File</span> <Shortcut value="Mod + N" />
 </div>
 ```
 
@@ -111,4 +113,4 @@ All other key tokens are rendered as-is.
 
 - The component renders a `<span>` with `flex items-center gap-1 text-sm`.
 - Keys are split on `"+"` and trimmed, so `"Mod + K"`, `"Mod+K"`, and `"Mod +K"` all produce the same output.
-- The OS check uses `isMac()` from the internal `combi-keys` utility, which reads `navigator.userAgent`.
+- The OS check uses `isMac` from the internal `combi-keys` utility, which reads `navigator.userAgent`.

@@ -57,24 +57,20 @@ Optional right-side slot for timestamps or auxiliary actions. Renders inside a `
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+| Override                                      | Library default                        |
+| --------------------------------------------- | -------------------------------------- |
+| `--var-timeline-item-padding-block-end`       | `calc(var(--var-spacing-base) * 2)`    |
+| `--var-timeline-connector-inset-block-start`  | `calc(var(--var-spacing-base) * 2)`    |
+| `--var-timeline-connector-inset-inline-start` | `calc(var(--var-spacing-base) * 1)`    |
+| `--var-timeline-content-gap`                  | `calc(var(--var-spacing-base) * 0.75)` |
 
-| Override | Library default |
-| --- | --- |
-| `--var-timeline-item-padding-block-end` | `calc(var(--var-spacing-base) * 2)` |
-| `--var-timeline-connector-inset-block-start` | `calc(var(--var-spacing-base) * 2)` |
-| `--var-timeline-connector-inset-inline-start` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-timeline-content-gap` | `calc(var(--var-spacing-base) * 0.75)` |
-
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                     | CSS Variable           | Purpose                           |
-| ------------------------- | ---------------------- | --------------------------------- |
-| `bg-border` | `--var-color-border` | Vertical connector color |
-| `bg-primary` | `--var-color-primary` | Default icon background |
-| `text-primary-foreground` | `--var-color-primary-foreground` | Default icon color |
+| Token | CSS Variable              | Purpose                          |
+| ------------------------- | -------------------------------- | ------------------------ |
+| `bg-border`               | `--var-color-border`             | Vertical connector color |
+| `bg-primary`              | `--var-color-primary`            | Default icon background  |
+| `text-primary-foreground` | `--var-color-primary-foreground` | Default icon color       |
 
 ## Examples
 
@@ -82,39 +78,44 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 import { CheckIcon, PackageIcon, TruckIcon } from "@phosphor-icons/react";
-
 <Timeline>
+    {" "}
     <TimelineItem>
+        {" "}
         <TimelineItem.Icon>
-            <CheckIcon size={20} />
-        </TimelineItem.Icon>
+            {" "}
+            <CheckIcon size={20} />{" "}
+        </TimelineItem.Icon>{" "}
         <TimelineItem.Body>
-            <h4 className="font-bold">Order Placed</h4>
-            <p className="text-muted-foreground">Your order has been received and is being processed.</p>
-        </TimelineItem.Body>
-        <TimelineItem.Right as="time">10:00 AM</TimelineItem.Right>
-    </TimelineItem>
-
+            {" "}
+            <h4 className="font-bold">Order Placed</h4>{" "}
+            <p className="text-muted-foreground">Your order has been received and is being processed.</p>{" "}
+        </TimelineItem.Body>{" "}
+        <TimelineItem.Right as="time">10:00 AM</TimelineItem.Right>{" "}
+    </TimelineItem>{" "}
     <TimelineItem>
+        {" "}
         <TimelineItem.Icon>
-            <PackageIcon size={20} />
-        </TimelineItem.Icon>
+            {" "}
+            <PackageIcon size={20} />{" "}
+        </TimelineItem.Icon>{" "}
         <TimelineItem.Body>
-            <h4 className="font-bold">Packed</h4>
-            <p className="text-muted-foreground">Your order has been packed and is ready for shipment.</p>
-        </TimelineItem.Body>
-        <TimelineItem.Right as="time">1:00 PM</TimelineItem.Right>
-    </TimelineItem>
-
+            {" "}
+            <h4 className="font-bold">Packed</h4> <p className="text-muted-foreground">Your order has been packed and is ready for shipment.</p>{" "}
+        </TimelineItem.Body>{" "}
+        <TimelineItem.Right as="time">1:00 PM</TimelineItem.Right>{" "}
+    </TimelineItem>{" "}
     <TimelineItem>
+        {" "}
         <TimelineItem.Icon>
-            <TruckIcon size={20} />
-        </TimelineItem.Icon>
+            {" "}
+            <TruckIcon size={20} />{" "}
+        </TimelineItem.Icon>{" "}
         <TimelineItem.Body>
-            <h4 className="font-bold">Shipped</h4>
-            <p className="text-muted-foreground">Your package is on its way.</p>
-        </TimelineItem.Body>
-        <TimelineItem.Right as="time">2:30 PM</TimelineItem.Right>
+            {" "}
+            <h4 className="font-bold">Shipped</h4> <p className="text-muted-foreground">Your package is on its way.</p>{" "}
+        </TimelineItem.Body>{" "}
+        <TimelineItem.Right as="time">2:30 PM</TimelineItem.Right>{" "}
     </TimelineItem>
 </Timeline>;
 ```
@@ -123,15 +124,20 @@ import { CheckIcon, PackageIcon, TruckIcon } from "@phosphor-icons/react";
 
 ```tsx
 <Timeline>
+    {" "}
     <TimelineItem>
+        {" "}
         <TimelineItem.Body>
-            <strong>Step 1:</strong> Initial setup completed.
-        </TimelineItem.Body>
-    </TimelineItem>
+            {" "}
+            <strong>Step 1:</strong> Initial setup completed.{" "}
+        </TimelineItem.Body>{" "}
+    </TimelineItem>{" "}
     <TimelineItem>
+        {" "}
         <TimelineItem.Body>
-            <strong>Step 2:</strong> Data migration started.
-        </TimelineItem.Body>
+            {" "}
+            <strong>Step 2:</strong> Data migration started.{" "}
+        </TimelineItem.Body>{" "}
     </TimelineItem>
 </Timeline>
 ```
@@ -140,35 +146,35 @@ import { CheckIcon, PackageIcon, TruckIcon } from "@phosphor-icons/react";
 
 ```tsx
 import { UserIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
-
 function ActivityFeed({ events }: { events: ActivityEvent[] }) {
-    const iconMap = {
-        create: UserIcon,
-        update: PencilSimpleIcon,
-        delete: TrashIcon,
-    };
-
+    const iconMap = { create: UserIcon, update: PencilSimpleIcon, delete: TrashIcon };
     return (
         <Timeline>
+            {" "}
             {events.map((event) => {
                 const Icon = iconMap[event.type];
                 return (
                     <TimelineItem key={event.id}>
+                        {" "}
                         <TimelineItem.Icon>
-                            <Icon size={18} />
-                        </TimelineItem.Icon>
+                            {" "}
+                            <Icon size={18} />{" "}
+                        </TimelineItem.Icon>{" "}
                         <TimelineItem.Body>
+                            {" "}
                             <p className="font-medium">
-                                {event.user} {event.action}
-                            </p>
-                            <p className="text-sm text-muted-foreground">{event.description}</p>
-                        </TimelineItem.Body>
+                                {" "}
+                                {event.user} {event.action}{" "}
+                            </p>{" "}
+                            <p className="text-sm text-muted-foreground">{event.description}</p>{" "}
+                        </TimelineItem.Body>{" "}
                         <TimelineItem.Right as="time" dateTime={event.iso}>
-                            {event.relativeTime}
-                        </TimelineItem.Right>
+                            {" "}
+                            {event.relativeTime}{" "}
+                        </TimelineItem.Right>{" "}
                     </TimelineItem>
                 );
-            })}
+            })}{" "}
         </Timeline>
     );
 }
@@ -178,14 +184,16 @@ function ActivityFeed({ events }: { events: ActivityEvent[] }) {
 
 ```tsx
 import { WarningCircleIcon } from "@phosphor-icons/react";
-
 <TimelineItem>
+    {" "}
     <TimelineItem.Icon className="bg-danger text-danger-foreground">
-        <WarningCircleIcon size={20} />
-    </TimelineItem.Icon>
+        {" "}
+        <WarningCircleIcon size={20} />{" "}
+    </TimelineItem.Icon>{" "}
     <TimelineItem.Body>
-        <h4 className="font-bold text-danger-foreground">Deployment Failed</h4>
-        <p className="text-muted-foreground">Build step exited with code 1.</p>
+        {" "}
+        <h4 className="font-bold text-danger-foreground">Deployment Failed</h4>{" "}
+        <p className="text-muted-foreground">Build step exited with code 1.</p>{" "}
     </TimelineItem.Body>
 </TimelineItem>;
 ```

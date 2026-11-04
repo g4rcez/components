@@ -28,8 +28,6 @@ import { Slot, Slottable } from "@g4rcez/components";
 
 ## Props
 
-### Slot
-
 | Prop       | Type                                | Default | Description                                                        |
 | ---------- | ----------------------------------- | ------- | ------------------------------------------------------------------ |
 | `children` | `React.ReactNode`                   | -       | A single valid React element that will receive all of Slot's props |
@@ -61,30 +59,31 @@ None — `Slot` is a structural/composition primitive that applies no styles of 
 
 ```tsx
 interface ButtonProps {
-  asChild?: boolean;
-  children: React.ReactNode;
-  className?: string;
+    asChild?: boolean;
+    children: React.ReactNode;
+    className?: string;
 }
 
 const StyledButton = ({ asChild, children, ...props }: ButtonProps) => {
-  const Component = asChild ? Slot : "button";
-  return (
-    <Component
-      className="inline-flex items-center rounded-button-radius bg-button-primary-bg text-button-primary-text px-4 py-2 font-medium"
-      {...props}
-    >
-      {children}
-    </Component>
-  );
+    const Component = asChild ? Slot : "button";
+    return (
+        <Component
+            className="inline-flex items-center rounded-button-radius bg-button-primary-bg text-button-primary-text px-4 py-2 font-medium"
+            {...props}
+        >
+            {children}
+        </Component>
+    );
 };
 
-// Renders a <button>
-<StyledButton>Click me</StyledButton>
-
-// Renders an <a> with all button styles applied
-<StyledButton asChild>
-  <a href="/dashboard">Go to Dashboard</a>
-</StyledButton>
+const examples = (
+    <>
+        <StyledButton>Click me</StyledButton>
+        <StyledButton asChild>
+            <a href="/dashboard">Go to Dashboard</a>
+        </StyledButton>
+    </>
+);
 ```
 
 ### Using Slottable for Internal Structure
@@ -95,25 +94,26 @@ When your component wraps children with additional internal elements, use `Slott
 import { CheckIcon } from "@phosphor-icons/react";
 
 const IconButton = ({ asChild, children, ...props }: { asChild?: boolean; children: React.ReactNode }) => {
-  const Component = asChild ? Slot : "button";
-  return (
-    <Component
-      className="inline-flex items-center gap-1.5 rounded-button-radius bg-button-success-bg text-button-success-text px-4 py-2"
-      {...props}
-    >
-      <Slottable>{children}</Slottable>
-      <CheckIcon size={14} aria-hidden="true" />
-    </Component>
-  );
+    const Component = asChild ? Slot : "button";
+    return (
+        <Component
+            className="inline-flex items-center gap-1.5 rounded-button-radius bg-button-success-bg text-button-success-text px-4 py-2"
+            {...props}
+        >
+            <Slottable>{children}</Slottable>
+            <CheckIcon size={14} aria-hidden="true" />
+        </Component>
+    );
 };
 
-// Renders <button> with icon
-<IconButton>Confirm</IconButton>
-
-// Renders <a> with icon — the <a> is the slot target
-<IconButton asChild>
-  <a href="/confirm">Confirm</a>
-</IconButton>
+const examples = (
+    <>
+        <IconButton>Confirm</IconButton>
+        <IconButton asChild>
+            <a href="/confirm">Confirm</a>
+        </IconButton>
+    </>
+);
 ```
 
 ### Creating a Named Slot
@@ -122,7 +122,6 @@ Use `createSlot` when building your own design-system components for better DevT
 
 ```tsx
 import { createSlot, createSlottable } from "@g4rcez/components";
-
 const CardSlot = createSlot("Card");
 const CardSlottable = createSlottable("Card");
 ```
@@ -132,8 +131,12 @@ const CardSlottable = createSlottable("Card");
 Both handlers are called when both the `Slot` and the child define the same event.
 
 ```tsx
+import { Button } from "@g4rcez/components/button";
+import { Slot } from "@g4rcez/components";
+
 <Slot onClick={() => console.log("slot handler")}>
-    <button onClick={() => console.log("child handler")}>Click me</button>
+    {" "}
+    <Button onClick={() => console.log("child handler")}>Click me</Button>
 </Slot>
 // Logs: "child handler", then "slot handler"
 ```
@@ -169,3 +172,7 @@ Both handlers are called when both the `Slot` and the child define the same even
 - Ref composition: if both `Slot` and the child have refs, they are composed via `composeRefs`
 - `Slottable` uses an internal symbol (`__radixId`) to identify itself — do not attempt to replicate this check
 - React Fragment children are supported: the composed ref is not applied to `Fragment` (React 19 compatibility)
+
+```
+
+```

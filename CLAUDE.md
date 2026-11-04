@@ -1,1 +1,1 @@
-@AGENTS.md
+[AGENTS.md](AGENTS.md "writeme-mention:file:AGENTS.md")

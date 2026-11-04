@@ -38,7 +38,7 @@ import { Calendar } from "@g4rcez/components/calendar";
 | `RenderOnDay`       | `React.FC<{ date: Date }>`                                                                        | —             | Renders extra content for a day.                                             |
 | `labelRange`        | `{ from: string; to: string }`                                                                    | —             | Accessible labels for the range endpoints.                                   |
 | `datetimeTitle`     | `string`                                                                                          | —             | Label for the time control in datetime mode.                                 |
-| `styles`            | `CalendarStyles`                                                                                  | —             | Class names or class-name callbacks for calendar regions.                    |
+| `styles` | `CalendarStyles` | — | Class names or class-name callbacks for calendar regions. |
 
 `rangeMode` is not inferred from `type="range"`; pass both when using `Calendar` directly. `DatePicker` configures range mode for you.
 
@@ -48,15 +48,13 @@ The initial date is not a change: `onChange` does not run when the Calendar moun
 
 ## Design Tokens and CSS
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-calendar-day-cell-padding` | `calc(var(--var-spacing-base) / 4)` |
-| `--var-calendar-day-button-size` | `calc(var(--var-spacing-base) * 2.25)` |
-| `--var-calendar-focus-ring-width` | `calc(var(--var-spacing-base) / 4)` |
+| Override                             | Library default                        |
+| ------------------------------------ | -------------------------------------- |
+| `--var-calendar-day-cell-padding`    | `calc(var(--var-spacing-base) / 4)`    |
+| `--var-calendar-day-button-size`     | `calc(var(--var-spacing-base) * 2.25)` |
+| `--var-calendar-focus-ring-width`    | `calc(var(--var-spacing-base) / 4)`    |
 | `--var-calendar-selected-ring-width` | `calc(var(--var-spacing-base) / 4)` |
 
 The component ships a plain CSS chunk at `@g4rcez/components/calendar.css`. Its stable root selector is `.__calendar`; use the component style manifest for its slots and dependencies. Calendar-specific token values are defined in the library token sheet and should be overridden with semantic `--var-*` variables.
@@ -66,8 +64,7 @@ The component ships a plain CSS chunk at `@g4rcez/components/calendar.css`. Its 
 ### Single date
 
 ```tsx
-const [date, setDate] = useState<Date>();
-
+const [date, setDate] = useState<Date>;
 <Calendar date={date} onChange={setDate} />;
 ```
 
@@ -75,8 +72,7 @@ const [date, setDate] = useState<Date>();
 
 ```tsx
 type DateRange = { from?: Date; to?: Date };
-const [range, setRange] = useState<DateRange | undefined>();
-
+const [range, setRange] = useState<DateRange | undefined>;
 <Calendar type="range" rangeMode range={range} onChange={setRange} labelRange={{ from: "Start date", to: "End date" }} />;
 ```
 

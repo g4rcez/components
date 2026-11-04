@@ -19,20 +19,20 @@ import { CommandPalette } from "@g4rcez/components";
 
 ## Props
 
-| Prop                 | Type                                                                   | Default     | Description                                    |
-| -------------------- | ---------------------------------------------------------------------- | ----------- | ---------------------------------------------- |
-| `open`               | `boolean`                                                              | —           | Controlled open state                          |
-| `commands`           | `CommandItemTypes[]`                                                   | —           | Array of commands to display                   |
-| `onChangeVisibility` | `(next: boolean) => void`                                              | —           | Open/close handler                             |
-| `bind`               | `string`                                                               | `"Mod + k"` | Global keyboard shortcut to open the palette   |
-| `loading`            | `boolean`                                                              | `false`     | Show loading skeleton while commands load      |
-| `emptyMessage`       | `Label`                                                                | —           | Message shown when no results match            |
-| `footer`             | `React.ReactElement`                                                   | —           | Custom footer content                          |
-| `filters`            | `React.ReactNode`                                                    | —           | Optional consumer-provided filter controls; the palette renders the content but does not filter commands. |
-| `onChangeText`       | `(text: string) => void`                                               | —           | Search text change handler                     |
-| `Preview`            | `React.FC<{ command: CommandItemTypes; text: string }>`                | —           | Optional preview panel for the active command; users can collapse it when provided. |
-| `Icon`               | `React.FC<IconProps & { text: string; Default: React.FC<IconProps> }>` | —           | Custom search icon                             |
-| `translations`       | `TranslationOverrides`                                                 | —           | Override the palette, filter, and preview accessibility labels. |
+| Prop                 | Type                                                                   | Default     | Description                                                                                               |
+| -------------------- | ---------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `open`               | `boolean`                                                              | —           | Controlled open state                                                                                     |
+| `commands`           | `CommandItemTypes[]`                                                   | —           | Array of commands to display                                                                              |
+| `onChangeVisibility` | `(next: boolean) => void`                                              | —           | Open/close handler                                                                                        |
+| `bind`               | `string`                                                               | `"Mod + k"` | Global keyboard shortcut to open the palette                                                              |
+| `loading`            | `boolean`                                                              | `false`     | Show loading skeleton while commands load                                                                 |
+| `emptyMessage`       | `Label`                                                                | —           | Message shown when no results match                                                                       |
+| `footer`             | `React.ReactElement`                                                   | —           | Custom footer content                                                                                     |
+| `filters`            | `React.ReactNode`                                                      | —           | Optional consumer-provided filter controls; the palette renders the content but does not filter commands. |
+| `onChangeText`       | `(text: string) => void`                                               | —           | Search text change handler                                                                                |
+| `Preview`            | `React.FC<{ command: CommandItemTypes; text: string }>`                | —           | Optional preview panel for the active command; users can collapse it when provided.                       |
+| `Icon`               | `React.FC<IconProps & { text: string; Default: React.FC<IconProps> }>` | —           | Custom search icon                                                                                        |
+| `translations`       | `TranslationOverrides`                                                 | —           | Override the palette, filter, and preview accessibility labels.                                           |
 
 ## Command Types
 
@@ -58,39 +58,31 @@ type CommandShortcutItem = {
 ### CommandGroupItem
 
 ```tsx
-type CommandGroupItem = {
-    type: "group";
-    title: string | React.ReactElement | React.ComponentType<{ text: string }>;
-    items: CommandItemTypes[];
-};
+type CommandGroupItem = { type: "group"; title: string | React.ReactElement | React.ComponentType<{ text: string }>; items: CommandItemTypes[] };
 ```
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-command-dialog-max-inline-size-md` | `calc(var(--var-spacing-base) * 40)` |
-| `--var-command-dialog-max-inline-size-lg` | `calc(var(--var-spacing-base) * 48)` |
-| `--var-command-list-max-block-size` | `calc(var(--var-spacing-base) * 24)` |
-| `--var-command-row-block-size` | `calc(var(--var-spacing-base) * 2.5)` |
+| Override                                  | Library default                       |
+| ----------------------------------------- | ------------------------------------- |
+| `--var-command-dialog-max-inline-size-md` | `calc(var(--var-spacing-base) * 40)`  |
+| `--var-command-dialog-max-inline-size-lg` | `calc(var(--var-spacing-base) * 48)`  |
+| `--var-command-list-max-block-size`       | `calc(var(--var-spacing-base) * 24)`  |
+| `--var-command-row-block-size`            | `calc(var(--var-spacing-base) * 2.5)` |
 | `--var-command-group-padding-block-start` | `calc(var(--var-spacing-base) * 0.5)` |
 
-With `Preview`, desktop palettes can grow to 94vw (capped at 96 spacing units) and use a side-by-side results/preview layout from 1024px. Narrower layouts stack the preview below the results.
+With `Preview`, desktop palettes can grow to 94vw (capped at 96 spacing units) and use a side-by-side results/preview layout from 1024px. Narrower layouts stack the preview below the results. Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                    | CSS Variable            | Purpose                                |
-| ------------------------ | ----------------------- | -------------------------------------- |
-| CSS override | `--var-command-surface-background` | Palette surface background |
-| CSS override | `--var-command-surface-border` | Palette surface border |
-| CSS override | `--var-command-item-background-hover` | Hovered/active command background |
-| `z-floating` | `--var-layer-floating` | Search header z-index |
-| CSS override | `--var-command-group-label-foreground` | Group label text |
-| CSS override | `--var-command-empty-foreground` | Empty state text |
+| Token | CSS Variable | Purpose                                |
+| ------------ | -------------------------------------- | --------------------------------- |
+| CSS override | `--var-command-surface-background`     | Palette surface background        |
+| CSS override | `--var-command-surface-border`         | Palette surface border            |
+| CSS override | `--var-command-item-background-hover`  | Hovered/active command background |
+| `z-floating` | `--var-layer-floating`                 | Search header z-index             |
+| CSS override | `--var-command-group-label-foreground` | Group label text                  |
+| CSS override | `--var-command-empty-foreground`       | Empty state text                  |
 
 ## Examples
 
@@ -100,10 +92,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 import { useState } from "react";
 import { FileTextIcon, FloppyDiskIcon, FolderOpenIcon } from "@phosphor-icons/react";
 import { CommandPalette } from "@g4rcez/components";
-
 function BasicCommandPalette() {
     const [open, setOpen] = useState(false);
-
     const commands = [
         {
             type: "shortcut" as const,
@@ -136,25 +126,35 @@ function BasicCommandPalette() {
             },
         },
     ];
-
     return <CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} />;
 }
 ```
 
 ### Preview and consumer-provided filters
 
-Pass your own filter controls through `filters`. CommandPalette only renders and collapses this content; use your application state to decide which commands to pass. When `Preview` is provided, the palette shows a side panel for the active command and includes independent controls to hide the preview and filters.
+Pass your own filter controls through `filters`. CommandPalette only renders and collapses this content; use your application state to decide which commands to pass. When `Preview` is provided, the palette shows a side panel for the active command and includes independent controls to hide the preview and filters. Omitting `filters` leaves the filter row out of the palette; the preview control is available only when `Preview` is supplied.
 
 ```tsx
 import { useState } from "react";
+import { Button } from "@g4rcez/components/button";
 import { CommandPalette } from "@g4rcez/components";
 
 function ProjectCommandPalette() {
     const [open, setOpen] = useState(false);
     const [projectsOnly, setProjectsOnly] = useState(false);
     const allCommands = [
-        { type: "shortcut" as const, title: "Open project", category: "project", action: ({ setOpen }: { setOpen: (open: boolean) => void }) => setOpen(false) },
-        { type: "shortcut" as const, title: "Open preferences", category: "settings", action: ({ setOpen }: { setOpen: (open: boolean) => void }) => setOpen(false) },
+        {
+            type: "shortcut" as const,
+            title: "Open project",
+            category: "project",
+            action: ({ setOpen }: { setOpen: (open: boolean) => void }) => setOpen(false),
+        },
+        {
+            type: "shortcut" as const,
+            title: "Open preferences",
+            category: "settings",
+            action: ({ setOpen }: { setOpen: (open: boolean) => void }) => setOpen(false),
+        },
     ];
     const commands = projectsOnly ? allCommands.filter((command) => command.category === "project") : allCommands;
 
@@ -164,9 +164,14 @@ function ProjectCommandPalette() {
             commands={commands}
             onChangeVisibility={setOpen}
             filters={
-                <button type="button" aria-pressed={projectsOnly} onClick={() => setProjectsOnly((enabled) => !enabled)}>
+                <Button
+                    type="button"
+                    theme={projectsOnly ? "primary" : "ghost-neutral"}
+                    aria-pressed={projectsOnly}
+                    onClick={() => setProjectsOnly((enabled) => !enabled)}
+                >
                     Projects only
-                </button>
+                </Button>
             }
             Preview={({ command }) => (
                 <article>
@@ -179,18 +184,13 @@ function ProjectCommandPalette() {
 }
 ```
 
-Omitting `filters` leaves the filter row and its toggle out of the palette. The preview toggle is likewise available only when `Preview` is supplied.
-
-
 ### Grouped Commands
 
 ```tsx
 import { FileIcon, FolderOpenIcon, HouseIcon, GearIcon, MoonIcon } from "@phosphor-icons/react";
 import { CommandPalette } from "@g4rcez/components";
-
 function GroupedCommandPalette() {
     const [open, setOpen] = useState(false);
-
     const commands = [
         {
             type: "group" as const,
@@ -257,7 +257,6 @@ function GroupedCommandPalette() {
             ],
         },
     ];
-
     return <CommandPalette open={open} commands={commands} onChangeVisibility={setOpen} emptyMessage="No commands found" />;
 }
 ```
@@ -272,14 +271,8 @@ function GroupedCommandPalette() {
 
 ```tsx
 import { UserIcon, ShieldIcon } from "@phosphor-icons/react";
-
 const commands = [
-    {
-        type: "shortcut" as const,
-        title: "User Dashboard",
-        Icon: <UserIcon size={16} />,
-        action: ({ setOpen }) => setOpen(false),
-    },
+    { type: "shortcut" as const, title: "User Dashboard", Icon: <UserIcon size={16} />, action: ({ setOpen }) => setOpen(false) },
     {
         type: "shortcut" as const,
         title: "Admin Panel",
@@ -318,15 +311,15 @@ const commands = [
 
 ## Data Attributes
 
-| Attribute                                          | Applied to             | Description                                      |
-| -------------------------------------------------- | ---------------------- | ------------------------------------------------ |
-| `data-component="command-palette"`                 | Root modal container   | Identifies the palette root                      |
-| `data-has-preview="true"`                          | Root modal container   | Enables the wider preview layout                 |
-| `data-component="command-palette-list"`            | List container         | Identifies the command list                      |
-| `data-component="command-palette-item"`            | Each command option    | Identifies an individual command option          |
-| `data-component="command-palette-container"`       | List/preview wrapper   | Identifies the content area                      |
-| `data-component="command-palette-filters"`         | Filter content wrapper | Identifies the optional consumer-owned filters   |
-| `data-component="command-palette-preview"`         | Preview `<section>`    | Identifies the active command preview region     |
+| Attribute                                    | Applied to             | Description                                    |
+| -------------------------------------------- | ---------------------- | ---------------------------------------------- |
+| `data-component="command-palette"`           | Root modal container   | Identifies the palette root                    |
+| `data-has-preview="true"`                    | Root modal container   | Enables the wider preview layout               |
+| `data-component="command-palette-list"`      | List container         | Identifies the command list                    |
+| `data-component="command-palette-item"`      | Each command option    | Identifies an individual command option        |
+| `data-component="command-palette-container"` | List/preview wrapper   | Identifies the content area                    |
+| `data-component="command-palette-filters"`   | Filter content wrapper | Identifies the optional consumer-owned filters |
+| `data-component="command-palette-preview"`   | Preview `<section>`    | Identifies the active command preview region   |
 
 ## Notes
 

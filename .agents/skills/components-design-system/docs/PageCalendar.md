@@ -19,6 +19,7 @@ import { PageCalendar } from "@g4rcez/components";
 
 ## Props
 
+<<<<<<< Updated upstream
 | Prop              | Type                                               | Default      | Description                                                                           |
 | ----------------- | -------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------- |
 | `events`          | `CalendarEvent<T>[]`                               | —            | Array of event objects to display across all views.                                   |
@@ -34,26 +35,50 @@ import { PageCalendar } from "@g4rcez/components";
 | `renderEvent`     | `(event: CalendarEvent<T>) => ReactNode`           | —            | Custom renderer for the selected event detail panel in day view.                      |
 | `filterArea`      | `ReactNode`                                        | —            | Replaces the default filter tag row in the header with custom content.                |
 | `getFilterId`     | `(event: CalendarEvent<T>) => string \| undefined` | —            | Custom accessor to extract a filter id from an event. Defaults to `event.filterId`.   |
+||||||| Stash base
+| Prop              | Type                                               | Default      | Description                                                                           |
+| ----------------- | -------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------- |
+| `events`          | `CalendarEvent<T>[]`                               | —            | Array of event objects to display across all views.                                   |
+| `filters`         | `CalendarFilter[]`                                 | `[]`         | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
+| `defaultView`     | `"month" \| "week" \| "day"`                       | `"month"`    | Initial view rendered when the component mounts.                                      |
+| `defaultDate`     | `Date`                                             | `new Date()` | Initial date the calendar focuses on.                                                 |
+| `loading`         | `boolean`                                          | `false`      | Shows a centered loading spinner instead of the active calendar view.                 |
+| `onEventClick`    | `(event: CalendarEvent) => void`                   | —            | Called when the user clicks an event pill.                                            |
+| `onSlotClick`     | `(date: Date) => void`                             | —            | Called when the user clicks an empty time slot (week and day views).                  |
+| `onAddEvent`      | `() => void`                                       | —            | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
+| `onChangeFilters` | `(filters: CalendarFilter[]) => void`              | —            | Called whenever a filter is toggled, receiving the updated filter array.              |
+| `renderEvent`     | `(event: CalendarEvent<T>) => ReactNode`           | —            | Custom renderer for the selected event detail panel in day view.                      |
+| `filterArea`      | `ReactNode`                                        | —            | Replaces the default filter tag row in the header with custom content.                |
+| `getFilterId`     | `(event: CalendarEvent<T>) => string \| undefined` | —            | Custom accessor to extract a filter id from an event. Defaults to `event.filterId`.   |
+=======
+| Prop              | Type                                               | Default    | Description                                                                           |
+| ----------------- | -------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------- |
+| `events`          | `CalendarEvent<T>[]`                               | —          | Array of event objects to display across all views.                                   |
+| `filters`         | `CalendarFilter[]`                                 | `[]`       | Filter tag definitions. Each filter can be toggled to hide/show matching events.      |
+| `defaultView`     | `"month" \| "week" \| "day"`                       | `"month"`  | Initial view rendered when the component mounts.                                      |
+| `defaultDate`     | `Date`                                             | `new Date` | Initial date the calendar focuses on.                                                 |
+| `loading`         | `boolean`                                          | `false`    | Shows a centered loading spinner instead of the active calendar view.                 |
+| `onEventClick`    | `(event: CalendarEvent) => void`                   | —          | Called when the user clicks an event pill.                                            |
+| `onSlotClick`     | `(date: Date) => void`                             | —          | Called when the user clicks an empty time slot (week and day views).                  |
+| `onAddEvent`      | `() => void`                                         | —          | Called when the "Add event" button in the header is clicked. Omit to hide the button. |
+| `onChangeFilters` | `(filters: CalendarFilter[]) => void`              | —          | Called whenever a filter is toggled, receiving the updated filter array.              |
+| `renderEvent`     | `(event: CalendarEvent<T>) => ReactNode`           | —          | Custom renderer for the selected event detail panel in day view.                      |
+| `filterArea`      | `ReactNode`                                        | —          | Replaces the default filter tag row in the header with custom content.                |
+| `getFilterId`     | `(event: CalendarEvent<T>) => string \| undefined` | —          | Custom accessor to extract a filter id from an event. Defaults to `event.filterId`.   |
+>>>>>>> Stashed changes
 
 ## Type Definitions
 
 ### CalendarEventBase
 
 ```ts
-type CalendarEventBase = {
-    id: string;
-    date: Date;
-};
+type CalendarEventBase = { id: string; date: Date };
 ```
 
 ### CalendarEvent
 
 ```ts
-type CalendarEvent<T extends CalendarEventBase = CalendarEventBase> = T & {
-    title: string;
-    filterId?: string;
-    className?: string;
-};
+type CalendarEvent<T extends CalendarEventBase = CalendarEventBase> = T & { title: string; filterId?: string; className?: string };
 ```
 
 `className` is applied directly to the event pill element in all views.
@@ -83,31 +108,27 @@ type WeekStart = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = Sunday, 1 = Monday
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-page-calendar-hour-block-size` | `calc(var(--var-spacing-base) * 3)` |
-| `--var-page-calendar-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-page-calendar-header-nav-icon-size` | `calc(var(--var-spacing-base) * 1)` |
+| Override                                   | Library default                         |
+| ------------------------------------------ | --------------------------------------- |
+| `--var-page-calendar-hour-block-size`      | `calc(var(--var-spacing-base) * 3)`     |
+| `--var-page-calendar-gap`                  | `calc(var(--var-spacing-base) * 1)`     |
+| `--var-page-calendar-header-nav-icon-size` | `calc(var(--var-spacing-base) * 1)`     |
 | `--var-page-calendar-header-icon-size` | `calc(var(--var-spacing-base) * 0.875)` |
 
-Day/week hour rows and event offsets share `--var-page-calendar-hour-block-size`. Changing it preserves event/time-grid alignment; gutters also scale with density.
+Day/week hour rows and event offsets share `--var-page-calendar-hour-block-size`. Changing it preserves event/time-grid alignment; gutters also scale with density. Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                     | CSS Variable           | Purpose                                            |
-| ------------------------- | ---------------------- | -------------------------------------------------- |
-| `bg-primary` | `--var-color-primary` | Today and selected day background |
-| `text-primary-foreground` | `--var-color-primary-foreground` | Text on today / selected day |
-| `bg-background` | `--var-color-background` | Non-today header date badge background |
-| `text-foreground` | `--var-color-foreground` | Default day and header text |
-| `text-muted-foreground` | `--var-color-muted-foreground` | Hour labels and secondary text |
-| `border-border` | `--var-color-border` | Day header and time-grid column borders |
-| CSS override | `--var-page-calendar-slot-border` | Day/week hour-slot dividers |
-| CSS override | `--var-page-calendar-slot-background-hover` | Time-slot hover background |
+| Token | CSS Variable              | Purpose                                     |
+| ------------------------- | ------------------------------------------- | --------------------------------------- |
+| `bg-primary`              | `--var-color-primary`                       | Today and selected day background       |
+| `text-primary-foreground` | `--var-color-primary-foreground`            | Text on today / selected day            |
+| `bg-background`           | `--var-color-background`                    | Non-today header date badge background  |
+| `text-foreground`         | `--var-color-foreground`                    | Default day and header text             |
+| `text-muted-foreground`   | `--var-color-muted-foreground`              | Hour labels and secondary text          |
+| `border-border`           | `--var-color-border`                        | Day header and time-grid column borders |
+| CSS override              | `--var-page-calendar-slot-border`           | Day/week hour-slot dividers             |
+| CSS override              | `--var-page-calendar-slot-background-hover` | Time-slot hover background              |
 
 ## Views
 
@@ -129,11 +150,8 @@ Displays a single day with an hourly grid alongside a mini calendar and a detail
 
 ```tsx
 import { PageCalendar } from "@g4rcez/components";
-
 type MyEvent = { id: string; date: Date; title: string };
-
 const events: MyEvent[] = [{ id: "1", date: new Date(), title: "Team standup" }];
-
 export function MyCalendar() {
     return <PageCalendar events={events} onEventClick={(event) => console.log(event)} />;
 }
@@ -144,17 +162,14 @@ export function MyCalendar() {
 ```tsx
 import { PageCalendar } from "@g4rcez/components";
 import type { CalendarFilter } from "@g4rcez/components";
-
 const filters: CalendarFilter[] = [
     { id: "work", label: "Work", enabled: true, theme: "primary" },
     { id: "personal", label: "Personal", enabled: true, theme: "success" },
 ];
-
 const events = [
     { id: "1", date: new Date(), title: "Sprint planning", filterId: "work" },
     { id: "2", date: new Date(), title: "Gym", filterId: "personal" },
 ];
-
 export function FilteredCalendar() {
     return <PageCalendar events={events} filters={filters} onChangeFilters={(updated) => console.log(updated)} />;
 }
@@ -165,7 +180,6 @@ export function FilteredCalendar() {
 ```tsx
 import { PageCalendar } from "@g4rcez/components";
 import { MapPinIcon } from "@phosphor-icons/react";
-
 export function DetailCalendar() {
     return (
         <PageCalendar
@@ -173,11 +187,12 @@ export function DetailCalendar() {
             defaultView="day"
             renderEvent={(event) => (
                 <div className="flex flex-col gap-1 p-2 bg-muted rounded-card-radius">
-                    <span className="font-semibold text-foreground">{event.title}</span>
+                    {" "}
+                    <span className="font-semibold text-foreground">{event.title}</span>{" "}
                     <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <MapPinIcon size={12} />
-                        {event.location}
-                    </span>
+                        {" "}
+                        <MapPinIcon size={12} /> {event.location}{" "}
+                    </span>{" "}
                 </div>
             )}
         />
@@ -190,13 +205,12 @@ export function DetailCalendar() {
 ```tsx
 import { useState } from "react";
 import { PageCalendar } from "@g4rcez/components";
-
 export function EditableCalendar() {
     const [showForm, setShowForm] = useState(false);
     const [slotDate, setSlotDate] = useState<Date | null>(null);
-
     return (
         <>
+            {" "}
             <PageCalendar
                 events={events}
                 onAddEvent={() => setShowForm(true)}
@@ -204,8 +218,8 @@ export function EditableCalendar() {
                     setSlotDate(date);
                     setShowForm(true);
                 }}
-            />
-            {showForm && <EventForm defaultDate={slotDate} onClose={() => setShowForm(false)} />}
+            />{" "}
+            {showForm && <EventForm defaultDate={slotDate} onClose={() => setShowForm(false)} />}{" "}
         </>
     );
 }
@@ -216,19 +230,21 @@ export function EditableCalendar() {
 ```tsx
 import { PageCalendar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
-
 export function CustomFilterCalendar() {
     return (
         <PageCalendar
             events={events}
             filterArea={
                 <div className="flex items-center gap-2 rounded-card-radius bg-muted px-3 py-1.5">
+                    {" "}
                     <Button theme="ghost-muted" size="small">
-                        All
-                    </Button>
+                        {" "}
+                        All{" "}
+                    </Button>{" "}
                     <Button theme="primary" size="small">
-                        Mine
-                    </Button>
+                        {" "}
+                        Mine{" "}
+                    </Button>{" "}
                 </div>
             }
         />
@@ -281,3 +297,7 @@ export function CustomFilterCalendar() {
 - The component grows to fill its container (`h-full flex-grow`). Place it inside a flex or grid container with an explicit height and `min-height: 0`. Apply the height to the calendar's own container, not surrounding documentation or sibling sections.
 - Month view scrolls within the available height; week/day time grids scroll within their view. The day grid shrinks beside its detail panel, and the toolbar wraps when horizontal space is limited.
 - On narrow screens, day view stacks the time grid above the mini-calendar and scrolls the combined view, preserving a usable time-grid viewport.
+
+```
+
+```

@@ -27,7 +27,7 @@ import { Steps, Step } from "@g4rcez/components";
 | `steps`       | `number`          | —       | Total number of steps              |
 | `children`    | `React.ReactNode` | —       | `Step` components                  |
 
-### Step
+### Step props
 
 | Prop             | Type         | Default | Description                                                                   |
 | ---------------- | ------------ | ------- | ----------------------------------------------------------------------------- |
@@ -35,47 +35,45 @@ import { Steps, Step } from "@g4rcez/components";
 | `currentStep`    | `number`     | —       | Index of the currently active step (usually from parent)                      |
 | `title`          | `Label`      | —       | Step label                                                                    |
 | `status`         | `StepStatus` | —       | Override automatic status (`"active" \| "inactive" \| "complete" \| "error"`) |
-| `titleClassName` | `string`     | —       | Additional classes for the title text                                         |
+| `titleClassName` | `string` | — | Additional classes for the title text |
 
 Standard `<button>` props are also forwarded (e.g. `onClick`, `disabled`).
 
-## Step Statuses
+### Statuses
+
+
 
 | Status     | Visual             | Icon                |
 | ---------- | ------------------ | ------------------- |
 | `active`   | Primary color ring | Step number         |
 | `inactive` | Muted border       | Step number         |
 | `complete` | Success color fill | Animated check mark |
-| `error`    | Danger color fill  | Animated X mark     |
+| `error` | Danger color fill | Animated X mark |
 
 Status is derived automatically from `step` vs. `currentStep` unless overridden via `status`.
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-step-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-step-marker-size` | `calc(var(--var-spacing-base) * 2.5)` |
-| `--var-step-icon-size` | `calc(var(--var-spacing-base) * 1.5)` |
+| Override                          | Library default                       |
+| --------------------------------- | ------------------------------------- |
+| `--var-step-gap`                  | `calc(var(--var-spacing-base) * 1)`   |
+| `--var-step-marker-size`          | `calc(var(--var-spacing-base) * 2.5)` |
+| `--var-step-icon-size`            | `calc(var(--var-spacing-base) * 1.5)` |
 | `--var-step-label-padding-inline` | `calc(var(--var-spacing-base) * 0.5)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                                   | CSS Variable                          | Purpose                            |
-| --------------------------------------- | ------------------------------------- | ---------------------------------- |
-| `bg-primary` / `border-primary` | `--var-color-primary` | Active fill and border |
-| `text-primary-foreground` | `--var-color-primary-foreground` | Active text |
-| `bg-success` / `border-success` | `--var-color-success` | Complete fill, border, and connector |
-| `text-success-foreground` | `--var-color-success-foreground` | Complete check icon |
-| `bg-danger` / `border-danger-hover` | `--var-color-danger` / `--var-color-danger-hover` | Error fill and border |
-| `text-danger-foreground` | `--var-color-danger-foreground` | Error X icon |
-| `text-disabled` | `--var-color-disabled` | Inactive text |
-| `bg-border` / `border-border` | `--var-color-border` | Default connector and inactive border |
-| `bg-background` | `--var-color-background` | Inactive background |
+| Token | CSS Variable                        | Purpose                                           |
+| ----------------------------------- | ------------------------------------------------- | ------------------------------------- |
+| `bg-primary` / `border-primary`     | `--var-color-primary`                             | Active fill and border                |
+| `text-primary-foreground`           | `--var-color-primary-foreground`                  | Active text                           |
+| `bg-success` / `border-success`     | `--var-color-success`                             | Complete fill, border, and connector  |
+| `text-success-foreground`           | `--var-color-success-foreground`                  | Complete check icon                   |
+| `bg-danger` / `border-danger-hover` | `--var-color-danger` / `--var-color-danger-hover` | Error fill and border                 |
+| `text-danger-foreground`            | `--var-color-danger-foreground`                   | Error X icon                          |
+| `text-disabled`                     | `--var-color-disabled`                            | Inactive text                         |
+| `bg-border` / `border-border`       | `--var-color-border`                              | Default connector and inactive border |
+| `bg-background`                     | `--var-color-background`                          | Inactive background                   |
 
 ## Examples
 
@@ -83,8 +81,8 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 <Steps currentStep={2} steps={3}>
-    <Step step={1} currentStep={2} title="Account" />
-    <Step step={2} currentStep={2} title="Profile" />
+    {" "}
+    <Step step={1} currentStep={2} title="Account" /> <Step step={2} currentStep={2} title="Profile" />{" "}
     <Step step={3} currentStep={2} title="Review" />
 </Steps>
 ```
@@ -94,22 +92,21 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 ```tsx
 function Wizard() {
     const [currentStep, setCurrentStep] = useState(1);
-
     return (
         <div className="space-y-8">
+            {" "}
             <Steps currentStep={currentStep} steps={4}>
-                <Step step={1} currentStep={currentStep} title="Account" onClick={() => setCurrentStep(1)} />
-                <Step step={2} currentStep={currentStep} title="Profile" onClick={() => setCurrentStep(2)} />
-                <Step step={3} currentStep={currentStep} title="Payment" onClick={() => setCurrentStep(3)} />
-                <Step step={4} currentStep={currentStep} title="Review" onClick={() => setCurrentStep(4)} />
-            </Steps>
-
+                {" "}
+                <Step step={1} currentStep={currentStep} title="Account" onClick={() => setCurrentStep(1)} />{" "}
+                <Step step={2} currentStep={currentStep} title="Profile" onClick={() => setCurrentStep(2)} />{" "}
+                <Step step={3} currentStep={currentStep} title="Payment" onClick={() => setCurrentStep(3)} />{" "}
+                <Step step={4} currentStep={currentStep} title="Review" onClick={() => setCurrentStep(4)} />{" "}
+            </Steps>{" "}
             <div className="p-6 rounded-card-radius border border-card-border bg-card-background">
-                {currentStep === 1 && <AccountForm />}
-                {currentStep === 2 && <ProfileForm />}
-                {currentStep === 3 && <PaymentForm />}
-                {currentStep === 4 && <ReviewSummary />}
-            </div>
+                {" "}
+                {currentStep === 1 && <AccountForm />} {currentStep === 2 && <ProfileForm />} {currentStep === 3 && <PaymentForm />}{" "}
+                {currentStep === 4 && <ReviewSummary />}{" "}
+            </div>{" "}
         </div>
     );
 }
@@ -119,8 +116,8 @@ function Wizard() {
 
 ```tsx
 <Steps currentStep={2} steps={3}>
-    <Step step={1} currentStep={2} title="Identity" />
-    <Step step={2} currentStep={2} title="Payment" status="error" />
+    {" "}
+    <Step step={1} currentStep={2} title="Identity" /> <Step step={2} currentStep={2} title="Payment" status="error" />{" "}
     <Step step={3} currentStep={2} title="Finish" />
 </Steps>
 ```
@@ -131,9 +128,9 @@ function Wizard() {
 function CheckoutSteps({ step }: { step: number }) {
     return (
         <Steps currentStep={step} steps={3}>
-            <Step step={1} currentStep={step} title="Cart" />
-            <Step step={2} currentStep={step} title="Shipping" />
-            <Step step={3} currentStep={step} title="Confirmation" />
+            {" "}
+            <Step step={1} currentStep={step} title="Cart" /> <Step step={2} currentStep={step} title="Shipping" />{" "}
+            <Step step={3} currentStep={step} title="Confirmation" />{" "}
         </Steps>
     );
 }

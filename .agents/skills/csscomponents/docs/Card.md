@@ -19,7 +19,7 @@ import { Card } from "@g4rcez/components/card";
 
 ## Props
 
-### Card
+### Card props
 
 | Prop             | Type                         | Default | Description                                       |
 | ---------------- | ---------------------------- | ------- | ------------------------------------------------- |
@@ -53,32 +53,28 @@ A composable header with a title and an optional navigation/action area.
 | `Icon`        | `Icon`    | `InfoIcon` | Decorative metric icon.                      |
 | `mark`        | `string`  | —          | Additional class for the icon mark.          |
 | `interactive` | `boolean` | `true`     | Applies the interactive stats-panel styling. |
-| `loading`     | `boolean` | —          | Shows a skeleton in place of the value.      |
+| `loading` | `boolean` | — | Shows a skeleton in place of the value. |
 
 `StatsCard` is exported from the same entry point and uses the card surface contract.
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-card-content-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-card-surface-radius` | `calc(var(--var-radius-base) / 4)` |
-| `--var-card-surface-padding-block` | `calc(var(--var-spacing-base) * 0.75)` |
+| Override                            | Library default                        |
+| ----------------------------------- | -------------------------------------- |
+| `--var-card-content-gap`            | `calc(var(--var-spacing-base) * 1)`    |
+| `--var-card-surface-radius`         | `calc(var(--var-radius-base) / 4)`     |
+| `--var-card-surface-padding-block`  | `calc(var(--var-spacing-base) * 0.75)` |
 | `--var-card-title-margin-block-end` | `calc(var(--var-spacing-base) / 2)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                 | CSS Variable        | Purpose                         |
-| --------------------- | ------------------- | ------------------------------- |
-| `bg-card-background` | `--var-card-background` | Card surface color |
-| `border-card-border` | `--var-card-border` | Card border and title separator |
-| `rounded-card-radius` | `--var-card-surface-radius` | Corner radius |
-| `shadow-shadow-card` | `--var-shadow-card` | Card drop shadow |
-| `bg-muted` | `--var-color-muted` | Skeleton loading lines |
+| Token | CSS Variable          | Purpose                     |
+| --------------------- | --------------------------- | ------------------------------- |
+| `bg-card-background`  | `--var-card-background`     | Card surface color              |
+| `border-card-border`  | `--var-card-border`         | Card border and title separator |
+| `rounded-card-radius` | `--var-card-surface-radius` | Corner radius                   |
+| `shadow-shadow-card`  | `--var-shadow-card`         | Card drop shadow                |
+| `bg-muted`            | `--var-color-muted`         | Skeleton loading lines          |
 
 ## Examples
 
@@ -86,25 +82,32 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 <Card>
+    {" "}
     <p>Card content goes here.</p>
 </Card>
 ```
 
-### Card with Title
+### With Title
+
+
 
 ```tsx
 <Card title="User Profile">
+    {" "}
     <div className="space-y-4">
-        <p>Name: John Doe</p>
-        <p>Email: john@example.com</p>
+        {" "}
+        <p>Name: John Doe</p> <p>Email: john@example.com</p>{" "}
     </div>
 </Card>
 ```
 
-### Card with Loading State
+### With Loading State
+
+
 
 ```tsx
 <Card title="Analytics" loading={isLoading}>
+    {" "}
     <p>Loaded content rendered here when not loading.</p>
 </Card>
 ```
@@ -115,21 +118,25 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 <StatsCard title="Active users" value="1,234" loading={isLoading} />
 ```
 
-### Card.Title with Actions
+### Card.Title
+
+with Actions
 
 ```tsx
 import { Button } from "@g4rcez/components/button";
-
 <Card>
+    {" "}
     <Card.Title title="Project Overview">
+        {" "}
         <Button theme="primary" size="small">
-            Edit
-        </Button>
+            {" "}
+            Edit{" "}
+        </Button>{" "}
         <Button theme="neutral" size="small">
-            Share
-        </Button>
-    </Card.Title>
-
+            {" "}
+            Share{" "}
+        </Button>{" "}
+    </Card.Title>{" "}
     <p>Project description and details.</p>
 </Card>;
 ```
@@ -140,10 +147,12 @@ import { Button } from "@g4rcez/components/button";
 <Card
     header={
         <header className="flex justify-between items-center p-4 border-b border-card-border">
-            <h2 className="text-foreground font-semibold">Custom Header</h2>
+            {" "}
+            <h2 className="text-foreground font-semibold">Custom Header</h2>{" "}
         </header>
     }
 >
+    {" "}
     <p>Content with a completely custom header.</p>
 </Card>
 ```
@@ -152,16 +161,20 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 <Card title="Dashboard">
+    {" "}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {" "}
         <Card title="Statistics">
-            <p>Chart content here</p>
-        </Card>
+            {" "}
+            <p>Chart content here</p>{" "}
+        </Card>{" "}
         <Card title="Recent Activity">
+            {" "}
             <ul>
-                <li>User logged in</li>
-                <li>New order received</li>
-            </ul>
-        </Card>
+                {" "}
+                <li>User logged in</li> <li>New order received</li>{" "}
+            </ul>{" "}
+        </Card>{" "}
     </div>
 </Card>
 ```
@@ -170,6 +183,7 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 <Card as="article" title="Blog Post">
+    {" "}
     <p>Blog post content.</p>
 </Card>
 ```

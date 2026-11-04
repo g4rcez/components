@@ -30,9 +30,7 @@ import { Heading } from "@g4rcez/components";
 
 ## Design Tokens
 
-Shared geometry uses scoped spacing/radius fallbacks; explicit overrides win. Read [Geometry tokens](geometry-tokens.md) before changing density or looking up library defaults.
-
-The component uses the `.__heading` selector and the typography tokens used by the heading stylesheet, including `--var-typography-xl` and `--var-font-weight-bold`. Override the variables or add `className` for local styling.
+Shared geometry uses scoped spacing/radius fallbacks; explicit overrides win. Read [Geometry tokens](geometry-tokens.md) before changing density or looking up library defaults. The component uses the `.__heading` selector and the typography tokens used by the heading stylesheet, including `--var-typography-xl` and `--var-font-weight-bold`. Override the variables or add `className` for local styling.
 
 ## Examples
 
@@ -45,8 +43,11 @@ The component uses the `.__heading` selector and the typography tokens used by t
 ### Match the document outline
 
 ```tsx
-<Heading as="h1">Dashboard</Heading>
-<Heading as="h3">Billing details</Heading>
+<>
+    <Heading as="h1">Dashboard</Heading>
+    <Heading as="h2">Billing</Heading>
+    <Heading as="h3">Billing details</Heading>
+</>
 ```
 
 ### Local styling
@@ -72,10 +73,26 @@ The component uses the `.__heading` selector and the typography tokens used by t
 - The `as` prop lets the rendered element match the page outline.
 - Do not rely on visual styling alone to communicate heading hierarchy.
 
+## Interaction design and acceptance criteria
+
+- Select `as="h1"` through `as="h6"` from the content hierarchy, independently of visual size. The default `h2` is appropriate for a section under the page title, not automatically for the page title itself.
+
+- Describe each section with meaningful text so heading navigation is useful out of context. Use paragraphs for body text rather than headings chosen for their bold styling.
+- Static headings should not enter the tab order. If a heading includes a link or an adjacent action, retain the child control's native semantics, clear name, and visible focus; do not make an otherwise static heading clickable.
+- At narrow widths and 200% text enlargement, verify that long titles wrap without truncating the topic or obscuring nearby controls. Use the library's typography tokens rather than changing heading level to change its size.
+- The component does not validate the surrounding outline or automatically choose a level. Changing `as` to a non-heading element removes native heading semantics.
+
+## Acceptance criteria
+
+1. **Given** a page with sections and subsections, **when** its heading outline is inspected, **then** each level reflects the actual hierarchy, including a meaningful page heading.
+2. **Given** static headings, **when** the user presses Tab, **then** only associated interactive controls receive focus, in logical document order.
+3. **Given** desktop or mobile heading navigation, **when** the user moves between headings, **then** the topic and structural level are available without relying on visual styling.
+4. **Given** a long title, **when** text is enlarged to 200% or the viewport narrows, **then** the title remains readable and associated actions remain reachable.
+
 ## Data Attributes
 
 - `data-component="heading"` — set on the rendered heading element.
 
 ## Notes
 
-- `Heading` delegates element rendering to `Polymorph` and forwards standard element props and refs through the polymorphic type.
+- `Heading` delegates rendering to `Polymorph` and passes standard element props through its polymorphic type.

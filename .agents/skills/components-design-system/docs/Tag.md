@@ -19,6 +19,7 @@ import { Tag } from "@g4rcez/components/tag";
 
 ## Props
 
+<<<<<<< Updated upstream
 | Prop        | Type                                                                                                                                   | Default     | Description                                |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------ |
 | `theme`     | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral" \| "custom" \| "disabled" \| "loading"` | `"primary"` | Visual theme/variant of the tag            |
@@ -26,24 +27,38 @@ import { Tag } from "@g4rcez/components/tag";
 | `size`      | `"icon" \| "small" \| "default" \| "big" \| "tiny"`                                                                                    | `"default"` | Size of the tag                            |
 | `icon`      | `React.ReactNode`                                                                                                                      | -           | Icon to display inside the tag             |
 | `indicator` | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral"`                                        | -           | Shows a small colored dot before the label |
+||||||| Stash base
+| Prop        | Type                                                                                                                                   | Default     | Description                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------ |
+| `theme`     | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral" \| "custom" \| "disabled" \| "loading"` | `"primary"` | Visual theme/variant of the tag            |
+| `size`      | `"icon" \| "small" \| "default" \| "big" \| "tiny"`                                                                                    | `"default"` | Size of the tag                            |
+| `icon`      | `React.ReactNode`                                                                                                                      | -           | Icon to display inside the tag             |
+| `indicator` | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral"`                                        | -           | Shows a small colored dot before the label |
+=======
+| Prop        | Type                                                                                                                                   | Default     | Description                                                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `theme`     | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral" \| "custom" \| "disabled" \| "loading"` | `"primary"` | Visual theme/variant of the tag                                                                      |
+| `size`      | `"icon" \| "small" \| "default" \| "big" \| "tiny"`                                                                                    | `"default"` | Size of the tag                                                                                      |
+| `icon`      | `React.ReactNode`                                                                                                                      | -           | Icon to display inside the tag                                                                       |
+| `indicator` | `"primary" \| "secondary" \| "info" \| "warn" \| "danger" \| "success" \| "muted" \| "neutral"`                                        | -           | Shows a small colored dot before the label                                                           |
+>>>>>>> Stashed changes
 | `loading`   | `boolean`                                                                                                                              | `false`     | Overrides the theme with a loading appearance; its pulse is omitted when reduced motion is preferred |
-| `as`        | `React.ElementType`                                                                                                                    | `"span"`    | HTML element to render as                  |
-| `className` | `string`                                                                                                                               | -           | Additional CSS classes                     |
-| `children`  | `React.ReactNode`                                                                                                                      | -           | Tag content                                |
+| `as`        | `React.ElementType`                                                                                                                    | `"span"`    | HTML element to render as                                                                            |
+| `className` | `string`                                                                                                                               | -           | Additional CSS classes                                                                               |
+| `children`  | `React.ReactNode`                                                                                                                      | -           | Tag content                                                                                          |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-tag-surface-gap` | `calc(var(--var-spacing-base) * 0.375)` |
-| `--var-tag-surface-radius` | `calc(var(--var-radius-base) * 2.666667)` |
-| `--var-tag-indicator-size` | `calc(var(--var-spacing-base) * 0.5)` |
+| Override                           | Library default                           |
+| ---------------------------------- | ----------------------------------------- |
+| `--var-tag-surface-gap`            | `calc(var(--var-spacing-base) * 0.375)`   |
+| `--var-tag-surface-radius`         | `calc(var(--var-radius-base) * 2.666667)` |
+| `--var-tag-indicator-size`         | `calc(var(--var-spacing-base) * 0.5)`     |
 | `--var-tag-default-min-block-size` | `calc(var(--var-spacing-base) * 2)` |
 
+<<<<<<< Updated upstream
 Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
 
 | Token                     | CSS Variable           | Purpose                                |
@@ -75,6 +90,63 @@ Tailwind utility mappings and component tokens. Where a historical utility targe
 | CSS override | `--var-tag-soft-<theme>-background` | Soft background (`primary`, `info`, `warn`, `danger`, `success`, `neutral`) |
 | CSS override | `--var-tag-soft-<theme>-foreground` | Soft text color; each pair measures 7:1 or more in light and dark |
 | CSS override | `--var-tag-soft-<theme>-border` | Soft hairline border (decorative) |
+||||||| Stash base
+Tailwind utility mappings and component tokens. Where a historical utility targets a different surface, the component's actual token is noted.
+
+| Token                     | CSS Variable           | Purpose                                |
+| ------------------------- | ---------------------- | -------------------------------------- |
+| `bg-tag-primary-bg` | `--var-tag-primary-background` | Background for primary theme |
+| `text-tag-primary-text` | `--var-tag-primary-foreground` | Text color for primary theme |
+| `bg-tag-secondary-bg` | `--var-tag-secondary-background` | Background for secondary theme |
+| `text-tag-secondary-text` | `--var-tag-secondary-foreground` | Text color for secondary theme |
+| `bg-tag-info-bg` | `--var-tag-info-background` | Background for info theme |
+| `text-tag-info-text` | `--var-tag-info-foreground` | Text color for info theme |
+| `bg-tag-warn-bg` | `--var-tag-warn-background` | Background for warn theme |
+| `text-tag-warn-text` | `--var-tag-warn-foreground` | Text color for warn theme |
+| `bg-tag-danger-bg` | `--var-tag-danger-background` | Background for danger theme |
+| `text-tag-danger-text` | `--var-tag-danger-foreground` | Text color for danger theme |
+| `bg-tag-success-bg` | `--var-tag-success-background` | Background for success theme |
+| `text-tag-success-text` | `--var-tag-success-foreground` | Text color for success theme |
+| `bg-tag-muted-bg` | `--var-tag-muted-background` | Background for muted theme |
+| `text-tag-muted-text` | `--var-tag-muted-foreground` | Text color for muted theme |
+| `bg-disabled` | `--var-color-disabled` | Disabled utility; disabled/loading tags use `--var-tag-disabled-background` |
+| `border-card-border` | `--var-card-border` | Card border utility; neutral tags use `--var-tag-neutral-border` |
+| `rounded-tag-surface-radius` | `--var-tag-surface-radius` | Tag border radius |
+| `bg-primary` | `--var-color-primary` | Dot color for primary indicator |
+| `bg-secondary` | `--var-color-secondary` | Dot color for secondary indicator |
+| `bg-info` | `--var-color-info` | Dot color for info indicator |
+| `bg-warn` | `--var-color-warn` | Dot color for warn indicator |
+| `bg-danger` | `--var-color-danger` | Dot color for danger indicator |
+| `bg-success` | `--var-color-success` | Dot color for success indicator |
+| `bg-muted` | `--var-color-muted` | Dot color for muted indicator |
+=======
+| Token | CSS Variable                 | Purpose                          |
+| ---------------------------- | -------------------------------- | --------------------------------------------------------------------------- |
+| `bg-tag-primary-bg`          | `--var-tag-primary-background`   | Background for primary theme                                                |
+| `text-tag-primary-text`      | `--var-tag-primary-foreground`   | Text color for primary theme                                                |
+| `bg-tag-secondary-bg`        | `--var-tag-secondary-background` | Background for secondary theme                                              |
+| `text-tag-secondary-text`    | `--var-tag-secondary-foreground` | Text color for secondary theme                                              |
+| `bg-tag-info-bg`             | `--var-tag-info-background`      | Background for info theme                                                   |
+| `text-tag-info-text`         | `--var-tag-info-foreground`      | Text color for info theme                                                   |
+| `bg-tag-warn-bg`             | `--var-tag-warn-background`      | Background for warn theme                                                   |
+| `text-tag-warn-text`         | `--var-tag-warn-foreground`      | Text color for warn theme                                                   |
+| `bg-tag-danger-bg`           | `--var-tag-danger-background`    | Background for danger theme                                                 |
+| `text-tag-danger-text`       | `--var-tag-danger-foreground`    | Text color for danger theme                                                 |
+| `bg-tag-success-bg`          | `--var-tag-success-background`   | Background for success theme                                                |
+| `text-tag-success-text`      | `--var-tag-success-foreground`   | Text color for success theme                                                |
+| `bg-tag-muted-bg`            | `--var-tag-muted-background`     | Background for muted theme                                                  |
+| `text-tag-muted-text`        | `--var-tag-muted-foreground`     | Text color for muted theme                                                  |
+| `bg-disabled`                | `--var-color-disabled`           | Disabled utility; disabled/loading tags use `--var-tag-disabled-background` |
+| `border-card-border`         | `--var-card-border`              | Card border utility; neutral tags use `--var-tag-neutral-border`            |
+| `rounded-tag-surface-radius` | `--var-tag-surface-radius`       | Tag border radius                                                           |
+| `bg-primary`                 | `--var-color-primary`            | Dot color for primary indicator                                             |
+| `bg-secondary`               | `--var-color-secondary`          | Dot color for secondary indicator                                           |
+| `bg-info`                    | `--var-color-info`               | Dot color for info indicator                                                |
+| `bg-warn`                    | `--var-color-warn`               | Dot color for warn indicator                                                |
+| `bg-danger`                  | `--var-color-danger`             | Dot color for danger indicator                                              |
+| `bg-success`                 | `--var-color-success`            | Dot color for success indicator                                             |
+| `bg-muted`                   | `--var-color-muted`              | Dot color for muted indicator                                               |
+>>>>>>> Stashed changes
 
 ## Theme Variants
 
@@ -100,39 +172,50 @@ Tailwind utility mappings and component tokens. Where a historical utility targe
 ### Basic Variants
 
 ```tsx
-<Tag theme="primary">Primary</Tag>
-<Tag theme="secondary">Secondary</Tag>
-<Tag theme="info">Info</Tag>
-<Tag theme="warn">Warning</Tag>
-<Tag theme="danger">Error</Tag>
-<Tag theme="success">Success</Tag>
-<Tag theme="muted">Muted</Tag>
-<Tag theme="neutral">Neutral</Tag>
+<>
+    <Tag theme="primary">Primary</Tag>
+    <Tag theme="secondary">Secondary</Tag>
+    <Tag theme="info">Info</Tag>
+    <Tag theme="warn">Warning</Tag>
+    <Tag theme="danger">Error</Tag>
+    <Tag theme="success">Success</Tag>
+    <Tag theme="muted">Muted</Tag>
+    <Tag theme="neutral">Neutral</Tag>
+</>
 ```
 
 ### Sizes
 
 ```tsx
-<Tag size="small">Small</Tag>
-<Tag size="default">Default</Tag>
-<Tag size="big">Big</Tag>
+<>
+    <Tag size="small">Small</Tag>
+    <Tag size="default">Default</Tag>
+    <Tag size="big">Big</Tag>
+</>
 ```
 
 ### With Icons
 
 ```tsx
 import { StarIcon, CheckIcon } from "@phosphor-icons/react";
-
-<Tag icon={<StarIcon size={14} />} theme="warn">Featured</Tag>
-<Tag icon={<CheckIcon size={14} />} theme="success">Completed</Tag>
+<>
+    <Tag icon={<StarIcon size={14} />} theme="warn">
+        Featured
+    </Tag>
+    <Tag icon={<CheckIcon size={14} />} theme="success">
+        Completed
+    </Tag>
+</>;
 ```
 
 ### With Indicators
 
 ```tsx
-<Tag indicator="success">Online</Tag>
-<Tag indicator="danger">Offline</Tag>
-<Tag indicator="warn">Pending</Tag>
+<>
+    <Tag indicator="success">Online</Tag>
+    <Tag indicator="danger">Offline</Tag>
+    <Tag indicator="warn">Pending</Tag>
+</>
 ```
 
 ### Status Tags
@@ -144,12 +227,12 @@ const statusMap: Record<string, { theme: "success" | "warn" | "muted" | "danger"
     inactive: { theme: "muted" },
     error: { theme: "danger" },
 };
-
 const StatusTag = ({ status }: { status: string }) => {
     const config = statusMap[status] ?? statusMap.inactive;
     return (
         <Tag theme={config.theme} indicator={config.theme}>
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {" "}
+            {status.charAt(0).toUpperCase + status.slice(1)}{" "}
         </Tag>
     );
 };
@@ -159,6 +242,7 @@ const StatusTag = ({ status }: { status: string }) => {
 
 ```tsx
 <Tag loading theme="primary">
+    {" "}
     Processing...
 </Tag>
 ```
@@ -166,13 +250,16 @@ const StatusTag = ({ status }: { status: string }) => {
 ### Polymorphic Usage
 
 ```tsx
-<Tag as="button" onClick={() => void 0} theme="primary">
-  Clickable Tag
-</Tag>
-
-<Tag as="a" href="/category/react" theme="info">
-  React
-</Tag>
+<>
+    <Tag as="button" onClick={() => void 0} theme="primary">
+        {" "}
+        Clickable Tag
+    </Tag>{" "}
+    <Tag as="a" href="/category/react" theme="info">
+        {" "}
+        React
+    </Tag>
+</>
 ```
 
 ### Content Categorization
@@ -183,11 +270,12 @@ const categories = [
     { name: "TypeScript", theme: "primary" },
     { name: "CSS", theme: "success" },
 ] as const;
-
 <div className="flex gap-2 flex-wrap">
+    {" "}
     {categories.map((cat) => (
         <Tag key={cat.name} theme={cat.theme}>
-            {cat.name}
+            {" "}
+            {cat.name}{" "}
         </Tag>
     ))}
 </div>;
@@ -197,11 +285,12 @@ const categories = [
 
 ```tsx
 import { BellIcon } from "@phosphor-icons/react";
-
 <div className="relative">
-    <BellIcon size={24} />
+    {" "}
+    <BellIcon size={24} />{" "}
     <Tag size="small" theme="danger" className="absolute -top-2 -right-2 min-w-[20px] h-5 text-xs">
-        3
+        {" "}
+        3{" "}
     </Tag>
 </div>;
 ```

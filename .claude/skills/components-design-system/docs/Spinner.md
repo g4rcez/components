@@ -19,7 +19,7 @@ import { Spinner, Loading } from "@g4rcez/components";
 
 ## Props
 
-### Spinner
+### Spinner props
 
 | Prop        | Type     | Default | Description                               |
 | ----------- | -------- | ------- | ----------------------------------------- |
@@ -31,13 +31,11 @@ import { Spinner, Loading } from "@g4rcez/components";
 
 ## Design Tokens and CSS
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
-
-| Override | Library default |
-| --- | --- |
-| `--var-spinner-indicator-size` | `calc(var(--var-spacing-base) * 3)` |
+| Override                               | Library default                        |
+| -------------------------------------- | -------------------------------------- |
+| `--var-spinner-indicator-size`         | `calc(var(--var-spacing-base) * 3)`    |
 | `--var-spinner-indicator-border-width` | `calc(var(--var-spacing-base) * 0.25)` |
 | `--var-spinner-container-padding` | `calc(var(--var-spacing-base) * 3)` |
 
@@ -51,7 +49,9 @@ The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__s
 <Spinner />
 ```
 
-### Loading container
+### Loading
+
+container
 
 ```tsx
 {
@@ -63,8 +63,8 @@ The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__s
 
 ```tsx
 <Button disabled={isSaving}>
-    {isSaving ? <Spinner /> : null}
-    {isSaving ? "Saving…" : "Save"}
+    {" "}
+    {isSaving ? <Spinner /> : null} {isSaving ? "Saving…" : "Save"}
 </Button>
 ```
 
@@ -97,3 +97,7 @@ The component ships `@g4rcez/components/spinner.css`. Stable selectors are `.__s
 
 - The spinner uses a border arc and CSS animation; rotation is disabled when reduced motion is preferred. It does not report numeric progress.
 - The default translation is `Loading` in the default locale and changes with `ComponentsProvider` translations.
+
+```
+
+```

@@ -28,15 +28,13 @@ import { Toolbar } from "@g4rcez/components";
 
 Tokens this component reads. Customize by overriding these CSS variables in your theme.
 
-| CSS Variable | Purpose |
-| --- | --- |
-| `--var-toolbar-bottom` | Sticky bottom offset |
-| `--var-toolbar-p` | Toolbar padding |
+| CSS Variable           | Purpose                                       |
+| ---------------------- | --------------------------------------------- |
+| `--var-toolbar-bottom` | Sticky bottom offset                          |
+| `--var-toolbar-p`      | Toolbar padding                               |
 | `--var-layer-normal` | Keeps focused buttons above adjacent controls |
 
-The toolbar root does not paint a surface or border and does not consume a radius token. Connected controls retain their own outer corners. The offset and padding read only the canonical properties above, without legacy-name fallbacks.
-
-The root selector is `.__toolbar`. Connected styling targets direct native buttons and direct `.__button` elements, including polymorphic button links. Wrapping controls in a layout element opts out of connected styling. Load `button.css` separately when composing with `Button`; toolbar CSS does not replace button styles.
+The toolbar root does not paint a surface or border and does not consume a radius token. Connected controls retain their own outer corners. The offset and padding read only the canonical properties above, without legacy-name fallbacks. The root selector is `.__toolbar`. Connected styling targets direct native buttons and direct `.__button` elements, including polymorphic button links. Wrapping controls in a layout element opts out of connected styling. Load `button.css` separately when composing with `Button`; toolbar CSS does not replace button styles.
 
 ## Examples
 
@@ -45,10 +43,9 @@ The root selector is `.__toolbar`. Connected styling targets direct native butto
 ```tsx
 import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
-
 <Toolbar>
-    <Button theme="ghost-muted">Cancel</Button>
-    <Button theme="primary">Save Changes</Button>
+    {" "}
+    <Button theme="ghost-muted">Cancel</Button> <Button theme="primary">Save Changes</Button>
 </Toolbar>;
 ```
 
@@ -59,26 +56,33 @@ import { BoldIcon, ItalicIcon, UnderlineIcon } from "@phosphor-icons/react";
 import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
 import { Tooltip } from "@g4rcez/components/tooltip";
-
 <Toolbar>
+    {" "}
     <Tooltip title="Bold">
+        {" "}
         <Button size="icon" theme="ghost-neutral">
-            <BoldIcon size={16} />
-        </Button>
-    </Tooltip>
+            {" "}
+            <BoldIcon size={16} />{" "}
+        </Button>{" "}
+    </Tooltip>{" "}
     <Tooltip title="Italic">
+        {" "}
         <Button size="icon" theme="ghost-neutral">
-            <ItalicIcon size={16} />
-        </Button>
-    </Tooltip>
+            {" "}
+            <ItalicIcon size={16} />{" "}
+        </Button>{" "}
+    </Tooltip>{" "}
     <Tooltip title="Underline">
+        {" "}
         <Button size="icon" theme="ghost-neutral">
-            <UnderlineIcon size={16} />
-        </Button>
-    </Tooltip>
-    <div className="mx-2 h-6 w-px bg-card-border" />
+            {" "}
+            <UnderlineIcon size={16} />{" "}
+        </Button>{" "}
+    </Tooltip>{" "}
+    <div className="mx-2 h-6 w-px bg-card-border" />{" "}
     <Button theme="primary" size="small">
-        Publish
+        {" "}
+        Publish{" "}
     </Button>
 </Toolbar>;
 ```
@@ -89,21 +93,20 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 import { TrashIcon, DownloadIcon } from "@phosphor-icons/react";
 import { Toolbar } from "@g4rcez/components";
 import { Button } from "@g4rcez/components/button";
-
 function BatchToolbar({ selectedCount }: { selectedCount: number }) {
     if (selectedCount === 0) return null;
-
     return (
         <Toolbar>
-            <span className="text-sm text-muted-foreground">{selectedCount} selected</span>
+            {" "}
+            <span className="text-sm text-muted-foreground">{selectedCount} selected</span>{" "}
             <Button theme="ghost-neutral" size="small">
-                <DownloadIcon size={16} />
-                Export
-            </Button>
+                {" "}
+                <DownloadIcon size={16} /> Export{" "}
+            </Button>{" "}
             <Button theme="danger" size="small">
-                <TrashIcon size={16} />
-                Delete
-            </Button>
+                {" "}
+                <TrashIcon size={16} /> Delete{" "}
+            </Button>{" "}
         </Toolbar>
     );
 }

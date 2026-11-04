@@ -39,7 +39,7 @@ import { Masonry, MasonryItem } from "@g4rcez/components/masonry";
 | Prop       | Type                           | Default | Description                                                   |
 | ---------- | ------------------------------ | ------- | ------------------------------------------------------------- |
 | `width`    | `React.CSSProperties["width"]` | —       | Requested item width, such as `"100%"` to reserve a full row. |
-| `children` | `React.ReactNode`              | —       | Item content.                                                 |
+| `children` | `React.ReactNode` | — | Item content. |
 
 `MasonryLayout` has the shape `{ columns, gutter, height, items }`. Each item contains `index`, `column`, `top`, `left`, `width`, and `height`.
 
@@ -53,9 +53,8 @@ Masonry has no component-specific design tokens. Its generated CSS contract is `
 
 ```tsx
 <Masonry columns={3} gutter={16}>
-    <Card title="First">Short content.</Card>
-    <Card title="Second">Content with a different height.</Card>
-    <Card title="Third">More content.</Card>
+    {" "}
+    <Card title="First">Short content.</Card> <Card title="Second">Content with a different height.</Card> <Card title="Third">More content.</Card>
 </Masonry>
 ```
 
@@ -63,11 +62,12 @@ Masonry has no component-specific design tokens. Its generated CSS contract is `
 
 ```tsx
 <Masonry columns={3}>
+    {" "}
     <MasonryItem width="100%">
-        <Card title="Featured">This item spans the available row.</Card>
-    </MasonryItem>
-    <Card title="One">Column content.</Card>
-    <Card title="Two">Column content.</Card>
+        {" "}
+        <Card title="Featured">This item spans the available row.</Card>{" "}
+    </MasonryItem>{" "}
+    <Card title="One">Column content.</Card> <Card title="Two">Column content.</Card>
 </Masonry>
 ```
 
@@ -75,9 +75,11 @@ Masonry has no component-specific design tokens. Its generated CSS contract is `
 
 ```tsx
 <Masonry onLayoutChange={(layout) => console.info(layout)}>
+    {" "}
     {items.map((item) => (
         <Card key={item.id} title={item.title}>
-            {item.content}
+            {" "}
+            {item.content}{" "}
         </Card>
     ))}
 </Masonry>
