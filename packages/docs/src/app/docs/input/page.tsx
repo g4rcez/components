@@ -13,13 +13,15 @@ const Password = () => {
             title="Secret..."
             required
             right={
-                <button type="button" onClick={() => setType((p) => (p === "text" ? "password" : "text"))}>
-                    {type === "password" ? (
-                        <EyeIcon className="text-foreground" size={18} />
-                    ) : (
-                        <EyeClosedIcon className="text-foreground" size={18} />
-                    )}
-                </button>
+                <Button
+                    type="button"
+                    size="icon"
+                    theme="ghost-neutral"
+                    aria-label={type === "password" ? "Show password" : "Hide password"}
+                    onClick={() => setType((p) => (p === "text" ? "password" : "text"))}
+                >
+                    {type === "password" ? <EyeIcon aria-hidden="true" size={18} /> : <EyeClosedIcon aria-hidden="true" size={18} />}
+                </Button>
             }
         />
     );
@@ -37,7 +39,7 @@ export default function InputPage() {
                 title="Brazilian Masks"
                 description="Examples of inputs using common Brazilian masks (CPF, CNPJ, Cellphone)."
                 code={`"use client";
-import { Input } from "@g4rcez/components";
+import { Button, Input } from "@g4rcez/components";
 
 function BrazilianMasksDemo() {
   return (
@@ -49,8 +51,8 @@ function BrazilianMasksDemo() {
         placeholder="00.000.000/0001-00"
         required
         info={
-          <div>
-            Testing <button>nested button</button>
+            <div>
+            Testing <Button type="button">Nested action</Button>
           </div>
         }
       />
@@ -73,7 +75,7 @@ function BrazilianMasksDemo() {
                         required
                         info={
                             <div>
-                                Testing <button>nested button</button>
+                                Testing <Button type="button">Nested action</Button>
                             </div>
                         }
                     />

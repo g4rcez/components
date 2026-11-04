@@ -339,21 +339,6 @@
     z-index: var(--var-layer-normal);
     inset-block-end: calc(var(--var-spacing-base) * 1.25);
     inset-inline-end: calc(var(--var-spacing-base) * 1.25);
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--var-spacing-base) / 2);
-    min-block-size: calc(var(--var-spacing-base) * 2.75);
-    padding: calc(var(--var-spacing-base) * 0.75);
-    border: var(--var-border-hairline) solid var(--docs-border);
-    border-radius: calc(var(--var-radius-base) * 0.75);
-    background: var(--docs-surface);
-    color: var(--docs-text-muted);
-    font-size: 0.75rem;
-}
-
-.site-help-button:hover {
-    border-color: var(--docs-primary);
-    color: var(--docs-primary);
 }
 
 .site-quick-links {

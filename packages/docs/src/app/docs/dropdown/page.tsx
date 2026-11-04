@@ -22,9 +22,9 @@ function BasicDropdown() {
   return (
     <Dropdown trigger={<Button>Open dropdown</Button>} title="Options">
       <ul className="flex flex-col gap-2">
-        <li><button type="button" className="w-full text-left px-2 py-1 rounded hover:bg-muted">Profile</button></li>
-        <li><button type="button" className="w-full text-left px-2 py-1 rounded hover:bg-muted">Settings</button></li>
-        <li><button type="button" className="w-full text-left px-2 py-1 rounded hover:bg-muted text-danger">Sign out</button></li>
+        <li><Button type="button" theme="ghost-neutral" className="w-full justify-start">Profile</Button></li>
+        <li><Button type="button" theme="ghost-neutral" className="w-full justify-start">Settings</Button></li>
+        <li><Button type="button" theme="ghost-danger" className="w-full justify-start">Sign out</Button></li>
       </ul>
     </Dropdown>
   );
@@ -34,19 +34,19 @@ function BasicDropdown() {
                     <Dropdown trigger={<Button>Open dropdown</Button>} title="Options">
                         <ul className="flex flex-col gap-2">
                             <li>
-                                <button type="button" className="w-full rounded px-2 py-1 text-left hover:bg-muted">
+                                <Button type="button" theme="ghost-neutral" className="w-full justify-start">
                                     Profile
-                                </button>
+                                </Button>
                             </li>
                             <li>
-                                <button type="button" className="w-full rounded px-2 py-1 text-left hover:bg-muted">
+                                <Button type="button" theme="ghost-neutral" className="w-full justify-start">
                                     Settings
-                                </button>
+                                </Button>
                             </li>
                             <li>
-                                <button type="button" className="w-full rounded px-2 py-1 text-left text-danger hover:bg-muted">
+                                <Button type="button" theme="ghost-danger" className="w-full justify-start">
                                     Sign out
-                                </button>
+                                </Button>
                             </li>
                         </ul>
                     </Dropdown>
@@ -71,7 +71,7 @@ function HoverDropdown() {
             >
                 <Card title="Hover">
                     <Dropdown hover trigger={<Button theme="secondary">Hover me</Button>} title="Quick info">
-                        <p className="max-w-48 text-sm text-secondary">This dropdown opens on hover and closes when you move away.</p>
+                        <p className="text-secondary max-w-48 text-sm">This dropdown opens on hover and closes when you move away.</p>
                     </Dropdown>
                 </Card>
             </ComponentDemo>

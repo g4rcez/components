@@ -4,6 +4,7 @@ import { HeroDemo } from "@/components/examples/hero-demo";
 import { FloatingAction } from "@/components/floating-action";
 import { Footer } from "@/components/footer";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react";
+import { Button } from "@g4rcez/components";
 import Link from "next/link";
 import "./landing.css";
 
@@ -62,12 +63,12 @@ export default function LandingPage() {
                             from scratch.
                         </p>
                         <div className="landing-actions">
-                            <Link href="/docs/get-started" className="site-button site-button-primary">
+                            <Button as={Link} href="/docs/get-started" theme="primary">
                                 Get started <ArrowRightIcon size={17} aria-hidden="true" />
-                            </Link>
-                            <Link href="/docs" className="site-button site-button-secondary">
+                            </Button>
+                            <Button as={Link} href="/docs" theme="neutral">
                                 Explore the components
-                            </Link>
+                            </Button>
                         </div>
                     </div>
                     <div className="landing-install">
@@ -150,9 +151,9 @@ export default function LandingPage() {
                         </h2>
                         <p>Customize colors, spacing, and component styles with CSS variables. Keep the behavior. Make the design your own.</p>
                     </div>
-                    <Link href="/docs/setup" className="site-button site-button-primary">
+                    <Button as={Link} href="/docs/setup" theme="primary">
                         Explore theming <ArrowRightIcon size={17} aria-hidden="true" />
-                    </Link>
+                    </Button>
                 </section>
                 <Footer />
             </div>

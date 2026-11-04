@@ -31,45 +31,42 @@ const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({
     const hint = Array.isArray(command.hint) ? command.hint.join(" · ") : command.hint;
 
     return (
-        <article className="flex min-w-0 flex-col gap-base">
-            <div className="flex min-h-24 items-end justify-between gap-base overflow-hidden rounded-card-radius bg-muted p-base">
+        <article className="gap-base flex min-w-0 flex-col">
+            <div className="gap-base rounded-card-radius bg-muted p-base flex min-h-24 items-end justify-between overflow-hidden">
                 <div className="min-w-0">
-                    <p className="text-typography-xs font-semibold text-foreground">Workspace</p>
-                    <p className="mt-1 text-typography-sm text-foreground/80">A page in your team space</p>
+                    <p className="text-typography-xs text-foreground font-semibold">Workspace</p>
+                    <p className="text-typography-sm text-foreground/80 mt-1">A page in your team space</p>
                 </div>
-                <FolderIcon aria-hidden="true" className="shrink-0 text-primary/20" size={64} />
+                <FolderIcon aria-hidden="true" className="text-primary/20 shrink-0" size={64} />
             </div>
-            <header className="flex min-w-0 items-start gap-sm">
-                <div
-                    aria-hidden="true"
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"
-                >
+            <header className="gap-sm flex min-w-0 items-start">
+                <div aria-hidden="true" className="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
                     {command.Icon ?? <FolderIcon size={20} />}
                 </div>
                 <div className="min-w-0 flex-1">
-                    <p className="text-typography-xs font-medium text-muted-foreground">Workspace page</p>
-                    <h2 className="mt-1 break-words text-typography-xl font-semibold text-foreground">{title}</h2>
+                    <p className="text-typography-xs text-muted-foreground font-medium">Workspace page</p>
+                    <h2 className="text-typography-xl text-foreground mt-1 break-words font-semibold">{title}</h2>
                 </div>
                 {command.shortcut ? (
-                    <kbd className="inline-flex shrink-0 items-center rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y font-mono text-typography-xs text-muted-foreground">
+                    <kbd className="rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y text-typography-xs text-muted-foreground inline-flex shrink-0 items-center font-mono">
                         {command.shortcut}
                     </kbd>
                 ) : null}
             </header>
-            {hint ? <p className="text-typography-sm leading-relaxed text-muted-foreground">{hint}</p> : null}
+            {hint ? <p className="text-typography-sm text-muted-foreground leading-relaxed">{hint}</p> : null}
             <section
                 aria-label="Recently updated workspace pages"
-                className="min-w-0 overflow-hidden rounded-card-radius border border-floating-border bg-floating-background"
+                className="rounded-card-radius border-floating-border bg-floating-background min-w-0 overflow-hidden border"
             >
-                <div className="flex items-center justify-between gap-sm border-b border-floating-border px-base py-sm">
-                    <h3 className="text-typography-sm font-semibold text-foreground">Recent work</h3>
+                <div className="gap-sm border-floating-border px-base py-sm flex items-center justify-between border-b">
+                    <h3 className="text-typography-sm text-foreground font-semibold">Recent work</h3>
                     <span className="text-typography-xs text-muted-foreground">Example data</span>
                 </div>
-                <table className="w-full table-fixed border-collapse text-left text-typography-xs">
+                <table className="text-typography-xs w-full table-fixed border-collapse text-left">
                     <caption className="sr-only">Example workspace pages and their status</caption>
                     <thead>
-                        <tr className="border-b border-floating-border text-muted-foreground">
-                            <th scope="col" className="w-2/3 px-base py-sm font-medium">
+                        <tr className="border-floating-border text-muted-foreground border-b">
+                            <th scope="col" className="px-base py-sm w-2/3 font-medium">
                                 Page
                             </th>
                             <th scope="col" className="px-base py-sm font-medium">
@@ -79,10 +76,10 @@ const CommandPreview: React.FC<{ command: CommandItemTypes; text: string }> = ({
                     </thead>
                     <tbody>
                         {previewRows.map((row) => (
-                            <tr className="border-b border-floating-border last:border-0" key={row.title}>
-                                <td className="truncate px-base py-sm font-medium text-foreground">{row.title}</td>
+                            <tr className="border-floating-border border-b last:border-0" key={row.title}>
+                                <td className="px-base py-sm text-foreground truncate font-medium">{row.title}</td>
                                 <td className="px-base py-sm">
-                                    <span className="inline-flex max-w-full truncate rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y text-foreground">
+                                    <span className="rounded-tag-radius bg-muted px-tag-padding-x py-tag-padding-y text-foreground inline-flex max-w-full truncate">
                                         {row.status}
                                     </span>
                                 </td>
@@ -374,8 +371,8 @@ function CommanderExample() {
                     <Button theme="primary" size="big" onClick={() => setOpen1(true)}>
                         Open Commander
                     </Button>
-                    <p className="text-xs text-muted-foreground">
-                        Or press <span className="font-bold text-primary">Alt + K</span>
+                    <p className="text-muted-foreground text-xs">
+                        Or press <span className="text-primary font-bold">Alt + K</span>
                     </p>
                 </div>
             </ComponentDemo>
@@ -416,8 +413,8 @@ function EmptyStateExample() {
             >
                 <div className="flex flex-col items-center gap-4">
                     <Button onClick={() => setOpen2(true)}>Open Commander</Button>
-                    <p className="text-xs text-muted-foreground">
-                        Type <span className="font-bold text-primary">xyz</span> to see the empty state
+                    <p className="text-muted-foreground text-xs">
+                        Type <span className="text-primary font-bold">xyz</span> to see the empty state
                     </p>
                 </div>
             </ComponentDemo>
@@ -516,14 +513,14 @@ function PreviewExample() {
         commands={commands}
         onChangeVisibility={setOpen}
         filters={
-          <button
+          <Button
             type="button"
+            theme={projectsOnly ? "primary" : "ghost-neutral"}
             aria-pressed={projectsOnly}
-            className={\`rounded border border-floating-border px-3 py-1.5 text-sm \${projectsOnly ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}\`}
             onClick={() => setProjectsOnly((enabled) => !enabled)}
           >
             Projects only
-          </button>
+          </Button>
         }
         Preview={CommandPreview}
       />
@@ -533,8 +530,9 @@ function PreviewExample() {
             >
                 <div className="flex flex-col items-center gap-4">
                     <Button onClick={() => setOpen3(true)}>Open Commander</Button>
-                    <p className="text-xs text-muted-foreground">
-                        Use <span className="font-bold text-primary">↑ ↓ arrow keys</span> to update the preview, or use the collapsible Projects filter.
+                    <p className="text-muted-foreground text-xs">
+                        Use <span className="text-primary font-bold">↑ ↓ arrow keys</span> to update the preview, or use the collapsible Projects
+                        filter.
                     </p>
                 </div>
             </ComponentDemo>
@@ -556,14 +554,14 @@ function PreviewExample() {
                 open={open3}
                 Preview={CommandPreview}
                 filters={
-                    <button
+                    <Button
                         type="button"
+                        theme={projectsOnly ? "primary" : "ghost-neutral"}
                         aria-pressed={projectsOnly}
-                        className={`rounded border border-floating-border px-3 py-1.5 text-sm ${projectsOnly ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}`}
                         onClick={() => setProjectsOnly((enabled) => !enabled)}
                     >
                         Projects only
-                    </button>
+                    </Button>
                 }
                 commands={visiblePreviewCommands}
                 onChangeVisibility={setOpen3}

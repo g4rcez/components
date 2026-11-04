@@ -1,7 +1,7 @@
 "use client";
 import { GithubIcon } from "@/components/icons/github";
 import { ToggleMode } from "@/components/toggle-mode";
-import { Modal } from "@g4rcez/components";
+import { Button, Modal } from "@g4rcez/components";
 import { ListIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -46,8 +46,10 @@ export const Header = () => {
         <header className="docs-header">
             <div className="docs-header-inner">
                 <div className="docs-header-leading">
-                    <button
+                    <Button
                         type="button"
+                        size="icon"
+                        theme="ghost-neutral"
                         className="docs-icon-button docs-menu-button"
                         aria-label="Open documentation navigation"
                         aria-controls="mobile-docs-navigation"
@@ -55,7 +57,7 @@ export const Header = () => {
                         onClick={() => setOpen(true)}
                     >
                         <ListIcon size={21} aria-hidden="true" />
-                    </button>
+                    </Button>
                     <Link href="/" className="docs-brand" aria-label="Components home">
                         <span className="docs-brand-mark" aria-hidden="true">
                             C
@@ -72,20 +74,30 @@ export const Header = () => {
                     </nav>
                 </div>
                 <div className="docs-header-actions">
-                    <button type="button" className="docs-search-trigger" aria-label="Search documentation" onClick={focusDocumentationSearch}>
+                    <Button
+                        type="button"
+                        size="small"
+                        theme="ghost-neutral"
+                        className="docs-search-trigger"
+                        aria-label="Search documentation"
+                        onClick={focusDocumentationSearch}
+                    >
                         <MagnifyingGlassIcon size={17} aria-hidden="true" />
                         <span>Search documentation...</span>
                         <kbd aria-hidden="true">⌘ K</kbd>
-                    </button>
-                    <a
+                    </Button>
+                    <Button
+                        as="a"
                         href="https://github.com/g4rcez/components"
                         target="_blank"
                         rel="noreferrer"
+                        size="icon"
+                        theme="ghost-neutral"
                         className="docs-icon-button docs-header-github"
                         aria-label="View components on GitHub"
                     >
                         <GithubIcon className="docs-github-icon" aria-hidden="true" />
-                    </a>
+                    </Button>
                     <ToggleMode />
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Modal } from "@g4rcez/components";
+import { Button, Modal } from "@g4rcez/components";
 import { ArrowRightIcon, QuestionIcon } from "@phosphor-icons/react";
 
 const quickLinks = [
@@ -17,10 +17,17 @@ export const FloatingAction = () => {
 
     return (
         <>
-            <button type="button" className="site-help-button" aria-label="Open quick links" aria-haspopup="dialog" onClick={() => setIsOpen(true)}>
+            <Button
+                type="button"
+                theme="neutral"
+                className="site-help-button"
+                aria-label="Open quick links"
+                aria-haspopup="dialog"
+                onClick={() => setIsOpen(true)}
+            >
                 <QuestionIcon size={20} aria-hidden="true" />
                 <span>Quick links</span>
-            </button>
+            </Button>
             <Modal open={isOpen} onChange={setIsOpen} title="Quick links" type="dialog" overlayClickClose>
                 <nav aria-label="Quick links" className="site-quick-links">
                     {quickLinks.map((link) => (

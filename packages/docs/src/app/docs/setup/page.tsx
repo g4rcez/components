@@ -151,12 +151,12 @@ type LeafEditorProps = {
 function LeafEditor({ row, value, error, onChange, swatch }: LeafEditorProps) {
     const id = useId();
     return (
-        <div className="text-typography-xs flex min-w-0 flex-col gap-input-label-mb">
-            <div className="flex items-center gap-input-slot-gap">
+        <div className="text-typography-xs gap-input-label-mb flex min-w-0 flex-col">
+            <div className="gap-input-slot-gap flex items-center">
                 {swatch && (
                     <span
                         aria-hidden
-                        className="size-input-height shrink-0 rounded-input-radius border border-card-border"
+                        className="size-input-height rounded-input-radius border-card-border shrink-0 border"
                         style={{ backgroundColor: error ? row.value : value || row.value }}
                     />
                 )}
@@ -191,25 +191,38 @@ function GroupBlock({ title, rows, drafts, errors, swatch, onChange }: GroupBloc
     const id = useId();
     return (
         <Card>
-            <header className="-mx-card-padding-x -my-card-padding-y flex items-center justify-between gap-base px-card-padding-x py-card-padding-y">
-                <button
+            <header className="-mx-card-padding-x -my-card-padding-y gap-base px-card-padding-x py-card-padding-y flex items-center justify-between">
+                <Button
                     type="button"
+                    theme="ghost-neutral"
                     onClick={() => setOpen((value) => !value)}
                     aria-expanded={open}
                     aria-controls={id}
-                    className="flex min-w-0 flex-1 items-center gap-base text-left text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    className="gap-base min-w-0 flex-1 justify-start text-left"
                 >
-                    {open ? <CaretDownIcon aria-hidden className="size-4 text-muted-foreground" /> : <CaretRightIcon aria-hidden className="size-4 text-muted-foreground" />}
+                    {open ? (
+                        <CaretDownIcon aria-hidden className="text-muted-foreground size-4" />
+                    ) : (
+                        <CaretRightIcon aria-hidden className="text-muted-foreground size-4" />
+                    )}
                     <span className="text-typography-sm break-all font-mono font-semibold">{title}</span>
-                </button>
-                <Tag size="tiny" theme="muted">{rows.length}</Tag>
+                </Button>
+                <Tag size="tiny" theme="muted">
+                    {rows.length}
+                </Tag>
             </header>
             <div id={id} hidden={!open}>
                 {open && (
-                    <div className="mt-card-gap grid grid-cols-1 gap-base border-t border-card-border pt-card-gap md:grid-cols-2">
+                    <div className="mt-card-gap gap-base border-card-border pt-card-gap grid grid-cols-1 border-t md:grid-cols-2">
                         {rows.map((row) => (
-                            <LeafEditor key={labelize(row.path)} row={row} value={drafts[labelize(row.path)] ?? ""}
-                                error={errors[labelize(row.path)]} swatch={swatch} onChange={onChange} />
+                            <LeafEditor
+                                key={labelize(row.path)}
+                                row={row}
+                                value={drafts[labelize(row.path)] ?? ""}
+                                error={errors[labelize(row.path)]}
+                                swatch={swatch}
+                                onChange={onChange}
+                            />
                         ))}
                     </div>
                 )}
@@ -227,8 +240,10 @@ function TokenEditor({ rows, ...props }: Omit<GroupBlockProps, "title">) {
         groups.set(group, leaves);
     }
     return (
-        <div className="flex flex-col gap-base">
-            {Array.from(groups, ([title, leaves]) => <GroupBlock key={title} title={title} rows={leaves} {...props} />)}
+        <div className="gap-base flex flex-col">
+            {Array.from(groups, ([title, leaves]) => (
+                <GroupBlock key={title} title={title} rows={leaves} {...props} />
+            ))}
         </div>
     );
 }
@@ -249,19 +264,19 @@ const BUTTON_GHOSTS = [
 function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
     const [previewTab, setPreviewTab] = useState("overview");
     return (
-        <div style={style} className="rounded-card-radius border border-card-border bg-background p-card-padding-x text-foreground">
-            <div className="flex flex-col gap-base">
-                <header className="flex items-center justify-between gap-base">
-                    <div className="flex flex-col gap-card-title-pb">
+        <div style={style} className="rounded-card-radius border-card-border bg-background p-card-padding-x text-foreground border">
+            <div className="gap-base flex flex-col">
+                <header className="gap-base flex items-center justify-between">
+                    <div className="gap-card-title-pb flex flex-col">
                         <h4 className="text-typography-2xl font-bold">Preview · {mode}</h4>
                         <p className="text-typography-sm text-muted-foreground">Built-in palette with your shared and theme overrides.</p>
                     </div>
                     <Tag theme="primary">{mode}</Tag>
                 </header>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Buttons</h5>
-                    <div className="flex flex-wrap items-center gap-button-gap">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Buttons</h5>
+                    <div className="gap-button-gap flex flex-wrap items-center">
                         <Button theme="primary">Primary</Button>
                         <Button theme="info">Info</Button>
                         <Button theme="success">Success</Button>
@@ -271,14 +286,14 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                         <Button theme="muted">Muted</Button>
                         <Button theme="neutral">Neutral</Button>
                     </div>
-                    <div className="flex flex-wrap items-center gap-button-gap">
+                    <div className="gap-button-gap flex flex-wrap items-center">
                         {BUTTON_GHOSTS.map((variant) => (
                             <Button key={variant} theme={variant}>
                                 {variant.replace("ghost-", "")}
                             </Button>
                         ))}
                     </div>
-                    <div className="flex flex-wrap items-center gap-button-gap">
+                    <div className="gap-button-gap flex flex-wrap items-center">
                         <Button theme="primary" size="big">
                             Big
                         </Button>
@@ -295,9 +310,9 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Tags</h5>
-                    <div className="flex flex-wrap items-center gap-button-gap">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Tags</h5>
+                    <div className="gap-button-gap flex flex-wrap items-center">
                         {THEMED_VARIANTS.map((variant) => (
                             <Tag key={variant} theme={variant}>
                                 {variant}
@@ -306,9 +321,9 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Alerts</h5>
-                    <div className="grid gap-base md:grid-cols-2">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Alerts</h5>
+                    <div className="gap-base grid md:grid-cols-2">
                         <Alert theme="primary" title="Primary">
                             <p>Primary alert surface.</p>
                         </Alert>
@@ -330,9 +345,9 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Surfaces</h5>
-                    <div className="grid gap-base md:grid-cols-2">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Surfaces</h5>
+                    <div className="gap-base grid md:grid-cols-2">
                         <Card title="Card surface">
                             <p className="text-typography-sm text-muted-foreground">Surface colors can be edited independently in components.card.</p>
                         </Card>
@@ -346,12 +361,12 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Form controls</h5>
-                    <div className="grid gap-base md:grid-cols-2">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Form controls</h5>
+                    <div className="gap-base grid md:grid-cols-2">
                         <Input title="Email" name="email" placeholder="you@example.com" />
                         <Input title="With error" name="email-error" placeholder="you@example.com" error="This email is already in use." />
-                        <div className="flex flex-col gap-base">
+                        <div className="gap-base flex flex-col">
                             <Checkbox>Subscribe to updates</Checkbox>
                             <Radiobox name="plan" value="basic">
                                 Basic plan
@@ -361,10 +376,10 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                             </Radiobox>
                             <Switch>Enable notifications</Switch>
                         </div>
-                        <div className="flex flex-col gap-base">
+                        <div className="gap-base flex flex-col">
                             <Progress value={42} label="Upload" />
                             <Progress value={78} label="Render" />
-                            <div className="flex flex-wrap items-center gap-button-gap">
+                            <div className="gap-button-gap flex flex-wrap items-center">
                                 <Shortcut value="ctrl+k" />
                                 <Shortcut value="shift+enter" />
                                 <Shortcut value="cmd+shift+p" />
@@ -373,8 +388,8 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Navigation</h5>
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Navigation</h5>
                     <Tabs active={previewTab} onChange={setPreviewTab}>
                         <Tab id="overview" title="Overview">
                             <p className="text-typography-sm text-muted-foreground">The tab content surface inherits from card-background.</p>
@@ -393,8 +408,8 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </Steps>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Timeline</h5>
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Timeline</h5>
                     <Timeline>
                         <TimelineItem>
                             <TimelineItem.Icon>
@@ -426,18 +441,18 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </Timeline>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Skeleton</h5>
-                    <div className="flex w-full flex-col gap-base">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Skeleton</h5>
+                    <div className="gap-base flex w-full flex-col">
                         <Skeleton className="w-full" />
                         <Skeleton className="w-8/12" />
                         <Skeleton className="w-1/2" />
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <h5 className="text-typography-sm font-semibold uppercase tracking-wide text-muted-foreground">Typography</h5>
-                    <div className="flex flex-col gap-card-title-pb">
+                <section className="gap-card-title-pb flex flex-col">
+                    <h5 className="text-typography-sm text-muted-foreground font-semibold uppercase tracking-wide">Typography</h5>
+                    <div className="gap-card-title-pb flex flex-col">
                         <p className="text-typography-xs text-muted-foreground">Caption · text-typography-xs</p>
                         <p className="text-typography-sm">Small · text-typography-sm</p>
                         <p className="text-typography-base">Body · text-typography-base</p>
@@ -447,10 +462,12 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-card-title-pb">
-                    <div className="flex items-center gap-button-gap text-muted-foreground">
+                <section className="gap-card-title-pb flex flex-col">
+                    <div className="gap-button-gap text-muted-foreground flex items-center">
                         <RocketLaunchIcon className="size-4" />
-                        <span className="text-typography-xs">Scoped preview: overlays portaled outside this panel inherit the site theme, not these local overrides.</span>
+                        <span className="text-typography-xs">
+                            Scoped preview: overlays portaled outside this panel inherit the site theme, not these local overrides.
+                        </span>
                     </div>
                 </section>
             </div>
@@ -487,16 +504,22 @@ export default function SetupPage() {
             setLight({});
             setShared({});
         }
-        setStatus(mode === "dark" ? "Dark overrides cleared. Shared overrides are unchanged." : "Default overrides cleared, including shared tokens. Dark overrides are unchanged.");
+        setStatus(
+            mode === "dark"
+                ? "Dark overrides cleared. Shared overrides are unchanged."
+                : "Default overrides cleared, including shared tokens. Dark overrides are unchanged."
+        );
     };
     const defaultConfig: ThemeConfiguration = { name: "default", ...defaultResult.overrides };
     const darkConfig: ThemeConfiguration = { name: "dark", ...darkResult.overrides };
     const hasErrors = [sharedResult, lightResult, darkResult].some((result) => Object.keys(result.errors).length > 0);
     const previewStyle: CSSProperties = {
-        ...createThemeProperties({ tokens: {
-            spacing: defaultLightThemeTokens.tokens.spacing,
-            rounding: defaultLightThemeTokens.tokens.rounding,
-        } }),
+        ...createThemeProperties({
+            tokens: {
+                spacing: defaultLightThemeTokens.tokens.spacing,
+                rounding: defaultLightThemeTokens.tokens.rounding,
+            },
+        }),
         ...createThemeProperties(mode === "dark" ? defaultDarkThemeTokens : lightPalette),
         ...createThemeProperties(defaultResult.overrides),
         ...(mode === "dark" ? createThemeProperties(darkResult.overrides) : {}),
@@ -504,29 +527,45 @@ export default function SetupPage() {
     };
     const paletteRows = colorRows.map((row) => ({
         ...row,
-        value: (mode === "dark" ? light[labelize(row.path)] : undefined)
-            ?? getLeaf(mode === "dark" ? defaultDarkThemeTokens : defaultLightThemeTokens, row.path)
-            ?? row.value,
+        value:
+            (mode === "dark" ? light[labelize(row.path)] : undefined) ??
+            getLeaf(mode === "dark" ? defaultDarkThemeTokens : defaultLightThemeTokens, row.path) ??
+            row.value,
     }));
 
     return (
-        <DocsLayout title="Theme Setup" section="theming"
-            description="Edit shared tokens once, customize light and dark palettes, and export only your intentional overrides. Empty fields inherit library defaults.">
-            <div className="flex flex-col gap-base">
+        <DocsLayout
+            title="Theme Setup"
+            section="theming"
+            description="Edit shared tokens once, customize light and dark palettes, and export only your intentional overrides. Empty fields inherit library defaults."
+        >
+            <div className="gap-base flex flex-col">
                 <Card>
-                    <div className="flex flex-wrap items-center justify-between gap-base">
-                        <div className="flex items-center gap-base">
-                            <PaletteIcon aria-hidden className="size-5 text-muted-foreground" />
-                            <div className="flex flex-col gap-card-title-pb">
+                    <div className="gap-base flex flex-wrap items-center justify-between">
+                        <div className="gap-base flex items-center">
+                            <PaletteIcon aria-hidden className="text-muted-foreground size-5" />
+                            <div className="gap-card-title-pb flex flex-col">
                                 <span className="text-typography-sm font-semibold">Editing</span>
                                 <span className="text-typography-xs text-muted-foreground">Light uses :root (default); dark uses html.dark.</span>
                             </div>
                         </div>
-                        <div className="flex flex-wrap items-center gap-button-gap">
-                            <Button theme={mode === "light" ? "primary" : "ghost-muted"} size="small"
-                                aria-pressed={mode === "light"} onClick={() => setMode("light")}>Light / default</Button>
-                            <Button theme={mode === "dark" ? "primary" : "ghost-muted"} size="small"
-                                aria-pressed={mode === "dark"} onClick={() => setMode("dark")}>Dark</Button>
+                        <div className="gap-button-gap flex flex-wrap items-center">
+                            <Button
+                                theme={mode === "light" ? "primary" : "ghost-muted"}
+                                size="small"
+                                aria-pressed={mode === "light"}
+                                onClick={() => setMode("light")}
+                            >
+                                Light / default
+                            </Button>
+                            <Button
+                                theme={mode === "dark" ? "primary" : "ghost-muted"}
+                                size="small"
+                                aria-pressed={mode === "dark"}
+                                onClick={() => setMode("dark")}
+                            >
+                                Dark
+                            </Button>
                             <Button theme="ghost-muted" size="small" onClick={reset}>
                                 <ArrowsClockwiseIcon aria-hidden className="size-4" />
                                 Reset {mode === "light" ? "default + shared" : "dark"}
@@ -534,47 +573,73 @@ export default function SetupPage() {
                         </div>
                     </div>
                     <p className="text-typography-xs mt-card-gap text-muted-foreground">
-                        Shared tokens belong to default and apply in both modes. Default color overrides also apply in dark unless you override them there.
-                        Component palettes are independent; changing primary does not recolor every component.
+                        Shared tokens belong to default and apply in both modes. Default color overrides also apply in dark unless you override them
+                        there. Component palettes are independent; changing primary does not recolor every component.
                     </p>
-                    <p role="status" className="text-typography-xs">{status}</p>
+                    <p role="status" className="text-typography-xs">
+                        {status}
+                    </p>
                 </Card>
-                {hasErrors && <Alert theme="warn" title="Some edits are incomplete">
-                    Fix the marked values or clear them to inherit. The preview skips invalid values; export is unavailable until they are resolved.
-                </Alert>}
+                {hasErrors && (
+                    <Alert theme="warn" title="Some edits are incomplete">
+                        Fix the marked values or clear them to inherit. The preview skips invalid values; export is unavailable until they are
+                        resolved.
+                    </Alert>
+                )}
                 <LivePreview style={previewStyle} mode={mode} />
-                <Tabs active={activeTab} onChange={(tab) => {
-                    setActiveTab(tab);
-                    if (tab === "named") setMode("dark");
-                }}>
+                <Tabs
+                    active={activeTab}
+                    onChange={(tab) => {
+                        setActiveTab(tab);
+                        if (tab === "named") setMode("dark");
+                    }}
+                >
                     <Tab id="colors" title="Theme colors">
                         <TokenEditor rows={paletteRows} drafts={active} errors={activeResult.errors} swatch onChange={update(mode)} />
                     </Tab>
                     <Tab id="shared" title="Shared tokens">
-                        <div className="flex flex-col gap-base">
+                        <div className="gap-base flex flex-col">
                             <p className="text-typography-sm text-muted-foreground">
-                                Spacing, rounding, typography, shadows and component geometry are shared. Enter CSS values such as 16px or 0; clear a field to remove its override.
+                                Spacing, rounding, typography, shadows and component geometry are shared. Enter CSS values such as 16px or 0; clear a
+                                field to remove its override.
                             </p>
-                            <Button theme="ghost-muted" size="small" onClick={() => {
-                                setShared({});
-                                setStatus("Shared overrides cleared. Theme colors and dark overrides are unchanged.");
-                            }}>Reset shared tokens</Button>
+                            <Button
+                                theme="ghost-muted"
+                                size="small"
+                                onClick={() => {
+                                    setShared({});
+                                    setStatus("Shared overrides cleared. Theme colors and dark overrides are unchanged.");
+                                }}
+                            >
+                                Reset shared tokens
+                            </Button>
                             <TokenEditor rows={sharedRows} drafts={shared} errors={sharedResult.errors} swatch={false} onChange={update("shared")} />
                         </div>
                     </Tab>
                     <Tab id="named" title="Dark token overrides">
-                        <div className="flex flex-col gap-base">
+                        <div className="gap-base flex flex-col">
                             <p className="text-typography-sm text-muted-foreground">
                                 Optional non-color overrides for the named dark theme, such as denser spacing. Empty fields inherit shared tokens.
                                 These edits affect the dark preview only.
                             </p>
-                            <TokenEditor rows={sharedRows.map((row) => ({ ...row, value: shared[labelize(row.path)] ?? row.value }))}
-                                drafts={dark} errors={darkResult.errors} swatch={false} onChange={update("dark")} />
+                            <TokenEditor
+                                rows={sharedRows.map((row) => ({ ...row, value: shared[labelize(row.path)] ?? row.value }))}
+                                drafts={dark}
+                                errors={darkResult.errors}
+                                swatch={false}
+                                onChange={update("dark")}
+                            />
                         </div>
                     </Tab>
                     <Tab id="output" title="Output">
-                        {hasErrors ? <p role="status">Resolve incomplete values before copying the configuration.</p> :
-                            <OutputPane darkCode={serializeTheme("DARK_THEME", darkConfig)} lightCode={serializeTheme("DEFAULT_THEME", defaultConfig)} />}
+                        {hasErrors ? (
+                            <p role="status">Resolve incomplete values before copying the configuration.</p>
+                        ) : (
+                            <OutputPane
+                                darkCode={serializeTheme("DARK_THEME", darkConfig)}
+                                lightCode={serializeTheme("DEFAULT_THEME", defaultConfig)}
+                            />
+                        )}
                     </Tab>
                 </Tabs>
             </div>
@@ -586,15 +651,31 @@ type OutputPaneProps = { darkCode: string; lightCode: string };
 
 function OutputPane({ darkCode, lightCode }: OutputPaneProps) {
     return (
-        <div className="flex flex-col gap-base">
-            <OutputBlock title="src/theme/light.ts" description="Sparse default configuration: shared tokens and intentional light colors only. No complete defaults are pinned."
-                Icon={CodeIcon} code={lightCode} />
-            <OutputBlock title="src/theme/dark.ts" description="Sparse dark colors and optional dark-only tokens. An empty configuration restores the built-in palette."
-                Icon={CodeIcon} code={darkCode} />
-            <OutputBlock title="Runtime registration" description="Each call replaces that name's override set. Registration and activation are separate."
-                Icon={SquaresFourIcon} code={runtimeSnippet} />
-            <OutputBlock title="Static or server-rendered CSS" description="Pure CSS generation uses the same sparse configurations. Load foundation and component CSS before your application overrides."
-                Icon={RulerIcon} code={cssSnippet} />
+        <div className="gap-base flex flex-col">
+            <OutputBlock
+                title="src/theme/light.ts"
+                description="Sparse default configuration: shared tokens and intentional light colors only. No complete defaults are pinned."
+                Icon={CodeIcon}
+                code={lightCode}
+            />
+            <OutputBlock
+                title="src/theme/dark.ts"
+                description="Sparse dark colors and optional dark-only tokens. An empty configuration restores the built-in palette."
+                Icon={CodeIcon}
+                code={darkCode}
+            />
+            <OutputBlock
+                title="Runtime registration"
+                description="Each call replaces that name's override set. Registration and activation are separate."
+                Icon={SquaresFourIcon}
+                code={runtimeSnippet}
+            />
+            <OutputBlock
+                title="Static or server-rendered CSS"
+                description="Pure CSS generation uses the same sparse configurations. Load foundation and component CSS before your application overrides."
+                Icon={RulerIcon}
+                code={cssSnippet}
+            />
         </div>
     );
 }
@@ -609,8 +690,8 @@ type OutputBlockProps = {
 function OutputBlock({ title, description, Icon, code }: OutputBlockProps) {
     return (
         <Card>
-            <header className="flex items-center gap-button-gap">
-                <Icon className="size-4 text-muted-foreground" />
+            <header className="gap-button-gap flex items-center">
+                <Icon className="text-muted-foreground size-4" />
                 <h4 className="text-typography-sm font-semibold">{title}</h4>
             </header>
             <p className="text-typography-xs mt-card-title-pb text-muted-foreground">{description}</p>
