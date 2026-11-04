@@ -1,0 +1,92 @@
+.__rich-text-editor {
+    display: grid;
+    gap: var(--var-rich-text-editor-gap, calc(var(--var-spacing-base) * 0.75));
+    min-inline-size: 0;
+    color: var(--var-color-foreground);
+    font-family: inherit;
+}
+.__rich-text-editor__label { font-weight: 600; }
+.__rich-text-editor__modes,
+.__rich-text-editor__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--var-spacing-base) * 0.5);
+    min-inline-size: 0;
+}
+.__rich-text-editor__toolbar {
+    padding-block: calc(var(--var-spacing-base) * 0.5);
+    border-block: 1px solid var(--var-color-border);
+}
+.__rich-text-editor__toolbar > * { max-inline-size: 100%; }
+.__rich-text-editor__modes [aria-pressed="true"],
+.__rich-text-editor__toolbar [aria-pressed="true"] { outline: 2px solid var(--var-color-primary); outline-offset: 2px; }
+.__rich-text-editor__content {
+    box-sizing: border-box;
+    position: relative;
+    white-space: pre-wrap;
+    white-space: break-spaces;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0;
+    min-inline-size: 0;
+    min-block-size: var(--var-rich-text-editor-min-height, 20rem);
+    max-inline-size: 100%;
+    padding: var(--var-rich-text-editor-padding, var(--var-spacing-base));
+    border: 1px solid var(--var-color-border);
+    border-radius: var(--var-rich-text-editor-radius, calc(var(--var-radius-base) / 2));
+    background: var(--var-color-background);
+    color: var(--var-color-foreground);
+    font-size: var(--var-rich-text-editor-font-size, 1rem);
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+    caret-color: var(--var-color-primary);
+}
+.__rich-text-editor__content:focus-visible { outline: 2px solid var(--var-color-primary); outline-offset: 2px; }
+.__rich-text-editor__content[aria-disabled="true"] { cursor: not-allowed; }
+.__rich-text-editor__content ::selection { background: var(--var-color-primary); color: var(--var-color-primary-foreground); }
+.__rich-text-editor__content [contenteditable="false"] { white-space: normal; }
+.__rich-text-editor__content [contenteditable="false"] [contenteditable="true"] { white-space: pre-wrap; }
+.__rich-text-editor__content img.ProseMirror-separator { display: inline; border: 0; margin: 0; inline-size: 0; block-size: 0; }
+.__rich-text-editor__content .ProseMirror-gapcursor { display: none; pointer-events: none; position: absolute; margin: 0; }
+.__rich-text-editor__content .ProseMirror-gapcursor::after { content: ""; display: block; position: absolute; inset-block-start: -0.125rem; inline-size: 1.25em; border-block-start: 1px solid currentColor; }
+.__rich-text-editor__content.ProseMirror-focused .ProseMirror-gapcursor { display: block; }
+.__rich-text-editor__content.ProseMirror-hideselection *::selection { background: transparent; }
+.__rich-text-editor__content.ProseMirror-hideselection * { caret-color: transparent; }
+.__rich-text-editor__content :where(p, ul, ol, blockquote, pre, table) { margin-block: 0.75em; }
+.__rich-text-editor__content > :first-child { margin-block-start: 0; }
+.__rich-text-editor__content > :last-child { margin-block-end: 0; }
+.__rich-text-editor__content :where(h1, h2, h3, h4, h5, h6) { margin-block: 1.5em 0.5em; font-weight: 700; line-height: 1.25; }
+.__rich-text-editor__content h1 { font-size: 2em; }
+.__rich-text-editor__content h2 { font-size: 1.5em; }
+.__rich-text-editor__content h3 { font-size: 1.25em; }
+.__rich-text-editor__content :where(h4, h5, h6) { font-size: 1em; }
+.__rich-text-editor__content :where(ul, ol) { padding-inline-start: 1.75em; }
+.__rich-text-editor__content ul { list-style: disc; }
+.__rich-text-editor__content ol { list-style: decimal; }
+.__rich-text-editor__content a { color: var(--var-color-primary); text-decoration: underline; text-underline-offset: 0.15em; }
+.__rich-text-editor__content blockquote { border-inline-start: 1px solid var(--var-color-border); padding-inline-start: var(--var-spacing-base); }
+.__rich-text-editor__content :where(pre, code),
+.__rich-text-editor__source { font-family: ui-monospace, monospace; }
+.__rich-text-editor__content pre { overflow-x: auto; white-space: pre; padding: var(--var-spacing-base); background: var(--var-color-muted); }
+.__rich-text-editor__content .tableWrapper { overflow-x: auto; max-inline-size: 100%; }
+.__rich-text-editor__content table { border-collapse: collapse; inline-size: 100%; table-layout: fixed; }
+.__rich-text-editor__content :where(th, td) { position: relative; border: 1px solid var(--var-color-border); padding: calc(var(--var-spacing-base) * 0.5); min-inline-size: 5em; vertical-align: top; }
+.__rich-text-editor__content th { font-weight: 700; text-align: start; background: var(--var-color-muted); }
+.__rich-text-editor__content .selectedCell::after { content: ""; position: absolute; inset: 0; pointer-events: none; outline: 2px solid var(--var-color-primary); outline-offset: -2px; }
+.__rich-text-editor__content ul[data-type="taskList"] { list-style: none; padding-inline-start: 0; }
+.__rich-text-editor__content ul[data-type="taskList"] > li[data-checked] { display: flex; gap: calc(var(--var-spacing-base) * 0.5); align-items: baseline; }
+.__rich-text-editor__content ul[data-type="taskList"] > li[data-checked] > div { min-inline-size: 0; flex: 1; }
+.__rich-text-editor__content ul[data-type="taskList"] > li[data-checked] input { accent-color: var(--var-color-primary); }
+.__rich-text-editor__content ul[data-type="taskList"] > li[data-checked="true"] > div { text-decoration: line-through; }
+.__rich-text-editor__fields { display: grid; gap: calc(var(--var-spacing-base) * 0.75); min-inline-size: 0; }
+.__rich-text-editor__help { margin: 0; font-size: 0.875rem; color: var(--var-color-muted-foreground); overflow-wrap: anywhere; }
+.__rich-text-editor__image { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--var-spacing-base) * 0.5); padding: var(--var-spacing-base); border: 1px solid var(--var-color-border); }
+.__rich-text-editor__image[data-selected] { outline: 2px solid var(--var-color-primary); }
+.__rich-text-editor__image .__rich-text-editor__help { flex-basis: 100%; }
+.__rich-text-editor__image-content { display: block; max-inline-size: 100%; block-size: auto; }
+@media (forced-colors: active) {
+    .__rich-text-editor__content:focus-visible,
+    .__rich-text-editor__modes [aria-pressed="true"],
+    .__rich-text-editor__toolbar [aria-pressed="true"],
+    .__rich-text-editor__image[data-selected] { outline-color: Highlight; }
+}
