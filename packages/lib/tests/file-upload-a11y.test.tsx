@@ -188,6 +188,26 @@ describe("FileUpload a11y", () => {
         expect(openSpy).toHaveBeenCalledTimes(1);
     });
 
+    it("waits for Space to be released before activating the idle upload action", async () => {
+        const user = userEvent.setup();
+        openSpy.mockClear();
+
+        render(
+            <ComponentsProvider>
+                <FileUpload name="docs" />
+            </ComponentsProvider>
+        );
+
+        const uploadButton = screen.getByRole("button", { name: singleButtonCopy });
+        uploadButton.focus();
+
+        await user.keyboard("[Space>]");
+        expect(openSpy).not.toHaveBeenCalled();
+
+        await user.keyboard("[/Space]");
+        expect(openSpy).toHaveBeenCalledTimes(1);
+    });
+
     it("keyboard Enter/Space on the idle action trigger file input click", async () => {
         const user = userEvent.setup();
         openSpy.mockClear();

@@ -1,6 +1,6 @@
 import { createRef } from "react";
 import type React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -33,11 +33,7 @@ const controls: ControlCase[] = [
 
 describe.each(controls)("$name accessibility", ({ renderControl }) => {
     const renderField = (props: ControlProps = {}) =>
-        render(
-            <ComponentsProvider>
-                {renderControl({ title: "Message", ...props })}
-            </ComponentsProvider>
-        );
+        render(<ComponentsProvider>{renderControl({ title: "Message", ...props })}</ComponentsProvider>);
 
     it("preserves caller descriptions and references populated error and feedback nodes", () => {
         renderField({
@@ -168,4 +164,35 @@ describe("free-text forwarded refs", () => {
 
         expect(ref.current).toBe(screen.getByRole("textbox", { name: "Message" }));
     });
+});
+
+it("preserves the native row minimum with normal line-height while content grows and shrinks", () => {
+    const computed = window.getComputedStyle.bind(window);
+    const styles = vi.spyOn(window, "getComputedStyle").mockImplementation((element, pseudo) => {
+        const style = computed(element, pseudo);
+        style.lineHeight = "normal";
+        return style;
+    });
+    const nativeHeight = vi.spyOn(HTMLTextAreaElement.prototype, "offsetHeight", "get").mockReturnValue(200);
+    let contentHeight = 20;
+    const scrollHeight = vi.spyOn(HTMLTextAreaElement.prototype, "scrollHeight", "get").mockImplementation(() => contentHeight);
+    try {
+        render(
+            <ComponentsProvider>
+                <Textarea title="Long message" rows={10} />
+            </ComponentsProvider>
+        );
+        const textarea = screen.getByRole("textbox", { name: "Long message" });
+        expect(textarea).toHaveStyle({ height: "200px" });
+        contentHeight = 340;
+        fireEvent.input(textarea, { target: { value: "Long content" } });
+        expect(textarea).toHaveStyle({ height: "340px" });
+        contentHeight = 20;
+        fireEvent.input(textarea, { target: { value: "" } });
+        expect(textarea).toHaveStyle({ height: "200px" });
+    } finally {
+        styles.mockRestore();
+        nativeHeight.mockRestore();
+        scrollHeight.mockRestore();
+    }
 });

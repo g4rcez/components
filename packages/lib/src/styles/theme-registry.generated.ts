@@ -270,6 +270,12 @@ export const themeTokenRegistry = {
             "presets-inline-size",
             "range-nights-radius"
         ],
+        "drawing-editor": [
+            "canvas-background",
+            "gap",
+            "handle-space",
+            "layer-list-height"
+        ],
         "dropdown": [
             "header-margin-block-end",
             "list-max-block-size",
@@ -592,6 +598,13 @@ export const themeTokenRegistry = {
             "mark-size",
             "transition-duration",
             "transition-timing"
+        ],
+        "rich-text-editor": [
+            "font-size",
+            "gap",
+            "min-height",
+            "padding",
+            "radius"
         ],
         "shortcut": [
             "content-font-size",

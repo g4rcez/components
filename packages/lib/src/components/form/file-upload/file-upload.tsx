@@ -59,7 +59,12 @@ const extensionMap: Record<string, Icon> = {
     mp4: FileVideoIcon,
 };
 
-const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }>; translations?: TranslationOverrides }) => {
+const ItemViewer = (props: {
+    file: File;
+    onDeleteFile?: (file: File) => void;
+    File?: React.FC<{ file: File }>;
+    translations?: TranslationOverrides;
+}) => {
     const translations = useTranslations(props.translations);
     const [, setManager] = useFileManager();
     const [info, setInfo] = useState({ url: "", type: "", size: "" });
@@ -131,7 +136,12 @@ const ItemViewer = (props: { file: File; onDeleteFile?: (file: File) => void; Fi
     );
 };
 
-const FilesList = (props: { files: File[]; onDeleteFile?: (file: File) => void; File?: React.FC<{ file: File }>; translations?: TranslationOverrides }) => (
+const FilesList = (props: {
+    files: File[];
+    onDeleteFile?: (file: File) => void;
+    File?: React.FC<{ file: File }>;
+    translations?: TranslationOverrides;
+}) => (
     <ul className={fileUploadStyles.slots.list}>
         {props.files.map((file, index) => {
             const key = `${file.name}-${file.lastModified}-${file.size}-${index}`;
@@ -167,15 +177,14 @@ const Idle = (props: IdleProps) => {
         ? t.uploadIdleButton
         : getSingleFileCopy(singleFileUploadCopy.idleButton, t.uploadIdleButton, defaultTranslations.uploadIdleButton);
 
-    const onUpload = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {
+    const onUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
         if (!props.disabled) props.onUpload?.();
     };
 
     const onUploadKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        onUpload(event);
+        if (event.key === "Enter" || event.key === " ") event.stopPropagation();
     };
 
     return (
@@ -216,7 +225,16 @@ type InteractiveAreaProps = {
 
 const InteractiveArea = (props: InteractiveAreaProps) => {
     if (props.isDragActive) {
-        return <Idle files={props.files} dragging multiple={props.multiple} disabled={props.disabled} onUpload={props.onUpload} translations={props.translations} />;
+        return (
+            <Idle
+                files={props.files}
+                dragging
+                multiple={props.multiple}
+                disabled={props.disabled}
+                onUpload={props.onUpload}
+                translations={props.translations}
+            />
+        );
     }
     if (props.files.length > 0) {
         return <FilesList File={props.File} onDeleteFile={props.onDeleteFile} files={props.files} translations={props.translations} />;

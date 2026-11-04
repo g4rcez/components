@@ -17,8 +17,17 @@ export const Textarea: React.FC<TextareaProps> = createFreeText<"textarea", HTML
         const computeMinHeight = (): number => {
             if (!hasRows) return textarea.offsetHeight;
             const s = window.getComputedStyle(textarea);
+            const lineHeight = parseFloat(s.lineHeight);
+            if (!Number.isFinite(lineHeight)) {
+                // Shared control CSS has a fixed block-size; let the browser resolve rows.
+                const blockSize = textarea.style.blockSize;
+                textarea.style.blockSize = "auto";
+                const height = textarea.offsetHeight;
+                textarea.style.blockSize = blockSize;
+                return height;
+            }
             return (
-                textarea.rows * parseFloat(s.lineHeight) +
+                textarea.rows * lineHeight +
                 parseFloat(s.paddingTop) +
                 parseFloat(s.paddingBottom) +
                 parseFloat(s.borderTopWidth) +
