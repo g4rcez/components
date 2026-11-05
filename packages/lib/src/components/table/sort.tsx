@@ -157,10 +157,9 @@ export const SorterHead = <T extends Any>(props: SorterHeadProps<T>) => {
         props.setSorters((prev) => {
             if (next === Order.Undefined) return prev.filter((x) => x.value !== props.col.id);
             const findIndex = prev.findIndex((p) => (p.value as string) === props.col.id);
-            const sorter = createSorter(props.col, next, next);
+            const sorter = createSorter(props.col, next === Order.Asc ? translations.tableSortAsc : translations.tableSortDesc, next);
             if (findIndex === -1) return [...prev, sorter];
-            prev[findIndex] = sorter;
-            return [...prev];
+            return prev.map((x, index) => (index === findIndex ? sorter : x));
         });
     };
 

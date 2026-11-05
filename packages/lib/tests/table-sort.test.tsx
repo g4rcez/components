@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { VirtuosoMockContext } from "react-virtuoso";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 import { Table } from "../src/components/table";
@@ -62,5 +63,34 @@ describe("Table sort", () => {
 
         expect(screen.getAllByText(/^(Ada|Bob|Cy)$/).map((name) => name.textContent)).toEqual(["Cy", "Bob", "Ada"]);
         expect(rows.map((row) => row.name)).toEqual(["Ada", "Bob", "Cy"]);
+    });
+
+    it("reports a translated label and leaves the sorters prop untouched when the header toggles the order", async () => {
+        const byNameAscending: Sorter<Row> = { id: "sort-name", value: "name", type: "asc" as Sorter<Row>["type"], label: "Ascending" };
+        const sorters = [byNameAscending];
+        const setSorters = vi.fn();
+
+        render(
+            <ComponentsProvider>
+                <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 48 }}>
+                    <Table<Row>
+                        name="sort-toggle"
+                        cols={columns}
+                        rows={[{ id: "1", name: "Ada" }]}
+                        reference="id"
+                        loading={false}
+                        operations={false}
+                        sorters={sorters}
+                        setSorters={setSorters}
+                    />
+                </VirtuosoMockContext.Provider>
+            </ComponentsProvider>
+        );
+
+        await userEvent.click(screen.getByRole("button", { name: /Name/ }));
+
+        expect(sorters[0]).toBe(byNameAscending);
+        expect(setSorters).toHaveBeenCalledTimes(1);
+        expect(setSorters.mock.calls[0]![0]).toMatchObject([{ value: "name", type: "desc", label: "Descending" }]);
     });
 });
