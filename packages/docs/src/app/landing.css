@@ -5,19 +5,40 @@
 }
 
 .landing-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-    align-items: end;
-    gap: calc(var(--var-spacing-base) * 4);
-    padding: calc(var(--var-spacing-base) * 6) calc(var(--var-spacing-base) * 4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: calc(var(--var-spacing-base) * 5.5) calc(var(--var-spacing-base) * 2) calc(var(--var-spacing-base) * 3.5);
+    text-align: center;
+}
+
+.landing-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--var-spacing-base) / 2);
+    margin-block-end: calc(var(--var-spacing-base) * 1.5);
+    padding: calc(var(--var-spacing-base) / 4) calc(var(--var-spacing-base) * 0.75);
+    border: var(--var-border-hairline) solid var(--docs-border);
+    border-radius: var(--var-rounded-full);
+    color: var(--docs-text-muted);
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition:
+        background-color 150ms ease,
+        color 150ms ease;
+}
+
+.landing-eyebrow:hover {
+    background: var(--docs-surface);
+    color: var(--docs-text);
 }
 
 .landing-hero h1 {
     margin: 0;
-    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    font-size: clamp(2.75rem, 6.5vw, 5rem);
     font-weight: 650;
-    line-height: 1.08;
-    letter-spacing: -0.04em;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
 }
 
 .landing-hero h1 span,
@@ -25,50 +46,108 @@
     color: var(--docs-primary);
 }
 
-.landing-hero-copy > p {
-    max-inline-size: 48ch;
-    margin-block: calc(var(--var-spacing-base) * 1.75) calc(var(--var-spacing-base) * 2);
+.landing-hero > p {
+    max-inline-size: 52ch;
+    margin-block: calc(var(--var-spacing-base) * 1.5) calc(var(--var-spacing-base) * 2);
     color: var(--docs-text-muted);
     font-size: 1.0625rem;
-    line-height: 1.8;
+    line-height: 1.75;
 }
 
 .landing-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: calc(var(--var-spacing-base) * 0.75);
 }
 
 .landing-install {
-    min-inline-size: 0;
-    padding-block-end: calc(var(--var-spacing-base) / 4);
-}
-
-.landing-package {
-    color: var(--docs-text);
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-}
-
-.landing-install > p {
-    margin-block: calc(var(--var-spacing-base) / 2) calc(var(--var-spacing-base) * 1.5);
-    color: var(--docs-text-muted);
-    font-size: 0.875rem;
-}
-
-.landing-install > a {
-    margin-block-start: calc(var(--var-spacing-base) * 1.25);
-    color: var(--docs-text-muted);
-    font-size: 0.8125rem;
+    inline-size: 100%;
+    max-inline-size: 24rem;
+    margin-block-start: calc(var(--var-spacing-base) * 2.5);
+    text-align: start;
 }
 
 .landing-install .shiki-container pre {
-    padding: calc(var(--var-spacing-base) * 1.25);
+    padding: var(--var-spacing-base);
     font-size: 0.8125rem;
 }
 
-.landing-section-bar,
-.landing-panel-label {
+/* One window for the live preview and its source (Helios example frame, Linear product shot). */
+.landing-window {
+    padding: 0 calc(var(--var-spacing-base) * 2) calc(var(--var-spacing-base) * 5);
+}
+
+.landing-window-tabs {
+    max-inline-size: 64rem;
+    margin-inline: auto;
+    padding: 0;
+    overflow: hidden;
+    border: var(--var-border-hairline) solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-canvas);
+    box-shadow: var(--var-shadow-floating);
+}
+
+.landing-window-tabs > .__tabs__header {
+    margin: 0;
+    padding-inline: calc(var(--var-spacing-base) * 0.75);
+    background: var(--docs-surface);
+}
+
+.landing-window-tabs > .landing-window-body {
+    padding-inline: 0;
+}
+
+.landing-window-body .docs-code-block {
+    border: 0;
+    border-radius: 0;
+}
+
+.landing-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    align-items: center;
+}
+
+.landing-stage-side {
+    align-self: stretch;
+    display: grid;
+    align-items: center;
+    padding: calc(var(--var-spacing-base) * 2);
+    border-inline-start: var(--var-border-hairline) solid var(--docs-border);
+    background: var(--docs-surface);
+}
+
+.landing-composition {
+    display: grid;
+    gap: calc(var(--var-spacing-base) * 1.25);
+    padding: calc(var(--var-spacing-base) * 1.25);
+    border: var(--var-border-hairline) solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-canvas);
+    box-shadow: var(--var-shadow-floating);
+}
+
+.landing-composition-row,
+.landing-composition-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--var-spacing-base);
+}
+
+.landing-composition-actions {
+    justify-content: flex-end;
+    gap: calc(var(--var-spacing-base) / 2);
+}
+
+.landing-composition-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.landing-section-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,43 +169,8 @@
     font-size: 0.8125rem;
 }
 
-.landing-playground-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.landing-preview,
-.landing-source {
-    min-inline-size: 0;
-    background: var(--docs-surface);
-}
-
-.landing-source {
-    border-inline-start: var(--var-border-hairline) solid var(--docs-border);
-    background: var(--docs-canvas);
-}
-
-.landing-panel-label {
-    min-block-size: calc(var(--var-spacing-base) * 3.5);
-    padding-inline: calc(var(--var-spacing-base) * 2);
-    color: var(--docs-text-muted);
-    font-size: 0.75rem;
-}
-
-.landing-live {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--var-spacing-base) / 2);
-}
-
-.landing-live > span {
-    inline-size: calc(var(--var-spacing-base) * 0.375);
-    block-size: calc(var(--var-spacing-base) * 0.375);
-    border-radius: 50%;
-    background: var(--docs-primary);
-}
-
 .landing-demo {
+    inline-size: 100%;
     max-inline-size: 440px;
     margin-inline: auto;
     padding: calc(var(--var-spacing-base) * 2);
@@ -171,57 +215,58 @@
     font-size: 0.8125rem;
 }
 
-.landing-preview-note {
-    padding: var(--var-spacing-base) calc(var(--var-spacing-base) * 2) calc(var(--var-spacing-base) * 2);
-    color: var(--docs-text-muted);
-    font-size: 0.75rem;
-    text-align: center;
+.landing-foundations-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--var-border-hairline);
+    border-block-end: var(--var-border-hairline) solid var(--docs-border);
+    background: var(--docs-border);
 }
 
-.landing-source .docs-code-block {
-    border: 0;
-    border-radius: 0;
-}
-
-.landing-source .docs-code-toolbar {
-    min-block-size: calc(var(--var-spacing-base) * 2.5);
-    padding-inline: calc(var(--var-spacing-base) * 2);
-    border-block: var(--var-border-hairline) solid var(--docs-border);
-    background: transparent;
-}
-
-.landing-source .shiki-container pre {
-    padding: calc(var(--var-spacing-base) * 1.5) calc(var(--var-spacing-base) * 2);
-    font-size: 0.8125rem;
-    line-height: 1.7;
-}
-
-.landing-principles {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: calc(var(--var-spacing-base) * 1.5);
+.landing-foundation {
     padding: calc(var(--var-spacing-base) * 1.75) calc(var(--var-spacing-base) * 2);
-    border-block: var(--var-border-hairline) solid var(--docs-border);
+    background: var(--docs-canvas);
+}
+
+.landing-foundation h3 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.landing-foundation p {
+    margin-block-start: calc(var(--var-spacing-base) / 2);
     color: var(--docs-text-muted);
     font-size: 0.8125rem;
-}
-
-.landing-principles > span {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--var-spacing-base) / 2);
-}
-
-.landing-principles svg {
-    color: var(--docs-primary);
+    line-height: 1.6;
 }
 
 .landing-catalog {
     display: grid;
-    grid-template-columns: 1fr 1.25fr;
-    gap: calc(var(--var-spacing-base) * 6);
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--var-spacing-base) * 3);
     padding: calc(var(--var-spacing-base) * 6) calc(var(--var-spacing-base) * 4);
+}
+
+/* Hub grid: one frame, cells separated by shared hairlines. */
+.landing-catalog-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--var-border-hairline);
+    overflow: hidden;
+    border: var(--var-border-hairline) solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-border);
+}
+
+.landing-catalog .landing-section-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: end;
+    gap: calc(var(--var-spacing-base) * 3);
+}
+
+.landing-catalog .landing-section-intro p {
+    margin-block-start: 0;
 }
 
 .landing-section-intro h2,
@@ -245,14 +290,14 @@
     display: flex;
     justify-content: space-between;
     gap: calc(var(--var-spacing-base) * 2);
-    padding-block: calc(var(--var-spacing-base) * 1.5);
-    border-block-start: var(--var-border-hairline) solid var(--docs-border);
+    padding: calc(var(--var-spacing-base) * 1.75);
+    background: var(--docs-canvas);
     text-decoration: none;
+    transition: background-color 150ms ease;
 }
 
-.landing-catalog-link:first-child {
-    padding-block-start: 0;
-    border-block-start: 0;
+.landing-catalog-link:hover {
+    background: var(--docs-surface);
 }
 
 .landing-catalog-link h3 {
@@ -305,6 +350,10 @@
     padding: calc(var(--var-spacing-base) * 4);
 }
 
+.site-footer-brand .docs-icon-button {
+    display: inline-flex;
+}
+
 .site-footer-brand p {
     margin-block: calc(var(--var-spacing-base) * 1.25) var(--var-spacing-base);
     color: var(--docs-text-muted);
@@ -334,41 +383,6 @@
     color: var(--docs-primary);
 }
 
-.site-help-button {
-    position: fixed;
-    z-index: var(--var-layer-normal);
-    inset-block-end: calc(var(--var-spacing-base) * 1.25);
-    inset-inline-end: calc(var(--var-spacing-base) * 1.25);
-}
-
-.site-quick-links {
-    display: grid;
-}
-
-.site-quick-links > a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--var-spacing-base);
-    padding: var(--var-spacing-base);
-    border-block-end: var(--var-border-hairline) solid var(--docs-border);
-}
-
-.site-quick-links strong,
-.site-quick-links a > span > span {
-    display: block;
-}
-
-.site-quick-links a > span > span {
-    margin-block-start: calc(var(--var-spacing-base) / 4);
-    font-size: 0.8125rem;
-    color: var(--docs-text-muted);
-}
-
-.site-quick-links > a:hover {
-    color: var(--docs-primary);
-}
-
 @media (max-width: 74.999rem) {
     .landing-hero,
     .landing-catalog {
@@ -382,14 +396,21 @@
     }
 }
 
-@media (max-width: 59.999rem) {
-    .landing-hero {
-        grid-template-columns: 1fr;
-        align-items: start;
+@media (max-width: 63.999rem) {
+    .landing-stage {
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .landing-install {
-        max-inline-size: 30rem;
+    .landing-stage-side {
+        border-inline-start: 0;
+        border-block-start: var(--var-border-hairline) solid var(--docs-border);
+    }
+}
+
+@media (max-width: 59.999rem) {
+    .landing-catalog .landing-section-intro {
+        grid-template-columns: minmax(0, 1fr);
+        gap: calc(var(--var-spacing-base) * 1.5);
     }
 
     .landing-catalog {
@@ -405,13 +426,25 @@
     }
 }
 
+@media (max-width: 63.999rem) {
+    .landing-foundations-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 47.999rem) {
+    .landing-catalog-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 @media (max-width: 39.999rem) {
-    .landing-frame {
-        border-inline: 0;
+    .landing-foundations-grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .site-help-button > span {
-        display: none;
+    .landing-frame {
+        border-inline: 0;
     }
 
     .landing-hero,
@@ -430,25 +463,15 @@
         flex-direction: column;
     }
 
-    .landing-playground-grid,
     .landing-catalog {
         grid-template-columns: 1fr;
     }
 
-    .landing-source {
-        border-inline-start: 0;
-        border-block-start: var(--var-border-hairline) solid var(--docs-border);
-    }
-
     .landing-section-bar,
-    .landing-panel-label {
+    .landing-demo {
         padding-inline: calc(var(--var-spacing-base) * 1.25);
     }
 
-    .landing-principles {
-        display: grid;
-        padding-inline: calc(var(--var-spacing-base) * 1.25);
-    }
 
     .landing-closing {
         align-items: flex-start;

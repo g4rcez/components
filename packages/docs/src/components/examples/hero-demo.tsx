@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Dropdown, Menu, MenuItem, Input, type CurrencyCode, type Locales } from "@g4rcez/components";
+import { Button, Dropdown, Menu, MenuItem, Input, type CurrencyCode, type Locales } from "@g4rcez/components";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 
@@ -19,6 +19,7 @@ const CurrencyShowCase = () => {
             <Input
                 mask="currency"
                 title="Currency"
+                placeholder="0.00"
                 locale={state.locale}
                 currency={state.currency}
                 right={
@@ -57,10 +58,10 @@ export const HeroDemo = () => {
             </div>
             <CurrencyShowCase />
             <div className="landing-demo-controls">
-                <Dropdown trigger="Click">
+                <Dropdown asChild trigger={<Button theme="outlined">Click</Button>}>
                     <div className="max-w-32">I'm a dropdown component</div>
                 </Dropdown>
-                <Menu label="Menu">
+                <Menu asChild title="Menu" label={<Button theme="outlined">Menu</Button>}>
                     <MenuItem title="Item 1">Item 1</MenuItem>
                     <MenuItem title="Item 2">Item 2</MenuItem>
                     <MenuItem title="Item 3">Item 3</MenuItem>
