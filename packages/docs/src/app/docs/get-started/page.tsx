@@ -17,35 +17,45 @@ export default function GetStartedPage() {
         >
             <div className="space-y-12">
                 <section id="overview">
-                    <h2 className="mb-4 text-2xl font-bold tracking-tight text-foreground">Overview</h2>
-                    <p className="mb-6 text-muted-foreground">
+                    <h2 className="text-foreground mb-4 text-2xl font-bold tracking-tight">Overview</h2>
+                    <p className="text-muted-foreground mb-6">
                         Welcome to the documentation! `@g4rcez/components` is a library of high-quality React components designed to help you build
                         beautiful, accessible web applications faster than ever.
                     </p>
                 </section>
 
                 <section id="installation">
-                    <h2 className="mb-4 text-2xl font-bold tracking-tight text-foreground">Installation</h2>
-                    <p className="mb-6 text-muted-foreground">
-                        Install the library and its peer dependencies using your preferred package manager. We recommend `pnpm` for its speed and
-                        efficiency.
+                    <h2 className="text-foreground mb-4 text-2xl font-bold tracking-tight">Installation</h2>
+                    <p className="text-muted-foreground mb-6">
+                        Install the library with your preferred package manager. It needs React 18 or newer. Icons and animation libraries come with
+                        the package, so you do not install them yourself.
                     </p>
-                    <div className="overflow-hidden rounded-xl border border-border/40 bg-background">
-                        <div className="flex items-center justify-between border-b border-border/40 bg-muted/30 px-4 py-2">
-                            <span className="text-xs font-medium tracking-wide text-muted-foreground">Terminal</span>
+                    <div className="border-border/40 bg-background overflow-hidden rounded-xl border">
+                        <div className="border-border/40 bg-muted/30 flex items-center justify-between border-b px-4 py-2">
+                            <span className="text-muted-foreground text-xs font-medium tracking-wide">Terminal</span>
                         </div>
-                        <CodeBlock code="pnpm install @g4rcez/components @phosphor-icons/react motion" lang="bash" />
+                        <CodeBlock code="pnpm add @g4rcez/components" lang="bash" />
+                    </div>
+                    <p className="text-muted-foreground mb-6 mt-6">
+                        Then import the CSS in your app stylesheet. `foundation.css` comes first, followed by the CSS of each component you use. Run
+                        `npx csscomponents --css src/app.css` to add these imports for you.
+                    </p>
+                    <div className="border-border/40 bg-background overflow-hidden rounded-xl border">
+                        <div className="border-border/40 bg-muted/30 flex items-center justify-between border-b px-4 py-2">
+                            <span className="text-muted-foreground text-xs font-medium tracking-wide">app.css</span>
+                        </div>
+                        <CodeBlock code={`@import "@g4rcez/components/foundation.css";\n@import "@g4rcez/components/button.css";`} lang="css" />
                     </div>
                 </section>
 
                 <section id="examples">
-                    <h2 className="mb-4 text-2xl font-bold tracking-tight text-foreground">Quick Example</h2>
-                    <p className="mb-6 text-muted-foreground">
+                    <h2 className="text-foreground mb-4 text-2xl font-bold tracking-tight">Quick Example</h2>
+                    <p className="text-muted-foreground mb-6">
                         Here's a simple example of how to use our components. We'll trigger a notification using the `useNotification` hook.
                     </p>
                     <ComponentDemo
                         title="Interactive Demo"
-                        description="Our components use Framer Motion for physically-accurate animations. Try triggering a system notification."
+                        description="Our components use Motion for physically-accurate animations. Try triggering a system notification."
                         onReset={() => {
                             count.current = 0;
                         }}
@@ -81,8 +91,8 @@ function App() {
                         </Button>
                     </ComponentDemo>
                 </section>
-                <section id="accessibility" className="border-t border-border pt-12">
-                    <h2 className="mb-8 text-2xl font-bold tracking-tight text-foreground">Why this library?</h2>
+                <section id="accessibility" className="border-border border-t pt-12">
+                    <h2 className="text-foreground mb-8 text-2xl font-bold tracking-tight">Why this library?</h2>
                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2">
                         {[
                             {
@@ -91,7 +101,7 @@ function App() {
                             },
                             {
                                 title: "A11y Compliant",
-                                desc: "Strictly adheres to WAI-ARIA patterns using Radix UI and Base UI foundations.",
+                                desc: "Follows WAI-ARIA patterns, built on Base UI primitives.",
                             },
                             {
                                 title: "Theming System",
@@ -103,8 +113,8 @@ function App() {
                             },
                         ].map((item, i) => (
                             <div key={i} className="flex flex-col gap-2">
-                                <h4 className="font-semibold text-foreground">{item.title}</h4>
-                                <p className="text-[14px] leading-relaxed text-muted-foreground">{item.desc}</p>
+                                <h4 className="text-foreground font-semibold">{item.title}</h4>
+                                <p className="text-muted-foreground text-[14px] leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>

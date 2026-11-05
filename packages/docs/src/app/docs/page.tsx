@@ -45,9 +45,9 @@ export default function DocsPage() {
             <section aria-labelledby="installation-title">
                 <h2 id="installation-title">Installation</h2>
                 <p>Get started by installing the package using your preferred package manager.</p>
-                <CodeBlock code="pnpm install @g4rcez/components" lang="bash" />
+                <CodeBlock code="pnpm add @g4rcez/components" lang="bash" />
                 <p className="docs-install-note">
-                    Next, follow the <Link href="/docs/get-started">setup guide</Link> for peer dependencies and{" "}
+                    Next, follow the <Link href="/docs/get-started">setup guide</Link> to import the CSS and use your first component, then the{" "}
                     <Link href="/docs/setup">theme configuration</Link>.
                 </p>
             </section>

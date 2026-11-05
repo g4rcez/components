@@ -9,7 +9,7 @@ This document provides instructions and guidelines for AI agents operating withi
     - `packages/lib` (`@g4rcez/components`): The main React component library.
     - `packages/docs`: Documentation site built with Next.js 16.
     - `packages/tailwindcss-v4`: Tailwind CSS v4 integration/test app.
-- **Tech Stack**: React 19, TypeScript, Tailwind CSS, Radix UI/Base UI, Framer Motion, Vitest.
+- **Tech Stack**: React 18+ (peer; the repo builds on 19), TypeScript, plain CSS with `--var-*` tokens (Tailwind only in the legacy preset and `packages/tailwindcss-v4`), Base UI, Motion, Vitest.
 
 ## 2. Build, Lint, and Test Commands
 
