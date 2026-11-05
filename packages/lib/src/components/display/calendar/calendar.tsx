@@ -35,11 +35,11 @@ import { Button } from "../../core/button/button";
 
 const timeRegex = /^(?<hour>\d\d):(?<min>\d\d)$/;
 
-const transition: Transition = { type: "spring", bounce: 0.3, duration: 0.6 };
+const transition: Transition = { type: "tween", ease: [0.23, 1, 0.32, 1], duration: 0.18 };
 
 const dir =
     (mod: number) =>
-    (n: number = 1) => ({ x: `${100 * mod * n}%`, opacity: 0.25 });
+    (n: number = 1) => ({ x: `${25 * mod * n}%`, opacity: 0 });
 
 const variants: Variants = {
     enter: dir(1),
@@ -130,6 +130,12 @@ const focusDate = (origin: HTMLElement | null, root: RefObject<HTMLElement | nul
 };
 
 const formatYear = (now: Date) => now.getFullYear().toString().padStart(4, "0");
+
+const shiftMonth = <S extends { date: Date; isAnimating: boolean }>(state: S, direction: 1 | -1) => {
+    if (state.isAnimating) return state;
+    const date = add(state.date, { months: direction });
+    return { date, isAnimating: true, direction, year: formatYear(date) };
+};
 
 const normalizeRange = (range: Range) => {
     const from = range.from;
@@ -329,27 +335,11 @@ export const Calendar = <T extends DatepickerType = "date">({
             },
             nextMonth: (e?: React.MouseEvent<HTMLButtonElement>) => {
                 if (e) monthClicked.current = e.currentTarget;
-                const state = get.state();
-                if (state.isAnimating) return state;
-                const date = add(state.date, { months: 1 });
-                return {
-                    date,
-                    isAnimating: true,
-                    direction: 1,
-                    year: formatYear(date),
-                };
+                return shiftMonth(get.state(), 1);
             },
             previousMonth: (e?: React.MouseEvent<HTMLButtonElement>) => {
                 if (e) monthClicked.current = e.currentTarget;
-                const state = get.state();
-                if (state.isAnimating) return state;
-                const date = sub(state.date, { months: 1 });
-                return {
-                    date,
-                    isAnimating: true,
-                    direction: -1,
-                    year: formatYear(date),
-                };
+                return shiftMonth(get.state(), -1);
             },
             onSelectDate: (e: React.MouseEvent<HTMLButtonElement>) => {
                 const isRangeMode = e.currentTarget.dataset.range === "true";
