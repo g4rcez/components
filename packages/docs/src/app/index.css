@@ -64,7 +64,7 @@
     --docs-canvas: hsla(220, 16%, 6%, 1);
     --docs-surface: hsla(220, 13%, 9%, 1);
     --docs-surface-raised: hsla(220, 10%, 14%, 1);
-    --docs-border: hsla(220, 9%, 19%, 1);
+    --docs-border: var(--var-color-border);
     --docs-primary: hsla(188, 86%, 57%, 1);
     --docs-primary-soft: hsla(190, 48%, 12%, 1);
     --docs-text: hsla(210, 12%, 96%, 1);
@@ -79,7 +79,6 @@ html:not(.dark) {
     --docs-canvas: hsla(0, 0%, 100%, 1);
     --docs-surface: hsla(210, 20%, 98%, 1);
     --docs-surface-raised: hsla(210, 17%, 95%, 1);
-    --docs-border: hsla(215, 15%, 88%, 1);
     --docs-primary: hsla(192, 100%, 29%, 1);
     --docs-primary-soft: hsla(188, 65%, 95%, 1);
     --docs-text: hsla(220, 20%, 12%, 1);
