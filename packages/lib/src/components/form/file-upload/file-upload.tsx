@@ -31,7 +31,8 @@ const Context = createContext<[state: ContextProps, setState: SetState<ContextPr
 
 const useFileManager = () => useContext(Context);
 
-type Props = Override<React.ComponentProps<"input">, DropzoneProps> & {
+// Omit `onDrop` (native DragEvent handler and dropzone generic): intersecting them with ours leaves callback parameters untyped.
+type Props = Omit<Override<React.ComponentProps<"input">, DropzoneProps>, "onDrop"> & {
     files?: File[];
     idle?: React.ReactElement<IdleProps>;
     File?: React.FC<{ file: File }>;

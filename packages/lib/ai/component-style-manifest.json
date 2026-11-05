@@ -15,6 +15,10 @@
           "tiny": "__tag--size-tiny",
           "small": "__tag--size-small"
         },
+        "appearance": {
+          "solid": "__tag--appearance-solid",
+          "soft": "__tag--appearance-soft"
+        },
         "theme": {
           "custom": "__tag--theme-custom",
           "info": "__tag--theme-info",
@@ -1525,7 +1529,11 @@
         "dot": "__table-metadata__dot",
         "value-frame": "__table-metadata__value-frame",
         "ghost-value": "__table-metadata__ghost-value",
-        "input": "__table-metadata__input"
+        "input": "__table-metadata__input",
+        "trigger": "__table-metadata__trigger",
+        "trigger-label": "__table-metadata__trigger-label",
+        "trigger-value": "__table-metadata__trigger-value",
+        "trigger-icon": "__table-metadata__trigger-icon"
       },
       "compounds": []
     }
@@ -1551,7 +1559,9 @@
   "table-row": {
     "import": "@g4rcez/components/table-row",
     "css": "@g4rcez/components/table.css",
-    "dependencies": [],
+    "dependencies": [
+      "checkbox"
+    ],
     "classes": {
       "base": "__table-row",
       "variants": {},
@@ -1562,7 +1572,9 @@
         "cell": "__table-row__cell",
         "cell-label": "__table-row__cell-label",
         "cell-frame": "__table-row__cell-frame",
-        "cell-content": "__table-row__cell-content"
+        "cell-content": "__table-row__cell-content",
+        "selection-cell": "__table-row__selection-cell",
+        "selection-control": "__table-row__selection-control"
       },
       "compounds": []
     }
@@ -1637,7 +1649,10 @@
         "filter-item": "__table-head__filter-item",
         "add-filter-button": "__table-head__add-filter-button",
         "label": "__table-head__label",
-        "resizer": "__table-head__resizer"
+        "resizer": "__table-head__resizer",
+        "filter-trigger": "__table-head__filter-trigger",
+        "selection-cell": "__table-head__selection-cell",
+        "selection-control": "__table-head__selection-control"
       },
       "compounds": []
     }
@@ -1650,6 +1665,28 @@
       "base": "__video-player",
       "variants": {},
       "slots": {},
+      "compounds": []
+    }
+  },
+  "pdf-viewer": {
+    "import": "@g4rcez/components/pdf-viewer",
+    "css": "@g4rcez/components/pdf-viewer.css",
+    "dependencies": [
+      "alert",
+      "button",
+      "free-text",
+      "input-field",
+      "polymorph",
+      "select",
+      "tooltip"
+    ],
+    "classes": {
+      "base": "__pdf-viewer",
+      "variants": {},
+      "slots": {
+        "toolbar": "__pdf-viewer__toolbar",
+        "page": "__pdf-viewer__page"
+      },
       "compounds": []
     }
   },

@@ -222,6 +222,11 @@
             "import": "./dist/components/display/shortcut.mjs",
             "default": "./dist/components/display/shortcut.mjs"
         },
+        "./components/display/pdf-viewer": {
+            "types": "./dist/components/display/pdf-viewer/pdf-viewer.d.ts",
+            "import": "./dist/components/display/pdf-viewer.mjs",
+            "default": "./dist/components/display/pdf-viewer.mjs"
+        },
         "./components/display/skeleton": {
             "types": "./dist/components/display/skeleton/skeleton.d.ts",
             "import": "./dist/components/display/skeleton.mjs",
@@ -241,6 +246,11 @@
             "types": "./dist/components/display/step/step.d.ts",
             "import": "./dist/components/display/step.mjs",
             "default": "./dist/components/display/step.mjs"
+        },
+        "./components/display/video-player": {
+            "types": "./dist/components/display/video-player/video-player.d.ts",
+            "import": "./dist/components/display/video-player.mjs",
+            "default": "./dist/components/display/video-player.mjs"
         },
         "./components/display/swipeable-list": {
             "types": "./dist/components/display/swipeable-list/swipeable-list.d.ts",
@@ -312,6 +322,11 @@
             "import": "./dist/components/form/date-picker.mjs",
             "default": "./dist/components/form/date-picker.mjs"
         },
+        "./components/form/drawing-editor": {
+            "types": "./dist/components/form/drawing-editor/drawing-editor.d.ts",
+            "import": "./dist/components/form/drawing-editor.mjs",
+            "default": "./dist/components/form/drawing-editor.mjs"
+        },
         "./components/form/file-upload": {
             "types": "./dist/components/form/file-upload/file-upload.d.ts",
             "import": "./dist/components/form/file-upload.mjs",
@@ -346,6 +361,11 @@
             "types": "./dist/components/form/radiobox/radiobox.d.ts",
             "import": "./dist/components/form/radiobox.mjs",
             "default": "./dist/components/form/radiobox.mjs"
+        },
+        "./components/form/rich-text-editor": {
+            "types": "./dist/components/form/rich-text-editor/rich-text-editor.d.ts",
+            "import": "./dist/components/form/rich-text-editor.mjs",
+            "default": "./dist/components/form/rich-text-editor.mjs"
         },
         "./components/form/select": {
             "types": "./dist/components/form/select/select.d.ts",
