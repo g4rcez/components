@@ -56,8 +56,9 @@
 :root {
     --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    --header-height: 64px;
-    --docs-sidebar-width: 248px;
+    --header-height: 56px;
+    --docs-frame-radius: 12px;
+    --docs-sidebar-width: 240px;
     --docs-article-width: 760px;
     --docs-toc-width: 192px;
     --docs-canvas: hsla(220, 16%, 6%, 1);
@@ -228,27 +229,35 @@ html:not(.dark) .docs-body {
     padding-inline-start: 10px;
     border-inline-start: 1px solid var(--docs-border);
     color: var(--docs-text-muted);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .docs-header-nav {
-    gap: 20px;
-    margin-inline-start: 20px;
+    align-self: stretch;
+    gap: 4px;
+    margin-inline-start: 16px;
 }
 
 .docs-header-nav a {
+    display: flex;
+    align-items: center;
+    padding-inline: 12px;
+    border-block-end: 2px solid transparent;
     color: var(--docs-text-muted);
     font-size: 13px;
-    font-weight: 650;
+    font-weight: 500;
     text-decoration: none;
+    transition: color 150ms ease;
 }
 
-.docs-header-nav a:hover,
+.docs-header-nav a:hover {
+    color: var(--docs-text);
+}
+
 .docs-header-nav a[aria-current="page"] {
-    color: var(--docs-primary);
+    border-block-end-color: var(--docs-primary);
+    color: var(--docs-text);
 }
 
 .docs-search-trigger {
@@ -302,6 +311,7 @@ html:not(.dark) .docs-body {
     inline-size: var(--docs-sidebar-width);
     block-size: calc(100vh - var(--header-height));
     overflow: hidden;
+    background: var(--docs-surface);
     scrollbar-width: thin;
     scrollbar-color: var(--docs-border) transparent;
 }
@@ -321,7 +331,7 @@ html:not(.dark) .docs-body {
     display: flex;
     flex-direction: column;
     block-size: 100%;
-    padding: 32px 24px 32px;
+    padding: 20px 16px 24px;
 }
 
 .docs-nav-search {
@@ -390,11 +400,12 @@ html:not(.dark) .docs-body {
 
 .docs-nav-section-title,
 .docs-toc-title {
-    margin: 0 0 12px;
-    color: var(--docs-text);
+    margin: 0 0 8px;
+    padding-inline: 12px;
+    color: var(--docs-text-muted);
     font-family: var(--font-sans);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.4;
 }
 
@@ -412,15 +423,13 @@ html:not(.dark) .docs-body {
     min-block-size: 34px;
     gap: 10px;
     padding: 7px 12px;
-    border-inline-start: 1px solid var(--docs-border);
-    border-radius: 0;
+    border-radius: 8px;
     color: var(--docs-text-muted);
     font-size: 13px;
     line-height: 1.35;
     text-decoration: none;
     transition:
         background-color 150ms ease,
-        border-color 150ms ease,
         color 150ms ease;
 }
 
@@ -429,11 +438,11 @@ html:not(.dark) .docs-body {
     color: var(--docs-text);
 }
 
-.docs-nav-link-active {
-    border-inline-start-color: var(--docs-primary);
-    background: var(--docs-primary-soft);
-    color: var(--docs-primary);
-    font-weight: 700;
+.docs-nav-link-active,
+.docs-nav-link-active:hover {
+    background: var(--docs-surface-raised);
+    color: var(--docs-text);
+    font-weight: 600;
 }
 
 .docs-nav-link-icon {
@@ -521,10 +530,12 @@ html:not(.dark) .docs-body {
 }
 
 .docs-page-meta {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
-    gap: 12px 20px;
     margin-block-start: 24px;
+    overflow: hidden;
+    border: 1px solid var(--docs-border);
+    border-radius: 8px;
     color: var(--docs-text-muted);
     font-size: 12px;
     line-height: 1.5;
@@ -535,6 +546,11 @@ html:not(.dark) .docs-body {
     align-items: baseline;
     flex-wrap: wrap;
     gap: 8px;
+    padding: 6px 12px;
+}
+
+.docs-page-meta > span + span {
+    border-inline-start: 1px solid var(--docs-border);
 }
 
 .docs-page-meta code {
@@ -545,17 +561,15 @@ html:not(.dark) .docs-body {
 
 .docs-meta-label {
     color: var(--docs-text-muted);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .docs-section-title {
     margin: 0 0 24px;
     color: var(--docs-text);
-    font-size: clamp(1.5rem, 3vw, 1.875rem);
-    font-weight: 750;
+    font-size: clamp(1.5rem, 3vw, 1.75rem);
+    font-weight: 650;
     letter-spacing: -0.025em;
     line-height: 1.2;
 }
@@ -567,25 +581,25 @@ html:not(.dark) .docs-body {
 .docs-guidance-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-border);
 }
 
 .docs-guidance {
     min-inline-size: 0;
     padding: 24px;
-    border: 1px solid var(--docs-border);
-    border-radius: 14px;
-    background: var(--docs-surface);
+    background: var(--docs-canvas);
 }
 
 .docs-guidance-use {
-    border-color: hsla(157, 45%, 50%, 0.45);
-    background: var(--docs-success-soft);
+    box-shadow: inset 0 2px 0 var(--docs-success);
 }
 
 .docs-guidance-avoid {
-    border-color: hsla(355, 69%, 65%, 0.45);
-    background: var(--docs-danger-soft);
+    box-shadow: inset 0 2px 0 var(--docs-danger);
 }
 
 .docs-guidance-heading {
@@ -598,8 +612,8 @@ html:not(.dark) .docs-body {
 .docs-guidance-heading h3 {
     margin: 0;
     color: var(--docs-text);
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 600;
     line-height: 1.3;
 }
 
@@ -637,6 +651,39 @@ html:not(.dark) .docs-body {
     min-inline-size: 0;
 }
 
+/* The library Tabs renders inside a Card; the page tabs keep only the tab bar and drop the frame. */
+.docs-page-tabs {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.docs-page-tabs > .__tabs__header {
+    margin-block-end: 32px;
+}
+
+.docs-page-tabs .__tabs__item:first-child .__tabs__tab {
+    padding-inline-start: 0;
+}
+
+.docs-page-tabs > .docs-page-tabs-body {
+    padding-inline: 0;
+}
+
+/* The tab already names these sections, so their h2 stays for outline and screen readers only. */
+#docs-examples-title,
+#accessibility-notes-title {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
 .docs-examples > .docs-content > h2:first-child,
 .docs-examples > .docs-content > section:first-child > h2:first-child {
     margin-block-start: 24px;
@@ -650,8 +697,8 @@ html:not(.dark) .docs-body {
 .docs-content h2:not(:where(.docs-example-preview *)) {
     margin-block: 64px 24px;
     color: var(--docs-text);
-    font-size: clamp(1.5rem, 3vw, 1.875rem);
-    font-weight: 750;
+    font-size: clamp(1.5rem, 3vw, 1.75rem);
+    font-weight: 650;
     letter-spacing: -0.025em;
     line-height: 1.2;
 }
@@ -659,8 +706,8 @@ html:not(.dark) .docs-body {
 .docs-content h3:not(:where(.docs-example-preview *)) {
     margin-block: 48px 16px;
     color: var(--docs-text);
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
     line-height: 1.3;
 }
 
@@ -717,10 +764,10 @@ html:not(.dark) .docs-body {
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 0 0 8px;
+    margin: 0 0 4px;
     color: var(--docs-text);
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
     line-height: 1.3;
 }
 
@@ -757,7 +804,7 @@ html:not(.dark) .docs-body {
 .docs-example-panel {
     overflow: hidden;
     border: 1px solid var(--docs-border);
-    border-radius: 14px;
+    border-radius: var(--docs-frame-radius);
     background: var(--docs-surface);
 }
 
@@ -772,6 +819,29 @@ html:not(.dark) .docs-body {
 
 .docs-example-preview > * {
     max-inline-size: 100%;
+}
+
+/* Most demos wrap their subject in a titled Card. Inside the example panel it is a titled section, not a second frame. The preview keeps its padding: floating panels need that room inside the panel's clipping box. */
+.docs-example-preview:has(> [data-component="card"]:only-child) {
+    align-items: stretch;
+}
+
+.docs-example-preview > [data-component="card"]:only-child {
+    inline-size: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.docs-example-preview > [data-component="card"]:only-child > [data-component="card-title"] {
+    margin-block: 0 16px;
+    padding: 0;
+    border: 0;
+    color: var(--docs-text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
 }
 
 .docs-example-code {
@@ -789,7 +859,7 @@ html:not(.dark) .docs-body {
     min-inline-size: 0;
     overflow: hidden;
     border: 1px solid var(--docs-border);
-    border-radius: 10px;
+    border-radius: var(--docs-frame-radius);
     background: var(--docs-canvas);
 }
 
@@ -797,19 +867,17 @@ html:not(.dark) .docs-body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-block-size: 48px;
+    min-block-size: 40px;
     gap: 16px;
-    padding: 6px 10px 6px 14px;
+    padding: 4px 8px 4px 16px;
     border-block-end: 1px solid var(--docs-border);
     background: var(--docs-surface);
 }
 
 .docs-code-language {
     color: var(--docs-text-muted);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .docs-code-copy {
@@ -863,8 +931,12 @@ html:not(.dark) .docs-body {
 
 .docs-related-links {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-border);
 }
 
 .docs-related-link {
@@ -873,16 +945,19 @@ html:not(.dark) .docs-body {
     justify-content: space-between;
     gap: 10px;
     min-inline-size: 0;
-    padding: 12px 14px;
-    border-block-end: 1px solid var(--docs-border);
+    padding: 14px 16px;
+    background: var(--docs-canvas);
     color: var(--docs-text-muted);
     font-size: 13px;
     text-decoration: none;
+    transition:
+        background-color 150ms ease,
+        color 150ms ease;
 }
 
 .docs-related-link:hover {
-    border-color: var(--docs-primary);
-    color: var(--docs-primary);
+    background: var(--docs-surface);
+    color: var(--docs-text);
 }
 
 .docs-related-link span {
@@ -894,28 +969,32 @@ html:not(.dark) .docs-body {
 .docs-pager {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 1px;
     margin-block-start: 64px;
-    padding-block-start: 24px;
-    border-block-start: 1px solid var(--docs-border);
+    overflow: hidden;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-border);
+}
+
+.docs-pager > span:empty {
+    background: var(--docs-canvas);
 }
 
 .docs-pager-link {
     display: flex;
     min-inline-size: 0;
     flex-direction: column;
-    gap: 10px;
-    padding: 16px;
-    border: 1px solid var(--docs-border);
-    border-radius: 10px;
-    background: var(--docs-surface);
+    gap: 8px;
+    padding: 16px 20px;
+    background: var(--docs-canvas);
     color: var(--docs-text);
     text-decoration: none;
+    transition: background-color 150ms ease;
 }
 
 .docs-pager-link:hover {
-    border-color: var(--docs-primary);
-    background: var(--docs-surface-raised);
+    background: var(--docs-surface);
 }
 
 .docs-pager-next {
@@ -929,10 +1008,8 @@ html:not(.dark) .docs-body {
     gap: 6px;
     color: var(--docs-text-muted);
     font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .docs-pager-link strong {
@@ -1066,46 +1143,75 @@ html:not(.dark) .docs-body {
     font-size: 15px;
 }
 
-.docs-start-links {
+.docs-hub {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--var-spacing-base);
-    margin-block: calc(var(--var-spacing-base) * 2);
+    gap: 1px;
+    margin-block: 24px;
+    overflow: hidden;
+    border: 1px solid var(--docs-border);
+    border-radius: var(--docs-frame-radius);
+    background: var(--docs-border);
 }
 
-.docs-start-links > a {
+.docs-content a.docs-hub-cell,
+.docs-hub-cell {
     display: flex;
-    justify-content: space-between;
-    gap: var(--var-spacing-base);
-    padding: calc(var(--var-spacing-base) * 1.25);
-    border: var(--var-border-hairline) solid var(--docs-border);
-    border-radius: calc(var(--var-radius-base) * 0.75);
+    flex-direction: column;
+    gap: 8px;
+    min-inline-size: 0;
+    padding: 20px;
+    background: var(--docs-canvas);
     color: var(--docs-text);
     text-decoration: none;
+    transition: background-color 150ms ease;
 }
 
-.docs-start-links strong {
-    display: block;
-    margin-block-end: calc(var(--var-spacing-base) / 2);
-    font-size: 14px;
+.docs-hub-cell:hover {
+    background: var(--docs-surface);
+}
+
+.docs-content a.docs-hub-cell {
+    color: var(--docs-text);
+}
+
+.docs-hub-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.docs-hub-head strong {
+    font-size: 15px;
     font-weight: 600;
 }
 
-.docs-start-links a > span > span {
-    display: block;
+.docs-hub-head svg {
+    flex: none;
+    color: var(--docs-text-muted);
+    transition:
+        color 150ms ease,
+        transform 150ms ease;
+}
+
+.docs-hub-cell:hover .docs-hub-head svg {
+    color: var(--docs-text);
+    transform: translateX(2px);
+}
+
+.docs-hub-text {
     color: var(--docs-text-muted);
     font-size: 13px;
     line-height: 1.6;
 }
 
-.docs-start-links svg {
-    flex: none;
+.docs-hub-meta {
+    margin-block-start: auto;
+    padding-block-start: 8px;
     color: var(--docs-text-muted);
-}
-
-.docs-start-links > a:hover {
-    border-color: var(--docs-primary);
-    background: var(--docs-primary-soft);
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .docs-content > section > p + .docs-code-block {
@@ -1116,41 +1222,6 @@ html:not(.dark) .docs-body {
     margin-block-start: var(--var-spacing-base);
     color: var(--docs-text-muted);
     font-size: 13px;
-}
-
-.docs-explore-links {
-    margin-block-start: var(--var-spacing-base);
-}
-
-.docs-explore-links > a {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: calc(var(--var-spacing-base) / 2) var(--var-spacing-base);
-    padding-block: calc(var(--var-spacing-base) * 1.25);
-    border-block-end: var(--var-border-hairline) solid var(--docs-border);
-    text-decoration: none;
-}
-
-.docs-explore-links strong {
-    color: var(--docs-text);
-    font-size: 14px;
-    font-weight: 550;
-}
-
-.docs-explore-links span {
-    grid-column: 1;
-    color: var(--docs-text-muted);
-    font-size: 13px;
-}
-
-.docs-explore-links svg {
-    grid-column: 2;
-    grid-row: 1 / 3;
-    align-self: center;
-}
-
-.docs-explore-links > a:hover strong {
-    color: var(--docs-primary);
 }
 
 @media (min-width: 60rem) {
@@ -1279,7 +1350,7 @@ html:not(.dark) .docs-body {
         padding-inline: 20px;
     }
 
-    .docs-start-links {
+    .docs-hub {
         grid-template-columns: 1fr;
     }
 
@@ -1339,7 +1410,12 @@ html:not(.dark) .docs-body {
 }
 
 @media (forced-colors: active) {
-    .docs-nav-link-active,
+    .docs-nav-link-active {
+        outline: 2px solid Highlight;
+        outline-offset: -2px;
+        forced-color-adjust: none;
+    }
+
     .docs-toc-link-active {
         border-color: Highlight;
         forced-color-adjust: none;

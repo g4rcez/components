@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeftIcon, ArrowRightIcon, CaretDownIcon, CheckIcon, WarningCircleIcon } from "@phosphor-icons/react";
-import type { Label } from "@g4rcez/components";
+import { type Label, Tab, Tabs } from "@g4rcez/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from "react";
@@ -31,6 +31,21 @@ const sectionLabels: Record<string, string> = {
     primitives: "Primitives",
     start: "Getting Started",
     utilities: "Utilities",
+};
+
+type PageTab = "examples" | "usage" | "accessibility";
+
+const pageTabs: readonly PageTab[] = ["examples", "usage", "accessibility"];
+
+/** A deep link may name the tab (?tab=) or an anchor that lives inside a non-default tab. */
+const tabFromLocation = (): PageTab => {
+    const query = new URLSearchParams(window.location.search).get("tab");
+    const named = pageTabs.find((tab) => tab === query);
+    if (named) return named;
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    if (hash === "usage-guidance") return "usage";
+    if (hash === "accessibility-notes") return "accessibility";
+    return "examples";
 };
 
 const slugify = (value: string) =>
@@ -134,8 +149,31 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
     const next = currentIndex >= 0 && currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
     const [tocItems, setTocItems] = useState<TocItem[]>([]);
     const [activeId, setActiveId] = useState("");
+    const [tab, setTab] = useState<PageTab>("examples");
     const title = String(props.title);
     const sectionLabel = sectionLabels[props.section.toLocaleLowerCase()] ?? props.section;
+
+    useEffect(() => {
+        setTab(tabFromLocation());
+    }, [pathname]);
+
+    useEffect(() => {
+        const hash = decodeURIComponent(window.location.hash.slice(1));
+        if (!hash) return;
+        const frame = window.requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView());
+        return () => window.cancelAnimationFrame(frame);
+    }, [tab]);
+
+    const selectTab = (id: string) => {
+        const next = pageTabs.find((item) => item === id);
+        if (!next || next === tab) return;
+        setTab(next);
+        const url = new URL(window.location.href);
+        url.hash = "";
+        if (next === "examples") url.searchParams.delete("tab");
+        else url.searchParams.set("tab", next);
+        window.history.replaceState(window.history.state, "", url);
+    };
 
     useEffect(() => {
         const frame = window.requestAnimationFrame(() => {
@@ -165,7 +203,7 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
         });
 
         return () => window.cancelAnimationFrame(frame);
-    }, [pathname]);
+    }, [pathname, tab]);
 
     useEffect(() => {
         if (tocItems.length === 0) return;
@@ -214,16 +252,22 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                 {isGuide ? (
                     <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
                 ) : (
-                    <>
-                        <section className="docs-examples" aria-labelledby="docs-examples-title">
-                            <h2 id="docs-examples-title" className="docs-section-title">
-                                Examples
-                            </h2>
-                            <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
-                        </section>
-                        <UsageSummary title={title} useWhen={props.useWhen} avoidWhen={props.avoidWhen} />
-                        <AccessibilityNotes title={title}>{props.accessibility}</AccessibilityNotes>
-                    </>
+                    <Tabs active={tab} onChange={selectTab} aria-label="Page sections" container="docs-page-tabs" className="docs-page-tabs-body">
+                        <Tab id="examples" title="Examples">
+                            <section className="docs-examples" aria-labelledby="docs-examples-title">
+                                <h2 id="docs-examples-title" className="docs-section-title">
+                                    Examples
+                                </h2>
+                                <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
+                            </section>
+                        </Tab>
+                        <Tab id="usage" title="Usage">
+                            <UsageSummary title={title} useWhen={props.useWhen} avoidWhen={props.avoidWhen} />
+                        </Tab>
+                        <Tab id="accessibility" title="Accessibility">
+                            <AccessibilityNotes title={title}>{props.accessibility}</AccessibilityNotes>
+                        </Tab>
+                    </Tabs>
                 )}
 
                 {relatedItems.length > 0 ? (

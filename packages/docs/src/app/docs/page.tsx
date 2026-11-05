@@ -3,9 +3,19 @@
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
 import { CodeBlock } from "@/components/code-block";
+import { sections } from "@/config/navigation";
 import { Button } from "@g4rcez/components";
 import { ArrowRightIcon, SparkleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
+
+const libraryDescriptions: Record<string, string> = {
+    Primitives: "Typography, layout, and composition building blocks.",
+    "Display Components": "Cards, tables, calendars, and other ways to present information.",
+    "Floating Elements": "Modals, menus, dropdowns, and tooltips that sit above the page.",
+    "Form Controls": "Inputs, selects, pickers, and validation.",
+};
+
+const library = sections.filter((section) => section.title in libraryDescriptions);
 
 export default function DocsPage() {
     return (
@@ -15,22 +25,22 @@ export default function DocsPage() {
                 and make them your own.
             </p>
 
-            <div className="docs-start-links">
-                <Link href="/docs/get-started">
-                    <span>
+            <nav className="docs-hub" aria-label="Start here">
+                <Link href="/docs/get-started" className="docs-hub-cell">
+                    <span className="docs-hub-head">
                         <strong>Get started</strong>
-                        <span>Install the library and build your first interface.</span>
+                        <ArrowRightIcon size={16} aria-hidden="true" />
                     </span>
-                    <ArrowRightIcon size={20} aria-hidden="true" />
+                    <span className="docs-hub-text">Install the library and build your first interface.</span>
                 </Link>
-                <Link href="/docs/setup">
-                    <span>
+                <Link href="/docs/setup" className="docs-hub-cell">
+                    <span className="docs-hub-head">
                         <strong>Make it yours</strong>
-                        <span>Set up your theme with colors and design tokens.</span>
+                        <ArrowRightIcon size={16} aria-hidden="true" />
                     </span>
-                    <ArrowRightIcon size={20} aria-hidden="true" />
+                    <span className="docs-hub-text">Set up your theme with colors and design tokens.</span>
                 </Link>
-            </div>
+            </nav>
 
             <section aria-labelledby="installation-title">
                 <h2 id="installation-title">Installation</h2>
@@ -68,25 +78,26 @@ function BasicUsage() {
             </section>
 
             <section aria-labelledby="explore-title">
-                <h2 id="explore-title">Find your next building block</h2>
-                <p>Explore components by the job you need them to do.</p>
-                <div className="docs-explore-links">
-                    <Link href="/docs/input">
-                        <strong>Collect input</strong>
-                        <span>Forms, fields, and selection controls</span>
-                        <ArrowRightIcon size={17} aria-hidden="true" />
-                    </Link>
-                    <Link href="/docs/table">
-                        <strong>Display information</strong>
-                        <span>Tables, cards, and data presentation</span>
-                        <ArrowRightIcon size={17} aria-hidden="true" />
-                    </Link>
-                    <Link href="/docs/modal">
-                        <strong>Add interaction</strong>
-                        <span>Dialogs, menus, and floating elements</span>
-                        <ArrowRightIcon size={17} aria-hidden="true" />
-                    </Link>
-                </div>
+                <h2 id="explore-title">Browse the library</h2>
+                <p>Every component has live examples, usage guidance, and accessibility notes.</p>
+                <nav className="docs-hub" aria-label="Component groups">
+                    {library.map((section) => (
+                        <Link key={section.title} href={section.items[0].href} className="docs-hub-cell">
+                            <span className="docs-hub-head">
+                                <strong>{section.title}</strong>
+                                <ArrowRightIcon size={16} aria-hidden="true" />
+                            </span>
+                            <span className="docs-hub-text">{libraryDescriptions[section.title]}</span>
+                            <span className="docs-hub-meta">
+                                {section.items.length} components ·{" "}
+                                {section.items
+                                    .slice(0, 4)
+                                    .map((item) => item.title)
+                                    .join(", ")}
+                            </span>
+                        </Link>
+                    ))}
+                </nav>
             </section>
         </DocsLayout>
     );

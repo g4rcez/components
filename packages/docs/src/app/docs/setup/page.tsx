@@ -458,7 +458,7 @@ function LivePreview({ style, mode }: { style: CSSProperties; mode: Mode }) {
                         <p className="text-typography-base">Body · text-typography-base</p>
                         <p className="text-typography-lg">Lead · text-typography-lg</p>
                         <p className="text-typography-2xl font-bold">Section · text-typography-2xl</p>
-                        <p className="text-typography-4xl font-extrabold">Display · text-typography-4xl</p>
+                        <p className="text-typography-4xl font-extrabold [overflow-wrap:anywhere]">Display · text-typography-4xl</p>
                     </div>
                 </section>
 

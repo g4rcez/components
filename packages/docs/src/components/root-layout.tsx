@@ -9,7 +9,7 @@ import { Navigation } from "./navigation";
 
 const tweaks: Tweaks = {
     input: { iconFeedback: true },
-    table: { filters: false, sorters: false, operations: false, sticky: 64 },
+    table: { filters: false, sorters: false, operations: false, sticky: 56 },
 };
 
 const themeStyles = docsThemes.map((theme) => ({
@@ -27,18 +27,12 @@ export const RootLayout = (props: PropsWithChildren) => {
     }, []);
 
     return (
-        <html lang="en" className="dark scroll-smooth bg-background proportional-nums text-foreground antialiased">
+        <html lang="en" className="bg-background text-foreground dark scroll-smooth proportional-nums antialiased">
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 {themeStyles.map(({ id, name, css }) => (
-                    <style
-                        key={name}
-                        id={id}
-                        data-theme-owner="theme-runtime"
-                        data-theme-name={name}
-                        dangerouslySetInnerHTML={{ __html: css }}
-                    />
+                    <style key={name} id={id} data-theme-owner="theme-runtime" data-theme-name={name} dangerouslySetInnerHTML={{ __html: css }} />
                 ))}
                 <title>Components — Modern React UI Library</title>
             </head>

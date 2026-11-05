@@ -48,9 +48,7 @@ typography:
     lineHeight: 1.6
 rounded:
   control: "8px"
-  code: "10px"
-  link-panel: "12px"
-  example: "14px"
+  frame: "12px"
 spacing:
   small: "8px"
   base: "16px"
@@ -97,9 +95,9 @@ Landing titles are larger than documentation titles. Keep article prose within a
 
 ## Layout
 
-The shared header is 64px high in a centered 1440px frame. The landing page has a 1376px bordered frame, a split introduction/installation area, and a preview/source pair. Catalog links are rows rather than repeated feature cards.
+The shared header is 56px high in a centered 1440px frame; its section links carry a 2px underline for the current section, not cyan text. The landing page has a 1376px bordered frame and flows top to bottom: a centered hero (documented-components pill, headline, copy, two actions, install command); one Preview/Code window built on the library Tabs, with the live demo beside a live component composition (stacked below 1024px); a four-cell foundations grid; the hub grid under a two-column section header; and a closing call to action. The hero eyebrow shows the number of documented components, computed from the navigation config. The catalog is one hub grid: a single bordered frame whose cells share hairlines (Helios hub structure), not separate feature cards. The landing page has no floating overlay; the footer carries the same links.
 
-Documentation has a 248px navigation rail, an article up to 760px wide, and a 192px page outline at 1280px and above. Below 1280px the outline becomes a collapsed native disclosure. Below 960px the navigation moves into a left drawer. At 640px, preview/source panels, guide links, and page actions stack.
+Documentation has a 240px recessed navigation rail on the surface tone (Linear-style: group labels and inactive links are muted, the current route is a raised neutral row), an article up to 760px wide, and a 192px page outline at 1280px and above. Below 1280px the outline becomes a collapsed native disclosure. Below 960px the navigation moves into a left drawer. Below 1024px the landing preview and source stack so the code keeps a readable width. At 640px, guide links and page actions stack.
 
 New spacing derives from the library's base spacing token. Keep horizontal scrolling inside code panels instead of widening the document.
 
@@ -113,10 +111,13 @@ Controls have small rounded corners; bounded examples have larger corners. Struc
 
 ## Components
 
-- **Navigation:** group labels are sans-serif, links sit on a thin vertical rail, and the current route has cyan text, a tinted background, and an accessible current-page state.
+- **Navigation:** group labels are muted sentence-case, links are rounded rows, and the current route has full-contrast text on a raised neutral background plus an accessible current-page state. Cyan is reserved for actions, links, and focus.
 - **Search:** the header and keyboard shortcuts focus desktop navigation or open the drawer. The drawer traps focus through the library Modal and starts in the search input.
 - **Page outline:** sticky and independently scrollable on large screens; a keyboard-operable disclosure on smaller screens.
-- **Examples:** rendered preview above source. Keep copying, reset controls, and component behavior intact.
+- **Examples:** rendered preview above source. Keep copying, reset controls, and component behavior intact. A Card that wraps the whole subject renders as a titled section inside the example panel, without its own border or background, and the panel keeps its padding so floating panels have room; Card demos that show several Cards keep their frames.
+- **Page header:** breadcrumb, title, summary, then a bordered key/value strip (Package, Section) in the style of Helios component headers.
+- **Page tabs:** component pages use the library Tabs, frameless, below the page header: Examples, Usage, Accessibility (Helios-style). Only the active panel renders, so the outline lists that panel's headings. The tab is stored in `?tab=` (omitted for Examples); `?tab=` and anchors inside another tab (`#usage-guidance`, `#accessibility-notes`) open that tab on load. Guide pages have no tabs. The Examples and Accessibility h2 headings stay for the outline and screen readers but are visually hidden because the tab names them.
+- **Usage guidance:** "Use when" and "Avoid when" share one bordered frame split by a hairline, each with a 2px semantic top edge.
 - **Guide pages:** display guide content directly, without generic component usage warnings. Component pages put examples before usage guidance and accessibility notes.
 - **Actions:** cyan primary links, neutral outlined secondary links, visible focus, and restrained color transitions. Navigation links remain links rather than nested buttons.
 
