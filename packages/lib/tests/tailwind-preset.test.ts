@@ -89,7 +89,7 @@ describe("Tailwind preset", () => {
             declarations.push(declaration.value);
         });
 
-        expect(declarations).toStrictEqual(["var(--var-card-surface-radius, calc(var(--var-radius-base) / 4))"]);
+        expect(declarations).toStrictEqual(["var(--var-card-surface-radius, calc(var(--var-radius-base) * 0.75))"]);
     });
 
     it.each(["table", "notification"])("keeps full %s shadow overrides ahead of theme-aware defaults", (name) => {

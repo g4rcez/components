@@ -62,18 +62,20 @@ test.describe("touch device (no hover, coarse pointer)", () => {
 test.describe("mouse device (hover, fine pointer)", () => {
     test.use({ viewport: { width: 1280, height: 800 } });
 
-    test("hovering a button dims it", async ({ page }) => {
+    test("hovering a primary button darkens its fill without fading it", async ({ page }) => {
         await page.goto("/docs/buttons");
         const normal = button(page);
         await normal.hover();
-        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).opacity)).toBe("0.7");
+        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(20, 109, 123)");
+        expect(await normal.evaluate((element) => getComputedStyle(element).opacity)).toBe("1");
     });
 
-    test("keyboard focus dims a button", async ({ page }) => {
+    test("keyboard focus darkens a primary button without fading it", async ({ page }) => {
         await page.goto("/docs/buttons");
         const normal = button(page);
         await normal.focus();
-        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).opacity)).toBe("0.7");
+        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(20, 109, 123)");
+        expect(await normal.evaluate((element) => getComputedStyle(element).opacity)).toBe("1");
     });
 
     test("a mouse click does not leave a button dimmed by focus", async ({ page }) => {

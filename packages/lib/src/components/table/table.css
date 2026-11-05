@@ -235,7 +235,7 @@
 @media (min-width: 768px) {
     .__table-row__cell {
         display: table-cell;
-        block-size: var(--var-table-row-block-size, calc(var(--var-spacing-base) * 3));
+        block-size: var(--var-table-row-block-size, calc(var(--var-spacing-base) * 2.75));
         vertical-align: middle;
         border-block-end-width: var(--var-table-cell-border);
     }
@@ -351,16 +351,16 @@
 }
 
 .__table-head__cell:first-child {
-    border-start-start-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
+    border-start-start-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.75));
 }
 
 .__table-head__cell:last-child {
-    border-start-end-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
+    border-start-end-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.75));
 }
 
 @media (min-width: 768px) {
     .__table-head__cell {
-        height: var(--var-table-head-cell-block-size, calc(var(--var-spacing-base) * 3.5));
+        height: var(--var-table-head-cell-block-size, calc(var(--var-spacing-base) * 2.75));
     }
 }
 
@@ -374,11 +374,11 @@
 }
 
 .__table-head__cell-content--last {
-    border-start-end-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
+    border-start-end-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.75));
 }
 
 .__table-head__cell-content--first {
-    border-start-start-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
+    border-start-start-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.75));
 }
 
 .__table-head__actions {
@@ -448,7 +448,7 @@
     margin-block: auto;
     place-items: center;
     border: 0;
-    border-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
+    border-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.75));
     cursor: col-resize;
     background-color: var(--var-color-muted-foreground);
     transition-duration: var(--var-motion-duration-normal);
@@ -797,7 +797,7 @@
     flex-direction: column;
     width: 100%;
     white-space: nowrap;
-    border-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
+    border-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.75));
     background-color: var(--var-table-background);
 }
 

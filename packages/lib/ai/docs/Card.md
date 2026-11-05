@@ -67,7 +67,7 @@ Composable header with a title and an optional navigation or action area.
 | Override | Library default |
 |---|---|
 | `--var-card-content-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-card-surface-radius` | `calc(var(--var-radius-base) / 4)` |
+| `--var-card-surface-radius` | `calc(var(--var-radius-base) * 0.75)` |
 | `--var-card-surface-padding-block` | `calc(var(--var-spacing-base) * 0.75)` |
 | `--var-card-title-margin-block-end` | `calc(var(--var-spacing-base) / 2)` |
 

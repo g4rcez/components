@@ -46,21 +46,33 @@
     transition-timing-function: var(--var-tabs-item-transition-timing);
 }
 
+.__tabs__item {
+    color: var(--var-color-muted-foreground);
+    font-weight: var(--var-font-weight-medium);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__tabs__item:not(.__tabs__item--disabled):hover {
+        color: var(--var-color-foreground);
+    }
+}
+
 .__tabs__item--active {
-    color: var(--var-color-primary);
+    color: var(--var-color-foreground);
     border-bottom-width: var(--var-tabs-active-divider-block-size);
 }
 
 .__tabs__item--disabled {
     color: var(--var-color-muted-foreground);
+    opacity: 0.6;
 }
 
 .__tabs__tab {
     display: block;
     width: 100%;
     white-space: nowrap;
-    padding-block: var(--var-tabs-tab-padding-block, calc(var(--var-spacing-base) * 1));
-    padding-inline: var(--var-tabs-tab-padding-inline, calc(var(--var-spacing-base) * 2.5));
+    padding-block: var(--var-tabs-tab-padding-block, calc(var(--var-spacing-base) * 0.75));
+    padding-inline: var(--var-tabs-tab-padding-inline, calc(var(--var-spacing-base) * 1.25));
 }
 
 .__tabs__tab:disabled {

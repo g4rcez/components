@@ -94,7 +94,7 @@ Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the 
 
 | Override | Library default |
 |---|---|
-| `--var-notification-surface-radius` | `calc(var(--var-radius-base) * 1.333333)` |
+| `--var-notification-surface-radius` | `var(--var-radius-base)` |
 | `--var-notification-surface-backdrop-blur` | `calc( var(--var-spacing-base) * 0.75 )` |
 | `--var-notification-content-gap` | `calc(var(--var-spacing-base) * 0.75)` |
 | `--var-notification-content-padding` | `calc(var(--var-spacing-base) * 1)` |

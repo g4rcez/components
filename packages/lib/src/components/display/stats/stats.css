@@ -1,7 +1,7 @@
 .__stats {
     overflow: hidden;
     border: 1px solid var(--var-stats-border-color);
-    border-radius: var(--var-stats-rounded, calc(var(--var-radius-base) * 1));
+    border-radius: var(--var-stats-rounded, calc(var(--var-radius-base) * 0.75));
     background: var(--var-stats-background);
     box-shadow: var(--var-shadow-card);
 }

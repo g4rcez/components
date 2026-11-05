@@ -33,7 +33,7 @@ Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the 
 
 | Override | Library default |
 | --- | --- |
-| `--var-stats-rounded` | `calc(var(--var-radius-base) * 1)` |
+| `--var-stats-rounded` | `calc(var(--var-radius-base) * 0.75)` |
 | `--var-stats-gap` | `calc(var(--var-spacing-base) * 1)` |
 | `--var-stats-icon-p` | `calc(var(--var-spacing-base) * 2)` |
 | `--var-stats-icon-size` | `calc(var(--var-spacing-base) * 2.5)` |

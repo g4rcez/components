@@ -1,10 +1,12 @@
 /* CSS owns the shared geometry and global accent; TS adds sparse component overrides. */
 :root {
     --var-spacing-base: 16px;
-    --var-radius-base: 0.5rem;
+    --var-radius-base: 1rem;
     --var-color-primary: hsla(192, 100%, 29%, 1);
+    --var-color-primary-hover: hsla(192, 100%, 23%, 1);
 }
 
 html.dark {
     --var-color-primary: hsla(188, 72%, 34%, 1);
+    --var-color-primary-hover: hsla(188, 72%, 28%, 1);
 }

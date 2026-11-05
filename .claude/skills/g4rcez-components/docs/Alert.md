@@ -50,7 +50,7 @@ When you load styles individually, import the visibility-wrapper styles with Ale
 
 |Override|Library default|
 |---|---|
-|`--var-alert-surface-radius`|`calc(var(--var-radius-base) / 4)`|
+|`--var-alert-surface-radius`|`calc(var(--var-radius-base) * 0.75)`|
 |`--var-alert-surface-padding`|`calc(var(--var-spacing-base) * 1)`|
 |`--var-alert-content-gap`|`calc(var(--var-spacing-base) / 2)`|
 |`--var-alert-close-inset-inline-end`|`calc(var(--var-spacing-base) * 0.75)`|

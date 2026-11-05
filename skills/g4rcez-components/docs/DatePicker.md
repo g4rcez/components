@@ -63,8 +63,8 @@ Geometry defaults are scoped `calc` fallbacks from `--var-spacing-base` and the 
 | Override | Library default |
 |---|---|
 | `--var-date-picker-calendar-icon-size` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-date-picker-range-nights-radius` | `var(--var-card-surface-radius, calc(var(--var-radius-base) / 4))` |
-| `--var-card-surface-radius` | `calc(var(--var-radius-base) / 4)` |
+| `--var-date-picker-range-nights-radius` | `calc(var(--var-radius-base) / 4)` |
+| `--var-card-surface-radius` | `calc(var(--var-radius-base) * 0.75)` |
 | `--var-date-picker-panel-gap` | `calc(var(--var-spacing-base) * 1)` |
 
 CSS contracts: `date-picker`, `input`, `input-field`, `calendar`, and `dropdown`. Import `foundation.css` before those chunks, or use `index.css`. Customize the semantic `--var-*` variables, not generated utility selectors.

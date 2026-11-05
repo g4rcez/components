@@ -53,7 +53,7 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list";
 |---|---|
 | `--var-modal-surface-min-inline-size` | `calc(var(--var-spacing-base) * 20)` |
 | `--var-modal-surface-gap` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-modal-surface-radius` | `calc(var(--var-radius-base) * 1.333333)` |
+| `--var-modal-surface-radius` | `var(--var-radius-base)` |
 | `--var-modal-body-padding-block` | `calc(var(--var-spacing-base) * 1)` |
 
 - The detail overlay uses [Modal](Modal.md) surface and body tokens.

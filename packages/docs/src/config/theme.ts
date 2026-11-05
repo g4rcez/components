@@ -5,13 +5,8 @@ export const docsThemes = [
         name: "default",
         tokens: { "motion-duration-normal": "180ms" },
         components: {
-            button: { "secondary-background": "hsla(188, 86%, 94%, 1)" },
+            button: { "secondary-background": "hsla(188, 86%, 94%, 1)", "secondary-foreground": "hsla(192, 100%, 18%, 1)" },
         },
     },
-    {
-        name: "dark",
-        components: {
-            button: { rounded: "0px" },
-        },
-    },
+    { name: "dark" },
 ] satisfies readonly ThemeConfiguration[];

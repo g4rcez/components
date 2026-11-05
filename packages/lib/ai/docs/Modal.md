@@ -68,7 +68,7 @@ import { Modal, ModalConfirmProvider, useConfirm } from "@g4rcez/components/moda
 | `--var-modal-surface-min-inline-size` | `calc(var(--var-spacing-base) * 20)` |
 | `--var-modal-surface-gap` | `calc(var(--var-spacing-base) * 1)` |
 | `--var-modal-dialog-max-block-size` | `calc(var(--var-spacing-base) * 40)` |
-| `--var-modal-surface-radius` | `calc(var(--var-radius-base) * 1.333333)` |
+| `--var-modal-surface-radius` | `var(--var-radius-base)` |
 
 | Token | CSS Variable | Purpose |
 |---|---|---|

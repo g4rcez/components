@@ -210,7 +210,7 @@
 
   --var-tabs-divider-block-size: calc(var(--var-border-hairline) * 1);
   --var-tabs-active-divider-block-size: calc(var(--var-border-hairline) * 2);
-  --var-tabs-item-transition-duration: 375ms;
+  --var-tabs-item-transition-duration: 150ms;
   --var-tabs-item-transition-timing: cubic-bezier(0, 0, 0.58, 1);
 
   --var-timeline-connector-inline-size: calc(var(--var-border-hairline) * 2);
@@ -285,26 +285,29 @@
   --var-color-secondary-foreground: hsla(0, 0%, 100%);
   --var-color-secondary-subtle: hsla(240, 5%, 96%);
   --var-color-secondary-hover: hsla(240, 6%, 15%);
-  --var-color-info: hsla(199, 89%, 48%);
+  --var-color-info: hsla(201, 96%, 32%);
   --var-color-info-foreground: hsla(0, 0%, 100%);
   --var-color-info-subtle: hsla(199, 89%, 96%);
-  --var-color-info-hover: hsla(199, 89%, 40%);
+  --var-color-info-hover: hsla(201, 96%, 26%);
   --var-color-warn: hsla(38, 92%, 32%);
   --var-color-warn-foreground: hsla(0, 0%, 100%);
   --var-color-warn-subtle: hsla(38, 92%, 96%);
-  --var-color-warn-hover: hsla(38, 92%, 45%);
-  --var-color-danger: hsla(0, 84%, 60%);
+  --var-color-warn-hover: hsla(38, 92%, 26%);
+  --var-color-danger: hsla(0, 72%, 47%);
   --var-color-danger-foreground: hsla(0, 0%, 100%);
   --var-color-danger-subtle: hsla(0, 84%, 96%);
-  --var-color-danger-hover: hsla(0, 84%, 50%);
-  --var-color-success: hsla(142, 71%, 45%);
+  --var-color-danger-hover: hsla(0, 72%, 40%);
+  --var-color-success: hsla(142, 72%, 29%);
   --var-color-success-foreground: hsla(0, 0%, 100%);
   --var-color-success-subtle: hsla(142, 71%, 96%);
-  --var-color-success-hover: hsla(142, 71%, 40%);
+  --var-color-success-hover: hsla(142, 72%, 24%);
 
-  --var-shadow-card: 0px 1px 2px 1px transparent;
+  --var-color-shadow-edge: hsla(0, 0%, 0%, 0.05);
+  --var-color-shadow-drop: hsla(0, 0%, 0%, 0.1);
+  --var-shadow-card: 0 1px 2px 0 var(--var-color-shadow-edge);
   --var-shadow-floating:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    0 0 0 1px var(--var-color-shadow-edge),
+    0 12px 24px -4px var(--var-color-shadow-drop);
   --var-shadow-notification-shape: 1px 2px 2px 2px;
   --var-color-shadow-notification: hsla(210, 25%, 40%, 0.15);
   --var-shadow-table-shape: 0px 1px 1px 1px;
@@ -358,7 +361,7 @@
 
   --var-table-background: hsla(0, 0%, 100%);
   --var-table-border: hsla(240, 6%, 90%);
-  --var-table-header-background: hsla(0, 0%, 100%);
+  --var-table-header-background: hsla(240, 5%, 98%);
   --var-table-header-foreground: hsla(240, 4%, 35%);
   --var-table-row-hover-background: hsla(240, 5%, 98%);
   --var-page-calendar-today-background-hover: hsla(240, 5%, 96%, 0.5);
@@ -533,7 +536,7 @@ html.dark {
 
   --var-table-background: hsla(240, 10%, 8%);
   --var-table-border: hsla(240, 4%, 16%);
-  --var-table-header-background: hsla(240, 10%, 8%);
+  --var-table-header-background: hsla(240, 8%, 10%);
   --var-table-header-foreground: var(--var-color-muted-foreground);
   --var-table-row-hover-background: hsla(240, 6%, 12%);
   --var-table-inline-placeholder-color: hsla(201, 49%, 65%, 0.7);
@@ -579,11 +582,20 @@ html.dark {
   --var-color-danger-subtle: hsla(0, 84%, 15%);
   --var-color-warn: hsla(38, 92%, 50%);
   --var-color-warn-subtle: hsla(38, 92%, 15%);
+  --var-color-warn-hover: hsla(38, 92%, 45%);
+  --var-color-info: hsla(199, 89%, 48%);
+  --var-color-info-hover: hsla(199, 89%, 40%);
+  --var-color-danger: hsla(0, 84%, 60%);
+  --var-color-danger-hover: hsla(0, 84%, 50%);
+  --var-color-success: hsla(142, 71%, 45%);
+  --var-color-success-hover: hsla(142, 71%, 40%);
   --var-color-warn-foreground: hsla(240, 10%, 4%);
   --var-color-success-subtle: hsla(142, 71%, 15%);
   --var-color-success-foreground: hsla(240, 10%, 4%);
   --var-color-shadow-table: hsla(210, 25%, 20%, 0.1);
   --var-color-shadow-notification: hsla(210, 15%, 20%, 0.15);
+  --var-color-shadow-edge: hsla(0, 0%, 100%, 0.08);
+  --var-color-shadow-drop: hsla(0, 0%, 0%, 0.5);
   --var-alert-primary-foreground: hsla(199, 89%, 80%);
   --var-alert-primary-border: hsla(199, 89%, 25%);
   --var-alert-primary-background: hsla(199, 89%, 12%);

@@ -94,7 +94,7 @@
 }
 
 .__multi-select__surface {
-    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius-base) * 0.375));
+    border-radius: var(--var-free-text-surface-radius, calc(var(--var-radius-base) * 0.5));
     background-color: transparent;
     padding-inline: var(--var-free-text-surface-padding-inline, calc(var(--var-spacing-base) * 0.5));
     padding-block: var(--var-free-text-surface-padding-block, calc(var(--var-spacing-base) * 0.25));

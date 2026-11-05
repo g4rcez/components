@@ -26,7 +26,7 @@
 
 .__date-picker__range-nights {
   flex: none;
-  border-radius: var(--var-date-picker-range-nights-radius, var(--var-card-surface-radius, calc(var(--var-radius-base) / 4)));
+  border-radius: var(--var-date-picker-range-nights-radius, calc(var(--var-radius-base) / 4));
   padding-block: calc(var(--var-spacing-base) * 0.5);
   padding-inline: var(--var-spacing-base);
   background-color: var(--var-calendar-range-background);

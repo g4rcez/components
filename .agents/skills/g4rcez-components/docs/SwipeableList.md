@@ -71,7 +71,7 @@ Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the 
 | Override | Library default |
 | --- | --- |
 | `--var-swipeable-list-root-gap` | `calc(var(--var-spacing-base) * 0.5)` |
-| `--var-swipeable-list-surface-radius` | `var(--var-radius-base)` |
+| `--var-swipeable-list-surface-radius` | `calc(var(--var-radius-base) * 0.75)` |
 | `--var-swipeable-list-action-focus-ring-width` | `calc( var(--var-spacing-base) * 0.125 )` |
 | `--var-swipeable-list-action-focus-ring-offset` | `calc( var(--var-spacing-base) * 0.125 )` |
 

@@ -5,6 +5,7 @@
     justify-content: center;
     gap: var(--var-button-gap, calc(var(--var-spacing-base) * 0.375));
     overflow: hidden;
+    min-inline-size: min-content;
     border: 0 solid transparent;
     appearance: none;
     white-space: nowrap;
@@ -112,7 +113,7 @@
 }
 
 .__button--rounded-default {
-    border-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
+    border-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.5));
 }
 
 .__button--rounded-rough {
@@ -304,13 +305,70 @@
     }
 }
 
-.__button:enabled:focus-visible {
-    opacity: 0.7;
+/* Solid themes: hover moves to the theme's own -hover color; no opacity fade. */
+.__button--theme-main:enabled:focus-visible,
+.__button--theme-primary:enabled:focus-visible {
+    background: var(--var-color-primary-hover);
+}
+
+.__button--theme-info:enabled:focus-visible {
+    background: var(--var-color-info-hover);
+}
+
+.__button--theme-warn:enabled:focus-visible {
+    background: var(--var-color-warn-hover);
+}
+
+.__button--theme-danger:enabled:focus-visible {
+    background: var(--var-color-danger-hover);
+}
+
+.__button--theme-success:enabled:focus-visible {
+    background: var(--var-color-success-hover);
+}
+
+.__button--theme-secondary:enabled:focus-visible {
+    background: var(--var-color-secondary-hover);
+}
+
+.__button--theme-neutral:enabled:focus-visible,
+.__button--theme-outlined:enabled:focus-visible,
+.__button--theme-ghost-neutral:enabled:focus-visible,
+.__button--theme-muted:enabled:focus-visible {
+    background: var(--var-color-muted);
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .__button:enabled:hover {
-        opacity: 0.7;
+    .__button--theme-main:enabled:hover,
+    .__button--theme-primary:enabled:hover {
+        background: var(--var-color-primary-hover);
+    }
+
+    .__button--theme-info:enabled:hover {
+        background: var(--var-color-info-hover);
+    }
+
+    .__button--theme-warn:enabled:hover {
+        background: var(--var-color-warn-hover);
+    }
+
+    .__button--theme-danger:enabled:hover {
+        background: var(--var-color-danger-hover);
+    }
+
+    .__button--theme-success:enabled:hover {
+        background: var(--var-color-success-hover);
+    }
+
+    .__button--theme-secondary:enabled:hover {
+        background: var(--var-color-secondary-hover);
+    }
+
+    .__button--theme-neutral:enabled:hover,
+    .__button--theme-outlined:enabled:hover,
+    .__button--theme-ghost-neutral:enabled:hover,
+    .__button--theme-muted:enabled:hover {
+        background: var(--var-color-muted);
     }
 }
 

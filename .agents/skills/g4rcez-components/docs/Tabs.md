@@ -51,8 +51,8 @@ import { Tabs, Tab } from "@g4rcez/components/tabs";
 | Override | Library default |
 |---|---|
 | `--var-tabs-header-margin-block-end` | `calc(var(--var-spacing-base) * 0.5)` |
-| `--var-tabs-tab-padding-block` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-tabs-tab-padding-inline` | `calc(var(--var-spacing-base) * 2.5)` |
+| `--var-tabs-tab-padding-block` | `calc(var(--var-spacing-base) * 0.75)` |
+| `--var-tabs-tab-padding-inline` | `calc(var(--var-spacing-base) * 1.25)` |
 
 | Token | CSS Variable | Purpose |
 |---|---|---|
@@ -60,8 +60,8 @@ import { Tabs, Tab } from "@g4rcez/components/tabs";
 | `border-card-border` | `--var-card-border` | Composed Card border |
 | `bg-border` | `--var-color-border` | Tab bar divider |
 | `bg-primary` | `--var-color-primary` | Active indicator |
-| `text-primary` | `--var-color-primary` | Active tab text |
-| `text-muted-foreground` | `--var-color-muted-foreground` | Disabled tab text |
+| `text-foreground` | `--var-color-foreground` | Active tab text |
+| `text-muted-foreground` | `--var-color-muted-foreground` | Inactive and disabled tab text |
 
 ## Examples
 

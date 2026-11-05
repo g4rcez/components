@@ -140,13 +140,13 @@
 }
 
 .__page-calendar-header__view-button:first-child {
-    border-start-start-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
-    border-end-start-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
+    border-start-start-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.5));
+    border-end-start-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.5));
 }
 
 .__page-calendar-header__view-button:last-child {
-    border-start-end-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
-    border-end-end-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.733333));
+    border-start-end-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.5));
+    border-end-end-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.5));
 }
 
 .__page-calendar-header__filters {

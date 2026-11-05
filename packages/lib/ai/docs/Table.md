@@ -165,7 +165,7 @@ const prefs = useTablePreferences("users-table", columns);
 |`--var-table-group-title-gap`|`calc(var(--var-spacing-base) * 0.25)`|
 |`--var-table-group-title-padding-block`|`calc(var(--var-spacing-base) * 0.5)`|
 |`--var-table-group-title-padding-inline`|`calc(var(--var-spacing-base) * 0.75)`|
-|`--var-table-row-block-size`|`calc(var(--var-spacing-base) * 3)`|
+|`--var-table-row-block-size`|`calc(var(--var-spacing-base) * 2.75)`|
 |`--var-table-selection-column-inline-size`|`calc(var(--var-spacing-base) * 3)`|
 |`--var-table-selection-target-size`|`calc(var(--var-spacing-base) * 2.75)`|
 |`--var-table-pill-min-block-size`|`calc(var(--var-spacing-base) * 2.75)`|
