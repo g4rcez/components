@@ -1,7 +1,8 @@
 import type { TranslationOverrides } from "../../hooks/use-translations";
 import { isToday } from "date-fns";
 import { css } from "../../lib/dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
+import { useHourGrid } from "./use-hour-grid";
 import { Tag } from "../core/tag/tag";
 import { useLocale } from "../../hooks/use-locale";
 import type { CalendarEvent, CalendarEventBase } from "./page-calendar.types";
@@ -9,12 +10,10 @@ import { EventPill } from "./event-pill";
 import { Calendar } from "../display/calendar/calendar";
 import { pageCalendarDayViewStyles } from "./day-view.styles";
 import {
-    getHourSlots,
     toDateKey,
     formatDay,
     formatWeekdayLong,
     formatMonthYear,
-    formatHourLabel,
     formatFullDate,
     formatTime,
     computeEventColumns,
@@ -42,18 +41,8 @@ export function DayView<T extends CalendarEventBase>({
     translations,
 }: DayViewProps<T>) {
     const locale = useLocale();
-    const currentHourRef = useRef<HTMLDivElement>(null);
-    const scrollBodyRef = useRef<HTMLDivElement>(null);
-    const hours = getHourSlots();
-    const hourLabels = useMemo(() => getHourSlots().map((hour) => formatHourLabel(hour, locale)), [locale]);
+    const { hours, hourLabels, scrollBodyRef, currentHourRef } = useHourGrid();
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent<T> | null>(null);
-
-    useEffect(() => {
-        if (scrollBodyRef.current && currentHourRef.current) {
-            const top = currentHourRef.current.offsetTop;
-            scrollBodyRef.current.scrollTop = top - scrollBodyRef.current.clientHeight / 2;
-        }
-    }, []);
 
     const dayKey = toDateKey(currentDate);
     const events = eventsByDate.get(dayKey) || [];

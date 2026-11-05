@@ -113,21 +113,23 @@ const findDefaultManifest = () => {
     return manifest;
 };
 
-function listCssFiles(entry, output = []) {
+function walkFiles(entry, accepts, output = []) {
     if (!existsSync(entry)) return output;
     const stats = statSync(entry);
     if (stats.isFile()) {
-        if (extname(entry) === ".css") output.push(entry);
+        if (accepts(entry)) output.push(entry);
         return output;
     }
     if (!stats.isDirectory()) return output;
 
     for (const item of readdirSync(entry, { withFileTypes: true })) {
         if (item.isDirectory() && IGNORED_DIRS.has(item.name)) continue;
-        listCssFiles(resolve(entry, item.name), output);
+        walkFiles(resolve(entry, item.name), accepts, output);
     }
     return output;
 }
+
+const listCssFiles = (entry) => walkFiles(entry, (file) => extname(file) === ".css");
 
 const findDefaultCssFile = (root) => {
     const explicit = DEFAULT_CSS_FILES.map((path) => resolveFrom(root, path)).find((path) => existsSync(path));
@@ -141,21 +143,7 @@ const findDefaultCssFile = (root) => {
     throw new Error("Could not auto-detect a stylesheet. Pass --css <file>.");
 };
 
-const listFiles = (entry, output = []) => {
-    if (!existsSync(entry)) return output;
-    const stats = statSync(entry);
-    if (stats.isFile()) {
-        if (SOURCE_EXTENSIONS.has(extname(entry))) output.push(entry);
-        return output;
-    }
-    if (!stats.isDirectory()) return output;
-
-    for (const item of readdirSync(entry, { withFileTypes: true })) {
-        if (item.isDirectory() && IGNORED_DIRS.has(item.name)) continue;
-        listFiles(resolve(entry, item.name), output);
-    }
-    return output;
-};
+const listFiles = (entry) => walkFiles(entry, (file) => SOURCE_EXTENSIONS.has(extname(file)));
 
 const sourceRoots = (root, content) => {
     const entries = content.length > 0 ? content : DEFAULT_CONTENT_DIRS;

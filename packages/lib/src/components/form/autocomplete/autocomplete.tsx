@@ -21,7 +21,7 @@ import { useMediaQuery } from "../../../hooks/use-media-query";
 import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useRemoveScroll } from "../../../hooks/use-remove-scroll";
 import { useTranslations } from "../../../hooks/use-translations";
-import { css, dispatchInput, getRemainingSize, initializeInputDataset, synthesizeChangeEvent } from "../../../lib/dom";
+import { css, dispatchInput, getRemainingSize, initializeInputDataset, mergeRefs, synthesizeChangeEvent } from "../../../lib/dom";
 import { safeRegex } from "../../../lib/fns";
 import { fzf } from "../../../lib/fzf";
 import type { Label } from "../../../types";
@@ -314,7 +314,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             setClosed();
         };
 
-        const id = props.id || props.name || generatedId;
+        const id = props.id ?? props.name ?? generatedId;
 
         const shadowId = `${id}-shadow`;
         const listboxId = `${shadowId}-listbox`;
@@ -441,19 +441,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         value={value}
                         onChange={onTouchDeviceChange}
                     />
-                    <input
-                        id={id}
-                        name={id}
-                        type="hidden"
-                        data-origin={id}
-                        ref={(node) => {
-                            hiddenInput.current = node;
-                            if (typeof externalRef === "function") externalRef(node);
-                            else if (externalRef) externalRef.current = node;
-                        }}
-                        value={value}
-                        readOnly
-                    />
+                    <input id={id} name={id} type="hidden" data-origin={id} ref={mergeRefs(hiddenInput, externalRef)} value={value} readOnly />
                 </Fragment>
             );
         }
@@ -601,11 +589,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     name={id}
                     type="hidden"
                     data-origin={id}
-                    ref={(node) => {
-                        hiddenInput.current = node;
-                        if (typeof externalRef === "function") externalRef(node);
-                        else if (externalRef) externalRef.current = node;
-                    }}
+                    ref={mergeRefs(hiddenInput, externalRef)}
                     required={required}
                     value={value}
                     readOnly

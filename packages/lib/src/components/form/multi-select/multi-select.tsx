@@ -319,7 +319,7 @@ export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(
             setClosed();
         };
 
-        const id = props.id || props.name || generatedId;
+        const id = props.id ?? props.name ?? generatedId;
         const shadowId = `${id}-shadow`;
         const listboxId = `${shadowId}-listbox`;
         const activeOptionId = open && index !== null && displayList[index] ? `${shadowId}-option-${index}` : undefined;

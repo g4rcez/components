@@ -1,22 +1,12 @@
 import type { TranslationOverrides } from "../../hooks/use-translations";
 import { isToday } from "date-fns";
-import { useEffect, useMemo, useRef } from "react";
 import { useLocale } from "../../hooks/use-locale";
+import { useHourGrid } from "./use-hour-grid";
 import type { CalendarEvent } from "./page-calendar.types";
 import { EventPill } from "./event-pill";
 import { css } from "../../lib/dom";
 import { pageCalendarWeekViewStyles } from "./week-view.styles";
-import {
-    getHourSlots,
-    toDateKey,
-    formatWeekdayShort,
-    formatDay,
-    formatHourLabel,
-    formatFullDate,
-    computeEventColumns,
-    getTopOffset,
-    HOUR_HEIGHT,
-} from "./page-calendar.utils";
+import { toDateKey, formatWeekdayShort, formatDay, formatFullDate, computeEventColumns, getTopOffset, HOUR_HEIGHT } from "./page-calendar.utils";
 
 type WeekViewProps = {
     days: Date[];
@@ -29,18 +19,8 @@ type WeekViewProps = {
 
 export function WeekView({ days, eventsByDate, currentDate, onEventClick, onSlotClick, translations }: WeekViewProps) {
     const locale = useLocale();
-    const hours = getHourSlots();
-    const hourLabels = useMemo(() => getHourSlots().map((hour) => formatHourLabel(hour, locale)), [locale]);
-    const scrollBodyRef = useRef<HTMLDivElement>(null);
-    const currentHourRef = useRef<HTMLDivElement>(null);
+    const { hours, hourLabels, scrollBodyRef, currentHourRef } = useHourGrid();
     const selectedDateKey = toDateKey(currentDate);
-
-    useEffect(() => {
-        if (scrollBodyRef.current && currentHourRef.current) {
-            const top = currentHourRef.current.offsetTop;
-            scrollBodyRef.current.scrollTop = top - scrollBodyRef.current.clientHeight / 2;
-        }
-    }, []);
 
     return (
         <div className={pageCalendarWeekViewStyles.slots.root}>

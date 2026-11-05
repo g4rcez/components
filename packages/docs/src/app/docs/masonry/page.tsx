@@ -25,7 +25,7 @@ const cards = [
         title: "Semantic defaults",
         body: "Masonry renders a ul with li wrappers by default. Switch itemAs only when your content has a stronger semantic container.",
     },
-    ...Array.from({ length: 50 }).map((_, i) => ({ title: `Index ${i}`, body: "Lorem ipsum dolor sit amet".repeat(Math.ceil(Math.random() * 10)) })),
+    ...Array.from({ length: 50 }).map((_, i) => ({ title: `Index ${i}`, body: "Lorem ipsum dolor sit amet".repeat(((i * 7) % 10) + 1) })),
 ];
 
 export default function MasonryPage() {
@@ -55,7 +55,7 @@ function BasicMasonry() {
                         <Card
                             key={card.title}
                             title={card.title}
-                            className="text-typography-sm flex flex-col gap-base leading-relaxed text-muted-foreground"
+                            className="text-typography-sm gap-base text-muted-foreground flex flex-col leading-relaxed"
                         >
                             <p>{card.body}</p>
                             {index % 2 === 0 ? (
@@ -123,8 +123,8 @@ function ControlledMasonry() {
   );
 }`}
             >
-                <div className="flex w-full flex-col gap-base">
-                    <div className="flex flex-wrap items-center justify-between gap-base">
+                <div className="gap-base flex w-full flex-col">
+                    <div className="gap-base flex flex-wrap items-center justify-between">
                         <Button onClick={() => setFresh((value) => value + 1)}>Measure again</Button>
                         <p className="text-typography-sm text-muted-foreground" aria-live="polite">
                             {layout ? `Columns: ${layout.columns}, height: ${Math.round(layout.height)}px` : "Waiting for layout"}
@@ -134,7 +134,7 @@ function ControlledMasonry() {
                         <Card title="Alpha" className="text-typography-sm text-muted-foreground">
                             Short card.
                         </Card>
-                        <Card title="Beta" className="text-typography-sm flex flex-col gap-base text-muted-foreground">
+                        <Card title="Beta" className="text-typography-sm gap-base text-muted-foreground flex flex-col">
                             <p>Longer card with more content to demonstrate how the measured layout balances column heights.</p>
                             <p>When the measurement changes, the callback exposes the resulting layout shape.</p>
                         </Card>
@@ -145,8 +145,8 @@ function ControlledMasonry() {
                 </div>
             </ComponentDemo>
 
-            <section className="text-typography-sm space-y-base rounded-card-radius border border-card-border bg-card-background p-base leading-relaxed text-muted-foreground">
-                <h3 id="accessibility-and-compatibility" className="text-typography-xl font-bold text-foreground">
+            <section className="text-typography-sm space-y-base rounded-card-radius border-card-border bg-card-background p-base text-muted-foreground border leading-relaxed">
+                <h3 id="accessibility-and-compatibility" className="text-typography-xl text-foreground font-bold">
                     Accessibility and Compatibility
                 </h3>
                 <p>

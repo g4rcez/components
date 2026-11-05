@@ -10,7 +10,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { css } from "../../../lib/dom";
+import { css, mergeRefs } from "../../../lib/dom";
 import { useStableRef } from "../../../hooks/use-stable-ref";
 import { Polymorph, type PolymorphicProps } from "../../core/polymorph/polymorph";
 import { masonryStyles } from "./masonry.styles";
@@ -70,14 +70,6 @@ export const MasonryItem = forwardRef(MasonryItemInner) as unknown as <T extends
 
 const isMasonryItem = (child: React.ReactNode): child is React.ReactElement<MasonryItemProps> =>
     React.isValidElement(child) && child.type === MasonryItem;
-
-const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
-    if (typeof ref === "function") {
-        ref(value);
-    } else if (ref) {
-        ref.current = value;
-    }
-};
 
 const clampColumns = (columns: number) => Math.max(1, Math.floor(columns));
 
@@ -274,10 +266,9 @@ const MasonryInner = <T extends React.ElementType = "ul">(
                         data-component="masonry-item"
                         className={css(masonryStyles.slots.item, itemClassName, masonryItem?.props.className)}
                         key={typeof child === "object" && "key" in child ? child.key : index}
-                        ref={(node: HTMLElement | null) => {
+                        ref={mergeRefs<HTMLElement>((node) => {
                             itemRefs.current[index] = node;
-                            assignRef(itemRef, node);
-                        }}
+                        }, itemRef)}
                     >
                         {itemContent}
                     </ItemComponent>

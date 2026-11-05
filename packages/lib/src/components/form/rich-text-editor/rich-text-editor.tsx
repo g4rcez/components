@@ -44,6 +44,18 @@ export interface RichTextEditorProps extends Omit<HTMLAttributes<HTMLDivElement>
 
 const slots = richTextEditorStyles.slots;
 
+const formatToggles = [
+    { mark: "bold", toggle: "toggleBold", label: "Bold" },
+    { mark: "italic", toggle: "toggleItalic", label: "Italic" },
+    { mark: "strike", toggle: "toggleStrike", label: "Strike" },
+    { mark: "bulletList", toggle: "toggleBulletList", label: "Bullet list" },
+    { mark: "orderedList", toggle: "toggleOrderedList", label: "Numbered list" },
+    { mark: "taskList", toggle: "toggleTaskList", label: "Checklist" },
+    { mark: "blockquote", toggle: "toggleBlockquote", label: "Quote" },
+    { mark: "code", toggle: "toggleCode", label: "Inline code" },
+    { mark: "codeBlock", toggle: "toggleCodeBlock", label: "Code block" },
+] as const;
+
 function ImageView({ node, selected }: NodeViewProps) {
     const [loadedSource, setLoadedSource] = useState("");
     const source = typeof node.attrs.src === "string" ? node.attrs.src : "";
@@ -428,87 +440,18 @@ export const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(fu
                                 else focusedChain()?.setParagraph().run();
                             }}
                         />
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("bold") ?? false}
-                            onClick={() => focusedChain()?.toggleBold().run()}
-                        >
-                            Bold
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("italic") ?? false}
-                            onClick={() => focusedChain()?.toggleItalic().run()}
-                        >
-                            Italic
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("strike") ?? false}
-                            onClick={() => focusedChain()?.toggleStrike().run()}
-                        >
-                            Strike
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("bulletList") ?? false}
-                            onClick={() => focusedChain()?.toggleBulletList().run()}
-                        >
-                            Bullet list
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("orderedList") ?? false}
-                            onClick={() => focusedChain()?.toggleOrderedList().run()}
-                        >
-                            Numbered list
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("taskList") ?? false}
-                            onClick={() => focusedChain()?.toggleTaskList().run()}
-                        >
-                            Checklist
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("blockquote") ?? false}
-                            onClick={() => focusedChain()?.toggleBlockquote().run()}
-                        >
-                            Quote
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("code") ?? false}
-                            onClick={() => focusedChain()?.toggleCode().run()}
-                        >
-                            Inline code
-                        </Button>
-                        <Button
-                            size="small"
-                            theme="neutral"
-                            disabled={toolbarDisabled}
-                            aria-pressed={editor?.isActive("codeBlock") ?? false}
-                            onClick={() => focusedChain()?.toggleCodeBlock().run()}
-                        >
-                            Code block
-                        </Button>
+                        {formatToggles.map(({ mark, toggle, label }) => (
+                            <Button
+                                key={mark}
+                                size="small"
+                                theme="neutral"
+                                disabled={toolbarDisabled}
+                                aria-pressed={editor?.isActive(mark) ?? false}
+                                onClick={() => focusedChain()?.[toggle]().run()}
+                            >
+                                {label}
+                            </Button>
+                        ))}
                         <Button size="small" theme="neutral" disabled={toolbarDisabled} onClick={() => beginInsert("link")}>
                             Link
                         </Button>

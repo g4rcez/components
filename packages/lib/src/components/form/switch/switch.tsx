@@ -33,7 +33,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         ref
     ) => {
         const id = useId();
-        const errorId = error ? `${props.id || id}-error` : undefined;
+        const errorId = error ? `${props.id ?? id}-error` : undefined;
         const describedBy = [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
         const ariaInvalid = error ? true : props["aria-invalid"];
         const hasVisibleLabel = typeof children === "string" ? children.trim().length > 0 : typeof children === "number" || Boolean(children);
@@ -76,7 +76,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                         ref={innerRef}
                         type="checkbox"
                         checked={checked}
-                        id={props.id || id}
+                        id={props.id ?? id}
                         data-trigger="change"
                         data-checked={checked}
                         disabled={props.disabled || loading}
@@ -108,7 +108,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                     >
                         <span aria-hidden="true" data-checked={checked} className={switchStyles.slots.thumb} />
                     </button>
-                    <label htmlFor={props.id || id} className={switchStyles.slots.label} id={`${id}-label`}>
+                    <label htmlFor={props.id ?? id} className={switchStyles.slots.label} id={`${id}-label`}>
                         <span className={switchStyles.slots["label-text"]}>{children}</span>
                     </label>
                 </span>
