@@ -103,8 +103,10 @@
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__card__stats-panel--interactive:hover {
-    background-color: var(--var-card-stats-panel-background-hover);
+@media (hover: hover) and (pointer: fine) {
+    .__card__stats-panel--interactive:hover {
+        background-color: var(--var-card-stats-panel-background-hover);
+    }
 }
 
 .__card__stats-icon {

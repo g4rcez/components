@@ -61,8 +61,10 @@
     font-size: var(--var-wizard-label-font-size);
 }
 
-.__wizard__skip-button:hover {
-    color: var(--var-wizard-label-foreground-hover);
+@media (hover: hover) and (pointer: fine) {
+    .__wizard__skip-button:hover {
+        color: var(--var-wizard-label-foreground-hover);
+    }
 }
 
 .__wizard__actions {

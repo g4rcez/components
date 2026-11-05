@@ -8,6 +8,7 @@
     inset: 0;
     z-index: var(--var-layer-overlay);
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     background-color: var(--var-list-overlay-background);
 }
@@ -56,10 +57,16 @@
     transition-timing-function: var(--var-list-transition-timing);
 }
 
-.__list__close-button:hover,
-.__list__close-button:focus {
+.__list__close-button:focus-visible {
     color: var(--var-color-danger);
     opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__list__close-button:hover {
+        color: var(--var-color-danger);
+        opacity: 1;
+    }
 }
 
 .__list__header {
@@ -151,6 +158,8 @@
     transition-timing-function: var(--var-list-transition-timing);
 }
 
-.__list__item-action:hover {
-    color: var(--var-color-primary);
+@media (hover: hover) and (pointer: fine) {
+    .__list__item-action:hover {
+        color: var(--var-color-primary);
+    }
 }

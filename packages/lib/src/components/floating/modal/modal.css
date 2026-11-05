@@ -17,7 +17,9 @@
 .__modal--type-drawer {
     position: absolute;
     height: 100vh;
+    height: 100dvh;
     max-height: 100vh;
+    max-height: 100dvh;
     min-height: 0;
     width: fit-content;
     max-width: var(--var-modal-drawer-max-inline-size);
@@ -43,7 +45,7 @@
     border-top-left-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
     border-top-right-radius: var(--var-modal-surface-radius, calc(var(--var-radius-base) * 1.333333));
     padding-top: var(--var-modal-sheet-padding-block-start, calc(var(--var-spacing-base) * 1.5));
-    padding-bottom: var(--var-modal-sheet-padding-block-end, calc(var(--var-spacing-base) * 1.5));
+    padding-bottom: calc(var(--var-modal-sheet-padding-block-end, calc(var(--var-spacing-base) * 1.5)) + env(safe-area-inset-bottom, 0px));
 }
 
 .__modal--position-right {
@@ -203,10 +205,16 @@
     transition-timing-function: var(--var-modal-transition-timing);
 }
 
-.__modal__close-button:hover,
-.__modal__close-button:focus {
+.__modal__close-button:focus-visible {
     color: var(--var-color-danger);
     opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__modal__close-button:hover {
+        color: var(--var-color-danger);
+        opacity: 1;
+    }
 }
 
 .__modal__close-button:focus-visible {

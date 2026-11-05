@@ -191,7 +191,7 @@ const Idle = (props: IdleProps) => {
         <div className={css(fileUploadStyles.slots.idle, fileUploadStyles.slots.column)}>
             <div className={css(fileUploadStyles.slots["idle-icon-wrap"], fileUploadStyles.slots.column)}>
                 <span className={fileUploadStyles.slots.accent}>
-                    <Icon aria-hidden="true" className={fileUploadStyles.slots["idle-icon"]} />
+                    <Icon aria-hidden="true" data-dragging={props.dragging} className={fileUploadStyles.slots["idle-icon"]} />
                 </span>
             </div>
             <div className={css(fileUploadStyles.slots["idle-copy"], fileUploadStyles.slots.column)}>

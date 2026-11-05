@@ -28,6 +28,7 @@ import { CaretRightIcon, type Icon } from "@phosphor-icons/react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../../constants";
 import { css, mergeRefs } from "../../../lib/dom";
+import { placementOrigin } from "../../../lib/floating-origin";
 import type { Override } from "../../../types";
 import { menuStyles } from "./menu.styles";
 
@@ -86,7 +87,8 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
         const { floatingStyles, refs, context } = useFloating<HTMLButtonElement>({
             nodeId,
             open: isOpen,
-            transform: true,
+            // Position with top/left so the CSS enter animation can use the `scale` property.
+            transform: false,
             strategy: "absolute",
             onOpenChange: setIsOpen,
             whileElementsMounted: autoUpdate,
@@ -233,7 +235,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                                     <FloatingComponent
                                         {...getFloatingProps()}
                                         ref={refs.setFloating}
-                                        style={{ ...props.style, ...floatingStyles }}
+                                        style={{ ...props.style, ...floatingStyles, transformOrigin: placementOrigin(context.placement) }}
                                         className={css(menuStyles.slots.floating, floatingClassName)}
                                     >
                                         {children}

@@ -117,8 +117,8 @@ describe("Table column Properties", () => {
         await user.click(propertiesButton);
 
         const dialog = screen.getByRole("dialog", { name: "Columns" });
-        await waitFor(() => expect(dialog.style.transform).not.toBe(""));
-        const initialPosition = dialog.style.transform;
+        await waitFor(() => expect(dialog.style.left).not.toBe(""));
+        const initialPosition = { left: dialog.style.left, top: dialog.style.top };
         expect(within(dialog).getByRole("checkbox", { name: "Name" })).toBeDisabled();
 
         const reorderStatus = within(dialog).getByRole("button", { name: /Reorder Status/ });
@@ -132,7 +132,7 @@ describe("Table column Properties", () => {
         await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
         await waitFor(() => expect(headerIds()).toEqual(["name", "status"]));
         expect(within(dialog).getByRole("checkbox", { name: "Email" })).not.toBeChecked();
-        expect(dialog.style.transform).toBe(initialPosition);
+        expect({ left: dialog.style.left, top: dialog.style.top }).toEqual(initialPosition);
 
         expect((await axe(dialog)).violations).toHaveLength(0);
     });

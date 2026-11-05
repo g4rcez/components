@@ -11,6 +11,7 @@
     padding: var(--var-dropdown-surface-padding, calc(var(--var-spacing-base) * 1));
     color: var(--var-dropdown-surface-foreground);
     box-shadow: var(--var-shadow-floating);
+    animation: __dropdown-in var(--var-motion-duration-fast) var(--var-motion-timing-out);
 }
 
 .__dropdown__arrow {
@@ -28,4 +29,23 @@
     font-weight: var(--var-font-weight-medium);
     line-height: var(--var-typography-paragraph-line-height);
     letter-spacing: var(--var-dropdown-title-letter-spacing);
+}
+
+@keyframes __dropdown-in {
+    from {
+        opacity: 0;
+        scale: 0.97;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__dropdown {
+        animation-name: __dropdown-fade;
+    }
+
+    @keyframes __dropdown-fade {
+        from {
+            opacity: 0;
+        }
+    }
 }

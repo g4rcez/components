@@ -2,9 +2,14 @@
     box-sizing: border-box;
 }
 
-.__select__field:focus-within,
-.__select__field:hover {
+.__select__field:focus-within {
     border-color: var(--var-color-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__select__field:hover {
+        border-color: var(--var-color-primary);
+    }
 }
 
 .__select__field:where([aria-disabled="true"], :disabled),
@@ -28,8 +33,10 @@ fieldset:disabled .__select__field {
     margin-block-start: var(--var-free-text-small-surface-padding-block, calc( var(--var-spacing-base) * 0.125 ));
 }
 
-.__select__trigger:enabled:hover {
-    color: var(--var-color-primary);
+@media (hover: hover) and (pointer: fine) {
+    .__select__trigger:enabled:hover {
+        color: var(--var-color-primary);
+    }
 }
 
 .__select__trigger:disabled {
