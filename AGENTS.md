@@ -153,7 +153,7 @@ MyComponent.displayName = "MyComponent";
    reference in `packages/lib/ai/docs/`. Update changed props, behavior,
    accessibility, tokens, selectors, variants, imports, and CSS dependencies.
 2. Update `packages/lib/ai/docs/index.md` for component additions, removals, or
-   import changes. Update `skills/csscomponents/SKILL.md` when general usage or
+   import changes. Update `skills/g4rcez-components/SKILL.md` when general usage or
    setup guidance changes.
 3. For documentation-only changes, run `pnpm components:skills sync` and then
    `pnpm components:skills check`; no build is needed.

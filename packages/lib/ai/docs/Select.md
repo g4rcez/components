@@ -19,52 +19,56 @@ import { Select } from "@g4rcez/components/select";
 
 ## Props
 
-| Prop                 | Type                                                           | Default    | Description                                                                                       |
-| -------------------- | -------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------- |
-| `options`            | `OptionProps[]`                                                | —          | Array of option objects.                                                                          |
-| `size`               | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared control size inherited from `InputField`.                                                  |
-| `selectContainer`    | `string`                                                       | `""`       | Legacy compatibility prop; currently accepted but not applied.                                    |
-| `required`           | `boolean`                                                      | `true`     | Whether the field is required.                                                                    |
-| `error`              | `string`                                                       | —          | Error message to display.                                                                         |
-| `loading`            | `boolean`                                                      | `false`    | Accepted, but currently adds no loading indicator or interaction lock; set `disabled` explicitly. |
-| `disabled`           | `boolean`                                                      | `false`    | Disables the select.                                                                              |
-| `placeholder`        | `string`                                                       | —          | Placeholder shown as a disabled hidden option.                                                    |
-| `value`              | `string`                                                       | —          | Controlled selected value.                                                                        |
-| `onChange`           | `(e: ChangeEvent<HTMLSelectElement>) => void`                  | —          | Change handler.                                                                                   |
-| `...inputFieldProps` | `InputFieldProps`                                              | —          | All `InputField` props (title, left, right, feedback, etc.).                                      |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `options` | `OptionProps[]` | — | Option objects. |
+| `size` | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Shared size from `InputField`. |
+| `selectContainer` | `string` | `""` | Legacy, not applied. Use `container` or `labelClassName`. |
+| `required` | `boolean` | `true` | Required field. Pass `required={false}` when optional. |
+| `error` | `string` | — | Error message. |
+| `loading` | `boolean` | `false` | No indicator, no interaction lock. Set `disabled` explicitly. |
+| `disabled` | `boolean` | `false` | Disables the select. |
+| `placeholder` | `string` | — | Shown as a disabled hidden option. |
+| `value` | `string` | — | Controlled selected value. |
+| `onChange` | `(e: ChangeEvent<HTMLSelectElement>) => void` | — | Change handler. |
+| `...inputFieldProps` | `InputFieldProps` | — | All `InputField` props (title, left, right, feedback, etc.). |
+
+`Select` accepts all HTML `<select>` attributes. `InputField` handles layout, label, error, and loading.
 
 ### OptionProps
 
-| Prop           | Type      | Description                                              |
-| -------------- | --------- | -------------------------------------------------------- |
-| `value`        | `string`  | Option value (required).                                 |
-| `label`        | `string`  | Optional display text; falls back to `value` if omitted. |
-| `disabled`     | `boolean` | Disables this individual option.                         |
-| `data-dynamic` | `string`  | Marks a dynamically generated option.                    |
-| `data-*`       | `string`  | Any custom data attributes forwarded to the `<option>`.  |
+| Prop | Type | Description |
+|---|---|---|
+| `value` | `string` | Option value (required). |
+| `label` | `string` | Display text. Falls back to `value`. |
+| `disabled` | `boolean` | Disables this option. |
+| `data-dynamic` | `string` | Marks a dynamically generated option. |
+| `data-*` | `string` | Custom data attributes, forwarded to the `<option>`. |
+
+Custom `OptionProps` data attributes (for example `data-price`) are available through `e.target.selectedOptions[0].dataset`.
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Geometry defaults are scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides win. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. The first table lists examples. `defaultGeometryTokens` holds the full set.
 
-| Override                                      | Library default                           |
-| --------------------------------------------- | ----------------------------------------- |
-| `--var-free-text-surface-padding-block`       | `calc(var(--var-spacing-base) * 0.25)`    |
+| Override | Library default |
+|---|---|
+| `--var-free-text-surface-padding-block` | `calc(var(--var-spacing-base) * 0.25)` |
 | `--var-free-text-small-surface-padding-block` | `calc( var(--var-spacing-base) * 0.125 )` |
-| `--var-input-field-icon-size`                 | `calc(var(--var-spacing-base) * 1)`       |
-| `--var-input-field-small-icon-size`           | `calc(var(--var-spacing-base) * 0.875)` |
+| `--var-input-field-icon-size` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-input-field-small-icon-size` | `calc(var(--var-spacing-base) * 0.875)` |
 
-| Token | CSS Variable                    | Purpose                                        |
-| ------------------------------- | ---------------------------------------------- | ------------------------------- |
-| `text-foreground`               | `--var-color-foreground`                       | Selected option text            |
-| `text-input-placeholder`        | `--var-free-text-placeholder-foreground`       | Text when no option is selected |
-| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground`       | Placeholder text                |
-| `placeholder-input-mask-error`  | `--var-free-text-error-placeholder-foreground` | Error placeholder text          |
-| `text-danger`                   | `--var-color-danger`                           | Error text                      |
-| `hover:text-primary`            | `--var-color-primary`                          | Caret hover color               |
-| `h-input-height`                | `--var-free-text-control-height`               | Default control height          |
-| `px-input-padding-x`            | `--var-free-text-surface-padding-inline`       | Horizontal padding              |
-| `py-input-padding-y`            | `--var-free-text-surface-padding-block`        | Vertical padding                |
+| Token | CSS Variable | Purpose |
+|---|---|---|
+| `text-foreground` | `--var-color-foreground` | Selected option text |
+| `text-input-placeholder` | `--var-free-text-placeholder-foreground` | Text when no option is selected |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder text |
+| `text-danger` | `--var-color-danger` | Error text |
+| `hover:text-primary` | `--var-color-primary` | Caret hover color |
+| `h-input-height` | `--var-free-text-control-height` | Control height |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
 
 ## Examples
 
@@ -248,57 +252,55 @@ export default function CascadingSelect() {
 
 - Use descriptive `label` values for each option.
 - Order options logically (alphabetically or by usage frequency).
-- Provide a `placeholder` so users know what to select.
-- Use `loading` and `disabled` together while fetching options asynchronously.
-- Use design-token classes for wrapper elements (`bg-background`, `text-foreground`, `border-border`).
+- Set a `placeholder` that prompts the user.
+- Use `loading` and `disabled` together while fetching options.
+- Use design-token classes on wrappers (`bg-background`, `text-foreground`, `border-border`).
 
 ## Don't
 
-- For a small set of alternatives that should stay visible, prefer `Radiobox`. Use `Switch` only for an immediate binary setting, not as a compact option picker.
-- Don't use `Select` for large searchable lists; use `Autocomplete` instead.
-- Don't use long option labels that may truncate on small viewports.
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`); use design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`); override CSS variables in your `@theme` block instead.
+- For a few alternatives that stay visible, use `Radiobox`. Use `Switch` only for an immediate binary setting, not as a compact option picker.
+- Don't use `Select` for large searchable lists. Use `Autocomplete`.
+- Don't use long option labels. They truncate on small viewports.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`). Use design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`). Override CSS variables in your `@theme` block.
 
 ## Interaction design and acceptance criteria
 
-This component uses native selection behavior. [MultiSelect](MultiSelect.md) and [Autocomplete](Autocomplete.md) adapt the same selection guidance but have separate custom interaction contracts.
+`Select` uses native selection behavior. [MultiSelect](MultiSelect.md) and [Autocomplete](Autocomplete.md) adapt this guidance, but have separate custom interaction contracts.
 
-- Use `Select` for a compact choice from known options. Give it a persistent `title`, meaningful option labels, and explicit `required={false}` when optional. A placeholder is a prompt, not the field name or a selectable answer.
-
-- Pointer/touch selection and opening/confirmation keys are browser/platform-owned. Tab reaches the select, arrows navigate or change values, and Enter/Space/system shortcuts vary by platform. The caret button only focuses the select; do not promise that tapping it opens a native picker. CSS changes the field border on hover and focus; verify the focus cue and target comfort in the consumer theme.
-- `disabled` disables the field and its native controls; individual options support `disabled`. `loading` is currently accepted without a spinner, disable rule, or pending announcement. Consumers must set `disabled` and provide any necessary loading/result status.
-- The generated label, invalid state, help/error descriptions, and native value semantics support inspection, not a guarantee of particular announcements. `InputField` renders errors with `role="alert"`; verify actual reading and updates with supported assistive technologies. There is no built-in clear action: an optional field that needs clearing requires an enabled empty-value option in `options` and matching validation.
-
-## Acceptance criteria
-
-These checks and consumer targets have not been exercised as part of this documentation review. 1. **Current behavior:** Given labeled options and a controlled value, when an enabled option is chosen with a pointer, touch, or native keyboard interaction, then `onChange` contains that option's value and the accepted parent value is displayed. 2. **Browser check:** Given focus on the select, when the platform's opening/navigation/confirmation keys and Tab/Shift+Tab are used, then options are usable and focus can continue through the form; the field's focus treatment remains visible. 3. **Current behavior:** Given an enabled select, when its caret button is activated, then focus moves to the select; native picker opening is not an implemented caret action. 4. **Current behavior:** Given `disabled` or a disabled option, when selection is attempted, then that unavailable choice cannot be changed through native interaction; `loading` alone is not an interaction lock. 5. **Consumer target:** Given an optional or invalid selection, when the field is inspected and used with supported assistive technology, then its persistent name, current value, required/disabled/invalid state, and applicable description are available; clearing works only if the consumer supplies a selectable empty option.
+- Use `Select` for a compact choice from known options. Give it a persistent `title` and meaningful option labels.
+- A placeholder is a prompt. It is not the field name or a selectable answer.
+- The browser or platform owns pointer and touch selection and the opening and confirmation keys.
+- `Tab` reaches the select. Arrows navigate or change values. Enter, Space, and system shortcuts vary by platform.
+- The caret button only focuses the select. Do not promise that tapping it opens a native picker.
+- CSS changes the field border on hover and focus. Verify the focus cue and target comfort in the consumer theme.
+- `disabled` disables the field and its native controls. Each option supports `disabled`.
+- `loading` has no spinner, disable rule, or pending announcement. The consumer MUST set `disabled` and provide any loading or result status.
+- The generated label, invalid state, descriptions, and native value semantics do not guarantee particular announcements.
+- `InputField` renders errors with `role="alert"`. Verify reading and updates with supported assistive technologies.
+- There is no built-in clear action. For an optional field that needs clearing, add an enabled empty-value option to `options` and matching validation.
 
 ## Accessibility
 
 - Uses a native `<select>` for keyboard and screen-reader compatibility.
 - The `placeholder` renders as a `disabled hidden` option and is never submitted.
-- The caret is a translated, named `<button>` whose action focuses the select; it does not call `showPicker` or implement popup opening.
-- The native select references the generated title label through `aria-labelledby`; error/feedback ids are appended to `aria-describedby`, and `error` sets `aria-invalid`.
-- `data-selected` starts from the truthiness of `value` and is set to `"true"` on the first change; it is a visual hint, not a validity check.
+- The caret is a translated, named `<button>`. Its action focuses the select. It does not call `showPicker` or open a popup.
+- The native select references the generated title label through `aria-labelledby`.
+- Error and feedback IDs are appended to `aria-describedby`. `error` sets `aria-invalid`.
 
 ## Data Attributes
 
-| Attribute | Element
+| Attribute | Element | Value | Description |
+|---|---|---|---|
+| `data-component` | Root | `"select"` | Component ID. |
+| `data-selected` | `<select>` | `true` / `false` | Whether a value is selected. |
 
-| Value            | Description |
-| ---------------- | ----------- |
-| `data-component` | Root |
-| `data-selected` | `<select>` |
-
-`"select"`
-Component ID.
-`true` / `false`
-Whether selected.
+`data-selected` starts from the truthiness of `value` and becomes `"true"` on the first change. It is a visual hint, not a validity check.
 
 ## Notes
 
-- `selectContainer` remains in the public type for compatibility but is not applied. Use `container` or `labelClassName` for styling. - Built on `InputField` for layout, label, error, and loading handling.
-- Supports all standard HTML `<select>` attributes via prop spread.
-- `required` defaults to `true`; pass `required={false}` when optional.
-- Custom `OptionProps` data attributes (for example, `data-price`) are forwarded to each `<option>` and available through `e.target.selectedOptions[0].dataset`.
+- `selectContainer` stays in the public type for compatibility only.
+
+## Verification
+
+Acceptance criteria for tests and reviews: [verify/Select.md](verify/Select.md).

@@ -1,9 +1,22 @@
 # PdfViewer
 
-Import `PdfViewer`, `PdfPageImage` and `PdfPageRequest` from `@g4rcez/components/pdf-viewer`. Load foundation and the manifest dependency closure for `pdf-viewer.css` (Button, Select and Alert plus their dependencies) before the viewer stylesheet.
+Import `PdfViewer`, `PdfPageImage` and `PdfPageRequest` from `@g4rcez/components/pdf-viewer`. Load foundation CSS, then the manifest dependency closure for `pdf-viewer.css` (Button, Select, Alert and their dependencies), then the viewer stylesheet.
 
-The viewer provides labelled Previous/Next and page selection, fit-width/100%/150%/200% zoom, bounded scrollable raster content, loading status and explicit retry. It does not bundle a PDF parser. The application must authorize/read the retained original and provide a stable `renderPage({page,signal})` adapter using its PDF decoder. Page numbers are one-based; pageCount is 1–1000. Change `documentKey` when original bytes change. This resets to page one and prevents old raster content appearing under a new source or page label.
+- The viewer shows labelled Previous/Next buttons, page selection, zoom (fit-width, 100%, 150%, 200%), bounded scrollable raster content, loading status and explicit retry.
+- Zoom changes presentation, not decoder resolution.
+- The viewer bundles no PDF parser.
+- The host MUST authorize and read the retained original.
+- The host MUST provide a stable `renderPage({page,signal})` adapter that uses its PDF decoder.
+- Page numbers are one-based. `pageCount` is 1–1000.
+- Change `documentKey` when the original bytes change. The viewer resets to page one and never shows old raster content under a new source or page label.
+- Page or source change cancels the prior request. The host MUST honor the AbortSignal. The viewer suppresses late results even when the renderer cannot cancel.
+- A renderer exception stays visible. The viewer never shows a stale page.
 
-Return `{src,width,height}` with a PNG/JPEG/WebP base64 data URL, positive finite dimensions, at most 8192 pixels per side and 8 MP total. The encoded URL is capped at 24 MiB. SVG, remote URLs and active document embedding are rejected before image attachment. The host must separately enforce PDF/input/decode/embedded-image limits and must honor the AbortSignal to stop obsolete work. The viewer suppresses late results even when a renderer cannot cancel.
+Return `{src,width,height}` from the adapter:
 
-PDF scripts, links, forms, attachments, printing, annotations, text selection and signatures are not implemented. Keep extracted accessible text and unchanged-original download in the host application. Raster preview is not an accessible replacement for that text or a guarantee of font/color/layout fidelity. Zoom changes presentation, not decoder resolution. Retry is explicit; page/source changes cancel the prior request. A renderer exception remains visible rather than showing a stale page.
+- `src`: PNG, JPEG or WebP base64 data URL, at most 24 MiB.
+- `width`, `height`: positive finite numbers, at most 8192 pixels per side and 8 MP total.
+- The viewer rejects SVG, remote URLs and active document embedding before image attachment.
+- The host MUST enforce PDF, input, decode and embedded-image limits.
+
+Not implemented: PDF scripts, links, forms, attachments, printing, annotations, text selection, signatures. Keep extracted accessible text and unchanged-original download in the host. Raster preview does not replace that text and does not guarantee font, color or layout fidelity.

@@ -9,7 +9,7 @@ category: display
 
 # VideoPlayer
 
-Use `VideoPlayer` for uploaded or hosted video. The browser owns playback, seeking, audio, playback speed, captions and fullscreen; no replacement controls or player dependency are required. Codec support depends on the browser. This component does not transcode, upload or authorize media.
+Use `VideoPlayer` for uploaded or hosted video. The browser owns playback, seeking, audio, speed, captions and fullscreen. Codec support depends on the browser. The component does not transcode, upload or authorize media.
 
 ```tsx
 import { VideoPlayer } from "@g4rcez/components/video-player";
@@ -25,15 +25,23 @@ import "@g4rcez/components/video-player.css";
 
 ## API
 
-- `src: string` and `label: string` are required. Label names the video and its native controls for assistive technology.
-- `tracks?: readonly VideoPlayerTrack[]` renders standard WebVTT tracks: `src`, `kind`, optional `srcLang`, `label` and `default`. Provide captions for speech and meaningful audio; descriptions or a nearby transcript may be needed for visual information.
-- Standard React video attributes/events, including `poster`, `muted`, `loop`, `onError`, `onLoadedMetadata` and `onTimeUpdate`, are supported. The forwarded ref is the actual `HTMLVideoElement`.
-- Controls are always enabled. `preload` defaults to `"metadata"`; `playsInline` defaults to `true`. Playback never starts automatically unless the caller explicitly sets `autoPlay`.
-- `fallback?: string` is text for browsers without the video element. Network and decoding errors are reported through native `onError`; use the application’s library feedback surface to display recovery actions.
-- `className` styles the video root. Children and raw HTML injection are intentionally not accepted.
+- `src: string` and `label: string` are required. `label` names the video and its native controls for assistive technology.
+- `tracks?: readonly VideoPlayerTrack[]` renders WebVTT tracks: `src`, `kind`, optional `srcLang`, `label` and `default`.
+- Add captions for speech and meaningful audio. Add descriptions or a nearby transcript for visual information.
+- React video attributes and events work, including `poster`, `muted`, `loop`, `onError`, `onLoadedMetadata` and `onTimeUpdate`.
+- The forwarded ref is the `HTMLVideoElement`.
+- Controls are always enabled. `preload` defaults to `"metadata"`. `playsInline` defaults to `true`.
+- Playback starts automatically only when the caller sets `autoPlay`.
+- `fallback?: string` is text for browsers without the video element.
+- Native `onError` reports network and decoding errors. Show recovery actions with the application's library feedback surface.
+- `className` styles the video root. Children and raw HTML injection are not accepted.
 
 ## CSS and security
 
-Import foundation before `video-player.css`; there are no component CSS dependencies. Public root selector: `.__video-player`, also identified by `data-component="video-player"`. It reads canonical `--var-color-muted`, `--var-color-foreground`, `--var-color-border`, `--var-color-ring` and `--var-radius-base` tokens.
-
-Serve authenticated media from the application’s authorized endpoint, or supply an owned object URL and revoke it when no longer used. Only pass sources the application intends to load: the player follows browser media fetching and CORS rules and does not turn arbitrary remote URLs into trusted content. A browser can reject a valid container with an unsupported codec; provide a download option when appropriate. Do not autoplay audible media or omit captions for meaningful audio.
+- Import foundation before `video-player.css`. The component has no CSS dependencies.
+- Root selector: `.__video-player`, also `data-component="video-player"`.
+- The CSS reads `--var-color-muted`, `--var-color-foreground`, `--var-color-border`, `--var-color-ring` and `--var-radius-base`.
+- Serve authenticated media from the application's authorized endpoint, or supply an owned object URL and revoke it after use.
+- Pass only sources the application intends to load. The player follows browser fetching and CORS rules and does not make remote URLs trusted.
+- When the browser rejects a valid container codec, provide a download option.
+- Do not autoplay audible media. Do not omit captions for meaningful audio.

@@ -21,56 +21,56 @@ import { Timeline, TimelineItem } from "@g4rcez/components/timeline";
 
 ### Timeline
 
-The root container. Renders as a `<ul>` with `role="list"`. The vertical connector line on the last item is hidden automatically.
+Root container. Renders a `<ul>` with `role="list"`. The connector line on the last item is hidden automatically.
 
 ### TimelineItem
 
-A single event entry. Renders as a `<li>` with `role="listitem"` and `pb-12` vertical spacing for the connector line.
+Single event entry. Renders an `<li>` with `role="listitem"`. It uses `pb-12` vertical spacing for the connector line.
 
 ### TimelineItem.Icon
 
-The visual marker — a rounded circle, typically containing an icon. Renders as a `<header>`.
+Visual marker: a rounded circle that holds an icon. Renders a `<header>`.
 
-| Prop        | Type              | Default | Description                        |
-| ----------- | ----------------- | ------- | ---------------------------------- |
-| `className` | `string`          | —       | Override icon container appearance |
-| `children`  | `React.ReactNode` | —       | Icon element                       |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | — | Overrides icon container appearance. |
+| `children` | `React.ReactNode` | — | Icon element. |
 
 ### TimelineItem.Body
 
-The main content area. Polymorphic — defaults to `<section>`.
+Main content area. Polymorphic. Renders a `<section>` by default.
 
-| Prop        | Type                | Default     | Description               |
-| ----------- | ------------------- | ----------- | ------------------------- |
-| `as`        | `React.ElementType` | `"section"` | HTML element to render as |
-| `className` | `string`            | —           | Additional classes        |
-| `children`  | `React.ReactNode`   | —           | Event body content        |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `React.ElementType` | `"section"` | HTML element to render. |
+| `className` | `string` | — | Additional classes. |
+| `children` | `React.ReactNode` | — | Event body content. |
 
 ### TimelineItem.Right
 
-Optional right-side slot for timestamps or auxiliary actions. Renders inside a `<footer>` wrapper. Polymorphic — defaults to `<button>`.
+Optional right-side slot for timestamps or auxiliary actions. Renders inside a `<footer>` wrapper. Polymorphic. Renders a `<button>` by default.
 
-| Prop       | Type                | Default    | Description               |
-| ---------- | ------------------- | ---------- | ------------------------- |
-| `as`       | `React.ElementType` | `"button"` | HTML element to render as |
-| `children` | `React.ReactNode`   | —          | Right-side content        |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `React.ElementType` | `"button"` | HTML element to render. |
+| `children` | `React.ReactNode` | — | Right-side content. |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Geometry defaults are scoped `calc` fallbacks of `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides stay unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. The exported `defaultGeometryTokens` map holds the full set; the table shows examples.
 
-| Override                                      | Library default                        |
-| --------------------------------------------- | -------------------------------------- |
-| `--var-timeline-item-padding-block-end`       | `calc(var(--var-spacing-base) * 2)`    |
-| `--var-timeline-connector-inset-block-start`  | `calc(var(--var-spacing-base) * 2)`    |
-| `--var-timeline-connector-inset-inline-start` | `calc(var(--var-spacing-base) * 1)`    |
-| `--var-timeline-content-gap`                  | `calc(var(--var-spacing-base) * 0.75)` |
+| Override | Library default |
+| --- | --- |
+| `--var-timeline-item-padding-block-end` | `calc(var(--var-spacing-base) * 2)` |
+| `--var-timeline-connector-inset-block-start` | `calc(var(--var-spacing-base) * 2)` |
+| `--var-timeline-connector-inset-inline-start` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-timeline-content-gap` | `calc(var(--var-spacing-base) * 0.75)` |
 
-| Token | CSS Variable              | Purpose                          |
-| ------------------------- | -------------------------------- | ------------------------ |
-| `bg-border`               | `--var-color-border`             | Vertical connector color |
-| `bg-primary`              | `--var-color-primary`            | Default icon background  |
-| `text-primary-foreground` | `--var-color-primary-foreground` | Default icon color       |
+| Token | CSS Variable | Purpose |
+| --- | --- | --- |
+| `bg-border` | `--var-color-border` | Connector color |
+| `bg-primary` | `--var-color-primary` | Default icon background |
+| `text-primary-foreground` | `--var-color-primary-foreground` | Default icon color |
 
 ## Examples
 
@@ -200,32 +200,32 @@ import { WarningCircleIcon } from "@phosphor-icons/react";
 
 ## Do
 
-- Use icons that clearly represent the status or type of event.
-- Keep body content concise; link to a detail view for lengthy information.
-- Maintain consistent chronological order (ascending or descending) throughout the list.
-- Use semantic elements for timestamps — `as="time"` with a `dateTime` attribute.
+- Use icons that show the status or type of the event.
+- Keep body content short. Link to a detail view for long content.
+- Keep one chronological order (ascending or descending) in the whole list.
+- Mark timestamps with `as="time"` and a `dateTime` attribute.
 - Use design-token classes for icon background overrides (`bg-success`, `bg-danger`).
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-green-500`, `text-red-600`) for icon backgrounds — use design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
-- Don't cram too much information into a single `TimelineItem`; link to detail pages.
-- Don't use `Timeline` for non-sequential data — use `List` or `Table` for unordered collections.
+- Don't pass raw utility color classes (`bg-green-500`, `text-red-600`) for icon backgrounds. Use design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`). Override CSS variables in your `@theme` block.
+- Don't put much information in one `TimelineItem`. Link to detail pages.
+- Don't use `Timeline` for non-sequential data. Use `List` or `Table` for unordered collections.
 
 ## Accessibility
 
-- `Timeline` uses `<ul role="list">` and each `TimelineItem` uses `<li role="listitem">` for semantic list structure.
-- The vertical connector `<span>` between items carries `aria-hidden="true"` since it is purely decorative.
-- The last item's connector line is hidden via a CSS selector (`[&>li:last-child>span[aria-hidden=true]]:hidden`), removing it from layout without JS.
+- `Timeline` is a `<ul role="list">`. Each `TimelineItem` is an `<li role="listitem">`.
+- The connector `<span>` between items has `aria-hidden="true"`. It is decorative.
+- A CSS selector hides the last connector (`[&>li:last-child>span[aria-hidden=true]]:hidden`). No JS is needed.
 
 ## Data Attributes
 
-- `data-component="timeline"` — applied to the `<ul>` container.
-- `data-component="timeline-item"` — applied to each `<li>` entry.
+- `data-component="timeline"`: on the `<ul>` container.
+- `data-component="timeline-item"`: on each `<li>` entry.
 
 ## Notes
 
-- `TimelineItem.Right` defaults to `as="button"` — change to `as="time"` or `as="span"` if the right slot is non-interactive.
-- Vertical spacing between entries is controlled by `pb-12` on `TimelineItem`; the connector line fills this gap.
-- `TimelineItem` can be used without `TimelineItem.Icon` — the connector line still renders from the left edge.
+- `TimelineItem.Right` defaults to `as="button"`. Set `as="time"` or `as="span"` when the slot is non-interactive.
+- `pb-12` on `TimelineItem` sets the vertical spacing between entries. The connector line fills this gap.
+- `TimelineItem` works without `TimelineItem.Icon`. The connector line still renders from the left edge.

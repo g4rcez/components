@@ -19,54 +19,54 @@ import { FileUpload } from "@g4rcez/components/file-upload";
 
 ## Props
 
-| Prop               | Type                                 | Default         | Description                                                          |
-| ------------------ | ------------------------------------ | --------------- | -------------------------------------------------------------------- |
-| `files`            | `File[]`                             | -               | Controlled files array                                               |
-| `onDrop`           | `(files: File[]) => void`            | -               | Called when files are dropped or selected                            |
-| `onDeleteFile`     | `(file: File) => void`               | -               | Called when the delete button on a file item is clicked              |
-| `idle`             | `React.ReactElement`                 | Default idle UI | Content to show when no files are present and the area is not active |
-| `File`             | `React.FC<{ file: File }>`           | -               | Custom component rendered below each file's name/size row            |
-| `accept`           | `string \| Record<string, string[]>` | -               | Accepted file types (forwarded to `react-dropzone`)                  |
-| `multiple`         | `boolean`                            | `false`         | Allow selecting more than one file                                   |
-| `maxFiles`         | `number`                             | -               | Maximum number of files                                              |
-| `maxSize`          | `number`                             | -               | Maximum file size in bytes                                           |
-| `disabled`         | `boolean`                            | `false`         | Disable the drop zone                                                |
-| `name`             | `string`                             | -               | Name for the underlying `<input>`                                    |
-| `...DropzoneProps` |                                      |                 | All `react-dropzone` props are supported                             |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `files` | `File[]` | - | Controlled files array. |
+| `onDrop` | `(files: File[]) => void` | - | Called when files are dropped or selected. |
+| `onDeleteFile` | `(file: File) => void` | - | Called when the delete button of a file item is clicked. |
+| `idle` | `React.ReactElement` | Default idle UI | Content when no files exist and the area is not active. |
+| `File` | `React.FC<{ file: File }>` | - | Custom component below the name and size row of each file. |
+| `accept` | `string \| Record<string, string[]>` | - | Accepted file types. Forwarded to `react-dropzone`. |
+| `multiple` | `boolean` | `false` | Allow more than one file. |
+| `maxFiles` | `number` | - | Maximum number of files. |
+| `maxSize` | `number` | - | Maximum file size in bytes. |
+| `disabled` | `boolean` | `false` | Disable the drop zone. |
+| `name` | `string` | - | Name for the underlying `<input>`. |
+| `...DropzoneProps` | | | All `react-dropzone` props. |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides stay unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. The exported `defaultGeometryTokens` map has the full set. Current plain-CSS geometry examples:
 
-| Override                             | Library default                        |
-| ------------------------------------ | -------------------------------------- |
-| `--var-file-upload-file-icon-size`   | `calc(var(--var-spacing-base) * 3)`    |
-| `--var-file-upload-remove-icon-size` | `calc(var(--var-spacing-base) * 1)`    |
-| `--var-file-upload-idle-icon-size`   | `calc(var(--var-spacing-base) * 5)`    |
-| `--var-file-upload-thumb-icon-size`  | `calc(var(--var-spacing-base) * 1.75)` |
+| Override | Library default |
+| --- | --- |
+| `--var-file-upload-file-icon-size` | `calc(var(--var-spacing-base) * 3)` |
+| `--var-file-upload-remove-icon-size` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-file-upload-idle-icon-size` | `calc(var(--var-spacing-base) * 5)` |
+| `--var-file-upload-thumb-icon-size` | `calc(var(--var-spacing-base) * 1.75)` |
 
-| Token | CSS Variable      | Purpose                  |
-| ----------------- | ------------------------ | ------------------------------------------------- |
-| `border-border`   | `--var-color-border`     | File item separators and default drop zone border |
-| `bg-background`   | `--var-color-background` | Active drop zone background                       |
-| `text-foreground` | `--var-color-foreground` | General text color                                |
-| `text-primary`    | `--var-color-primary`    | Idle accent color                                 |
-| `text-danger`     | `--var-color-danger`     | Delete action hover color                         |
+| Token | CSS Variable | Purpose |
+| --- | --- | --- |
+| `border-border` | `--var-color-border` | File item separators and default drop zone border |
+| `bg-background` | `--var-color-background` | Active drop zone background |
+| `text-foreground` | `--var-color-foreground` | General text color |
+| `text-primary` | `--var-color-primary` | Idle accent color |
+| `text-danger` | `--var-color-danger` | Delete action hover color |
 
 ## Drag and Drop States
 
-| State         | Description                                                                |
-| ------------- | -------------------------------------------------------------------------- |
-| Idle (empty)  | Displays the `idle` prop or context-aware singular/plural default copy     |
-| Drag active   | Replaces the idle UI with an open folder icon while dragging               |
-| Files present | Renders the file list; drop zone border becomes solid and background fills |
+| State | Description |
+| --- | --- |
+| Idle (empty) | Shows the `idle` prop, or default singular or plural copy. |
+| Drag active | Replaces the idle UI with an open folder icon while dragging. |
+| Files present | Shows the file list. The drop zone border becomes solid and the background fills. |
 
 ## Default Idle Copy
 
-The default idle content follows `multiple`. Omitted `multiple` and `multiple={false}` use singular wording; `multiple={true}` preserves plural wording.
+The default idle content follows `multiple`. Omitted `multiple` and `multiple={false}` give singular wording. `multiple={true}` gives plural wording.
 
-| `multiple`       | Prompt                               | Action                                                 |
-| ---------------- | ------------------------------------ | ------------------------------------------------------ |
+| `multiple` | Prompt | Action |
+| --- | --- | --- |
 | omitted or `false` | `Arraste seu arquivo para cá ou` | `clique para escolher um arquivo` |
 | `true` | `Arraste seus arquivos para cá ou` | `clique para escolher seus arquivos` |
 
@@ -74,19 +74,19 @@ Pass `idle` to replace the default content completely.
 
 ## File Type Rendering
 
-The component automatically selects an icon based on file extension:
+The component selects an icon from the file extension:
 
-| Extension(s)   | Icon                     |
-| -------------- | ------------------------ |
-| csv, xls, xlsx | `SheetIcon`              |
-| pdf, txt       | `FileTextIcon`           |
-| json           | `FileJsonIcon`           |
-| mp3            | `AudioLinesIcon`         |
-| mp4, mov       | `FileVideo2`             |
-| Images         | Inline `<img>` thumbnail |
-| Other          | Generic `FileIcon`       |
+| Extension(s) | Icon |
+| --- | --- |
+| csv, xls, xlsx | `SheetIcon` |
+| pdf, txt | `FileTextIcon` |
+| json | `FileJsonIcon` |
+| mp3 | `AudioLinesIcon` |
+| mp4, mov | `FileVideo2` |
+| Images | Inline `<img>` thumbnail |
+| Other | Generic `FileIcon` |
 
-Clicking a file thumbnail opens a `Modal` viewer with full-size preview for images, `<video>` player for videos, and `<audio>` player for audio files.
+Click a file thumbnail to open a `Modal` viewer. It shows a full-size preview for images, a `<video>` player for videos, and an `<audio>` player for audio files.
 
 ## Examples
 
@@ -199,52 +199,56 @@ function SubmissionForm() {
 
 ## Do
 
-- Always set `accept` to restrict uploads to the file types your server expects.
-- Set `maxSize` and use `onDropRejected` to explain oversized or unsupported files; rejection does not render an error message automatically.
-- Use `multiple` when batch uploads are expected.
-- Use the `File` prop to add progress bars, metadata, or custom actions below each file row.
-- Use design-token classes for wrapper elements (`bg-card-background`, `text-foreground`).
+- Set `accept` to the file types your server expects.
+- Set `maxSize`. Use `onDropRejected` to explain oversized or unsupported files. Rejection renders no error message.
+- Use `multiple` for batch uploads.
+- Use the `File` prop for progress bars, metadata, or custom actions below each file row.
+- Use design-token classes on wrapper elements (`bg-card-background`, `text-foreground`).
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
-- Don't rely solely on client-side `maxSize`/`accept` — validate files server-side as well.
-- Don't skip `onDeleteFile` when `files` is controlled — without it, users cannot remove files they added.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`). Use theme props or design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`). Override CSS variables in your `@theme` block.
+- Don't rely only on client-side `maxSize` and `accept`. Validate files on the server too.
+- Don't omit `onDeleteFile` when `files` is controlled. Users cannot remove files without it.
 
 ## Accessibility
 
-- The drop zone uses `react-dropzone`'s `getRootProps` and `getInputProps` for keyboard support. The visible file-picker button uses native Enter/Space activation; Space opens the picker on release.
-- The drop zone and hidden `<input type="file">` labels use singular wording by default and plural wording when `multiple={true}`.
-- The hidden `<input type="file">` is accessible by assistive technologies.
-- Delete buttons include a `type="button"` to prevent accidental form submission.
-- The modal viewer opened for file preview is managed by the `Modal` component, which handles focus trapping and Escape to close.
+- The drop zone uses `getRootProps` and `getInputProps` of `react-dropzone` for keyboard support.
+- The visible file-picker button uses native Enter and Space activation. Space opens the picker on release.
+- The labels of the drop zone and hidden `<input type="file">` are singular by default and plural when `multiple={true}`.
+- Assistive technologies can access the hidden `<input type="file">`.
+- Delete buttons use `type="button"`, so they do not submit a form.
+- The `Modal` component manages the preview viewer, including focus trapping and Escape to close.
 
 ## Interaction design and acceptance criteria
 
-Treat dropping files as a shortcut, not the only entry point. The default idle UI provides a file-picker button, and the dropzone delegates keyboard operation to `react-dropzone`. Avoid `noKeyboard`/`noClick` unless an equivalent reachable file-picker path remains.
-
-- State accepted types, size/count limits, and whether multiple files are allowed before selection. Pass translated instructions through `translations`; a custom `idle` receives `onUpload` and `disabled` and must preserve a clearly named, operable picker control.
-- Dropping files adds selections; it does not upload them to a server or reorder them. Controlled `files` require the application to update the array from `onDrop` and `onDeleteFile`. Network progress and completion are application-owned.
-- `onDropRejected` is forwarded, but rejected-file messages and live-region feedback are not rendered automatically. Explain the file-specific reason and a correction path, without deleting previously accepted selections.
-- Preview and removal buttons include the filename in their accessible names. Verify focus after removing a file, canceling the picker, or closing the preview; the component does not explicitly move focus to a surviving item after removal.
-- Check visible focus and touch-target spacing on the dropzone and per-file controls in the actual app. Do not infer these from the drag-active visual alone.
-
-## Acceptance criteria
-
-1. **Given** an enabled upload area, **when** the user opens the picker with keyboard or touch instead of dragging, **then** the same accepted-file selection path is available.
-2. **Given** existing files, **when** selection is canceled or a new file is rejected, **then** existing selections remain and any rejection explains the reason and how to correct it.
-3. **Given** controlled files, **when** a file is added or removed, **then** the application updates the visible list and preserves a predictable focus destination.
-4. **Given** several files, **when** controls are inspected with assistive technology, **then** each preview/removal action identifies its file and the result is perceivable.
-5. **Given** `disabled`, **when** the user attempts to select or drop new files, **then** no files are added; separately decide whether actions on already selected files should remain available.
+- Treat dropping files as a shortcut, not the only entry point.
+- The default idle UI has a file-picker button. The dropzone delegates keyboard operation to `react-dropzone`.
+- Avoid `noKeyboard` and `noClick` unless an equivalent reachable file-picker path remains.
+- State accepted types, size and count limits, and whether multiple files are allowed before selection.
+- Pass translated instructions through `translations`.
+- A custom `idle` receives `onUpload` and `disabled`. It MUST keep a clearly named, operable picker control.
+- Dropping files adds selections. It does not upload them to a server or reorder them.
+- Controlled `files` require the application to update the array from `onDrop` and `onDeleteFile`.
+- The application owns network progress and completion.
+- `onDropRejected` is forwarded. The component renders no rejected-file messages and no live-region feedback.
+- Explain the file-specific reason and a correction path. Do not delete previously accepted selections.
+- Preview and removal buttons include the filename in their accessible names.
+- The component does not move focus to a surviving item after removal. Verify focus after removing a file, canceling the picker, or closing the preview.
+- Check visible focus and touch-target spacing on the dropzone and per-file controls in the actual app. Do not infer them from the drag-active visual.
 
 ## Data Attributes
 
-- `data-active="true"` — on the drop zone wrapper when at least one file is present; used to switch between dashed (empty) and solid (filled) border styles.
+- `data-active="true"`: on the drop zone wrapper when at least one file exists. It switches the border between dashed (empty) and solid (filled).
 
 ## Notes
 
-- When `files` is not provided, the component manages its own internal file state. Pass `files` for fully controlled behavior.
-- Object URLs created for previews are revoked on cleanup via `useEffect` to prevent memory leaks.
-- The `File` prop (custom renderer) is rendered inside the file list item, below the file name and size row, alongside the built-in delete button.
-- The component depends on `react-dropzone` and `pretty-bytes` as peer dependencies.
+- When `files` is not provided, the component keeps its own internal file state. Pass `files` for controlled behavior.
+- `useEffect` cleanup revokes the object URLs created for previews, to prevent memory leaks.
+- The `File` prop (custom renderer) renders inside the file list item, below the name and size row, next to the built-in delete button.
+- `react-dropzone` and `pretty-bytes` are peer dependencies.
+
+## Verification
+
+Acceptance criteria for tests and reviews: [verify/FileUpload.md](verify/FileUpload.md).

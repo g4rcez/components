@@ -4,7 +4,7 @@ A comprehensive React component library built with TypeScript, plain CSS, semant
 
 ## AI Agents + Skills
 
-This package includes the `csscomponents` agent skill. It gives AI coding
+This package includes the `g4rcez-components` agent skill. It gives AI coding
 agents guidance for installation, CSS setup, theming, design tokens, and the
 component API.
 
@@ -14,11 +14,14 @@ Use the [Vercel Skills CLI](https://github.com/vercel-labs/skills) to install
 the skill in your agent's skill directory:
 
 ```bash
-npx skills add g4rcez/components --skill csscomponents
+npx skills@latest add g4rcez/components
 ```
 
 The CLI supports Claude Code, Cursor, GitHub Copilot, and other compatible
 agents.
+
+The installed skill is self-contained: it bundles the per-component references, so
+it works without the package in `node_modules`.
 
 ### Install from `node_modules`
 

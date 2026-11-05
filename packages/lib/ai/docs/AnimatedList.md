@@ -9,7 +9,7 @@ category: display
 
 # AnimatedList
 
-Animated list that expands each item into a floating detail overlay on click.
+Animated list. A click expands an item into a floating detail overlay.
 
 ## Import
 
@@ -21,40 +21,40 @@ import { AnimatedList, AnimatedListItem } from "@g4rcez/components";
 
 ### AnimatedList props
 
-| Prop       | Type              | Default | Description                              |
-| ---------- | ----------------- | ------- | ---------------------------------------- |
-| `children` | `React.ReactNode` | —       | One or more `AnimatedListItem` elements. |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `React.ReactNode` | — | One or more `AnimatedListItem` elements. |
 
 ### AnimatedListItem
 
-| Prop          | Type                           | Default | Description                                                                                                                                 |
-| ------------- | ------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`       | `Label`                        | —       | Primary heading shown in the list row and the overlay header.                                                                               |
-| `titleText`   | `string`                       | —       | Optional plain-text alternative for the localized open-action label when a non-string title has no clear rendered text.                     |
-| `description` | `Label`                        | —       | Secondary text shown below the title in both the row and overlay header.                                                                    |
-| `children`    | `Label`                        | —       | Content rendered inside the expanded overlay below the header.                                                                              |
-| `avatar`      | `Label`                        | —       | Optional node (icon, image, or element) shown at the leading edge of the row.                                                               |
-| `leading`     | `React.FC<{ open: () => void }>` | —       | Optional render-prop component placed at the trailing edge of the row. Receives an `open` function to trigger the overlay programmatically. |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` | `Label` | — | Heading in the row and the overlay header. |
+| `titleText` | `string` | — | Plain-text label for the open action when a non-string `title` has no clear rendered text. |
+| `description` | `Label` | — | Text below the title in the row and the overlay header. |
+| `children` | `Label` | — | Content in the overlay below the header. |
+| `avatar` | `Label` | — | Node (icon, image, or element) at the leading edge of the row. |
+| `leading` | `React.FC<{ open: () => void }>` | — | Component at the trailing edge of the row. Receives `open` to open the overlay. |
 
 `Label` accepts a string, number, or React node.
 
 ## Design Tokens
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+The component reads these tokens. Override these CSS variables in your theme.
 
-| Token | CSS Variable             | Purpose                          |
-| ------------------------ | -------------------------------- | ---------------------------------------------- |
-| `border-border`          | `--var-color-border`             | Row separator and overlay border               |
-| `bg-background`          | `--var-color-background`         | Overlay card background                        |
-| CSS override             | `--var-modal-surface-radius`     | Current detail overlay border radius           |
-| `shadow-shadow-floating` | `--var-shadow-floating`          | Current Modal detail surface shadow            |
-| `text-foreground`        | `--var-color-foreground`         | Row body text                                  |
-| `text-muted-foreground`  | `--var-color-muted-foreground`   | Description text                               |
-| `text-primary`           | `--var-color-primary`            | Row action hover color                         |
-| `text-danger`            | `--var-color-danger`             | Close button hover/focus color                 |
-| CSS override             | `--var-modal-overlay-background` | Current Modal backdrop tint, including opacity |
-| `z-floating`             | `--var-layer-floating`           | Overlay layer (default: 22)                    |
-| `z-overlay`              | `--var-layer-overlay`            | Backdrop layer                                 |
+| Token | CSS Variable | Purpose |
+| --- | --- | --- |
+| `border-border` | `--var-color-border` | Row separator and overlay border |
+| `bg-background` | `--var-color-background` | Overlay card background |
+| CSS override | `--var-modal-surface-radius` | Detail overlay border radius |
+| `shadow-shadow-floating` | `--var-shadow-floating` | Modal detail surface shadow |
+| `text-foreground` | `--var-color-foreground` | Row body text |
+| `text-muted-foreground` | `--var-color-muted-foreground` | Description text |
+| `text-primary` | `--var-color-primary` | Row action hover color |
+| `text-danger` | `--var-color-danger` | Close button hover and focus color |
+| CSS override | `--var-modal-overlay-background` | Modal backdrop tint, including opacity |
+| `z-floating` | `--var-layer-floating` | Overlay layer (default: 22) |
+| `z-overlay` | `--var-layer-overlay` | Backdrop layer |
 
 ## Examples
 
@@ -174,52 +174,64 @@ export function ActivityFeed() {
 
 ## Do
 
-- Keep `title` and `description` concise — the title action shares its row with any trailing action, and truncation is not automatic.
-- Provide meaningful `children` content in the overlay; it should justify opening the detail view.
-- Use `leading` to surface a primary call-to-action without forcing the user to click the title.
-- Use design-token classes for any content inside the overlay (`bg-card-background`, `text-foreground`, `border-card-border`).
+- Keep `title` and `description` short. The title action shares its row with any trailing action, and truncation is not automatic.
+- Put meaningful content in `children`. It must justify opening the detail view.
+- Use `leading` for a primary call to action, so users need not click the title.
+- Use design-token classes for overlay content (`bg-card-background`, `text-foreground`, `border-card-border`).
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
-- Don't use `AnimatedList` for purely informational lists with no actionable detail — use a semantic `<ul>` or `<ol>`. `List.md` documents this same compound API, not a separate static `List` component.
-- Don't embed full sub-applications inside the overlay `children`; keep the detail view focused and lightweight.
-- Don't use `AnimatedListItem` alone expecting a row or overlay — it returns its children in a `Fragment`; the parent builds the interactive list.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`). Use design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`). Override CSS variables in your `@theme` block.
+- Don't use `AnimatedList` for informational lists with no actionable detail. Use a semantic `<ul>` or `<ol>`.
+- Don't embed full sub-applications in the overlay `children`. Keep the detail view small.
+- Don't use `AnimatedListItem` alone. It returns its children in a `Fragment`, and the parent builds the interactive list.
 
 ## Interaction design and acceptance criteria
 
-**List guidance adaptation:** This is the same implementation documented in [List](List.md), accessed through the package-root import; it does not have a separate implementation.
+**List guidance adaptation:** this is the implementation documented in [List](List.md), reached through the package-root import. `List.md` documents this same compound API, not a separate static `List` component.
 
-- Use animated summary-to-detail rows when the extra panel helps users inspect an unordered collection. The root is a semantic `ul` with `li` children, not an ordered-list, listbox, or accordion API. Preserve meaningful sequence/nesting with appropriate static list markup instead.
-
-- Only the title/description button, optional avatar button, and consumer `leading` action open details; the whole row is not clickable. Keep interactive descendants out of `title`/`description`, and use existing `Button` controls for trailing actions. String titles get localized action names; `titleText` supplies a plain-text alternative for complex titles. Descriptions label the row's purpose without claiming tested item-count announcements.
-- The named detail view uses [Modal](Modal.md), including focus containment, scroll lock, responsive sheet layout, and a scrollable body. Its accessible description is supplied only for string descriptions. Verify keyboard focus entry, Escape/close/outside dismissal, and return to the exact opening button. There are no row `aria-expanded`/`aria-controls` attributes.
-- `MotionConfig reducedMotion="user"` is configured. Animation must not be required to understand which item is open. Internal layout IDs use item indexes, and selected detail props are copied on opening, so stable child keys alone do not guarantee continuity if rows change while open. Keep the trigger available or manage its replacement. Long labels plus `leading` share a non-wrapping row layout; zoom/reflow and touch target usability remain consumer checks.
-
-## Acceptance criteria
-
-These are integration targets, not verification already performed for assistive technologies. 1. **Given** a collection with clear titles/descriptions, **when** users read or Tab through rows, **then** visual and DOM order agree and opening controls have item-specific accessible names and descriptions. 2. **Given** a visible title, avatar, or trailing action, **when** pointer/touch or Enter/Space activates it, **then** the matching titled detail view opens without nested-control conflicts. 3. **Given** an open panel, **when** users traverse it and dismiss it, **then** focus is contained while open and returns predictably, including when the original item was changed or removed. 4. **Given** reduced motion, 200% text size, or a 320 CSS-pixel viewport, **when** details are opened and read, **then** the selected item remains clear and all text/actions, including close, stay reachable.
+- Use animated summary-to-detail rows when an extra panel helps users inspect an unordered collection.
+- The root is a semantic `ul` with `li` children. It is not an ordered-list, listbox, or accordion API. For meaningful sequence or nesting, use static list markup.
+- Only the title/description button, the optional avatar button, and the consumer `leading` action open details. The whole row is not clickable.
+- Keep interactive descendants out of `title` and `description`. Use existing `Button` controls for trailing actions.
+- String titles get localized action names. Use `titleText` for a plain-text name of complex titles.
+- Descriptions label the row purpose. Item-count announcements are untested.
+- The detail view uses [Modal](Modal.md): focus containment, scroll lock, responsive sheet layout, and a scrollable body.
+- The accessible description is supplied only for string descriptions.
+- Verify keyboard focus entry, Escape, close, and outside dismissal, and return of focus to the exact opening button.
+- Rows have no `aria-expanded` or `aria-controls`.
+- `MotionConfig reducedMotion="user"` is set. Animation must not be required to know which item is open.
+- Internal layout IDs use item indexes. Selected detail props are copied on opening. Stable child keys alone do not keep continuity when rows change while a detail is open. Keep the trigger available or manage its replacement.
+- Long labels plus `leading` share a non-wrapping row layout. Zoom, reflow, and touch target usability are consumer checks.
 
 ## Accessibility
 
 - The list renders as a semantic `<ul role="list">`.
-- Each item's title/description area is a `<button>` that triggers the overlay, making it keyboard accessible.
-- String titles use localized open-action labels; complex titles use `titleText` or the rendered title. Opening controls reference the rendered description with `aria-describedby`.
-- The detail view delegates to `Modal`, including its named dialog, `FloatingFocusManager`, and scroll-locking `FloatingOverlay`.
-- Pressing `Escape` or clicking outside the overlay dismisses it.
-- The close button inside the overlay is a focusable `<button>` with a localized accessible name.
-- `MotionConfig reducedMotion="user"` configures reduced-motion handling; verify the complete presentation with that preference enabled.
+- The title/description area of each item is a `<button>` that opens the overlay, so it is keyboard accessible.
+- String titles use localized open-action labels. Complex titles use `titleText` or the rendered title.
+- Opening controls reference the rendered description with `aria-describedby`.
+- The detail view delegates to `Modal`: its named dialog, `FloatingFocusManager`, and scroll-locking `FloatingOverlay`.
+- `Escape` or a click outside the overlay dismisses it.
+- The close button in the overlay is a focusable `<button>` with a localized accessible name.
+- `MotionConfig reducedMotion="user"` sets reduced-motion handling. Verify the full presentation with that preference enabled.
 
 ## Data Attributes
 
-- `layoutId="item-{id}"` — shared between the list row and the overlay card to drive the expand/collapse shared-element animation.
-- Title, description, and avatar use matching shared layout IDs scoped to each list instance.
+- `layoutId="item-{id}"`: shared between the list row and the overlay card. It drives the expand and collapse shared-element animation.
+- Title, description, and avatar use matching shared layout IDs, scoped to each list instance.
 
 ## Notes
 
-- Animations use a spring with no bounce to expand the row surface and carry its title, description, and avatar into the overlay. Desktop uses a dialog; narrow viewports use the Modal's responsive sheet.
-- Detail content fades in separately and remains mounted during dismissal so the surface can collapse back into its row. Escape, the close button, and backdrop dismissal restore focus to the opening control.
-- The overlay is rendered in a `FloatingPortal`, outside the normal DOM tree, to avoid stacking-context issues.
-- Only one detail panel is open at a time; selecting an item replaces its selected content.
-- `AnimatedListItem` is a thin shell — it returns children in a `Fragment` and holds no state. `AnimatedList` reads child props via `React.Children.toArray` to build the rows and detail view.
+- A spring with no bounce expands the row surface and carries its title, description, and avatar into the overlay.
+- Desktop uses a dialog. Narrow viewports use the responsive sheet of `Modal`.
+- Detail content fades in separately and stays mounted during dismissal, so the surface collapses back into its row.
+- Escape, the close button, and backdrop dismissal restore focus to the opening control.
+- The overlay renders in a `FloatingPortal`, outside the normal DOM tree, to avoid stacking-context issues.
+- One detail panel is open at a time. Selecting an item replaces the selected content.
+- `AnimatedListItem` holds no state. It returns children in a `Fragment`.
+- `AnimatedList` reads child props with `React.Children.toArray` to build the rows and the detail view.
+
+## Verification
+
+Acceptance criteria for tests and reviews: [verify/AnimatedList.md](verify/AnimatedList.md).

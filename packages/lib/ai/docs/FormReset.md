@@ -9,7 +9,7 @@ category: form
 
 # formReset
 
-Utility function that resets all inputs and selects in a form to their default values and clears their initialization state.
+Resets all inputs and selects in a form to their default values and clears their initialization state.
 
 ## Import
 
@@ -25,16 +25,16 @@ function formReset(form?: HTMLFormElement | null): void;
 
 ## Parameters
 
-| Parameter | Type                                   | Description                                                        |
-| --------- | -------------------------------------- | ------------------------------------------------------------------ |
-| `form`    | `HTMLFormElement \| null \| undefined` | The form element to reset. Safely no-ops if `null` or `undefined`. |
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `form` | `HTMLFormElement \| null \| undefined` | Form to reset. No-op if `null` or `undefined`. |
 
 ## How It Works
 
-1. Iterates over all elements in the form (`form.elements`).
+1. Iterates over all elements in `form.elements`.
 2. For `<input>` elements: sets `input.value` to `input.defaultValue`.
 3. For `<select>` elements: sets `select.value` to `""`.
-4. On every processed field: sets `data-initialized="false"`, which tells components like `Input` and `Autocomplete` to treat the field as untouched (suppressing validation messages).
+4. On every processed field: sets `data-initialized="false"`. Components like `Input` and `Autocomplete` then treat the field as untouched and suppress validation messages.
 
 ## Examples
 
@@ -94,25 +94,25 @@ function EditForm({ defaultValues }: { defaultValues: Record<string, string> }) 
 
 ## Do
 
-- Use `formReset` (instead of `form.reset`) when the form contains library components — it also resets the `data-initialized` flag that controls validation UI.
+- Use `formReset`, not `form.reset`, when the form contains library components. It also resets the `data-initialized` flag that controls validation UI.
 - Pass a valid `HTMLFormElement` ref.
 
 ## Don't
 
-- Don't expect `formReset` to fire `onChange` events — it modifies `value` directly in the DOM without dispatching React synthetic events.
-- Don't use `formReset` to reset a single field; use standard DOM methods or React state for that.
-- Don't use `formReset` as a substitute for React-controlled state management in complex forms.
+- Don't expect `formReset` to fire `onChange` events. It sets `value` directly in the DOM and dispatches no React synthetic events.
+- Don't use `formReset` to reset one field. Use standard DOM methods or React state.
+- Don't use `formReset` instead of React-controlled state in complex forms.
 
 ## Accessibility
 
-No direct accessibility implications. After a reset, validation error messages will disappear because `data-initialized="false"` prevents them from being shown again until the user interacts with each field.
+No direct accessibility implications. After a reset, validation error messages disappear. `data-initialized="false"` keeps them hidden until the user interacts with each field.
 
 ## Data Attributes
 
-- Sets `data-initialized="false"` on every `INPUT` and `SELECT` element in the form. This attribute is read by `InputField` to decide whether to display validation feedback.
+- `data-initialized="false"` is set on every `INPUT` and `SELECT` element in the form. `InputField` reads it to decide whether to show validation feedback.
 
 ## Notes
 
-- Safe to call with `null` or `undefined` — the function returns early without throwing.
-- Only processes elements with `tagName === "INPUT"` or `tagName === "SELECT"`. `<textarea>` elements are not currently reset by this utility.
-- This is a plain function, not a React component or hook. It works on DOM references directly.
+- Call with `null` or `undefined` is safe. The function returns early without throwing.
+- Only elements with `tagName === "INPUT"` or `tagName === "SELECT"` are processed. `<textarea>` elements are not reset.
+- `formReset` is a plain function, not a React component or hook. It works on DOM references.

@@ -6,235 +6,174 @@ package: "@g4rcez/components"
 
 # @g4rcez/components — Component Index
 
-A React design system built on plain CSS, stable component selectors, and semantic design tokens.
+A React design system. It uses plain CSS, stable component selectors, and semantic design tokens.
 
-**Installation:**
+## Setup
 
 ```bash
-
 npm install @g4rcez/components
 ```
 
-**Setup:**
+Import CSS in an application stylesheet. Import `foundation.css` first. Then import the CSS of each component you use. Resolve component dependencies in [style-dependencies.md](style-dependencies.md).
 
 ```css
-/* In an application stylesheet; alternatively import index.css for all components. */
 @import "@g4rcez/components/foundation.css";
 @import "@g4rcez/components/button.css";
 ```
 
-## Theme and geometry customization
+`@g4rcez/components/index.css` bundles the foundation and all components.
 
-Read [Theme customization](theme-customization.md) for CSS-only setup, sparse overrides and reset/replacement, custom themes, root activation, cascade precedence, SSR hydration/nonce ownership, provider/preset integration, shadow controls, and breaking-release migration. Read [Geometry tokens](geometry-tokens.md) for spacing/rounding bases, reactive geometry fallbacks, and wrapper/portal boundaries. Import the theme API from `@g4rcez/components` or `@g4rcez/components/theme`:
+## Theme and geometry
 
-| Export                                                                 | Purpose                                                                               |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `configureTheme`                                                       | Register/replace sparse named root overrides; return CSS without activating the theme |
-| `createThemeCss`                                                       | Pure CSS serialization for SSR/static output                                          |
-| `createThemeProperties`                                                | Pure sparse `{ tokens?, colors?, components? }` to custom-property object conversion  |
-| `defaultLightThemeTokens`                                              | Generated shared defaults and light palette for inspection                            |
-| `defaultDarkThemeTokens`                                               | Generated effective global/component dark colors, without shared geometry             |
-| `themeTokenRegistry`                                                   | Supported shared, color, and component key inventory                                  |
-| `defaultGeometryTokens`, `defaultGeometryBases`                        | Geometry inspection data, not automatic root declarations                             |
-| `ThemeConfiguration`, `ThemeTokenOverrides`, `ThemeComponentOverrides` | Typed configuration and sparse override groups |
+Read [theme-customization.md](theme-customization.md) for CSS setup, overrides, custom themes, root activation, cascade order, SSR, provider and preset integration, shadows, and migration. Read [geometry-tokens.md](geometry-tokens.md) for the spacing and rounding bases.
 
-Defaults are supplied by foundation CSS, not mandatory JavaScript initialization. Activate dark with `.dark` on `<html>`; the API does not toggle it.
+Import these from `@g4rcez/components` or `@g4rcez/components/theme`:
 
-## Interaction design reference
+| Export | Purpose |
+|---|---|
+| `configureTheme` | Register or replace sparse named root overrides. Returns CSS. Does not activate the theme. |
+| `createThemeCss` | Pure CSS output for SSR and static builds. |
+| `createThemeProperties` | Convert sparse `{ tokens?, colors?, components? }` to a custom-property object. |
+| `defaultLightThemeTokens` | Shared defaults and the light palette, for inspection. |
+| `defaultDarkThemeTokens` | Effective global and component dark colors, without shared geometry. |
+| `themeTokenRegistry` | Inventory of supported shared, color, and component keys. |
+| `defaultGeometryTokens`, `defaultGeometryBases` | Geometry data for inspection. They are not root declarations. |
+| `ThemeConfiguration`, `ThemeTokenOverrides`, `ThemeComponentOverrides` | Types for configuration and override groups. |
 
-The component references describe interaction behavior and acceptance criteria, not a visual theme or a React implementation. Use this library's existing components, themes, and semantic tokens for appearance.
+Foundation CSS supplies the defaults. No JavaScript initialization is required. Activate dark mode with `.dark` on `<html>`. The API never toggles it.
 
-Apply these principles before choosing variants:
+Use canonical `--var-*` properties in plain CSS, or `configureTheme` for sparse root overrides. The default scope is `:root`. Each component doc lists its tokens.
 
-- **Semantics follow the outcome.** Buttons perform actions; links navigate. Same-page tabs and destination navigation are different patterns. Choose heading levels from the document outline, not the desired font size.
-- **Design idle, active, unavailable, and error states.** Explain what a control does before interaction, expose selected/expanded/invalid state, and give understandable feedback afterward. Do not rely on color or an icon alone.
-- **Provide equivalent input paths.** Preserve visible keyboard focus and native activation keys. Touch, keyboard, and assistive-technology users must not depend on hover, swiping, or dragging alone.
-- **Keep focus and reading order predictable.** Hidden content must not remain unexpectedly focusable. Opening, closing, removing, and replacing content need an explicit focus strategy appropriate to the pattern.
-- **Match feedback to urgency.** Use persistent field errors and alerts for information that must remain available. Toasts must not be the only record of a critical outcome. Avoid excessive announcements and unexpected focus changes.
-- **Verify the composed product.** Check names, roles, state, keyboard behavior, desktop/mobile screen readers, touch, enlargement, contrast, and reduced motion. The Given/When/Then criteria in component references are verification targets, not evidence of WCAG conformance.
+## Interaction principles
 
-### Component coverage
+Component docs describe interaction behavior and acceptance criteria. They do not define visual style. Use this library's themes and tokens for appearance.
 
-The interaction patterns are mapped below. **Existing** means a public API covers the pattern, not that every criterion has been tested. **Partial** means coverage is limited to a variant, internal feature, or consumer composition. **Missing** means there is no complete reusable API for that pattern. Proposed additions and their acceptance criteria live in the repository-root `MISSING_COMPONENTS.md`; that backlog is not a list of current package exports.
+- **Semantics follow the outcome.** Buttons perform actions. Links navigate. Same-page tabs and destination navigation are different patterns. Choose heading levels from the document outline, not from font size.
+- **Design every state.** Cover idle, active, unavailable, and error. Expose selected, expanded, and invalid state. Do not use color or an icon as the only signal.
+- **Give equivalent input paths.** Keep visible keyboard focus and native activation keys. Never require hover, swipe, or drag alone.
+- **Keep focus and reading order predictable.** Hidden content MUST NOT stay focusable. Opening, closing, removing, and replacing content each need a focus plan.
+- **Match feedback to urgency.** Use persistent field errors and alerts for information that must stay available. A toast MUST NOT be the only record of a critical outcome. Avoid extra announcements and unexpected focus moves.
+- **Verify the composed product.** Check names, roles, state, keyboard use, screen readers, touch, zoom, contrast, and reduced motion. Each `verify/<Name>.md` lists Given/When/Then criteria. They are test targets, not proof of WCAG conformance.
 
-| Component pattern           | Library reference / coverage                                                                                                            |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Títulos (Cabeçalhos)        | Existing: [Heading](Heading.md); [Typography](Typography.md) documents fixed-level page titles                                          |
-| Tabelas                     | Existing: [Table](Table.md), with consumer-owned captions and interaction checks                                                        |
-| Listas                      | Existing/adapted: [List](List.md), [AnimatedList](AnimatedList.md); use native list semantics where appropriate                         |
-| Tabbar                      | Partial: [Tabs](Tabs.md) for same-page panels; destination navigation bar missing                                                       |
-| Alertas                     | Existing: [Alert](Alert.md); urgency and announcement strategy depend on context                                                        |
-| Dialogs                     | Existing: [Modal](Modal.md), including confirmation behavior                                                                            |
-| Validação de formulários    | Partial: [Form](Form.md), [InputField](InputField.md), [Input](Input.md), [Textarea](Textarea.md); reusable error summary missing       |
-| Toasts                      | Existing: [Notifications](Notifications.md), with documented announcement/timing limits                                                 |
-| Breadcrumb                  | Missing: ordered hierarchical navigation component                                                                                      |
-| Menu                        | Existing: [Menu](Menu.md); [Dropdown](Dropdown.md) is a dialog-style surface, not a menu keyboard model                                 |
-| Links                       | Partial: [Button](Button.md) rendered as an anchor for action-shaped navigation; dedicated inline Link missing                          |
-| Paginação                   | Partial: internal [Table](Table.md) footer; reusable public Pagination missing                                                          |
-| Carrossel                   | Missing: controlled slide navigation and rotation management                                                                            |
-| Drag'n'Drop                 | Partial: [Table](Table.md) reordering and [FileUpload](FileUpload.md) file dropping; generic accessible reordering missing              |
-| Accordion                   | Missing: inline grouped disclosures; [Expand](Expand.md) is a floating dialog                                                           |
-| Detalhes e Mais informações | Missing: reusable inline Disclosure/Details; native `details`/`summary` is a consumer option                                            |
-| Abas                        | Existing: [Tabs](Tabs.md) for associated same-page panels                                                                               |
-| Tooltip e Popover           | Partial: [Tooltip](Tooltip.md) and [Dropdown](Dropdown.md); dedicated interactive Popover contract missing                              |
-| Modal                       | Existing: [Modal](Modal.md), with context-dependent focus and dismissal decisions                                                       |
-| Botão                       | Existing: [Button](Button.md), using native action semantics                                                                            |
-| Checkbox                    | Existing: [Checkbox](Checkbox.md); [TaskList](TaskList.md) is a checklist adaptation                                                    |
-| Radio Button                | Existing: [Radiobox](Radiobox.md), with native grouping                                                                                 |
-| Input text                  | Existing: [Input](Input.md), [InputField](InputField.md); [Textarea](Textarea.md) adapts text-field guidance                            |
-| Input email                 | Existing: [Input](Input.md) with `type="email"`                                                                                         |
-| Input search                | Existing: [Input](Input.md) with `type="search"`; application owns results and feedback                                                 |
-| Input password              | Existing: [Input](Input.md) with `type="password"`; see visibility-control limitations                                                  |
-| Select (Combo)              | Existing/adapted: [Select](Select.md), [MultiSelect](MultiSelect.md), [Autocomplete](Autocomplete.md); custom behavior must be verified |
-| Slider                      | Existing: [Slider](Slider.md), with an accessible name and understandable value                                                         |
-| Switch                      | Existing: [Switch](Switch.md); distinguish immediate settings from submitted checkbox choices                                          
+### Pattern coverage
 
-## All Components
+**Existing**: a public API covers the pattern. It does not mean every criterion is tested. **Partial**: coverage is limited to a variant, an internal feature, or consumer composition. **Missing**: no reusable API exists. Proposals live in the repository file `MISSING_COMPONENTS.md`. That file is not a list of exports.
 
-| Component       | Category | Import                                                                                     | Description                                                               |
-| --------------- | -------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| VideoPlayer | Display | `import { VideoPlayer } from "@g4rcez/components/video-player"` | Browser-owned playback controls, captions and responsive video |
-| PdfViewer | Display | `import { PdfViewer } from "@g4rcez/components/pdf-viewer"` | Local raster page navigation, zoom, cancellation and explicit retry; host-owned PDF decoding |
-| RichTextEditor | Form | `import { RichTextEditor } from "@g4rcez/components/rich-text-editor"` | Controlled sanitized Markdown rich/source editing, formatting and selection |
-| DrawingEditor | Form | `import { DrawingEditor } from "@g4rcez/components/drawing-editor"` | Retained drawing layers, transforms, selection masks and PNG export |
-| Button          | Core     | `import { Button } from "@g4rcez/components/button"`                                       | Versatile button with multiple variants, sizes, and polymorphic rendering |
-| Tag             | Core     | `import { Tag } from "@g4rcez/components/tag"`                                             | Label/badge for metadata, status, and categorization                      |
-| Heading         | Core     | `import { Heading } from "@g4rcez/components"`                                             | Semantic heading with consistent typography tokens                        |
-| Polymorph       | Core     | `import { Polymorph } from "@g4rcez/components"`                                           | Polymorphic base component for rendering as any HTML element              |
-| RenderOnView    | Core     | `import { RenderOnView } from "@g4rcez/components"`                                        | Lazy-renders children when they scroll into the viewport                  |
-| Resizable       | Core     | `import { Resizable } from "@g4rcez/components"`                                           | Drag-to-resize panel container                                            |
-| Slot            | Core     | `import { Slot } from "@g4rcez/components"`                                                | Render-prop slot for component composition                                |
-| Typography APIs | Core     | `import { Paragraph, Description, Info, PageTitle, PageHeader } from "@g4rcez/components"` | Text and fixed-level page-title compositions                              |
-| Alert           | Display  | `import { Alert } from "@g4rcez/components/alert"`                                         | Dismissible alert for messages, warnings, and status updates              |
-| AnimatedList    | Display  | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components"`                      | Unordered summary-to-detail list with a modal panel                       |
-| Calendar        | Display  | `import { Calendar } from "@g4rcez/components/calendar"`                                   | Inline date picker calendar                                               |
-| Card            | Display  | `import { Card } from "@g4rcez/components/card"`                                           | Surface container with card tokens and elevation                          |
-| Empty           | Display  | `import { Empty } from "@g4rcez/components"`                                               | Empty state placeholder with optional icon and action                     |
-| List reference  | Display  | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list"`                 | Same AnimatedList API through the list subpath                            |
-| Masonry         | Display  | `import { Masonry } from "@g4rcez/components/masonry"`                                     | Measured masonry layout that preserves source order                       |
-| Notifications   | Display  | `import { Notifications } from "@g4rcez/components/notifications"`                         | Toast notification system with queue management                           |
-| Progress        | Display  | `import { Progress } from "@g4rcez/components"`                                            | Progress bar with themed fill                                             |
-| Shortcut        | Display  | `import { Shortcut } from "@g4rcez/components"`                                            | Keyboard shortcut badge display                                           |
-| Skeleton        | Display  | `import { Skeleton } from "@g4rcez/components"`                                            | Accessible loading placeholder with pulse animation                       |
-| Spinner         | Display  | `import { Spinner } from "@g4rcez/components"`                                             | Accessible indeterminate loading spinner                                  |
-| SwipeableList   | Display  | `import { SwipeableList } from "@g4rcez/components/swipeable-list"`                        | Virtualized list with swipe-revealed actions                              |
-| Stats           | Display  | `import { Stats } from "@g4rcez/components/stats"`                                         | Metric/statistics display with label and value                            |
-| Step            | Display  | `import { Step } from "@g4rcez/components"`                                                | Multi-step wizard progress indicator                                      |
-| Tabs            | Display  | `import { Tabs } from "@g4rcez/components/tabs"`                                           | Same-page tab panels with automatic keyboard selection                    |
-| Timeline        | Display  | `import { Timeline } from "@g4rcez/components/timeline"`                                   | Vertical event timeline with themed markers                               |
-| Autocomplete    | Form     | `import { Autocomplete } from "@g4rcez/components/autocomplete"`                           | Text input with dropdown suggestions                                      |
-| Checkbox        | Form     | `import { Checkbox } from "@g4rcez/components/checkbox"`                                   | Checkbox with indeterminate support                                       |
-| DatePicker      | Form     | `import { DatePicker } from "@g4rcez/components/date-picker"`                              | Date input with calendar popover                                          |
-| FileUpload      | Form     | `import { FileUpload } from "@g4rcez/components/file-upload"`                              | Drag-and-drop file upload with preview                                    |
-| Form            | Form     | `import { Form } from "@g4rcez/components/form"`                                           | Minimal form wrapper that prevents default submit behavior                |
-| FormReset       | Form     | `import { FormReset } from "@g4rcez/components"`                                           | Reset button wired to the nearest Form context                            |
-| Input           | Form     | `import { Input } from "@g4rcez/components/input"`                                         | Text input with mask, prefix/suffix, and error states                     |
-| InputField      | Form     | `import { InputField } from "@g4rcez/components"`                                          | Input with label, helper text, and error message                          |
-| MultiSelect     | Form     | `import { MultiSelect } from "@g4rcez/components"`                                         | Multi-value select with search and tag display                            |
-| Radiobox        | Form     | `import { Radiobox } from "@g4rcez/components/radiobox"`                                   | Native radio input; consumers provide group name and legend               |
-| Select          | Form     | `import { Select } from "@g4rcez/components/select"`                                       | Labeled native select; use Autocomplete for searchable choices            |
-| Slider          | Form     | `import { Slider } from "@g4rcez/components"`                                              | Range slider input                                                        |
-| Switch          | Form     | `import { Switch } from "@g4rcez/components/switch"`                                       | Toggle switch for boolean values                                          |
-| TaskList        | Form     | `import { TaskList } from "@g4rcez/components/task-list"`                                  | Checklist with completion tracking                                        |
-| Textarea        | Form     | `import { Textarea } from "@g4rcez/components"`                                            | Multi-line text input with auto-resize                                    |
-| CommandPalette  | Floating | `import { CommandPalette } from "@g4rcez/components"`                                      | Spotlight-style command palette with keyboard navigation                  |
-| Dropdown        | Floating | `import { Dropdown } from "@g4rcez/components/dropdown"`                                   | Named nonmodal dialog anchored to a built-in button                       |
-| Expand          | Floating | `import { Expand } from "@g4rcez/components/expand"`                                       | Button-triggered floating dialog with managed focus                       |
-| Menu            | Floating | `import { Menu } from "@g4rcez/components/menu"`                                           | Context menu or navigation menu                                           |
-| Modal           | Floating | `import { Modal } from "@g4rcez/components/modal"`                                         | Dialog overlay with focus trap and scroll lock                            |
-| Toolbar         | Floating | `import { Toolbar } from "@g4rcez/components"`                                             | Grouped action bar with button slots                                      |
-| Tooltip         | Floating | `import { Tooltip } from "@g4rcez/components/tooltip"`                                     | Hover tooltip with floating positioning                                   |
-| Wizard          | Floating | `import { Wizard } from "@g4rcez/components"`                                              | Multi-step guided flow overlay                                            |
-| Table           | Table    | `import { Table } from "@g4rcez/components/table"`                                         | Feature-rich data table with sorting, filtering, and virtualization       |
-| PageCalendar | Calendar | `import { PageCalendar } from "@g4rcez/components"` | Full-page calendar with month, week, and day views |
+| Pattern | Coverage |
+|---|---|
+| Títulos (headings) | Existing: [Heading](Heading.md). [Typography](Typography.md) covers fixed-level page titles. |
+| Tabelas (tables) | Existing: [Table](Table.md). The consumer owns captions and interaction checks. |
+| Listas (lists) | Existing: [List](List.md), [AnimatedList](AnimatedList.md). Use native list semantics where they fit. |
+| Tabbar | Partial: [Tabs](Tabs.md) for same-page panels. A destination navigation bar is missing. |
+| Alertas (alerts) | Existing: [Alert](Alert.md). Urgency and announcement strategy depend on context. |
+| Dialogs, Modal | Existing: [Modal](Modal.md), including confirmation. Focus and dismissal decisions depend on context. |
+| Validação de formulários (form validation) | Partial: [Form](Form.md), [InputField](InputField.md), [Input](Input.md), [Textarea](Textarea.md). A reusable error summary is missing. |
+| Toasts | Existing: [Notifications](Notifications.md). Announcement and timing limits are documented. |
+| Breadcrumb | Missing: ordered hierarchical navigation. |
+| Menu | Existing: [Menu](Menu.md). [Dropdown](Dropdown.md) is a dialog-style surface, not a menu keyboard model. |
+| Links | Partial: [Button](Button.md) rendered as an anchor for action-shaped navigation. A dedicated inline Link is missing. |
+| Paginação (pagination) | Partial: the internal [Table](Table.md) footer. A reusable public Pagination is missing. |
+| Carrossel (carousel) | Missing: controlled slide navigation and rotation management. |
+| Drag'n'Drop | Partial: [Table](Table.md) reordering and [FileUpload](FileUpload.md) file drop. Generic accessible reordering is missing. |
+| Accordion | Missing: inline grouped disclosures. [Expand](Expand.md) is a floating dialog. |
+| Detalhes e Mais informações (details) | Missing: reusable inline Disclosure. Native `details`/`summary` is an option. |
+| Abas (tabs) | Existing: [Tabs](Tabs.md) for associated same-page panels. |
+| Tooltip e Popover | Partial: [Tooltip](Tooltip.md), [Dropdown](Dropdown.md). A dedicated interactive Popover contract is missing. |
+| Botão (button) | Existing: [Button](Button.md), with native action semantics. |
+| Checkbox | Existing: [Checkbox](Checkbox.md). [TaskList](TaskList.md) is a checklist adaptation. |
+| Radio Button | Existing: [Radiobox](Radiobox.md), with native grouping. |
+| Input text | Existing: [Input](Input.md), [InputField](InputField.md). [Textarea](Textarea.md) adapts the text-field guidance. |
+| Input email | Existing: [Input](Input.md) with `type="email"`. |
+| Input search | Existing: [Input](Input.md) with `type="search"`. The application owns results and feedback. |
+| Input password | Existing: [Input](Input.md) with `type="password"`. See the visibility-control limits. |
+| Select (Combo) | Existing/adapted: [Select](Select.md), [MultiSelect](MultiSelect.md), [Autocomplete](Autocomplete.md). Verify custom behavior. |
+| Slider | Existing: [Slider](Slider.md), with an accessible name and a readable value. |
+| Switch | Existing: [Switch](Switch.md). Separate immediate settings from submitted checkbox choices. |
 
-## Core
+## Catalog
 
-| Component       | Import                                                                                     | Description                                                               |
-| --------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| Button          | `import { Button } from "@g4rcez/components/button"`                                       | Versatile button with multiple variants, sizes, and polymorphic rendering |
-| Tag             | `import { Tag } from "@g4rcez/components/tag"`                                             | Label/badge for metadata, status, and categorization                      |
-| Heading         | `import { Heading } from "@g4rcez/components"`                                             | Semantic heading with consistent typography tokens                        |
-| Polymorph       | `import { Polymorph } from "@g4rcez/components"`                                           | Polymorphic base component for rendering as any HTML element              |
-| RenderOnView    | `import { RenderOnView } from "@g4rcez/components"`                                        | Lazy-renders children when they scroll into the viewport                  |
-| Resizable       | `import { Resizable } from "@g4rcez/components"`                                           | Drag-to-resize panel container                                            |
-| Slot            | `import { Slot } from "@g4rcez/components"`                                                | Render-prop slot for component composition                                |
-| Typography APIs | `import { Paragraph, Description, Info, PageTitle, PageHeader } from "@g4rcez/components"` | Text and fixed-level page-title compositions                              |
+Read the component doc before using a component. Each row links the doc and shows the import.
 
-## Display
+### Core
 
-| Component      | Import                                                                     | Description                                                  |
-| -------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Alert          | `import { Alert } from "@g4rcez/components/alert"`                         | Dismissible alert for messages, warnings, and status updates |
-| AnimatedList   | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components"`      | Unordered summary-to-detail list with a modal panel          |
-| Calendar       | `import { Calendar } from "@g4rcez/components/calendar"`                   | Inline date picker calendar                                  |
-| Card           | `import { Card } from "@g4rcez/components/card"`                           | Surface container with card tokens and elevation             |
-| Empty          | `import { Empty } from "@g4rcez/components"`                               | Empty state placeholder with optional icon and action        |
-| List reference | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list"` | Same AnimatedList API through the list subpath               |
-| Masonry        | `import { Masonry } from "@g4rcez/components/masonry"`                     | Measured masonry layout that preserves source order          |
-| Notifications  | `import { Notifications } from "@g4rcez/components/notifications"`         | Toast notification system with queue management              |
-| Progress       | `import { Progress } from "@g4rcez/components"`                            | Progress bar with themed fill                                |
-| Shortcut       | `import { Shortcut } from "@g4rcez/components"`                            | Keyboard shortcut badge display                              |
-| Skeleton       | `import { Skeleton } from "@g4rcez/components"`                            | Accessible loading placeholder with pulse animation          |
-| Spinner        | `import { Spinner } from "@g4rcez/components"`                             | Accessible indeterminate loading spinner                     |
-| SwipeableList  | `import { SwipeableList } from "@g4rcez/components/swipeable-list"`        | Virtualized list with swipe-revealed actions                 |
-| Stats          | `import { Stats } from "@g4rcez/components/stats"`                         | Metric/statistics display with label and value               |
-| Step           | `import { Step } from "@g4rcez/components"`                                | Multi-step wizard progress indicator                         |
-| Tabs           | `import { Tabs } from "@g4rcez/components/tabs"`                           | Same-page tab panels with automatic keyboard selection       |
-| Timeline       | `import { Timeline } from "@g4rcez/components/timeline"`                   | Vertical event timeline with themed markers                  |
+| Component | Import | Use |
+|---|---|---|
+| [Button](Button.md) | `import { Button } from "@g4rcez/components/button"` | A versatile button component with multiple variants, sizes, and states. |
+| [Heading](Heading.md) | `import { Heading } from "@g4rcez/components"` | Semantic heading wrapper that renders h2 by default and accepts a polymorphic element type. |
+| [Polymorph](Polymorph.md) | `import { Polymorph } from "@g4rcez/components"` | A polymorphic component that renders as any HTML element while maintaining full TypeScript type safety. |
+| [RenderOnView](RenderOnView.md) | `import { RenderOnView } from "@g4rcez/components"` | A performance wrapper that defers rendering children until the container enters the viewport. |
+| [Resizable](Resizable.md) | `import { Resizable } from "@g4rcez/components"` | Motion wrapper that animates its height when content changes or when it opens and closes. |
+| [Slot](Slot.md) | `import { Slot, Slottable } from "@g4rcez/components"` | A composition primitive that merges its props into a single child element, enabling the asChild pattern. |
+| [Tag](Tag.md) | `import { Tag } from "@g4rcez/components/tag"` | A label/badge component for displaying metadata, status, or categorization information. |
+| [Typography](Typography.md) | `import { Paragraph, Description, Info, PageTitle, PageHeader } from "@g4rcez/components"` | A set of text and page-structure components for consistent typographic styling. |
 
-## Form
+### Form
 
-| Component    | Import                                                           | Description                                                    |
-| ------------ | ---------------------------------------------------------------- | -------------------------------------------------------------- |
-| Autocomplete | `import { Autocomplete } from "@g4rcez/components/autocomplete"` | Text input with dropdown suggestions                           |
-| Checkbox     | `import { Checkbox } from "@g4rcez/components/checkbox"`         | Checkbox with indeterminate support                            |
-| DatePicker   | `import { DatePicker } from "@g4rcez/components/date-picker"`    | Date input with calendar popover                               |
-| FileUpload   | `import { FileUpload } from "@g4rcez/components/file-upload"`    | Drag-and-drop file upload with preview                         |
-| Form         | `import { Form } from "@g4rcez/components/form"`                 | Prevents default submit behavior                               |
-| FormReset    | `import { FormReset } from "@g4rcez/components"`                 | Reset button wired to the nearest Form context                 |
-| Input        | `import { Input } from "@g4rcez/components/input"`               | Text input with mask, prefix/suffix, and error states          |
-| InputField   | `import { InputField } from "@g4rcez/components"`                | Input with label, helper text, and error message               |
-| MultiSelect  | `import { MultiSelect } from "@g4rcez/components"`               | Multi-value select with search and tag display                 |
-| Radiobox     | `import { Radiobox } from "@g4rcez/components/radiobox"`         | Native radio input; consumers provide group name and legend    |
-| Select       | `import { Select } from "@g4rcez/components/select"`             | Labeled native select; use Autocomplete for searchable choices |
-| Slider       | `import { Slider } from "@g4rcez/components"`                    | Range slider input                                             |
-| Switch       | `import { Switch } from "@g4rcez/components/switch"`             | Toggle switch for boolean values                               |
-| TaskList     | `import { TaskList } from "@g4rcez/components/task-list"`        | Checklist with completion tracking                             |
-| Textarea     | `import { Textarea } from "@g4rcez/components"`                  | Multi-line text input with auto-resize                         |
+| Component | Import | Use |
+|---|---|---|
+| [Autocomplete](Autocomplete.md) | `import { Autocomplete } from "@g4rcez/components/autocomplete"` | Searchable select with fuzzy matching, virtualized options, keyboard navigation, and dynamic option creation. |
+| [Checkbox](Checkbox.md) | `import { Checkbox } from "@g4rcez/components/checkbox"` | Styled checkbox with label support, task mode, error display, loading state, and size variants. |
+| [DatePicker](DatePicker.md) | `import { DatePicker } from "@g4rcez/components/date-picker"` | Locale-aware date input with a masked field and an optional calendar or range picker. |
+| [FileUpload](FileUpload.md) | `import { FileUpload } from "@g4rcez/components/file-upload"` | Drag-and-drop file upload area with file preview, modal viewer, and per-file deletion. |
+| [Form](Form.md) | `import { Form } from "@g4rcez/components/form"` | Thin wrapper around the HTML form element that calls preventDefault automatically before invoking onSubmit. |
+| [formReset](FormReset.md) | `import { formReset } from "@g4rcez/components"` | Utility function that resets all inputs and selects in a form to their default values and clears their initialization state. |
+| [Input](Input.md) | `import { Input } from "@g4rcez/components/input"` | Text input with optional masking for currencies, percentages, phone numbers, dates, and custom regex patterns. |
+| [InputField](InputField.md) | `import { InputField } from "@g4rcez/components"` | Low-level field wrapper that provides a label, tooltip, error message, feedback text, and left/right slots for any form control. |
+| [MultiSelect](MultiSelect.md) | `import { MultiSelect } from "@g4rcez/components"` | Dropdown that lets users select multiple options with fuzzy search and tag display. |
+| [Radiobox](Radiobox.md) | `import { Radiobox } from "@g4rcez/components/radiobox"` | Styled radio button for selecting one option from a mutually exclusive set. |
+| [Select](Select.md) | `import { Select } from "@g4rcez/components/select"` | Styled native select component with validation, loading state, and form integration. |
+| [Slider](Slider.md) | `import { Slider } from "@g4rcez/components"` | Range control for selecting one or more numeric values along a scale. |
+| [Switch](Switch.md) | `import { Switch } from "@g4rcez/components/switch"` | Toggle switch for switching between two mutually exclusive states such as On/Off. |
+| [TaskList](TaskList.md) | `import { TaskList } from "@g4rcez/components/task-list"` | Fieldset container with a reduced-motion-aware celebration when all child tasks are checked. |
+| [Textarea](Textarea.md) | `import { Textarea } from "@g4rcez/components"` | Auto-growing multi-line text input built on the InputField foundation. |
+| [DrawingEditor](drawing-editor.md) | `import { DrawingEditor, createDrawingScene } from "@g4rcez/components/drawing-editor"` | Controlled layered raster/vector drawing with bounded JSON scenes and flattened PNG export. |
+| [RichTextEditor](rich-text-editor.md) | `import { RichTextEditor } from "@g4rcez/components/rich-text-editor"` | Controlled GFM Markdown editing with a safe rich view and an exact source view. |
 
-## Floating
+### Display
 
-| Component      | Import                                                   | Description                                              |
-| -------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| CommandPalette | `import { CommandPalette } from "@g4rcez/components"`    | Spotlight-style command palette with keyboard navigation |
-| Dropdown       | `import { Dropdown } from "@g4rcez/components/dropdown"` | Named nonmodal dialog anchored to a built-in button      |
-| Expand         | `import { Expand } from "@g4rcez/components/expand"`     | Button-triggered floating dialog with managed focus      |
-| Menu           | `import { Menu } from "@g4rcez/components/menu"`         | Context menu or navigation menu                          |
-| Modal          | `import { Modal } from "@g4rcez/components/modal"`       | Dialog overlay with focus trap and scroll lock           |
-| Toolbar        | `import { Toolbar } from "@g4rcez/components"`           | Grouped action bar with button slots                     |
-| Tooltip        | `import { Tooltip } from "@g4rcez/components/tooltip"`   | Hover tooltip with floating positioning                  |
-| Wizard         | `import { Wizard } from "@g4rcez/components"`            | Multi-step guided flow overlay                           |
+| Component | Import | Use |
+|---|---|---|
+| [Alert](Alert.md) | `import { Alert } from "@g4rcez/components/alert"` | Collapsible, themed alert banner for displaying important messages and status updates. |
+| [AnimatedList](AnimatedList.md) | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components"` | Animated list that expands each item into a floating detail overlay on click. |
+| [Calendar](Calendar.md) | `import { Calendar } from "@g4rcez/components/calendar"` | Interactive month calendar with single-date, date-time, and range selection modes. |
+| [Card](Card.md) | `import { Card, StatsCard } from "@g4rcez/components/card"` | Polymorphic container for grouping related content with optional title header, loading state, and composable sub-components. |
+| [Empty](Empty.md) | `import { Empty } from "@g4rcez/components"` | Empty state placeholder displayed when a collection or data set contains no items. |
+| [List](List.md) | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components/list"` | Animated list that expands each item into a focused floating detail overlay when clicked. |
+| [Masonry](Masonry.md) | `import { Masonry, MasonryItem } from "@g4rcez/components/masonry"` | Measured masonry layout that preserves source order while placing items in columns of uneven height. |
+| [Notifications](Notifications.md) | `import { Notifications, useNotification } from "@g4rcez/components/notifications"` | Toast notification system with themes, stacking, swipe-to-dismiss, and programmatic control. |
+| [Progress](Progress.md) | `import { Progress } from "@g4rcez/components"` | Accessible determinate progress bar with an optional label overlay. |
+| [Shortcut](Shortcut.md) | `import { Shortcut } from "@g4rcez/components"` | Inline keyboard shortcut display with automatic OS-specific key symbol mapping. |
+| [Skeleton](Skeleton.md) | `import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components"` | Accessible animated loading placeholders for blocks, cells, and lists. |
+| [Spinner](Spinner.md) | `import { Spinner, Loading } from "@g4rcez/components"` | Accessible loading indicator for indeterminate work with a reduced-motion static state, plus an optional full-container wrapper. |
+| [Stats](Stats.md) | `import { Stats } from "@g4rcez/components/stats"` | Metric display card with a prominent icon, value, and optional footer for trend or contextual data. |
+| [Step](Step.md) | `import { Steps, Step } from "@g4rcez/components"` | Animated multi-step progress indicator with status tracking for checkout flows, onboarding, and wizards. |
+| [SwipeableList](SwipeableList.md) | `import { SwipeableList } from "@g4rcez/components/swipeable-list"` | Virtualized list with draggable rows and configurable actions revealed from the left or right. |
+| [Tabs](Tabs.md) | `import { Tabs, Tab } from "@g4rcez/components/tabs"` | Keyboard-accessible tab container for organizing content into switchable panels. |
+| [Timeline](Timeline.md) | `import { Timeline, TimelineItem } from "@g4rcez/components/timeline"` | Vertical chronological event list with icon markers, body content, and optional right-side metadata. |
+| [PdfViewer](pdf-viewer.md) | `import { PdfViewer } from "@g4rcez/components/pdf-viewer"` | Raster PDF page viewer with page navigation and zoom. The host app decodes the PDF. |
+| [VideoPlayer](video-player.md) | `import { VideoPlayer } from "@g4rcez/components/video-player"` | Responsive video playback with accessible browser-owned controls and caption tracks. |
 
-## Table
+### Floating
 
-| Component | Import                                             | Description                                                         |
-| --------- | -------------------------------------------------- | ------------------------------------------------------------------- |
-| Table     | `import { Table } from "@g4rcez/components/table"` | Feature-rich data table with sorting, filtering, and virtualization |
+| Component | Import | Use |
+|---|---|---|
+| [CommandPalette](CommandPalette.md) | `import { CommandPalette } from "@g4rcez/components"` | Searchable command palette with fuzzy search, keyboard shortcuts, and grouped commands. |
+| [Dropdown](Dropdown.md) | `import { Dropdown } from "@g4rcez/components/dropdown"` | Floating dropdown panel with an optional title, arrow pointer, and automatic collision-aware positioning. |
+| [Expand](Expand.md) | `import { Expand } from "@g4rcez/components/expand"` | A button that expands in-place into a floating container using shared-element layout animations. |
+| [Menu](Menu.md) | `import { Menu, MenuItem } from "@g4rcez/components/menu"` | Floating application-action menu with nested submenus, keyboard navigation, hover support, and typeahead. |
+| [Modal](Modal.md) | `import { Modal } from "@g4rcez/components/modal"` | Animated modal with dialog, drawer, and sheet variants; includes drag-to-resize and a programmatic confirm utility. |
+| [Toolbar](Toolbar.md) | `import { Toolbar } from "@g4rcez/components"` | Sticky floating toolbar for surfacing persistent actions at the bottom of a scrollable area. |
+| [Tooltip](Tooltip.md) | `import { Tooltip } from "@g4rcez/components/tooltip"` | Polymorphic tooltip for noninteractive descriptions, with hover/focus triggers, optional click mode, and cursor-following. |
+| [Wizard](Wizard.md) | `import { Wizard } from "@g4rcez/components"` | Guided tour overlay that highlights page elements step-by-step with animated SVG masking and floating tooltips. |
 
-## Calendar
+### Table
 
-| Component    | Import                                              | Description                                        |
-| ------------ | --------------------------------------------------- | -------------------------------------------------- |
-| PageCalendar | `import { PageCalendar } from "@g4rcez/components"` | Full-page calendar with month, week, and day views |
+| Component | Import | Use |
+|---|---|---|
+| [Table](Table.md) | `import { Table, createColumns, useTablePreferences, ColType } from "@g4rcez/components"` | Virtualized, sortable, filterable data table with column reordering, grouping, and pagination. |
 
-## Design Token Quick Reference
+### Calendar
 
-Use canonical `--var-*` properties in plain CSS, or use `configureTheme` for sparse root-level overrides. The default scope is `:root`; dark activation is `.dark` on `<html>`. See [Theme customization](theme-customization.md) for examples and precedence. See individual component docs for the full token list per component.
-
-## Setup
-
-```css
-/* Import in an application stylesheet. */
-@import "@g4rcez/components/index.css";
-```
+| Component | Import | Use |
+|---|---|---|
+| [PageCalendar](PageCalendar.md) | `import { PageCalendar } from "@g4rcez/components"` | Full-page calendar with month, week, and day views, event filtering, and custom event rendering. |

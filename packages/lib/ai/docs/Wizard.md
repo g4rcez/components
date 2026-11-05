@@ -9,7 +9,7 @@ category: floating
 
 # Wizard
 
-Guided tour overlay that highlights page elements step-by-step with animated SVG masking and floating tooltips.
+Guided tour overlay. It highlights page elements step by step with animated SVG masking and floating tooltips.
 
 ## Import
 
@@ -21,46 +21,46 @@ import { Wizard } from "@g4rcez/components";
 
 ### Wizard props
 
-| Prop       | Type                                                                   | Default | Description                                        |
-| ---------- | ---------------------------------------------------------------------- | ------- | -------------------------------------------------- |
-| `active`   | `boolean`                                                              | `false` | Controls whether the wizard is visible             |
-| `steps`    | `WizardStep[]`                                                         | —       | Ordered array of step configurations               |
-| `onClose`  | `() => void`                                                             | —       | Callback when the user skips or dismisses the tour |
-| `onFinish` | `() => void`                                                             | —       | Callback when the last step is completed           |
-| `onChange` | `(index: number) => void`                                              | —       | Callback fired when the step index changes         |
-| `labels`   | `{ next?: string; skip?: string; finish?: string; previous?: string }` | —       | Override button labels                             |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `active` | `boolean` | `false` | Shows the wizard. |
+| `steps` | `WizardStep[]` | — | Ordered step configurations. |
+| `onClose` | `() => void` | — | Called on skip or dismiss. |
+| `onFinish` | `() => void` | — | Called when the last step completes. |
+| `onChange` | `(index: number) => void` | — | Called when the step index changes. |
+| `labels` | `{ next?: string; skip?: string; finish?: string; previous?: string }` | — | Button labels. Missing values use `useTranslations`. |
 
 ### WizardStep
 
-| Prop          | Type                                                    | Default    | Description                                             |
-| ------------- | ------------------------------------------------------- | ---------- | ------------------------------------------------------- |
-| `element`     | `string \| Element \| React.RefObject<Element \| null>` | —          | Target element: CSS selector, DOM element, or React ref |
-| `title`       | `React.ReactNode`                                       | —          | Step title displayed in the tooltip                     |
-| `description` | `React.ReactNode`                                       | —          | Step body content                                       |
-| `side`        | `Placement`                                             | `"bottom"` | Tooltip placement relative to the target element        |
-| `onEnter`     | `() => void`                                              | —          | Called when this step becomes active                    |
-| `onNext`      | `() => void`                                              | —          | Called before advancing to the next step                |
-| `onPrevious`  | `() => void`                                              | —          | Called before going back to the previous step           |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `element` | `string \| Element \| React.RefObject<Element \| null>` | — | Target: CSS selector, DOM element, or React ref. |
+| `title` | `React.ReactNode` | — | Step title in the tooltip. |
+| `description` | `React.ReactNode` | — | Step body content. |
+| `side` | `Placement` | `"bottom"` | Tooltip placement. |
+| `onEnter` | `() => void` | — | Called when this step becomes active. |
+| `onNext` | `() => void` | — | Called before advancing to the next step. |
+| `onPrevious` | `() => void` | — | Called before going back one step. |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Geometry defaults are scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides win. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. The first table lists examples. `defaultGeometryTokens` holds the full set.
 
-| Override                               | Library default                         |
-| -------------------------------------- | --------------------------------------- |
-| `--var-wizard-focus-outline-width`     | `calc(var(--var-spacing-base) * 0.125)` |
-| `--var-wizard-focus-outline-offset`    | `calc(var(--var-spacing-base) * 0.125)` |
-| `--var-wizard-surface-inline-size`     | `calc(var(--var-spacing-base) * 20)`    |
+| Override | Library default |
+|---|---|
+| `--var-wizard-focus-outline-width` | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-wizard-focus-outline-offset` | `calc(var(--var-spacing-base) * 0.125)` |
+| `--var-wizard-surface-inline-size` | `calc(var(--var-spacing-base) * 20)` |
 | `--var-wizard-surface-max-inline-size` | `calc(var(--var-spacing-base) * 24)` |
 
-| Token | CSS Variable | Purpose                               |
-| ------------ | ------------------------------------- | -------------------------------------------------------------------- |
-| CSS override | `--var-wizard-overlay-background`     | SVG mask fill, including opacity                                     |
-| CSS override | `--var-wizard-surface-background`     | Step tooltip surface                                                 |
-| CSS override | `--var-wizard-surface-border`         | Tooltip border, arrow stroke, and footer divider                     |
-| `z-wizard`   | `--var-layer-wizard`                  | Layer base; the wizard root uses `calc(var(--var-layer-wizard) + 1)` |
-| CSS override | `--var-wizard-label-foreground`       | Step counter and skip button text                                    |
-| CSS override | `--var-wizard-label-foreground-hover` | Skip button hover text                                               |
+| Token | CSS Variable | Purpose |
+|---|---|---|
+| CSS override | `--var-wizard-overlay-background` | SVG mask fill, including opacity |
+| CSS override | `--var-wizard-surface-background` | Step tooltip surface |
+| CSS override | `--var-wizard-surface-border` | Tooltip border, arrow stroke, footer divider |
+| `z-wizard` | `--var-layer-wizard` | Layer base. Root uses `calc(var(--var-layer-wizard) + 1)`. |
+| CSS override | `--var-wizard-label-foreground` | Step counter and skip button text |
+| CSS override | `--var-wizard-label-foreground-hover` | Skip button hover text |
 
 ## Examples
 
@@ -151,37 +151,36 @@ const steps = [
 
 ## Do
 
-- Keep tours to 3–7 steps; fewer steps are completed more often.
-- Ensure target elements are visible in the viewport when each step activates — the wizard scrolls to them automatically.
-- Always provide `onClose` so users can exit at any time without completing the tour.
-- Use `onEnter` to trigger any side effects that make the target element visible (e.g., open a panel) before the step highlights it.
+- Keep tours to 3–7 steps. Fewer steps complete more often.
+- Make each target visible in the viewport when its step activates. The wizard scrolls to it.
+- Always provide `onClose`, so users can exit at any time.
+- Use `onEnter` to make the target visible (for example, open a panel) before the step highlights it.
 
 ## Don't
 
-- Don't use the wizard for critical information that isn't accessible elsewhere — some users will skip it.
-- Don't pass more than ~10 steps; tours that feel long are abandoned.
-- Don't block users from navigating if they skip the wizard.
-- Don't pass raw utility color classes in `title` or `description` content — use design-token classes.
-- Don't use arbitrary utility values (`z-[9999]`) — the wizard already uses `z-wizard`; override the CSS variable if needed.
+- Don't put critical information only in the wizard. Users skip it.
+- Don't pass more than ~10 steps. Users abandon long tours.
+- Don't block navigation when the user skips the wizard.
+- Don't pass raw utility color classes in `title` or `description`. Use design-token classes.
+- Don't use arbitrary utility values (`z-[9999]`). The wizard uses `z-wizard`. Override the CSS variable.
 
 ## Accessibility
 
-- The wizard renders in a `FloatingPortal` above all other content.
-- The SVG mask highlights the target element using `pointer-events-auto` so users can interact with it during the tour.
-- Navigation buttons use the `Button` component and are keyboard accessible.
-- Step progress is shown as `{current} / {total}` in the tooltip corner.
-- The `FloatingArrow` provides a visual pointer connecting the tooltip to the target element.
+- The wizard renders in a `FloatingPortal` above other content.
+- The overlay is `pointer-events-none`. Only the SVG mask rect is `pointer-events-auto`, so users can click the highlighted element during the tour.
+- Navigation buttons use `Button` and support the keyboard.
+- Step progress shows as `{current} / {total}` in the tooltip corner.
+- The `FloatingArrow` points from the tooltip to the target.
 
 ## Data Attributes
 
-| Attribute                 | Applied to            | Description                        |
-| ------------------------- | --------------------- | ---------------------------------- |
-| `data-component="wizard"` | Main wizard container | Identifies the wizard overlay root |
+| Attribute | Applied to | Description |
+|---|---|---|
+| `data-component="wizard"` | Main wizard container | Wizard overlay root |
 
 ## Notes
 
-- The SVG mask uses a `<motion.rect>` that animates to the target element's bounding rect with a spring transition. The tooltip appears only after the animation completes (`onAnimationComplete`).
-- The overlay is `pointer-events-none` except for the mask rect, which is `pointer-events-auto` — this allows clicking the highlighted element while the tour is active.
-- When `element` resolves to `null` (selector not found or ref is empty), the tooltip centers on the screen and a console warning is emitted.
-- `useResizeObserver` and scroll/resize event listeners keep the highlight rect in sync as the layout changes.
-- The `labels` prop values fall back to the global translations provided by `useTranslations`.
+- The SVG mask is a `<motion.rect>` that animates to the target bounding rect with a spring transition.
+- The tooltip appears only after the animation completes (`onAnimationComplete`).
+- When `element` resolves to `null` (selector not found or ref empty), the tooltip centers on screen and the console warns.
+- `useResizeObserver` and scroll and resize listeners keep the highlight rect in sync.

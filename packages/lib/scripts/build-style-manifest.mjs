@@ -13,26 +13,19 @@ for (const output of outputs) {
     writeFileSync(output, json);
 }
 
+// Compact on purpose: agents read this file in full. Selector names follow a fixed pattern, stated once in the header:
+// base `__<name>`, variant `__<name>--<variant>-<value>`, slot `__<name>__<slot>`.
 const rows = Object.entries(componentStyleManifest)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([name, entry]) => {
-        const dependencies = entry.dependencies.length ? entry.dependencies.map((dependency) => `\`${dependency}.css\``).join(", ") : "none";
+        const dependencies = entry.dependencies.length ? entry.dependencies.map((dependency) => `${dependency}.css`).join(", ") : "-";
         const variants = Object.entries(entry.classes.variants)
-            .map(
-                ([variant, values]) =>
-                    `\`${variant}\`: ${Object.keys(values)
-                        .map((value) => `\`${value}\``)
-                        .join(", ")}`
-            )
+            .map(([variant, values]) => `${variant}=${Object.keys(values).join("/")}`)
             .join("; ");
-        const slots = Object.keys(entry.classes.slots).length
-            ? Object.values(entry.classes.slots)
-                  .map((slot) => `\`${slot}\``)
-                  .join(", ")
-            : "none";
-        return `| \`${name}\` | \`${entry.css}\` | ${dependencies} | \`${entry.classes.base}\` | ${variants || "none"} | ${slots} |`;
+        const slots = Object.keys(entry.classes.slots).join(", ");
+        return `| ${name} | ${entry.css.replace("@g4rcez/components/", "")} | ${dependencies} | ${variants || "-"} | ${slots || "-"} |`;
     })
     .join("\n");
 
-const markdown = `# @g4rcez/components style dependencies\n\nGenerated from the component style manifest. Do not edit by hand.\n\nImport \`@g4rcez/components/foundation.css\` before component CSS files. Component dependencies are already resolved in the manifest and should be imported before the component that depends on them.\n\n| Component | CSS import | Dependencies | Base class | Variants | Slots |\n|---|---|---|---|---|---|\n${rows}\n`;
+const markdown = `# @g4rcez/components style dependencies\n\nGenerated from the component style manifest. Do not edit by hand.\n\nImport order: \`@g4rcez/components/foundation.css\`, then each file in Needs, then the component CSS. Prefix every file with \`@g4rcez/components/\`.\n\nSelectors: base \`__<component>\`, variant \`__<component>--<variant>-<value>\`, slot \`__<component>__<slot>\`. A \`-\` cell means none.\n\n| Component | CSS | Needs | Variants (name=values) | Slots |\n|---|---|---|---|---|\n${rows}\n`;
 writeFileSync(resolve(root, "ai/docs/style-dependencies.md"), markdown);

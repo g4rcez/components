@@ -25,11 +25,13 @@ import "@g4rcez/components/resizable.css";
 import "@g4rcez/components/rich-text-editor.css";
 ```
 
-Component style dependencies: `button`, `input`, `textarea`, `select`, `alert`, `resizable`. Textarea shares input.css; Resizable is included explicitly for Alert's Collapse composition. Load collapse.css alongside the existing Alert integration. The style manifest resolves the registered dependency closure. Use the existing ComponentsProvider setup.
-
-Runtime dependencies are Tiptap v3 (`core`, `pm`, `react`, `starter-kit`, `markdown`, `extension-image`, `extension-list`, `extension-table`), DOMPurify and marked. The editor does not execute, inject, or preview source HTML.
-
-The public stylesheet also owns the editor's required whitespace, separator, gap-cursor and selection styles. Tiptap runtime CSS injection is disabled, so hosts can keep `style-src 'self'` without allowing an inline `<style>` or adding an editor-specific nonce/hash. The gap cursor is static rather than an authored blinking animation.
+- Style dependencies: `button`, `input`, `textarea`, `select`, `alert`, `resizable`. The style manifest resolves the dependency closure.
+- Textarea shares input.css. Resizable serves Alert's Collapse composition, so load collapse.css with the Alert integration.
+- Use the existing ComponentsProvider setup.
+- Runtime dependencies: Tiptap v3 (`core`, `pm`, `react`, `starter-kit`, `markdown`, `extension-image`, `extension-list`, `extension-table`), DOMPurify, marked.
+- The editor never executes, injects, or previews source HTML.
+- The public stylesheet owns whitespace, separator, gap-cursor and selection styles. Tiptap runtime CSS injection is off, so hosts keep `style-src 'self'` with no inline `<style>`, nonce or hash.
+- The gap cursor is static, not blinking.
 
 ## Controlled example
 
@@ -50,42 +52,64 @@ const [selection, setSelection] = useState<RichTextSelection | null>(null);
 
 | Prop | Type | Default | Behavior |
 | --- | --- | --- | --- |
-| `label` | `string` | required | Visible title and accessible rich textbox name; source has an additional Markdown source label. |
+| `label` | `string` | required | Visible title and rich textbox name. Source view adds a Markdown source label. |
 | `value` | `string` | required | Authoritative Markdown source, never HTML. |
-| `onChange` | `(markdown: string) => void` | required | Emitted for accepted user edits only. The parent must synchronously update its controlled state. |
-| `disabled` | `boolean` | `false` | Disables editing, formatting and view controls; rich textbox is removed from sequential focus. Pass explicitly when disabling an ancestor fieldset: contenteditable does not inherit native fieldset disabling. |
-| `readOnly` | `boolean` | `false` | Formatting and editing are disabled, selection and view switching remain available. |
-| `defaultMode` | `'rich' \| 'source'` | `'rich'` | Initial requested view; unsupported rich input opens exact source instead. |
-| `maxLength` | `number` | — | Source character bound for native source editing and accepted rich transactions. Not a UTF-8 byte limit; enforce application storage limits separately. |
-| `name` | `string` | — | Includes the controlled source in a hidden form field; omitted when disabled. |
-| `onSelectionChange` | `(selection: RichTextSelection \| null) => void` | — | Selection text, mode, range and exact `value` snapshot. Cleared by edits/view changes/external replacements. |
-| `id`, `className`, native div attributes | — | — | Root attributes; forwarded ref points to root div. |
+| `onChange` | `(markdown: string) => void` | required | Emitted for accepted user edits only. Parent MUST update state synchronously. |
+| `disabled` | `boolean` | `false` | Disables editing, formatting and view controls. Rich textbox leaves sequential focus. |
+| `readOnly` | `boolean` | `false` | Disables formatting and editing. Selection and view switching stay on. |
+| `defaultMode` | `'rich' \| 'source'` | `'rich'` | Initial view. Unsupported rich input opens exact source. |
+| `maxLength` | `number` | — | Source character bound for source edits and accepted rich transactions. Not a UTF-8 byte limit. |
+| `name` | `string` | — | Adds the controlled source to a hidden form field. Omitted when disabled. |
+| `onSelectionChange` | `(selection: RichTextSelection \| null) => void` | — | Reports selection text, mode, range and exact `value` snapshot. Edits, view changes, external replacements clear it. |
+| `id`, `className`, native div attributes | — | — | Root attributes. Forwarded ref points to the root div. |
 
-`RichTextSelection` has `{ mode, text, from, to, value }`. Source `from`/`to` are UTF-16 Markdown offsets. Rich positions are **ProseMirror document positions**, not source offsets. Never slice Markdown with a rich range. Selection is context, not permission or a patch-application API. Revalidate the exact snapshot and document/revision ownership before using it for AI or writes.
+- Pass `disabled` explicitly when you disable an ancestor fieldset. Contenteditable ignores native fieldset disabling.
+- Enforce storage limits separately from `maxLength`.
+- `RichTextSelection` is `{ mode, text, from, to, value }`. Source `from`/`to` are UTF-16 Markdown offsets.
+- Rich positions are **ProseMirror document positions**, not source offsets. Never slice Markdown with a rich range.
+- Selection is context, not permission or a patch API. Before AI use or writes, revalidate the exact snapshot and the document/revision ownership.
 
 ## Formatting and keyboard behavior
 
-- Heading levels 1–6, paragraphs, bold, italic, strike, bullet/numbered lists, nested checklists, blockquotes, inline code and fenced code blocks.
-- Insert/edit links; unlink; insert URL images with required alternative text. Existing Markdown image alt text is preserved even when empty.
-- GFM tables with a header row; add/delete rows and columns, delete table, navigate cells with Tab/Shift+Tab. Cell merging, arbitrary HTML layout, multiple paragraphs in a cell and non-Markdown attributes are not supported.
-- Undo/redo buttons and standard Tiptap shortcuts: Mod+B, Mod+I, Mod+Z, Mod+Shift+Z (platform-specific redo variants are owned by Tiptap). Source uses the browser's text editing/undo behavior. Histories are not one cross-mode global history: unchanged view switches retain rich history; source changes and external controlled replacements establish a fresh rich history so Undo cannot resurrect another revision.
-- Formatting actions are an ordinary labelled button group, not an ARIA toolbar requiring arrow navigation. Tab reaches each action. Buttons expose pressed state for active marks/lists/quotes/code. Formatting and table actions restore editor focus synchronously, so immediate typing after a mouse or keyboard activation cannot be lost while waiting for an animation frame. Escape closes URL entry and returns to the editor; Cancel does the same. View changes focus the destination editor.
-- Task checkboxes announce their task text. Read-only does not supply Tiptap's read-only toggle callback, so tasks cannot change. No custom editor animation is authored.
+- Supported: heading levels 1–6, paragraphs, bold, italic, strike, bullet/numbered lists, nested checklists, blockquotes, inline code, fenced code blocks.
+- Links: insert, edit, unlink. Images: insert by URL with required alternative text. Existing Markdown image alt text stays, even when empty.
+- GFM tables need a header row. Add/delete rows and columns, delete table, move between cells with Tab/Shift+Tab.
+- Tables do not support cell merging, arbitrary HTML layout, multiple paragraphs in a cell, or non-Markdown attributes.
+- Undo/redo buttons and Tiptap shortcuts: Mod+B, Mod+I, Mod+Z, Mod+Shift+Z. Tiptap owns platform-specific redo variants. Source view uses browser undo.
+- There is no global history across modes. An unchanged view switch keeps rich history. Source changes and external controlled replacements start fresh rich history, so Undo cannot restore another revision.
+- Formatting actions are a labelled button group, not an ARIA toolbar. Tab reaches each action. Buttons expose pressed state for active marks, lists, quotes and code.
+- Formatting and table actions restore editor focus synchronously, so typing right after activation is not lost.
+- Escape or Cancel closes URL entry and returns to the editor. A view change focuses the destination editor.
+- Task checkboxes announce their task text. Read-only mode omits Tiptap's read-only toggle callback, so tasks cannot change.
+- The editor authors no custom animation.
 
 ## Source fidelity and failure behavior
 
-Mounting, switching views and accepting a controlled echo never call `onChange`. The original source—including CRLF, delimiters, reference syntax and trailing blanks—stays byte-for-byte in `value` until a real edit. A rich edit serializes canonical GFM and may normalize delimiter style, whitespace, line endings and reference-link spelling. The help text discloses this before editing.
-
-Before loading rich content, a separate marked token comparison checks parse/serialize semantic equivalence. Raw HTML, unsafe URLs, parser failures and unsupported structures keep the source intact and show an Alert. There is **no** “best effort” conversion silently dropping content and no automatic destructive conversion action. Continue in source view for unsupported dialects or malformed input. The conservative gate may reject valid but unsupported Markdown; it is not a Markdown validator.
-
-Each rich document transaction is checked for safe URLs and structural round-trip equivalence through the installed Markdown serializer/schema. Changes that would lose meaningful blocks, table structure or formatting are refused with recoverable feedback. Bold/italic/strike run-edge spaces are compared outside their delimiters, matching the serializer; paragraph/heading-edge editing spaces remain in serialized source even though Markdown parsing omits them. Internal text spaces, code/link-marked whitespace and meaningful marks remain distinct. Empty paragraphs are editing space, not meaningful Markdown content. Source editing remains available. Rich mode is client initialized; server rendering shows its loading state rather than trying to instantiate a browser editor.
+- Mounting, switching views and accepting a controlled echo never call `onChange`.
+- `value` keeps the original source byte-for-byte until a real edit, including CRLF, delimiters, reference syntax and trailing blanks.
+- A rich edit serializes canonical GFM. It can normalize delimiter style, whitespace, line endings and reference-link spelling. The help text states this before editing.
+- Before loading rich content, a separate marked token comparison checks parse/serialize semantic equivalence.
+- Raw HTML, unsafe URLs, parser failures and unsupported structures keep the source intact and show an Alert.
+- There is **no** "best effort" conversion that silently drops content, and no automatic destructive conversion. Continue in source view for unsupported dialects or malformed input.
+- The conservative gate can reject valid but unsupported Markdown. It is not a Markdown validator.
+- Each rich transaction is checked for safe URLs and structural round-trip equivalence through the installed Markdown serializer/schema. The editor refuses changes that lose meaningful blocks, table structure or formatting, with recoverable feedback.
+- Bold/italic/strike run-edge spaces are compared outside their delimiters, as the serializer does.
+- Paragraph/heading-edge editing spaces stay in serialized source, although Markdown parsing omits them.
+- Internal text spaces, code/link-marked whitespace and meaningful marks stay distinct. Empty paragraphs are editing space, not Markdown content.
+- Rich mode initializes on the client. Server rendering shows the loading state.
 
 ## Trust and privacy boundaries
 
-- Markdown is never passed to `dangerouslySetInnerHTML`. It is parsed to a constrained ProseMirror schema; React node views render image placeholders as escaped text.
-- Clipboard HTML is sanitized by DOMPurify with an explicit element/attribute allowlist, then parsed through the editor schema. Scripts, handlers, inline styles, embeds, data/blob/file URLs, URL credentials and unsupported attributes are removed. Plain text paste stays text, not HTML. Pasted/dropped files are refused with an explanation; there is no hidden uploader.
-- Allowed links are absolute `http:`, `https:` and `mailto:`. Images allow absolute `http:`/`https:` only. Relative URLs, protocol-relative URLs, data images, executable schemes and credential-bearing URLs are rejected. Source can retain these strings but cannot enter rich view while they are present.
-- Remote image references **do not load automatically**, including during schema-renderer fallback while React node views attach, mode changes or read-only initial content. HTML/clipboard serialization retains the URL in an inert `data-rich-text-src` attribute rather than a fetching `src`; the paste boundary validates and preserves this representation. Other editors may not recognize that clipboard image representation. A per-image Load image action opts into a request with `referrerPolicy="no-referrer"`; the remote host still receives network information such as IP address and may return redirects. The component is not a network proxy or host/DNS safety service. Safe preview consumers may choose not to load images at all.
+- Markdown never reaches `dangerouslySetInnerHTML`. It parses to a constrained ProseMirror schema. React node views render image placeholders as escaped text.
+- DOMPurify sanitizes clipboard HTML with an explicit element/attribute allowlist. The editor schema then parses it.
+- Sanitizing removes scripts, handlers, inline styles, embeds, data/blob/file URLs, URL credentials and unsupported attributes.
+- Plain text paste stays text. Pasted or dropped files are refused with an explanation. There is no hidden uploader.
+- Allowed links: absolute `http:`, `https:`, `mailto:`. Allowed images: absolute `http:`/`https:` only.
+- Rejected: relative URLs, protocol-relative URLs, data images, executable schemes, credential-bearing URLs. Source can keep them but cannot enter rich view while they are present.
+- Remote image references **do not load automatically**, including during schema-renderer fallback while React node views attach, mode changes, and read-only initial content.
+- HTML/clipboard serialization keeps the URL in an inert `data-rich-text-src` attribute, not a fetching `src`. The paste boundary validates and preserves it. Other editors may not recognize this clipboard image form.
+- A per-image Load image action opts into a request with `referrerPolicy="no-referrer"`. The remote host still receives network information such as the IP address and can return redirects.
+- The component is not a network proxy or host/DNS safety service. A safe preview consumer can skip image loading.
 - Sanitization governs the editor DOM, not exported source opened in another application. Validate persistent content, authorization, byte limits, revision staleness and any downstream HTML/export renderer at their own boundaries.
 
 ## Tokens and selectors
@@ -100,4 +124,8 @@ The component uses canonical foundation colors (`--var-color-background`, `foreg
 | `--var-rich-text-editor-radius` | `calc(var(--var-radius-base) / 2)` |
 | `--var-rich-text-editor-font-size` | `1rem` |
 
-Root: `.__rich-text-editor` / `[data-component="rich-text-editor"]`. Slots: `label`, `modes`, `toolbar`, `content`, `source`, `fields`, `help`, `image`, `image-content` under `.__rich-text-editor__*`. The library owns editor prose, tables, checkbox presentation, selected cells and image placeholders. Consumers should use tokens rather than private Tiptap internals. The layout wraps actions and constrains content; code/table content can scroll horizontally. Forced-colors focus uses Highlight.
+- Root: `.__rich-text-editor` / `[data-component="rich-text-editor"]`.
+- Slots under `.__rich-text-editor__*`: `label`, `modes`, `toolbar`, `content`, `source`, `fields`, `help`, `image`, `image-content`.
+- The library owns editor prose, tables, checkbox presentation, selected cells and image placeholders. Use tokens, not private Tiptap internals.
+- The layout wraps actions and constrains content. Code and table content scroll horizontally.
+- Forced-colors focus uses Highlight.

@@ -1,6 +1,8 @@
 ---
 name: design-system-guidelines
 description: ALWAYS use this skill when creating new components, modifying existing components, adding styling, working with design tokens, or doing anything related to this component library. Use this before writing any component code.
+metadata:
+  internal: true
 ---
 
 # Design System Guidelines

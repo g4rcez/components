@@ -19,70 +19,70 @@ import { Input } from "@g4rcez/components/input";
 
 ## Props
 
-`Input` extends all standard HTML `<input>` attributes plus `InputField` layout props:
+`Input` extends HTML `<input>` attributes and the `InputField` layout props.
 
-| Prop             | Type                                                                   | Default    | Description                                                                      |
-| ---------------- | ---------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------- |
-| `mask`           | `AllMasks \| Array<string \| RegExp> \| ((value: string) => AllMasks)` | -          | Input mask pattern                                                               |
-| `size`           | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"`         | `"normal"` | Field size; button-compatible names use the same control heights                 |
-| `locale`         | `Locales`                                                              | -          | Locale for currency/number formatting                                            |
-| `currency`       | `CurrencyCode`                                                         | -          | Currency code when using `mask="currency"`                                       |
-| `error`          | `string`                                                               | -          | Error message shown below the field                                              |
-| `title`          | `string`                                                               | -          | Field label                                                                      |
-| `feedback`       | `Label`                                                                | -          | Success or neutral feedback text below the field                                 |
-| `left`           | `Label`                                                                | -          | Content rendered on the left inside the field border                             |
-| `right`          | `Label`                                                                | -          | Content rendered on the right inside the field border                            |
-| `required`       | `boolean`                                                              | `false`    | Native required constraint; hides explicitly supplied optional label text        |
-| `disabled`       | `boolean`                                                              | `false`    | Disabled state                                                                   |
-| `loading`        | `boolean`                                                              | `false`    | Sets `aria-busy`; does not disable editing or submission                         |
-| `container`      | `string`                                                               | -          | Extra CSS classes for the outer `fieldset`                                       |
-| `labelClassName` | `string`                                                               | -          | Extra CSS classes for the label/border wrapper                                   |
-| `next`           | `string`                                                               | -          | `id` of the next field to focus when Enter is pressed with `enterKeyHint="next"` |
-| `hiddenLabel`    | `boolean`                                                              | `false`    | Visually hides the label but keeps it for screen readers                         |
-| `...props`       | `React.InputHTMLAttributes<HTMLInputElement>`                          | -          | All standard input attributes                                                    |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `mask` | `AllMasks \| Array<string \| RegExp> \| ((value: string) => AllMasks)` | - | Input mask pattern. |
+| `size` | `"big" \| "default" \| "min" \| "normal" \| "small" \| "tiny"` | `"normal"` | Field size. Matches `Button` heights. |
+| `locale` | `Locales` | - | Locale for currency and number formatting. |
+| `currency` | `CurrencyCode` | - | Currency code for `mask="currency"`. |
+| `error` | `string` | - | Error message below the field. |
+| `title` | `string` | - | Field label. |
+| `feedback` | `Label` | - | Success or neutral text below field. |
+| `left` | `Label` | - | Content left of the input, inside the border. |
+| `right` | `Label` | - | Content right of the input, inside the border. |
+| `required` | `boolean` | `false` | Native required constraint. Hides supplied optional label text. |
+| `disabled` | `boolean` | `false` | Disabled state. |
+| `loading` | `boolean` | `false` | Sets `aria-busy`. Does not disable editing or submission. |
+| `container` | `string` | - | Extra CSS classes for the outer `fieldset`. |
+| `labelClassName` | `string` | - | Extra CSS classes for the label wrapper. |
+| `next` | `string` | - | `id` to focus on Enter with `enterKeyHint="next"`. |
+| `hiddenLabel` | `boolean` | `false` | Hides the label visually, not from screen readers. |
+| `...props` | `React.InputHTMLAttributes<HTMLInputElement>` | - | All standard input attributes. |
 
 ### Mask patterns
 
-| Pattern char | Matches           |
-| ------------ | ----------------- |
-| `9`          | Digit (0–9)       |
-| `A`          | Letter (a–z, A–Z) |
-| `S`          | Alphanumeric      |
-| `*`          | Any character     |
+| Pattern char | Matches |
+|---|---|
+| `9` | Digit (0–9) |
+| `A` | Letter (a–z, A–Z) |
+| `S` | Alphanumeric |
+| `*` | Any character |
 
 ### Special mask strings
 
-| Value          | Description                                            |
-| -------------- | ------------------------------------------------------ |
-| `"currency"`   | Currency formatting (requires `locale` and `currency`) |
-| `"percentage"` | Percentage input with `%` symbol                       |
-| `"decimal"`    | Decimal number formatting                              |
+| Value | Description |
+|---|---|
+| `"currency"` | Currency format. Requires `locale` and `currency`. |
+| `"percentage"` | Percentage input with `%` symbol. |
+| `"decimal"` | Decimal number format. |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Geometry defaults are scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides win. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. The first table lists examples. `defaultGeometryTokens` holds the full set.
 
-| Override                                         | Library default                          |
-| ------------------------------------------------ | ---------------------------------------- |
-| `--var-input-field-icon-size`                    | `calc(var(--var-spacing-base) * 1)`      |
-| `--var-input-field-small-icon-size`              | `calc(var(--var-spacing-base) * 0.875)`  |
-| `--var-input-field-small-tooltip-icon-size`      | `calc(var(--var-spacing-base) * 0.6875)` |
+| Override | Library default |
+|---|---|
+| `--var-input-field-icon-size` | `calc(var(--var-spacing-base) * 1)` |
+| `--var-input-field-small-icon-size` | `calc(var(--var-spacing-base) * 0.875)` |
+| `--var-input-field-small-tooltip-icon-size` | `calc(var(--var-spacing-base) * 0.6875)` |
 | `--var-input-field-small-status-min-inline-size` | `calc( var(--var-spacing-base) * 1.25 )` |
 
-| Token | CSS Variable                    | Purpose                                        |
-| ------------------------------- | ---------------------------------------------- | ----------------------------------------- |
-| `h-input-height`                | `--var-free-text-control-height`               | Default input height                      |
-| `px-input-padding-x`            | `--var-free-text-surface-padding-inline`       | Horizontal padding                        |
-| `py-input-padding-y`            | `--var-free-text-surface-padding-block`        | Vertical padding                          |
-| `mt-input-gap`                  | `--var-input-field-hint-margin-block-start`    | Gap before error/feedback text            |
-| `border-input-border`           | `--var-color-border`                           | Default border color                      |
-| `text-input-label-text`         | `--var-input-field-label-font-size`            | Label font size, not color                |
-| `text-foreground`               | `--var-color-foreground`                       | Input text color                          |
-| `text-primary`                  | `--var-color-primary`                          | Hover/focus border and label accent       |
-| `text-danger`                   | `--var-color-danger`                           | Error state border, text, and label color |
-| `text-disabled`                 | `--var-color-disabled`                         | Disabled text and border color            |
-| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground`       | Placeholder text color                    |
-| `placeholder-input-mask-error`  | `--var-free-text-error-placeholder-foreground` | Error placeholder color                   |
+| Token | CSS Variable | Purpose |
+|---|---|---|
+| `h-input-height` | `--var-free-text-control-height` | Input height |
+| `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
+| `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
+| `mt-input-gap` | `--var-input-field-hint-margin-block-start` | Gap before error and feedback |
+| `border-input-border` | `--var-color-border` | Border color |
+| `text-input-label-text` | `--var-input-field-label-font-size` | Label font size, not color |
+| `text-foreground` | `--var-color-foreground` | Input text color |
+| `text-primary` | `--var-color-primary` | Hover and focus accent |
+| `text-danger` | `--var-color-danger` | Error color |
+| `text-disabled` | `--var-color-disabled` | Disabled color |
+| `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder |
+| `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder |
 
 ## Examples
 
@@ -121,7 +121,7 @@ const docMask = (value: string) => (value.replace(/\D/g, "").length <= 11 ? "999
 </div>
 ```
 
-`big`, `default`, `min`, `small`, and `tiny` use the same control heights as the matching `Button` sizes. `normal` remains the default input size and has the same height as `default`.
+`big`, `default`, `min`, `small`, and `tiny` match the control heights of the `Button` sizes with the same name. `normal` is the default and matches `default`.
 
 ### Input with inline left/right slots
 
@@ -169,7 +169,7 @@ function EmailField() {
 }
 ```
 
-The hint remains visible when an error hides `feedback`. Browser format validation does not confirm that the address exists.
+An error hides `feedback`. The hint stays visible. Browser format validation does not confirm that the address exists.
 
 ### Password visibility composed with Button
 
@@ -197,7 +197,7 @@ function PasswordField() {
 }
 ```
 
-This is a consumer composition, not a built-in password toggle. The changing action name does not use `aria-pressed`. Verify value preservation, button focus, touch targeting, and password-manager behavior in the consuming form.
+This is a consumer composition, not a built-in toggle. The changing action name does not use `aria-pressed`. Verify value, button focus, touch targeting, and password-manager behavior in the consuming form.
 
 ### Enter-to-advance between fields
 
@@ -240,69 +240,71 @@ function SignUpForm() {
 
 ## Interaction design and acceptance criteria
 
-Choose the native input type that matches the data and browser behavior. `Input` uses native input types; it does not provide separate exported components for text, email, search, or password fields.
+`Input` uses native input types. It has no separate exported components for text, email, search, or password.
 
-| Native type | Use and consumer responsibilities |
-| --- | --- |
-| `text` (default) | Use for single-line free text. Keep a visible label and explain length limits. Use `Textarea` when users need line breaks. |
-| `email` | Set `autoComplete="email"` for contact addresses or the appropriate account identifier for sign-in. Native format checks do not prove delivery or ownership. Use `multiple` only when users need to enter more than one address, and explain the format. |
-| `search` | Label what is searched. Choose submission or live filtering, and provide clear result, empty, and pending feedback without moving focus unexpectedly. |
-| `password` | Set the appropriate autocomplete value (`current-password` or `new-password`). A reveal action is consumer-owned; use a non-submit `Button` with an updated action name, preserve the value and focus, and allow paste and autofill. Never log or announce the secret. |
+| Native type | Consumer responsibilities |
+|---|---|
+| `text` (default) | Keep a visible label. State length limits. Use `Textarea` for line breaks. |
+| `email` | Set `autoComplete="email"` for contact addresses. Use the account identifier value for sign-in. Native checks do not prove delivery or ownership. Use `multiple` only for more than one address, and explain the format. |
+| `search` | Label what is searched. Choose submission or live filtering. Show result, empty, and pending feedback. Do not move focus unexpectedly. |
+| `password` | Set `autoComplete` to `current-password` or `new-password`. Own the reveal action: use a non-submit `Button` with an updated action name, keep value and focus, allow paste and autofill. Never log or announce the secret. |
 
 ### Current behavior and integration limits
 
-- `title` labels the control using `id`, then `name`, then a generated ID. Use an explicit unique `id` for external hints and focus destinations. Native `required`, `disabled`, and `readOnly` are forwarded; only explicitly supplied `optionalText` is displayed. Placeholder text is supplementary, not a label.
-- Pointer/touch activation of the associated label should focus the field. Native editing, `Tab`, and `Shift+Tab` remain available. `Enter` follows the form's submission behavior, except when `enterKeyHint="next"` and `next` resolve to a focusable target. Explain that override rather than intercepting ordinary editing keys.
-- CSS highlights the containing border on focus; it does not supply the previously documented primary focus ring. Verify contrast, distinguishability of read-only/disabled states, target sizes, zoom, and visibility above the virtual keyboard in the actual theme and layout.
-- A populated `error` sets `aria-invalid` and adds its message ID to `aria-describedby`; caller hint IDs are retained. Native invalidity is exposed after focus/blur, but does not generate explanatory error text. A custom `error` does not call `setCustomValidity` or prevent submission: the form handler must enforce its rules.
-- `InputField` renders error text with `role="alert"` and hides feedback during errors. Keep essential hints outside `feedback` and link them with `aria-describedby`; do not add duplicate live announcements. There is no built-in search-result region, reusable clear/reveal control, error-summary component, or automatic application-level focus recovery. `loading` marks busy state without disabling the control.
+- `title` labels the control. The label target is `id`, then `name`, then a generated ID.
+- Set an explicit unique `id` for external hints and focus destinations.
+- Native `required`, `disabled`, and `readOnly` are forwarded.
+- Only explicitly supplied `optionalText` is displayed.
+- Placeholder text is supplementary, not a label.
+- Label activation by pointer or touch focuses the field. Native editing, `Tab`, and `Shift+Tab` stay available.
+- `Enter` follows the form submission behavior. Exception: when `enterKeyHint="next"` and `next` resolve to a focusable target, `Enter` focuses that target. Explain this override. Do not intercept ordinary editing keys.
+- On focus, CSS changes the containing border to the primary color. There is no primary focus ring.
+- Verify contrast, read-only and disabled states, target sizes, zoom, and visibility above the virtual keyboard in the actual theme and layout.
+- A populated `error` sets `aria-invalid` and adds its message ID to `aria-describedby`. Caller IDs stay in `aria-describedby`.
+- An explicit caller `aria-invalid` stays when neither state applies.
+- Native invalidity is exposed after interaction, while blurred. It generates no error text.
+- A custom `error` does not call `setCustomValidity` and does not block submission. The form handler MUST enforce its rules.
+- `InputField` renders error text with `role="alert"` and hides feedback during errors.
+- Keep essential hints outside `feedback`. Link them with `aria-describedby`. Do not add duplicate live announcements.
+- `Input` has no built-in search-result region, clear or reveal control, error-summary component, or application-level focus recovery.
 
-## Acceptance criteria
-
-These are integration targets to verify, not recorded test results or accessibility certification.
-
-1. **Given** a visible title and unique control ID, **when** the label is activated or the field receives keyboard focus, **then** the correct field has visible focus and native editing, paste, and Tab navigation work without a focus trap.
-2. **Given** an email field with stated requirements, **when** invalid input is validated, **then** a specific correction message appears without clearing the address; correcting and revalidating removes it without claiming the address exists.
-3. **Given** a search field, **when** a query is submitted or filtering settles, **then** result, empty, and pending feedback are available without unexpected focus movement.
-4. **Given** a masked password and a consumer-provided visibility button, **when** the button is activated by pointer or keyboard, **then** its name and input type change while the value and button focus remain, no form submission occurs, and the password is not announced.
-5. **Given** a persistent hint and a detected error, **when** the field is inspected with assistive technology, **then** its name, type, required/invalid state, hint, and correction text are available; verify announcement timing in the consuming application.
 ## Do
 
-- Use `mask` patterns that match user expectations for the data type.
-- Provide a `placeholder` that shows the expected format (e.g., `"(00) 00000-0000"`).
-- Use the `error` prop to surface validation messages from your form library or manual validation.
-- Use the `next` prop with `enterKeyHint="next"` to create smooth keyboard flows on mobile.
-- Use design-token classes for wrapper elements (`bg-background`, `text-foreground`, `border-border`).
+- Use `mask` patterns that match the data type.
+- Set a `placeholder` with the expected format (for example `"(00) 00000-0000"`).
+- Use `error` for validation messages.
+- Use `next` with `enterKeyHint="next"` for mobile keyboard flows.
+- Use design-token classes on wrappers (`bg-background`, `text-foreground`, `border-border`).
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) — use theme props or design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`) — override CSS variables in your `@theme` block instead.
-- Don't use a mask that blocks valid input variations — prefer dynamic masks for formats with variable length.
-- Don't forget that the mask formats the display value; if your backend expects raw data, strip formatting before sending.
-- Don't use `Input` for long-form text — use `Textarea` instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`). Use theme props or design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`, `bg-[--my-var]`). Override CSS variables in your `@theme` block.
+- Don't use a mask that blocks valid input variations. Use dynamic masks for variable-length formats.
+- Don't send masked display values to a backend that expects raw data. Strip the formatting first.
+- Don't use `Input` for long-form text. Use `Textarea`.
 
 ## Accessibility
 
-- Renders a semantic `<input>` wrapped in a `<fieldset>` with an associated `<label>` (via `InputField`).
-- `aria-disabled`, `aria-readonly`, and `aria-busy` are set automatically from props.
-- Caller-provided `aria-describedby` IDs are preserved and combined with IDs for populated error and feedback messages.
-- Custom errors set `aria-invalid`; native constraint invalidity is exposed after interaction while the field is blurred. An explicit caller `aria-invalid` is preserved when neither state applies.
-- A supplied custom error appears in a visible `<p>` below the field; native validation styling is enabled after first focus (`data-initialized="true"`).
-- Focus is indicated by the containing field border changing to the primary color; verify its visibility and contrast in the consuming theme.
-- The `hiddenLabel` prop keeps the label in the accessibility tree while hiding it visually.
+- Renders a semantic `<input>` in a `<fieldset>` with an associated `<label>` (via `InputField`).
+- Props set `aria-disabled`, `aria-readonly`, and `aria-busy`.
+- A custom error shows in a visible `<p>` below the field.
+- Native validation styling starts after first focus (`data-initialized="true"`).
 
 ## Data Attributes
 
-- `data-initialized` — `initializeInputDataset` sets this to `"true"` on focus, enabling native validation styling after the field is blurred; it does not initialize the attribute to `"false"` at mount.
-- `data-next` — set from the `next` prop; used to focus the next field on Enter.
-- `data-component="input"` — set on the outer `fieldset` by `InputField`.
-- `data-error` — on the `fieldset`: `"true"` when an `error` string is present.
+- `data-initialized`: `initializeInputDataset` sets `"true"` on focus. This enables native validation styling after blur. Mount does not set `"false"`.
+- `data-next`: set from `next`.
+- `data-component="input"`: set on the outer `fieldset` by `InputField`.
+- `data-error`: on the `fieldset`. `"true"` when an `error` string is present.
 
 ## Notes
 
-- Built on top of `the-mask-input`. All mask features from that library are available.
-- The component automatically manages cursor positioning during masked input.
-- Works with both controlled (`value` + `onChange`) and uncontrolled (`defaultValue`) patterns.
-- `Input` is created via the `createFreeText` factory, which also powers `Textarea`. Both share the same styling tokens.
+- Built on `the-mask-input`. All its mask features work.
+- The component manages cursor position during masked input.
+- Works controlled (`value` + `onChange`) and uncontrolled (`defaultValue`).
+- `Input` comes from the `createFreeText` factory, which also builds `Textarea`. Both share the same styling tokens.
 
+## Verification
+
+Acceptance criteria for tests and reviews: [verify/Input.md](verify/Input.md).

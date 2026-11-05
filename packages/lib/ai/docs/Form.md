@@ -6,7 +6,6 @@ export: "{ Form }"
 import: "import { Form } from '@g4rcez/components/form'"
 category: form
 ---
-
 # Form
 
 Thin wrapper around the HTML `<form>` element that calls `preventDefault` automatically before invoking `onSubmit`.
@@ -21,16 +20,16 @@ import { Form } from "@g4rcez/components/form";
 
 `Form` accepts all standard HTML `<form>` attributes.
 
-| Prop        | Type                                                | Default | Description                                                            |
-| ----------- | --------------------------------------------------- | ------- | ---------------------------------------------------------------------- |
-| `onSubmit`  | `(event: React.FormEvent<HTMLFormElement>) => void` | -       | Submit handler. `preventDefault` is called before this.                |
-| `children`  | `React.ReactNode`                                   | -       | Form fields and other content.                                         |
-| `className` | `string`                                            | -       | CSS classes for the `<form>` element.                                  |
-| `...props`  | `React.ComponentProps<"form">`                      | -       | All standard form attributes (`action`, `method`, `noValidate`, etc.). |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `onSubmit` | `(event: React.FormEvent<HTMLFormElement>) => void` | - | Submit handler. `preventDefault` runs first. |
+| `children` | `React.ReactNode` | - | Form fields and other content. |
+| `className` | `string` | - | CSS classes for the `<form>` element. |
+| `...props` | `React.ComponentProps<"form">` | - | Standard form attributes (`action`, `method`, `noValidate`, etc.). |
 
 ## Design Tokens
 
-`Form` has no direct token usage. Tokens are applied by the child components (`Input`, `Button`, etc.) placed inside it.
+`Form` uses no tokens directly. Child components (`Input`, `Button`, etc.) apply their own tokens.
 
 ## Examples
 
@@ -133,50 +132,75 @@ function EmailForm({ onSave }: { onSave: (email: string) => void }) {
 }
 ```
 
-`noValidate` lets this handler run even for invalid native constraints. The handler explicitly refuses invalid submission, preserves the value, and chooses the first invalid field as the focus destination. It revalidates on each submit; it does not claim delivery, server success, or provide an error summary.
+- `noValidate` lets this handler run even for invalid native constraints.
+- The handler refuses invalid submission, keeps the value, and focuses the first invalid field.
+- It revalidates on each submit. It does not claim delivery or server success. It provides no error summary.
 
 ## Interaction design and acceptance criteria
 
-Use the following integration criteria to verify the component in context.
 ### Validation ownership
 
-- Use `Form` for client-handled submission. It only prevents the default submit action and calls the handler; it does not validate, send requests, manage pending state, reset data, or choose a focus destination. Native browser constraints normally run before a submit event; with `noValidate`, the consumer must validate explicitly.
-- Keep visible field labels, required/format instructions, and text errors near their controls. `Input`/`Textarea` provide field-level error text, `aria-invalid`, and merged description IDs. Their `error` prop alone does not make native validity fail or block `Form` submission. The consumer must enforce business rules and retain values after rejection.
-- The library has existing field-error support, but no reusable error-summary component. A summary is a separate form-level integration responsibility, not a feature of `Form`, `InputField`, or `useForm`: when provided, it needs a clear title and same-page links that name problems and move focus to their fields. For a form without a summary, choose the first invalid field as a predictable focus destination after a rejected submission.
-- Pointer/touch and keyboard submission should use `Button type="submit"`; its native button activation supports `Enter`/`Space`. `Tab`/`Shift+Tab` should follow the visible field/action order. Check that errors and any summary links remain readable and operable with zoom or the virtual keyboard open. Do not disable submit as the only indication of what needs correction.
-- Choose submit/blur/specific-check validation timing rather than showing untouched fields as errors. Ordinary editing validation should preserve typing and focus. `InputField` error paragraphs already use `role="alert"`; coordinate summary focus and live regions to avoid repeated announcements, and verify the resulting desktop/mobile assistive-technology behavior.
-- Distinguish empty required fields, format errors, business-rule failures, and service/network failures. Keep correction guidance until the chosen revalidation confirms a fix. Asynchronous checks must not allow an older result to replace the current value's result; communicate pending/failure states and confirm success only after the real operation completes. Client validation does not replace server validation. Do not expose passwords in summaries, logs, or status messages.
+- Use `Form` for client-handled submission. It only prevents the default submit action and calls the handler.
+- `Form` does not validate, send requests, manage pending state, reset data, or choose a focus destination.
+- Native browser constraints normally run before a submit event. With `noValidate`, the consumer MUST validate explicitly.
+- Keep visible field labels, required/format instructions, and text errors near their controls.
+- `Input`/`Textarea` provide field-level error text, `aria-invalid`, and merged description IDs.
+- The `error` prop alone does not make native validity fail or block `Form` submission.
+- The consumer MUST enforce business rules and keep values after rejection.
+- The library has field-error support but no reusable error-summary component. A summary is a separate form-level integration duty, not a feature of `Form`, `InputField`, or `useForm`.
+- A summary needs a clear title and same-page links. The links name the problems and move focus to their fields.
+- Without a summary, focus the first invalid field after a rejected submission.
+- Use `Button type="submit"` for pointer, touch, and keyboard submission. Native button activation supports `Enter`/`Space`.
+- `Tab`/`Shift+Tab` follow the visible field/action order.
+- Check that errors and summary links stay readable and operable with zoom or the virtual keyboard open.
+- Do not disable submit as the only indication of what needs correction.
+- Choose submit, blur, or specific-check validation timing. Do not show untouched fields as errors.
+- Ordinary editing validation MUST preserve typing and focus.
+- `InputField` error paragraphs already use `role="alert"`. Coordinate summary focus and live regions to avoid repeated announcements. Verify the result with desktop and mobile assistive technology.
+- Distinguish empty required fields, format errors, business-rule failures, and service/network failures.
+- Keep correction guidance until the chosen revalidation confirms a fix.
+- An older asynchronous result MUST NOT replace the result for the current value.
+- Show pending and failure states. Confirm success only after the real operation completes.
+- Client validation does not replace server validation.
+- Do not expose passwords in summaries, logs, or status messages.
 
 ### Using the existing useForm hook
 
-`useForm` is exported from `@g4rcez/components` separately from `Form`. Its `input`/`textarea` helpers bind names, IDs, values, requirements, and field-error props to a synchronous Zod schema; `controller` supplies the form's ID/name, not submit or invalid handlers. Field checks listen for `blur` by default (or a native `data-trigger` event). Connect `onInvalid={form.onInvalid}` explicitly when using its native-invalid path. `form.onSubmit(callback)` invokes the callback for both valid and schema-invalid data: check `success` before saving. On schema failure it calls `reportValidity` and supplies an `errors` list plus `setErrors` to the callback; it does not automatically copy those issues into the field-error state or guarantee focus for schema-only errors. The consumer must map errors into the appropriate field state and select a focus destination. The hook does not render a summary, provide asynchronous schema validation/response ordering, or announce server results. Its `disabled` return value reflects whether error state is non-null; it is not a complete submission or explanation policy. Successful schema submissions serialize parsed data to the form's `data-json` attribute, and an optional storage interceptor persists state; review those paths before using the hook with secrets.
+- `useForm` is exported from `@g4rcez/components`, separately from `Form`.
+- Its `input`/`textarea` helpers bind names, IDs, values, requirements, and field-error props to a synchronous Zod schema.
+- `controller` supplies the form's ID/name, not submit or invalid handlers.
+- Field checks listen for `blur` by default, or for a native `data-trigger` event.
+- Connect `onInvalid={form.onInvalid}` explicitly for the native-invalid path.
+- `form.onSubmit(callback)` calls the callback for valid and schema-invalid data. Check `success` before saving.
+- On schema failure, it calls `reportValidity` and passes an `errors` list plus `setErrors` to the callback.
+- It does not copy those issues into field-error state. It does not guarantee focus for schema-only errors. The consumer MUST map errors into field state and choose a focus destination.
+- The hook renders no summary, gives no asynchronous schema validation or response ordering, and announces no server results.
+- Its `disabled` return value reflects whether error state is non-null. It is not a complete submission or explanation policy.
+- Successful schema submissions serialize parsed data to the form's `data-json` attribute. An optional storage interceptor persists state. Review both paths before using the hook with secrets.
 
-## Acceptance criteria
+## Verification
 
-These are integration targets to verify, not recorded test results or accessibility certification. 1. **Given** invalid values and a submit `Button`, **when** submission is requested by click, tap, `Enter`, or `Space`, **then** saving is refused, specific field errors remain visible, entered values remain, and focus reaches the documented summary or first invalid field. 2. **Given** a hint and detected field error, **when** that field is navigated with assistive technology, **then** its label, required/invalid state, hint, and correction text are available; if a summary exists, keyboard/touch activation of each link focuses its correct same-page field without duplicate announcements. 3. **Given** several errors, **when** one field is corrected and revalidated, **then** only that field's error/state and summary entry are updated, other errors and values remain, and editing focus is not interrupted. 4. **Given** `useForm` submission integration, **when** the schema rejects data and its callback receives `success: false`, **then** no save is performed and the consumer exposes the supplied issues; native `reportValidity` is not mistaken for an error summary or guaranteed schema-error focus. 5. **Given** an asynchronous check or save, **when** it is pending, fails, or completes, **then** pending/service-failure feedback is distinguishable from field validation, stale checks do not overwrite newer values, and success is shown only after completion without including sensitive values.
+Acceptance criteria for tests and reviews: [verify/Form.md](verify/Form.md).
 
 ## Do
 
 - Use `Form` instead of a raw `<form>` to avoid calling `e.preventDefault` in every submit handler.
-- Always include a `Button type="submit"` so the form has an explicit keyboard- and pointer-operable submit action.
-- Use design-token layout utilities (`gap-base`, `gap-sm`) for consistent spacing between fields.
+- Include a `Button type="submit"`, so the form has an explicit keyboard- and pointer-operable submit action.
+- Use design-token layout utilities (`gap-base`, `gap-sm`) for spacing between fields.
 
 ## Don't
 
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `Form` — use theme props or design tokens instead.
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block instead.
-- Don't use `Form` when you need a traditional server-rendered full-page reload; use a plain `<form>` with `action` and `method` instead.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`, `border-gray-300`) to `Form`. Use theme props or design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`). Override CSS variables in your `@theme` block.
+- Don't use `Form` for a traditional server-rendered full-page reload. Use a plain `<form>` with `action` and `method`.
 
 ## Accessibility
 
-- Renders a semantic `<form>` element. Supply an accessible form name when a named landmark is needed.
-- Give every field a persistent associated label (`title` on `Input`, `Textarea`, and other `InputField`-based components) and retain hint associations when errors are added.
+- `Form` renders a semantic `<form>` element. Supply an accessible form name when a named landmark is needed.
+- Give every field a persistent associated label (`title` on `Input`, `Textarea`, and other `InputField`-based components).
+- Keep hint associations when errors are added.
 
 ## Notes
 
-- `Form` is intentionally minimal — it has no state, no validation logic, and no styling. All field-level behavior is delegated to child components.
-- The `e.persist` call inside the wrapper ensures the synthetic event remains accessible in async submit handlers.
-
-```
-
-```
+- `Form` is minimal: no state, no validation logic, no styling. Child components own all field-level behavior.
+- The wrapper calls `e.persist` so the synthetic event stays accessible in async submit handlers.

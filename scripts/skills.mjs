@@ -5,23 +5,24 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const packageAi = join(repoRoot, "packages", "lib", "ai");
-const installDestination = join(repoRoot, ".claude", "skills", "components-design-system");
-const canonicalSkill = join(repoRoot, "skills", "csscomponents", "SKILL.md");
+const skillName = "g4rcez-components";
+const installDestination = join(repoRoot, ".claude", "skills", skillName);
+const canonicalSkill = join(repoRoot, "skills", skillName, "SKILL.md");
 const canonicalDocs = join(packageAi, "docs");
 const usage = "Usage: npx components:skills <install|sync|check>\n";
 
 const skillDestinations = [
-    { path: join(repoRoot, "packages", "lib", "SKILL.md"), alias: false },
-    { path: join(packageAi, "SKILL.md"), alias: false },
-    { path: join(installDestination, "SKILL.md"), alias: false },
-    { path: join(repoRoot, ".agents", "skills", "csscomponents", "SKILL.md"), alias: false },
-    { path: join(repoRoot, ".agents", "skills", "components-design-system", "SKILL.md"), alias: true },
+    join(repoRoot, "packages", "lib", "SKILL.md"),
+    join(packageAi, "SKILL.md"),
+    join(installDestination, "SKILL.md"),
+    join(repoRoot, ".agents", "skills", skillName, "SKILL.md"),
 ];
 
+// skills/<name>/docs makes the skill self-contained when installed from GitHub with `npx skills add`.
 const docsDestinations = [
-    join(repoRoot, ".claude", "skills", "components-design-system", "docs"),
-    join(repoRoot, ".agents", "skills", "csscomponents", "docs"),
-    join(repoRoot, ".agents", "skills", "components-design-system", "docs"),
+    join(repoRoot, "skills", skillName, "docs"),
+    join(installDestination, "docs"),
+    join(repoRoot, ".agents", "skills", skillName, "docs"),
 ];
 
 const toRelativePath = (path) => relative(repoRoot, path).split(sep).join("/");
@@ -97,32 +98,15 @@ function collectMarkdownFiles(directory, relativeDirectory = "") {
     return files;
 }
 
-function aliasSkillContent(content) {
-    const frontmatter = /^(?<opening>---\r?\n)(?<body>[\s\S]*?)(?<closing>\r?\n---(?:\r?\n|$))/u.exec(content);
-    if (!frontmatter?.groups) {
-        throw new Error("canonical skill frontmatter is missing or invalid");
-    }
-
-    const { opening, body } = frontmatter.groups;
-    const lines = body.split(/\r?\n/u);
-    const nameLine = "name: csscomponents";
-    const nameLineIndexes = lines.flatMap((line, index) => (line === nameLine ? [index] : []));
-    if (nameLineIndexes.length !== 1) {
-        throw new Error(`canonical skill frontmatter must contain exactly one ${nameLine} line`);
-    }
-
-    const lineEnding = body.includes("\r\n") ? "\r\n" : "\n";
-    const beforeName = lines.slice(0, nameLineIndexes[0]).join(lineEnding);
-    const offset = frontmatter.index + opening.length + (beforeName ? beforeName.length + lineEnding.length : 0);
-    return `${content.slice(0, offset)}name: g4rcez-components${content.slice(offset + nameLine.length)}`;
-}
-
 function loadCanonicalSources() {
     const skillStat = validatePath(canonicalSkill, "canonical skill", "file");
     if (!skillStat) throw new Error(`canonical skill not found at ${toRelativePath(canonicalSkill)}`);
     const skill = readFileSync(canonicalSkill);
-    const skillText = skill.toString();
-    const alias = Buffer.from(aliasSkillContent(skillText));
+    const frontmatter = /^---\r?\n(?<body>[\s\S]*?)\r?\n---(?:\r?\n|$)/u.exec(skill.toString());
+    if (!frontmatter?.groups) throw new Error("canonical skill frontmatter is missing or invalid");
+    if (!frontmatter.groups.body.split(/\r?\n/u).includes(`name: ${skillName}`)) {
+        throw new Error(`canonical skill frontmatter must declare name: ${skillName}`);
+    }
 
     const docsStat = validatePath(canonicalDocs, "canonical docs", "directory");
     if (!docsStat) throw new Error(`canonical docs not found at ${toRelativePath(canonicalDocs)}`);
@@ -132,7 +116,7 @@ function loadCanonicalSources() {
     }
     references.sort((left, right) => compareStrings(left.relativePath, right.relativePath));
 
-    return { skill, alias, references };
+    return { skill, references };
 }
 
 function validateDestinationFile(path, label) {
@@ -151,12 +135,8 @@ function makeDestinationPath(directory, referencePath) {
 function prepareTargets(sources) {
     const operations = [];
     for (const destination of skillDestinations) {
-        validateDestinationFile(destination.path, "destination skill");
-        operations.push({
-            path: destination.path,
-            relativePath: toRelativePath(destination.path),
-            content: destination.alias ? sources.alias : sources.skill,
-        });
+        validateDestinationFile(destination, "destination skill");
+        operations.push({ path: destination, relativePath: toRelativePath(destination), content: sources.skill });
     }
 
     const expectedReferences = new Set(sources.references.map((reference) => reference.relativePath));
@@ -264,10 +244,10 @@ function runInstall() {
     mkdirSync(join(installDestination, "docs"), { recursive: true });
 
     cpSync(sourceSkill, join(installDestination, "SKILL.md"));
-    process.stdout.write(`copied SKILL.md → .claude/skills/components-design-system/SKILL.md\n`);
+    process.stdout.write(`copied SKILL.md → .claude/skills/${skillName}/SKILL.md\n`);
 
     cpSync(sourceDocs, join(installDestination, "docs"), { recursive: true });
-    process.stdout.write(`copied docs/    → .claude/skills/components-design-system/docs/\n`);
+    process.stdout.write(`copied docs/    → .claude/skills/${skillName}/docs/\n`);
     process.stdout.write("install complete\n");
 }
 

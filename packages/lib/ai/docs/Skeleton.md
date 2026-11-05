@@ -9,7 +9,7 @@ category: display
 
 # Skeleton
 
-The skeleton components indicate that content is loading while preserving a stable layout. They render status semantics and pulse unless the user prefers reduced motion, in which case they remain static.
+Skeleton components show that content is loading and keep the layout stable. They render status semantics. They pulse, unless the user prefers reduced motion. Then they stay static.
 
 ## Import
 
@@ -21,35 +21,40 @@ import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components";
 
 ### Skeleton props
 
-| Prop        | Type                  | Default  | Description                           |
-| ----------- | --------------------- | -------- | ------------------------------------- |
-| `as`        | `React.ElementType`   | `"span"` | Element used for the placeholder.     |
-| `className` | `string`              | —        | Additional classes.                   |
-| `style`     | `React.CSSProperties` | —        | Inline styles such as a custom width. |
+|Prop|Type|Default|Description|
+|---|---|---|---|
+|`as`|`React.ElementType`|`"span"`|Element used for the placeholder.|
+|`className`|`string`|—|Additional classes.|
+|`style`|`React.CSSProperties`|—|Inline styles, such as a custom width.|
 
 ### SkeletonCell
 
-`SkeletonCell` is a ready-to-render element with no props. It renders a status placeholder sized for a table/list cell.
+`SkeletonCell` takes no props. It renders a status placeholder sized for a table or list cell.
 
 ### SkeletonList
 
-| Prop        | Type     | Default | Description                             |
-| ----------- | -------- | ------- | --------------------------------------- |
-| `rows`      | `number` | —       | Number of skeleton list rows to render. |
-| `className` | `string` | —       | Additional classes for the list.        |
+|Prop|Type|Default|Description|
+|---|---|---|---|
+|`rows`|`number`|—|Number of skeleton list rows to render.|
+|`className`|`string`|—|Additional classes for the list.|
 
 ## Design Tokens and CSS
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+- Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`.
+- Explicit semantic overrides remain unchanged.
+- See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+- The exported `defaultGeometryTokens` map holds the full set. Current plain-CSS geometry examples:
 
-| Override                           | Library default                       |
-| ---------------------------------- | ------------------------------------- |
-| `--var-skeleton-radius`            | `calc(var(--var-radius-base) / 3)`    |
-| `--var-skeleton-cell-block-size`   | `calc(var(--var-spacing-base) * 1.5)` |
-| `--var-skeleton-block-inline-size` | `calc(var(--var-spacing-base) * 8)`   |
-| `--var-skeleton-block-size` | `calc(var(--var-spacing-base) * 2)` |
+|Override|Library default|
+|---|---|
+|`--var-skeleton-radius`|`calc(var(--var-radius-base) / 3)`|
+|`--var-skeleton-cell-block-size`|`calc(var(--var-spacing-base) * 1.5)`|
+|`--var-skeleton-block-inline-size`|`calc(var(--var-spacing-base) * 8)`|
+|`--var-skeleton-block-size`|`calc(var(--var-spacing-base) * 2)`|
 
-The component ships `@g4rcez/components/skeleton.css`. Stable selectors include `.__skeleton`, `.__skeleton__cell`, `.__skeleton__block`, and `.__skeleton__list`. The stylesheet reads semantic variables such as `--var-skeleton-radius`, `--var-skeleton-pulse-duration`, `--var-skeleton-pulse-opacity`, `--var-skeleton-block-inline-size`, and `--var-color-muted`.
+- The stylesheet is `@g4rcez/components/skeleton.css`.
+- Stable selectors: `.__skeleton`, `.__skeleton__cell`, `.__skeleton__block`, `.__skeleton__list`.
+- The stylesheet reads these semantic variables: `--var-skeleton-radius`, `--var-skeleton-pulse-duration`, `--var-skeleton-pulse-opacity`, `--var-skeleton-block-inline-size`, `--var-color-muted`.
 
 ## Examples
 
@@ -90,28 +95,28 @@ The component ships `@g4rcez/components/skeleton.css`. Stable selectors include 
 
 ## Do
 
-- Use a skeleton where the loaded content will occupy the same region.
+- Place a skeleton where the loaded content will occupy the same region.
 - Set `rows` to the approximate number of items users will see.
-- Use `as` and `style` when the placeholder needs the same semantic element or dimensions as the final content.
+- Use `as` and `style` when the placeholder needs the same element or dimensions as the final content.
 
 ## Don't
 
-- Don't use a skeleton for a short operation where a spinner or no indicator is less disruptive.
-- Don't expose placeholder text as if it were completed content.
-- Don't rely on animation alone to communicate loading; its pulse is omitted when reduced motion is preferred, and status semantics remain intact.
+- Don't use a skeleton for a short operation. A spinner or no indicator is less disruptive.
+- Don't expose placeholder text as completed content.
+- Don't rely on animation alone to show loading. The pulse is omitted when reduced motion is preferred. Status semantics stay intact.
 
 ## Accessibility
 
 - `Skeleton` and `SkeletonList` expose `role="status"`, `aria-busy="true"`, and a localized loading label.
 - `SkeletonCell` exposes `role="status"`, `aria-busy="true"`, and the label `Loading content`.
-- Replace or remove the placeholder when loading finishes so assistive technology does not announce stale status.
+- Replace or remove the placeholder when loading finishes. Otherwise assistive technology announces stale status.
 
 ## Data Attributes
 
-- The components do not add custom `data-*` attributes; their stable styling contract is class-based.
+- The components add no custom `data-*` attributes. Their stable styling contract is class-based.
 
 ## Notes
 
-- `Skeleton` renders a `span` by default; use `as="div"` or `as="li"` to match the surrounding structure.
+- `Skeleton` renders a `span` by default. Use `as="div"` or `as="li"` to match the surrounding structure.
 - `SkeletonList` creates `li` children inside a `ul`.
-- The current list implementation assigns each generated row a minimum width of `100%`; use `Skeleton` directly when varied widths are required.
+- The list implementation gives each generated row a minimum width of `100%`. Use `Skeleton` directly for varied widths.

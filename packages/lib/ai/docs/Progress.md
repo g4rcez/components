@@ -9,7 +9,7 @@ category: display
 
 # Progress
 
-`Progress` wraps Base UI's progress primitive and renders a themed track, indicator, and optional percentage label. It accepts values in any numeric range and maps them to the configured `min`/`max` interval.
+`Progress` wraps the Base UI progress primitive. It renders a themed track, an indicator, and an optional percentage label. It accepts any numeric range and maps it to the `min`/`max` interval.
 
 ## Import
 
@@ -19,31 +19,37 @@ import { Progress } from "@g4rcez/components";
 
 ## Props
 
-| Prop              | Type     | Default | Description                                                                    |
-| ----------------- | -------- | ------- | ------------------------------------------------------------------------------ |
-| `value`           | `number` | —       | Current progress value. Preferred API.                                         |
-| `percent`         | `number` | —       | Deprecated alias for `value`. `value` takes precedence when both are provided. |
-| `min`             | `number` | `0`     | Minimum value of the progress range.                                           |
-| `max`             | `number` | `100`   | Maximum value of the progress range.                                           |
-| `label`           | `Label`  | —       | Replaces the rounded percentage label.                                         |
-| `container`       | `string` | —       | Class for the progress track.                                                  |
-| `className`       | `string` | —       | Class for the indicator.                                                       |
-| `textClassName`   | `string` | —       | Class for the label.                                                           |
-| `aria-label`      | `string` | —       | Accessible name used when no nonempty visible `label` is rendered.             |
-| `aria-labelledby` | `string` | — | ID reference used when no nonempty visible `label` is rendered. |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `value` | `number` | — | Current progress value; preferred API |
+| `percent` | `number` | — | Deprecated alias for `value`; `value` wins when both are set |
+| `min` | `number` | `0` | Minimum of the progress range |
+| `max` | `number` | `100` | Maximum of the progress range |
+| `label` | `Label` | — | Replaces the rounded percentage label |
+| `container` | `string` | — | Class for the progress track |
+| `className` | `string` | — | Class for the indicator |
+| `textClassName` | `string` | — | Class for the label |
+| `aria-label` | `string` | — | Accessible name when no nonempty visible `label` renders |
+| `aria-labelledby` | `string` | — | ID reference used when no nonempty visible `label` renders |
 
-If `value` and `percent` are both absent, or `max <= min`, the track is rendered without an indicator or label. Values outside the range are clamped for the visual percentage.
+- When `value` and `percent` are both absent, or `max <= min`, the track renders without an indicator or label.
+- The visual percentage clamps values outside the range.
 
 ## Design Tokens and CSS
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+- Geometry defaults are scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`.
+- Explicit semantic overrides stay unchanged.
+- See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+- The table lists current plain-CSS geometry examples. The exported `defaultGeometryTokens` map holds the full set.
 
-| Override                          | Library default                       |
-| --------------------------------- | ------------------------------------- |
+| Override | Library default |
+|---|---|
 | `--var-progress-track-block-size` | `calc(var(--var-spacing-base) * 1.5)` |
 | `--var-progress-track-radius` | `calc(var(--var-radius-base) * 0.4)` |
 
-The component ships `@g4rcez/components/progress.css`. Its stable selectors are `.__progress`, `.__progress__indicator`, and `.__progress__label`. The stylesheet reads `--var-progress-track-block-size`, `--var-progress-track-radius`, `--var-progress-indicator-transition-duration`, `--var-progress-indicator-transition-timing`, `--var-color-background`, `--var-color-primary`, and `--var-color-primary-foreground`.
+- The component ships `@g4rcez/components/progress.css`.
+- Its stable selectors are `.__progress`, `.__progress__indicator`, and `.__progress__label`.
+- The stylesheet reads `--var-progress-track-block-size`, `--var-progress-track-radius`, `--var-progress-indicator-transition-duration`, `--var-progress-indicator-transition-timing`, `--var-color-background`, `--var-color-primary`, and `--var-color-primary-foreground`.
 
 ## Examples
 
@@ -83,32 +89,33 @@ Use a `Spinner` or another pending-state indicator when no numeric progress is a
 
 ## Do
 
-- Use `value` for new code and keep the value in the same domain as `min` and `max`.
-- Provide a descriptive `label` when a rounded percentage is not enough context.
+- Use `value` in new code. Keep the value in the same domain as `min` and `max`.
+- Set a descriptive `label` when a rounded percentage gives too little context.
 - Keep progress updates meaningful to avoid unnecessary visual work.
 
 ## Don't
 
 - Don't use `Progress` for an operation whose progress cannot be measured.
 - Don't use the deprecated `percent` prop in new code.
-- Don't style the indicator with raw colors; override semantic `--var-*` tokens or use the component CSS contract.
+- Don't style the indicator with raw colors. Override semantic `--var-*` tokens or use the component CSS contract.
 
 ## Accessibility
 
-- A nonempty `label` is referenced as the progressbar's accessible name when a value is rendered. The default percentage text does not name the progressbar.
-- When no visible `label` is rendered, provide `aria-label` or `aria-labelledby` on `Progress`.
+- When a value renders, a nonempty `label` is the accessible name of the progressbar. The default percentage text does not name the progressbar.
+- When no visible `label` renders, set `aria-label` or `aria-labelledby` on `Progress`.
 - Pair long-running progress with a visible status message when users need more detail.
 
 ## Data Attributes
 
-- `data-component="progress"` — progress root.
-- `data-slot="indicator"` — filled indicator.
-- `data-slot="label"` — rendered only when a value is available.
+- `data-component="progress"`: progress root.
+- `data-slot="indicator"`: filled indicator.
+- `data-slot="label"`: rendered only when a value is available.
 
 ## Notes
 
-- The displayed label is `Math.round(percent) %` unless `label` is supplied.
-- The indicator width is controlled by Base UI from the normalized value; the component does not render an indeterminate animation.
+- The displayed label is `Math.round(percent) %` unless `label` is set.
+- Base UI controls the indicator width from the normalized value. The component renders no indeterminate animation.
+
 
 ```
 

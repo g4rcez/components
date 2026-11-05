@@ -9,7 +9,7 @@ category: floating
 
 # Toolbar
 
-Sticky floating toolbar with a shared border and connected buttons. Place buttons directly inside the toolbar: adjacent button edges are square, while exposed edges retain each button’s design-system radius. A single button keeps all its corners, and a separator starts a new connected group. Button themes, disabled states, and focus rings are preserved. This is not a menubar and does not add menu navigation.
+Sticky floating toolbar with a shared border and connected buttons. Place buttons directly inside the toolbar. Adjacent button edges are square. Exposed edges keep each button's design-system radius. A single button keeps all its corners. A separator starts a new connected group. Button themes, disabled states, and focus rings are preserved. The toolbar is not a menubar and adds no menu navigation.
 
 ## Import
 
@@ -19,22 +19,26 @@ import { Toolbar } from "@g4rcez/components";
 
 ## Props
 
-| Prop       | Type              | Default | Description                                           |
-| ---------- | ----------------- | ------- | ----------------------------------------------------- |
-| `children` | `React.ReactNode` | —       | Items displayed inside the toolbar                    |
-| `root`     | `HTMLElement`     | —       | Optional root element reference for scrolling context |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `children` | `React.ReactNode` | — | Items displayed inside the toolbar |
+| `root` | `HTMLElement` | — | Scrolling-context root; accepted but unused, reserved for future use. |
 
 ## Design Tokens
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
+Override these CSS variables in your theme to customize the component.
 
-| CSS Variable           | Purpose                                       |
-| ---------------------- | --------------------------------------------- |
-| `--var-toolbar-bottom` | Sticky bottom offset                          |
-| `--var-toolbar-p`      | Toolbar padding                               |
+| CSS Variable | Purpose |
+|---|---|
+| `--var-toolbar-bottom` | Sticky bottom offset |
+| `--var-toolbar-p` | Toolbar padding |
 | `--var-layer-normal` | Keeps focused buttons above adjacent controls |
 
-The toolbar root does not paint a surface or border and does not consume a radius token. Connected controls retain their own outer corners. The offset and padding read only the canonical properties above, without legacy-name fallbacks. The root selector is `.__toolbar`. Connected styling targets direct native buttons and direct `.__button` elements, including polymorphic button links. Wrapping controls in a layout element opts out of connected styling. Load `button.css` separately when composing with `Button`; toolbar CSS does not replace button styles.
+- The toolbar root paints no surface or border and uses no radius token. Connected controls keep their own outer corners.
+- Offset and padding read only the canonical properties above, with no legacy-name fallbacks.
+- The root selector is `.__toolbar`.
+- Connected styling targets direct native buttons and direct `.__button` elements, including polymorphic button links. A layout element around controls opts out of connected styling.
+- Load `button.css` separately when composing with `Button`. Toolbar CSS does not replace button styles.
 
 ## Examples
 
@@ -114,26 +118,25 @@ function BatchToolbar({ selectedCount }: { selectedCount: number }) {
 
 ## Do
 
-- Keep the toolbar small — it overlays content and should not obscure more than a thin strip at the bottom.
-- Reserve the toolbar for primary actions users may need at any scroll position.
-- Use controls with sufficient touch-target sizes; connected controls intentionally have no gap.
-- Use design-token classes for any custom styling inside the toolbar (`bg-background`, `border-card-border`, `text-foreground`).
+- Keep the toolbar small. It overlays content, so cover only a thin strip at the bottom.
+- Use the toolbar for primary actions that users need at any scroll position.
+- Use controls with large enough touch targets. Connected controls have no gap by design.
+- Use design-token classes for custom styling inside the toolbar (`bg-background`, `border-card-border`, `text-foreground`).
 
 ## Don't
 
-- Don't use `Toolbar` for secondary or rarely used actions — keep the surface focused.
-- Don't cram too many items into the toolbar; it will wrap awkwardly on narrow viewports.
-- Don't pass raw utility color classes (`bg-gray-100`, `border-gray-300`) — use design-token classes.
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
+- Don't use `Toolbar` for secondary or rarely used actions. Keep the surface focused.
+- Don't cram too many items into the toolbar. It wraps awkwardly on narrow viewports.
+- Don't pass raw color classes (`bg-gray-100`, `border-gray-300`). Use design-token classes.
+- Don't use arbitrary values (`bg-[#abc]`). Override CSS variables in your `@theme` block.
 
 ## Accessibility
 
-- The component already has `role="toolbar"`. Pass `aria-label="Page actions"` directly to it; do not add a nested toolbar wrapper.
-- Ensure each icon-only button inside the toolbar has an accessible name via `aria-label` or a `Tooltip` with `focus={true}`.
-- Tab key navigates through items in the toolbar naturally.
+- The component has `role="toolbar"`. Pass `aria-label="Page actions"` to it. Do not add a nested toolbar wrapper.
+- Give each icon-only button an accessible name through `aria-label` or a `Tooltip` with `focus={true}`.
+- Tab moves through toolbar items in order.
 
 ## Notes
 
-- The component is a thin wrapper around `motion.div` from `motion/react` with `sticky bottom-4` positioning.
-- The `root` prop is accepted but not yet used in the current implementation — it is reserved for future scrolling context support.
-- Because the toolbar is `sticky` (not `fixed`), it flows with the document and sticks at the bottom of its scrolling container, not the viewport.
+- The component renders `motion.div` from `motion/react` with `sticky bottom-4` positioning.
+- The toolbar is `sticky`, not `fixed`. It flows with the document and sticks to the bottom of its scrolling container, not the viewport.

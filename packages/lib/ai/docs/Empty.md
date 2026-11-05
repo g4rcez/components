@@ -19,25 +19,28 @@ import { Empty } from "@g4rcez/components";
 
 ## Props
 
-| Prop      | Type     | Default                       | Description                        |
-| --------- | -------- | ----------------------------- | ---------------------------------- |
-| `Icon`    | `Icon`   | `FileIcon`                    | Phosphor icon component to display |
-| `message` | `string` | Localized "No data available" | Descriptive empty state message    |
+|Prop|Type|Default|Description|
+|---|---|---|---|
+|`Icon`|`Icon`|`FileIcon`|Phosphor icon component to display.|
+|`message`|`string`|Localized "No data available"|Descriptive empty state message.|
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+- Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`.
+- Explicit semantic overrides remain unchanged.
+- See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
+- The exported `defaultGeometryTokens` map holds the full set. Current plain-CSS geometry examples:
 
-| Override                             | Library default                     |
-| ------------------------------------ | ----------------------------------- |
-| `--var-empty-surface-gap`            | `calc(var(--var-spacing-base) * 1)` |
-| `--var-empty-surface-padding-block`  | `calc(var(--var-spacing-base) * 3)` |
-| `--var-empty-surface-padding-inline` | `calc(var(--var-spacing-base) * 2)` |
-| `--var-empty-icon-size`              | `calc(var(--var-spacing-base) * 4)` |
+|Override|Library default|
+|---|---|
+|`--var-empty-surface-gap`|`calc(var(--var-spacing-base) * 1)`|
+|`--var-empty-surface-padding-block`|`calc(var(--var-spacing-base) * 3)`|
+|`--var-empty-surface-padding-inline`|`calc(var(--var-spacing-base) * 2)`|
+|`--var-empty-icon-size`|`calc(var(--var-spacing-base) * 4)`|
 
-| Token | CSS Variable    | Purpose      |
-| --------------- | ------------ | --------------------------- |
-| `text-disabled` | `--disabled` | Icon and message text color |
+|Token|CSS Variable|Purpose|
+|---|---|---|
+|`text-disabled`|`--disabled`|Icon and message text color|
 
 ## Examples
 
@@ -132,25 +135,25 @@ import { ShoppingCartIcon, HeartIcon, BellIcon, MailIcon } from "@phosphor-icons
 ## Do
 
 - Provide a clear, encouraging message that tells users what is missing.
-- Use an icon that is contextually relevant to the missing content type.
+- Use an icon that matches the missing content type.
 - Pair `Empty` with an action button when the user can resolve the empty state.
-- Wrap `Empty` in a padded container for visual breathing room.
+- Wrap `Empty` in a padded container for visual space.
 
 ## Don't
 
-- Don't pass raw utility color classes (`text-gray-400`) for the icon — the component uses `text-disabled` from the design system.
-- Don't use arbitrary utility values (`text-[#abc]`) — override CSS variables in your `@theme` block instead.
-- Don't use `Empty` for transient loading states — use `Skeleton` or `Spinner` instead.
-- Don't leave a blank space when data is missing; always provide visual feedback.
-- Don't use overly technical language in the empty state message.
+- Don't pass raw utility color classes (`text-gray-400`) for the icon. The component uses `text-disabled` from the design system.
+- Don't use arbitrary utility values (`text-[#abc]`). Override CSS variables in your `@theme` block.
+- Don't use `Empty` for transient loading states. Use `Skeleton` or `Spinner`.
+- Don't leave a blank space when data is missing. Always give visual feedback.
+- Don't use technical language in the empty state message.
 
 ## Accessibility
 
-- The icon renders at `size={64}` using a Phosphor component which includes accessible SVG markup.
-- The message uses a `<p>` element for semantic text.
-- Both icon and text use `text-disabled` ensuring sufficient contrast against the background.
+- The icon renders at `size={64}` as a Phosphor component with accessible SVG markup.
+- The message is a `<p>` element.
+- Icon and text use `text-disabled` for sufficient contrast against the background.
 
 ## Notes
 
-- The default message is sourced from the active locale translations via `useTranslations`, so it localizes automatically when the app locale changes.
-- To override the default message permanently, pass an explicit `message` prop.
+- `useTranslations` supplies the default message from the active locale. It localizes when the app locale changes.
+- To override the default message, pass an explicit `message` prop.

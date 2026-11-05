@@ -942,7 +942,7 @@
         "tokens:generate": "node ./scripts/generate-theme-registry.mjs",
         "tokens:check": "node ./scripts/generate-theme-registry.mjs --check",
         "prepublishOnly": "npm run build",
-        "build": "npm run tokens:generate && cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
+        "build": "npm run tokens:generate && cp ../../skills/g4rcez-components/SKILL.md ./SKILL.md && cp ../../skills/g4rcez-components/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
         "lib:lint": "pnpm --filter @g4rcez/lint build && node ./scripts/copy-lint.mjs",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
@@ -1019,7 +1019,7 @@
     "agents": {
         "skills": [
             {
-                "name": "csscomponents",
+                "name": "g4rcez-components",
                 "path": "./ai/SKILL.md",
                 "docs": "./ai/docs/index.md",
                 "version": "1"
@@ -1027,7 +1027,7 @@
         ]
     },
     "skill": {
-        "name": "csscomponents",
+        "name": "g4rcez-components",
         "path": "./ai/SKILL.md",
         "docs": "./ai/docs/index.md",
         "version": "1"

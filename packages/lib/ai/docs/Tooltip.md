@@ -19,43 +19,43 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 
 ## Props
 
-| Prop           | Type                      | Default  | Description                                                                                |
-| -------------- | ------------------------- | -------- | ------------------------------------------------------------------------------------------ |
-| `title`        | `Label`                   | —        | Tooltip trigger element — the element the user interacts with                              |
-| `children`     | `React.ReactNode`         | —        | Tooltip popup content                                                                      |
-| `open`         | `boolean`                 | —        | Controlled open state                                                                      |
-| `enabled`      | `boolean`                 | `true`   | Enable or disable the tooltip entirely                                                     |
-| `hover`        | `boolean`                 | `true`   | Show tooltip on hover                                                                      |
-| `focus`        | `boolean`                 | `true`   | Show tooltip on focus                                                                      |
-| `popover`      | `boolean`                 | `false`  | Enable click toggling and change the popup role to `dialog`; does not add focus management |
-| `placement`    | `Placement`               | auto     | Preferred placement; falls back via `autoPlacement`                                        |
-| `followCursor` | `boolean`                 | `false`  | Tooltip follows the mouse cursor position                                                  |
-| `onChange`     | `(open: boolean) => void` | —        | Open state change handler                                                                  |
-| `as` | `React.ElementType` | `"span"` | HTML element to render the trigger wrapper as |
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `title` | `Label` | — | Trigger element the user interacts with |
+| `children` | `React.ReactNode` | — | Tooltip popup content |
+| `open` | `boolean` | — | Controlled open state |
+| `enabled` | `boolean` | `true` | Enable or disable the tooltip entirely |
+| `hover` | `boolean` | `true` | Show tooltip on hover |
+| `focus` | `boolean` | `true` | Show tooltip on focus |
+| `popover` | `boolean` | `false` | Enables click toggle and popup role `dialog`; adds no focus management. |
+| `placement` | `Placement` | auto | Preferred placement; falls back via `autoPlacement` |
+| `followCursor` | `boolean` | `false` | Tooltip follows the mouse cursor |
+| `onChange` | `(open: boolean) => void` | — | Open state change handler |
+| `as` | `React.ElementType` | `"span"` | Element type of the trigger wrapper |
 
-> Note: `title` is the **trigger** and `children` is the **popup content**. This is the inverse of the HTML `title` attribute convention — the prop name matches how the component API evolved.
+> Note: `title` is the **trigger** and `children` is the **popup content**. This inverts the HTML `title` attribute convention. The prop names follow the history of the component API.
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides take precedence. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. The table shows examples; the exported `defaultGeometryTokens` map holds the full set.
 
-| Override                        | Library default                        |
-| ------------------------------- | -------------------------------------- |
-| `--var-tooltip-surface-radius`  | `calc(var(--var-radius-base) / 2)`     |
+| Override | Library default |
+|---|---|
+| `--var-tooltip-surface-radius` | `calc(var(--var-radius-base) / 2)` |
 | `--var-tooltip-surface-padding` | `calc(var(--var-spacing-base) * 0.75)` |
 
-| Token | CSS Variable              | Purpose                            |
-| ------------------------- | ---------------------------------- | ------------------------------------- |
-| `bg-tooltip-background`   | `--var-tooltip-surface-background` | Tooltip popup background              |
-| `text-tooltip-foreground` | `--var-tooltip-surface-foreground` | Tooltip popup text color              |
-| `border-tooltip-border`   | `--var-tooltip-surface-border`     | Tooltip popup border and arrow stroke |
-| `fill-tooltip-background` | `--var-tooltip-surface-background` | Arrow fill color                      |
-| `z-tooltip`               | `--var-layer-tooltip`              | Z-index of the tooltip popup          |
-| `shadow-shadow-floating`  | `--var-shadow-floating`            | Tooltip drop shadow                   |
+| Token | CSS Variable | Purpose |
+|---|---|---|
+| `bg-tooltip-background` | `--var-tooltip-surface-background` | Tooltip popup background |
+| `text-tooltip-foreground` | `--var-tooltip-surface-foreground` | Tooltip popup text color |
+| `border-tooltip-border` | `--var-tooltip-surface-border` | Tooltip popup border and arrow stroke |
+| `fill-tooltip-background` | `--var-tooltip-surface-background` | Arrow fill color |
+| `z-tooltip` | `--var-layer-tooltip` | Z-index of the tooltip popup |
+| `shadow-shadow-floating` | `--var-shadow-floating` | Tooltip drop shadow |
 
 ## Placement Options
 
-Supports all Floating UI placements: `"top"`, `"top-start"`, `"top-end"`, `"bottom"`, `"bottom-start"`, `"bottom-end"`, `"left"`, `"left-start"`, `"left-end"`, `"right"`, `"right-start"`, `"right-end"`. When `placement` is omitted, `autoPlacement` picks the best available side.
+Supported values are all Floating UI placements: `"top"`, `"top-start"`, `"top-end"`, `"bottom"`, `"bottom-start"`, `"bottom-end"`, `"left"`, `"left-start"`, `"left-end"`, `"right"`, `"right-start"`, `"right-end"`. When `placement` is omitted, `autoPlacement` picks the best available side.
 
 ## Examples
 
@@ -110,7 +110,7 @@ import { Button } from "@g4rcez/components/button";
 </Tooltip>;
 ```
 
-The hover-only example illustrates the flag; it needs an equivalent keyboard/touch path before use in an application. Click mode changes the role to `dialog` but is not a complete interactive Popover.
+The hover-only example illustrates the flag. Before application use, add an equivalent keyboard/touch path. Click mode sets the role to `dialog` but is not a complete interactive Popover.
 
 ### Cursor-Following Tooltip
 
@@ -200,45 +200,57 @@ import { Button } from "@g4rcez/components/button";
 
 ## Do
 
-- Keep `focus={true}` (default) and put the reference on a focusable, named control, such as `as={Button}`. Enabling focus does not make the default `<span>` focusable.
-- Keep tooltip content short — one or two sentences at most.
+- Keep `focus={true}` (default). Put the reference on a focusable, named control such as `as={Button}`. Enabling focus does not make the default `<span>` focusable.
+- Keep tooltip content to one or two sentences at most.
 - Use `followCursor` for large interactive areas (charts, canvases) to keep the tip near the pointer.
-- Use design-token classes for any custom elements inside the tooltip popup (`text-tooltip-foreground`, `bg-muted`, etc.).
+- Use design-token classes for custom elements in the popup (`text-tooltip-foreground`, `bg-muted`).
 
 ## Don't
 
-- Don't put essential information only in a tooltip — users on touch devices may never see it.
-- Don't use tooltips for long text or complex layouts — use `Modal` or `Dropdown` instead.
-- Don't pass raw utility color classes (`bg-gray-900`, `text-white`) inside tooltip content — use design-token classes.
-- Don't use arbitrary utility values (`bg-[#abc]`, `z-[9999]`) — override CSS variables in your `@theme` block.
-- Don't use tooltips on elements that are already self-explanatory.
+- Don't put essential information only in a tooltip. Users on touch devices may never see it.
+- Don't use tooltips for long text or complex layouts. Use `Modal` or `Dropdown` instead.
+- Don't pass raw color classes (`bg-gray-900`, `text-white`) in tooltip content. Use design-token classes.
+- Don't use arbitrary values (`bg-[#abc]`, `z-[9999]`). Override CSS variables in your `@theme` block.
+- Don't use tooltips on self-explanatory elements.
 
 ## Accessibility
 
-- Hover and focus are enabled by default; click is opt-in through `popover`.
-- Default popup semantics are `role="tooltip"` with `aria-describedby` on the reference wrapper. With `popover`, `useRole` switches to `dialog`.
-- `useDismiss` handles Escape and outside press; focus-driven opening/closing comes from `useFocus`. No `FloatingFocusManager`, focus trap, focus return, or visible dismiss button is rendered.
-- Safe-polygon pointer handling is enabled only in `popover` mode; it does not provide a keyboard path into popup controls.
-- Use `as={Button}` to put the interaction and description on the actual control. With a nested button in `title`, the generated ARIA relationship is on the outer wrapper rather than that button.
+- Hover and focus are on by default. Click is opt-in through `popover`.
+- Default popup semantics are `role="tooltip"`, with `aria-describedby` on the reference wrapper. With `popover`, `useRole` switches the role to `dialog`.
+- `useDismiss` handles Escape and outside press. `useFocus` handles focus-driven open and close.
+- The component renders no `FloatingFocusManager`, focus trap, focus return, or visible dismiss button.
+- Safe-polygon pointer handling is on only in `popover` mode. It gives no keyboard path into popup controls.
+- Use `as={Button}` to put the interaction and description on the real control. With a nested button in `title`, the ARIA relationship sits on the outer wrapper, not on that button.
 
 ## Interaction design and acceptance criteria
 
 ### Selection and current behavior
 
-- Use a default `Tooltip` for a short, noninteractive description of an already named control. Keep essential instructions visible. Links, form fields, and action/close controls belong in a named `Dropdown` or `Modal`, not a `role="tooltip"` popup.
+- Use a default `Tooltip` for a short, noninteractive description of an already named control. Keep essential instructions visible.
+- Put links, form fields, and action/close controls in a named `Dropdown` or `Modal`, not in a `role="tooltip"` popup.
+- Combined guidance emphasizes explicit activation, outside/Escape dismissal, and reachable close controls. That is popover-like guidance, not default tooltip behavior.
+- The component opens on hover/focus with a shared hover delay. Click is disabled unless `popover` is set.
+- `popover` only adds click interaction, dialog semantics, and safe-polygon hover handling.
+- There is no popup naming prop, initial-focus policy, focus manager, visible close control, or return-focus configuration.
+- `popover` is a partial composition, not a full interactive Popover. See [Dropdown](Dropdown.md) for the managed nonmodal panel.
 
-- 's combined page emphasizes explicit activation, outside/Escape dismissal, and reachable close controls. That is popover-like guidance, not the default implemented tooltip behavior: this component opens on hover/focus, with a shared hover delay, and click is disabled unless `popover` is set.
-- `popover` only adds click interaction, dialog semantics, and safe-polygon hover handling. There is no popup naming prop, initial-focus policy, focus manager, visible close control, or return-focus configuration. It is a partial composition, not a fully provided interactive Popover; see [Dropdown](Dropdown.md) for the managed nonmodal panel alternative.
-- `open` is strictly controlled when supplied: `onChange` reports requests, and the parent must update `open`. `enabled={false}` disables interaction hooks but does not suppress a popup forced open by the prop. **Consumer responsibilities and design targets** Place the reference on a focusable control with visible focus and its own accessible name; tooltip text supplements that name. Provide an equivalent touch-accessible path rather than relying on hover or cursor-following. Verify Escape, focus-driven closure, description announcements, and whether pointer-triggered text remains usable while moving toward it; hover persistence is not guaranteed by the default mode. Positioning middleware does not prove that important content remains unobscured at zoom or on a small screen. These are application checks, not tested assistive-technology claims. **Acceptance criteria — verify in the consuming application** 1. **Given** a named `as={Button}` reference in default mode, **when** it receives keyboard focus, **then** the noninteractive tooltip opens, focus stays on the control, and its `aria-describedby` references the tooltip.
+### Consumer responsibilities and design targets
 
-2. **Given** a pointer-enabled tooltip, **when** the pointer hovers over its reference, **then** the description appears after the shared delay; verify readable placement and persistence separately because default mode has no safe-polygon handling.
-3. **Given** a controlled open tooltip, **when** Escape or outside press requests dismissal, **then** `onChange(false)` is reported and the popup remains until the parent changes `open`.
-4. **Given** a touch-only user or an unfocusable reference, **when** the supplementary information is needed, **then** an equivalent explicit control or visible text provides access; default hover behavior alone does not satisfy this target.
-5. **Given** information requiring interactive controls, **when** a popup is chosen, **then** it uses a named managed panel with a reachable close action and verified focus return; setting `popover` on `Tooltip` alone does not satisfy this target.
+- Put the reference on a focusable control with visible focus and its own accessible name. Tooltip text supplements that name.
+- Provide an equivalent touch-accessible path. Do not rely on hover or cursor-following.
+- Verify Escape, focus-driven closure, and description announcements.
+- Verify that pointer-triggered text stays usable while the pointer moves toward it. Default mode does not guarantee hover persistence.
+- Positioning middleware does not prove that important content stays unobscured at zoom or on a small screen.
+- These are application checks, not tested assistive-technology claims.
 
 ## Notes
 
-- When `open` is provided it is the source of truth; interaction requests call `onChange` without changing internal visibility. Without it, the component manages internal state.
-- `autoPlacement` middleware runs alongside `flip` — placement is fully automatic when `placement` is omitted.
-- Hover delay is controlled by the shared `FLOATING_DELAY` constant; there is no per-instance delay prop.
-- The component is polymorphic via the `Polymorph` core component for the popup and `as` for the trigger wrapper.
+- When `open` is provided, it is the source of truth. Interaction requests call `onChange` without changing internal visibility, so the parent MUST update `open`. Without `open`, the component manages state.
+- `enabled={false}` disables the interaction hooks. It does not suppress a popup that `open` forces open.
+- `autoPlacement` middleware runs with `flip`. Placement is fully automatic when `placement` is omitted.
+- The shared `FLOATING_DELAY` constant sets the hover delay. There is no per-instance delay prop.
+- The `Polymorph` core component renders the popup. The `as` prop sets the trigger wrapper.
+
+## Verification
+
+Acceptance criteria for tests and reviews: [verify/Tooltip.md](verify/Tooltip.md).

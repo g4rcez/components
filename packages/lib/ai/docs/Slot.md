@@ -9,7 +9,7 @@ category: core
 
 # Slot
 
-A composition primitive that merges its props into a single child element. This enables the `asChild` pattern — letting consumers supply their own element while still receiving component-level styles, event handlers, and ARIA attributes. The implementation follows the Radix UI `Slot` pattern.
+`Slot` merges its props into a single child element. This enables the `asChild` pattern: the consumer supplies the element and still receives component-level styles, event handlers, and ARIA attributes. The implementation follows the Radix UI `Slot` pattern.
 
 ## Import
 
@@ -19,39 +19,39 @@ import { Slot, Slottable } from "@g4rcez/components";
 
 ## Exports
 
-| Export                       | Description                                                                    |
-| ---------------------------- | ------------------------------------------------------------------------------ |
-| `Slot`                       | Merges props into the single child element                                     |
-| `Slottable`                  | Marks which child is the slot target when the component has internal structure |
-| `createSlot(ownerName)`      | Factory to create a named `Slot` (for building design-system components)       |
-| `createSlottable(ownerName)` | Factory to create a named `Slottable`                                          |
+| Export | Description |
+| --- | --- |
+| `Slot` | Merges props into the single child element |
+| `Slottable` | Marks the slot target among internal children |
+| `createSlot(ownerName)` | Factory for a named `Slot`, for design-system components |
+| `createSlottable(ownerName)` | Factory for a named `Slottable` |
 
 ## Props
 
-| Prop       | Type                                | Default | Description                                                        |
-| ---------- | ----------------------------------- | ------- | ------------------------------------------------------------------ |
-| `children` | `React.ReactNode`                   | -       | A single valid React element that will receive all of Slot's props |
-| `ref`      | `React.ForwardedRef<HTMLElement>`   | -       | Forwarded to the child element                                     |
-| `...props` | `React.HTMLAttributes<HTMLElement>` | -       | Props merged into the child                                        |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `React.ReactNode` | - | One valid React element; receives all `Slot` props |
+| `ref` | `React.ForwardedRef<HTMLElement>` | - | Forwarded to the child element |
+| `...props` | `React.HTMLAttributes<HTMLElement>` | - | Props merged into the child |
 
 ### Slottable
 
-| Prop       | Type              | Default | Description                              |
-| ---------- | ----------------- | ------- | ---------------------------------------- |
-| `children` | `React.ReactNode` | -       | The element to render as the slot target |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `React.ReactNode` | - | The element to render as the slot target |
 
 ## Design Tokens
 
-None — `Slot` is a structural/composition primitive that applies no styles of its own. Any classes passed to `Slot` are merged into the child element's `className`.
+None. `Slot` applies no styles. `Slot` merges its `className` into the child `className`.
 
 ## How It Works
 
-1. `Slot` receives props and a single child element.
-2. It merges `className`, `style`, and event handlers from `Slot`'s own props with those of the child.
-3. For event handlers: both the `Slot`'s and the child's handlers are called (child first).
-4. For `className`: values are joined with a space.
-5. For `style`: `Slot`'s style is spread first, then the child's style overrides.
-6. The child's element type is rendered — `Slot` itself renders no DOM element.
+1. `Slot` receives props and one child element.
+2. `Slot` merges `className`, `style`, and event handlers with those of the child.
+3. Event handlers: `Slot` calls the child handler first, then the `Slot` handler.
+4. `className`: values are joined with a space.
+5. `style`: the `Slot` style is spread first. The child style overrides it.
+6. `Slot` renders the child element type. `Slot` renders no DOM element.
 
 ## Examples
 
@@ -88,7 +88,7 @@ const examples = (
 
 ### Using Slottable for Internal Structure
 
-When your component wraps children with additional internal elements, use `Slottable` to mark which child is the slot target.
+Use `Slottable` to mark the slot target when the component wraps children with internal elements.
 
 ```tsx
 import { CheckIcon } from "@phosphor-icons/react";
@@ -118,7 +118,7 @@ const examples = (
 
 ### Creating a Named Slot
 
-Use `createSlot` when building your own design-system components for better DevTools display names.
+Use `createSlot` in design-system components to get named DevTools display names.
 
 ```tsx
 import { createSlot, createSlottable } from "@g4rcez/components";
@@ -128,7 +128,7 @@ const CardSlottable = createSlottable("Card");
 
 ### Merging Event Handlers
 
-Both handlers are called when both the `Slot` and the child define the same event.
+When `Slot` and the child define the same event, both handlers run.
 
 ```tsx
 import { Button } from "@g4rcez/components/button";
@@ -143,36 +143,31 @@ import { Slot } from "@g4rcez/components";
 
 ## Do
 
-- Use `Slot` when building reusable components that should support any element type via `asChild`
-- Use `Slottable` when your component wraps children with internal structure (icons, labels)
-- Pass accessibility attributes (`aria-*`, `role`) to `Slot` — they will be merged into the child
-- Use design-token classes in the `className` passed to `Slot` (`rounded-button-radius`, `bg-button-primary-bg`)
+- Use `Slot` in reusable components that accept any element type through `asChild`.
+- Use `Slottable` when the component wraps children with internal structure (icons, labels).
+- Pass `aria-*` and `role` to `Slot`. `Slot` merges them into the child.
+- Use design-token classes in the `Slot` `className` (`rounded-button-radius`, `bg-button-primary-bg`).
 
 ## Don't
 
-- Don't pass multiple direct children to `Slot` without using `Slottable` — `Slot` expects a single valid element
-- Don't use `Slot` when the element type is fixed and will never change
-- Don't pass raw utility color classes (`bg-blue-500`, `text-white`) in `Slot` className — use design tokens
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block
+- Don't pass multiple direct children to `Slot` without `Slottable`. `Slot` expects one valid element.
+- Don't use `Slot` when the element type is fixed.
+- Don't pass raw utility color classes (`bg-blue-500`, `text-white`). Use design tokens.
+- Don't use arbitrary utility values (`bg-[#abc]`). Override CSS variables in your `@theme` block.
 
 ## Accessibility
 
-- `Slot` merges `aria-*` and `role` props into the child element transparently
-- The final rendered element's semantics depend entirely on the child element type
-- Event handlers from both `Slot` and the child are composed — neither is silently dropped
+- The semantics of the rendered element come from the child element type.
+- Handlers from `Slot` and the child are composed. Neither is dropped.
 
 ## Data Attributes
 
-- `Slot` and `Slottable` use `displayName` for React DevTools identification but add no DOM attributes
-- Any `data-*` attributes passed to `Slot` are merged into the child element
+- `Slot` and `Slottable` use `displayName` for React DevTools. They add no DOM attributes.
+- `Slot` merges any `data-*` attributes into the child element.
 
 ## Notes
 
-- Supports `React.lazy` children via `React.use` when available in the React version
-- Ref composition: if both `Slot` and the child have refs, they are composed via `composeRefs`
-- `Slottable` uses an internal symbol (`__radixId`) to identify itself — do not attempt to replicate this check
-- React Fragment children are supported: the composed ref is not applied to `Fragment` (React 19 compatibility)
-
-```
-
-```
+- `Slot` supports `React.lazy` children through `React.use` when the React version provides it.
+- When `Slot` and the child both have refs, `composeRefs` composes them.
+- `Slottable` identifies itself with the internal symbol `__radixId`. Do not replicate this check.
+- `Slot` supports `Fragment` children. It does not apply the composed ref to `Fragment` (React 19 compatibility).
