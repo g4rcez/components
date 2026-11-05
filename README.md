@@ -1,258 +1,89 @@
 # @g4rcez/components
 
-A comprehensive React component library built with TypeScript, plain CSS, semantic design tokens, and modern web technologies. This library provides customizable, accessible, and performant UI components for building modern web applications.
+React components you can restyle without fighting them.
 
-## AI Agents + Skills
+`@g4rcez/components` is a TypeScript design system with about 60 components: forms, tables, calendars, modals, a command palette, a rich text editor, and more. It uses plain CSS, stable class names, and CSS variables for every visual decision. You do not need Tailwind, a CSS-in-JS runtime, or a provider to make it look right.
 
-This package includes the `g4rcez-components` agent skill. It gives AI coding
-agents guidance for installation, CSS setup, theming, design tokens, and the
-component API.
+[Documentation and live examples](https://components.garcez.dev/) · [npm](https://www.npmjs.com/package/@g4rcez/components) · [Releases](https://github.com/g4rcez/components/releases)
 
-### Install from GitHub
+## Why this library
 
-Use the [Vercel Skills CLI](https://github.com/vercel-labs/skills) to install
-the skill in your agent's skill directory:
+- **Styling you can predict.** Components emit class names such as `__button` and `__button--theme-primary`. Those names are a public contract and follow semver, so your own CSS keeps working between releases.
+- **Theming with variables.** Colors, spacing, radius, and shadows are `--var-*` custom properties. Change `--var-color-primary` and every component follows. Light and dark mode work with one class on `<html>`.
+- **Load only the CSS you use.** Every component has its own CSS file, and a small CLI can add the right imports for the components your code uses.
+- **Accessible by default.** Keyboard support, focus handling, and ARIA attributes are part of each component, not an add-on.
+- **Typed end to end.** Props, form paths, and table columns are checked by TypeScript.
+- **Ready for AI agents.** The package ships a skill and per-component reference docs, so coding agents use the real API instead of guessing.
 
-```bash
-npx skills@latest add g4rcez/components
-```
-
-The CLI supports Claude Code, Cursor, GitHub Copilot, and other compatible
-agents.
-
-The installed skill is self-contained: it bundles the per-component references, so
-it works without the package in `node_modules`.
-
-### Install from `node_modules`
-
-Install the package, then sync its bundled skill:
+## Install
 
 ```bash
 npm install @g4rcez/components
-npx skills experimental_sync --yes
-```
-
-`experimental_sync` discovers the package's root `SKILL.md` and installs it
-for detected agents. Add `--agent claude-code` to target a specific agent.
-
-### Manual fallback
-
-Agents that do not discover package skills automatically should read
-`@g4rcez/components/ai/SKILL.md` before writing or modifying UI in a project
-that uses this package.
-
-## 📋 Table of Contents
-
-- [AI Agents + Skills](#ai-agents--skills)
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Component Categories](#component-categories)
-- [Theming & Customization](#theming--customization)
-- [Development](#development)
-- [Contributing](#contributing)
-
-## 🎯 Overview
-
-This is a monorepo containing:
-
-- **`packages/lib/`** - The main component library (`@g4rcez/components`)
-- **`packages/docs/`** - Documentation and examples site built with Next.js
-
-### Key Features
-
-- 🎨 **Fully Customizable** - Theme system with light/dark mode support
-- ♿ **Accessible** - Built with accessibility best practices
-- 🔧 **TypeScript First** - Complete type safety and IntelliSense support
-- 🎯 **Tree Shakeable** - Import only what you need
-- 📱 **Responsive** - Mobile-first design approach
-- 🚀 **Modern Stack** - React 19, TypeScript, plain CSS, and optional Tailwind compatibility
-
-## 🏗️ Architecture
-
-### Project Structure
-
-```
-packages/
-├── lib/                          # Main component library
-│   ├── src/
-│   │   ├── components/           # All UI components
-│   │   │   ├── core/            # Basic components (Button, Tag, etc.)
-│   │   │   ├── form/            # Form components (Input, Select, etc.)
-│   │   │   ├── display/         # Display components (Alert, Card, etc.)
-│   │   │   ├── floating/        # Floating components (Modal, Tooltip, etc.)
-│   │   │   └── table/           # Table components and utilities
-│   │   ├── hooks/               # Custom React hooks
-│   │   ├── lib/                 # Utility functions
-│   │   ├── styles/              # Theme system and design tokens
-│   │   └── config/              # Configuration and context
-│   └── dist/                    # Built library files
-└── docs/                        # Documentation site
-    ├── src/app/docs/            # Component documentation pages
-    └── src/components/examples/ # Live component examples
-```
-
-### Component Organization
-
-Components are organized into logical categories:
-
-- **Core**: Basic building blocks (`Button`, `Tag`, `Polymorph`)
-- **Form**: Input and form-related components (`Input`, `Select`, `Checkbox`, etc.)
-- **Display**: Information display components (`Alert`, `Card`, `Timeline`, etc.)
-- **Floating**: Overlay components (`Modal`, `Tooltip`, `Dropdown`, etc.)
-- **Table**: Data table components with advanced features
-
-## 📦 Installation
-
-```bash
-npm install @g4rcez/components
-# or
-yarn add @g4rcez/components
 # or
 pnpm add @g4rcez/components
+yarn add @g4rcez/components
 ```
 
-### CSS Import
+It needs React 18 or newer. Node.js 20.14 or newer is needed for the CLI and the build tools.
 
-The v6 styling model is plain CSS first. Import CSS from an app stylesheet, not from component JS modules.
+## Quick start
+
+**1. Import the CSS** in your app stylesheet. `foundation.css` comes first. It holds the tokens and the base styles.
 
 ```css
 @import "@g4rcez/components/foundation.css";
 @import "@g4rcez/components/button.css";
+@import "@g4rcez/components/input.css";
 ```
 
-`foundation.css` is required before component CSS. For convenience, `@g4rcez/components/index.css` bundles the foundation plus every public component stylesheet.
+Prefer one import? `@g4rcez/components/index.css` bundles the foundation and every component stylesheet.
 
-Migration status: every public component now has a stable CSS chunk, style contract sidecar, and manifest entry. Button is fully ported to handwritten v6 CSS; other components keep their generated CSS chunks and legacy utility class names until their visual rules are hand-ported.
-
-### Auto-import used component CSS
-
-Run the packaged CLI to scan your source files and keep a managed CSS import block in your app stylesheet:
-
-```bash
-pnpm exec g4rcez-components styles --css src/app.css
-```
-
-Use `--check` in CI to fail when the stylesheet is out of date.
-
-### Oxlint design-system rules
-
-The design-system rules are published with `@g4rcez/components`. Install the
-library as a development dependency:
-
-```bash
-npm install --save-dev @g4rcez/components
-# or
-pnpm add --save-dev @g4rcez/components
-```
-
-Register the bundled plugin in `oxlint.config.ts` or `.oxlintrc.json`:
-
-```json
-{
-    "jsPlugins": ["@g4rcez/components/lint"],
-    "rules": {
-        "shadcn/no-restyle": "error",
-        "shadcn/no-raw-colors": "error"
-    }
-}
-```
-
-Available rules include `no-restyle`, `no-raw-colors`, `no-arbitrary-values`,
-`no-inline-styles`, `no-unknown-classes`, and `require-static-classes`.
-
-## 🚀 Quick Start
-
-### Basic Usage
+**2. Use the components.**
 
 ```tsx
-import { Button, Input, Modal } from "@g4rcez/components";
+import { Button, Input } from "@g4rcez/components";
 
-function App() {
-    return (
-        <div>
-            <Button theme="primary">Click me</Button>
-            <Input placeholder="Enter text..." />
-        </div>
-    );
-}
+export const App = () => (
+    <form>
+        <Input placeholder="Your name" />
+        <Button theme="primary">Save</Button>
+    </form>
+);
 ```
 
-### With Provider (Optional)
+**3. Turn on dark mode** by adding `class="dark"` to `<html>`. The library never changes that class for you.
 
-`ComponentsProvider` configures behavior such as translations, locale-aware masks, icon defaults, and modal helpers. It is not required for styling.
+`ComponentsProvider` is optional. Use it only for behavior such as translations, locale-aware masks, icon defaults, and modal helpers. It is not needed for styling.
 
-```tsx
-import { ComponentsProvider } from "@g4rcez/components";
+### Add only the CSS you use
 
-function App() {
-    return (
-        <ComponentsProvider>
-            <YourApp />
-        </ComponentsProvider>
-    );
-}
+The package includes a CLI. It scans your source files and keeps a managed block of CSS imports up to date in your stylesheet:
+
+```bash
+npx csscomponents --css src/app.css
 ```
 
-## 🧩 Component Categories
+Use `--check` in CI to fail when the stylesheet is out of date, and `--dry-run` to preview the changes. Run `npx csscomponents --help` for all options.
 
-### Core Components
+## What is inside
 
-| Component   | Description                       | Import                                               |
-| ----------- | --------------------------------- | ---------------------------------------------------- |
-| `Button`    | Customizable button with variants | `import { Button } from "@g4rcez/components/button"` |
-| `Tag`       | Label/badge component             | `import { Tag } from "@g4rcez/components/tag"`       |
-| `Polymorph` | Polymorphic component base        | `import { Polymorph } from "@g4rcez/components"`     |
+Every component can be imported from the package root or from its own path, for example `@g4rcez/components/button`.
 
-### Form Components
+| Group        | Components                                                                                                                                                                                                                |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Core**     | `Button`, `Tag`, `Heading`, `Typography`, `Polymorph`, `Slot`, `Resizable`, `RenderOnView`                                                                                                                                |
+| **Form**     | `Form`, `Input`, `InputField`, `Select`, `MultiSelect`, `Autocomplete`, `Checkbox`, `Radiobox`, `Switch`, `Slider`, `DatePicker`, `FileUpload`, `TaskList`, `RichTextEditor`, `DrawingEditor`                             |
+| **Display**  | `Alert`, `Card`, `Calendar`, `PageCalendar`, `Collapse`, `Empty`, `List`, `Masonry`, `Notifications`, `PdfViewer`, `Progress`, `Skeleton`, `Spinner`, `Stats`, `Step`, `SwipeableList`, `Tabs`, `Timeline`, `VideoPlayer` |
+| **Floating** | `Modal`, `Tooltip`, `Dropdown`, `Menu`, `CommandPalette`, `Expand`, `Toolbar`, `Wizard`                                                                                                                                   |
+| **Table**    | `Table` with sorting, filtering, grouping, pagination, and virtualized rows                                                                                                                                               |
 
-| Component      | Description                        | Import                                                           |
-| -------------- | ---------------------------------- | ---------------------------------------------------------------- |
-| `Input`        | Text input with mask support       | `import { Input } from "@g4rcez/components/input"`               |
-| `Select`       | Native select with styling         | `import { Select } from "@g4rcez/components/select"`             |
-| `Autocomplete` | Searchable select with floating UI | `import { Autocomplete } from "@g4rcez/components/autocomplete"` |
-| `Checkbox`     | Checkbox input                     | `import { Checkbox } from "@g4rcez/components/checkbox"`         |
-| `Switch`       | Toggle switch                      | `import { Switch } from "@g4rcez/components/switch"`             |
-| `DatePicker`   | Date selection component           | `import { DatePicker } from "@g4rcez/components/date-picker"`    |
-| `FileUpload`   | File upload with drag & drop       | `import { FileUpload } from "@g4rcez/components/file-upload"`    |
-| `Form`         | Minimal form wrapper               | `import { Form } from "@g4rcez/components/form"`                 |
+The library also exports hooks such as `useForm`, `useSwipe`, `usePrevious`, `useReactive`, `useLocale`, and `useTranslations`.
 
-### Display Components
+Props, defaults, accessibility notes, tokens, and examples for each component are in [`packages/lib/ai/docs`](packages/lib/ai/docs). Start with the [index](packages/lib/ai/docs/index.md). These files are written from the source code and are the best reference for exact APIs.
 
-| Component       | Description                 | Import                                                              |
-| --------------- | --------------------------- | ------------------------------------------------------------------- |
-| `Alert`         | Alert/notification messages | `import { Alert } from "@g4rcez/components/alert"`                  |
-| `Card`          | Content container           | `import { Card } from "@g4rcez/components/card"`                    |
-| `Calendar`      | Calendar display            | `import { Calendar } from "@g4rcez/components/calendar"`            |
-| `Timeline`      | Vertical event timeline     | `import { Timeline } from "@g4rcez/components/timeline"`            |
-| `Tabs`          | Tab navigation              | `import { Tabs } from "@g4rcez/components/tabs"`                    |
-| `Stats`         | Statistics display          | `import { Stats } from "@g4rcez/components/stats"`                  |
-| `Masonry`       | Measured masonry layout     | `import { Masonry } from "@g4rcez/components/masonry"`              |
-| `SwipeableList` | Swipeable virtualized list  | `import { SwipeableList } from "@g4rcez/components/swipeable-list"` |
+## Theming
 
-### Floating Components
-
-| Component  | Description   | Import                                                   |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `Modal`    | Modal dialog  | `import { Modal } from "@g4rcez/components/modal"`       |
-| `Tooltip`  | Hover tooltip | `import { Tooltip } from "@g4rcez/components/tooltip"`   |
-| `Dropdown` | Dropdown menu | `import { Dropdown } from "@g4rcez/components/dropdown"` |
-| `Menu`     | Context menu  | `import { Menu } from "@g4rcez/components/menu"`         |
-
-### Table Components
-
-| Component | Description         | Import                                             |
-| --------- | ------------------- | -------------------------------------------------- |
-| `Table`   | Advanced data table | `import { Table } from "@g4rcez/components/table"` |
-
-For the complete, source-aligned component props and examples, see [`packages/lib/ai/docs/index.md`](packages/lib/ai/docs/index.md) and the per-component references in [`packages/lib/ai/docs`](packages/lib/ai/docs).
-
-## 🎨 Theming & Customization
-
-### Theme System
-
-Foundation CSS supplies light colors on `:root` and dark colors on `html.dark`. The application activates dark mode with `<html class="dark">`; configuring a theme never changes classes. CSS-only setup needs no JavaScript or provider:
+Foundation CSS defines light colors on `:root` and dark colors on `html.dark`. For a CSS-only setup you need no JavaScript:
 
 ```css
 @import "@g4rcez/components/foundation.css";
@@ -268,7 +99,7 @@ html.dark {
 }
 ```
 
-The equivalent sparse JavaScript API uses the same canonical properties:
+The same settings are available from JavaScript:
 
 ```ts
 import { configureTheme } from "@g4rcez/components";
@@ -281,23 +112,19 @@ configureTheme({
 });
 ```
 
-`default` targets `:root`; named themes target `html.<name>`. Only `tokens.spacing` and `tokens.rounding` accept numbers, interpreted as pixels (including zero). Other values are CSS strings, and colors retain their full CSS syntax.
+How it works:
 
-Each call replaces that name's entire override set: omitted previous values are removed. `configureTheme({ name: "dark" })` clears managed dark overrides without removing built-in dark colors or changing activation. Default configuration can supply shared geometry while dark overrides only colors.
+- `default` targets `:root`. A named theme targets `html.<name>`.
+- Only `tokens.spacing` and `tokens.rounding` accept numbers, read as pixels. Every other value is a CSS string.
+- Each call replaces the whole override set for that name. Values you leave out are removed.
+- Order of priority, lowest to highest: library defaults (`var.tokens`), your configuration (`var.theme`), your unlayered CSS, then inline styles. Layer order wins over specificity, so an unlayered `:root` rule overrides even a configured `html.dark`.
+- For server rendering, `createThemeCss(config)` returns the CSS as a string. It supports a CSP nonce. `createThemeProperties(...)` returns sparse inline properties for a wrapper element.
 
-Normal declarations cascade from library defaults (`var.tokens`) to configuration (`var.theme`) to unlayered application CSS, then consumer inline styles. Layer priority precedes specificity: unlayered `:root` overrides even configured `html.dark`. Configured default colors also override built-in dark colors unless explicitly configured for dark.
+For reset behavior, custom themes, SSR ownership, shadows, and migration examples, read [Theme customization](packages/lib/ai/docs/theme-customization.md) and [Geometry tokens](packages/lib/ai/docs/geometry-tokens.md).
 
-Use `createThemeCss(config)` for pure SSR/static CSS, with owned style ID `g4rcez-theme-<name>`, `data-g4rcez-theme-owner="theme-runtime"`, and `data-g4rcez-theme-name="<name>"`. Pass a CSP nonce on server styles and initial client registration as needed. Matching styles are updated in place during hydration; later calls preserve an omitted nonce. Emit the active root class before first paint.
+### The public CSS contract
 
-Use `createThemeProperties({ tokens?, colors?, components? })` for sparse wrapper inline properties. Root themes reach body portals; wrappers reach only DOM descendants. Custom theme names do not inherit dark automatically: explicitly copy the color-only `defaultDarkThemeTokens` groups when needed. `defaultLightThemeTokens` and the geometry exports are inspection data, not required full-default injection.
-
-**Breaking release (v7):** Replace retired theme registration and full-object serializers with the sparse APIs; move theme imports from `/styles` or `/themes` to the package root or `/theme`; migrate root theme attributes to classes; and replace the retired `--var-radius` input with `tokens.rounding` or `--var-radius-base`. Remove unprefixed legacy theme aliases. The built-in dark Card shadow is normalized to the shared transparent `0px 1px 2px 1px` shape; this intentionally removes its former dark-only geometry. Keep `--var-shadow-card` as a full-shadow override. Notification and Table shadow geometry is shared while its color varies by built-in theme; retain full overrides on `--var-shadow-notification` / `--var-shadow-table`, or customize `--var-shadow-notification-shape` / `--var-shadow-table-shape` and `--var-color-shadow-notification` / `--var-color-shadow-table`. Provider component overrides and optional Tailwind preset utilities use canonical properties; neither is required for CSS styling.
-
-See [Theme customization](packages/lib/ai/docs/theme-customization.md) for complete reset, custom theme, SSR ownership/nonce, provider/preset, shadow shape/color, and migration examples, and [Geometry tokens](packages/lib/ai/docs/geometry-tokens.md) for reactive density and rounding.
-
-### Public CSS Contract
-
-Components expose semver-protected selectors:
+Components expose selectors that follow semver:
 
 ```css
 .__button {
@@ -310,129 +137,123 @@ Components expose semver-protected selectors:
 }
 ```
 
-Use semantic `--var-*` tokens for durable customization; use selectors for advanced overrides.
+Use `--var-*` tokens for lasting customization and selectors for advanced overrides. Published CSS includes source maps with the original source embedded, so browser developer tools can trace a minified rule back to its source.
 
-Published CSS chunks include source maps with embedded source content. Enable CSS
-source maps in browser developer tools to trace minified component rules and
-inlined foundation rules back to their original stylesheets.
+### Upgrading to v7
 
-### Why plain CSS is the default
+v7 is a breaking release for theming:
 
-Earlier versions used Tailwind as both the authoring API and token distribution mechanism. That made component styling depend on consumer Tailwind configuration, made theme maintenance harder, and polluted component internals with long utility strings.
+- Replace the retired theme registration and full-object serializers with the sparse APIs above.
+- Import theme code from the package root or `@g4rcez/components/theme`, not from `/styles` or `/themes`.
+- Switch root theme attributes to classes.
+- Replace the retired `--var-radius` input with `tokens.rounding` or `--var-radius-base`.
+- Remove the unprefixed legacy theme aliases.
+- The built-in dark Card shadow now uses the shared transparent `0px 1px 2px 1px` shape. Set `--var-shadow-card` to keep a full custom shadow.
+- Notification and Table shadows share one geometry, and only the color changes per theme. Override `--var-shadow-notification` or `--var-shadow-table` in full, or tune `--var-shadow-notification-shape`, `--var-shadow-table-shape`, `--var-color-shadow-notification`, and `--var-color-shadow-table`.
 
-The v6 model makes plain CSS, stable selectors, and runtime CSS variables the default. Legacy Tailwind preset and plugin entrypoints remain exported for projects that still use the v3/v4 integration; new apps should prefer the CSS chunks.
+### Why plain CSS
 
-### Style Manifest
+Earlier versions used Tailwind both to write styles and to ship tokens. That tied component styling to each consumer's Tailwind setup, made themes hard to maintain, and filled component code with long utility strings. The current model uses plain CSS, stable selectors, and runtime CSS variables. The Tailwind preset and plugin (`@g4rcez/components/preset.tailwind` and `@g4rcez/components/plugin.tailwind`) are still exported for projects that use them, but new apps should use the CSS files.
 
-The package publishes a machine-readable style manifest for CLIs and AI agents:
+## Tools for your project
+
+### Style manifest
+
+A machine-readable list of every component and its CSS dependencies, for CLIs and agents:
 
 ```ts
 import { componentStyleManifest } from "@g4rcez/components/style-manifest";
 ```
 
-The same data is available as JSON at `@g4rcez/components/style-manifest.json` and in `ai/component-style-manifest.json`.
+The same data is available as JSON at `@g4rcez/components/style-manifest.json`.
 
-## 🛠️ Development
+### Oxlint design-system rules
 
-### Prerequisites
+The package includes an Oxlint plugin that keeps your code on the design system. Register it in `oxlint.config.ts` or `.oxlintrc.json`:
 
-- Node.js >= 20.14.0
-- pnpm (recommended package manager)
+```json
+{
+    "jsPlugins": ["@g4rcez/components/lint"],
+    "rules": {
+        "shadcn/no-restyle": "error",
+        "shadcn/no-raw-colors": "error"
+    }
+}
+```
 
-### Setup
+Available rules: `no-restyle`, `no-raw-colors`, `no-arbitrary-values`, `no-inline-styles`, `no-unknown-classes`, and `require-static-classes`.
+
+### AI agents and skills
+
+This repository ships one skill for library users: `g4rcez-components`. It teaches coding agents how to install the library, set up CSS, theme it, and use each component API. It works with Claude Code, Cursor, GitHub Copilot, and other agents that support skills. Pick one of the three ways below.
+
+**1. From GitHub.** Use the [Vercel Skills CLI](https://github.com/vercel-labs/skills). This works in any project, even before you install the library:
 
 ```bash
-# Clone the repository
+npx skills@latest add g4rcez/components --skill g4rcez-components
+```
+
+The repository also holds skills for people who work on the library itself, such as design and accessibility helpers. Pass `--skill g4rcez-components` so you install only the one meant for library users. Add `--agent claude-code` to target one agent, or `--global` to install for all your projects. The skill includes the per-component references, so it works without the package in `node_modules`. Run the same command again to update it.
+
+**2. From `node_modules`.** Install the package, then sync the skill it bundles. The version of the skill then matches the version of the library:
+
+```bash
+npm install @g4rcez/components
+npx skills experimental_sync --yes
+```
+
+**3. By hand.** If your agent does not find skills on its own, tell it to read `node_modules/@g4rcez/components/ai/SKILL.md` before it edits UI. The per-component references are in `node_modules/@g4rcez/components/ai/docs`.
+
+## Contributing
+
+This repository is a pnpm monorepo:
+
+- [`packages/lib`](packages/lib) is the published library, `@g4rcez/components`.
+- [`packages/docs`](packages/docs) is the documentation site (Next.js).
+- [`packages/lint`](packages/lint) is the Oxlint plugin that is bundled into the library.
+
+### Set up
+
+```bash
 git clone https://github.com/g4rcez/components.git
 cd components
-
-# Install dependencies
 pnpm install
-
-# Start development server (docs site)
-pnpm dev
-
-# Build the library
-pnpm build
+pnpm dev        # docs site
+pnpm build      # build the packages
 ```
 
-### Scripts
+### Common commands
 
-- `pnpm dev` - Start docs development server
-- `pnpm build` - Build both library and docs
-- `pnpm test` - Run tests
-- `pnpm format` - Format code with oxfmt
-- `pnpm knip` - Check for unused files, exports, and dependencies
-- `pnpm knip:production` - Run Knip in production mode
+| Command                                      | What it does                                 |
+| -------------------------------------------- | -------------------------------------------- |
+| `pnpm dev`                                   | Start the docs site                          |
+| `pnpm build`                                 | Build every package                          |
+| `pnpm lint`                                  | Run Oxlint                                   |
+| `pnpm format`                                | Format with oxfmt                            |
+| `pnpm knip`                                  | Find unused files, exports, and dependencies |
+| `pnpm --filter @g4rcez/components test`      | Run the library tests (Vitest)               |
+| `pnpm --filter @g4rcez/components typecheck` | Type-check the library and its tests         |
 
-### Testing
+Some tests, `tests/package-types.test.ts` and `tests/css-sourcemaps.test.ts`, read the built `dist` files. Run the library build before them.
 
-```bash
-# Run tests
-cd packages/lib
-pnpm test
+### Guidelines
 
-# Watch mode
-pnpm test:watch
-```
+1. Type every component fully.
+2. Follow WCAG for accessibility.
+3. Add tests for new behavior, and examples to the docs site.
+4. Keep the agent skill in step with the code. Edit `skills/g4rcez-components/SKILL.md` and the references in `packages/lib/ai/docs`, then run `pnpm components:skills sync` and `pnpm components:skills check`. Do not edit the copies by hand. They are generated.
+5. Follow the patterns already in the code. See [CONTRIBUTING.md](CONTRIBUTING.md), [ARCHITECTURE.md](ARCHITECTURE.md), and [AGENTS.md](AGENTS.md).
 
-### Package maintenance
+Fork the repository, work on a branch, and open a pull request.
 
-- Build the library before running `tests/package-types.test.ts` or
-  `tests/css-sourcemaps.test.ts`; these tests exercise the published `dist` files.
-- The library TypeScript pass emits declarations only, preserving the `src`
-  directory layout under `dist`. Point new `types` exports at those original
-  declaration paths, not at JavaScript bundle paths. Keep existing `components/*`
-  aliases working with explicit type targets when a bundle has a flattened name.
-  The separate Tailwind compiler emits only the CommonJS preset/plugin entries
-  and their dependencies under `dist/preset`.
-- Public path constraints are owned by the package's private `lib/path-types`
-  module. Keep runtime utility dependencies out of emitted type signatures when
-  local types already express the contract. The published consumer test checks
-  the full declaration graph with `skipLibCheck: false`, including accepted and
-  rejected table/form paths and FileUpload's Dropzone prop overrides.
-- The CSS Vite configuration owns entry discovery, Vite/PostCSS import bundling,
-  and Lightning CSS minification with composed source maps. Do not copy
-  declarations or synthesize maps in post-build scripts.
-- Knip models public library/CLI entries, the copied lint bundle, test setup and
-  Next-discovered routes. See [CONTRIBUTING.md](CONTRIBUTING.md) for the installed
-  analyzer commands and build prerequisites. Keep docs components reachable from
-  routes and each workspace's dependencies tied to its actual imports.
-- Internal cleanup removed disconnected docs components and unused docs
-  dependencies, MultiSelect's unread label history, unused document-scroll-lock
-  machinery, and Wizard's redundant window-dimension subscription. Popup wheel
-  containment and Wizard's direct resize/scroll geometry tracking remain in place.
+### Releases
 
-## 🤝 Contributing
+Every commit on `main`, including a merged pull request, publishes a new patch version of `@g4rcez/components` to npm through GitHub Actions, with provenance. Other packages are not published. For a minor or major release, raise the version in `packages/lib/package.json` in your pull request. The pipeline publishes that version as it is, and the following releases continue from it.
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Add tests for new functionality
-5. Run tests: `pnpm test`
-6. Format code: `pnpm format`
-7. Commit changes: `git commit -m 'Add amazing feature'`
-8. Push to branch: `git push origin feature/amazing-feature`
-9. Open a Pull Request
+## License
 
-### Component Development Guidelines
-
-1. **TypeScript First** - All components must be fully typed
-2. **Accessibility** - Follow WCAG guidelines
-3. **Testing** - Include unit tests for new components
-4. **Documentation** - Add examples to the docs site
-5. **Consistency** - Follow existing patterns and conventions
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🔗 Links
-
-- [GitHub Repository](https://github.com/g4rcez/components)
-- [NPM Package](https://www.npmjs.com/package/@g4rcez/components)
-- [Author](https://garcez.dev)
+MIT. See [LICENSE](LICENSE).
 
 ---
 
-Built with ❤️ by [Allan Garcez](https://garcez.dev)
+Built by [Allan Garcez](https://garcez.dev).
