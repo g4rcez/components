@@ -1476,7 +1476,7 @@ export const defaultDarkComponentTokens = {
     },
     "card": {
         "background": "hsla(221, 16%, 9%)",
-        "border": "hsla(240, 4%, 16%)",
+        "border": "hsla(240, 4%, 10%)",
         "muted": "hsla(240, 4%, 16%)",
         "stats-panel-background-hover": "hsla(201, 49%, 22%, 0.1)"
     },

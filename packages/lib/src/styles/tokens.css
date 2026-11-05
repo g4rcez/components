@@ -429,7 +429,7 @@ html.dark {
 
   --var-color-background: hsla(240, 10%, 8%);
   --var-color-foreground: hsla(240, 5%, 96%);
-  --var-color-border: hsla(240, 4%, 16%);
+  --var-color-border: hsla(240, 4%, 12%);
   --var-color-ring: hsla(201, 49%, 65%);
   --var-color-disabled: hsla(240, 4%, 16%);
   --var-color-muted: hsla(240, 4%, 16%);
@@ -443,7 +443,7 @@ html.dark {
   --var-color-secondary-subtle: hsla(240, 4%, 20%);
   --var-color-secondary-hover: hsla(240, 4%, 25%);
   --var-card-background: hsla(221, 16%, 9%);
-  --var-card-border: hsla(240, 4%, 16%);
+  --var-card-border: hsla(240, 4%, 10%);
   --var-card-muted: hsla(240, 4%, 16%);
   --var-button-secondary-background: hsla(0, 0%, 100%);
   --var-button-secondary-foreground: hsla(240, 10%, 4%);
