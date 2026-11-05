@@ -4,6 +4,7 @@ description: Create beautiful, accessible user interfaces with shadcn/ui compone
 argument-hint: "[component or layout]"
 license: MIT
 metadata:
+  internal: true
   author: claudekit
   version: "1.0.0"
 ---

@@ -4,6 +4,7 @@ description: "Comprehensive design skill: brand identity, design tokens, UI styl
 argument-hint: "[design-type] [context]"
 license: MIT
 metadata:
+  internal: true
   author: claudekit
   version: "2.1.0"
 ---

@@ -4,6 +4,7 @@ description: "Design banners for social media, ads, website heroes, creative ass
 argument-hint: "[platform] [style] [dimensions]"
 license: MIT
 metadata:
+  internal: true
   author: claudekit
   version: "1.0.0"
 ---

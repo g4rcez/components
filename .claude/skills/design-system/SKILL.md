@@ -4,6 +4,7 @@ description: Token architecture, component specifications, and slide generation.
 argument-hint: "[component or token]"
 license: MIT
 metadata:
+  internal: true
   author: claudekit
   version: "1.0.0"
 ---

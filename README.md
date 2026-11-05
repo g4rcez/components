@@ -190,10 +190,10 @@ This repository ships one skill for library users: `g4rcez-components`. It teach
 **1. From GitHub.** Use the [Vercel Skills CLI](https://github.com/vercel-labs/skills). This works in any project, even before you install the library:
 
 ```bash
-npx skills@latest add g4rcez/components --skill g4rcez-components
+npx skills@latest add g4rcez/components
 ```
 
-The repository also holds skills for people who work on the library itself, such as design and accessibility helpers. Pass `--skill g4rcez-components` so you install only the one meant for library users. Add `--agent claude-code` to target one agent, or `--global` to install for all your projects. The skill includes the per-component references, so it works without the package in `node_modules`. Run the same command again to update it.
+The CLI offers only `g4rcez-components`. The other skills in this repository are for people who work on the library itself, and they are marked `metadata.internal: true` so the CLI hides them. Add `--agent claude-code` to target one agent, or `--global` to install for all your projects. The skill includes the per-component references, so it works without the package in `node_modules`. Run the same command again to update it.
 
 **2. From `node_modules`.** Install the package, then sync the skill it bundles. The version of the skill then matches the version of the library:
 
