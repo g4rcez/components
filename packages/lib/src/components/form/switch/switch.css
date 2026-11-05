@@ -34,6 +34,7 @@
 }
 
 .__switch__track {
+    box-sizing: border-box;
     position: relative;
     display: inline-flex;
     flex-shrink: 0;
@@ -84,7 +85,7 @@
 
 .__switch__thumb[data-checked="true"] {
     background-color: var(--var-switch-thumb-checked-background);
-    transform: translateX(var(--var-switch-thumb-checked-translate-inline, calc( var(--var-spacing-base) * 1.25 )));
+    transform: translateX(var(--var-switch-thumb-checked-translate-inline, calc(var(--var-spacing-base) * 1)));
 }
 
 .__switch__label {
