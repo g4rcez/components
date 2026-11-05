@@ -1,6 +1,6 @@
 ---
 title: Menu
-description: Accessible floating menu system with nested submenus, keyboard navigation, hover support, and typeahead.
+description: Floating application-action menu with nested submenus, keyboard navigation, hover support, and typeahead.
 package: "@g4rcez/components"
 export: "{ Menu, MenuItem }"
 import: "import { Menu, MenuItem } from '@g4rcez/components/menu'"
@@ -9,7 +9,7 @@ category: floating
 
 # Menu
 
-Accessible floating menu system with nested submenus, keyboard navigation, hover support, and typeahead.
+Floating application-action menu with nested submenus, keyboard navigation, hover support, and typeahead.
 
 ## Import
 
@@ -19,34 +19,32 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 ## Props
 
-### Menu
+### Menu props
 
-| Prop                | Type                           | Default | Description                                                                                     |
-| ------------------- | ------------------------------ | ------- | ----------------------------------------------------------------------------------------------- |
-| `label`             | `string \| React.ReactElement` | —       | Trigger content                                                                                 |
-| `title`             | `string`                       | —       | Required for accessibility when `label` is an element; also used for typeahead                  |
-| `hover`             | `boolean`                      | `true`  | Open on hover in addition to click                                                              |
-| `open`              | `boolean`                      | `false` | Initial open state                                                                              |
-| `asChild`           | `boolean`                      | `false` | Use the `Slot` pattern — merge props onto the child element instead of wrapping in a `<button>` |
-| `restoreFocus`      | `boolean`                      | `false` | Restore focus to the trigger after the menu closes                                              |
-| `floatingClassName` | `string`                       | —       | Additional CSS classes for the floating list container                                          |
-| `FloatingComponent` | `React.ElementType`            | `"div"` | Element type for the floating container                                                         |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string \| React.ReactElement` | — | Trigger content. |
+| `title` | `string` | — | Trigger `title` attribute. Set it for an element label. Not an accessible name. |
+| `hover` | `boolean` | `true` | Open on hover in addition to click. |
+| `open` | `boolean` | `false` | Initial open state only. |
+| `asChild` | `boolean` | `false` | Use the `Slot` pattern: merge props onto the child instead of a `<button>`. |
+| `restoreFocus` | `boolean` | `false` | Passed as the root focus manager's `returnFocus`. Returns focus to the root trigger on close. |
+| `floatingClassName` | `string` | — | Extra classes for the floating list container. |
+| `FloatingComponent` | `React.ElementType` | `"div"` | Element type for the floating container. |
 
 ### MenuItem
 
-| Prop       | Type                  | Default | Description                                                      |
-| ---------- | --------------------- | ------- | ---------------------------------------------------------------- |
-| `title`    | `string`              | —       | Item text; used for typeahead matching and the `title` attribute |
-| `children` | `React.ReactNode`     | —       | Visual content of the item                                       |
-| `disabled` | `boolean`             | `false` | Removes item from keyboard navigation and typeahead              |
-| `Right`    | `React.FC<IconProps>` | —       | Icon rendered on the right side                                  |
-| `onClick`  | `function`            | —       | Click handler                                                    |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` | `string` | — | Item text. Used for typeahead matching and the `title` attribute. |
+| `children` | `React.ReactNode` | — | Visual content of the item. |
+| `disabled` | `boolean` | `false` | Removes the item from keyboard navigation and typeahead. |
+| `Right` | `React.FC<IconProps>` | — | Icon on the right side. |
+| `onClick` | `function` | — | Click handler. |
 
 ## Design Tokens
 
-Geometry defaults use scoped `calc()` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions.
-
-Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
+Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independent `--var-radius-base`. Explicit semantic overrides remain unchanged. See [Geometry tokens](geometry-tokens.md) for default lookup, radius migration, theme emission, and exceptions. Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map contains the full set):
 
 | Override | Library default |
 | --- | --- |
@@ -55,10 +53,8 @@ Current plain-CSS geometry examples (the exported `defaultGeometryTokens` map co
 | `--var-menu-item-outline-width` | `calc(var(--var-spacing-base) * 0.125)` |
 | `--var-menu-item-outline-offset` | `calc(var(--var-spacing-base) * 0.125)` |
 
-Tokens this component reads. Customize by overriding these CSS variables in your theme.
-
-| Token                     | CSS Variable            | Purpose                        |
-| ------------------------- | ----------------------- | ------------------------------ |
+| Token | CSS Variable | Purpose |
+| --- | --- | --- |
 | CSS override | `--var-menu-surface-background` | Menu list surface background |
 | CSS override | `--var-menu-surface-border` | Menu list border |
 | `shadow-shadow-floating` | `--var-shadow-floating` | Menu list drop shadow |
@@ -72,10 +68,9 @@ Tokens this component reads. Customize by overriding these CSS variables in your
 
 ```tsx
 import { Menu, MenuItem } from "@g4rcez/components/menu";
-
 <Menu label="Actions">
-    <MenuItem title="Edit">Edit Profile</MenuItem>
-    <MenuItem title="Share">Share Profile</MenuItem>
+    {" "}
+    <MenuItem title="Edit">Edit Profile</MenuItem> <MenuItem title="Share">Share Profile</MenuItem>
 </Menu>;
 ```
 
@@ -84,13 +79,15 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 ```tsx
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Menu, MenuItem } from "@g4rcez/components/menu";
-
 <Menu label="Settings">
+    {" "}
     <MenuItem title="Edit" Right={PencilSimpleIcon}>
-        Edit
-    </MenuItem>
+        {" "}
+        Edit{" "}
+    </MenuItem>{" "}
     <MenuItem title="Delete" Right={TrashIcon} className="text-danger">
-        Delete
+        {" "}
+        Delete{" "}
     </MenuItem>
 </Menu>;
 ```
@@ -99,15 +96,16 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 
 ```tsx
 import { Menu, MenuItem } from "@g4rcez/components/menu";
-
 <Menu label="Actions">
-    <MenuItem title="Edit">Edit Profile</MenuItem>
-    <MenuItem title="Share">Share Profile</MenuItem>
+    {" "}
+    <MenuItem title="Edit">Edit Profile</MenuItem> <MenuItem title="Share">Share Profile</MenuItem>{" "}
     <Menu label="More Options" title="More Options">
-        <MenuItem title="Archive">Archive Account</MenuItem>
+        {" "}
+        <MenuItem title="Archive">Archive Account</MenuItem>{" "}
         <MenuItem title="Delete" className="text-danger">
-            Delete Account
-        </MenuItem>
+            {" "}
+            Delete Account{" "}
+        </MenuItem>{" "}
     </Menu>
 </Menu>;
 ```
@@ -117,10 +115,9 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 ```tsx
 import { Menu, MenuItem } from "@g4rcez/components/menu";
 import { Button } from "@g4rcez/components/button";
-
 <Menu label={<Button theme="primary">Main Action</Button>} asChild title="Main Action">
-    <MenuItem title="Save">Save Version</MenuItem>
-    <MenuItem title="Publish">Publish Now</MenuItem>
+    {" "}
+    <MenuItem title="Save">Save Version</MenuItem> <MenuItem title="Publish">Publish Now</MenuItem>
 </Menu>;
 ```
 
@@ -128,52 +125,85 @@ import { Button } from "@g4rcez/components/button";
 
 ```tsx
 import { Menu, MenuItem } from "@g4rcez/components/menu";
-
 <Menu label="Options">
-    <MenuItem title="Export">Export Data</MenuItem>
+    {" "}
+    <MenuItem title="Export">Export Data</MenuItem>{" "}
     <MenuItem title="Import" disabled>
-        Import (unavailable)
-    </MenuItem>
+        {" "}
+        Import (unavailable){" "}
+    </MenuItem>{" "}
     <MenuItem title="Delete" className="text-danger">
-        Delete
+        {" "}
+        Delete{" "}
     </MenuItem>
 </Menu>;
 ```
 
 ## Do
 
-- Provide a `title` string whenever `label` is a React element — it enables typeahead and improves accessibility.
-- Use nested `Menu` components (not just `MenuItem`) for logical groupings of secondary actions.
-- Use `disabled` for actions temporarily unavailable, so users know the option exists.
+- Set `title` whenever `label` is a React element.
+- Keep meaningful visible text or an explicit `aria-label` on the trigger.
+- Use nested `Menu` components (not just `MenuItem`) to group secondary actions.
+- Use `disabled` for temporarily unavailable actions, so users see the option exists.
 - Use design-token classes (`text-danger`, `text-foreground`) for item text colors.
+- Use short, distinct trigger and item names, and consistent typeahead titles.
+- Use `asChild` when the label is an existing `Button`, to avoid nested buttons.
 
 ## Don't
 
-- Don't make menus deeper than 2–3 levels — deeply nested submenus are hard to navigate.
-- Don't use raw utility color classes (`text-red-600`, `hover:bg-gray-100`) on items — use design-token classes.
-- Don't use arbitrary utility values (`bg-[#abc]`) — override CSS variables in your `@theme` block.
-- Don't use `Menu` for primary navigation that should be crawlable — use standard `<a>` links instead.
+- Don't nest menus deeper than 2–3 levels.
+- Don't use raw utility color classes (`text-red-600`, `hover:bg-gray-100`) on items. Use design-token classes.
+- Don't use arbitrary utility values (`bg-[#abc]`). Override CSS variables in your `@theme` block.
+- Don't use `Menu` for primary navigation that must be crawlable. Use standard `<a>` links.
 
 ## Accessibility
 
-- Full keyboard navigation: arrow keys navigate items, `Enter`/`Space` select, `Escape` closes.
-- Typeahead: typing the first characters of an item's `title` focuses it instantly (resets after inactivity).
-- Correct ARIA roles: `menu` on the container, `menuitem` on each item, `aria-expanded` on nested triggers.
-- `data-active` marks the currently focused item for CSS styling.
-- `FloatingFocusManager` handles focus trapping and restoration.
+- Floating UI provides looping list navigation, nested-menu navigation, Enter/Space activation, Escape/outside-press dismissal, and title-based item typeahead.
+- The container uses `menu`. Each `MenuItem` is a native button with `menuitem`.
+- Nested triggers expose submenu state through the role interaction.
+- `MenuItem.title` supplies the typeahead label and the HTML `title` attribute. Rendered children normally supply the accessible name.
+- Keep `MenuItem.title` and children consistent, or supply a suitable inherited `aria-label`.
+- `data-active` marks the focused menu item. The stylesheet uses active/hover/focus foreground and background tokens.
+- `FloatingFocusManager` is nonmodal. It is not a focus trap.
+- Root focus return is opt-in through `restoreFocus={true}`. List navigation handles nested focus.
+
+## Interaction design and acceptance criteria
+
+### Selection and current behavior
+
+- covers both navigation and action choices.
+- This `Menu` is an application-action menu, not a site navigation region.
+- For page destinations, use a named `nav` and native links or `Button as="a"` with `aria-current="page"`. Do not apply `menu` semantics to visually grouped links.
+- Use `Menu` for command lists that need arrows, typeahead, or nested submenus.
+- Use [Dropdown](Dropdown.md) for a named temporary panel whose links or controls follow ordinary Tab order. It has no menu keyboard model.
+- Root menus support pointer activation, optional delayed hover, keyboard activation, Escape, and outside press.
+- Selecting a `MenuItem` runs its click handler and emits a tree event that closes open menus.
+- Opening a sibling submenu closes the other sibling.
+- Hover is on by default. It MUST NOT be the only access path.
+- Nested triggers use different click settings from the root (`toggle: false`, `ignoreMouse: true`).
+- When you disable hover, verify pointer and touch access for each submenu. Do not assume root click behavior.
+- `open` initializes `useState` and does not sync on later prop changes. There is no controlled `onChange` API.
+- Set `restoreFocus` when closing the root must return focus to its trigger.
+- The built-in submenu hint is the English text “Next menu”. No per-instance translation option exists.
+- Verify focus visibility and touch targets with the selected theme, submenu reachability, and root focus return.
+- Names, menu roles, expanded state, and disabled buttons are source-backed. Spoken announcements and mobile reading order need application testing.
 
 ## Data Attributes
 
-| Attribute           | Applied to             | Description                                  |
-| ------------------- | ---------------------- | -------------------------------------------- |
-| `data-open`         | Menu trigger, MenuItem | Present when the menu/item is open           |
-| `data-nested`       | Nested menu trigger    | Present on triggers that open a submenu      |
-| `data-focus-inside` | Menu trigger           | Present when focus is inside an open submenu |
-| `data-active`       | MenuItem               | Present on the currently focused item        |
+| Attribute | Applied to | Description |
+| --- | --- | --- |
+| `data-open` | Menu trigger, MenuItem | Present when the menu/item is open |
+| `data-nested` | Nested menu trigger | Present on triggers that open a submenu |
+| `data-focus-inside` | Menu trigger | Present when focus is inside an open submenu |
+| `data-active` | MenuItem | Present on the currently focused item |
 
 ## Notes
 
-- The root `Menu` wraps itself in a `FloatingTree`; nested `Menu` components detect this via `useFloatingParentNodeId` and behave as submenus.
-- Hover delay is controlled by the `FLOATING_DELAY` constant. The safe-polygon handler keeps the menu open while the pointer moves toward the submenu.
-- When `hover` is `false`, the menu opens only on click.
-- The floating container default `max-h-80` prevents the list from growing taller than the viewport.
+- The root `Menu` wraps itself in a `FloatingTree`. Nested `Menu` components detect it with `useFloatingParentNodeId` and act as submenus.
+- The `FLOATING_DELAY` constant sets the hover delay. The safe-polygon handler keeps the menu open while the pointer moves toward the submenu.
+- With `hover={false}`, the root still supports click and keyboard activation. Nested triggers ignore mouse click.
+- The floating list has a token-defined maximum block size and vertical scrolling. The cap does not guarantee a fit in every viewport, zoom level, or virtual keyboard.
+
+## Verification
+
+Acceptance criteria for tests and reviews: [verify/Menu.md](verify/Menu.md).

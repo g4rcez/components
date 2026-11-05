@@ -59,9 +59,14 @@
     padding: var(--var-command-item-padding, calc(var(--var-spacing-base) * 0.5));
 }
 
-.__command-palette__item:hover,
 .__command-palette__item--active {
     background-color: var(--var-command-item-background-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__command-palette__item:hover {
+        background-color: var(--var-command-item-background-hover);
+    }
 }
 
 .__command-palette__item-content {

@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
+import { Button } from "@g4rcez/components";
 import { codeToHtml } from "shiki";
 import { useEffect, useRef, useState } from "react";
 
@@ -65,10 +66,17 @@ export const CodeBlock = ({ code, lang = "tsx" }: CodeBlockProps) => {
         <div className="docs-code-block">
             <div className="docs-code-toolbar">
                 <span className="docs-code-language">{lang}</span>
-                <button type="button" className="docs-code-copy" onClick={handleCopy} aria-label={`${copyLabel} code example`}>
+                <Button
+                    type="button"
+                    size="small"
+                    theme="ghost-neutral"
+                    className="docs-code-copy"
+                    onClick={handleCopy}
+                    aria-label={`${copyLabel} code example`}
+                >
                     {copyState === "copied" ? <CheckIcon size={15} aria-hidden="true" /> : <CopyIcon size={15} aria-hidden="true" />}
                     <span>{copyLabel}</span>
-                </button>
+                </Button>
             </div>
             <section className="shiki-container" aria-label={`${lang} code example`}>
                 {highlightedCode ? (

@@ -13,8 +13,10 @@ export const themeTokenRegistry = {
         "layer-overlay",
         "layer-tooltip",
         "layer-wizard",
+        "motion-duration-fast",
         "motion-duration-normal",
         "motion-timing-linear",
+        "motion-timing-out",
         "rounded-full",
         "rounded-pill",
         "shadow-card",
@@ -269,6 +271,12 @@ export const themeTokenRegistry = {
             "preset-selected-foreground",
             "presets-inline-size",
             "range-nights-radius"
+        ],
+        "drawing-editor": [
+            "canvas-background",
+            "gap",
+            "handle-space",
+            "layer-list-height"
         ],
         "dropdown": [
             "header-margin-block-end",
@@ -592,6 +600,13 @@ export const themeTokenRegistry = {
             "mark-size",
             "transition-duration",
             "transition-timing"
+        ],
+        "rich-text-editor": [
+            "font-size",
+            "gap",
+            "min-height",
+            "padding",
+            "radius"
         ],
         "shortcut": [
             "content-font-size",
@@ -1248,7 +1263,7 @@ export const defaultLightComponentTokens = {
     "modal": {
         "drawer-max-inline-size": "90vw",
         "sheet-max-block-size": "90svh",
-        "overlay-block-size": "100vh",
+        "overlay-block-size": "100dvh",
         "title-font-size": "calc(var(--var-fontsize) * 1.25)",
         "title-line-height": "1.625",
         "close-button-opacity": "0.7",
@@ -1585,8 +1600,10 @@ export const defaultLightThemeTokens = {
         "layer-overlay": "21",
         "layer-tooltip": "22",
         "layer-wizard": "100",
+        "motion-duration-fast": "150ms",
         "motion-duration-normal": "300ms",
         "motion-timing-linear": "linear",
+        "motion-timing-out": "cubic-bezier(0.23, 1, 0.32, 1)",
         "rounded-full": "9999px",
         "shadow-card": "0px 1px 2px 1px transparent",
         "shadow-floating": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",

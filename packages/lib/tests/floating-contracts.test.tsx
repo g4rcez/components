@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
+import { Button } from "../src/components/core/button/button";
 import { CommandPalette, type CommandItemTypes } from "../src/components/floating/command-palette/command-palette";
 import { Dropdown } from "../src/components/floating/dropdown/dropdown";
 import { Expand } from "../src/components/floating/expand/expand";
@@ -51,6 +52,60 @@ describe("floating and command contracts", () => {
             </Dropdown>
         );
         await waitFor(() => expect(screen.queryByText("Menu content")).not.toBeInTheDocument());
+    });
+
+    it("uses the trigger element itself with asChild, without nesting a button inside a button", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+        const { container } = render(
+            <Dropdown asChild title="Menu" trigger={<Button onClick={onClick}>Open menu</Button>}>
+                <div>Menu content</div>
+            </Dropdown>
+        );
+
+        expect(container.querySelectorAll("button")).toHaveLength(1);
+        const trigger = screen.getByRole("button", { name: "Open menu" });
+        expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+        await user.click(trigger);
+        expect(await screen.findByText("Menu content")).toBeInTheDocument();
+        expect(trigger).toHaveAttribute("aria-expanded", "true");
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("keeps the built-in button for a text trigger even with asChild", async () => {
+        const user = userEvent.setup();
+        render(
+            <Dropdown asChild title="Menu" trigger="Open menu">
+                <div>Menu content</div>
+            </Dropdown>
+        );
+
+        await user.click(screen.getByRole("button", { name: "Open menu" }));
+        expect(await screen.findByText("Menu content")).toBeInTheDocument();
+    });
+
+    it("passes buttonProps to the asChild trigger element", () => {
+        render(
+            <Dropdown asChild title="Menu" buttonProps={{ "aria-describedby": "hint" }} trigger={<Button>Open menu</Button>}>
+                <div>Menu content</div>
+            </Dropdown>
+        );
+
+        expect(screen.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-describedby", "hint");
+    });
+
+    it("grows the panel from the edge facing its trigger", async () => {
+        render(
+            <Dropdown open title="Menu" trigger="Open menu">
+                <div>Menu content</div>
+            </Dropdown>
+        );
+
+        const panel = await screen.findByRole("dialog", { name: "Menu" });
+        expect(panel.style.transformOrigin).toBe("center top");
+        // Positioned with top/left, so the CSS `scale` enter animation does not move the panel.
+        expect(panel.style.transform).toBe("");
     });
 
     it("keeps controlled Tooltip changes owned by the parent and preserves no-popover defaults", async () => {
@@ -153,7 +208,6 @@ describe("floating and command contracts", () => {
         expect(screen.getByText("Alpha visual title")).toBeInTheDocument();
         expect(screen.getByText("Beta visual title")).toBeInTheDocument();
     });
-
 
     it("exposes one localized loading status for CommandPalette placeholders", async () => {
         render(

@@ -1,0 +1,22 @@
+.__drawing-editor { display: grid; gap: var(--var-drawing-editor-gap, var(--var-spacing-base)); min-inline-size: 0; color: var(--var-color-foreground); }
+.__drawing-editor__toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--var-spacing-base) * .5); }
+.__drawing-editor__toolbar > [data-component="input"] { flex: 0 1 10rem; }
+.__drawing-editor__workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(14rem, 19rem); gap: var(--var-drawing-editor-gap, var(--var-spacing-base)); align-items: start; }
+.__drawing-editor__viewport { min-inline-size: 0; overflow: auto; max-block-size: 75vh; overscroll-behavior: contain; }
+.__drawing-editor__stage { box-sizing: border-box; inline-size: 100%; padding: var(--var-drawing-editor-handle-space, calc(var(--var-spacing-base) * 3)); touch-action: none; }
+.__drawing-editor__canvas-frame { position: relative; inline-size: 100%; min-inline-size: 0; background-color: var(--var-drawing-editor-canvas-background, var(--var-color-background)); border: 1px solid var(--var-color-border); }
+.__drawing-editor__stage canvas { display: block; inline-size: 100%; block-size: 100%; touch-action: none; cursor: crosshair; }
+.__drawing-editor__stage canvas:focus-visible { outline: 3px solid var(--var-color-primary); outline-offset: 3px; }
+.__drawing-editor__overlay { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
+.__drawing-editor__overlay polygon { fill: none; stroke: var(--var-color-primary); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.__drawing-editor__overlay circle { fill: var(--var-color-background); stroke: var(--var-color-primary); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.__drawing-editor__overlay .__drawing-editor__selection { stroke-dasharray: 5 4; fill: color-mix(in srgb, var(--var-color-primary) 12%, transparent); }
+.__drawing-editor__overlay line { stroke: var(--var-color-primary); stroke-width: 1; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+.__drawing-editor__layers { display: grid; gap: calc(var(--var-spacing-base) * .75); min-inline-size: 0; }
+.__drawing-editor__layer-list { display: grid; gap: calc(var(--var-spacing-base) * .5); padding: 0; margin: 0; max-block-size: var(--var-drawing-editor-layer-list-height, 22rem); overflow: auto; list-style: none; }
+.__drawing-editor__layer-list li { display: grid; gap: calc(var(--var-spacing-base) * .25); min-inline-size: 0; }
+.__drawing-editor__layer-list button { white-space: normal; overflow-wrap: anywhere; text-align: start; }
+.__drawing-editor__properties { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--var-spacing-base) * .5); min-inline-size: 0; }
+.__drawing-editor p { margin: 0; line-height: 1.5; }
+@media (max-width: 60rem) { .__drawing-editor__workspace { grid-template-columns: minmax(0, 1fr); } .__drawing-editor__layers { grid-template-columns: minmax(0, 1fr); } }
+@media (forced-colors: active) { .__drawing-editor__overlay polygon, .__drawing-editor__overlay circle, .__drawing-editor__overlay line { stroke: Highlight; } .__drawing-editor__stage canvas:focus-visible { outline-color: Highlight; } }

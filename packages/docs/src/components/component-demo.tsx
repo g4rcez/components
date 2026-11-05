@@ -3,6 +3,7 @@
 import { ArrowCounterClockwiseIcon, LinkIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { type PropsWithChildren, useState } from "react";
+import { Button } from "@g4rcez/components";
 import { CodeBlock } from "./code-block";
 
 type ComponentDemoProps = {
@@ -46,10 +47,10 @@ export const ComponentDemo = ({
                     <p className="docs-example-description">{description}</p>
                 </div>
                 {onReset ? (
-                    <button type="button" className="docs-reset-button" onClick={handleReset}>
+                    <Button type="button" size="small" theme="ghost-neutral" className="docs-reset-button" onClick={handleReset}>
                         <ArrowCounterClockwiseIcon size={15} aria-hidden="true" />
                         Reset
-                    </button>
+                    </Button>
                 ) : null}
             </div>
             <div className="docs-example-panel">

@@ -60,6 +60,10 @@ import { tablePaginationStyles } from "../components/table/pagination.styles";
 import { tableRowStyles } from "../components/table/row.styles";
 import { tableSortStyles } from "../components/table/sort.styles";
 import { tableHeadStyles } from "../components/table/thead.styles";
+import { videoPlayerStyles } from "../components/display/video-player/video-player.styles";
+import { pdfViewerStyles } from "../components/display/pdf-viewer/pdf-viewer.styles";
+import { richTextEditorStyles } from "../components/form/rich-text-editor/rich-text-editor.styles";
+import { drawingEditorStyles } from "../components/form/drawing-editor/drawing-editor.styles";
 
 const componentStyles = [
     tagStyles,
@@ -124,6 +128,10 @@ const componentStyles = [
     tableRowStyles,
     tableSortStyles,
     tableHeadStyles,
+    videoPlayerStyles,
+    pdfViewerStyles,
+    richTextEditorStyles,
+    drawingEditorStyles,
 ] as const;
 
 type ComponentStyle = (typeof componentStyles)[number];

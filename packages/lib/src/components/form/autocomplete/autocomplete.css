@@ -32,8 +32,10 @@
     padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
-.__autocomplete__option:hover {
-    background-color: var(--var-autocomplete-option-background-hover);
+@media (hover: hover) and (pointer: fine) {
+    .__autocomplete__option:hover {
+        background-color: var(--var-autocomplete-option-background-hover);
+    }
 }
 
 .__autocomplete__option--active {
@@ -46,9 +48,14 @@
     background-color: var(--var-autocomplete-option-selected-background);
 }
 
-.__autocomplete__field-state:focus-within,
-.group:hover .__autocomplete__control-state {
+.__autocomplete__field-state:focus-within {
     border-color: var(--var-color-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .group:hover .__autocomplete__control-state {
+        border-color: var(--var-color-primary);
+    }
 }
 
 .__autocomplete__disabled-border {
@@ -72,14 +79,24 @@
     padding: var(--var-autocomplete-action-padding-md, calc(var(--var-spacing-base) * 0.25));
 }
 
-.__autocomplete__action--primary:hover,
 .__autocomplete__action--primary:focus {
     color: var(--var-color-primary);
 }
 
-.__autocomplete__action--danger:hover,
+@media (hover: hover) and (pointer: fine) {
+    .__autocomplete__action--primary:hover {
+        color: var(--var-color-primary);
+    }
+}
+
 .__autocomplete__action--danger:focus {
     color: var(--var-color-danger);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__autocomplete__action--danger:hover {
+        color: var(--var-color-danger);
+    }
 }
 
 .__autocomplete__action:disabled {

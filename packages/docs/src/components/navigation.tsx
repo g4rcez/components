@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@g4rcez/components";
 import { sections } from "../config/navigation";
 
 type NavigationProps = {
@@ -84,9 +85,16 @@ export const Navigation = ({
                     spellCheck={false}
                 />
                 {query ? (
-                    <button type="button" className="docs-nav-clear" aria-label="Clear documentation search" onClick={clearSearch}>
+                    <Button
+                        type="button"
+                        size="icon"
+                        theme="ghost-neutral"
+                        className="docs-nav-clear"
+                        aria-label="Clear documentation search"
+                        onClick={clearSearch}
+                    >
                         <XIcon size={15} aria-hidden="true" />
-                    </button>
+                    </Button>
                 ) : (
                     <kbd className="docs-nav-shortcut">/</kbd>
                 )}

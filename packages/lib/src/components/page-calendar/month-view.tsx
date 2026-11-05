@@ -133,7 +133,12 @@ export function MonthView({ days, eventsByDate, currentDate, onEventClick, onDay
                                                     onClick={(event) => event.stopPropagation()}
                                                     onKeyDown={(event) => event.stopPropagation()}
                                                 >
-                                                    <EventPill compact event={event} onClick={() => onEventClick(event)} translations={translations} />
+                                                    <EventPill
+                                                        compact
+                                                        event={event}
+                                                        onClick={() => onEventClick(event)}
+                                                        translations={translations}
+                                                    />
                                                 </div>
                                             ))}
                                         </div>

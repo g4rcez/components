@@ -126,9 +126,11 @@
     transition-timing-function: var(--var-notification-close-transition-timing);
 }
 
-.__notifications__close:hover {
-    background-color: var(--var-notification-close-background-hover);
-    color: var(--var-color-foreground);
+@media (hover: hover) and (pointer: fine) {
+    .__notifications__close:hover {
+        background-color: var(--var-notification-close-background-hover);
+        color: var(--var-color-foreground);
+    }
 }
 
 .__notifications__close-icon {
@@ -178,9 +180,11 @@
     transition-timing-function: var(--var-notification-badge-transition-timing);
 }
 
-.__notifications__badge:hover {
-    background-color: var(--var-color-background);
-    color: var(--var-notification-badge-foreground-hover);
+@media (hover: hover) and (pointer: fine) {
+    .__notifications__badge:hover {
+        background-color: var(--var-color-background);
+        color: var(--var-notification-badge-foreground-hover);
+    }
 }
 
 @keyframes notifications-spin {

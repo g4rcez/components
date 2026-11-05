@@ -45,3 +45,7 @@
 @import "../components/core/resizable/resizable.css";
 @import "../components/display/shortcut/shortcut.css";
 @import "../components/display/skeleton/skeleton.css";
+@import "../components/display/video-player/video-player.css";
+@import "../components/display/pdf-viewer/pdf-viewer.css";
+@import "../components/form/rich-text-editor/rich-text-editor.css";
+@import "../components/form/drawing-editor/drawing-editor.css";

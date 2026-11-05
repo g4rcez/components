@@ -1,6 +1,6 @@
 {
     "name": "@g4rcez/components",
-    "version": "7.0.1",
+    "version": "7.0.2",
     "private": false,
     "description": "Customizable react components.",
     "keywords": [
@@ -222,6 +222,11 @@
             "import": "./dist/components/display/shortcut.mjs",
             "default": "./dist/components/display/shortcut.mjs"
         },
+        "./components/display/pdf-viewer": {
+            "types": "./dist/components/display/pdf-viewer/pdf-viewer.d.ts",
+            "import": "./dist/components/display/pdf-viewer.mjs",
+            "default": "./dist/components/display/pdf-viewer.mjs"
+        },
         "./components/display/skeleton": {
             "types": "./dist/components/display/skeleton/skeleton.d.ts",
             "import": "./dist/components/display/skeleton.mjs",
@@ -241,6 +246,11 @@
             "types": "./dist/components/display/step/step.d.ts",
             "import": "./dist/components/display/step.mjs",
             "default": "./dist/components/display/step.mjs"
+        },
+        "./components/display/video-player": {
+            "types": "./dist/components/display/video-player/video-player.d.ts",
+            "import": "./dist/components/display/video-player.mjs",
+            "default": "./dist/components/display/video-player.mjs"
         },
         "./components/display/swipeable-list": {
             "types": "./dist/components/display/swipeable-list/swipeable-list.d.ts",
@@ -312,6 +322,11 @@
             "import": "./dist/components/form/date-picker.mjs",
             "default": "./dist/components/form/date-picker.mjs"
         },
+        "./components/form/drawing-editor": {
+            "types": "./dist/components/form/drawing-editor/drawing-editor.d.ts",
+            "import": "./dist/components/form/drawing-editor.mjs",
+            "default": "./dist/components/form/drawing-editor.mjs"
+        },
         "./components/form/file-upload": {
             "types": "./dist/components/form/file-upload/file-upload.d.ts",
             "import": "./dist/components/form/file-upload.mjs",
@@ -346,6 +361,11 @@
             "types": "./dist/components/form/radiobox/radiobox.d.ts",
             "import": "./dist/components/form/radiobox.mjs",
             "default": "./dist/components/form/radiobox.mjs"
+        },
+        "./components/form/rich-text-editor": {
+            "types": "./dist/components/form/rich-text-editor/rich-text-editor.d.ts",
+            "import": "./dist/components/form/rich-text-editor.mjs",
+            "default": "./dist/components/form/rich-text-editor.mjs"
         },
         "./components/form/select": {
             "types": "./dist/components/form/select/select.d.ts",
@@ -698,6 +718,10 @@
             "import": "./dist/components/display/spinner.mjs",
             "default": "./dist/components/display/spinner.mjs"
         },
+        "./collapse.css": {
+            "source": "./src/components/display/collapse/collapse.css",
+            "default": "./dist/css/collapse.css"
+        },
         "./expand.css": {
             "source": "./src/components/floating/expand/expand.css",
             "default": "./dist/css/expand.css"
@@ -725,6 +749,52 @@
             "types": "./dist/components/display/progress/progress.d.ts",
             "import": "./dist/components/display/progress.mjs",
             "default": "./dist/components/display/progress.mjs"
+        },
+        "./video-player": {
+            "source": "./src/components/display/video-player/video-player.tsx",
+            "types": "./dist/components/display/video-player/video-player.d.ts",
+            "import": "./dist/components/display/video-player.mjs",
+            "default": "./dist/components/display/video-player.mjs"
+        },
+        "./video-player.css": {
+            "source": "./src/components/display/video-player/video-player.css",
+            "default": "./dist/css/video-player.css"
+        },
+        "./pdf-viewer": {
+            "source": "./src/components/display/pdf-viewer/pdf-viewer.tsx",
+            "types": "./dist/components/display/pdf-viewer/pdf-viewer.d.ts",
+            "import": "./dist/components/display/pdf-viewer.mjs",
+            "default": "./dist/components/display/pdf-viewer.mjs"
+        },
+        "./pdf-viewer.css": {
+            "source": "./src/components/display/pdf-viewer/pdf-viewer.css",
+            "default": "./dist/css/pdf-viewer.css"
+        },
+        "./rich-text-editor": {
+            "source": "./src/components/form/rich-text-editor/rich-text-editor.tsx",
+            "types": "./dist/components/form/rich-text-editor/rich-text-editor.d.ts",
+            "import": "./dist/components/form/rich-text-editor.mjs",
+            "default": "./dist/components/form/rich-text-editor.mjs"
+        },
+        "./rich-text-editor.css": {
+            "source": "./src/components/form/rich-text-editor/rich-text-editor.css",
+            "default": "./dist/css/rich-text-editor.css"
+        },
+        "./drawing-editor": {
+            "source": "./src/components/form/drawing-editor/drawing-editor.tsx",
+            "types": "./dist/components/form/drawing-editor/drawing-editor.d.ts",
+            "import": "./dist/components/form/drawing-editor.mjs",
+            "default": "./dist/components/form/drawing-editor.mjs"
+        },
+        "./drawing-editor-scene": {
+            "source": "./src/components/form/drawing-editor/scene.ts",
+            "types": "./dist/components/form/drawing-editor/scene.d.ts",
+            "import": "./dist/components/form/drawing-editor/scene.mjs",
+            "default": "./dist/components/form/drawing-editor/scene.mjs"
+        },
+        "./drawing-editor.css": {
+            "source": "./src/components/form/drawing-editor/drawing-editor.css",
+            "default": "./dist/css/drawing-editor.css"
         },
         "./timeline.css": {
             "source": "./src/components/display/timeline/timeline.css",
@@ -892,7 +962,7 @@
         "tokens:generate": "node ./scripts/generate-theme-registry.mjs",
         "tokens:check": "node ./scripts/generate-theme-registry.mjs --check",
         "prepublishOnly": "npm run build",
-        "build": "npm run tokens:generate && cp ../../skills/csscomponents/SKILL.md ./SKILL.md && cp ../../skills/csscomponents/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
+        "build": "npm run tokens:generate && cp ../../skills/g4rcez-components/SKILL.md ./SKILL.md && cp ../../skills/g4rcez-components/SKILL.md ./ai/SKILL.md && rm -rf ./dist && vite build && npm run lib:types && npm run preset && npm run lib:css:v6 && npm run lib:style-manifest && npm run lib:lint && node ../../scripts/skills.mjs sync",
         "lib:lint": "pnpm --filter @g4rcez/lint build && node ./scripts/copy-lint.mjs",
         "format": "oxfmt --write .",
         "lint": "oxlint .",
@@ -910,11 +980,21 @@
         "@base-ui/react": "1.6.0",
         "@floating-ui/react": "0.27.20",
         "@phosphor-icons/react": "2.1.10",
+        "@tiptap/core": "3.32.0",
+        "@tiptap/extension-image": "3.32.0",
+        "@tiptap/extension-list": "3.32.0",
+        "@tiptap/extension-table": "3.32.0",
+        "@tiptap/markdown": "3.32.0",
+        "@tiptap/pm": "3.32.0",
+        "@tiptap/react": "3.32.0",
+        "@tiptap/starter-kit": "3.32.0",
         "class-variance-authority": "0.7.1",
         "clsx": "2.1.1",
         "cn": "0.2.6",
         "date-fns": "4.4.0",
+        "dompurify": "3.4.17",
         "linq-arrays": "3.2.5",
+        "marked": "18.1.1",
         "motion": "12.43.0",
         "oxc-parser": "0.148.0",
         "pretty-bytes": "7.1.1",
@@ -924,7 +1004,7 @@
         "react-virtuoso": "4.18.11",
         "sidekicker": "1.0.0",
         "storage-manager-js": "4.2.6-5",
-        "the-mask-input": "3.4.0",
+        "the-mask-input": "3.5.0",
         "use-sync-external-store": "1.6.0",
         "use-typed-reducer": "4.3.0",
         "zod": "3.25.67"
@@ -959,7 +1039,7 @@
     "agents": {
         "skills": [
             {
-                "name": "csscomponents",
+                "name": "g4rcez-components",
                 "path": "./ai/SKILL.md",
                 "docs": "./ai/docs/index.md",
                 "version": "1"
@@ -967,7 +1047,7 @@
         ]
     },
     "skill": {
-        "name": "csscomponents",
+        "name": "g4rcez-components",
         "path": "./ai/SKILL.md",
         "docs": "./ai/docs/index.md",
         "version": "1"

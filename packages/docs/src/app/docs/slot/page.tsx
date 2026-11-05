@@ -1,7 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { Card, Slot, createSlot } from "@g4rcez/components";
+import { Button, Card, Slot, createSlot } from "@g4rcez/components";
 
 const ButtonSlot = createSlot("Button");
 
@@ -26,7 +26,7 @@ function BasicMerging() {
 }`}
             >
                 <Card title="Basic">
-                    <Slot className="font-bold text-primary">
+                    <Slot className="text-primary font-bold">
                         <span>This text inherits the className from Slot</span>
                     </Slot>
                 </Card>
@@ -35,31 +35,23 @@ function BasicMerging() {
             <ComponentDemo
                 title="Event Handler Composition"
                 description="Both the Slot and child onClick handlers fire when the element is clicked."
-                code={`import { Slot } from "@g4rcez/components/core/slot";
+                code={`import { Button, Slot } from "@g4rcez/components";
 
 function EventComposition() {
   return (
     <Slot onClick={() => console.log("Slot handler")}>
-      <button
-        type="button"
-        onClick={() => console.log("Button handler")}
-        className="rounded px-4 py-2 bg-primary text-primary-foreground"
-      >
+      <Button type="button" onClick={() => console.log("Button handler")}>
         Click (both handlers fire)
-      </button>
+      </Button>
     </Slot>
   );
 }`}
             >
                 <Card title="Event composition">
                     <Slot onClick={() => console.log("Slot handler")}>
-                        <button
-                            type="button"
-                            onClick={() => console.log("Button handler")}
-                            className="rounded bg-primary px-4 py-2 text-primary-foreground"
-                        >
+                        <Button type="button" onClick={() => console.log("Button handler")}>
                             Click (both handlers fire)
-                        </button>
+                        </Button>
                     </Slot>
                 </Card>
             </ComponentDemo>
@@ -67,24 +59,21 @@ function EventComposition() {
             <ComponentDemo
                 title="Custom Slot via createSlot"
                 description="createSlot creates a named Slot for use as an asChild pattern in component primitives."
-                code={`import { createSlot } from "@g4rcez/components/core/slot";
+                code={`import { Button, createSlot } from "@g4rcez/components";
 
 const ButtonSlot = createSlot("Button");
 
 function CustomSlot() {
   return (
-    <ButtonSlot
-      className="rounded px-4 py-2 bg-primary text-primary-foreground"
-      aria-label="Custom button slot"
-    >
-      <button type="button">Composed button</button>
+    <ButtonSlot aria-label="Custom button slot">
+      <Button type="button">Composed button</Button>
     </ButtonSlot>
   );
 }`}
             >
                 <Card title="createSlot">
-                    <ButtonSlot className="rounded bg-primary px-4 py-2 text-primary-foreground" aria-label="Custom button slot">
-                        <button type="button">Composed button</button>
+                    <ButtonSlot aria-label="Custom button slot">
+                        <Button type="button">Composed button</Button>
                     </ButtonSlot>
                 </Card>
             </ComponentDemo>

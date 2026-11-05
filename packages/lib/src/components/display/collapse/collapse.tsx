@@ -13,14 +13,15 @@ const transition: Transition = {
 type CollapseProps = HTMLMotionProps<"div"> & { open: boolean };
 
 export const Collapse = ({ open, children, className, ...props }: PropsWithChildren<CollapseProps>) => (
-    <AnimatePresence mode="popLayout" propagate>
+    // initial={false} on AnimatePresence keeps content that is open on first render still; later mounts fade in.
+    <AnimatePresence mode="popLayout" propagate initial={false}>
         {open ? (
             <motion.div
                 {...props}
-                initial={false}
+                initial={{ opacity: 0 }}
                 aria-hidden={!open}
                 transition={transition}
-                animate={{ opacity: 1 }}
+                animate={{ opacity: 1, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                 data-component="collapse"
                 exit={{ opacity: 0, height: 0 }}
                 className={css("__collapse", className)}

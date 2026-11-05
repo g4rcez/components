@@ -412,19 +412,29 @@
     font-size: var(--var-table-header-font-size);
 }
 
-/* The filter trigger stays in the tab order: it shows on hover, on focus, when open, or when the column has a filter. */
+/* The filter trigger stays in the tab order. With fine hover it shows on hover, on focus, when open, or when the column has a filter. Without hover (touch) it is always visible. */
 .__table-head__filter-trigger {
     display: flex;
     align-items: center;
-    opacity: 0;
     transition: opacity var(--var-motion-duration-normal);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__table-head__filter-trigger {
+        opacity: 0;
+    }
 }
 
 .__table-head__filter-trigger--active,
 .__table-head__filter-trigger[aria-expanded="true"],
-.__table-head__cell:hover .__table-head__filter-trigger,
 .__table-head__cell:focus-within .__table-head__filter-trigger {
     opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__table-head__cell:hover .__table-head__filter-trigger {
+        opacity: 1;
+    }
 }
 
 .__table-head__resizer {
@@ -440,7 +450,6 @@
     border: 0;
     border-radius: var(--var-table-rounded, calc(var(--var-radius-base) * 0.666667));
     cursor: col-resize;
-    opacity: 0;
     background-color: var(--var-color-muted-foreground);
     transition-duration: var(--var-motion-duration-normal);
     transition-property: background-color, box-shadow;
@@ -453,14 +462,30 @@
     content: "";
 }
 
-.__table-head__cell:hover > .__table-head__resizer,
+@media (hover: hover) and (pointer: fine) {
+    .__table-head__resizer {
+        opacity: 0;
+    }
+}
+
 .__table-head__resizer:focus-visible {
     opacity: 1;
 }
 
-.__table-head__resizer:hover,
+@media (hover: hover) and (pointer: fine) {
+    .__table-head__cell:hover > .__table-head__resizer {
+        opacity: 1;
+    }
+}
+
 .__table-head__resizer:active {
     background-color: var(--var-color-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__table-head__resizer:hover {
+        background-color: var(--var-color-primary);
+    }
 }
 
 .__table-head__resizer:focus-visible {
@@ -524,9 +549,11 @@
     transition-timing-function: var(--var-table-pagination-item-transition-timing);
 }
 
-.__table-pagination__page-link:hover {
-    border-color: var(--var-color-primary-subtle);
-    color: var(--var-color-primary-subtle);
+@media (hover: hover) and (pointer: fine) {
+    .__table-pagination__page-link:hover {
+        border-color: var(--var-color-primary-subtle);
+        color: var(--var-color-primary-subtle);
+    }
 }
 
 .__table-pagination__page-link--active {
@@ -717,7 +744,7 @@
     }
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
     .__table-inner-table__row {
         transition: background-color var(--var-motion-duration-normal);
     }

@@ -72,9 +72,17 @@
   print-color-adjust: exact;
   user-select: none;
   transition-property:
-    color, background-color, border-color, box-shadow, opacity;
-  transition-duration: var(--var-motion-duration-normal);
-  transition-timing-function: var(--var-motion-timing-linear);
+    color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration:
+    var(--var-motion-duration-normal), var(--var-motion-duration-normal), var(--var-motion-duration-normal),
+    var(--var-motion-duration-normal), var(--var-motion-duration-normal), var(--var-motion-duration-fast);
+  transition-timing-function:
+    var(--var-motion-timing-linear), var(--var-motion-timing-linear), var(--var-motion-timing-linear),
+    var(--var-motion-timing-linear), var(--var-motion-timing-linear), var(--var-motion-timing-out);
+}
+
+.__checkbox__control-state:not(:disabled):active {
+  transform: scale(0.95);
 }
 
 .__checkbox__control-state::before {
@@ -150,5 +158,11 @@
 
   .__checkbox__control-state::before {
     content: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .__checkbox__control-state:not(:disabled):active {
+    transform: none;
   }
 }

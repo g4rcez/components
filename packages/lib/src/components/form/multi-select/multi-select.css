@@ -61,9 +61,14 @@
     color: currentColor;
 }
 
-.__multi-select__tag-remove:hover,
 .__multi-select__tag-remove:focus {
     color: var(--var-color-danger);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__multi-select__tag-remove:hover {
+        color: var(--var-color-danger);
+    }
 }
 
 .__multi-select__actions {
@@ -236,9 +241,14 @@
     padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
-.__multi-select__option:hover,
 .__multi-select__option:focus {
     background-color: var(--var-multi-select-option-background-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__multi-select__option:hover {
+        background-color: var(--var-multi-select-option-background-hover);
+    }
 }
 
 .__multi-select__option--selected {
@@ -270,10 +280,16 @@
     padding: var(--var-free-text-small-surface-padding-inline, calc( var(--var-spacing-base) * 0.375 ));
 }
 
-.__multi-select__control-state:is(:hover, :focus-within),
-.__input-field:hover .__multi-select__control-state,
+.__multi-select__control-state:focus-within,
 .__input-field:focus-within .__multi-select__control-state {
     border-color: var(--var-color-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__multi-select__control-state:hover,
+    .__input-field:hover .__multi-select__control-state {
+        border-color: var(--var-color-primary);
+    }
 }
 
 .__input-field:has(.__multi-select:not(:focus):invalid[data-initialized="true"]) .__multi-select__invalid {

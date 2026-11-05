@@ -56,6 +56,7 @@ export default defineConfig(
                     "styles/tokens": "./src/styles/tokens.ts",
                     "styles/theme-runtime": "./src/styles/theme-runtime.ts",
                     "styles/style-manifest": "./src/styles/style-manifest.ts",
+                    "components/form/drawing-editor/scene": "./src/components/form/drawing-editor/scene.ts",
                 },
                 formats: ["es"],
             },

@@ -16,10 +16,14 @@ import {
     useRole,
 } from "@floating-ui/react";
 import type React from "react";
-import { Fragment, type PropsWithChildren, useId, useMemo, useRef, useState } from "react";
+import { Fragment, isValidElement, type PropsWithChildren, useId, useMemo, useRef, useState } from "react";
+import { placementOrigin } from "../../../lib/floating-origin";
+import { Slot } from "../../core/slot/slot";
 import { dropdownStyles } from "./dropdown.styles";
 
 type DropdownProps = {
+    /** Use the `trigger` element itself as the trigger instead of wrapping it in a `<button>`. Pass an interactive element, such as a `Button`, only with this prop. */
+    asChild?: boolean;
     open?: boolean;
     arrow?: boolean;
     lockPositionOnOpen?: boolean;
@@ -41,8 +45,7 @@ const updatePositionOnce: typeof autoUpdate = (_reference, _floating, update) =>
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const headingId = useId();
-    const hasTitle =
-        typeof props.title === "string" ? props.title.trim().length > 0 : typeof props.title === "number" || Boolean(props.title);
+    const hasTitle = typeof props.title === "string" ? props.title.trim().length > 0 : typeof props.title === "number" || Boolean(props.title);
     const isControlled = props.open !== undefined;
     const [innerOpen, setInnerOpen] = useState(false);
     const open = isControlled ? props.open : innerOpen;
@@ -62,7 +65,8 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const { refs, floatingStyles, context } = useFloating({
         open,
         middleware,
-        transform: true,
+        // Position with top/left so the CSS enter animation can use the `scale` property.
+        transform: false,
         whileElementsMounted: props.lockPositionOnOpen ? updatePositionOnce : autoUpdate,
         onOpenChange: (nextValue, event) => {
             const element = (event as FocusEvent | undefined)?.relatedTarget as HTMLElement | null;
@@ -81,15 +85,19 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
 
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role, hover]);
 
+    const referenceProps = getReferenceProps(props.buttonProps as Parameters<typeof getReferenceProps>[0]);
+
     return (
         <Fragment>
-            <button
-                ref={refs.setReference}
-                {...(getReferenceProps(props.buttonProps as Parameters<typeof getReferenceProps>[0]) as React.HTMLProps<HTMLButtonElement>)}
-                type="button"
-            >
-                {props.trigger}
-            </button>
+            {props.asChild && isValidElement(props.trigger) ? (
+                <Slot ref={refs.setReference as React.Ref<HTMLElement>} {...referenceProps}>
+                    {props.trigger}
+                </Slot>
+            ) : (
+                <button ref={refs.setReference} {...(referenceProps as React.HTMLProps<HTMLButtonElement>)} type="button">
+                    {props.trigger}
+                </button>
+            )}
             {open && (
                 <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
                     <FloatingFocusManager guards restoreFocus={true} returnFocus={true} visuallyHiddenDismiss context={context} modal={false}>
@@ -99,7 +107,7 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                             {...getFloatingProps()}
                             aria-label={hasTitle ? undefined : props["aria-label"]}
                             aria-labelledby={hasTitle ? headingId : props["aria-labelledby"]}
-                            style={floatingStyles as unknown as React.CSSProperties}
+                            style={{ ...(floatingStyles as unknown as React.CSSProperties), transformOrigin: placementOrigin(context.placement) }}
                         >
                             <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={dropdownStyles.slots.arrow} />
                             <header className={dropdownStyles.slots.header}>

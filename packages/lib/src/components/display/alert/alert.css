@@ -39,8 +39,10 @@
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__alert__close-button:hover {
-    color: var(--var-color-danger);
+@media (hover: hover) and (pointer: fine) {
+    .__alert__close-button:hover {
+        color: var(--var-color-danger);
+    }
 }
 
 .__alert__header {

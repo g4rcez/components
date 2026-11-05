@@ -94,8 +94,10 @@
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__file-upload__actions:hover {
-    color: var(--var-color-danger);
+@media (hover: hover) and (pointer: fine) {
+    .__file-upload__actions:hover {
+        color: var(--var-color-danger);
+    }
 }
 
 .__file-upload__remove-button {
@@ -180,4 +182,27 @@
 
 .__file-upload__dropzone[data-active="false"] {
     border-style: dashed;
+}
+
+.__file-upload__idle-icon[data-dragging="true"] {
+    animation: __file-upload-icon-in var(--var-motion-duration-fast) var(--var-motion-timing-out);
+}
+
+@keyframes __file-upload-icon-in {
+    from {
+        opacity: 0;
+        scale: 0.9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__file-upload__idle-icon[data-dragging="true"] {
+        animation-name: __file-upload-icon-fade;
+    }
+
+    @keyframes __file-upload-icon-fade {
+        from {
+            opacity: 0;
+        }
+    }
 }

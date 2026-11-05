@@ -20,33 +20,33 @@ import { Button, Dropdown } from "@g4rcez/components";
 
 function BasicDropdown() {
   return (
-    <Dropdown trigger={<Button>Open dropdown</Button>} title="Options">
+    <Dropdown asChild trigger={<Button>Open dropdown</Button>} title="Options">
       <ul className="flex flex-col gap-2">
-        <li><button type="button" className="w-full text-left px-2 py-1 rounded hover:bg-muted">Profile</button></li>
-        <li><button type="button" className="w-full text-left px-2 py-1 rounded hover:bg-muted">Settings</button></li>
-        <li><button type="button" className="w-full text-left px-2 py-1 rounded hover:bg-muted text-danger">Sign out</button></li>
+        <li><Button type="button" theme="ghost-neutral" className="w-full justify-start">Profile</Button></li>
+        <li><Button type="button" theme="ghost-neutral" className="w-full justify-start">Settings</Button></li>
+        <li><Button type="button" theme="ghost-danger" className="w-full justify-start">Sign out</Button></li>
       </ul>
     </Dropdown>
   );
 }`}
             >
                 <Card title="Basic">
-                    <Dropdown trigger={<Button>Open dropdown</Button>} title="Options">
+                    <Dropdown asChild trigger={<Button>Open dropdown</Button>} title="Options">
                         <ul className="flex flex-col gap-2">
                             <li>
-                                <button type="button" className="w-full rounded px-2 py-1 text-left hover:bg-muted">
+                                <Button type="button" theme="ghost-neutral" className="w-full justify-start">
                                     Profile
-                                </button>
+                                </Button>
                             </li>
                             <li>
-                                <button type="button" className="w-full rounded px-2 py-1 text-left hover:bg-muted">
+                                <Button type="button" theme="ghost-neutral" className="w-full justify-start">
                                     Settings
-                                </button>
+                                </Button>
                             </li>
                             <li>
-                                <button type="button" className="w-full rounded px-2 py-1 text-left text-danger hover:bg-muted">
+                                <Button type="button" theme="ghost-danger" className="w-full justify-start">
                                     Sign out
-                                </button>
+                                </Button>
                             </li>
                         </ul>
                     </Dropdown>
@@ -61,7 +61,7 @@ import { Button, Dropdown } from "@g4rcez/components";
 
 function HoverDropdown() {
   return (
-    <Dropdown hover trigger={<Button theme="secondary">Hover me</Button>} title="Quick info">
+    <Dropdown asChild hover trigger={<Button theme="secondary">Hover me</Button>} title="Quick info">
       <p className="text-sm text-secondary max-w-48">
         This dropdown opens on hover and closes when you move away.
       </p>
@@ -70,8 +70,8 @@ function HoverDropdown() {
 }`}
             >
                 <Card title="Hover">
-                    <Dropdown hover trigger={<Button theme="secondary">Hover me</Button>} title="Quick info">
-                        <p className="max-w-48 text-sm text-secondary">This dropdown opens on hover and closes when you move away.</p>
+                    <Dropdown asChild hover trigger={<Button theme="secondary">Hover me</Button>} title="Quick info">
+                        <p className="text-secondary max-w-48 text-sm">This dropdown opens on hover and closes when you move away.</p>
                     </Dropdown>
                 </Card>
             </ComponentDemo>
@@ -88,6 +88,7 @@ function ControlledDropdown() {
   return (
     <div className="flex items-center gap-4">
       <Dropdown
+        asChild
         open={open}
         onChange={setOpen}
         trigger={<Button theme="info">Controlled</Button>}
@@ -104,7 +105,7 @@ function ControlledDropdown() {
             >
                 <Card title="Controlled">
                     <div className="flex items-center gap-4">
-                        <Dropdown open={open} onChange={setOpen} trigger={<Button theme="info">Controlled</Button>} title="Controlled panel">
+                        <Dropdown asChild open={open} onChange={setOpen} trigger={<Button theme="info">Controlled</Button>} title="Controlled panel">
                             <p className="text-sm">Opened from outside: {open ? "yes" : "no"}</p>
                         </Dropdown>
                         <Button theme="muted" onClick={() => setOpen((v) => !v)}>

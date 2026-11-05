@@ -1,3 +1,4 @@
+import { Button } from "@g4rcez/components";
 import Link from "next/link";
 import { GithubIcon } from "./icons/github";
 
@@ -33,15 +34,18 @@ export const Footer = () => (
                 <br />
                 that feel like yours.
             </p>
-            <a
+            <Button
+                as="a"
                 href="https://github.com/g4rcez/components"
                 target="_blank"
                 rel="noreferrer"
+                size="icon"
+                theme="ghost-neutral"
                 className="docs-icon-button"
                 aria-label="View components on GitHub"
             >
                 <GithubIcon className="docs-github-icon" aria-hidden="true" />
-            </a>
+            </Button>
         </div>
         {Object.entries(footerLinks).map(([category, links]) => (
             <nav key={category} aria-label={category}>

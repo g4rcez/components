@@ -42,6 +42,11 @@
 @import "@g4rcez/components/notifications.css";
 @import "@g4rcez/components/command-palette.css";
 @import "@g4rcez/components/skeleton.css";
+@import "@g4rcez/components/resizable.css";
+@import "@g4rcez/components/collapse.css";
+@import "@g4rcez/components/rich-text-editor.css";
+@import "@g4rcez/components/drawing-editor.css";
+@import "@g4rcez/components/video-player.css";
 @import "./themes.css";
 
 @tailwind base;
@@ -111,42 +116,6 @@ html:not(.dark) {
 
 .docs-skip-link:focus {
     inset-block-start: 1rem;
-}
-
-.site-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: calc(var(--var-spacing-base) / 2);
-    min-block-size: calc(var(--var-spacing-base) * 2.75);
-    padding: calc(var(--var-spacing-base) * 0.75) calc(var(--var-spacing-base) * 1.25);
-    border: var(--var-border-hairline) solid transparent;
-    border-radius: calc(var(--var-radius-base) / 2);
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-        background-color 150ms ease,
-        border-color 150ms ease;
-}
-
-.site-button-primary {
-    background: var(--docs-primary);
-    color: var(--docs-canvas);
-}
-
-.site-button-primary:hover {
-    background: var(--docs-text);
-}
-
-.site-button-secondary {
-    border-color: var(--docs-border);
-    color: var(--docs-text);
-}
-
-.site-button-secondary:hover {
-    background: var(--docs-surface-raised);
-    border-color: var(--docs-text-muted);
 }
 
 .site-text-link {
@@ -283,21 +252,8 @@ html:not(.dark) .docs-body {
 }
 
 .docs-search-trigger {
-    min-block-size: 36px;
     min-inline-size: 248px;
-    gap: 8px;
-    padding: 0 10px;
-    border: 1px solid var(--docs-border);
-    border-radius: 8px;
-    background: var(--docs-surface);
-    color: var(--docs-text-muted);
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.docs-search-trigger:hover {
-    border-color: var(--docs-primary);
-    color: var(--docs-text);
+    justify-content: flex-start;
 }
 
 .docs-search-trigger kbd {
@@ -312,20 +268,7 @@ html:not(.dark) .docs-body {
 
 .docs-icon-button {
     justify-content: center;
-    inline-size: 40px;
-    block-size: 40px;
-    padding: 0;
-    border: 0;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--docs-text-muted);
-    cursor: pointer;
     text-decoration: none;
-}
-
-.docs-icon-button:hover {
-    background: var(--docs-surface-raised);
-    color: var(--docs-text);
 }
 
 .docs-github-icon {
@@ -428,21 +371,7 @@ html:not(.dark) .docs-body {
 }
 
 .docs-nav-clear {
-    display: grid;
-    place-items: center;
-    inline-size: 30px;
-    block-size: 30px;
     margin-inline-end: 6px;
-    border: 0;
-    border-radius: 6px;
-    background: transparent;
-    color: var(--docs-text-muted);
-    cursor: pointer;
-}
-
-.docs-nav-clear:hover {
-    background: var(--docs-surface-raised);
-    color: var(--docs-text);
 }
 
 .docs-nav-groups {
@@ -822,26 +751,7 @@ html:not(.dark) .docs-body {
 
 .docs-reset-button,
 .docs-code-copy {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-block-size: 36px;
-    gap: 8px;
-    padding: 8px 12px;
-    border: 1px solid var(--docs-border);
-    border-radius: 8px;
-    background: var(--docs-surface-raised);
-    color: var(--docs-text-muted);
-    font-size: 12px;
-    font-weight: 650;
     white-space: nowrap;
-    cursor: pointer;
-}
-
-.docs-reset-button:hover,
-.docs-code-copy:hover {
-    border-color: var(--docs-primary);
-    color: var(--docs-text);
 }
 
 .docs-example-panel {
@@ -904,8 +814,6 @@ html:not(.dark) .docs-body {
 
 .docs-code-copy {
     min-inline-size: 78px;
-    padding-block: 6px;
-    background: transparent;
 }
 
 .shiki-container {

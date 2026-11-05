@@ -118,8 +118,10 @@
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__input-field:hover .__input-field__label-row {
-    color: var(--var-color-primary);
+@media (hover: hover) and (pointer: fine) {
+    .__input-field:hover .__input-field__label-row {
+        color: var(--var-color-primary);
+    }
 }
 
 .__input-field__label-meta {
@@ -206,9 +208,11 @@
     transition-timing-function: var(--var-motion-timing-linear);
 }
 
-.__input-field:hover .__input-field__optional {
-    color: var(--var-color-primary);
-    opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+    .__input-field:hover .__input-field__optional {
+        color: var(--var-color-primary);
+        opacity: 1;
+    }
 }
 
 .__input-field__control {
@@ -230,9 +234,11 @@
     flex-wrap: nowrap;
 }
 
-.__input-field:hover .__input-field__control,
+@media (hover: hover) and (pointer: fine) {
+    .__input-field:hover .__input-field__control,
 .__input-field:hover .__input-field__control-state {
-    border-color: var(--var-color-primary);
+        border-color: var(--var-color-primary);
+    }
 }
 
 .__input-field__slot-start,
@@ -276,11 +282,17 @@
 }
 
 .__input-field:focus-within .__input-field__label-active,
-.__input-field:hover .__input-field__label-active,
-.__input-field:focus-within .__input-field__optional-state,
-.__input-field:hover .__input-field__optional-state {
+.__input-field:focus-within .__input-field__optional-state {
     color: var(--var-color-primary);
     opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__input-field:hover .__input-field__label-active,
+.__input-field:hover .__input-field__optional-state {
+        color: var(--var-color-primary);
+        opacity: 1;
+    }
 }
 
 .__input-field:disabled .__input-field__label-active,
@@ -432,4 +444,18 @@
 /* textarea */
 .__textarea {
     inline-size: 100%;
+}
+
+@media (pointer: coarse) {
+    .__free-text--size-min.__free-text__surface {
+        font-size: max(16px, var(--var-free-text-min-font-size));
+    }
+
+    .__free-text--size-small.__free-text__surface {
+        font-size: max(16px, var(--var-free-text-small-font-size));
+    }
+
+    .__free-text--size-tiny.__free-text__surface {
+        font-size: max(16px, var(--var-free-text-tiny-font-size));
+    }
 }

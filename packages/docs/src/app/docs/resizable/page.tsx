@@ -19,19 +19,15 @@ export default function ResizablePage() {
                 description="The container animates its height when content is shown or hidden."
                 code={`"use client";
 import { useState } from "react";
-import { Resizable } from "@g4rcez/components/core/resizable";
+import { Button, Resizable } from "@g4rcez/components";
 
 function ToggleContent() {
   const [showExtra, setShowExtra] = useState(false);
   return (
     <div className="flex flex-col gap-4">
-      <button
-        type="button"
-        onClick={() => setShowExtra((v) => !v)}
-        className="rounded px-4 py-2 bg-primary text-primary-foreground w-fit"
-      >
+      <Button type="button" onClick={() => setShowExtra((v) => !v)}>
         {showExtra ? "Hide" : "Show"} extra content
-      </button>
+      </Button>
       <Resizable>
         <div className="border border-card-border rounded p-4">
           <p>Always visible content</p>
@@ -48,17 +44,13 @@ function ToggleContent() {
             >
                 <Card title="Toggle">
                     <div className="flex flex-col gap-4">
-                        <button
-                            type="button"
-                            onClick={() => setShowExtra((v) => !v)}
-                            className="w-fit rounded bg-primary px-4 py-2 text-primary-foreground"
-                        >
+                        <Button type="button" onClick={() => setShowExtra((v) => !v)}>
                             {showExtra ? "Hide" : "Show"} extra content
-                        </button>
+                        </Button>
                         <Resizable>
-                            <div className="rounded border border-card-border p-4">
+                            <div className="border-card-border rounded border p-4">
                                 <p>Always visible content</p>
-                                {showExtra && <p className="mt-4 text-secondary">This extra content causes the container to grow smoothly.</p>}
+                                {showExtra && <p className="text-secondary mt-4">This extra content causes the container to grow smoothly.</p>}
                             </div>
                         </Resizable>
                     </div>
@@ -70,19 +62,15 @@ function ToggleContent() {
                 description="Add items to a list and watch the container animate its height."
                 code={`"use client";
 import { useState } from "react";
-import { Resizable } from "@g4rcez/components/core/resizable";
+import { Button, Resizable } from "@g4rcez/components";
 
 function GrowingList() {
   const [items, setItems] = useState(["Item 1", "Item 2"]);
   return (
     <div className="flex flex-col gap-4">
-      <button
-        type="button"
-        onClick={() => setItems((v) => [...v, \`Item \${v.length + 1}\`])}
-        className="rounded px-4 py-2 bg-primary text-primary-foreground w-fit"
-      >
+      <Button type="button" onClick={() => setItems((v) => [...v, \`Item \${v.length + 1}\`])}>
         Add item
-      </button>
+      </Button>
       <Resizable>
         <ul className="border border-card-border rounded divide-y divide-card-border">
           {items.map((item) => (
@@ -100,7 +88,7 @@ function GrowingList() {
                             Add item - {items.length}
                         </Button>
                         <Resizable>
-                            <ul className="divide-y divide-card-border rounded border border-card-border">
+                            <ul className="divide-card-border border-card-border divide-y rounded border">
                                 {items.map((item) => (
                                     <li key={item} className="px-4 py-2">
                                         {item}

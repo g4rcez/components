@@ -124,8 +124,10 @@
     transition-timing-function: var(--var-page-calendar-transition-timing);
 }
 
-.__page-calendar-header__today-button:hover {
-    background-color: var(--var-page-calendar-today-background-hover);
+@media (hover: hover) and (pointer: fine) {
+    .__page-calendar-header__today-button:hover {
+        background-color: var(--var-page-calendar-today-background-hover);
+    }
 }
 
 .__page-calendar-header__date-picker {
@@ -303,9 +305,11 @@
     border-color: var(--var-page-calendar-slot-border);
 }
 
-.__page-calendar-day-view__time-slot:hover,
+@media (hover: hover) and (pointer: fine) {
+    .__page-calendar-day-view__time-slot:hover,
 .__page-calendar-week-view__time-slot:hover {
-    background-color: var(--var-page-calendar-slot-background-hover);
+        background-color: var(--var-page-calendar-slot-background-hover);
+    }
 }
 
 .__page-calendar-day-view__event,
@@ -406,8 +410,10 @@
     transition-timing-function: var(--var-page-calendar-transition-timing);
 }
 
-.__page-calendar-month-view__day-cell:hover {
-    background-color: var(--var-page-calendar-cell-background-hover);
+@media (hover: hover) and (pointer: fine) {
+    .__page-calendar-month-view__day-cell:hover {
+        background-color: var(--var-page-calendar-cell-background-hover);
+    }
 }
 
 .__page-calendar-month-view__day-cell--outside {
@@ -462,8 +468,10 @@
     transition-timing-function: var(--var-page-calendar-transition-timing);
 }
 
-.group:hover .__page-calendar-month-view__add-indicator {
-    opacity: var(--var-page-calendar-add-indicator-opacity-hover);
+@media (hover: hover) and (pointer: fine) {
+    .group:hover .__page-calendar-month-view__add-indicator {
+        opacity: var(--var-page-calendar-add-indicator-opacity-hover);
+    }
 }
 
 .__page-calendar-month-view__events {

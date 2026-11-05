@@ -183,11 +183,17 @@
   text-align: start;
 }
 
-.__date-picker__preset-button:hover,
 .__date-picker__preset-button:focus-visible,
 .__date-picker__preset-button[data-selected="true"] {
   background-color: var(--var-date-picker-preset-selected-background);
   color: var(--var-date-picker-preset-selected-foreground);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .__date-picker__preset-button:hover {
+    background-color: var(--var-date-picker-preset-selected-background);
+    color: var(--var-date-picker-preset-selected-foreground);
+  }
 }
 
 .__date-picker__panel .__calendar__footer {

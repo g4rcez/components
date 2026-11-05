@@ -113,12 +113,16 @@
     color: var(--var-color-danger);
 }
 
-.__swipeable-list__action:hover .__swipeable-list__action-icon {
-    background-color: var(--var-color-background);
+@media (hover: hover) and (pointer: fine) {
+    .__swipeable-list__action:hover .__swipeable-list__action-icon {
+        background-color: var(--var-color-background);
+    }
 }
 
-.__swipeable-list__action:hover .__swipeable-list__action-icon.__swipeable-list--tone-neutral {
-    color: var(--var-color-foreground);
+@media (hover: hover) and (pointer: fine) {
+    .__swipeable-list__action:hover .__swipeable-list__action-icon.__swipeable-list--tone-neutral {
+        color: var(--var-color-foreground);
+    }
 }
 
 .__swipeable-list__action:active .__swipeable-list__action-icon {

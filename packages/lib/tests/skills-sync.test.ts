@@ -15,7 +15,7 @@ const references = new Map([
     ["style-dependencies.md", "# Style dependencies\n"],
 ]);
 const skill = `---
-name: csscomponents
+name: g4rcez-components
 description: Fixture skill.
 ---
 
@@ -24,22 +24,21 @@ description: Fixture skill.
 Use the canonical skill.\n`;
 
 const destinationDocs = (root: string) => [
-    resolve(root, ".claude/skills/components-design-system/docs"),
-    resolve(root, ".agents/skills/csscomponents/docs"),
-    resolve(root, ".agents/skills/components-design-system/docs"),
+    resolve(root, "skills/g4rcez-components/docs"),
+    resolve(root, ".claude/skills/g4rcez-components/docs"),
+    resolve(root, ".agents/skills/g4rcez-components/docs"),
 ];
 
 const managedPaths = (root: string) => [
     resolve(root, "packages/lib/SKILL.md"),
     resolve(root, "packages/lib/ai/SKILL.md"),
-    resolve(root, ".claude/skills/components-design-system/SKILL.md"),
-    resolve(root, ".agents/skills/csscomponents/SKILL.md"),
-    resolve(root, ".agents/skills/components-design-system/SKILL.md"),
+    resolve(root, ".claude/skills/g4rcez-components/SKILL.md"),
+    resolve(root, ".agents/skills/g4rcez-components/SKILL.md"),
     ...destinationDocs(root),
 ];
 
 const sourceCases: Array<[string, (root: string) => void, string]> = [
-    ["missing source", (root) => rmSync(resolve(root, "skills/csscomponents/SKILL.md")), "canonical skill not found"],
+    ["missing source", (root) => rmSync(resolve(root, "skills/g4rcez-components/SKILL.md")), "canonical skill not found"],
     [
         "empty references",
         (root) => {
@@ -47,7 +46,7 @@ const sourceCases: Array<[string, (root: string) => void, string]> = [
         },
         "contains no Markdown references",
     ],
-    ["invalid frontmatter", (root) => writeFileSync(resolve(root, "skills/csscomponents/SKILL.md"), "not frontmatter\n"), "frontmatter"],
+    ["invalid frontmatter", (root) => writeFileSync(resolve(root, "skills/g4rcez-components/SKILL.md"), "not frontmatter\n"), "frontmatter"],
 ];
 
 function createFixture() {
@@ -55,8 +54,8 @@ function createFixture() {
     roots.push(root);
     mkdirSync(resolve(root, "scripts"), { recursive: true });
     copyFileSync(sourceScript, resolve(root, "scripts/skills.mjs"));
-    mkdirSync(resolve(root, "skills/csscomponents"), { recursive: true });
-    writeFileSync(resolve(root, "skills/csscomponents/SKILL.md"), skill);
+    mkdirSync(resolve(root, "skills/g4rcez-components"), { recursive: true });
+    writeFileSync(resolve(root, "skills/g4rcez-components/SKILL.md"), skill);
     mkdirSync(resolve(root, "packages/lib/ai/docs"), { recursive: true });
     for (const [path, content] of references) {
         const target = resolve(root, "packages/lib/ai/docs", path);
@@ -114,9 +113,7 @@ describe("skills sync CLI", () => {
         expect(existsSync(resolve(root, "dist"))).toBe(false);
         for (const path of managedPaths(root)) expect(existsSync(path)).toBe(true);
         expect(readFileSync(resolve(root, "packages/lib/SKILL.md"), "utf8")).toBe(skill);
-        expect(readFileSync(resolve(root, ".agents/skills/components-design-system/SKILL.md"), "utf8")).toBe(
-            skill.replace("name: csscomponents", "name: g4rcez-components")
-        );
+        expect(readFileSync(resolve(root, ".agents/skills/g4rcez-components/SKILL.md"), "utf8")).toBe(skill);
         for (const docs of destinationDocs(root)) {
             for (const [path, content] of references) {
                 expect(readFileSync(resolve(docs, path), "utf8")).toBe(content);
@@ -136,13 +133,13 @@ describe("skills sync CLI", () => {
     it("replaces stale content and restores missing references", () => {
         const root = createFixture();
         sync(root);
-        writeFileSync(resolve(root, ".agents/skills/csscomponents/docs/nested/Style.md"), "stale\n");
-        rmSync(resolve(root, ".claude/skills/components-design-system/docs/Button.md"));
+        writeFileSync(resolve(root, ".agents/skills/g4rcez-components/docs/nested/Style.md"), "stale\n");
+        rmSync(resolve(root, ".claude/skills/g4rcez-components/docs/Button.md"));
 
         const before = run(root, "check");
         expect(before.status).toBe(1);
-        expect(before.stderr).toContain(".agents/skills/csscomponents/docs/nested/Style.md: different");
-        expect(before.stderr).toContain(".claude/skills/components-design-system/docs/Button.md: missing");
+        expect(before.stderr).toContain(".agents/skills/g4rcez-components/docs/nested/Style.md: different");
+        expect(before.stderr).toContain(".claude/skills/g4rcez-components/docs/Button.md: missing");
 
         expect(run(root, "sync").status).toBe(0);
         expect(run(root, "check").status).toBe(0);
@@ -164,23 +161,23 @@ describe("skills sync CLI", () => {
     it("reports sorted missing, different, and extra files without writing", () => {
         const root = createFixture();
         sync(root);
-        writeFileSync(resolve(root, ".agents/skills/csscomponents/docs/index.md"), "different\n");
-        rmSync(resolve(root, ".claude/skills/components-design-system/docs/nested/Style.md"));
-        writeFileSync(resolve(root, ".agents/skills/components-design-system/docs/extra.md"), "keep\n");
-        writeFileSync(resolve(root, ".agents/skills/components-design-system/docs/keep.txt"), "unrelated\n");
+        writeFileSync(resolve(root, ".agents/skills/g4rcez-components/docs/index.md"), "different\n");
+        rmSync(resolve(root, ".claude/skills/g4rcez-components/docs/nested/Style.md"));
+        writeFileSync(resolve(root, "skills/g4rcez-components/docs/extra.md"), "keep\n");
+        writeFileSync(resolve(root, "skills/g4rcez-components/docs/keep.txt"), "unrelated\n");
         const before = snapshotManaged(root);
 
         const result = run(root, "check");
 
         expect(result.status).toBe(1);
         expect(result.stderr.split("\n").slice(1, -1)).toEqual([
-            ".agents/skills/components-design-system/docs/extra.md: extra",
-            ".agents/skills/csscomponents/docs/index.md: different",
-            ".claude/skills/components-design-system/docs/nested/Style.md: missing",
+            ".agents/skills/g4rcez-components/docs/index.md: different",
+            ".claude/skills/g4rcez-components/docs/nested/Style.md: missing",
+            "skills/g4rcez-components/docs/extra.md: extra",
         ]);
         expect(snapshotManaged(root)).toBe(before);
-        expect(readFileSync(resolve(root, ".agents/skills/components-design-system/docs/extra.md"), "utf8")).toBe("keep\n");
-        expect(readFileSync(resolve(root, ".agents/skills/components-design-system/docs/keep.txt"), "utf8")).toBe("unrelated\n");
+        expect(readFileSync(resolve(root, "skills/g4rcez-components/docs/extra.md"), "utf8")).toBe("keep\n");
+        expect(readFileSync(resolve(root, "skills/g4rcez-components/docs/keep.txt"), "utf8")).toBe("unrelated\n");
 
         const syncResult = run(root, "sync");
         expect(syncResult.status).toBe(1);
@@ -206,8 +203,8 @@ describe("skills sync CLI", () => {
         roots.push(externalRoot);
         const sentinel = resolve(externalRoot, "sentinel.txt");
         writeFileSync(sentinel, "do not change\n");
-        rmSync(resolve(root, "skills/csscomponents/SKILL.md"));
-        symlinkSync(sentinel, resolve(root, "skills/csscomponents/SKILL.md"));
+        rmSync(resolve(root, "skills/g4rcez-components/SKILL.md"));
+        symlinkSync(sentinel, resolve(root, "skills/g4rcez-components/SKILL.md"));
         const before = snapshotManaged(root);
 
         const result = run(root, "sync");
@@ -225,7 +222,7 @@ describe("skills sync CLI", () => {
         roots.push(externalRoot);
         const sentinel = resolve(externalRoot, "sentinel.md");
         writeFileSync(sentinel, "do not change\n");
-        const destination = resolve(root, ".agents/skills/csscomponents/docs/Button.md");
+        const destination = resolve(root, ".agents/skills/g4rcez-components/docs/Button.md");
         rmSync(destination);
         symlinkSync(sentinel, destination);
         const before = snapshotManaged(root);
@@ -258,9 +255,9 @@ describe("skills sync CLI", () => {
         const result = run(root, "install");
 
         expect(result.status).toBe(0);
-        expect(readFileSync(resolve(root, ".claude/skills/components-design-system/SKILL.md"), "utf8")).toBe("installed fixture skill\n");
+        expect(readFileSync(resolve(root, ".claude/skills/g4rcez-components/SKILL.md"), "utf8")).toBe("installed fixture skill\n");
         for (const path of references.keys()) {
-            expect(readFileSync(resolve(root, ".claude/skills/components-design-system/docs", path), "utf8")).toBe(references.get(path));
+            expect(readFileSync(resolve(root, ".claude/skills/g4rcez-components/docs", path), "utf8")).toBe(references.get(path));
         }
     });
 
@@ -278,7 +275,7 @@ describe("skills sync CLI", () => {
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain("install destination contains symlink at .claude");
         expect(readFileSync(sentinel, "utf8")).toBe("do not change\n");
-        expect(existsSync(resolve(externalRoot, "skills/components-design-system"))).toBe(false);
+        expect(existsSync(resolve(externalRoot, "skills/g4rcez-components"))).toBe(false);
     });
 
     it("repository copies match canonical sources", () => {

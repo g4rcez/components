@@ -16,7 +16,7 @@ read it at `@g4rcez/components/ai/SKILL.md`.
 Install the skill from this repository with:
 
 ```bash
-npx skills add g4rcez/components --skill csscomponents
+npx skills@latest add g4rcez/components
 ```
 
 ## Install and CSS setup

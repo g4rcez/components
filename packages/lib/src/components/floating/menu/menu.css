@@ -28,11 +28,17 @@
     opacity: var(--var-menu-item-expanded-opacity);
 }
 
-.__menu__item:hover,
 .__menu__item:focus,
 .__menu__item--active {
     color: var(--var-menu-item-active-foreground);
     background-color: var(--var-menu-item-active-background);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__menu__item:hover {
+        color: var(--var-menu-item-active-foreground);
+        background-color: var(--var-menu-item-active-background);
+    }
 }
 
 .__menu__item:disabled {
@@ -56,6 +62,7 @@
     color: var(--var-menu-surface-foreground);
     text-align: left;
     box-shadow: var(--var-shadow-floating);
+    animation: __menu-in var(--var-motion-duration-fast) var(--var-motion-timing-out);
     outline: var(--var-menu-item-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
     outline-offset: var(--var-menu-item-outline-offset, calc(var(--var-spacing-base) * 0.125));
 }
@@ -85,4 +92,23 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+@keyframes __menu-in {
+    from {
+        opacity: 0;
+        scale: 0.97;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__menu__floating {
+        animation-name: __menu-fade;
+    }
+
+    @keyframes __menu-fade {
+        from {
+            opacity: 0;
+        }
+    }
 }

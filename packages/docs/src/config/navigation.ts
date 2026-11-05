@@ -106,6 +106,7 @@ export const sections: Section[] = [
             { title: "Tabs", href: "/docs/tabs", icon: SquaresFourIcon },
             { title: "Timeline", href: "/docs/timeline", icon: ClockIcon },
             { title: "Table", href: "/docs/table", icon: TableIcon },
+            { title: "VideoPlayer", href: "/docs/video-player", icon: FrameCornersIcon },
             {
                 title: "Page Calendar",
                 href: "/docs/page-calendar",
@@ -137,6 +138,8 @@ export const sections: Section[] = [
                 icon: MagnifyingGlassIcon,
             },
             { title: "Checkbox", href: "/docs/checkbox", icon: CheckSquareIcon },
+            { title: "DrawingEditor", href: "/docs/drawing-editor", icon: FrameCornersIcon },
+            { title: "RichTextEditor", href: "/docs/rich-text-editor", icon: FileTextIcon },
             { title: "Date Picker", href: "/docs/date-picker", icon: CalendarIcon },
             {
                 title: "File Upload",

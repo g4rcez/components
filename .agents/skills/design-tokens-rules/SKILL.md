@@ -10,6 +10,8 @@ description: >
     tokens there only when necessary, derive sizes with `calc()` from base tokens,
     avoid deep CSS variable chains, never use `color-mix()`, and use broadly
     supported `hsla(...)` color tokens.
+metadata:
+  internal: true
 ---
 
 # Design Tokens Rules
