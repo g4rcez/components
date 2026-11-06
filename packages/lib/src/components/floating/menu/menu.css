@@ -31,6 +31,11 @@
     block-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
 }
 
+/* Reserve the indicator column only in menus that have a checkable item, so plain menus keep their original inset. */
+.__menu__floating:not(:has([role="menuitemradio"], [role="menuitemcheckbox"])) [data-menu-item-indicator] {
+    display: none;
+}
+
 .__menu__item:first-of-type {
     border-start-start-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
     border-start-end-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));

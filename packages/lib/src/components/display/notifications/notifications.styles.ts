@@ -8,6 +8,6 @@ export const notificationsStyles = defineComponentStyles({
     defaults: {
         theme: "default",
     },
-    slots: ["item", "content", "icon", "text", "title", "description", "close", "close-icon", "viewport", "badge"],
+    slots: ["item", "content", "icon", "text", "title", "description", "action", "close", "close-icon", "viewport", "badge"],
     dependencies: [],
 });

@@ -102,6 +102,7 @@ function Notification(props: NotificationItemProps) {
                                     action.onClick();
                                     toastManager.close(props.toast.id);
                                 }}
+                                className={notificationsStyles.slots.action}
                                 render={<Button size="small" theme="outlined" />}
                             >
                                 {action.label}

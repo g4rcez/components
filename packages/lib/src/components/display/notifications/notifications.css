@@ -114,6 +114,33 @@
     opacity: var(--var-notification-description-opacity);
 }
 
+/* The action takes the colour of the toast theme: the default outlined Button is unreadable on a filled theme such as secondary. */
+.__notifications__action.__button {
+    flex-shrink: 0;
+    border-color: currentColor;
+    background: transparent;
+    color: inherit;
+}
+
+.__notifications__action.__button:enabled:focus-visible {
+    background: color-mix(in srgb, currentColor 16%, transparent);
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) currentColor;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__notifications__action.__button:enabled:hover {
+        background: color-mix(in srgb, currentColor 16%, transparent);
+    }
+}
+
+/* WCAG 2.5.5 (AAA): 44px target on touch screens. */
+@media (pointer: coarse) {
+    .__notifications__action.__button {
+        min-block-size: calc(var(--var-spacing-base) * 2.75);
+        min-inline-size: calc(var(--var-spacing-base) * 2.75);
+    }
+}
+
 .__notifications__close {
     margin-top: var(--var-notification-close-margin-block-start, calc( var(--var-spacing-base) * -0.25 ));
     margin-right: var(--var-notification-close-margin-inline-end, calc( var(--var-spacing-base) * -0.25 ));
