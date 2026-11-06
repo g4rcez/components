@@ -14,6 +14,23 @@
     outline-offset: var(--var-menu-item-outline-offset, calc(var(--var-spacing-base) * 0.125));
 }
 
+.__menu__item [data-menu-item-label] {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: var(--var-menu-item-gap, calc(var(--var-spacing-base) * 0.5));
+    min-inline-size: 0;
+}
+
+.__menu__item [data-menu-item-indicator] {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
+}
+
 .__menu__item:first-of-type {
     border-start-start-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
     border-start-end-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));

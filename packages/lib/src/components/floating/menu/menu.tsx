@@ -24,7 +24,7 @@ import {
     useTypeahead,
 } from "@floating-ui/react";
 import { Slot } from "../../core/slot/slot";
-import { CaretRightIcon, type Icon } from "@phosphor-icons/react";
+import { CaretRightIcon, CheckIcon, type Icon } from "@phosphor-icons/react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../../constants";
 import { css, mergeRefs } from "../../../lib/dom";
@@ -250,21 +250,26 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
     }
 );
 
-type MenuItemProps = { title: string; disabled?: boolean; Right?: Icon };
+export type MenuItemRole = "menuitem" | "menuitemradio" | "menuitemcheckbox";
+
+type MenuItemProps = { title: string; disabled?: boolean; Right?: Icon; role?: MenuItemRole; checked?: boolean };
 
 export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.ButtonHTMLAttributes<HTMLButtonElement>, MenuItemProps>>(
-    ({ title, Right, disabled, children, ...props }, forwardedRef) => {
+    ({ title, Right, disabled, children, role = "menuitem", checked = false, ...props }, forwardedRef) => {
         const menu = useContext(MenuContext);
         const item = useListItem({ label: disabled ? null : title });
         const tree = useFloatingTree();
         const isActive = item.index === menu.activeIndex;
+        const isCheckable = role !== "menuitem";
         return (
             <button
                 {...props}
                 title={title}
                 type="button"
-                role="menuitem"
+                role={role}
                 disabled={disabled}
+                aria-checked={isCheckable ? checked : undefined}
+                data-checked={isCheckable && checked ? "" : undefined}
                 data-active={isActive}
                 data-open={menu.isOpen}
                 tabIndex={isActive ? 0 : -1}
@@ -281,7 +286,12 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                     },
                 })}
             >
-                {children}
+                <span data-menu-item-label="">
+                    <span data-menu-item-indicator="" aria-hidden="true">
+                        {isCheckable && checked ? <CheckIcon className={menuStyles.slots["item-icon"]} /> : null}
+                    </span>
+                    {children}
+                </span>
                 {Right ? <Right className={menuStyles.slots["item-icon"]} /> : null}
             </button>
         );

@@ -66,6 +66,7 @@ const subscription = notify("Saved", { theme: "success" });
 | `title` | `Label` | — | Optional notification title |
 | `theme` | `NotificationTheme` | `"default"` | Visual theme variant |
 | `timeout` | `number` | Provider default | Auto-dismiss time in ms; `0` disables automatic dismissal |
+| `action` | `{ label: string; onClick: () => void }` | — | Small `Button` beside the text. The click runs `onClick` and closes the toast. A toast with an action stays at least 10 s (`timeout: 0` still disables dismissal). |
 | `closable` | `boolean` | `true` | Shows a close button unless `loading` is true; swipe and Escape still dismiss |
 | `loading` | `boolean` | `false` | Shows a loading icon, hides the close button; timeout unchanged |
 
@@ -215,6 +216,15 @@ function ContactForm() {
 }
 ```
 
+### Action
+
+```tsx
+notify("Task archived.", {
+    theme: "success",
+    action: { label: "Undo", onClick: () => restoreTask() },
+});
+```
+
 ### Updating an Existing Toast
 
 ```tsx
@@ -257,6 +267,7 @@ function SyncButton() {
 - State the outcome in text. Do not depend on theme or icon.
 - Put critical failures, mandatory decisions, destructive confirmation, and information needed later in persistent task content: [Alert](Alert.md) or [Modal](Modal.md). Do not rely on the toast stack alone.
 - Provider `timeout` defaults to 5000 ms.
+- A toast with `action` uses `max(timeout, 10000)` ms. The timer pauses while the pointer is over the toast stack or keyboard focus is inside it (WCAG 2.2.1). Reach the toast with F6, then Tab to the action button.
 - `timeout: 0` disables automatic dismissal in the current Base UI dependency. `Infinity` goes to timers and is not a persistence flag.
 - `loading` only changes the icon and hides close. Set a timeout policy explicitly.
 - `closable: false` hides the button. Right-swipe and Escape on a focused toast still dismiss.

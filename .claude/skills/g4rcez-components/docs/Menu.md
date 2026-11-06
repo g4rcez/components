@@ -40,6 +40,8 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 | `children` | `React.ReactNode` | — | Visual content of the item. |
 | `disabled` | `boolean` | `false` | Removes the item from keyboard navigation and typeahead. |
 | `Right` | `React.FC<IconProps>` | — | Icon on the right side. |
+| `role` | `"menuitem" \| "menuitemradio" \| "menuitemcheckbox"` | `"menuitem"` | ARIA role. Use `menuitemradio` for one choice in a group and `menuitemcheckbox` for an independent toggle. |
+| `checked` | `boolean` | `false` | Selection state of a radio or checkbox item. Sets `aria-checked` and draws a `Check` icon. Ignored for `menuitem`. |
 | `onClick` | `function` | — | Click handler. |
 
 ## Design Tokens
@@ -121,6 +123,20 @@ import { Button } from "@g4rcez/components/button";
 </Menu>;
 ```
 
+### Selection state
+
+```tsx
+import { Menu, MenuItem } from "@g4rcez/components/menu";
+<Menu label="Theme" hover={false}>
+    <MenuItem title="Light" role="menuitemradio" checked={theme === "light"} onClick={() => setTheme("light")}>
+        Light
+    </MenuItem>
+    <MenuItem title="Dark" role="menuitemradio" checked={theme === "dark"} onClick={() => setTheme("dark")}>
+        Dark
+    </MenuItem>
+</Menu>;
+```
+
 ### Disabled Items
 
 ```tsx
@@ -159,7 +175,10 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 ## Accessibility
 
 - Floating UI provides looping list navigation, nested-menu navigation, Enter/Space activation, Escape/outside-press dismissal, and title-based item typeahead.
-- The container uses `menu`. Each `MenuItem` is a native button with `menuitem`.
+- The container uses `menu`. Each `MenuItem` is a native button with `menuitem`, `menuitemradio`, or `menuitemcheckbox`.
+- Radio and checkbox items always set `aria-checked`. Plain `menuitem` items never set it.
+- Every item reserves the width of the check icon, so labels stay aligned whether or not an item is checked. The icon is `aria-hidden`; the state comes from `aria-checked`.
+- The library draws the check only. Group semantics for radio items (one checked at a time) belong to the caller.
 - Nested triggers expose submenu state through the role interaction.
 - `MenuItem.title` supplies the typeahead label and the HTML `title` attribute. Rendered children normally supply the accessible name.
 - Keep `MenuItem.title` and children consistent, or supply a suitable inherited `aria-label`.
