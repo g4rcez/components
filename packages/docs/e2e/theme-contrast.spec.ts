@@ -13,7 +13,10 @@ async function setTheme(page: Page, theme: Theme): Promise<void> {
     }
 }
 
-async function renderedContrastRatio(locator: Locator, foregroundProperty: "color" | "borderTopColor" = "color"): Promise<number> {
+async function renderedContrastRatio(
+    locator: Locator,
+    foregroundProperty: "color" | "borderTopColor" | "borderBottomColor" = "color"
+): Promise<number> {
     return locator.evaluate(async (target, property) => {
         const ancestors: Element[] = [];
         for (let current: Element | null = target; current; current = current.parentElement) {
@@ -155,5 +158,24 @@ test("Input border meets 3:1 non-text contrast in both themes", async ({ page })
         await setTheme(page, theme);
         const ratio = await renderedContrastRatio(control, "borderTopColor");
         expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+    }
+});
+
+test("MultiSelect search border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+    await page.goto("/docs/multiselect");
+    await expect(page.getByRole("heading", { level: 1, name: "MultiSelect" })).toBeVisible();
+
+    for (const theme of ["light", "dark"] as const) {
+        await setTheme(page, theme);
+        await page.getByRole("combobox").first().click();
+        const search = page.locator(".__multi-select__search").first();
+        await expect(search).toBeFocused();
+        // The open panel focuses the search input, which swaps the border to --primary. Measure the resting border.
+        await search.evaluate((element) => (element as HTMLInputElement).blur());
+        await expect(search).not.toBeFocused();
+        const ratio = await renderedContrastRatio(search, "borderBottomColor");
+        expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        await page.keyboard.press("Escape");
+        await expect(search).toBeHidden();
     }
 });
