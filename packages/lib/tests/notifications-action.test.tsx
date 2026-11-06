@@ -114,9 +114,17 @@ describe("Notifications action", () => {
         expect(screen.getByText("File moved")).toBeInTheDocument();
     });
 
-    // Keep this test last: a toast that never closes leaks into the next test.
     it("keeps a toast with an action and timeout 0 on screen", async () => {
         const user = setup({ action: { label: "Undo", onClick: vi.fn() }, timeout: 0 });
+        await user.click(screen.getByRole("button", { name: "Notify" }));
+
+        await advance(60000);
+        expect(screen.getByText("File moved")).toBeInTheDocument();
+    });
+
+    // Keep the two timeout 0 tests last: a toast that never closes leaks into the next test.
+    it("keeps a toast with an action on screen when the provider timeout is 0", async () => {
+        const user = setup({ action: { label: "Undo", onClick: vi.fn() } }, 0);
         await user.click(screen.getByRole("button", { name: "Notify" }));
 
         await advance(60000);
