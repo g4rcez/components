@@ -191,7 +191,7 @@
 .__multi-select__empty {
     width: 100%;
     border-bottom-width: var(--var-border-hairline);
-    border-color: var(--var-color-input);
+    border-color: var(--var-color-border);
 }
 
 .__multi-select__empty:last-child {
