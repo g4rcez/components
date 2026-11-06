@@ -7,6 +7,7 @@ import { useHover } from "../../../hooks/use-hover";
 import type { ComponentStyleProps } from "../../../lib/component-styles";
 import { css } from "../../../lib/dom";
 import type { Label } from "../../../types";
+import { Button } from "../../core/button/button";
 import { notificationsStyles } from "./notifications.styles";
 
 type NotificationStyleProps = ComponentStyleProps<typeof notificationsStyles>;
@@ -21,6 +22,11 @@ const themeIcons = {
     secondary: InfoIcon,
 };
 
+export type NotificationAction = { label: string; onClick: () => void };
+
+/** A toast with an action stays on screen at least this long, so keyboard and screen reader users can reach it (WCAG 2.2.1). */
+const ACTION_MIN_TIMEOUT = 10_000;
+
 type NotificationOptions = Partial<{
     id: string;
     title: Label;
@@ -28,9 +34,11 @@ type NotificationOptions = Partial<{
     closable: boolean;
     loading: boolean;
     theme: NotificationStyleProps["theme"];
+    action: NotificationAction;
 }>;
 
 type NotificationData = {
+    action?: NotificationAction;
     theme?: NotificationOptions["theme"];
     closable?: boolean;
     loading?: boolean;
@@ -50,7 +58,12 @@ type NotificationItemProps = {
     toast: Base.Root.ToastObject<NotificationData>;
 };
 
+const resolveTimeout = (args?: NotificationOptions) =>
+    args?.action && args.timeout !== 0 ? Math.max(args.timeout ?? 0, ACTION_MIN_TIMEOUT) : args?.timeout;
+
 function Notification(props: NotificationItemProps) {
+    const toastManager = Base.useToastManager();
+    const action = props.toast.data?.action;
     const closable = props.toast.data?.closable ?? true;
     const loading = props.toast.data?.loading ?? false;
     const theme = props.toast.data?.theme || "default";
@@ -82,6 +95,19 @@ function Notification(props: NotificationItemProps) {
                             {props.toast.title ? <Base.Title className={notificationsStyles.slots.title} /> : null}
                             <Base.Description className={css("line-clamp-2", notificationsStyles.slots.description)} />
                         </div>
+
+                        {action ? (
+                            <Base.Action
+                                onClick={() => {
+                                    action.onClick();
+                                    toastManager.close(props.toast.id);
+                                }}
+                                className={notificationsStyles.slots.action}
+                                render={<Button size="small" theme="outlined" />}
+                            >
+                                {action.label}
+                            </Base.Action>
+                        ) : null}
 
                         {closable && !loading ? (
                             <Base.Close className={notificationsStyles.slots.close}>
@@ -139,7 +165,9 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
 
     const notify = useCallback(
         (description: Label, args?: NotificationOptions) => {
+            const timeout = resolveTimeout(args);
             const data = {
+                action: args?.action,
                 theme: args?.theme,
                 closable: args?.closable,
                 loading: args?.loading,
@@ -151,7 +179,7 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
                     toastManager.update(args.id, {
                         description,
                         title: args.title,
-                        timeout: args.timeout,
+                        timeout,
                         data,
                     });
                     return { close: () => toastManager.close(args.id!), clear };
@@ -162,7 +190,7 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
                 description,
                 id: args?.id,
                 title: args?.title,
-                timeout: args?.timeout,
+                timeout,
                 data,
             });
 
