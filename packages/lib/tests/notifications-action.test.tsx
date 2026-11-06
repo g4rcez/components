@@ -1,5 +1,6 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Notifications, useNotification } from "../src/components/display/notifications/notifications";
 
@@ -7,7 +8,13 @@ type Options = Parameters<ReturnType<typeof useNotification>>[1];
 
 function Trigger({ options }: { options?: Options }) {
     const notify = useNotification();
-    return <button onClick={() => notify("File moved", options)}>Notify</button>;
+    const toast = useRef<ReturnType<typeof notify>>(undefined);
+    return (
+        <>
+            <button onClick={() => (toast.current = notify("File moved", options))}>Notify</button>
+            <button onClick={() => toast.current?.close()}>Dismiss</button>
+        </>
+    );
 }
 
 const setup = (options?: Options, providerTimeout?: number) => {
@@ -31,7 +38,11 @@ describe("Notifications action", () => {
         // Testing Library only advances fake timers it finds through the jest global.
         vi.stubGlobal("jest", { advanceTimersByTime: (ms: number) => vi.advanceTimersByTime(ms) });
     });
-    afterEach(() => {
+    afterEach(async () => {
+        // Unmounting an open toast leaves a pending timer that keeps the toast of the next test open.
+        act(() => screen.getByRole("button", { name: "Dismiss" }).click());
+        await advance(1000);
+        cleanup();
         vi.useRealTimers();
         vi.unstubAllGlobals();
     });
@@ -122,7 +133,6 @@ describe("Notifications action", () => {
         expect(screen.getByText("File moved")).toBeInTheDocument();
     });
 
-    // Keep the two timeout 0 tests last: a toast that never closes leaks into the next test.
     it("keeps a toast with an action on screen when the provider timeout is 0", async () => {
         const user = setup({ action: { label: "Undo", onClick: vi.fn() } }, 0);
         await user.click(screen.getByRole("button", { name: "Notify" }));
