@@ -72,7 +72,7 @@ Tailwind utility mappings and component tokens follow. When a utility targets a 
 | `h-input-height` | `--var-free-text-control-height` | Input height |
 | `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal input padding |
 | `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical input padding |
-| `border-input-border` | `--var-color-input` | Default field border color (default: `--var-color-border`) |
+| `border-input-border` | `--var-color-input` | Default field border color |
 | `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text color |
 | `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Placeholder color in error state |
 | `text-foreground` | `--var-color-foreground` | Input text color |

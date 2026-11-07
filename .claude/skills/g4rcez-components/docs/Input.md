@@ -75,7 +75,7 @@ Geometry defaults are scoped `calc` fallbacks from `--var-spacing-base` and the 
 | `px-input-padding-x` | `--var-free-text-surface-padding-inline` | Horizontal padding |
 | `py-input-padding-y` | `--var-free-text-surface-padding-block` | Vertical padding |
 | `mt-input-gap` | `--var-input-field-hint-margin-block-start` | Gap before error and feedback |
-| `border-input-border` | `--var-color-input` | Border color (default: `--var-color-border`) |
+| `border-input-border` | `--var-color-input` | Border color |
 | `text-input-label-text` | `--var-input-field-label-font-size` | Label font size, not color |
 | `text-foreground` | `--var-color-foreground` | Input text color |
 | `text-primary` | `--var-color-primary` | Hover and focus accent |
