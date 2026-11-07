@@ -1,5 +1,6 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Notifications, useNotification } from "../src/components/display/notifications/notifications";
 
@@ -7,13 +8,19 @@ type Options = Parameters<ReturnType<typeof useNotification>>[1];
 
 function Trigger({ options }: { options?: Options }) {
     const notify = useNotification();
-    return <button onClick={() => notify("File moved", options)}>Notify</button>;
+    const toast = useRef<ReturnType<typeof notify>>(undefined);
+    return (
+        <>
+            <button onClick={() => (toast.current = notify("File moved", options))}>Notify</button>
+            <button onClick={() => toast.current?.close()}>Dismiss</button>
+        </>
+    );
 }
 
-const setup = (options?: Options) => {
+const setup = (options?: Options, providerTimeout?: number) => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(
-        <Notifications>
+        <Notifications timeout={providerTimeout}>
             <Trigger options={options} />
         </Notifications>
     );
@@ -31,7 +38,11 @@ describe("Notifications action", () => {
         // Testing Library only advances fake timers it finds through the jest global.
         vi.stubGlobal("jest", { advanceTimersByTime: (ms: number) => vi.advanceTimersByTime(ms) });
     });
-    afterEach(() => {
+    afterEach(async () => {
+        // Unmounting an open toast leaves a pending timer that keeps the toast of the next test open.
+        act(() => screen.getByRole("button", { name: "Dismiss" }).click());
+        await advance(1000);
+        cleanup();
         vi.useRealTimers();
         vi.unstubAllGlobals();
     });
@@ -55,6 +66,26 @@ describe("Notifications action", () => {
         await advance(9000);
         expect(screen.getByText("File moved")).toBeInTheDocument();
         await advance(3000);
+        expect(screen.queryByText("File moved")).not.toBeInTheDocument();
+    });
+
+    it("keeps the provider timeout when it is longer than 10 seconds", async () => {
+        const user = setup({ action: { label: "Undo", onClick: vi.fn() } }, 30000);
+        await user.click(screen.getByRole("button", { name: "Notify" }));
+
+        await advance(15000);
+        expect(screen.getByText("File moved")).toBeInTheDocument();
+        await advance(16000);
+        expect(screen.queryByText("File moved")).not.toBeInTheDocument();
+    });
+
+    it("keeps a toast timeout of 20 seconds when it has an action", async () => {
+        const user = setup({ action: { label: "Undo", onClick: vi.fn() }, timeout: 20000 });
+        await user.click(screen.getByRole("button", { name: "Notify" }));
+
+        await advance(19000);
+        expect(screen.getByText("File moved")).toBeInTheDocument();
+        await advance(2000);
         expect(screen.queryByText("File moved")).not.toBeInTheDocument();
     });
 
@@ -91,6 +122,22 @@ describe("Notifications action", () => {
         await user.tab();
         expect(screen.getByRole("button", { name: "Undo" })).toHaveFocus();
         await advance(30000);
+        expect(screen.getByText("File moved")).toBeInTheDocument();
+    });
+
+    it("keeps a toast with an action and timeout 0 on screen", async () => {
+        const user = setup({ action: { label: "Undo", onClick: vi.fn() }, timeout: 0 });
+        await user.click(screen.getByRole("button", { name: "Notify" }));
+
+        await advance(60000);
+        expect(screen.getByText("File moved")).toBeInTheDocument();
+    });
+
+    it("keeps a toast with an action on screen when the provider timeout is 0", async () => {
+        const user = setup({ action: { label: "Undo", onClick: vi.fn() } }, 0);
+        await user.click(screen.getByRole("button", { name: "Notify" }));
+
+        await advance(60000);
         expect(screen.getByText("File moved")).toBeInTheDocument();
     });
 });

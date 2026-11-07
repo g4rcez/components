@@ -58,8 +58,11 @@ type NotificationItemProps = {
     toast: Base.Root.ToastObject<NotificationData>;
 };
 
-const resolveTimeout = (args?: NotificationOptions) =>
-    args?.action && args.timeout !== 0 ? Math.max(args.timeout ?? 0, ACTION_MIN_TIMEOUT) : args?.timeout;
+const resolveTimeout = (providerTimeout: number, args?: NotificationOptions) => {
+    if (!args?.action) return args?.timeout;
+    const timeout = args.timeout ?? providerTimeout;
+    return timeout === 0 ? 0 : Math.max(timeout, ACTION_MIN_TIMEOUT);
+};
 
 function Notification(props: NotificationItemProps) {
     const toastManager = Base.useToastManager();
@@ -156,7 +159,7 @@ function NotificationsViewport({ max = 5 }: NotificationProps) {
     );
 }
 
-function NotificationsInner({ children, max = 5 }: PropsWithChildren<NotificationProps>) {
+function NotificationsInner({ children, max = 5, timeout: providerTimeout = 5000 }: PropsWithChildren<NotificationProps>) {
     const toastManager = Base.useToastManager();
 
     const clear = useCallback(() => {
@@ -165,7 +168,7 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
 
     const notify = useCallback(
         (description: Label, args?: NotificationOptions) => {
-            const timeout = resolveTimeout(args);
+            const timeout = resolveTimeout(providerTimeout, args);
             const data = {
                 action: args?.action,
                 theme: args?.theme,
@@ -199,7 +202,7 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
                 clear,
             };
         },
-        [toastManager, clear]
+        [toastManager, clear, providerTimeout]
     );
 
     return (
@@ -215,7 +218,9 @@ function NotificationsInner({ children, max = 5 }: PropsWithChildren<Notificatio
 export function Notifications({ children, max = 5, timeout = 5000 }: PropsWithChildren<NotificationProps>) {
     return (
         <Base.Provider limit={max} timeout={timeout}>
-            <NotificationsInner max={max}>{children}</NotificationsInner>
+            <NotificationsInner max={max} timeout={timeout}>
+                {children}
+            </NotificationsInner>
         </Base.Provider>
     );
 }
