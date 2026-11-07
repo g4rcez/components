@@ -13,8 +13,11 @@ async function setTheme(page: Page, theme: Theme): Promise<void> {
     }
 }
 
-async function renderedContrastRatio(locator: Locator): Promise<number> {
-    return locator.evaluate(async (target) => {
+async function renderedContrastRatio(
+    locator: Locator,
+    foregroundProperty: "color" | "borderTopColor" | "borderBottomColor" = "color"
+): Promise<number> {
+    return locator.evaluate(async (target, property) => {
         const ancestors: Element[] = [];
         for (let current: Element | null = target; current; current = current.parentElement) {
             ancestors.push(current);
@@ -24,7 +27,7 @@ async function renderedContrastRatio(locator: Locator): Promise<number> {
             ancestors
                 .map((element) => {
                     const style = getComputedStyle(element);
-                    return `${style.color}|${style.backgroundColor}`;
+                    return `${style[property]}|${style.backgroundColor}`;
                 })
                 .join("|");
 
@@ -66,7 +69,7 @@ async function renderedContrastRatio(locator: Locator): Promise<number> {
             background = composite(layer, background);
             if (layer.alpha === 1) break;
         }
-        const foreground = composite(parseColor(style.color), background);
+        const foreground = composite(parseColor(style[property]), background);
         const luminance = ({ red, green, blue }: Color): number => {
             const linearize = (channel: number) => {
                 const normalized = channel / 255;
@@ -78,7 +81,7 @@ async function renderedContrastRatio(locator: Locator): Promise<number> {
         const backgroundLuminance = luminance(background);
         const [lighter, darker] = [foregroundLuminance, backgroundLuminance].sort((a, b) => b - a);
         return (lighter + 0.05) / (darker + 0.05);
-    });
+    }, foregroundProperty);
 }
 
 function expectNormalTextContrast(ratio: number, state: string): void {
@@ -142,5 +145,37 @@ test("active Autocomplete option text remains legible in both themes", async ({ 
         await expect(activeOption).toHaveClass(/__autocomplete__option--active/);
         await expect(activeOption).not.toHaveClass(/__autocomplete__option--selected/);
         expectNormalTextContrast(await renderedContrastRatio(activeOption), `${theme} active Autocomplete option`);
+    }
+});
+
+test("Input border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+    await page.goto("/docs/input");
+    await expect(page.getByRole("heading", { level: 1, name: "Input" })).toBeVisible();
+    const control = page.locator(".__input-field__control").first();
+    await expect(control).toBeVisible();
+
+    for (const theme of ["light", "dark"] as const) {
+        await setTheme(page, theme);
+        const ratio = await renderedContrastRatio(control, "borderTopColor");
+        expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+    }
+});
+
+test("MultiSelect search border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+    await page.goto("/docs/multiselect");
+    await expect(page.getByRole("heading", { level: 1, name: "MultiSelect" })).toBeVisible();
+
+    for (const theme of ["light", "dark"] as const) {
+        await setTheme(page, theme);
+        await page.getByRole("combobox").first().click();
+        const search = page.locator(".__multi-select__search").first();
+        await expect(search).toBeFocused();
+        // The open panel focuses the search input, which swaps the border to --primary. Measure the resting border.
+        await search.evaluate((element) => (element as HTMLInputElement).blur());
+        await expect(search).not.toBeFocused();
+        const ratio = await renderedContrastRatio(search, "borderBottomColor");
+        expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        await page.keyboard.press("Escape");
+        await expect(search).toBeHidden();
     }
 });

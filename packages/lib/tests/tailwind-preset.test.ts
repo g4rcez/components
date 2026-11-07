@@ -118,4 +118,10 @@ describe("Tailwind preset", () => {
         expect(result.css).toContain("background-color: transparent");
         expect(result.css).not.toContain("color-mix");
     });
+
+    it("maps border-input-border to the field border token, not the divider token", async () => {
+        const result = await compileUtilities("border-input-border");
+        expect(result.css).toContain("var(--var-color-input)");
+        expect(result.css).not.toContain("var(--var-color-border)");
+    });
 });
