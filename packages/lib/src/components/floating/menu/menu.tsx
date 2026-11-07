@@ -55,6 +55,12 @@ export type MenuProps = Partial<
     {
         hover: boolean;
         open?: boolean;
+        /** Side of the trigger where the root menu opens. Nested menus always open to the `right`. @default "bottom" */
+        side: "top" | "right" | "bottom" | "left";
+        /** Alignment of the root menu along the trigger edge. @default "start" */
+        align: "start" | "center" | "end";
+        /** Gap in pixels between the trigger and the root menu. Nested menus have no gap. @default 4 */
+        offset: number;
         nested: boolean;
         asChild: boolean;
         isParent: boolean;
@@ -67,7 +73,20 @@ export type MenuProps = Partial<
 
 const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLProps<HTMLButtonElement>, MenuProps>>(
     (
-        { children, FloatingComponent = "div", hover = true, open, isParent = false, restoreFocus = false, floatingClassName = "", label, ...props },
+        {
+            children,
+            FloatingComponent = "div",
+            hover = true,
+            open,
+            side = "bottom",
+            align = "start",
+            offset: gap = 4,
+            isParent = false,
+            restoreFocus = false,
+            floatingClassName = "",
+            label,
+            ...props
+        },
         forwardedRef
     ) => {
         const [isOpen, setIsOpen] = useState<boolean>(open ?? false);
@@ -92,10 +111,10 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             strategy: "absolute",
             onOpenChange: setIsOpen,
             whileElementsMounted: autoUpdate,
-            placement: isNested ? "right" : "bottom-start",
+            placement: isNested ? "right" : align === "center" ? side : `${side}-${align}`,
             middleware: [
                 offset({
-                    mainAxis: isNested ? 0 : 4,
+                    mainAxis: isNested ? 0 : gap,
                     alignmentAxis: isNested ? -4 : 0,
                 }),
                 flip(),

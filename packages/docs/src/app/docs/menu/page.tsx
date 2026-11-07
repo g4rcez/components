@@ -78,6 +78,38 @@ function SimpleNestedMenu() {
                 </Card>
             </ComponentDemo>
             <ComponentDemo
+                title="Placement"
+                description="Use side, align and offset to choose where the root menu opens. The defaults are side=bottom, align=start and offset=4. Nested menus always open to the right."
+                code={`"use client";
+import { Menu, MenuItem } from "@g4rcez/components";
+
+function MenuPlacement() {
+  return (
+    <div className="flex gap-8">
+      <Menu hover={false} label="Bottom, end" side="bottom" align="end">
+        <MenuItem title="Profile">Profile</MenuItem>
+        <MenuItem title="Sign out">Sign out</MenuItem>
+      </Menu>
+      <Menu hover={false} label="Right, start" side="right" align="start" offset={8}>
+        <MenuItem title="Profile">Profile</MenuItem>
+        <MenuItem title="Sign out">Sign out</MenuItem>
+      </Menu>
+    </div>
+  );
+}`}
+            >
+                <Card title="Placement" className="flex gap-8">
+                    <Menu hover={false} label="Bottom, end" side="bottom" align="end">
+                        <MenuItem title="Profile">Profile</MenuItem>
+                        <MenuItem title="Sign out">Sign out</MenuItem>
+                    </Menu>
+                    <Menu hover={false} label="Right, start" side="right" align="start" offset={8}>
+                        <MenuItem title="Profile">Profile</MenuItem>
+                        <MenuItem title="Sign out">Sign out</MenuItem>
+                    </Menu>
+                </Card>
+            </ComponentDemo>
+            <ComponentDemo
                 title="Custom Trigger and Item Styling"
                 description="Illustrates how to use a custom component as the menu trigger and apply custom styling to individual menu items."
                 code={`"use client";
