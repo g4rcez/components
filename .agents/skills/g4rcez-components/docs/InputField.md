@@ -48,7 +48,7 @@ Shared geometry uses scoped spacing and radius fallbacks. Explicit overrides win
 
 | Token | CSS Variable | Purpose |
 |---|---|---|
-| `border-input-border` | `--var-color-input` | Border color |
+| `border-input-border` | `--var-color-input` | Border color (default: `--var-color-border`) |
 | `text-input-label-text` | `--var-input-field-label-font-size` | Label font size, not color |
 | `text-primary` | `--var-color-primary` | Label and border color on focus and hover |
 | `text-danger` | `--var-color-danger` | Label, border, and error text in error state |

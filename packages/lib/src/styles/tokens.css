@@ -273,7 +273,7 @@
   --var-color-background: hsla(0, 0%, 100%);
   --var-color-foreground: hsla(221, 15%, 23%);
   --var-color-border: hsla(240, 6%, 90%);
-  --var-color-input: hsla(240, 5%, 52%);
+  --var-color-input: var(--var-color-border);
   --var-color-ring: hsla(201, 49%, 36%);
   --var-color-disabled: hsla(240, 5%, 96%);
   --var-color-muted: hsla(240, 5%, 96%);
@@ -431,7 +431,7 @@ html.dark {
   --var-color-background: hsla(240, 10%, 8%);
   --var-color-foreground: hsla(240, 5%, 96%);
   --var-color-border: hsla(240, 4%, 12%);
-  --var-color-input: hsla(240, 5%, 50%);
+  --var-color-input: var(--var-color-border);
   --var-color-ring: hsla(201, 49%, 65%);
   --var-color-disabled: hsla(240, 4%, 16%);
   --var-color-muted: hsla(240, 4%, 16%);
