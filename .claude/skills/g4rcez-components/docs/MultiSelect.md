@@ -64,7 +64,7 @@ The component reads these tokens. Override them in your theme.
 | CSS override | `--var-multi-select-field-min-inline-size` | Minimum field width |
 | `placeholder-input-placeholder` | `--var-free-text-placeholder-foreground` | Placeholder text color |
 | `placeholder-input-mask-error` | `--var-free-text-error-placeholder-foreground` | Error placeholder color |
-| `border-input-border` | `--var-color-border` | Search input bottom border |
+| `border-input-border` | `--var-color-input` | Search input bottom border |
 | `bg-floating-background` | `--var-dropdown-surface-background` | Dropdown panel background |
 | `border-floating-border` | `--var-dropdown-surface-border` | Dropdown panel border |
 | CSS override | `--var-multi-select-option-background-hover` | Option hover and focus background |
