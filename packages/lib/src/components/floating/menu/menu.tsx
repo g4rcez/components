@@ -122,7 +122,11 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             ],
         });
         const role = useRole(context, { role: "menu" });
-        const dismiss = useDismiss(context, { bubbles: true });
+        // The root menu handles Escape in the capture phase and stops it, so a parent Modal keeps its own Escape for the next press.
+        const dismiss = useDismiss(
+            context,
+            isNested ? { bubbles: true } : { bubbles: { escapeKey: false, outsidePress: true }, capture: { escapeKey: true } }
+        );
         const hoverModule = useHover(context, {
             move: false,
             enabled: hover,
