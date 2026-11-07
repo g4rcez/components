@@ -35,7 +35,11 @@ type DropdownProps = {
     align?: "start" | "center" | "end";
     /** Gap in pixels between the trigger and the panel. @default 10 */
     offset?: number;
-    /** Class names merged on the panel root. */
+    /**
+     * Class names merged on the panel root. Use them for width and layout (`w-72`, `w-auto`).
+     * The design system CSS has no `@layer`, so it wins over utility classes: set padding and radius
+     * with `--var-dropdown-surface-padding` and `--var-dropdown-surface-radius`, not with `p-*` or `rounded-*`.
+     */
     className?: string;
     /** Element, or tabbable index, that receives focus when the panel opens. @default 0 */
     initialFocus?: React.ComponentProps<typeof FloatingFocusManager>["initialFocus"];

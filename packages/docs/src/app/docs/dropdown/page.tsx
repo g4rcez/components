@@ -171,7 +171,7 @@ function PlacementDropdown() {
 
             <ComponentDemo
                 title="Without Arrow And Title"
-                description="Pass arrow={false} to remove the arrow. Without title the panel has no header, so pass aria-label. className sets the panel width and initialFocus picks the element that receives focus."
+                description="Pass arrow={false} to remove the arrow. Without title the panel has no header, so pass aria-label. className sets the panel width and layout (w-72, w-auto). The design system CSS has no @layer, so it wins over utility classes: set the panel padding and radius with --var-dropdown-surface-padding and --var-dropdown-surface-radius, not with p-* or rounded-*. initialFocus picks the element that receives focus."
                 code={`"use client";
 import { useRef } from "react";
 import { Button, Dropdown, Input } from "@g4rcez/components";
