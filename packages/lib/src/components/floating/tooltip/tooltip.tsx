@@ -148,6 +148,11 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                 props.onPointerDown?.(event);
                 pointerType.current = event.pointerType;
             },
+            // A mouse that enters after a tap must not inherit the touch type of that tap.
+            onPointerEnter: (event: React.PointerEvent<HTMLElement>) => {
+                props.onPointerEnter?.(event);
+                pointerType.current = event.pointerType;
+            },
             onMouseLeave: (event: React.MouseEvent<HTMLElement>) => {
                 props.onMouseLeave?.(event);
                 closedByClick.current = false;

@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { Dropdown } from "../src/components/floating/dropdown/dropdown";
 import { Tooltip } from "../src/components/floating/tooltip/tooltip";
 
 class ResizeObserverMock {
@@ -134,6 +135,21 @@ describe("Tooltip props", () => {
         expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
     });
 
+    it("opens on a mouse hover with touch={false} after an earlier touch tap", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild touch={false} delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        const button = screen.getByRole("button", { name: "Copy" });
+        await user.pointer({ keys: "[TouchA]", target: button });
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await user.unhover(button);
+        await user.hover(button);
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
     it("opens on a mouse hover with touch={false}", async () => {
         const user = userEvent.setup();
         render(
@@ -174,5 +190,82 @@ describe("Tooltip props", () => {
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
         await user.keyboard("{Escape}");
         expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    describe("Tooltip and Dropdown on the same button", () => {
+        const renderShared = () =>
+            render(
+                <Dropdown
+                    asChild
+                    title="Files"
+                    trigger={
+                        <Tooltip asChild closeOnClick delay={0} title={<button type="button">Server files</button>}>
+                            Open the server files
+                        </Tooltip>
+                    }
+                >
+                    <p>Panel content</p>
+                </Dropdown>
+            );
+
+        it("renders one button and no wrapper element", () => {
+            const { container } = renderShared();
+            expect(container.children).toHaveLength(1);
+            expect(container.firstElementChild).toBe(screen.getByRole("button", { name: "Server files" }));
+        });
+
+        it("shows the tooltip on hover and the dropdown on click, and the click closes the tooltip", async () => {
+            const user = userEvent.setup();
+            renderShared();
+            const button = screen.getByRole("button", { name: "Server files" });
+            await user.hover(button);
+            expect(screen.getByRole("tooltip")).toHaveTextContent("Open the server files");
+            expect(button).toHaveAttribute("aria-expanded", "false");
+            await user.click(button);
+            expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+            expect(screen.getByRole("dialog")).toHaveTextContent("Panel content");
+            expect(button).toHaveAttribute("aria-expanded", "true");
+        });
+    });
+
+    describe("popover mode on a focusable status icon", () => {
+        const renderIcon = () =>
+            render(
+                <Tooltip asChild popover arrow={false} delay={0} title={<button type="button" aria-label="Sync status" />}>
+                    Synced a minute ago
+                </Tooltip>
+            );
+
+        it("opens on hover", async () => {
+            const user = userEvent.setup();
+            renderIcon();
+            await user.hover(screen.getByLabelText("Sync status"));
+            expect(screen.getByRole("dialog")).toHaveTextContent("Synced a minute ago");
+        });
+
+        it("opens on keyboard focus", async () => {
+            const user = userEvent.setup();
+            renderIcon();
+            await user.tab();
+            expect(screen.getByLabelText("Sync status")).toHaveFocus();
+            expect(screen.getByRole("dialog")).toHaveTextContent("Synced a minute ago");
+        });
+
+        it("opens on a touch tap", async () => {
+            const user = userEvent.setup();
+            renderIcon();
+            await user.pointer({ keys: "[TouchA]", target: screen.getByLabelText("Sync status") });
+            expect(screen.getByRole("dialog")).toHaveTextContent("Synced a minute ago");
+        });
+
+        it("closes with Escape and keeps the focus on the trigger", async () => {
+            const user = userEvent.setup();
+            renderIcon();
+            await user.tab();
+            expect(screen.getByRole("dialog")).toBeInTheDocument();
+            await user.keyboard("{Escape}");
+            expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+            expect(screen.getByLabelText("Sync status")).toHaveFocus();
+        });
     });
 });
