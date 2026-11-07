@@ -106,7 +106,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                 ? [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift(), ...arrowMiddleware]
                 : [shift(), offset(5), autoPlacement(), ...arrowMiddleware, flip({ fallbackAxisSideDirection: "start" })],
         });
-        const dismiss = useDismiss(context, { enabled });
+        const dismiss = useDismiss(context, { enabled, capture: { escapeKey: true } });
         const role = useRole(context, {
             role: popover ? "dialog" : "tooltip",
             enabled,
