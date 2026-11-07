@@ -1,8 +1,26 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
-import { useState } from "react";
-import { Button, Card, Dropdown } from "@g4rcez/components";
+import { useRef, useState } from "react";
+import { Button, Card, Dropdown, Input } from "@g4rcez/components";
+
+const NoArrowDropdown = () => {
+    const searchRef = useRef<HTMLInputElement>(null);
+    return (
+        <Dropdown
+            asChild
+            arrow={false}
+            offset={4}
+            align="start"
+            className="w-72"
+            aria-label="Search people"
+            initialFocus={searchRef}
+            trigger={<Button>Search people</Button>}
+        >
+            <Input ref={searchRef} aria-label="Search" placeholder="Search" />
+        </Dropdown>
+    );
+};
 
 export default function DropdownPage() {
     const [open, setOpen] = useState(false);
@@ -112,6 +130,72 @@ function ControlledDropdown() {
                             {open ? "Close" : "Open"} externally
                         </Button>
                     </div>
+                </Card>
+            </ComponentDemo>
+            <ComponentDemo
+                title="Placement"
+                description="Use side and align to choose where the panel opens. offset sets the gap in pixels."
+                code={`"use client";
+import { Button, Dropdown } from "@g4rcez/components";
+
+function PlacementDropdown() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Dropdown asChild side="bottom" align="start" trigger={<Button>Bottom start</Button>} title="Bottom start">
+        <p className="text-sm">Left edges line up.</p>
+      </Dropdown>
+      <Dropdown asChild side="bottom" align="end" trigger={<Button>Bottom end</Button>} title="Bottom end">
+        <p className="text-sm">Right edges line up.</p>
+      </Dropdown>
+      <Dropdown asChild side="top" trigger={<Button>Top</Button>} title="Top">
+        <p className="text-sm">Opens above the trigger.</p>
+      </Dropdown>
+    </div>
+  );
+}`}
+            >
+                <Card title="Placement">
+                    <div className="flex flex-wrap gap-4">
+                        <Dropdown asChild side="bottom" align="start" trigger={<Button>Bottom start</Button>} title="Bottom start">
+                            <p className="text-sm">Left edges line up.</p>
+                        </Dropdown>
+                        <Dropdown asChild side="bottom" align="end" trigger={<Button>Bottom end</Button>} title="Bottom end">
+                            <p className="text-sm">Right edges line up.</p>
+                        </Dropdown>
+                        <Dropdown asChild side="top" trigger={<Button>Top</Button>} title="Top">
+                            <p className="text-sm">Opens above the trigger.</p>
+                        </Dropdown>
+                    </div>
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Without Arrow And Title"
+                description="Pass arrow={false} to remove the arrow. Without title the panel has no header, so pass aria-label. className sets the panel width and layout (w-72, w-auto). The design system CSS has no @layer, so it wins over utility classes: set the panel padding and radius with --var-dropdown-surface-padding and --var-dropdown-surface-radius, not with p-* or rounded-*. initialFocus picks the element that receives focus."
+                code={`"use client";
+import { useRef } from "react";
+import { Button, Dropdown, Input } from "@g4rcez/components";
+
+function SearchDropdown() {
+  const searchRef = useRef<HTMLInputElement>(null);
+  return (
+    <Dropdown
+      asChild
+      arrow={false}
+      offset={4}
+      align="start"
+      className="w-72"
+      aria-label="Search people"
+      initialFocus={searchRef}
+      trigger={<Button>Search people</Button>}
+    >
+      <Input ref={searchRef} aria-label="Search" placeholder="Search" />
+    </Dropdown>
+  );
+}`}
+            >
+                <Card title="No arrow, no title">
+                    <NoArrowDropdown />
                 </Card>
             </ComponentDemo>
         </DocsLayout>
