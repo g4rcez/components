@@ -115,7 +115,7 @@ const rawColors = {
         border: cssVar("table-border"),
     },
     input: {
-        border: colorVar("border"),
+        border: colorVar("input"),
         placeholder: cssVar("free-text-placeholder-foreground"),
         "mask-error": cssVar("free-text-error-placeholder-foreground"),
         "switch-bg": colorVar("border"),
@@ -251,8 +251,7 @@ const spacing = {
     "input-gap": cssVar("input-field-hint-margin-block-start"),
 } as const;
 
-const themedShadow = (name: "notification" | "table") =>
-    `var(--var-shadow-${name}, var(--var-shadow-${name}-shape) var(--var-color-shadow-${name}))`;
+const themedShadow = (name: "notification" | "table") => `var(--var-shadow-${name}, var(--var-shadow-${name}-shape) var(--var-color-shadow-${name}))`;
 
 const shadows = {
     card: cssVar("shadow-card"),
@@ -380,8 +379,7 @@ for (const size of ["big", "min", "small", "tiny"]) {
     componentTokenNames[`button-text-${size}`] = `button-${size}-font-size`;
 }
 
-const componentToken = (key: string) =>
-    cssVar(componentTokenNames[key] ?? (key.startsWith("input-free-text-") ? key.slice("input-".length) : key));
+const componentToken = (key: string) => cssVar(componentTokenNames[key] ?? (key.startsWith("input-free-text-") ? key.slice("input-".length) : key));
 
 const registerComponentUtility = (key: string, attr: string, value: string) => {
     const isRadius = attr === "radius" || attr === "rounded" || attr.endsWith("-radius") || attr.endsWith("-rounded");
@@ -394,7 +392,9 @@ const registerComponentUtility = (key: string, attr: string, value: string) => {
     componentSpacing[key] = value;
 };
 // Historical info-* utilities resolve to tokens owned by typography.
-const componentUtilityOwners = [...new Set([...Object.keys(themeTokenRegistry.components), "input", "info"])].toSorted((left, right) => right.length - left.length);
+const componentUtilityOwners = [...new Set([...Object.keys(themeTokenRegistry.components), "input", "info"])].toSorted(
+    (left, right) => right.length - left.length
+);
 for (const [component, attrs] of Object.entries(themeTokenRegistry.components)) {
     if (component === "typography") {
         for (const attr of attrs) {
