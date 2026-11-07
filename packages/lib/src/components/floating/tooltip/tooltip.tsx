@@ -20,9 +20,10 @@ import {
     useRole,
 } from "@floating-ui/react";
 import type React from "react";
-import { forwardRef, Fragment, useRef, useState } from "react";
+import { forwardRef, Fragment, isValidElement, useRef, useState } from "react";
 import { Polymorph, type PolymorphicProps } from "../../../components/core/polymorph/polymorph";
 import { FLOATING_DELAY } from "../../../constants";
+import { Slot } from "../../core/slot/slot";
 import { mergeRefs } from "../../../lib/dom";
 import { noop } from "../../../lib/fns";
 import { tooltipStyles } from "./tooltip.styles";
@@ -30,7 +31,18 @@ import type { ComponentLike, Label } from "../../../types";
 
 export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProps<
     {
+        /** The trigger. With `asChild` it must be one element that accepts a ref and event handlers. */
         title: Label;
+        /** Use `title` itself as the trigger, with no wrapper element. Same contract as `Dropdown.asChild`. */
+        asChild?: boolean;
+        /** Draw the arrow that points at the trigger. @default true */
+        arrow?: boolean;
+        /** A click on the trigger closes the tooltip. It opens again only after the pointer leaves and enters again. @default false */
+        closeOnClick?: boolean;
+        /** Open delay in ms for hover. Focus opens at once. @default 200 */
+        delay?: number;
+        /** With `false`, a touch pointer never opens the tooltip. @default true */
+        touch?: boolean;
         open?: boolean;
         focus?: boolean;
         hover?: boolean;
@@ -51,6 +63,11 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             title,
             children,
             placement,
+            asChild = false,
+            arrow: showArrow = true,
+            closeOnClick = false,
+            delay = FLOATING_DELAY,
+            touch = true,
             focus = true,
             hover = true,
             enabled = true,
@@ -66,16 +83,28 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
         const currentOpen = isControlled ? open : innerOpen;
         const arrowRef = useRef(null);
         const Component: React.ElementType = as || "span";
+        const closedByClick = useRef(false);
+        const pointerType = useRef<string | undefined>(undefined);
         const handleOpenChange = (nextOpen: boolean) => {
+            if (nextOpen && closedByClick.current) return;
+            if (nextOpen && !touch && pointerType.current === "touch") return;
             if (!isControlled) setInnerOpen(nextOpen);
             onChange?.(nextOpen);
         };
-        const { refs, floatingStyles, context } = useFloating({
+        const arrowMiddleware = showArrow ? [arrow({ padding: 5, element: arrowRef })] : [];
+        const {
+            refs,
+            floatingStyles,
+            context,
+            placement: currentPlacement,
+        } = useFloating({
             placement,
             open: currentOpen,
             whileElementsMounted: autoUpdate,
             onOpenChange: handleOpenChange,
-            middleware: [shift(), offset(5), autoPlacement(), arrow({ padding: 5, element: arrowRef }), flip({ fallbackAxisSideDirection: "start" })],
+            middleware: placement
+                ? [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift(), ...arrowMiddleware]
+                : [shift(), offset(5), autoPlacement(), ...arrowMiddleware, flip({ fallbackAxisSideDirection: "start" })],
         });
         const dismiss = useDismiss(context, { enabled });
         const role = useRole(context, {
@@ -93,7 +122,8 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
         });
         const hoverController = useHover(context, {
             move: true,
-            delay: { open: FLOATING_DELAY },
+            mouseOnly: !touch,
+            delay: { open: delay },
             enabled: enabled ? hover : false,
             handleClose: popover ? safePolygon() : null,
         });
@@ -106,20 +136,56 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             popover ? clickController : undefined,
         ]);
 
+        const referenceProps = getReferenceProps({
+            ...props,
+            onClick: (event: React.MouseEvent<HTMLElement>) => {
+                props.onClick?.(event);
+                if (!closeOnClick) return;
+                closedByClick.current = true;
+                handleOpenChange(false);
+            },
+            onPointerDown: (event: React.PointerEvent<HTMLElement>) => {
+                props.onPointerDown?.(event);
+                pointerType.current = event.pointerType;
+            },
+            // A mouse that enters after a tap must not inherit the touch type of that tap.
+            onPointerEnter: (event: React.PointerEvent<HTMLElement>) => {
+                props.onPointerEnter?.(event);
+                pointerType.current = event.pointerType;
+            },
+            onMouseLeave: (event: React.MouseEvent<HTMLElement>) => {
+                props.onMouseLeave?.(event);
+                closedByClick.current = false;
+            },
+            onBlur: (event: React.FocusEvent<HTMLElement>) => {
+                props.onBlur?.(event);
+                closedByClick.current = false;
+                pointerType.current = undefined;
+            },
+        });
+        const reference = mergeRefs(refs.setReference, outerRef);
+
         return (
             <Fragment>
-                <Component {...getReferenceProps(props)} ref={mergeRefs(refs.setReference, outerRef)}>
-                    {title}
-                </Component>
+                {asChild && isValidElement(title) ? (
+                    <Slot {...referenceProps} ref={reference}>
+                        {title}
+                    </Slot>
+                ) : (
+                    <Component {...referenceProps} ref={reference}>
+                        {title}
+                    </Component>
+                )}
                 {currentOpen && (
                     <FloatingPortal>
                         <Polymorph
                             {...getFloatingProps()}
+                            data-placement={currentPlacement}
                             style={floatingStyles}
                             ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
                             className={tooltipStyles.className({})}
                         >
-                            <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={tooltipStyles.slots.arrow} />
+                            {showArrow && <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={tooltipStyles.slots.arrow} />}
                             {children}
                         </Polymorph>
                     </FloatingPortal>

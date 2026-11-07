@@ -92,6 +92,35 @@ function BasicTooltips() {
                     <Click />
                 </Card>
             </ComponentDemo>
+
+            <ComponentDemo
+                title="Icon Hints"
+                description="asChild uses the title element as the trigger, with no wrapper. placement fixes the side. closeOnClick closes the tooltip on click until the pointer leaves. touch={false} ignores touch pointers. arrow={false} removes the arrow. delay sets the hover open delay in ms."
+                code={`"use client";
+import { Button, Tooltip } from "@g4rcez/components";
+
+function IconHints() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Tooltip asChild closeOnClick touch={false} arrow={false} delay={300} placement="top" title={<Button theme="muted">Copy</Button>}>
+        Copy to clipboard
+      </Tooltip>
+      <Tooltip asChild touch={false} arrow={false} placement="right" title={<Button theme="muted">Right side</Button>}>
+        Opens to the right of the trigger
+      </Tooltip>
+    </div>
+  );
+}`}
+            >
+                <Card className="flex flex-row flex-wrap gap-4">
+                    <Tooltip asChild closeOnClick touch={false} arrow={false} delay={300} placement="top" title={<Button theme="muted">Copy</Button>}>
+                        Copy to clipboard
+                    </Tooltip>
+                    <Tooltip asChild touch={false} arrow={false} placement="right" title={<Button theme="muted">Right side</Button>}>
+                        Opens to the right of the trigger
+                    </Tooltip>
+                </Card>
+            </ComponentDemo>
         </DocsLayout>
     );
 }
