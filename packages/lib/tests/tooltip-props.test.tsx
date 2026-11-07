@@ -1,0 +1,178 @@
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { Tooltip } from "../src/components/floating/tooltip/tooltip";
+
+class ResizeObserverMock {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+}
+
+describe("Tooltip props", () => {
+    beforeEach(() => {
+        vi.stubGlobal("ResizeObserver", ResizeObserverMock);
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
+    it("wraps the title in a span by default", () => {
+        const { container } = render(<Tooltip title="Copy">Copy text</Tooltip>);
+        expect(container.firstElementChild?.tagName).toBe("SPAN");
+    });
+
+    it("uses the title element itself as the trigger with asChild", () => {
+        const { container } = render(
+            <Tooltip asChild open title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        const button = screen.getByRole("button", { name: "Copy" });
+        expect(container.firstElementChild).toBe(button);
+        expect(button).toHaveAttribute("aria-describedby", screen.getByRole("tooltip").id);
+    });
+
+    it("keeps the handler of the asChild trigger", async () => {
+        const onClick = vi.fn();
+        render(
+            <Tooltip
+                asChild
+                title={
+                    <button type="button" onClick={onClick}>
+                        Copy
+                    </button>
+                }
+            >
+                Copy text
+            </Tooltip>
+        );
+        await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it.each(["top", "right", "bottom", "left"] as const)("places the tooltip on the %s side when placement is set", (placement) => {
+        render(
+            <Tooltip open placement={placement} title="Anchor">
+                Content
+            </Tooltip>
+        );
+        expect(screen.getByRole("tooltip")).toHaveAttribute("data-placement", placement);
+    });
+
+    it("draws the arrow by default", () => {
+        render(
+            <Tooltip open title="Anchor">
+                Content
+            </Tooltip>
+        );
+        expect(screen.getByRole("tooltip").querySelector("svg")).not.toBeNull();
+    });
+
+    it("removes the arrow with arrow={false}", () => {
+        render(
+            <Tooltip open arrow={false} title="Anchor">
+                Content
+            </Tooltip>
+        );
+        expect(screen.getByRole("tooltip").querySelector("svg")).toBeNull();
+    });
+
+    it("closes on click with closeOnClick and stays closed while the pointer moves over the trigger", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild closeOnClick delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        const button = screen.getByRole("button", { name: "Copy" });
+        await user.hover(button);
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+        await user.click(button);
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await user.pointer({ target: button, coords: { clientX: 3, clientY: 3 } });
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await user.unhover(button);
+        await user.hover(button);
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
+    it("stays open after a click by default", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        const button = screen.getByRole("button", { name: "Copy" });
+        await user.hover(button);
+        await user.click(button);
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
+    it("opens on a touch tap by default", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        await user.pointer({ keys: "[TouchA]", target: screen.getByRole("button", { name: "Copy" }) });
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
+    it("does not open on a touch tap with touch={false}", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild touch={false} delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        await user.pointer({ keys: "[TouchA]", target: screen.getByRole("button", { name: "Copy" }) });
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    it("opens on a mouse hover with touch={false}", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild touch={false} delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        await user.hover(screen.getByRole("button", { name: "Copy" }));
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
+    it("waits for the open delay on hover", () => {
+        vi.useFakeTimers();
+        render(
+            <Tooltip delay={300} title="Anchor">
+                Content
+            </Tooltip>
+        );
+        fireEvent.mouseMove(screen.getByText("Anchor"));
+        act(() => {
+            vi.advanceTimersByTime(299);
+        });
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        act(() => {
+            vi.advanceTimersByTime(1);
+        });
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
+    it("closes with Escape", async () => {
+        const user = userEvent.setup();
+        render(
+            <Tooltip asChild delay={0} title={<button type="button">Copy</button>}>
+                Copy text
+            </Tooltip>
+        );
+        await user.hover(screen.getByRole("button", { name: "Copy" }));
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+        await user.keyboard("{Escape}");
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+});
