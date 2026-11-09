@@ -1034,6 +1034,7 @@
         "text": "__notifications__text",
         "title": "__notifications__title",
         "description": "__notifications__description",
+        "action": "__notifications__action",
         "close": "__notifications__close",
         "close-icon": "__notifications__close-icon",
         "viewport": "__notifications__viewport",
