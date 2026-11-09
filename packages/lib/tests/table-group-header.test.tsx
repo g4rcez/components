@@ -62,7 +62,7 @@ class IntersectionObserverMock {
 global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
 global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;
 
-const renderTable = (props: { rows?: Row[]; groups?: GroupItem<Row>[]; filters?: FilterConfig<Row>[] } = {}) =>
+const renderTable = (props: { rows?: Row[]; groups?: GroupItem<Row>[]; filters?: FilterConfig<Row>[]; sticky?: number } = {}) =>
     render(
         <ComponentsProvider>
             <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 48 }}>
@@ -73,6 +73,7 @@ const renderTable = (props: { rows?: Row[]; groups?: GroupItem<Row>[]; filters?:
                     groups={props.groups ?? activeThenInactive}
                     filters={props.filters}
                     loading={false}
+                    sticky={props.sticky}
                     operations={false}
                 />
             </VirtuosoMockContext.Provider>
@@ -90,6 +91,12 @@ describe("grouped table", () => {
         expect(screen.getByText("Ada")).toBeInTheDocument();
         expect(screen.getByText("Cy")).toBeInTheDocument();
         expect(screen.getByText("Bob")).toBeInTheDocument();
+    });
+
+    it("keeps the group row below a header that sticks at an offset", () => {
+        const { container } = renderTable({ sticky: 56 });
+
+        expect(container.querySelector('th[scope="rowgroup"]')?.closest("tr")).toHaveStyle({ top: "56px" });
     });
 
     it("hides a group whose rows are all filtered out", () => {
@@ -127,5 +134,6 @@ describe("grouped table", () => {
 
         expect(container.querySelectorAll("thead")).toHaveLength(1);
         expect(groupNames(container)).toEqual([]);
+        expect(screen.getAllByText("No data")).toHaveLength(1);
     });
 });

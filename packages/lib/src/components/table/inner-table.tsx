@@ -102,6 +102,14 @@ const Thead = React.forwardRef<HTMLTableSectionElement, TheadProps>(({ context, 
     return <thead {...props} ref={ref} style={style} role="rowgroup" className={tableInnerTableStyles.slots.head} />;
 });
 
+type GroupRowProps = HTMLAttributes<HTMLTableRowElement> & ContextProp<{ sticky?: number }>;
+
+// Virtuoso sticks the group row under the header (`top` = header height) and ignores the header's own `sticky` offset.
+const GroupRow = React.forwardRef<HTMLTableRowElement, GroupRowProps>(({ context, style, ...props }, ref) => {
+    const top = Is.number(context.sticky) && Is.number(style?.top) ? style.top + context.sticky : style?.top;
+    return <tr {...props} ref={ref} style={{ ...style, top }} />;
+});
+
 type TRowProps = ItemProps<VirtuosoData> & ContextProp<VirtuosoCtx> & { className?: string };
 
 const TRow = React.forwardRef<HTMLTableRowElement, TRowProps>(({ context, item, className, ...props }, ref) => {
@@ -136,6 +144,7 @@ const TFoot = React.forwardRef<HTMLTableSectionElement, TFootProps>(({ context, 
 
 const components: TableComponents<VirtuosoData, VirtuosoCtx> = {
     TableRow: TRow,
+    Group: GroupRow as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["Group"],
     Table: VirtualTable,
     TableFoot: TFoot as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableFoot"],
     TableHead: Thead as unknown as TableComponents<VirtuosoData, VirtuosoCtx>["TableHead"],

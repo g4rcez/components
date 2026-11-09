@@ -13,7 +13,9 @@
 }
 
 /* index */
+/* Below 768px rows are flex boxes, not table rows: a block th keeps the group row from adding columns that squeeze them. */
 .__table-root__group-title {
+    display: block;
     margin: 0;
     padding-block: var(--var-table-group-title-padding-block, calc(var(--var-spacing-base) * 0.5));
     padding-inline: var(--var-table-group-title-padding-inline, calc(var(--var-spacing-base) * 0.75));
@@ -23,6 +25,12 @@
     font-weight: var(--var-font-weight-medium);
     background-color: var(--var-table-header-background);
     border-block-end: var(--var-table-cell-border) solid var(--var-table-border);
+}
+
+@media (min-width: 768px) {
+    .__table-root__group-title {
+        display: table-cell;
+    }
 }
 
 /* filter */
