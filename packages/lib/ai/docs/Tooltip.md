@@ -217,7 +217,7 @@ import { Button } from "@g4rcez/components/button";
 
 - Hover and focus are on by default. Click is opt-in through `popover`.
 - Default popup semantics are `role="tooltip"`, with `aria-describedby` on the reference wrapper. With `popover`, `useRole` switches the role to `dialog`.
-- `useDismiss` handles Escape and outside press. `useFocus` handles focus-driven open and close.
+- `useDismiss` handles Escape and outside press. `useFocus` handles focus-driven open and close. When Escape comes from an expanded `role="combobox"` inside a `popover`, such as `Autocomplete` or `MultiSelect`, the field closes its list first and the popover stays open until the next Escape. `shift({ padding: 8 })` keeps the panel 8px from the viewport edge.
 - The component renders no `FloatingFocusManager`, focus trap, focus return, or visible dismiss button.
 - Safe-polygon pointer handling is on only in `popover` mode. It gives no keyboard path into popup controls.
 - Use `as={Button}` to put the interaction and description on the real control. With a nested button in `title`, the ARIA relationship sits on the outer wrapper, not on that button.

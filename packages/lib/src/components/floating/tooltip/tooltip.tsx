@@ -7,6 +7,7 @@ import {
     FloatingArrow,
     FloatingPortal,
     offset,
+    type OpenChangeReason,
     type Placement,
     safePolygon,
     shift,
@@ -22,7 +23,7 @@ import {
 import type React from "react";
 import { forwardRef, Fragment, isValidElement, useRef, useState } from "react";
 import { Polymorph, type PolymorphicProps } from "../../../components/core/polymorph/polymorph";
-import { FLOATING_DELAY } from "../../../constants";
+import { FLOATING_DELAY, VIEWPORT_PADDING } from "../../../constants";
 import { Slot } from "../../core/slot/slot";
 import { mergeRefs } from "../../../lib/dom";
 import { noop } from "../../../lib/fns";
@@ -85,7 +86,13 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
         const Component: React.ElementType = as || "span";
         const closedByClick = useRef(false);
         const pointerType = useRef<string | undefined>(undefined);
-        const handleOpenChange = (nextOpen: boolean) => {
+        const handleOpenChange = (nextOpen: boolean, event?: Event, reason?: OpenChangeReason) => {
+            if (!nextOpen && reason === "escape-key" && event) {
+                // APG combobox: the first Escape closes the open list. Let it reach the field and keep this layer open.
+                if ((event.target as Element | null)?.matches?.('[role="combobox"][aria-expanded="true"]')) return;
+                // Floating UI no longer stops it (see `bubbles` below), so a parent Modal keeps its own Escape for the next press.
+                event.stopPropagation();
+            }
             if (nextOpen && closedByClick.current) return;
             if (nextOpen && !touch && pointerType.current === "touch") return;
             if (!isControlled) setInnerOpen(nextOpen);
@@ -103,10 +110,16 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             whileElementsMounted: autoUpdate,
             onOpenChange: handleOpenChange,
             middleware: placement
-                ? [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift(), ...arrowMiddleware]
-                : [shift(), offset(5), autoPlacement(), ...arrowMiddleware, flip({ fallbackAxisSideDirection: "start" })],
+                ? [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift({ padding: VIEWPORT_PADDING }), ...arrowMiddleware]
+                : [
+                      shift({ padding: VIEWPORT_PADDING }),
+                      offset(5),
+                      autoPlacement(),
+                      ...arrowMiddleware,
+                      flip({ fallbackAxisSideDirection: "start" }),
+                  ],
         });
-        const dismiss = useDismiss(context, { enabled, capture: { escapeKey: true } });
+        const dismiss = useDismiss(context, { enabled, bubbles: { escapeKey: true }, capture: { escapeKey: true } });
         const role = useRole(context, {
             role: popover ? "dialog" : "tooltip",
             enabled,
