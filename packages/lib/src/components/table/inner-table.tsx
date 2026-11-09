@@ -163,27 +163,39 @@ const emptyRows: never[] = [];
 type RowGroups<T> = { rows: T[]; data: Array<T | undefined>; counts: number[]; labels: React.ReactNode[] };
 
 /**
- * Buckets the current (filtered and sorted) rows by the grouped column, so a group whose rows were all filtered out disappears.
- * Group order follows `groups`; a value that is not in `groups` yet goes at the end.
+ * Buckets the current (filtered and sorted) rows by group, so a group whose rows were all filtered out disappears.
+ * A row joins the group that lists it in `rows` (groups set in code) or whose `groupName` is its value (toolbar groups).
+ * Any other value gets its own group at the end.
  */
 const groupRows = <T extends Record<string, unknown>>(rows: T[], groups: GroupItem<T>[], emptyLabel: string): RowGroups<T> => {
     const key = String(groups[0].groupKey) as AllPaths<T>;
-    const buckets = new Map<string, T[]>();
+    const members = groups.map((group) => new Set<T>(group.rows));
+    const buckets = groups.map((): T[] => []);
+    const extras = new Map<string, T[]>();
     rows.forEach((row) => {
-        const name = String(path(row, key));
-        buckets.set(name, [...(buckets.get(name) ?? []), row]);
+        const raw = String(path(row, key));
+        const index = members.findIndex((set) => set.has(row));
+        const target = index >= 0 ? index : groups.findIndex((group) => group.groupName === raw);
+        if (target >= 0) return void buckets[target].push(row);
+        extras.set(raw, [...(extras.get(raw) ?? []), row]);
     });
-    const ordered = groups.map((group) => group.groupName);
-    const names = [...ordered, ...[...buckets.keys()].filter((name) => !ordered.includes(name))].filter((name) => buckets.has(name));
-    const value = (name: string) => {
-        const raw = path(buckets.get(name)![0], key);
-        return Is.nil(raw) || (raw as unknown) === "" ? emptyLabel : String(raw);
+    const label = (name: string, row: T, title?: React.ReactNode) => {
+        const raw = path(row, key) as unknown;
+        const empty = Is.nil(raw) || raw === "";
+        return title ?? (empty && name === String(raw) ? emptyLabel : name);
     };
+    const parts = [
+        ...groups.map((group, index) => ({
+            rows: buckets[index],
+            label: buckets[index][0] && label(group.groupName, buckets[index][0], group.groupTitle),
+        })),
+        ...[...extras].map(([name, bucket]) => ({ rows: bucket, label: label(name, bucket[0]) })),
+    ].filter((part) => part.rows.length > 0);
     return {
-        rows: names.flatMap((name) => buckets.get(name)!),
-        data: names.flatMap((name) => [undefined, ...buckets.get(name)!]),
-        counts: names.map((name) => buckets.get(name)!.length),
-        labels: names.map((name) => groups[0].groupTitle ?? value(name)),
+        rows: parts.flatMap((part) => part.rows),
+        data: parts.flatMap((part) => [undefined, ...part.rows]),
+        counts: parts.map((part) => part.rows.length),
+        labels: parts.map((part) => part.label),
     };
 };
 

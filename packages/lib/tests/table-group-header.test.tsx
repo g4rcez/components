@@ -99,6 +99,17 @@ describe("grouped table", () => {
         expect(screen.queryByText("Ada")).toBeNull();
     });
 
+    it("keeps groups set in code, named after groupName and holding their own rows", () => {
+        const { container } = renderTable({
+            groups: [
+                { ...group("Companies", 0), rows: [rows[0], rows[2]] },
+                { ...group("Individuals", 1), rows: [rows[1]] },
+            ],
+        });
+
+        expect(groupNames(container)).toEqual(["Companies", "Individuals"]);
+    });
+
     it("regroups from the current rows instead of a snapshot", () => {
         const { container } = renderTable({ rows: [...rows, { id: "4", name: "Di", status: "pending" }] });
 
