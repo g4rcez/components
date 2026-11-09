@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence } from "motion/react";
-import { type ComponentProps, useEffect, useId, useMemo, useState } from "react";
+import { type ComponentProps, useEffect, useMemo, useState } from "react";
 import { useContext } from "react";
 import { useReducer } from "use-typed-reducer";
 import { useTweaks } from "../../hooks/use-tweaks";
@@ -14,7 +14,6 @@ import { Metadata } from "./metadata";
 import type { Sorter } from "./sort";
 import { type Col, createOptionCols, type TableGetters, type TableOperationProps } from "./table-lib";
 import { type TableContextProps, TableProvider } from "./table.context";
-import { tableRootStyles } from "./index.styles";
 
 export type TableProps<T extends Record<string, unknown>> = Pick<InnerTableProps<T>, "cols" | "rows" | "loadingMore" | "border" | "Aside"> & {
     name: string;
@@ -54,7 +53,6 @@ const compareAndExec = <T extends unknown[]>(prev: T, state: T, exec?: (t: T) =>
 
 export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) => {
     const { translations, ...tableProps } = props;
-    const groupIdPrefix = useId();
     const context = useContext(Context);
     const translationContext = useMemo(
         () => (translations ? { ...context, map: { ...defaultTranslations, ...context?.map, ...translations } } : context),
@@ -160,68 +158,27 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                             inlineSorter={props.inlineSorter ?? true}
                         />
                     ) : null}
-                    {state.groups.length === 0 ? (
-                        <InnerTable
-                            {...tableProps}
-                            index={0}
-                            cols={visibleCols}
-                            allCols={state.cols}
-                            sticky={props.sticky ?? undefined}
-                            options={optionCols}
-                            groups={state.groups}
-                            filters={state.filters}
-                            optionCols={optionCols}
-                            setCols={dispatch.cols}
-                            sorters={state.sorters}
-                            setGroups={dispatch.groups}
-                            setFilters={dispatch.filters}
-                            setSorters={dispatch.sorters}
-                            selection={selection}
-                            onScrollEnd={props.onScrollEnd}
-                            pagination={props.pagination ?? null}
-                            inlineFilter={props.inlineFilter ?? true}
-                            inlineSorter={props.inlineSorter ?? true}
-                        />
-                    ) : (
-                        <div className={tableRootStyles.slots.groups}>
-                            {state.groups.map((group, index) => (
-                                <section
-                                    aria-labelledby={group.groupTitle ? `${groupIdPrefix}-group-${index}` : undefined}
-                                    className={tableRootStyles.slots.group}
-                                    key={`group-${group.groupId}`}
-                                >
-                                    {group.groupTitle ? (
-                                        <h2 className={tableRootStyles.slots["group-title"]} id={`${groupIdPrefix}-group-${index}`}>
-                                            {group.groupTitle}
-                                        </h2>
-                                    ) : null}
-                                    <InnerTable
-                                        {...tableProps}
-                                        sticky={props.sticky ?? undefined}
-                                        group={group}
-                                        index={index}
-                                        cols={visibleCols}
-                                        allCols={state.cols}
-                                        pagination={null}
-                                        rows={group.rows}
-                                        options={optionCols}
-                                        groups={state.groups}
-                                        filters={state.filters}
-                                        optionCols={optionCols}
-                                        setCols={dispatch.cols}
-                                        sorters={state.sorters}
-                                        setGroups={dispatch.groups}
-                                        setFilters={dispatch.filters}
-                                        setSorters={dispatch.sorters}
-                                        selection={selection}
-                                        onScrollEnd={props.onScrollEnd}
-                                        inlineFilter={props.inlineFilter ?? true}
-                                        inlineSorter={props.inlineSorter ?? true}
-                                    />
-                                </section>
-                            ))}
-                        </div>
-                    )}
+                    <InnerTable
+                        {...tableProps}
+                        index={0}
+                        cols={visibleCols}
+                        allCols={state.cols}
+                        sticky={props.sticky ?? undefined}
+                        options={optionCols}
+                        groups={state.groups}
+                        filters={state.filters}
+                        optionCols={optionCols}
+                        setCols={dispatch.cols}
+                        sorters={state.sorters}
+                        setGroups={dispatch.groups}
+                        setFilters={dispatch.filters}
+                        setSorters={dispatch.sorters}
+                        selection={selection}
+                        onScrollEnd={props.onScrollEnd}
+                        pagination={props.pagination ?? null}
+                        inlineFilter={props.inlineFilter ?? true}
+                        inlineSorter={props.inlineSorter ?? true}
+                    />
                 </AnimatePresence>
             </TableProvider>
         </Context.Provider>

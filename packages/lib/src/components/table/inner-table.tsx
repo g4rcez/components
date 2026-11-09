@@ -13,17 +13,20 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { type ContextProp, type ItemProps, type TableBodyProps, type TableComponents, TableVirtuoso } from "react-virtuoso";
+import { type ContextProp, GroupedTableVirtuoso, type ItemProps, type TableBodyProps, type TableComponents, TableVirtuoso } from "react-virtuoso";
 import { Is } from "sidekicker";
 import { useStableRef } from "../../hooks/use-stable-ref";
 import { useTranslations } from "../../hooks/use-translations";
 import { css } from "../../lib/dom";
+import { path } from "../../lib/fns";
+import type { AllPaths } from "../../lib/path-types";
 import type { Any } from "../../types";
 import { Empty } from "../display/empty/empty";
 import { Skeleton } from "../display/skeleton/skeleton";
 import type { OptionProps } from "../form/select/select";
 import type { FilterConfig } from "./filter";
 import type { GroupItem } from "./group";
+import { tableRootStyles } from "./index.styles";
 import { tableInnerTableStyles } from "./inner-table.styles";
 import { Pagination } from "./pagination";
 import { Row, type RowSelection } from "./row";
@@ -52,7 +55,6 @@ export type InnerTableProps<T extends Any> = HTMLAttributes<HTMLTableElement> &
         sticky?: number;
         border?: boolean;
         loading?: boolean;
-        group?: GroupItem<T>;
         useControl?: boolean;
         loadingMore?: boolean;
         sorters?: Sorter<T>[];
@@ -77,7 +79,7 @@ export type TableSelection<T extends Any> = {
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps & ContextProp<unknown>>(
     ({ context: _context, className = "", ...props }, ref) => (
         <tbody {...props} role="rowgroup" className={css(tableInnerTableStyles.slots.body, className)} ref={ref}>
-            <AnimatePresence>{props.children}</AnimatePresence>
+            <AnimatePresence>{React.Children.toArray(props.children)}</AnimatePresence>
         </tbody>
     )
 );
@@ -157,6 +159,34 @@ const EmptyCell = () => <Fragment />;
 
 const emptyRows: never[] = [];
 
+// `data` is indexed by Virtuoso's flat position, so each group header takes a slot (`undefined`) before its rows.
+type RowGroups<T> = { rows: T[]; data: Array<T | undefined>; counts: number[]; labels: React.ReactNode[] };
+
+/**
+ * Buckets the current (filtered and sorted) rows by the grouped column, so a group whose rows were all filtered out disappears.
+ * Group order follows `groups`; a value that is not in `groups` yet goes at the end.
+ */
+const groupRows = <T extends Record<string, unknown>>(rows: T[], groups: GroupItem<T>[], emptyLabel: string): RowGroups<T> => {
+    const key = String(groups[0].groupKey) as AllPaths<T>;
+    const buckets = new Map<string, T[]>();
+    rows.forEach((row) => {
+        const name = String(path(row, key));
+        buckets.set(name, [...(buckets.get(name) ?? []), row]);
+    });
+    const ordered = groups.map((group) => group.groupName);
+    const names = [...ordered, ...[...buckets.keys()].filter((name) => !ordered.includes(name))].filter((name) => buckets.has(name));
+    const value = (name: string) => {
+        const raw = path(buckets.get(name)![0], key);
+        return Is.nil(raw) || (raw as unknown) === "" ? emptyLabel : String(raw);
+    };
+    return {
+        rows: names.flatMap((name) => buckets.get(name)!),
+        data: names.flatMap((name) => [undefined, ...buckets.get(name)!]),
+        counts: names.map((name) => buckets.get(name)!.length),
+        labels: names.map((name) => groups[0].groupTitle ?? value(name)),
+    };
+};
+
 const scrollableOverflow = new Set(["auto", "overlay", "scroll"]);
 
 const resolveScrollParent = (viewport: HTMLElement, preferred?: HTMLElement) => {
@@ -185,6 +215,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
     translations,
     selection,
     border = false,
+    groups = [],
     ...props
 }: InnerTableProps<T>) => {
     const translation = useTranslations(translations);
@@ -201,7 +232,7 @@ export const InnerTable = <T extends Record<string, unknown>>({
     const onScrollEndRef = useStableRef(onScrollEnd);
     const loadingMoreRef = useStableRef(props.loadingMore);
 
-    const rows = useMemo(() => {
+    const filteredRows = useMemo(() => {
         if (props.loading) return loadingArray as unknown as T[];
         if (useControl) return props.rows;
         const linq = new Linq(props.rows);
@@ -213,6 +244,12 @@ export const InnerTable = <T extends Record<string, unknown>>({
         if (sorters.length === 0) return linq.Select();
         return multiSort(linq.Select(), sorters);
     }, [props.loading, props.rows, useControl, filters, sorters]);
+
+    const grouped = useMemo(
+        () => (props.loading || groups.length === 0 ? undefined : groupRows(filteredRows, groups, translation.tableGroupEmptyValue)),
+        [props.loading, filteredRows, groups, translation.tableGroupEmptyValue]
+    );
+    const rows = grouped?.rows ?? filteredRows;
 
     useEffect(() => {
         if (ref.current === null) return () => {};
@@ -265,34 +302,47 @@ export const InnerTable = <T extends Record<string, unknown>>({
         sticky: sticky || tweaks.sticky,
     };
 
+    const virtuosoProps = {
+        components,
+        context: context as VirtuosoCtx,
+        useWindowScroll: !getScrollRef,
+        customScrollParent: scrollParent,
+        fixedHeaderContent: () => (
+            <TableHeader<T>
+                headers={cols}
+                columns={allCols}
+                filters={filters}
+                setCols={setCols}
+                sorters={sorters}
+                setFilters={setFilters}
+                setSorters={setSorters}
+                loading={!!props.loading}
+                selection={selectionState?.header}
+                inlineFilter={props.inlineFilter}
+                inlineSorter={props.inlineSorter}
+                translations={translations}
+            />
+        ),
+    };
+
     return (
         <div ref={setViewportRef} data-border={border} className={tableInnerTableStyles.slots.viewport}>
             {props.loading && !empty ? <LoadingStatus translations={translations} /> : null}
-            <TableVirtuoso
-                components={components}
-                totalCount={rows.length}
-                data={empty ? emptyRows : rows}
-                context={context as VirtuosoCtx}
-                itemContent={empty ? EmptyCell : Row}
-                useWindowScroll={!getScrollRef}
-                customScrollParent={scrollParent}
-                fixedHeaderContent={() => (
-                    <TableHeader<T>
-                        headers={cols}
-                        columns={allCols}
-                        filters={filters}
-                        setCols={setCols}
-                        sorters={sorters}
-                        setFilters={setFilters}
-                        setSorters={setSorters}
-                        loading={!!props.loading}
-                        selection={selectionState?.header}
-                        inlineFilter={props.inlineFilter}
-                        inlineSorter={props.inlineSorter}
-                        translations={translations}
-                    />
-                )}
-            />
+            {grouped && !empty ? (
+                <GroupedTableVirtuoso
+                    {...virtuosoProps}
+                    data={grouped.data as VirtuosoData[]}
+                    groupCounts={grouped.counts}
+                    groupContent={(groupIndex) => (
+                        <th scope="rowgroup" colSpan={cols.length + (selection ? 1 : 0)} className={tableRootStyles.slots["group-title"]}>
+                            {grouped.labels[groupIndex]}
+                        </th>
+                    )}
+                    itemContent={(index, _groupIndex, row, itemContext) => Row(index, row, itemContext)}
+                />
+            ) : (
+                <TableVirtuoso {...virtuosoProps} totalCount={rows.length} data={empty ? emptyRows : rows} itemContent={empty ? EmptyCell : Row} />
+            )}
             {empty ? <EmptyContent loading={props.loading} translations={translations} /> : null}
             <div aria-hidden="true" ref={ref} className={tableInnerTableStyles.slots.sentinel} />
             {pagination !== null ? <Pagination {...pagination} translations={translations} /> : null}

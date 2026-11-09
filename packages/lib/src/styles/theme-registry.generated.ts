@@ -707,6 +707,7 @@ export const themeTokenRegistry = {
             "cell-border",
             "cell-padding",
             "cell-padding-inline",
+            "cell-tag-line-height",
             "divider-width",
             "divider-width-active",
             "empty-block-size",

@@ -1456,8 +1456,6 @@
       "base": "__table-root",
       "variants": {},
       "slots": {
-        "groups": "__table-root__groups",
-        "group": "__table-root__group",
         "group-title": "__table-root__group-title"
       },
       "compounds": []
