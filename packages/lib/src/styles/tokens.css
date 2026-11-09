@@ -88,11 +88,11 @@
   --var-dropdown-title-letter-spacing: 0.025em;
   --var-dropdown-surface-background: hsla(0, 0%, 100%);
   --var-dropdown-surface-foreground: hsla(240, 10%, 4%);
-  --var-dropdown-surface-border: hsla(240, 6%, 90%);
+  --var-dropdown-surface-border: var(--var-color-input);
 
   --var-menu-surface-background: hsla(0, 0%, 100%);
   --var-menu-surface-foreground: hsla(240, 10%, 4%);
-  --var-menu-surface-border: hsla(240, 6%, 90%);
+  --var-menu-surface-border: var(--var-color-input);
   --var-menu-item-expanded-opacity: 0.8;
   --var-menu-item-disabled-opacity: 0.4;
   --var-menu-item-active-background: hsla(201, 49%, 36%);
@@ -354,8 +354,8 @@
   --var-list-overlay-background: hsla(240, 6%, 10%, 0.7);
   --var-modal-overlay-background: hsla(240, 6%, 10%, 0.8);
 
-  --var-notification-close-foreground: hsla(221, 15%, 23%, 0.4);
-  --var-notification-close-background-hover: hsla(221, 15%, 23%, 0.1);
+  --var-notification-close-foreground: currentColor;
+  --var-notification-close-background-hover: color-mix(in srgb, currentColor 16%, transparent);
   --var-notification-badge-background: hsla(0, 0%, 100%, 0.8);
   --var-notification-badge-foreground: hsla(221, 15%, 23%, 0.5);
   --var-notification-badge-foreground-hover: hsla(221, 15%, 23%, 0.8);
@@ -468,11 +468,11 @@ html.dark {
 
   --var-dropdown-surface-background: hsla(240, 10%, 8%);
   --var-dropdown-surface-foreground: hsla(240, 5%, 96%);
-  --var-dropdown-surface-border: hsla(240, 4%, 16%);
+  --var-dropdown-surface-border: var(--var-color-input);
 
   --var-menu-surface-background: hsla(240, 10%, 8%);
   --var-menu-surface-foreground: hsla(240, 5%, 96%);
-  --var-menu-surface-border: hsla(240, 4%, 16%);
+  --var-menu-surface-border: var(--var-color-input);
   --var-menu-item-active-background: hsla(201, 49%, 54%);
   --var-menu-item-active-foreground: hsla(240, 6%, 10%);
 
@@ -530,8 +530,8 @@ html.dark {
   --var-tooltip-surface-foreground: hsla(240, 10%, 4%);
   --var-tooltip-surface-border: hsla(221, 10%, 17%);
 
-  --var-notification-close-foreground: hsla(240, 5%, 96%, 0.4);
-  --var-notification-close-background-hover: hsla(240, 5%, 96%, 0.1);
+  --var-notification-close-foreground: currentColor;
+  --var-notification-close-background-hover: color-mix(in srgb, currentColor 16%, transparent);
   --var-notification-badge-background: hsla(240, 10%, 8%, 0.8);
   --var-notification-badge-foreground: hsla(240, 5%, 96%, 0.5);
   --var-notification-badge-foreground-hover: hsla(240, 5%, 96%, 0.8);

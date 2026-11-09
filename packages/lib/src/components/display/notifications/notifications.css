@@ -153,10 +153,15 @@
     transition-timing-function: var(--var-notification-close-transition-timing);
 }
 
+/* The icon and the ring take the colour of the toast theme (currentColor): a fixed dim colour fails WCAG 1.4.11 on some themes. */
+.__notifications__close:focus-visible {
+    outline: calc(var(--var-spacing-base) * 0.125) solid currentColor;
+    outline-offset: calc(var(--var-spacing-base) * -0.125);
+}
+
 @media (hover: hover) and (pointer: fine) {
     .__notifications__close:hover {
         background-color: var(--var-notification-close-background-hover);
-        color: var(--var-color-foreground);
     }
 }
 
