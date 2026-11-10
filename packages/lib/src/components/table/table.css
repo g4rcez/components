@@ -13,25 +13,24 @@
 }
 
 /* index */
-.__table-root__groups {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--var-table-groups-gap, calc(var(--var-spacing-base) * 1));
-}
-
-.__table-root__group {
-    min-width: 100%;
-}
-
+/* Below 768px rows are flex boxes, not table rows: a block th keeps the group row from adding columns that squeeze them. */
 .__table-root__group-title {
-    display: flex;
-    gap: var(--var-table-group-title-gap, calc(var(--var-spacing-base) * 0.25));
+    display: block;
     margin: 0;
     padding-block: var(--var-table-group-title-padding-block, calc(var(--var-spacing-base) * 0.5));
     padding-inline: var(--var-table-group-title-padding-inline, calc(var(--var-spacing-base) * 0.75));
+    text-align: start;
     color: var(--var-color-foreground);
     font-size: var(--var-typography-sm);
     font-weight: var(--var-font-weight-medium);
+    background-color: var(--var-table-header-background);
+    border-block-end: var(--var-table-cell-border) solid var(--var-table-border);
+}
+
+@media (min-width: 768px) {
+    .__table-root__group-title {
+        display: table-cell;
+    }
 }
 
 /* filter */
@@ -265,6 +264,15 @@
 
 .__table-row__cell-content {
     white-space: pre-wrap;
+}
+
+/* Fixed layout: a nowrap tag would draw over the next column. Scoped so tags elsewhere keep nowrap. */
+.__table-row__cell .__tag {
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: start;
+    line-height: var(--var-table-cell-tag-line-height, 1.25);
 }
 
 .__table-inner-table__row:hover .__table-row__aside {

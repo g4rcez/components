@@ -95,6 +95,7 @@ export const defaultTranslations = {
     tableGroupOrderTitle: "Order groups",
     tableGroupPlaceholder: "Group by...",
     tableGroupTypeTitle: "Group type",
+    tableGroupEmptyValue: "No value",
     tableGroupDeleteLabel: (label: string) => `Delete group ${label}`,
     tableGroupReorderLabel: (label: string) => `Reorder group ${label}. Use the Up and Down arrow keys.`,
     tablePaginationFooter: (pagination: { pages: number; totalItems: number; sizes?: number[]; current: number; select: React.ReactNode }) => (

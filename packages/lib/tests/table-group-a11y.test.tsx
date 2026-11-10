@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, expect, it } from "vitest";
 
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
@@ -52,16 +53,18 @@ class IntersectionObserverMock {
 global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;
 
 describe("table group a11y", () => {
-    it("labels each grouped table with the column groupTitle", () => {
+    it("names each group row with the column groupTitle", () => {
         render(
             <ComponentsProvider>
-                <Table name="grouped-status" cols={columns} rows={grouped.rows} groups={[grouped]} operations={false} />
+                <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 48 }}>
+                    <Table name="grouped-status" cols={columns} rows={grouped.rows} groups={[grouped]} operations={false} />
+                </VirtuosoMockContext.Provider>
             </ComponentsProvider>
         );
 
-        const heading = screen.getByRole("heading", { name: "Status group: Active" });
-        expect(heading).toHaveClass("__table-root__group-title");
-        expect(heading.closest("section")).toHaveAccessibleName("Status group: Active");
+        const header = screen.getByRole("rowheader", { name: "Status group: Active" });
+        expect(header).toHaveClass("__table-root__group-title");
+        expect(header).toHaveAttribute("scope", "rowgroup");
     });
 
     it("uses provider map labels for group controls", async () => {
