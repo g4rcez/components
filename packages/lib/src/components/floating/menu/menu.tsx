@@ -26,7 +26,7 @@ import {
 import { Slot } from "../../core/slot/slot";
 import { CaretRightIcon, CheckIcon, type Icon } from "@phosphor-icons/react";
 import React, { createContext, Fragment, useContext, useEffect, useRef, useState } from "react";
-import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY } from "../../../constants";
+import { FLOATING_DELAY, TYPEAHEAD_RESET_DELAY, VIEWPORT_PADDING } from "../../../constants";
 import { css, mergeRefs } from "../../../lib/dom";
 import { placementOrigin } from "../../../lib/floating-origin";
 import type { Override } from "../../../types";
@@ -64,6 +64,7 @@ export type MenuProps = Partial<
         nested: boolean;
         asChild: boolean;
         isParent: boolean;
+        /** Return focus to the root trigger when the menu closes (Escape or a pick). Nested menus ignore it. @default true */
         restoreFocus: boolean;
         children: React.ReactNode;
         floatingClassName: string;
@@ -82,7 +83,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             align = "start",
             offset: gap = 4,
             isParent = false,
-            restoreFocus = false,
+            restoreFocus = true,
             floatingClassName = "",
             label,
             ...props
@@ -118,7 +119,7 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
                     alignmentAxis: isNested ? -4 : 0,
                 }),
                 flip(),
-                shift(),
+                shift({ padding: VIEWPORT_PADDING }),
             ],
         });
         const role = useRole(context, { role: "menu" });

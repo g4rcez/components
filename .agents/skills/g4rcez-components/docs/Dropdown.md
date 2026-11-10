@@ -237,7 +237,7 @@ function FilterDropdown() {
 
 ## Notes
 
-- Built on `@floating-ui/react` with `flip`, `shift`, and `offset(10)` middleware. The panel flips to the opposite side when space is insufficient.
+- Built on `@floating-ui/react` with `flip`, `shift({ padding: 8 })` (8px from the viewport edge), and `offset(10)` middleware. The panel flips to the opposite side when space is insufficient.
 - When a focus event's `relatedTarget` has `data-floating="true"`, the panel ignores the close request before it updates state or calls `onChange`. This coordinates nested portals.
 - When `open` is supplied, it owns visibility. Requests call `onChange` without changing internal state, so the parent MUST update `open`. When `open` is omitted, the component manages state.
 - `hover` is opt-in. It adds Floating UI hover interactions to the default click interaction.

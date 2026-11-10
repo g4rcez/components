@@ -18,6 +18,7 @@ import {
 } from "@floating-ui/react";
 import type React from "react";
 import { Fragment, isValidElement, type PropsWithChildren, useId, useMemo, useRef, useState } from "react";
+import { VIEWPORT_PADDING } from "../../../constants";
 import { css } from "../../../lib/dom";
 import { placementOrigin } from "../../../lib/floating-origin";
 import { Slot } from "../../core/slot/slot";
@@ -72,7 +73,12 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const align = props.align ?? "center";
     const placement: Placement = align === "center" ? (props.side ?? "bottom") : `${props.side ?? "bottom"}-${align}`;
     const middleware = useMemo(
-        () => [offset(gap), flip({ fallbackAxisSideDirection: "end" }), shift(), ...(showArrow ? [arrow({ padding: 5, element: arrowRef })] : [])],
+        () => [
+            offset(gap),
+            flip({ fallbackAxisSideDirection: "end" }),
+            shift({ padding: VIEWPORT_PADDING }),
+            ...(showArrow ? [arrow({ padding: 5, element: arrowRef })] : []),
+        ],
         [gap, showArrow]
     );
     const { refs, floatingStyles, context } = useFloating({

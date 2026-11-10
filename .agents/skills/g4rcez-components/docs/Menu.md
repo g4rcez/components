@@ -28,7 +28,7 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 | `hover` | `boolean` | `true` | Open on hover in addition to click. |
 | `open` | `boolean` | `false` | Initial open state only. |
 | `asChild` | `boolean` | `false` | Use the `Slot` pattern: merge props onto the child instead of a `<button>`. |
-| `restoreFocus` | `boolean` | `false` | Passed as the root focus manager's `returnFocus`. Returns focus to the root trigger on close. |
+| `restoreFocus` | `boolean` | `true` | Passed as the root focus manager's `returnFocus`. Returns focus to the root trigger on close (Escape or a pick). Set `false` to opt out. |
 | `floatingClassName` | `string` | — | Extra classes for the floating list container. |
 | `FloatingComponent` | `React.ElementType` | `"div"` | Element type for the floating container. |
 
@@ -184,7 +184,7 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 - Keep `MenuItem.title` and children consistent, or supply a suitable inherited `aria-label`.
 - `data-active` marks the focused menu item. The stylesheet uses active/hover/focus foreground and background tokens.
 - `FloatingFocusManager` is nonmodal. It is not a focus trap.
-- Root focus return is opt-in through `restoreFocus={true}`. List navigation handles nested focus.
+- Root focus return is on by default. Opt out with `restoreFocus={false}`. List navigation handles nested focus.
 
 ## Interaction design and acceptance criteria
 
@@ -202,7 +202,7 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 - Nested triggers use different click settings from the root (`toggle: false`, `ignoreMouse: true`).
 - When you disable hover, verify pointer and touch access for each submenu. Do not assume root click behavior.
 - `open` initializes `useState` and does not sync on later prop changes. There is no controlled `onChange` API.
-- Set `restoreFocus` when closing the root must return focus to its trigger.
+- Set `restoreFocus={false}` only when closing the root must not return focus to its trigger.
 - The built-in submenu hint is the English text “Next menu”. No per-instance translation option exists.
 - Verify focus visibility and touch targets with the selected theme, submenu reachability, and root focus return.
 - Names, menu roles, expanded state, and disabled buttons are source-backed. Spoken announcements and mobile reading order need application testing.
