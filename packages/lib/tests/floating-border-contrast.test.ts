@@ -94,3 +94,22 @@ describe("Notification close button", () => {
         expect(focus.outline).toBe("calc(var(--var-spacing-base) * 0.125) solid currentColor");
     });
 });
+
+describe("active MenuItem text", () => {
+    it("uses the 28% primary with white text in the light theme", () => {
+        const tokens = themeTokens(":root");
+        expect(tokens["--var-menu-item-active-background"]).toBe("hsla(201, 49%, 28%)");
+        expect(tokens["--var-menu-item-active-foreground"]).toBe("hsla(0, 0%, 100%)");
+    });
+
+    it("uses the 65% ring colour with the existing dark text in the dark theme", () => {
+        const tokens = themeTokens("html.dark");
+        expect(tokens["--var-menu-item-active-background"]).toBe("hsla(201, 49%, 65%)");
+        expect(tokens["--var-menu-item-active-foreground"]).toBe("hsla(240, 6%, 10%)");
+    });
+
+    it.each([":root" as const, "html.dark" as const])("%s the text is at least 7:1 against the active background", (selector) => {
+        const tokens = themeTokens(selector);
+        expect(contrast(tokens["--var-menu-item-active-foreground"], tokens["--var-menu-item-active-background"])).toBeGreaterThanOrEqual(7);
+    });
+});
