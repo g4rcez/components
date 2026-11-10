@@ -95,8 +95,8 @@
   --var-menu-surface-border: var(--var-color-input);
   --var-menu-item-expanded-opacity: 0.8;
   --var-menu-item-disabled-opacity: 0.4;
-  --var-menu-item-active-background: hsla(201, 49%, 36%);
-  --var-menu-item-active-foreground: hsla(221, 6%, 90%);
+  --var-menu-item-active-background: hsla(201, 49%, 28%);
+  --var-menu-item-active-foreground: hsla(0, 0%, 100%);
   --var-autocomplete-option-background-hover: hsla(240, 5%, 96%);
   --var-autocomplete-option-active-background: hsla(201, 49%, 22%);
   --var-autocomplete-option-active-foreground: hsla(221, 6%, 90%);
@@ -473,7 +473,7 @@ html.dark {
   --var-menu-surface-background: hsla(240, 10%, 8%);
   --var-menu-surface-foreground: hsla(240, 5%, 96%);
   --var-menu-surface-border: var(--var-color-input);
-  --var-menu-item-active-background: hsla(201, 49%, 54%);
+  --var-menu-item-active-background: hsla(201, 49%, 65%);
   --var-menu-item-active-foreground: hsla(240, 6%, 10%);
 
   --var-autocomplete-option-background-hover: hsla(240, 4%, 16%);

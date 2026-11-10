@@ -202,6 +202,27 @@ test("Dropdown and Menu surface borders meet 3:1 non-text contrast in both theme
     }
 });
 
+test("active MenuItem text meets 7:1 contrast when focused or hovered in both themes", async ({ page }) => {
+    for (const theme of ["light", "dark"] as const) {
+        await page.goto("/docs/menu");
+        await expect(page.getByRole("heading", { level: 1, name: "Menu" })).toBeVisible();
+        await setTheme(page, theme);
+        await page.getByRole("button", { name: "I'm a menu", exact: true }).first().click();
+        const item = page.getByRole("menuitem", { name: "Item 2", exact: true }).first();
+        await expect(item).toBeVisible();
+
+        await item.focus();
+        await expect(item).toBeFocused();
+        const focusRatio = await renderedContrastRatio(item);
+        expect(focusRatio, `${theme} focused MenuItem text contrast (${focusRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(7);
+
+        await page.getByRole("menuitem", { name: "Item 3", exact: true }).first().focus();
+        await item.hover();
+        const hoverRatio = await renderedContrastRatio(item);
+        expect(hoverRatio, `${theme} hovered MenuItem text contrast (${hoverRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(7);
+    }
+});
+
 test("Notification close button icon and focus ring meet 3:1 non-text contrast in every theme", async ({ page }) => {
     for (const mode of ["light", "dark"] as const) {
         for (const theme of ["default", "info", "warn", "muted", "danger", "success", "secondary"] as const) {

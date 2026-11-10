@@ -1130,8 +1130,8 @@ export const defaultLightComponentTokens = {
         "surface-border": "var(--var-color-input)",
         "item-expanded-opacity": "0.8",
         "item-disabled-opacity": "0.4",
-        "item-active-background": "hsla(201, 49%, 36%)",
-        "item-active-foreground": "hsla(221, 6%, 90%)",
+        "item-active-background": "hsla(201, 49%, 28%)",
+        "item-active-foreground": "hsla(0, 0%, 100%)",
         "nested-indicator-font-size": "calc(var(--var-fontsize) * 0.625)"
     },
     "autocomplete": {
@@ -1400,7 +1400,7 @@ export const defaultDarkComponentTokens = {
         "surface-background": "hsla(240, 10%, 8%)",
         "surface-foreground": "hsla(240, 5%, 96%)",
         "surface-border": "var(--var-color-input)",
-        "item-active-background": "hsla(201, 49%, 54%)",
+        "item-active-background": "hsla(201, 49%, 65%)",
         "item-active-foreground": "hsla(240, 6%, 10%)"
     },
     "autocomplete": {
