@@ -1121,12 +1121,12 @@ export const defaultLightComponentTokens = {
         "title-letter-spacing": "0.025em",
         "surface-background": "hsla(0, 0%, 100%)",
         "surface-foreground": "hsla(240, 10%, 4%)",
-        "surface-border": "hsla(240, 6%, 90%)"
+        "surface-border": "var(--var-color-input)"
     },
     "menu": {
         "surface-background": "hsla(0, 0%, 100%)",
         "surface-foreground": "hsla(240, 10%, 4%)",
-        "surface-border": "hsla(240, 6%, 90%)",
+        "surface-border": "var(--var-color-input)",
         "item-expanded-opacity": "0.8",
         "item-disabled-opacity": "0.4",
         "item-active-background": "hsla(201, 49%, 36%)",
@@ -1295,8 +1295,8 @@ export const defaultLightComponentTokens = {
         "badge-letter-spacing": "0.05em",
         "badge-transition-duration": "375ms",
         "badge-transition-timing": "cubic-bezier(0, 0, 0.58, 1)",
-        "close-foreground": "hsla(221, 15%, 23%, 0.4)",
-        "close-background-hover": "hsla(221, 15%, 23%, 0.1)",
+        "close-foreground": "currentColor",
+        "close-background-hover": "color-mix(in srgb, currentColor 16%, transparent)",
         "badge-background": "hsla(0, 0%, 100%, 0.8)",
         "badge-foreground": "hsla(221, 15%, 23%, 0.5)",
         "badge-foreground-hover": "hsla(221, 15%, 23%, 0.8)"
@@ -1393,12 +1393,12 @@ export const defaultDarkComponentTokens = {
     "dropdown": {
         "surface-background": "hsla(240, 10%, 8%)",
         "surface-foreground": "hsla(240, 5%, 96%)",
-        "surface-border": "hsla(240, 4%, 16%)"
+        "surface-border": "var(--var-color-input)"
     },
     "menu": {
         "surface-background": "hsla(240, 10%, 8%)",
         "surface-foreground": "hsla(240, 5%, 96%)",
-        "surface-border": "hsla(240, 4%, 16%)",
+        "surface-border": "var(--var-color-input)",
         "item-active-background": "hsla(201, 49%, 54%)",
         "item-active-foreground": "hsla(240, 6%, 10%)"
     },
@@ -1533,8 +1533,8 @@ export const defaultDarkComponentTokens = {
         "overlay-background": "hsla(240, 10%, 4%, 0.82)"
     },
     "notification": {
-        "close-foreground": "hsla(240, 5%, 96%, 0.4)",
-        "close-background-hover": "hsla(240, 5%, 96%, 0.1)",
+        "close-foreground": "currentColor",
+        "close-background-hover": "color-mix(in srgb, currentColor 16%, transparent)",
         "badge-background": "hsla(240, 10%, 8%, 0.8)",
         "badge-foreground": "hsla(240, 5%, 96%, 0.5)",
         "badge-foreground-hover": "hsla(240, 5%, 96%, 0.8)"

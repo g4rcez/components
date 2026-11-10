@@ -15,7 +15,7 @@ async function setTheme(page: Page, theme: Theme): Promise<void> {
 
 async function renderedContrastRatio(
     locator: Locator,
-    foregroundProperty: "color" | "borderTopColor" | "borderBottomColor" = "color"
+    foregroundProperty: "color" | "borderTopColor" | "borderBottomColor" | "outlineColor" = "color"
 ): Promise<number> {
     return locator.evaluate(async (target, property) => {
         const ancestors: Element[] = [];
@@ -177,5 +177,53 @@ test("MultiSelect search border meets 3:1 non-text contrast in both themes", asy
         expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
         await page.keyboard.press("Escape");
         await expect(search).toBeHidden();
+    }
+});
+
+test("Dropdown and Menu surface borders meet 3:1 non-text contrast in both themes", async ({ page }) => {
+    for (const theme of ["light", "dark"] as const) {
+        await page.goto("/docs/dropdown");
+        await expect(page.getByRole("heading", { level: 1, name: "Dropdown" })).toBeVisible();
+        await setTheme(page, theme);
+        await page.getByRole("button", { name: "Controlled", exact: true }).click();
+        const dropdown = page.locator(".__dropdown").first();
+        await expect(dropdown).toBeVisible();
+        const dropdownRatio = await renderedContrastRatio(dropdown, "borderTopColor");
+        expect(dropdownRatio, `${theme} Dropdown surface border contrast (${dropdownRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+
+        await page.goto("/docs/menu");
+        await expect(page.getByRole("heading", { level: 1, name: "Menu" })).toBeVisible();
+        await setTheme(page, theme);
+        await page.getByRole("button", { name: "I'm a menu", exact: true }).first().click();
+        const menu = page.locator(".__menu__floating").first();
+        await expect(menu).toBeVisible();
+        const menuRatio = await renderedContrastRatio(menu, "borderTopColor");
+        expect(menuRatio, `${theme} Menu surface border contrast (${menuRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+    }
+});
+
+test("Notification close button icon and focus ring meet 3:1 non-text contrast in every theme", async ({ page }) => {
+    for (const mode of ["light", "dark"] as const) {
+        for (const theme of ["default", "info", "warn", "muted", "danger", "success", "secondary"] as const) {
+            await page.goto("/docs/notification");
+            await expect(page.getByRole("heading", { level: 1, name: "Notifications" })).toBeVisible();
+            await setTheme(page, mode);
+            await page
+                .getByRole("button", { name: `Trigger ${theme}`, exact: true })
+                .first()
+                .click();
+
+            const close = page.locator(`.__notifications--theme-${theme} .__notifications__close`).first();
+            await expect(close).toBeVisible();
+            // Keyboard focus, so that :focus-visible matches.
+            await page.keyboard.press("Tab");
+            await close.focus();
+            await expect(close).toBeFocused();
+
+            const iconRatio = await renderedContrastRatio(close, "color");
+            expect(iconRatio, `${mode} ${theme} close icon contrast (${iconRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+            const ringRatio = await renderedContrastRatio(close, "outlineColor");
+            expect(ringRatio, `${mode} ${theme} close focus ring contrast (${ringRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        }
     }
 });
