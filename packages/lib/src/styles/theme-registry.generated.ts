@@ -327,6 +327,7 @@ export const themeTokenRegistry = {
             "big-surface-padding-inline",
             "control-height",
             "error-placeholder-foreground",
+            "focus-ring-width",
             "font-size",
             "min-control-height",
             "min-font-size",

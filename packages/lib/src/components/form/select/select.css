@@ -4,6 +4,7 @@
 
 .__select__field:focus-within {
     border-color: var(--var-color-primary);
+    box-shadow: 0 0 0 var(--var-free-text-focus-ring-width, calc(var(--var-spacing-base) * 0.125)) var(--var-color-ring);
 }
 
 @media (hover: hover) and (pointer: fine) {
