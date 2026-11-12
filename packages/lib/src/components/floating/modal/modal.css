@@ -11,6 +11,7 @@
     border-color: var(--var-color-border);
     background-color: var(--var-color-background);
     outline-width: 0;
+    overflow: var(--var-modal-surface-overflow, visible);
     box-shadow: var(--var-shadow-floating);
 }
 
@@ -38,7 +39,14 @@
     inset-inline: 0;
     bottom: 0;
     height: 100vh;
-    max-height: var(--var-modal-sheet-max-block-size);
+    max-height: min(
+        var(--var-modal-sheet-max-block-size),
+        calc(var(--var-modal-overlay-block-size) - var(--var-keyboard-inset, 0px) - env(safe-area-inset-top, 0px) - var(--var-spacing-base))
+    );
+    translate: 0 calc(var(--var-keyboard-inset, 0px) * -1);
+    transition-property: translate, max-height;
+    transition-duration: var(--var-motion-duration-normal);
+    transition-timing-function: var(--var-motion-timing-sheet);
     min-inline-size: 0;
     max-inline-size: none;
     inline-size: 100%;
@@ -131,7 +139,7 @@
 .__modal__overlay--centered {
     align-items: flex-start;
     justify-content: center;
-    padding-top: var(--var-modal-overlay-padding-block-start, calc(var(--var-spacing-base) * 1.5));
+    padding-top: calc(var(--var-modal-overlay-padding-block-start, calc(var(--var-spacing-base) * 1.5)) + env(safe-area-inset-top, 0px));
 }
 
 .__modal__content {
@@ -241,4 +249,10 @@
 .__modal__confirm-description {
     padding-block: var(--var-modal-confirm-description-padding-block, calc( var(--var-spacing-base) * 1 ));
     color: var(--var-color-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__modal--type-sheet {
+        transition-duration: 0ms;
+    }
 }

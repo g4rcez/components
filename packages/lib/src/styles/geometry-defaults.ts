@@ -279,6 +279,7 @@ export const defaultGeometryTokens = {
     "--var-modal-dialog-max-block-size": "calc(var(--var-spacing-base) * 40)",
     "--var-modal-surface-radius": "var(--var-radius-base)",
     "--var-modal-surface-padding-block": "calc(var(--var-spacing-base) * 1.5)",
+    "--var-modal-surface-overflow": "visible",
     "--var-modal-sheet-padding-block-start": "calc(var(--var-spacing-base) * 1.5)",
     "--var-modal-sheet-padding-block-end": "calc(var(--var-spacing-base) * 1.5)",
     "--var-modal-resizer-radius": "calc(var(--var-radius-base) * 0.666667)",

@@ -3,6 +3,7 @@ export * from "./config/context";
 export * from "./config/default-translations";
 export * from "./config/default-tweaks";
 export * from "./hooks/use-form";
+export { KEYBOARD_INSET_PROPERTY, readKeyboardInset, useKeyboardInset } from "./hooks/use-keyboard-inset";
 export * from "./hooks/use-previous";
 export * from "./hooks/use-reactive";
 export * from "./hooks/use-stable-ref";

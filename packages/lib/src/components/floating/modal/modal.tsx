@@ -36,9 +36,11 @@ import React, {
 } from "react";
 import { useFloatingRef } from "../../../hooks/use-floating-ref";
 import type { TranslationOverrides } from "../../../hooks/use-translations";
+import { useKeyboardInset } from "../../../hooks/use-keyboard-inset";
 import { useMediaQuery } from "../../../hooks/use-media-query";
 import { useTranslations } from "../../../hooks/use-translations";
 import { css } from "../../../lib/dom";
+import { SHEET_EASE } from "../../../lib/motion";
 import type { Label, Nil, Override } from "../../../types";
 import { Button, type ButtonProps } from "../../core/button/button";
 import { Slot } from "../../core/slot/slot";
@@ -66,10 +68,20 @@ type Animations = {
 
 const modalEaseOut: [number, number, number, number] = [0.23, 1, 0.32, 1];
 
+/** Viewport width from which a Modal stops being a bottom sheet. Consumers can reuse it to match the switch. */
+export const MODAL_DESKTOP_QUERY = "(min-width: 64rem)";
+
 const overlayAnimation: ModalAnimation = {
     initial: { opacity: 0 },
     enter: { opacity: 1, transition: { duration: 0.18, ease: modalEaseOut } },
     exit: { opacity: 0, transition: { duration: 0.14, ease: modalEaseOut } },
+};
+
+// The scrim follows the sheet's own timing so the two read as one motion.
+const sheetOverlayAnimation: ModalAnimation = {
+    initial: { opacity: 0 },
+    enter: { opacity: 1, transition: { duration: 0.5, ease: SHEET_EASE } },
+    exit: { opacity: 0, transition: { duration: 0.32, ease: SHEET_EASE } },
 };
 
 // Shared surfaces already animate from their source geometry; a second transform
@@ -115,13 +127,13 @@ const animations: Animations = {
             opacity: 1,
             y: "0%",
             transformOrigin: "bottom center",
-            transition: { type: "spring", duration: 0.34, bounce: 0.08 },
+            transition: { duration: 0.5, ease: SHEET_EASE },
         },
         exit: {
             opacity: 1,
             y: "100%",
             transformOrigin: "bottom center",
-            transition: { duration: 0.2, ease: modalEaseOut },
+            transition: { duration: 0.32, ease: SHEET_EASE },
         },
     },
     dialog: {
@@ -368,12 +380,13 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
         const descriptionId = useId();
         const resizeDescriptionId = useId();
         const modalType = _type as ModalType;
-        const isDesktop = useMediaQuery("(min-width: 64rem)");
+        const isDesktop = useMediaQuery(MODAL_DESKTOP_QUERY);
         const position = fetchPosition(isDesktop, forceType, modalType, propsPosition);
         const func = isDesktop ? animations[modalType] : forceType ? animations[modalType] : animations.sheet;
         const animation = typeof func === "function" ? func(position as DrawerPosition) : func;
         const type = isDesktop ? modalType : forceType ? modalType : "sheet";
         const useResizer = type !== "dialog";
+        useKeyboardInset(open && type === "sheet", removeScrollRef);
         const floating = useFloating({
             open,
             onOpenChange: onChange,
@@ -485,7 +498,7 @@ export const Modal: ModalComponent = forwardRef<ModalRef, PropsWithChildren<Moda
                                     exit="exit"
                                     animate="enter"
                                     initial="initial"
-                                    variants={overlayAnimation}
+                                    variants={type === "sheet" ? sheetOverlayAnimation : overlayAnimation}
                                     data-component="overlay"
                                     className={css(
                                         modalStyles.slots.overlay,

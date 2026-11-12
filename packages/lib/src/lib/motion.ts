@@ -9,6 +9,9 @@ export const SETTLE_SPRING = { type: "spring", stiffness: 800, damping: 52, mass
 /** Closing surfaces: no overshoot. */
 export const FOLD_SPRING = { type: "spring", stiffness: 900, damping: 60, mass: 0.9 } as const;
 
+/** iOS sheet curve (the system sheet presentation): fast start, long soft landing, no overshoot. */
+export const SHEET_EASE = [0.32, 0.72, 0, 1] as const;
+
 /**
  * iOS-style rubber banding. `distance` is how far past the edge the pointer is, `dimension` the size of the
  * axis. The result grows with `distance` but never reaches `dimension`.
