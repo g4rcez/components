@@ -9,12 +9,16 @@
         "components:styles": "node ../lib/bin/g4rcez-components.mjs styles --root . --content src --css src/app/index.css --library-root ../lib",
         "lint": "oxlint .",
         "test:e2e": "pnpm --filter @g4rcez/components build && playwright test",
-        "format": "oxfmt --write ."
+        "format": "oxfmt --write .",
+        "reference": "node scripts/generate-reference.mjs",
+        "reference:check": "node scripts/generate-reference.mjs && git diff --exit-code -- src/generated",
+        "reference:test": "node --test scripts/generate-reference.test.mjs"
     },
     "dependencies": {
         "@g4rcez/components": "workspace:*",
         "@phosphor-icons/react": "2.1.10",
         "date-fns": "4.1.0",
+        "geist": "^1.9.2",
         "motion": "12.23.26",
         "next": "16.1.1",
         "react": "19.2.3",
@@ -27,8 +31,10 @@
         "@types/node": "22",
         "@types/react": "19.2.17",
         "@types/react-dom": "19.2.3",
+        "marked": "18.1.1",
         "postcss": "8",
         "tailwindcss": "3.4.14",
-        "typescript": "5"
+        "typescript": "5",
+        "yaml": "^2.9.1"
     }
 }
