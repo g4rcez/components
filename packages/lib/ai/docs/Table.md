@@ -183,10 +183,11 @@ Override these CSS variables in your theme to customize the tokens this componen
 |`text-foreground`|`--var-color-foreground`|Group title text and loading bar color|
 |`text-primary`|`--var-color-primary`|Filter/sort action accent|
 
-- `--var-table-cell-padding` sets body-cell and header-content padding.
+- `--var-table-cell-padding` sets body-cell padding and the inline padding of header content (the header has no block padding).
 - Default: `calc(var(--var-spacing-base) * 0.75)` (`0.75rem` at the default spacing base).
 - Set it on the table or an ancestor scope.
 - Loading and empty-state horizontal padding use `--var-table-cell-padding-inline` instead. Default: `calc(var(--var-spacing-base) * 0.5)`.
+- `--var-table-selection-target-size` sets the width and the minimum height of the selection checkboxes, so it also sets how short a row can get. Lower it with `--var-table-row-block-size` and `--var-table-cell-padding` for a compact table, for example `className="[--var-table-row-block-size:2.25rem] [--var-table-selection-target-size:1.75rem]"` on a wrapper.
 
 ## Column Types
 

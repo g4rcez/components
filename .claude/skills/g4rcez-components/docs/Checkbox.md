@@ -204,7 +204,7 @@ These checks describe current behavior or consumer design targets. They are not 
 - Error text is visible below the label.
 - CSS provides a focus outline. Keyboard handlers toggle with Space and Enter unless a consumer handler prevents the default action.
 - `indeterminate` sets the DOM property `input.indeterminate`, so screen readers announce "mixed". The forwarded ref still points to the input.
-- The unchecked border meets the 3:1 contrast minimum for UI parts (WCAG 1.4.11) in light and dark.
+- The unchecked border is a soft outline (about 1.8:1 against the page), below the 3:1 of WCAG 1.4.11. The checked state, the label and the focus ring carry the state. Override `--var-checkbox-control-border` for a stronger outline.
 
 ## Data Attributes
 

@@ -2,7 +2,7 @@
 
 React components you can restyle without fighting them.
 
-`@g4rcez/components` is a TypeScript design system with about 60 components: forms, tables, calendars, modals, a command palette, a rich text editor, and more. It uses plain CSS, stable class names, and CSS variables for every visual decision. You do not need Tailwind, a CSS-in-JS runtime, or a provider to make it look right.
+`@g4rcez/components` is a TypeScript design system with about 60 components: forms, tables, calendars, modals, a command palette, and more. It uses plain CSS, stable class names, and CSS variables for every visual decision. You do not need Tailwind, a CSS-in-JS runtime, or a provider to make it look right.
 
 [Documentation and live examples](https://components.garcez.dev/) · [npm](https://www.npmjs.com/package/@g4rcez/components) · [Releases](https://github.com/g4rcez/components/releases)
 
@@ -71,9 +71,9 @@ Every component can be imported from the package root or from its own path, for 
 
 | Group        | Components                                                                                                                                                                                                                |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Core**     | `Button`, `Tag`, `Heading`, `Typography`, `Polymorph`, `Slot`, `Resizable`, `RenderOnView`                                                                                                                                |
-| **Form**     | `Form`, `Input`, `InputField`, `Select`, `MultiSelect`, `Autocomplete`, `Checkbox`, `Radiobox`, `Switch`, `Slider`, `DatePicker`, `FileUpload`, `TaskList`, `RichTextEditor`, `DrawingEditor`                             |
-| **Display**  | `Alert`, `Card`, `Calendar`, `PageCalendar`, `Collapse`, `Empty`, `List`, `Masonry`, `Notifications`, `PdfViewer`, `Progress`, `Skeleton`, `Spinner`, `Stats`, `Step`, `SwipeableList`, `Tabs`, `Timeline`, `VideoPlayer` |
+| **Core**     | `Button`, `ActionSwap`, `HoldToConfirm`, `Tag`, `Heading`, `Typography`, `Polymorph`, `Slot`, `Resizable`, `RenderOnView`, `RollingText`                                                                                   |
+| **Form**     | `Form`, `Input`, `InputField`, `Select`, `MorphSelect`, `MultiSelect`, `Autocomplete`, `Checkbox`, `Radiobox`, `Switch`, `Slider`, `DatePicker`, `FileUpload`, `TaskList`, `DrawingEditor`                             |
+| **Display**  | `Alert`, `Card`, `CardStack`, `Calendar`, `PageCalendar`, `Collapse`, `Empty`, `List`, `Masonry`, `Notifications`, `PdfViewer`, `Progress`, `Reactions`, `Skeleton`, `Spinner`, `Stats`, `Step`, `SwipeableList`, `Tabs`, `Timeline`, `VideoPlayer` |
 | **Floating** | `Modal`, `Tooltip`, `Dropdown`, `Menu`, `CommandPalette`, `Expand`, `Toolbar`, `Wizard`                                                                                                                                   |
 | **Table**    | `Table` with sorting, filtering, grouping, pagination, and virtualized rows                                                                                                                                               |
 

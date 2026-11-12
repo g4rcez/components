@@ -152,9 +152,9 @@ const steps = [
 ## Do
 
 - Keep tours to 3–7 steps. Fewer steps complete more often.
-- Make each target visible in the viewport when its step activates. The wizard scrolls to it.
+- Make each target reachable. When a step activates and its target is not inside the viewport (with 8px of room), the wizard scrolls it to the center with `scrollIntoView`, smoothly unless the person prefers reduced motion. Nested scrollers scroll too. A visible target is left where it is. Keyboard focus stays on the Next button so the tour keeps working from the keyboard.
 - Always provide `onClose`, so users can exit at any time.
-- Use `onEnter` to make the target visible (for example, open a panel) before the step highlights it.
+- Use `onEnter` to make the target visible (for example, open a panel or a modal) before the step highlights it. It runs once when the step starts, before the target is looked up, even when the target does not exist yet. A step with `onEnter` keeps looking for its target for up to 1.5 seconds and follows it while it animates in; a step without `onEnter` whose target is missing centers the card at once.
 
 ## Don't
 
@@ -184,3 +184,4 @@ const steps = [
 - The tooltip appears only after the animation completes (`onAnimationComplete`).
 - When `element` resolves to `null` (selector not found or ref empty), the tooltip centers on screen and the console warns.
 - `useResizeObserver` and scroll and resize listeners keep the highlight rect in sync.
+- Before measuring a step, an out-of-view target is brought into view; the scroll listener then moves the spotlight and the card with it.

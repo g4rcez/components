@@ -1,6 +1,6 @@
 ---
 title: Dropdown
-description: Floating dropdown panel with an optional title, arrow pointer, and automatic collision-aware positioning.
+description: Floating dropdown panel with an optional title, soft border, and automatic collision-aware positioning.
 package: "@g4rcez/components"
 export: "{ Dropdown }"
 import: "import { Dropdown } from '@g4rcez/components/dropdown'"
@@ -9,7 +9,7 @@ category: floating
 
 # Dropdown
 
-Floating dropdown panel with an optional title, arrow pointer, and automatic collision-aware positioning.
+Floating dropdown panel with an optional title, soft border, and automatic collision-aware positioning.
 
 ## Import
 
@@ -24,7 +24,6 @@ import { Dropdown } from "@g4rcez/components/dropdown";
 | `trigger` | `React.ReactElement \| React.ReactNode` | — | Noninteractive trigger content. Pass a button only with `asChild`. |
 | `asChild` | `boolean` | `false` | Use `trigger` as the trigger, with no wrapper `<button>`; avoids nested `<Button>`. |
 | `open` | `boolean` | — | Controlled open state |
-| `arrow` | `boolean` | `false` | Accepted but unused: the arrow always renders. |
 | `hover` | `boolean` | `false` | Also open the panel on pointer hover |
 | `lockPositionOnOpen` | `boolean` | `false` | Keep the initial panel position while open |
 | `title` | `React.ReactNode \| string` | — | Header title rendered inside the panel |
@@ -42,15 +41,15 @@ Defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independe
 
 | Override | Library default |
 |---|---|
-| `--var-dropdown-surface-radius` | `calc(var(--var-radius-base) / 2)` |
-| `--var-dropdown-surface-padding` | `calc(var(--var-spacing-base) * 1)` |
-| `--var-dropdown-header-margin-block-end` | `calc(var(--var-spacing-base) / 2)` |
+| `--var-dropdown-surface-radius` | `calc(var(--var-radius-base) * 1.25)` |
+| `--var-dropdown-surface-shadow` | `0 1px 2px var(--var-color-shadow-edge), 0 10px 28px -8px var(--var-color-shadow-drop)` |
+| `--var-dropdown-surface-padding` | `calc(var(--var-spacing-base) * 1.25)` |
+| `--var-dropdown-header-margin-block-end` | `calc(var(--var-spacing-base) * 0.625)` |
 
 | Token | CSS Variable | Purpose |
 |---|---|---|
 | `bg-floating-background` | `--var-dropdown-surface-background` | Panel surface background |
-| `border-floating-border` | `--var-dropdown-surface-border` | Panel border and arrow stroke |
-| `fill-floating-background` | `--var-dropdown-surface-background` | Arrow fill color |
+| `border-floating-border` | `--var-dropdown-surface-border` | Panel border (a soft hairline) |
 | `z-floating` | `--var-layer-floating` | Z-index for the floating panel |
 | `shadow-shadow-floating` | `--var-shadow-floating` | Panel drop shadow |
 | `rounded-dropdown-surface-radius` | `--var-dropdown-surface-radius` | Panel corner radius |
@@ -76,7 +75,7 @@ function SimpleDropdown() {
 }
 ```
 
-### With Title and Arrow
+### With a Title
 
 ```tsx
 import { CaretDownIcon, UserIcon } from "@phosphor-icons/react";
@@ -189,7 +188,8 @@ function FilterDropdown() {
 
 - Use design-token classes for item hover states (`hover:bg-floating-hover`, `text-foreground`), not raw color utilities.
 - Set a `title` and readable trigger content so users know the panel context.
-- Do not rely on `arrow={false}` to hide the arrow. The arrow always renders.
+- The panel enters and leaves with a short Motion animation (fade, scale and a nudge from the trigger side; fade only with reduced motion). It stays in the DOM for the exit, about 140ms after it closes, and ignores the pointer while it leaves.
+- The border is a soft hairline (`--var-dropdown-surface-border`), backed by the shadow. It is not the input colour, which is a slightly stronger outline used for fields.
 - Group related items with separators when a panel has more than 5 items.
 
 ## Don't

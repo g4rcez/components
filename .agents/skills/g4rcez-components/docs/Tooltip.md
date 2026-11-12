@@ -28,7 +28,8 @@ import { Tooltip } from "@g4rcez/components/tooltip";
 | `hover` | `boolean` | `true` | Show tooltip on hover |
 | `focus` | `boolean` | `true` | Show tooltip on focus |
 | `popover` | `boolean` | `false` | Enables click toggle and popup role `dialog`; adds no focus management. |
-| `placement` | `Placement` | auto | Preferred placement; falls back via `autoPlacement` |
+| `arrow` | `boolean` | `popover` | Draws the arrow that points at the trigger. A plain tooltip has none; a `popover` has one. |
+| `placement` | `Placement` | `"top"` | Preferred placement. It flips to the opposite side when there is no room and shifts to stay 8px inside the viewport. |
 | `followCursor` | `boolean` | `false` | Tooltip follows the mouse cursor |
 | `onChange` | `(open: boolean) => void` | — | Open state change handler |
 | `as` | `React.ElementType` | `"span"` | Element type of the trigger wrapper |
@@ -41,8 +42,8 @@ Defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independe
 
 | Override | Library default |
 |---|---|
-| `--var-tooltip-surface-radius` | `calc(var(--var-radius-base) / 2)` |
-| `--var-tooltip-surface-padding` | `calc(var(--var-spacing-base) * 0.75)` |
+| `--var-tooltip-surface-radius` | `calc(var(--var-radius-base) * 0.625)` |
+| `--var-tooltip-surface-padding` | `calc(var(--var-spacing-base) * 0.5) calc(var(--var-spacing-base) * 0.75)` |
 
 | Token | CSS Variable | Purpose |
 |---|---|---|
@@ -55,7 +56,7 @@ Defaults use scoped `calc` fallbacks from `--var-spacing-base` and the independe
 
 ## Placement Options
 
-Supported values are all Floating UI placements: `"top"`, `"top-start"`, `"top-end"`, `"bottom"`, `"bottom-start"`, `"bottom-end"`, `"left"`, `"left-start"`, `"left-end"`, `"right"`, `"right-start"`, `"right-end"`. When `placement` is omitted, `autoPlacement` picks the best available side.
+Supported values are all Floating UI placements: `"top"`, `"top-start"`, `"top-end"`, `"bottom"`, `"bottom-start"`, `"bottom-end"`, `"left"`, `"left-start"`, `"left-end"`, `"right"`, `"right-start"`, `"right-end"`. When `placement` is omitted the tooltip opens on `top`.
 
 ## Examples
 
@@ -216,6 +217,7 @@ import { Button } from "@g4rcez/components/button";
 ## Accessibility
 
 - Hover and focus are on by default. Click is opt-in through `popover`.
+- The tooltip animates in and out with Motion (a short fade, scale and nudge from the trigger side, fade only with reduced motion). It stays in the DOM for the exit, about 120ms after it closes.
 - Default popup semantics are `role="tooltip"`, with `aria-describedby` on the reference wrapper. With `popover`, `useRole` switches the role to `dialog`.
 - `useDismiss` handles Escape and outside press. `useFocus` handles focus-driven open and close. When Escape comes from an expanded `role="combobox"` inside a `popover`, such as `Autocomplete` or `MultiSelect`, the field closes its list first and the popover stays open until the next Escape. `shift({ padding: 8 })` keeps the panel 8px from the viewport edge.
 - The component renders no `FloatingFocusManager`, focus trap, focus return, or visible dismiss button.
@@ -247,7 +249,7 @@ import { Button } from "@g4rcez/components/button";
 
 - When `open` is provided, it is the source of truth. Interaction requests call `onChange` without changing internal visibility, so the parent MUST update `open`. Without `open`, the component manages state.
 - `enabled={false}` disables the interaction hooks. It does not suppress a popup that `open` forces open.
-- `autoPlacement` middleware runs with `flip`. Placement is fully automatic when `placement` is omitted.
+- Placement defaults to `top`. `flip` moves the tooltip to the opposite side when there is no room, and `shift` keeps it inside the viewport.
 - The shared `FLOATING_DELAY` constant sets the hover delay. There is no per-instance delay prop.
 - The `Polymorph` core component renders the popup. The `as` prop sets the trigger wrapper.
 

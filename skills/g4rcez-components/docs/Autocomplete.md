@@ -141,6 +141,24 @@ function TagPicker() {
 }
 ```
 
+### Left and right content
+
+`left` and `right` put an icon, a hint or any element inside the field border. `right` renders before the caret and the clear button, so both keep working. Give decorative icons `aria-hidden`; the field keeps its own label.
+
+```tsx
+import { CodeIcon, FileTsIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { Autocomplete } from "@g4rcez/components/autocomplete";
+
+<Autocomplete title="Search" options={languages} left={<MagnifyingGlassIcon aria-hidden size={16} />} />;
+<Autocomplete title="Language" options={languages} right={<CodeIcon aria-hidden size={16} />} />;
+<Autocomplete
+    title="Language"
+    options={languages}
+    left={<FileTsIcon aria-hidden size={16} />}
+    right={<span className="text-xs text-muted-foreground">TS</span>}
+/>;
+```
+
 ### Custom option renderer
 
 ```tsx

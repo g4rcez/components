@@ -1,75 +1,74 @@
 ---
 name: Components Website
-description: Cyan-accented landing and documentation layouts for the React component library.
+description: Neutral-first documentation and landing for the React component library, with an Ultramarine accent, in light and dark.
 colors:
-  canvas: "hsla(220, 16%, 6%, 1)"
-  surface: "hsla(220, 13%, 9%, 1)"
-  surface-raised: "hsla(220, 10%, 14%, 1)"
-  border: "hsla(220, 9%, 19%, 1)"
-  primary: "hsla(188, 86%, 57%, 1)"
-  primary-soft: "hsla(190, 48%, 12%, 1)"
-  text: "hsla(210, 12%, 96%, 1)"
-  text-muted: "hsla(215, 10%, 64%, 1)"
-  light-canvas: "hsla(0, 0%, 100%, 1)"
-  light-surface: "hsla(210, 20%, 98%, 1)"
-  light-border: "hsla(215, 15%, 88%, 1)"
-  light-primary: "hsla(192, 100%, 29%, 1)"
-  light-text: "hsla(220, 20%, 12%, 1)"
-  light-text-muted: "hsla(215, 12%, 40%, 1)"
+  light-background: "hsl(0 0% 100%)"
+  light-surface: "hsl(240 20% 98.5%)"
+  light-muted: "hsl(240 10% 96%)"
+  light-border: "hsl(240 6% 88%)"
+  light-input: "hsl(240 5% 52%)"
+  light-muted-foreground: "hsl(240 5% 38%)"
+  light-foreground: "hsl(240 10% 10%)"
+  light-primary: "hsl(232 72% 50%)"
+  light-primary-hover: "hsl(232 72% 43%)"
+  dark-background: "hsl(240 6% 7%)"
+  dark-surface: "hsl(240 6% 9%)"
+  dark-muted: "hsl(240 5% 12%)"
+  dark-border: "hsl(240 5% 21%)"
+  dark-input: "hsl(240 4% 52%)"
+  dark-muted-foreground: "hsl(240 5% 70%)"
+  dark-foreground: "hsl(240 6% 94%)"
+  dark-primary: "hsl(232 85% 70%)"
+  dark-primary-hover: "hsl(232 85% 76%)"
 typography:
   display:
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.75rem, 5vw, 4.5rem)"
-    fontWeight: 650
-    lineHeight: 1.08
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(2.5rem, 6vw, 4rem)"
+    fontWeight: 600
+    lineHeight: 1.04
     letterSpacing: "-0.04em"
   headline:
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2rem, 3vw, 2.5rem)"
-    fontWeight: 650
-    lineHeight: 1.08
-    letterSpacing: "-0.03em"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(2rem, 4vw, 2.5rem)"
+    fontWeight: 600
+    lineHeight: 1.1
+    letterSpacing: "-0.035em"
+  section:
+    fontSize: "1.625rem"
+    fontWeight: 600
+    lineHeight: 1.2
+    letterSpacing: "-0.025em"
   body:
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1rem"
-    lineHeight: 1.65
-  description:
-    fontSize: "0.875rem"
-    lineHeight: 1.55
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.9375rem"
+    lineHeight: 1.7
   navigation:
-    fontSize: "0.8125rem"
-    lineHeight: 1.35
+    fontSize: "0.875rem"
+    lineHeight: 1.4
   label:
-    fontSize: "0.75rem"
+    fontSize: "0.8125rem"
     lineHeight: 1.4
   code:
-    fontFamily: "IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+    fontFamily: "Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
     fontSize: "0.8125rem"
-    lineHeight: 1.6
+    lineHeight: 1.65
 rounded:
   control: "8px"
-  frame: "12px"
+  frame: "10px"
+  tile: "12px"
 spacing:
   small: "8px"
   base: "16px"
   group: "24px"
-  panel: "32px"
-  section: "64px"
+  section: "72px"
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.canvas}"
+    backgroundColor: "{colors.light-primary}"
+    textColor: "{colors.light-background}"
     rounded: "{rounded.control}"
-    padding: "12px 20px"
-    height: "44px"
-  button-secondary:
-    textColor: "{colors.text}"
-    rounded: "{rounded.control}"
-    padding: "12px 20px"
-    height: "44px"
-  search:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.text}"
+  search-trigger:
+    backgroundColor: "{colors.light-surface}"
+    textColor: "{colors.light-muted-foreground}"
     rounded: "{rounded.control}"
 ---
 
@@ -77,56 +76,63 @@ components:
 
 ## Overview
 
-The website uses the developer-documentation structure requested from Tailwind CSS and Next.js: a stable header, fine borders, clear type, and examples that demonstrate the library. Cyan connects navigation and actions across the landing page and documentation.
+The site is modelled on the Radix documentation experience: a quiet, neutral frame in which the library's own components are the colour. A stable header, a grouped sidebar, one long scrolling page per component (examples, usage, a generated API reference, tokens, accessibility) and a right-hand outline. The landing page is a short hero followed by a dense grid of real, working compositions.
 
-This app-specific system replaces the inherited website guidance without changing the library design system. Dark mode remains the initial state; the light theme supports brighter reading conditions. No new fonts or image assets are loaded.
+This is the website's own system and does not change the library's design system. It follows the system colour preference (light or dark) until a visitor chooses, and remembers the choice.
+
+## One palette
+
+The shell uses the library's tokens (`--var-*`), not a palette of its own. `src/app/styles/brand.css` is the only file allowed to contain colour literals: it sets the neutral steps and the accent as library tokens for `:root` and `html.dark`. It is unlayered, so it wins over the library's `@layer var.tokens`.
+
+The library hard-codes its old accent in about 54 component tokens (checkbox, radiobox, switch, menu and autocomplete active rows, calendar, tag, ghost-primary, table placeholder) rather than deriving them from `--var-color-primary`. `brand.css` re-derives every one of them. When the library adds a token with a hard-coded accent, add its override there too, or the demo shows the old colour.
+
+Shell CSS may reference `--var-*` and the layout measures `--docs-layout-*` (header, sidebar, article, outline, radius). The few surfaces the library has no token for (`--docs-surface`, `--docs-surface-raised`, `--docs-primary-soft`, `--docs-success-soft`, `--docs-danger-soft`) are defined in `brand.css` as plain `hsl()` so that computed colours stay `rgb`-parsable for the contrast tests. Check with: `rg -nP "hsla?\(|rgba?\(|#[0-9a-fA-F]{3,8}\b" src/app/styles/{base,shell,content,reference}.css src/app/landing.css` (must print nothing).
 
 ## Colors
 
-Cyan marks actions, links, current navigation, and focus. Dark and light modes use different cyan values to keep text readable. Neutral surfaces separate preview, source, and reading regions without decorative shadows.
+Neutrals use hue 240, in Radix-style steps. The accent is Ultramarine, hue 232. Measured contrast (WCAG):
 
-Library examples retain their own theme tokens and semantic colors. Website styles must not override component variants to make every demo cyan.
+- Light: white on primary 7.64:1, white on hover 9.23:1, soft accent text 8.71:1, muted text 6.61:1, input border 3.98:1.
+- Dark: background ink on primary 5.62:1, on hover 7.38:1, soft accent text 7.93:1, muted text 8.64:1, input border 4.81:1.
+- Active menu row: white on L36 is 11.1:1 (light); dark ink on L78 is 7.56:1 (dark).
+
+The accent marks the primary action, the current outline entry, links, focus and selection. Active navigation is a neutral raised row, not accent text. The library's semantic colours (info, success, warn, danger) are untouched.
 
 ## Typography
 
-Use the existing sans-serif stack for headings, navigation, and prose. Inter is a preferred local face, not a downloaded dependency. Monospace is reserved for source, package names, and compact metadata.
-
-Landing titles are larger than documentation titles. Keep article prose within about 70 characters per line. Group demo titles with their descriptions; do not inherit large article-heading margins into example headers.
+Geist Sans and Geist Mono come from the `geist` package (`next/font/local`: self-hosted, preloaded, metric-adjusted fallback, no network at build or run time). Headings are semibold with negative tracking; prose stays within about 70 characters; monospace is for source, package names, prop names and metadata.
 
 ## Layout
 
-The shared header is 56px high in a centered 1440px frame; its section links carry a 2px underline for the current section, not cyan text. The landing page has a 1376px bordered frame and flows top to bottom: a centered hero (documented-components pill, headline, copy, two actions, install command); one Preview/Code window built on the library Tabs, with the live demo beside a live component composition (stacked below 1024px); a four-cell foundations grid; the hub grid under a two-column section header; and a closing call to action. The hero eyebrow shows the number of documented components, computed from the navigation config. The catalog is one hub grid: a single bordered frame whose cells share hairlines (Helios hub structure), not separate feature cards. The landing page has no floating overlay; the footer carries the same links.
+The header is 56px in a centered 1440px frame: wordmark, Docs and Components links, a search button (also Cmd/Ctrl+K and `/`), version tag, GitHub, colour mode. Below 40rem the GitHub icon leaves the header (the footer carries it).
 
-Documentation has a 240px recessed navigation rail on the surface tone (Linear-style: group labels and inactive links are muted, the current route is a raised neutral row), an article up to 760px wide, and a 192px page outline at 1280px and above. Below 1280px the outline becomes a collapsed native disclosure. Below 960px the navigation moves into a left drawer. Below 1024px the landing preview and source stack so the code keeps a readable width. At 640px, guide links and page actions stack.
+Documentation is a 248px sidebar (grouped headings, plain links, current page on a neutral fill), an article up to 760px and a 200px "On this page" outline from 80rem. Below 80rem the outline is a collapsed disclosure; below 60rem the sidebar becomes a left drawer that starts on a Search button. Wide tables scroll inside their own focusable region so the page never scrolls sideways.
 
-New spacing derives from the library's base spacing token. Keep horizontal scrolling inside code panels instead of widening the document.
+The landing page is a left-aligned hero (count and version tag, headline, lede, two actions, install command with pnpm/npm/yarn tabs) followed by a showcase: `repeat(auto-fill, minmax(min(100%, 300px), 1fr))` with dense packing. Tiles span two columns or two rows only from 64rem, because on one column a span would create an implicit second column.
 
 ## Elevation & Depth
 
-Static surfaces use a fine border and tonal contrast. The website adds no decorative shadows, gradients, or entrance animations. Floating library components retain their own elevation rules.
+Static surfaces use a hairline border and tonal contrast. The only gradient is the fade at the bottom of a clamped token table, and the only texture is the dot grid behind demos. Floating library components keep their own elevation.
 
 ## Shapes
 
-Controls have small rounded corners; bounded examples have larger corners. Structural regions remain square. New geometry derives from the library's radius and spacing bases. The active navigation indicator is one pixel wide.
+Controls 8px, panels 10px, showcase tiles 12px. The wordmark's accent tile has a larger radius than the other three, echoing a trigger that grows into a list.
 
 ## Components
 
-- **Navigation:** group labels are muted sentence-case, links are rounded rows, and the current route has full-contrast text on a raised neutral background plus an accessible current-page state. Cyan is reserved for actions, links, and focus.
-- **Search:** the header and keyboard shortcuts focus desktop navigation or open the drawer. The drawer traps focus through the library Modal and starts in the search input.
-- **Page outline:** sticky and independently scrollable on large screens; a keyboard-operable disclosure on smaller screens.
-- **Examples:** rendered preview above source. Keep copying, reset controls, and component behavior intact. A Card that wraps the whole subject renders as a titled section inside the example panel, without its own border or background, and the panel keeps its padding so floating panels have room; Card demos that show several Cards keep their frames.
-- **Page header:** breadcrumb, title, summary, then a bordered key/value strip (Package, Section) in the style of Helios component headers.
-- **Page tabs:** component pages use the library Tabs, frameless, below the page header: Examples, Usage, Accessibility (Helios-style). Only the active panel renders, so the outline lists that panel's headings. The tab is stored in `?tab=` (omitted for Examples); `?tab=` and anchors inside another tab (`#usage-guidance`, `#accessibility-notes`) open that tab on load. Guide pages have no tabs. The Examples and Accessibility h2 headings stay for the outline and screen readers but are visually hidden because the tab names them.
-- **Usage guidance:** "Use when" and "Avoid when" share one bordered frame split by a hairline, each with a 2px semantic top edge.
-- **Guide pages:** display guide content directly, without generic component usage warnings. Component pages put examples before usage guidance and accessibility notes.
-- **Actions:** cyan primary links, neutral outlined secondary links, visible focus, and restrained color transitions. Navigation links remain links rather than nested buttons.
+- **Page template:** one scroll, in this order: header (breadcrumb, title, summary, package, section, import with copy, link to the reference markdown), Examples, "When to use X", API reference, Design tokens, Accessibility, related links, pager. Guide pages (Getting Started) show only the header and their content. Old `?tab=usage|accessibility` links land on the matching section.
+- **Generated reference:** `scripts/generate-reference.mjs` parses `packages/lib/ai/docs/*.md` into `src/generated/reference/<slug>.json` (committed) plus a search index. Run `pnpm reference` after editing those docs; `pnpm reference:check` fails when the output is stale. Slugs map to files by PascalCase, with explicit overrides in the script. Never edit generated files by hand.
+- **Demos:** a labelled section (`id` from the title), a dotted preview panel with 24px inset, and a Show code / Hide code toggle. The source is only rendered and highlighted once opened. A Card that wraps the whole subject renders frameless inside the panel.
+- **Search:** the library `CommandPalette`, opened by the header button, Cmd/Ctrl+K and `/`. It matches page titles, descriptions and prop names, and jumps straight to an example.
+- **Navigation:** small group headings, 14px links, no list icons; scroll position is remembered for the session.
+- **Showcase tiles:** a labelled region with a heading and a link to the docs of the main component; ids start with `showcase-`. Heavy tiles mount when scrolled into view.
 
 ## Do's and Don'ts
 
-- Do preserve routes, examples, theme switching, and keyboard navigation.
-- Do use cyan for the website's primary actions and navigation.
-- Do keep the landing preview interactive and code horizontally scrollable.
-- Do respect reduced-motion preferences.
-- Don't introduce gradients, promotional statistics, or unsupported product claims.
-- Don't change library component tokens as part of website styling.
-- Don't use a full expanded page outline to push mobile content below the fold.
+- Do keep one palette: change `brand.css`, not the shell CSS.
+- Do keep accent for action, link, focus and selection only.
+- Do preserve the test hooks: `#main-content`, `.docs-shell`, `#docs-page-title`, labelled demo sections, the colour-mode button names, the skip link.
+- Do respect reduced motion; components that vary motion by preference must not render differently on the server and the first client render (`useMotionPreference`).
+- Don't add colour literals outside `brand.css`.
+- Don't use `<details>` for anything but the mobile outline (a spec relies on it).
+- Don't hand-edit `src/generated`, the PNG brand assets (`pnpm exec node scripts/capture-brand.mjs`) or the library docs' tables as page copy.

@@ -376,7 +376,7 @@ These notes preserve the baseline evidence gathered before implementation. Subse
 Imported `src/styles/theme-runtime.ts` directly and observed:
 
 - Partial `{ spacing: { base: "20px" } }` emits 309 properties.
-- Implicit primary remains light `hsla(201, 49%, 36%)` and implicit card shadow is emitted.
+- Implicit primary remains light `hsla(202, 100%, 41%)` (#0084D1) and implicit card shadow is emitted.
 - Implicit derived Button height is absent, preserving the existing geometry fallback design.
 - Named dark selector is `[data-theme="dark"]`; named default selector is `[data-theme="default"]`.
 - Existing `{ base: {} }` produces sparse CSS as an explicit escape hatch.

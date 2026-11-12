@@ -5,7 +5,7 @@ description: >
     `--var-*` tokens and ~60 documented components. Use this skill whenever a project depends on
     @g4rcez/components or imports from it, or when the user wants to set it up, add or style a
     component (Button, Input, Select, Modal, Table, Calendar, Notifications, Tabs, forms, toasts,
-    command palette, VideoPlayer, PdfViewer, RichTextEditor, DrawingEditor, and others), change
+    command palette, VideoPlayer, PdfViewer, DrawingEditor, and others), change
     colors, spacing, radius or dark mode, configure themes, or replace native HTML controls and
     hand-rolled UI with library components. Read it before writing any UI in such a project, even
     if the user does not name the library.
@@ -141,13 +141,13 @@ Rules worth knowing before touching tokens:
 
 Read the matching file before use. Each file's frontmatter states the import path.
 
-**Core** — [Button](docs/Button.md), [Heading](docs/Heading.md), [Typography](docs/Typography.md) (Paragraph, Description, Info, PageTitle, PageHeader), [Tag](docs/Tag.md), [Polymorph](docs/Polymorph.md) (`as` rendering), [Slot](docs/Slot.md) (`asChild`), [Resizable](docs/Resizable.md) (animated height), [RenderOnView](docs/RenderOnView.md)
+**Core** — [Button](docs/Button.md), [ActionSwap](docs/ActionSwap.md) (cycling pill), [HoldToConfirm](docs/HoldToConfirm.md) (press-and-hold), [RollingText](docs/RollingText.md), [Heading](docs/Heading.md), [Typography](docs/Typography.md) (Paragraph, Description, Info, PageTitle, PageHeader), [Tag](docs/Tag.md), [Polymorph](docs/Polymorph.md) (`as` rendering), [Slot](docs/Slot.md) (`asChild`), [Resizable](docs/Resizable.md) (animated height), [RenderOnView](docs/RenderOnView.md)
 
-**Form** — [Form](docs/Form.md), [FormReset](docs/FormReset.md), [InputField](docs/InputField.md), [Input](docs/Input.md) (masks), [Textarea](docs/Textarea.md), [Select](docs/Select.md) (native), [Autocomplete](docs/Autocomplete.md) (searchable), [MultiSelect](docs/MultiSelect.md), [Checkbox](docs/Checkbox.md), [Radiobox](docs/Radiobox.md), [Switch](docs/Switch.md), [Slider](docs/Slider.md), [DatePicker](docs/DatePicker.md), [FileUpload](docs/FileUpload.md), [TaskList](docs/TaskList.md)
+**Form** — [Form](docs/Form.md), [FormReset](docs/FormReset.md), [InputField](docs/InputField.md), [Input](docs/Input.md) (masks), [Textarea](docs/Textarea.md), [Select](docs/Select.md) (native), [MorphSelect](docs/MorphSelect.md) (morphing picker), [Autocomplete](docs/Autocomplete.md) (searchable), [MultiSelect](docs/MultiSelect.md), [Checkbox](docs/Checkbox.md), [Radiobox](docs/Radiobox.md), [Switch](docs/Switch.md), [Slider](docs/Slider.md), [DatePicker](docs/DatePicker.md), [FileUpload](docs/FileUpload.md), [TaskList](docs/TaskList.md)
 
-**Editors and media** — [RichTextEditor](docs/rich-text-editor.md) (Markdown), [DrawingEditor](docs/drawing-editor.md) (layered canvas, PNG export), [VideoPlayer](docs/video-player.md), [PdfViewer](docs/pdf-viewer.md)
+**Editors and media** — [DrawingEditor](docs/drawing-editor.md) (layered canvas, PNG export), [VideoPlayer](docs/video-player.md), [PdfViewer](docs/pdf-viewer.md)
 
-**Display** — [Alert](docs/Alert.md), [Card](docs/Card.md) (+ StatsCard), [Stats](docs/Stats.md), [Empty](docs/Empty.md), [Skeleton](docs/Skeleton.md), [Spinner](docs/Spinner.md), [Progress](docs/Progress.md), [Step](docs/Step.md), [Tabs](docs/Tabs.md), [Timeline](docs/Timeline.md), [List](docs/List.md), [AnimatedList](docs/AnimatedList.md), [SwipeableList](docs/SwipeableList.md), [Masonry](docs/Masonry.md), [Calendar](docs/Calendar.md), [Shortcut](docs/Shortcut.md), [Notifications](docs/Notifications.md) (toasts)
+**Display** — [Alert](docs/Alert.md), [Card](docs/Card.md) (+ StatsCard), [Stats](docs/Stats.md), [Empty](docs/Empty.md), [Skeleton](docs/Skeleton.md), [Spinner](docs/Spinner.md), [Progress](docs/Progress.md), [Step](docs/Step.md), [Tabs](docs/Tabs.md), [Timeline](docs/Timeline.md), [List](docs/List.md), [AnimatedList](docs/AnimatedList.md), [SwipeableList](docs/SwipeableList.md), [CardStack](docs/CardStack.md) (swipe deck), [Reactions](docs/Reactions.md), [Masonry](docs/Masonry.md), [Calendar](docs/Calendar.md), [Shortcut](docs/Shortcut.md), [Notifications](docs/Notifications.md) (toasts)
 
 **Floating** — [Modal](docs/Modal.md) (dialog, drawer, sheet, confirm), [Dropdown](docs/Dropdown.md), [Menu](docs/Menu.md), [Expand](docs/Expand.md), [Tooltip](docs/Tooltip.md), [Toolbar](docs/Toolbar.md), [CommandPalette](docs/CommandPalette.md), [Wizard](docs/Wizard.md) (guided tour)
 
@@ -177,7 +177,6 @@ Root also exports hooks and helpers: `useForm`, `usePrevious`, `useReactive`, `u
 | spinners, loading blocks | `Spinner`, `Skeleton` |
 | `<progress>` | `Progress` |
 | tabs inside one page | `Tabs` |
-| markdown textarea | `RichTextEditor` |
 | `<video>` | `VideoPlayer` |
 
 ## Traps that cost time
@@ -186,7 +185,6 @@ Root also exports hooks and helpers: `useForm`, `usePrevious`, `useReactive`, `u
 - `Tabs` switches same-page panels. It does not route.
 - `Select` wraps a native `<select>`. Use `Autocomplete` when the user needs to search.
 - `PdfViewer` does not bundle a PDF parser. Your app must supply rasterized pages (see its doc for size limits and the data-URL contract).
-- `RichTextEditor` is for Markdown, not arbitrary HTML. Its content is sanitized.
 - **Missing patterns:** Accordion, Breadcrumb, Pagination as a standalone, Carousel, inline Link and Disclosure have no
   library component. Compose native elements (`<details>`, `<nav>`, `<a>`) and library tokens. `MISSING_COMPONENTS.md` in the repo lists proposals, not exports.
 - Heavy components (Table, Calendar, DrawingEditor) have many CSS dependencies. A missing import shows up as unstyled UI, not an error.
