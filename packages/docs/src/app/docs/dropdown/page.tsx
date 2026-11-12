@@ -9,7 +9,6 @@ const NoArrowDropdown = () => {
     return (
         <Dropdown
             asChild
-            arrow={false}
             offset={4}
             align="start"
             className="w-72"
@@ -28,7 +27,7 @@ export default function DropdownPage() {
         <DocsLayout
             title="Dropdown"
             section="floating"
-            description="A floating panel triggered by a button, with focus management, keyboard dismissal, and optional hover or arrow display."
+            description="A floating panel triggered by a button, with focus management, keyboard dismissal and optional hover opening."
         >
             <ComponentDemo
                 title="Basic Dropdown"
@@ -67,6 +66,45 @@ function BasicDropdown() {
                                 </Button>
                             </li>
                         </ul>
+                    </Dropdown>
+                </Card>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Confirmation panel"
+                description="A title, a short muted paragraph and one action. The border is a soft hairline and the shadow lifts the panel off the page."
+                code={`"use client";
+import { Button, Dropdown } from "@g4rcez/components";
+
+function ReviewPanel() {
+  return (
+    <Dropdown asChild align="start" className="w-80" trigger={<Button theme="muted">Pull request #412</Button>} title="Ready for review">
+      <div className="flex flex-col gap-4">
+        <p className="text-muted-foreground">All required checks passed. Invite a teammate when you want a second pair of eyes.</p>
+        <Button theme="outlined" className="w-full">
+          Got it
+        </Button>
+      </div>
+    </Dropdown>
+  );
+}`}
+            >
+                <Card title="Review">
+                    <Dropdown
+                        asChild
+                        align="start"
+                        className="w-80"
+                        trigger={<Button theme="muted">Pull request #412</Button>}
+                        title="Ready for review"
+                    >
+                        <div className="flex flex-col gap-4">
+                            <p className="text-muted-foreground">
+                                All required checks passed. Invite a teammate when you want a second pair of eyes.
+                            </p>
+                            <Button theme="outlined" className="w-full">
+                                Got it
+                            </Button>
+                        </div>
                     </Dropdown>
                 </Card>
             </ComponentDemo>
@@ -170,8 +208,8 @@ function PlacementDropdown() {
             </ComponentDemo>
 
             <ComponentDemo
-                title="Without Arrow And Title"
-                description="Pass arrow={false} to remove the arrow. Without title the panel has no header, so pass aria-label. className sets the panel width and layout (w-72, w-auto). The design system CSS has no @layer, so it wins over utility classes: set the panel padding and radius with --var-dropdown-surface-padding and --var-dropdown-surface-radius, not with p-* or rounded-*. initialFocus picks the element that receives focus."
+                title="Without a title"
+                description="Without title the panel has no header, so pass aria-label. className sets the panel width and layout (w-72, w-auto). The design system CSS has no @layer, so it wins over utility classes: set the panel padding and radius with --var-dropdown-surface-padding and --var-dropdown-surface-radius, not with p-* or rounded-*. initialFocus picks the element that receives focus."
                 code={`"use client";
 import { useRef } from "react";
 import { Button, Dropdown, Input } from "@g4rcez/components";
@@ -181,7 +219,6 @@ function SearchDropdown() {
   return (
     <Dropdown
       asChild
-      arrow={false}
       offset={4}
       align="start"
       className="w-72"
@@ -194,7 +231,7 @@ function SearchDropdown() {
   );
 }`}
             >
-                <Card title="No arrow, no title">
+                <Card title="Search panel">
                     <NoArrowDropdown />
                 </Card>
             </ComponentDemo>

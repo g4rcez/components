@@ -1,11 +1,14 @@
 "use client";
 
-import { ArrowLeftIcon, ArrowRightIcon, CaretDownIcon, CheckIcon, WarningCircleIcon } from "@phosphor-icons/react";
-import { type Label, Tab, Tabs } from "@g4rcez/components";
+import { ArrowLeftIcon, ArrowRightIcon, CaretDownIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react";
+import { Button, type Label } from "@g4rcez/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from "react";
+import { type PropsWithChildren, type ReactNode, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { referenceSlugs } from "@/generated/reference";
 import { sections } from "../config/navigation";
+import { FallbackSections, ReferenceSections } from "./reference/page-sections";
+import { useReference } from "./reference/use-reference";
 
 type TocItem = {
     id: string;
@@ -33,20 +36,8 @@ const sectionLabels: Record<string, string> = {
     utilities: "Utilities",
 };
 
-type PageTab = "examples" | "usage" | "accessibility";
-
-const pageTabs: readonly PageTab[] = ["examples", "usage", "accessibility"];
-
-/** A deep link may name the tab (?tab=) or an anchor that lives inside a non-default tab. */
-const tabFromLocation = (): PageTab => {
-    const query = new URLSearchParams(window.location.search).get("tab");
-    const named = pageTabs.find((tab) => tab === query);
-    if (named) return named;
-    const hash = decodeURIComponent(window.location.hash.slice(1));
-    if (hash === "usage-guidance") return "usage";
-    if (hash === "accessibility-notes") return "accessibility";
-    return "examples";
-};
+/** Old links used ?tab=usage|accessibility. The page is one scroll now, so those land on the section instead. */
+const legacyTabTarget: Record<string, string> = { usage: "usage-guidance", accessibility: "accessibility-notes" };
 
 const slugify = (value: string) =>
     value
@@ -64,6 +55,7 @@ const DocsTableOfContents = ({ items, activeId, compact = false }: { items: TocI
                 <Link
                     key={item.id}
                     href={`#${item.id}`}
+                    title={item.text}
                     aria-current={item.id === activeId ? "location" : undefined}
                     className={`docs-toc-link docs-toc-link-level-${item.level}${item.id === activeId ? " docs-toc-link-active" : ""}`}
                 >
@@ -92,49 +84,46 @@ const DocsTableOfContents = ({ items, activeId, compact = false }: { items: TocI
     );
 };
 
-const UsageSummary = ({ title, useWhen, avoidWhen }: { title: string; useWhen?: ReactNode; avoidWhen?: ReactNode }) => (
-    <section id="usage-guidance" className="docs-usage" aria-labelledby="usage-guidance-title">
-        <h2 id="usage-guidance-title" className="docs-section-title">
-            When to use {title}
-        </h2>
-        <div className="docs-guidance-grid">
-            <div className="docs-guidance docs-guidance-use">
-                <div className="docs-guidance-heading">
-                    <span className="docs-guidance-mark" aria-hidden="true">
-                        <CheckIcon size={14} />
-                    </span>
-                    <h3>Use when</h3>
-                </div>
-                <p>{useWhen ?? `You need the documented ${title} interaction or presentation in a product workflow.`}</p>
-            </div>
-            <div className="docs-guidance docs-guidance-avoid">
-                <div className="docs-guidance-heading">
-                    <span className="docs-guidance-mark" aria-hidden="true">
-                        <WarningCircleIcon size={14} />
-                    </span>
-                    <h3>Avoid when</h3>
-                </div>
-                <p>{avoidWhen ?? `A native HTML element already provides the ${title} behavior you need.`}</p>
-            </div>
-        </div>
-    </section>
-);
+/** The import statement and a link to the markdown the reference below is generated from. */
+const ImportLine = ({ slug }: { slug: string }) => {
+    const reference = useReference(slug);
+    const [copied, setCopied] = useState(false);
+    if (!reference?.import) return null;
+    const statement = reference.import.replace(/^import\s+/, "import ");
 
-const AccessibilityNotes = ({ title, children }: { title: string; children?: ReactNode }) => (
-    <section id="accessibility-notes" className="docs-accessibility" aria-labelledby="accessibility-notes-title">
-        <h2 id="accessibility-notes-title" className="docs-section-title">
-            Accessibility
-        </h2>
-        <p>
-            {children ??
-                `Keep the ${title} labeled and use its documented keyboard interaction. The component preserves visible focus and communicates state without relying on color alone.`}
-        </p>
-        <ul>
-            <li>Keep keyboard focus visible and follow the documented key commands.</li>
-            <li>Provide an accessible name and connect descriptions or errors to the control.</li>
-        </ul>
-    </section>
-);
+    const copy = async () => {
+        try {
+            await navigator.clipboard.writeText(statement);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 2000);
+        } catch {
+            setCopied(false);
+        }
+    };
+
+    return (
+        <div className="docs-page-import-row">
+            <span className="docs-page-import">
+                <span className="docs-meta-label">Import</span>
+                <code>{statement}</code>
+                <Button
+                    type="button"
+                    size="icon"
+                    theme="ghost-neutral"
+                    className="docs-icon-button"
+                    aria-label={copied ? "Copied import statement" : "Copy import statement"}
+                    onClick={copy}
+                >
+                    {copied ? <CheckIcon size={14} aria-hidden="true" /> : <CopyIcon size={14} aria-hidden="true" />}
+                </Button>
+            </span>
+            <a className="docs-page-source" href={reference.source} target="_blank" rel="noreferrer">
+                Reference source
+                <ArrowRightIcon size={12} aria-hidden="true" />
+            </a>
+        </div>
+    );
+};
 
 export const DocsLayout = (props: PropsWithChildren<Props>) => {
     const pathname = usePathname();
@@ -149,31 +138,25 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
     const next = currentIndex >= 0 && currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
     const [tocItems, setTocItems] = useState<TocItem[]>([]);
     const [activeId, setActiveId] = useState("");
-    const [tab, setTab] = useState<PageTab>("examples");
+    const [version, setVersion] = useState(0);
     const title = String(props.title);
     const sectionLabel = sectionLabels[props.section.toLocaleLowerCase()] ?? props.section;
+    const slug = pathname.replace(/^\/docs\/?/, "");
+    const hasReference = referenceSlugs.includes(slug);
+
+    // The generated sections arrive after first paint, so the outline is rebuilt when they do.
+    const sectionsReady = useCallback(() => setVersion((value) => value + 1), []);
 
     useEffect(() => {
-        setTab(tabFromLocation());
-    }, [pathname]);
-
-    useEffect(() => {
-        const hash = decodeURIComponent(window.location.hash.slice(1));
-        if (!hash) return;
-        const frame = window.requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView());
-        return () => window.cancelAnimationFrame(frame);
-    }, [tab]);
-
-    const selectTab = (id: string) => {
-        const next = pageTabs.find((item) => item === id);
-        if (!next || next === tab) return;
-        setTab(next);
         const url = new URL(window.location.href);
-        url.hash = "";
-        if (next === "examples") url.searchParams.delete("tab");
-        else url.searchParams.set("tab", next);
+        const tab = url.searchParams.get("tab");
+        if (!tab || !(tab in legacyTabTarget)) return;
+        url.searchParams.delete("tab");
+        url.hash = legacyTabTarget[tab];
         window.history.replaceState(window.history.state, "", url);
-    };
+        const frame = window.requestAnimationFrame(() => document.getElementById(legacyTabTarget[tab])?.scrollIntoView());
+        return () => window.cancelAnimationFrame(frame);
+    }, [pathname, version]);
 
     useEffect(() => {
         const frame = window.requestAnimationFrame(() => {
@@ -181,7 +164,9 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
             if (!article) return;
 
             const usedIds = new Set<string>();
-            const headings = Array.from(article.querySelectorAll<HTMLElement>("h2, h3")).filter((heading) => !heading.closest(".docs-toc"));
+            const headings = Array.from(article.querySelectorAll<HTMLElement>("h2, h3")).filter(
+                (heading) => !heading.closest(".docs-toc") && !heading.closest(".docs-guidance") && !heading.classList.contains("docs-ref-heading")
+            );
             const items = headings.flatMap((heading) => {
                 const text = heading.textContent?.trim() ?? "";
                 if (!text) return [];
@@ -199,11 +184,18 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
             });
 
             setTocItems(items);
-            setActiveId(items[0]?.id ?? "");
+            setActiveId((current) => (items.some((item) => item.id === current) ? current : (items[0]?.id ?? "")));
         });
 
         return () => window.cancelAnimationFrame(frame);
-    }, [pathname, tab]);
+    }, [pathname, version]);
+
+    useEffect(() => {
+        const hash = decodeURIComponent(window.location.hash.slice(1));
+        if (!hash) return;
+        const frame = window.requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView());
+        return () => window.cancelAnimationFrame(frame);
+    }, [pathname, version]);
 
     useEffect(() => {
         if (tocItems.length === 0) return;
@@ -223,8 +215,11 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
         return () => observer.disconnect();
     }, [tocItems]);
 
+    const guidance = { title, useWhen: props.useWhen, avoidWhen: props.avoidWhen, accessibility: props.accessibility };
+
     return (
         <div className="docs-reading-layout">
+            <title>{`${title} — components`}</title>
             <article ref={articleRef} className="docs-article" aria-labelledby="docs-page-title">
                 <header className="docs-page-header">
                     <nav className="docs-breadcrumb" aria-label="Breadcrumb">
@@ -245,6 +240,12 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                             <span className="docs-meta-label">Section</span>
                             {sectionLabel}
                         </span>
+                        {hasReference ? (
+                            // The row is always its own line and reserves its height, so the page does not jump when the import arrives.
+                            <Suspense fallback={<div className="docs-page-import-row" aria-hidden="true" />}>
+                                <ImportLine slug={slug} />
+                            </Suspense>
+                        ) : null}
                     </div>
                 </header>
 
@@ -252,26 +253,25 @@ export const DocsLayout = (props: PropsWithChildren<Props>) => {
                 {isGuide ? (
                     <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
                 ) : (
-                    <Tabs active={tab} onChange={selectTab} aria-label="Page sections" container="docs-page-tabs" className="docs-page-tabs-body">
-                        <Tab id="examples" title="Examples">
-                            <section className="docs-examples" aria-labelledby="docs-examples-title">
-                                <h2 id="docs-examples-title" className="docs-section-title">
-                                    Examples
-                                </h2>
-                                <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
-                            </section>
-                        </Tab>
-                        <Tab id="usage" title="Usage">
-                            <UsageSummary title={title} useWhen={props.useWhen} avoidWhen={props.avoidWhen} />
-                        </Tab>
-                        <Tab id="accessibility" title="Accessibility">
-                            <AccessibilityNotes title={title}>{props.accessibility}</AccessibilityNotes>
-                        </Tab>
-                    </Tabs>
+                    <>
+                        <section id="examples" className="docs-section docs-examples" aria-labelledby="docs-examples-title">
+                            <h2 id="docs-examples-title" className="docs-section-title">
+                                Examples
+                            </h2>
+                            <div className={`docs-content ${props.className ?? ""}`}>{props.children}</div>
+                        </section>
+                        {hasReference ? (
+                            <Suspense fallback={<FallbackSections {...guidance} />}>
+                                <ReferenceSections slug={slug} onReady={sectionsReady} {...guidance} />
+                            </Suspense>
+                        ) : (
+                            <FallbackSections {...guidance} />
+                        )}
+                    </>
                 )}
 
                 {relatedItems.length > 0 ? (
-                    <section id="related-components" className="docs-related" aria-labelledby="related-components-title">
+                    <section id="related-components" className="docs-section docs-related" aria-labelledby="related-components-title">
                         <h2 id="related-components-title" className="docs-section-title">
                             {isGuide ? "Continue reading" : "Related components"}
                         </h2>

@@ -1,0 +1,141 @@
+/* Generated API reference: tables, lists and sub-headings. */
+
+.docs-ref-heading {
+    margin: 32px 0 12px;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+h4.docs-ref-heading {
+    font-size: 0.9375rem;
+}
+
+.docs-ref-text {
+    max-inline-size: 70ch;
+    margin: 0 0 14px;
+    color: var(--var-color-muted-foreground);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.docs-ref-list {
+    display: grid;
+    gap: 8px;
+    max-inline-size: 72ch;
+    margin: 0 0 16px;
+    padding-inline-start: 20px;
+    color: var(--var-color-muted-foreground);
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.docs-ref-list code,
+.docs-ref-text code {
+    font-size: 0.875em;
+}
+
+.docs-ref-code {
+    padding: 1px 5px;
+    border-radius: 5px;
+    background: var(--var-color-muted);
+    color: var(--var-color-foreground);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+}
+
+.docs-ref-pre {
+    overflow-x: auto;
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    border: var(--var-border-hairline) solid var(--var-color-border);
+    border-radius: var(--docs-layout-radius);
+    background: var(--docs-surface);
+    font: 13px/1.6 var(--font-mono);
+}
+
+.docs-ref-scroll {
+    overflow-x: auto;
+    margin: 0 0 20px;
+    border: var(--var-border-hairline) solid var(--var-color-border);
+    border-radius: var(--docs-layout-radius);
+}
+
+.docs-ref-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: start;
+}
+
+.docs-ref-table th,
+.docs-ref-table td {
+    padding: 10px 14px;
+    border-block-end: var(--var-border-hairline) solid var(--var-color-border);
+    vertical-align: top;
+    text-align: start;
+}
+
+.docs-ref-table thead th {
+    background: var(--docs-surface);
+    color: var(--var-color-muted-foreground);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.docs-ref-table tbody tr:last-child > * {
+    border-block-end: 0;
+}
+
+.docs-ref-table .docs-ref-name {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.docs-ref-table .docs-ref-name .docs-ref-code {
+    background: var(--docs-primary-soft);
+    color: var(--var-color-primary);
+}
+
+.docs-ref-table td[data-column="type"] {
+    min-inline-size: 180px;
+}
+
+/* Defaults are short literals: never break them mid-token. */
+.docs-ref-table td[data-column="default"] {
+    white-space: nowrap;
+}
+
+.docs-ref-table td[data-column="description"],
+.docs-ref-table td[data-column="behavior"],
+.docs-ref-table td[data-column="purpose"],
+.docs-ref-table td[data-column="use"] {
+    min-inline-size: 240px;
+    color: var(--var-color-muted-foreground);
+}
+
+.docs-ref-none {
+    color: var(--var-color-muted-foreground);
+}
+
+/* Long token tables show a window of rows until revealed. */
+.docs-ref-clamp[data-clamped="true"] {
+    position: relative;
+    max-block-size: 460px;
+    overflow: hidden;
+}
+
+.docs-ref-clamp[data-clamped="true"]::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    block-size: 96px;
+    background: linear-gradient(to bottom, transparent, var(--var-color-background));
+    pointer-events: none;
+}
+
+.docs-ref-more {
+    margin-block-start: 8px;
+}

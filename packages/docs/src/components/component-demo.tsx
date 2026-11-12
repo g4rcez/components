@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowCounterClockwiseIcon, LinkIcon } from "@phosphor-icons/react";
+import { ArrowCounterClockwiseIcon, CodeIcon, LinkIcon } from "@phosphor-icons/react";
 import Link from "next/link";
-import { type PropsWithChildren, useState } from "react";
+import { type PropsWithChildren, useId, useState } from "react";
 import { Button } from "@g4rcez/components";
 import { CodeBlock } from "./code-block";
 
@@ -17,6 +17,10 @@ type ComponentDemoProps = {
 
 const slugify = (value: string) => value.toLocaleLowerCase().replace(/\s+/g, "-");
 
+/**
+ * A live example in a preview panel, with its source one press away. The source is only rendered (and highlighted)
+ * once it is opened, so a page with many demos stays light.
+ */
 export const ComponentDemo = ({
     title,
     description,
@@ -27,6 +31,8 @@ export const ComponentDemo = ({
     onReset,
 }: PropsWithChildren<ComponentDemoProps>) => {
     const id = slugify(title);
+    const codeId = useId();
+    const [showCode, setShowCode] = useState(false);
     const [resetAnnouncement, setResetAnnouncement] = useState("");
 
     const handleReset = () => {
@@ -55,8 +61,22 @@ export const ComponentDemo = ({
             </div>
             <div className="docs-example-panel">
                 <div className={`docs-example-preview ${demoClassName}`}>{children}</div>
-                <div className="docs-example-code">
-                    <CodeBlock code={code} />
+                <div className="docs-example-code" data-open={showCode ? "true" : "false"}>
+                    <Button
+                        type="button"
+                        size="small"
+                        theme="ghost-neutral"
+                        className="docs-example-toggle"
+                        aria-expanded={showCode}
+                        aria-controls={codeId}
+                        onClick={() => setShowCode((value) => !value)}
+                    >
+                        <CodeIcon size={15} aria-hidden="true" />
+                        {showCode ? "Hide code" : "Show code"}
+                    </Button>
+                    <div id={codeId} hidden={!showCode}>
+                        {showCode ? <CodeBlock code={code} /> : null}
+                    </div>
                 </div>
             </div>
             <span className="sr-only" role="status" aria-live="polite">

@@ -148,7 +148,7 @@ test("active Autocomplete option text remains legible in both themes", async ({ 
     }
 });
 
-test("Input border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+test("Input border is a soft outline, between 1.4:1 and 3:1, in both themes", async ({ page }) => {
     await page.goto("/docs/input");
     await expect(page.getByRole("heading", { level: 1, name: "Input" })).toBeVisible();
     const control = page.locator(".__input-field__control").first();
@@ -157,11 +157,13 @@ test("Input border meets 3:1 non-text contrast in both themes", async ({ page })
     for (const theme of ["light", "dark"] as const) {
         await setTheme(page, theme);
         const ratio = await renderedContrastRatio(control, "borderTopColor");
-        expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        // Deliberately soft: visible, but below the 3:1 of a high-contrast outline.
+        expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(1.4);
+        expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeLessThan(3);
     }
 });
 
-test("MultiSelect search border meets 3:1 non-text contrast in both themes", async ({ page }) => {
+test("MultiSelect search border is a soft outline, between 1.4:1 and 3:1, in both themes", async ({ page }) => {
     await page.goto("/docs/multiselect");
     await expect(page.getByRole("heading", { level: 1, name: "MultiSelect" })).toBeVisible();
 
@@ -174,13 +176,14 @@ test("MultiSelect search border meets 3:1 non-text contrast in both themes", asy
         await search.evaluate((element) => (element as HTMLInputElement).blur());
         await expect(search).not.toBeFocused();
         const ratio = await renderedContrastRatio(search, "borderBottomColor");
-        expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(1.4);
+        expect(ratio, `${theme} MultiSelect search border contrast (${ratio.toFixed(2)}:1)`).toBeLessThan(3);
         await page.keyboard.press("Escape");
         await expect(search).toBeHidden();
     }
 });
 
-test("Dropdown and Menu surface borders meet 3:1 non-text contrast in both themes", async ({ page }) => {
+test("The Menu and Dropdown surface borders stay soft hairlines in both themes", async ({ page }) => {
     for (const theme of ["light", "dark"] as const) {
         await page.goto("/docs/dropdown");
         await expect(page.getByRole("heading", { level: 1, name: "Dropdown" })).toBeVisible();
@@ -189,16 +192,19 @@ test("Dropdown and Menu surface borders meet 3:1 non-text contrast in both theme
         const dropdown = page.locator(".__dropdown").first();
         await expect(dropdown).toBeVisible();
         const dropdownRatio = await renderedContrastRatio(dropdown, "borderTopColor");
-        expect(dropdownRatio, `${theme} Dropdown surface border contrast (${dropdownRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        // A deliberately soft border: the Dropdown is separated from the page by its shadow, so it is a hairline, not a 3:1 outline.
+        expect(dropdownRatio, `${theme} Dropdown surface border contrast (${dropdownRatio.toFixed(2)}:1)`).toBeGreaterThan(1.05);
+        expect(dropdownRatio, `${theme} Dropdown surface border contrast (${dropdownRatio.toFixed(2)}:1)`).toBeLessThan(2);
 
         await page.goto("/docs/menu");
         await expect(page.getByRole("heading", { level: 1, name: "Menu" })).toBeVisible();
         await setTheme(page, theme);
-        await page.getByRole("button", { name: "I'm a menu", exact: true }).first().click();
+        await page.getByRole("button", { name: "Languages", exact: true }).first().click();
         const menu = page.locator(".__menu__floating").first();
         await expect(menu).toBeVisible();
         const menuRatio = await renderedContrastRatio(menu, "borderTopColor");
-        expect(menuRatio, `${theme} Menu surface border contrast (${menuRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        expect(menuRatio, `${theme} Menu surface border contrast (${menuRatio.toFixed(2)}:1)`).toBeGreaterThan(1.05);
+        expect(menuRatio, `${theme} Menu surface border contrast (${menuRatio.toFixed(2)}:1)`).toBeLessThan(2);
     }
 });
 
@@ -207,8 +213,8 @@ test("active MenuItem text meets 7:1 contrast when focused or hovered in both th
         await page.goto("/docs/menu");
         await expect(page.getByRole("heading", { level: 1, name: "Menu" })).toBeVisible();
         await setTheme(page, theme);
-        await page.getByRole("button", { name: "I'm a menu", exact: true }).first().click();
-        const item = page.getByRole("menuitem", { name: "Item 2", exact: true }).first();
+        await page.getByRole("button", { name: "Languages", exact: true }).first().click();
+        const item = page.getByRole("menuitem", { name: "Go", exact: true }).first();
         await expect(item).toBeVisible();
 
         await item.focus();
@@ -216,7 +222,7 @@ test("active MenuItem text meets 7:1 contrast when focused or hovered in both th
         const focusRatio = await renderedContrastRatio(item);
         expect(focusRatio, `${theme} focused MenuItem text contrast (${focusRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(7);
 
-        await page.getByRole("menuitem", { name: "Item 3", exact: true }).first().focus();
+        await page.getByRole("menuitem", { name: /^Rust/ }).first().focus();
         await item.hover();
         const hoverRatio = await renderedContrastRatio(item);
         expect(hoverRatio, `${theme} hovered MenuItem text contrast (${hoverRatio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(7);

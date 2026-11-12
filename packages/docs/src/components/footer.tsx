@@ -1,5 +1,6 @@
 import { Button } from "@g4rcez/components";
 import Link from "next/link";
+import { LogoMark } from "./brand/logo";
 import { GithubIcon } from "./icons/github";
 
 const footerLinks = {
@@ -24,10 +25,8 @@ export const Footer = () => (
     <footer className="site-footer">
         <div className="site-footer-brand">
             <Link href="/" className="docs-brand">
-                <span className="docs-brand-mark" aria-hidden="true">
-                    C
-                </span>
-                <span>@g4rcez/components</span>
+                <LogoMark />
+                <span>components</span>
             </Link>
             <p>
                 React components for interfaces

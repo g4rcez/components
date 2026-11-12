@@ -1,46 +1,47 @@
 "use client";
 import { GithubIcon } from "@/components/icons/github";
 import { ToggleMode } from "@/components/toggle-mode";
-import { Button, Modal } from "@g4rcez/components";
+import { Button, Modal, Tag } from "@g4rcez/components";
 import { ListIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Wordmark } from "./brand/logo";
 import { Navigation } from "./navigation";
+import { DocsSearch } from "./search/docs-search";
+
+/** Other parts of the site (the landing page showcase) ask the header to open the search through this event. */
+export const OPEN_SEARCH_EVENT = "docs:open-search";
 
 export const Header = () => {
-    const [open, setOpen] = useState(false);
-    const searchInputRef = useRef<HTMLInputElement>(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const drawerFocusRef = useRef<HTMLButtonElement>(null);
     const pathname = usePathname();
     const isGuide = ["/docs", "/docs/get-started", "/docs/setup"].includes(pathname);
 
     useEffect(() => {
-        setOpen(false);
+        setMenuOpen(false);
     }, [pathname]);
-
-    const focusDocumentationSearch = useCallback(() => {
-        const search = document.getElementById("docs-navigation-search");
-        if (search && window.matchMedia("(min-width: 960px)").matches) {
-            search.focus();
-        } else {
-            setOpen(true);
-        }
-    }, []);
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
             const target = event.target;
             const isTyping = target instanceof HTMLElement && (target.isContentEditable || target.matches("input, textarea, select"));
-            const commandSearch = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
-            const slashSearch = event.key === "/" && !isTyping && !event.altKey && !event.metaKey && !event.ctrlKey;
-            if (!commandSearch && !slashSearch) return;
-            event.preventDefault();
-            if (open) searchInputRef.current?.focus();
-            else focusDocumentationSearch();
+            if (event.key === "/" && !isTyping && !event.altKey && !event.metaKey && !event.ctrlKey) {
+                event.preventDefault();
+                setMenuOpen(false);
+                setSearchOpen(true);
+            }
         };
+        const onRequest = () => setSearchOpen(true);
         window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-    }, [focusDocumentationSearch, open]);
+        window.addEventListener(OPEN_SEARCH_EVENT, onRequest);
+        return () => {
+            window.removeEventListener("keydown", onKeyDown);
+            window.removeEventListener(OPEN_SEARCH_EVENT, onRequest);
+        };
+    }, []);
 
     return (
         <header className="docs-header">
@@ -53,16 +54,13 @@ export const Header = () => {
                         className="docs-icon-button docs-menu-button"
                         aria-label="Open documentation navigation"
                         aria-controls="mobile-docs-navigation"
-                        aria-expanded={open}
-                        onClick={() => setOpen(true)}
+                        aria-expanded={menuOpen}
+                        onClick={() => setMenuOpen(true)}
                     >
                         <ListIcon size={21} aria-hidden="true" />
                     </Button>
                     <Link href="/" className="docs-brand" aria-label="Components home">
-                        <span className="docs-brand-mark" aria-hidden="true">
-                            C
-                        </span>
-                        <span className="docs-brand-name">components</span>
+                        <Wordmark />
                     </Link>
                     <nav className="docs-header-nav" aria-label="Primary navigation">
                         <Link href="/docs" aria-current={isGuide ? "page" : undefined}>
@@ -80,12 +78,15 @@ export const Header = () => {
                         theme="ghost-neutral"
                         className="docs-search-trigger"
                         aria-label="Search documentation"
-                        onClick={focusDocumentationSearch}
+                        onClick={() => setSearchOpen(true)}
                     >
                         <MagnifyingGlassIcon size={17} aria-hidden="true" />
                         <span>Search documentation...</span>
                         <kbd aria-hidden="true">⌘ K</kbd>
                     </Button>
+                    <Tag appearance="soft" theme="neutral" size="tiny" className="docs-version">
+                        v7
+                    </Tag>
                     <Button
                         as="a"
                         href="https://github.com/g4rcez/components"
@@ -101,27 +102,37 @@ export const Header = () => {
                     <ToggleMode />
                 </div>
             </div>
+            <DocsSearch open={searchOpen} onChange={setSearchOpen} />
             <Modal
                 closable
-                open={open}
+                open={menuOpen}
                 title="Documentation"
                 type="drawer"
                 position="left"
                 forceType
                 resizer={false}
-                initialFocus={searchInputRef}
+                initialFocus={drawerFocusRef}
                 overlayClickClose
-                onChange={setOpen}
+                onChange={setMenuOpen}
                 className="docs-mobile-modal"
                 bodyClassName="docs-mobile-modal-body"
             >
+                <Button
+                    ref={drawerFocusRef}
+                    type="button"
+                    size="small"
+                    theme="neutral"
+                    className="docs-mobile-search"
+                    onClick={() => {
+                        setMenuOpen(false);
+                        setSearchOpen(true);
+                    }}
+                >
+                    <MagnifyingGlassIcon size={17} aria-hidden="true" />
+                    Search documentation
+                </Button>
                 <div id="mobile-docs-navigation" className="docs-mobile-navigation">
-                    <Navigation
-                        onNavigateAction={() => setOpen(false)}
-                        searchId="docs-mobile-navigation-search"
-                        sectionIdPrefix="mobile-docs-nav"
-                        searchInputRef={searchInputRef}
-                    />
+                    <Navigation onNavigateAction={() => setMenuOpen(false)} sectionIdPrefix="mobile-docs-nav" />
                 </div>
             </Modal>
         </header>

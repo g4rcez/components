@@ -66,7 +66,7 @@ test.describe("mouse device (hover, fine pointer)", () => {
         await page.goto("/docs/buttons");
         const normal = button(page);
         await normal.hover();
-        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(20, 109, 123)");
+        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(31, 52, 189)");
         expect(await normal.evaluate((element) => getComputedStyle(element).opacity)).toBe("1");
     });
 
@@ -74,7 +74,7 @@ test.describe("mouse device (hover, fine pointer)", () => {
         await page.goto("/docs/buttons");
         const normal = button(page);
         await normal.focus();
-        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(20, 109, 123)");
+        await expect.poll(() => normal.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(31, 52, 189)");
         expect(await normal.evaluate((element) => getComputedStyle(element).opacity)).toBe("1");
     });
 
@@ -92,7 +92,8 @@ test.describe("mouse device (hover, fine pointer)", () => {
         await expect(resizer).toBeAttached();
         await expect.poll(() => resizer.evaluate((element) => getComputedStyle(element).opacity)).toBe("0");
 
-        await page.locator(".__table-head__cell").first().hover();
+        // The first header cell can be the selection checkbox, which has no resizer: hover the first column header instead.
+        await page.locator(".__table-head__cell[data-tableheader]").first().hover();
         await expect.poll(() => resizer.evaluate((element) => getComputedStyle(element).opacity)).toBe("1");
     });
 

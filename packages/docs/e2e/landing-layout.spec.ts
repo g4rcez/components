@@ -14,36 +14,82 @@ for (const width of [320, 768, 1440]) {
     });
 }
 
-test("the preview triggers read as buttons and are tall enough to tap", async ({ page }) => {
+test("the hero states what the library is, with two ways in", async ({ page }) => {
     await page.goto("/");
-    for (const name of ["Click", "Menu"]) {
-        const trigger = page.locator(".landing-demo-controls").getByRole("button", { name, exact: true });
-        const style = await trigger.evaluate((el) => ({ border: getComputedStyle(el).borderTopWidth, height: el.getBoundingClientRect().height }));
-        expect(style.border).not.toBe("0px");
-        expect(style.height).toBeGreaterThanOrEqual(32);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("React components");
+    const hero = page.locator(".landing-hero");
+    await expect(hero.getByRole("link", { name: "Get started" })).toHaveAttribute("href", "/docs/get-started");
+    await expect(hero.getByRole("link", { name: "Browse components" })).toHaveAttribute("href", "/docs");
+    await expect(page).toHaveTitle(/components/);
+    expect(await page.locator("head > title").count()).toBe(1);
+});
+
+test("the install snippet has package manager tabs and copies the command", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+    const tabs = page.getByRole("tablist", { name: "Package manager" });
+    await expect(tabs.getByRole("tab", { name: "pnpm" })).toHaveAttribute("aria-selected", "true");
+    await tabs.getByRole("tab", { name: "yarn" }).click();
+    await page.getByRole("button", { name: "Copy code example" }).first().click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("yarn add @g4rcez/components");
+});
+
+test("the showcase is a grid of live compositions, each labelled and linked to its docs", async ({ page }) => {
+    await page.goto("/");
+    const tiles = page.locator(".landing-tile");
+    expect(await tiles.count()).toBeGreaterThanOrEqual(12);
+    for (const tile of await tiles.all()) {
+        await expect(tile.locator(".landing-tile-head").getByRole("heading", { level: 3 })).toBeVisible();
+        await expect(tile.getByRole("link", { name: /read the docs$/ })).toHaveAttribute("href", /^\/docs\//);
+    }
+    for (const id of ["showcase-settings", "showcase-cards", "showcase-reactions", "showcase-deploy", "showcase-danger", "showcase-slider"]) {
+        await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
 });
 
-test("the window switches between the live preview and its source", async ({ page }) => {
+test("the showcase compositions are the real, working components", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("tab", { name: "Preview" })).toHaveAttribute("aria-selected", "true");
-    await expect(page.getByRole("heading", { name: /Small pieces/ })).toBeVisible();
+    const settings = page.locator("#showcase-settings");
+    await settings.scrollIntoViewIfNeeded();
+    await settings.getByRole("combobox", { name: /Language/ }).click();
+    await page.getByRole("option", { name: /Español/ }).click();
+    await expect(settings.getByRole("combobox", { name: /Language/ })).toHaveAccessibleName(/Español/);
 
-    await page.getByRole("tab", { name: "Code" }).click();
-    await expect(page.getByRole("region", { name: "tsx code example" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Small pieces/ })).toHaveCount(0);
+    const reactions = page.locator("#showcase-reactions");
+    await reactions.getByRole("button", { name: /^Thumbs up, 24/ }).click();
+    await expect(reactions.getByRole("button", { name: /^Thumbs up, 25, you reacted/ })).toBeVisible();
+
+    const cards = page.locator("#showcase-cards");
+    await cards.scrollIntoViewIfNeeded();
+    await expect(cards.getByRole("group", { name: /Lisbon, 1 of 4/ })).toBeVisible();
+    await cards.getByRole("button", { name: "Keep" }).click();
+    await expect(cards.getByRole("group", { name: /Copenhagen, 2 of 4/ })).toBeVisible();
 });
 
-test("the live composition sits beside the demo from 1024px and stacks below it", async ({ page }) => {
-    await page.setViewportSize({ width: 768, height: 900 });
+test("the search tile opens the real documentation search", async ({ page }) => {
     await page.goto("/");
-    const stacked = { demo: await box(page.locator(".landing-demo")), side: await box(page.locator(".landing-stage-side")) };
-    expect(stacked.side.y).toBeGreaterThanOrEqual(stacked.demo.y + stacked.demo.height - 1);
-
-    await page.setViewportSize({ width: 1280, height: 900 });
-    const wide = { demo: await box(page.locator(".landing-demo")), side: await box(page.locator(".landing-stage-side")) };
-    expect(wide.side.x).toBeGreaterThanOrEqual(wide.demo.x + wide.demo.width - 1);
+    await page.locator("#showcase-search").getByRole("button", { name: "Open search" }).click();
+    await expect(page.getByRole("dialog").getByRole("combobox", { name: "Search documentation" })).toBeFocused();
 });
+
+for (const { width, columns } of [
+    { width: 1440, columns: 3 },
+    { width: 768, columns: 2 },
+    { width: 390, columns: 1 },
+]) {
+    test(`the showcase uses ${columns} column(s) at ${width}px without sideways scroll`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto("/");
+        const used = await page.evaluate(() => {
+            const lefts = new Set(
+                [...document.querySelectorAll<HTMLElement>(".landing-tile")].map((tile) => Math.round(tile.getBoundingClientRect().left))
+            );
+            return { columns: lefts.size, fits: document.documentElement.scrollWidth <= window.innerWidth };
+        });
+        expect(used.fits).toBe(true);
+        expect(used.columns).toBe(columns);
+    });
+}
 
 test("the landing page has no floating quick-links button over the content", async ({ page }) => {
     await page.goto("/");
