@@ -315,8 +315,8 @@ const commands = [
 
 | Attribute | Applied to | Description |
 |---|---|---|
-| `data-component="command-palette"` | Root modal container | Palette root |
-| `data-has-preview="true"` | Root modal container | Enables the wider preview layout |
+| `data-component="command-palette"` | Palette wrapper inside the Modal body | Palette root |
+| `data-has-preview="true"` | Palette wrapper inside the Modal body | Marks the preview layout (the wider dialog comes from the overlay `__command-palette__overlay--preview` class) |
 | `data-component="command-palette-list"` | List container | Command list |
 | `data-component="command-palette-item"` | Each command option | One command option |
 | `data-component="command-palette-container"` | List/preview wrapper | Content area |
