@@ -1,0 +1,148 @@
+.__card-stack {
+    /* The container is the uncapped outer box, so the queries below see the space available, not the 20rem stage. */
+    container-type: inline-size;
+    display: flex;
+    justify-content: center;
+    inline-size: 100%;
+}
+
+.__card-stack__body {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--var-spacing-base) * 1);
+    inline-size: min(100%, 20rem);
+}
+
+.__card-stack__stage {
+    position: relative;
+    inline-size: 100%;
+    /* The cards beneath peek out below the top one, 12px per level, so keep the controls clear of them. */
+    margin-block-end: calc(var(--var-spacing-base) * 2.25);
+    aspect-ratio: 4 / 5;
+    border-radius: var(--var-card-surface-radius, calc(var(--var-radius-base) * 0.75));
+    outline: 0;
+}
+
+.__card-stack__stage:focus-visible {
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
+}
+
+@media (forced-colors: active) {
+    .__card-stack__stage:focus-visible {
+        outline: var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) solid ButtonText;
+        box-shadow: none;
+    }
+}
+
+/* Short viewports and narrow containers get shorter cards. */
+@container (max-width: 26rem) {
+    .__card-stack__stage {
+        aspect-ratio: 1 / 1;
+    }
+}
+
+.__card-stack__card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--var-border-hairline) solid var(--var-card-border);
+    border-radius: inherit;
+    color: var(--var-color-foreground);
+    background: var(--var-card-background);
+    box-shadow: var(--var-shadow-card);
+    /* Vertical swipes still scroll the page; horizontal ones belong to the card. */
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transform-origin: 50% 100%;
+}
+
+.__card-stack__card[data-top="true"] {
+    cursor: grab;
+}
+
+.__card-stack__card[data-top="true"]:active {
+    cursor: grabbing;
+}
+
+.__card-stack__card[data-top="false"] {
+    pointer-events: none;
+}
+
+/* Directional stamps fade in with the drag distance. */
+.__card-stack__stamp {
+    position: absolute;
+    inset-block-start: calc(var(--var-spacing-base) * 1.25);
+    padding: calc(var(--var-spacing-base) * 0.25) calc(var(--var-spacing-base) * 0.75);
+    border: calc(var(--var-border-hairline) * 2) solid currentColor;
+    border-radius: calc(var(--var-radius-base) * 0.375);
+    background: var(--var-card-background);
+    font-size: calc(var(--var-fontsize) * 1);
+    font-weight: var(--var-font-weight-medium);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.__card-stack__stamp-left {
+    inset-inline-end: calc(var(--var-spacing-base) * 1.25);
+    color: var(--var-color-danger);
+    rotate: 10deg;
+}
+
+.__card-stack__stamp-right {
+    inset-inline-start: calc(var(--var-spacing-base) * 1.25);
+    color: var(--var-color-success);
+    rotate: -10deg;
+}
+
+.__card-stack__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--var-spacing-base) * 0.5);
+}
+
+@container (max-width: 22.5rem) {
+    .__card-stack__undo-label {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+}
+
+.__card-stack__empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--var-spacing-base) * 0.75);
+    border: var(--var-border-hairline) dashed var(--var-card-border);
+    border-radius: inherit;
+    color: var(--var-color-muted-foreground);
+    text-align: center;
+}
+
+.__card-stack__hint,
+.__card-stack__status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

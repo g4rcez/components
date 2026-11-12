@@ -1,0 +1,141 @@
+.__hold-to-confirm {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: var(--var-button-rounded, calc(var(--var-radius-base) * 0.5));
+    color: var(--var-color-foreground);
+    background: var(--var-color-background);
+    font: inherit;
+    font-size: var(--var-button-font-size);
+    font-weight: var(--var-font-weight-medium);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: box-shadow, transform, opacity;
+    transition-duration: var(--var-motion-duration-fast);
+    transition-timing-function: var(--var-motion-timing-out);
+}
+
+/* Hairline border painted above the fill so the sweep never covers it. */
+.__hold-to-confirm::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--var-border-hairline) var(--var-color-border);
+    pointer-events: none;
+}
+
+.__hold-to-confirm[data-holding="true"]:not([aria-disabled="true"]) {
+    transform: scale(0.97);
+}
+
+.__hold-to-confirm:focus-visible {
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
+}
+
+@media (forced-colors: active) {
+    .__hold-to-confirm:focus-visible {
+        outline: var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) solid ButtonText;
+        box-shadow: none;
+    }
+}
+
+.__hold-to-confirm:disabled,
+.__hold-to-confirm[aria-disabled="true"] {
+    cursor: default;
+}
+
+.__hold-to-confirm:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.__hold-to-confirm__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--var-color-danger);
+    transform-origin: left center;
+    transform: scaleX(0);
+    pointer-events: none;
+}
+
+.__hold-to-confirm--tone-neutral .__hold-to-confirm__fill {
+    background: var(--var-color-foreground);
+}
+
+.__hold-to-confirm__content {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--var-button-gap, calc(var(--var-spacing-base) * 0.375));
+    min-block-size: var(--var-button-height, calc(var(--var-spacing-base) * 2.5));
+    padding-block: var(--var-button-py, calc(var(--var-spacing-base) / 2));
+    padding-inline: var(--var-button-px, calc(var(--var-spacing-base) * 1));
+}
+
+/* Second copy of the content, revealed from the left at the same pace as the fill so the text color flips exactly at its edge. */
+.__hold-to-confirm__overlay {
+    position: absolute;
+    inset: 0;
+    color: var(--var-color-danger-foreground);
+    pointer-events: none;
+}
+
+.__hold-to-confirm--tone-neutral .__hold-to-confirm__overlay {
+    color: var(--var-color-background);
+}
+
+.__hold-to-confirm__icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    font-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    line-height: 1;
+}
+
+.__hold-to-confirm__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+}
+
+.__hold-to-confirm__label {
+    display: inline-block;
+}
+
+.__hold-to-confirm__hint,
+.__hold-to-confirm__status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__hold-to-confirm[data-holding="true"]:not([aria-disabled="true"]) {
+        transform: none;
+    }
+
+    .__hold-to-confirm {
+        transition-duration: 1ms;
+    }
+}

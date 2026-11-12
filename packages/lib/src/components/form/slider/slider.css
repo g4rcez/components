@@ -2,6 +2,42 @@
     box-sizing: border-box;
 }
 
+.__slider__row {
+    display: flex;
+    align-items: center;
+    gap: var(--var-slider-gap, calc(var(--var-spacing-base) * 0.75));
+}
+
+.__slider__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+}
+
+.__slider__icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    color: var(--var-color-muted-foreground);
+    line-height: 1;
+}
+
+/* The icons ride the stretch: the track pushes the one at the end it is pulled past, so neither is covered. */
+.__slider__icon[data-side="end"] {
+    transform: translateX(var(--slider-shift-max, 0px));
+}
+
+.__slider__icon[data-side="start"] {
+    transform: translateX(var(--slider-shift-min, 0px));
+}
+
+.__slider__icon > svg:not([width]) {
+    inline-size: 1.25em;
+    block-size: 1.25em;
+}
+
 .__slider__control {
     position: relative;
     display: flex;
@@ -12,12 +48,15 @@
     user-select: none;
 }
 
+/* Rubber-band: the root publishes --slider-scale-x / --slider-origin while a drag goes past either end. */
 .__slider__track {
     position: relative;
     flex-grow: 1;
     block-size: var(--var-slider-track-block-size, calc(var(--var-spacing-base) * 0.5));
     border-radius: var(--var-rounded-full);
     background-color: var(--var-color-background);
+    transform: scaleX(var(--slider-scale-x, 1));
+    transform-origin: var(--slider-origin, left center);
 }
 
 .__slider__indicator {
@@ -27,6 +66,7 @@
     background-color: var(--var-color-primary);
 }
 
+/* Base UI centers the thumb with the individual `translate` property, so the stretch uses `transform` and the press scale uses `scale`. */
 .__slider__thumb {
     display: block;
     box-sizing: border-box;
@@ -39,15 +79,139 @@
     background-color: var(--var-slider-thumb-background);
     box-shadow: var(--var-shadow-floating);
     cursor: grab;
+    transition-property: scale, border-color;
+    transition-duration: var(--var-motion-duration-fast);
+    transition-timing-function: var(--var-motion-timing-out);
+}
+
+.__slider__thumb[data-edge="max"] {
+    transform: translateX(var(--slider-shift-max, 0px));
+}
+
+.__slider__thumb[data-edge="min"] {
+    transform: translateX(var(--slider-shift-min, 0px));
 }
 
 .__slider__thumb:focus-within {
     border-color: var(--var-color-primary);
     outline: var(--var-slider-thumb-focus-outline-width, calc(var(--var-spacing-base) * 0.125)) solid var(--var-color-ring);
-    outline-offset: var(--var-slider-thumb-focus-outline-offset, calc( var(--var-spacing-base) * 0.125 ));
-    transform: scale(var(--var-slider-thumb-focus-scale));
+    outline-offset: var(--var-slider-thumb-focus-outline-offset, calc(var(--var-spacing-base) * 0.125));
+    scale: var(--var-slider-thumb-focus-scale);
+}
+
+.__slider__thumb[data-dragging] {
+    scale: var(--var-slider-thumb-drag-scale);
 }
 
 .__slider__thumb:active {
     cursor: grabbing;
+}
+
+.__slider__thumb[data-disabled] {
+    cursor: not-allowed;
+}
+
+/* Value tag that trails the thumb; motion drives its sway. */
+.__slider__tag {
+    position: absolute;
+    inset-block-end: calc(100% + var(--var-spacing-base) * 0.5);
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    padding: calc(var(--var-spacing-base) * 0.25) calc(var(--var-spacing-base) * 0.5);
+    border-radius: calc(var(--var-radius-base) * 0.5);
+    color: var(--var-color-background);
+    background: var(--var-color-foreground);
+    font-size: calc(var(--var-fontsize) * 0.75);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--var-motion-duration-fast) var(--var-motion-timing-out);
+}
+
+.__slider__thumb[data-dragging] .__slider__tag,
+.__slider__thumb:focus-within .__slider__tag {
+    opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__slider__thumb:hover .__slider__tag {
+        opacity: 1;
+    }
+}
+
+/* Marks are detents: a dragged thumb holds on each one, and the tick pops. */
+.__slider__tick {
+    position: absolute;
+    inset-block-start: 50%;
+    inline-size: 2px;
+    block-size: calc(var(--var-slider-track-block-size, calc(var(--var-spacing-base) * 0.5)) * 2.2);
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--var-color-foreground) 35%, transparent);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.__slider__tick[data-active="true"] {
+    background: var(--var-color-primary);
+    animation: var-slider-tick-pop 150ms var(--var-motion-timing-out);
+}
+
+@keyframes var-slider-tick-pop {
+    0% {
+        transform: translate(-50%, -50%) scaleY(1);
+    }
+
+    40% {
+        transform: translate(-50%, -50%) scaleY(1.4);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scaleY(1);
+    }
+}
+
+.__slider__marks {
+    position: relative;
+    block-size: calc(var(--var-spacing-base) * 1.25);
+    margin-block-start: calc(var(--var-spacing-base) * 0.125);
+}
+
+.__slider__mark-label {
+    position: absolute;
+    inset-block-start: 0;
+    padding: 0;
+    border: 0;
+    color: var(--var-color-muted-foreground);
+    background: transparent;
+    font: inherit;
+    font-size: calc(var(--var-fontsize) * 0.75);
+    line-height: 1.25;
+    white-space: nowrap;
+    cursor: pointer;
+    transform: translateX(-50%);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__slider__mark-label:hover {
+        color: var(--var-color-foreground);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__slider__thumb,
+    .__slider__tag {
+        transition-duration: 1ms;
+    }
+
+    .__slider__thumb[data-dragging] {
+        scale: 1;
+    }
+
+    .__slider__tick[data-active="true"] {
+        animation: none;
+    }
 }

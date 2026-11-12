@@ -1,0 +1,36 @@
+.__rolling-text {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: bottom;
+    white-space: pre;
+}
+
+.__rolling-text__visual {
+    position: relative;
+    display: inline-flex;
+    overflow: clip;
+    overflow-clip-margin: 0.1em;
+    font-variant-numeric: tabular-nums;
+}
+
+.__rolling-text__char {
+    display: inline-block;
+    will-change: transform, opacity;
+}
+
+.__rolling-text__char::before {
+    content: attr(data-char);
+}
+
+.__rolling-text__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

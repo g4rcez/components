@@ -1,0 +1,183 @@
+.__reactions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--var-reactions-gap, calc(var(--var-spacing-base) * 0.375));
+}
+
+.__reactions__pill,
+.__reactions__add {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--var-spacing-base) * 0.375);
+    min-block-size: var(--var-reactions-height, calc(var(--var-spacing-base) * 2));
+    padding-block: 0;
+    padding-inline: calc(var(--var-spacing-base) * 0.625);
+    border: 0;
+    border-radius: var(--var-rounded-full);
+    color: var(--var-color-foreground);
+    background: var(--var-color-background);
+    font: inherit;
+    font-size: calc(var(--var-fontsize) * 0.875);
+    font-weight: var(--var-font-weight-medium);
+    line-height: 1;
+    cursor: pointer;
+    outline: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, box-shadow, transform;
+    transition-duration: var(--var-motion-duration-fast);
+    transition-timing-function: var(--var-motion-timing-out);
+}
+
+/* Hairline painted on top so a state change never moves the layout. */
+.__reactions__pill::after,
+.__reactions__add::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--var-border-hairline) var(--var-color-border);
+    pointer-events: none;
+    transition: box-shadow var(--var-motion-duration-fast) var(--var-motion-timing-out);
+}
+
+.__reactions__pill[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--var-color-primary) 14%, var(--var-color-background));
+}
+
+.__reactions__pill[aria-pressed="true"]::after {
+    box-shadow: inset 0 0 0 var(--var-border-hairline) var(--var-color-primary);
+}
+
+.__reactions__pill:active,
+.__reactions__add:active {
+    transform: scale(0.96);
+}
+
+.__reactions__pill:focus-visible,
+.__reactions__add:focus-visible,
+.__reactions__option:focus-visible {
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
+}
+
+@media (forced-colors: active) {
+    .__reactions__pill:focus-visible,
+    .__reactions__add:focus-visible,
+    .__reactions__option:focus-visible {
+        outline: var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) solid ButtonText;
+        box-shadow: none;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__reactions__pill:hover,
+    .__reactions__add:hover {
+        background: var(--var-color-muted);
+    }
+}
+
+.__reactions__add {
+    color: var(--var-color-muted-foreground);
+}
+
+.__reactions__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--var-fontsize) * 1.125);
+    line-height: 1;
+}
+
+.__reactions__icon > svg {
+    inline-size: 1em;
+    block-size: 1em;
+}
+
+.__reactions__count {
+    display: inline-flex;
+    min-inline-size: 1ch;
+}
+
+/* The picker is a dropdown: tighten its surface, and let the toolbar inside carry the layout. */
+.__reactions__panel {
+    --var-dropdown-surface-padding: calc(var(--var-spacing-base) * 0.375);
+    --var-dropdown-surface-radius: calc(var(--var-radius-base) * 0.75);
+}
+
+.__reactions__picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--var-spacing-base) * 0.125);
+    max-inline-size: calc(var(--var-spacing-base) * 14);
+}
+
+.__reactions__option {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: calc(var(--var-spacing-base) * 2.25);
+    block-size: calc(var(--var-spacing-base) * 2.25);
+    padding: 0;
+    border: 0;
+    border-radius: calc(var(--var-radius-base) * 0.5);
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    font-size: calc(var(--var-fontsize) * 1.25);
+    line-height: 1;
+    cursor: pointer;
+    outline: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.__reactions__option[aria-pressed="true"] {
+    color: var(--var-color-primary);
+}
+
+.__reactions__option > svg,
+.__reactions__option > .__reactions__icon {
+    position: relative;
+    z-index: 1;
+}
+
+/* One highlight glides between the options as the pointer or focus moves. */
+.__reactions__highlight {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--var-color-muted);
+}
+
+.__reactions__status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__reactions__pill:active,
+    .__reactions__add:active {
+        transform: none;
+    }
+
+    .__reactions__pill,
+    .__reactions__add,
+    .__reactions__pill::after,
+    .__reactions__add::after {
+        transition-duration: 1ms;
+    }
+}
