@@ -1,7 +1,6 @@
 "use client";
 import {
     arrow,
-    autoPlacement,
     autoUpdate,
     flip,
     FloatingArrow,
@@ -20,15 +19,19 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import type React from "react";
 import { forwardRef, Fragment, isValidElement, useRef, useState } from "react";
 import { Polymorph, type PolymorphicProps } from "../../../components/core/polymorph/polymorph";
 import { FLOATING_DELAY, VIEWPORT_PADDING } from "../../../constants";
 import { Slot } from "../../core/slot/slot";
 import { mergeRefs } from "../../../lib/dom";
+import { floatingVariants } from "../../../lib/motion";
 import { noop } from "../../../lib/fns";
 import { tooltipStyles } from "./tooltip.styles";
 import type { ComponentLike, Label } from "../../../types";
+
+const tooltipVariants = floatingVariants();
 
 export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProps<
     {
@@ -36,7 +39,7 @@ export type TooltipProps<T extends React.ElementType = "span"> = PolymorphicProp
         title: Label;
         /** Use `title` itself as the trigger, with no wrapper element. Same contract as `Dropdown.asChild`. */
         asChild?: boolean;
-        /** Draw the arrow that points at the trigger. @default true */
+        /** Draw the arrow that points at the trigger. A plain tooltip has none, a `popover` has one. @default popover */
         arrow?: boolean;
         /** A click on the trigger closes the tooltip. It opens again only after the pointer leaves and enters again. @default false */
         closeOnClick?: boolean;
@@ -65,7 +68,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             children,
             placement,
             asChild = false,
-            arrow: showArrow = true,
+            arrow: arrowProp,
             closeOnClick = false,
             delay = FLOATING_DELAY,
             touch = true,
@@ -79,6 +82,7 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
         }: TooltipProps<T>,
         outerRef: React.ForwardedRef<HTMLSpanElement>
     ) {
+        const showArrow = arrowProp ?? popover;
         const isControlled = open !== undefined;
         const [innerOpen, setInnerOpen] = useState(false);
         const currentOpen = isControlled ? open : innerOpen;
@@ -98,26 +102,28 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
             if (!isControlled) setInnerOpen(nextOpen);
             onChange?.(nextOpen);
         };
-        const arrowMiddleware = showArrow ? [arrow({ padding: 5, element: arrowRef })] : [];
+        const arrowMiddleware = showArrow ? [arrow({ padding: 10, element: arrowRef })] : [];
         const {
             refs,
             floatingStyles,
             context,
+            isPositioned,
             placement: currentPlacement,
         } = useFloating({
-            placement,
+            placement: placement ?? "top",
             open: currentOpen,
+            // Motion owns `transform` for the enter and exit animation, so Floating UI positions with top and left.
+            transform: false,
             whileElementsMounted: autoUpdate,
             onOpenChange: handleOpenChange,
-            middleware: placement
-                ? [offset(5), flip({ fallbackAxisSideDirection: "start" }), shift({ padding: VIEWPORT_PADDING }), ...arrowMiddleware]
-                : [
-                      shift({ padding: VIEWPORT_PADDING }),
-                      offset(5),
-                      autoPlacement(),
-                      ...arrowMiddleware,
-                      flip({ fallbackAxisSideDirection: "start" }),
-                  ],
+            // `autoPlacement` and `flip` cannot be combined (Floating UI resets the placement on every pass, which put the
+            // tooltip far from its trigger), so a tooltip is placed on top by default and flips to the side with room.
+            middleware: [
+                offset(9),
+                flip({ fallbackAxisSideDirection: "start", padding: VIEWPORT_PADDING }),
+                shift({ padding: VIEWPORT_PADDING }),
+                ...arrowMiddleware,
+            ],
         });
         const dismiss = useDismiss(context, { enabled, bubbles: { escapeKey: true }, capture: { escapeKey: true } });
         const role = useRole(context, {
@@ -189,20 +195,40 @@ export const Tooltip: <T extends ComponentLike = "span">(_: TooltipProps<T>) => 
                         {title}
                     </Component>
                 )}
-                {currentOpen && (
-                    <FloatingPortal>
-                        <Polymorph
-                            {...getFloatingProps()}
-                            data-placement={currentPlacement}
-                            style={floatingStyles}
-                            ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
-                            className={tooltipStyles.className({})}
-                        >
-                            {showArrow && <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={tooltipStyles.slots.arrow} />}
-                            {children}
-                        </Polymorph>
-                    </FloatingPortal>
-                )}
+                <AnimatePresence>
+                    {currentOpen && (
+                        <FloatingPortal key="tooltip">
+                            <MotionConfig reducedMotion="user">
+                                <Polymorph
+                                    {...getFloatingProps()}
+                                    as={motion.div}
+                                    data-placement={currentPlacement}
+                                    style={floatingStyles}
+                                    custom={currentPlacement}
+                                    variants={tooltipVariants}
+                                    initial="initial"
+                                    animate={isPositioned ? "open" : "initial"}
+                                    exit="exit"
+                                    ref={refs.setFloating as React.Ref<React.ElementType<any, keyof React.JSX.IntrinsicElements>>}
+                                    className={tooltipStyles.className({})}
+                                >
+                                    {showArrow && (
+                                        <FloatingArrow
+                                            ref={arrowRef}
+                                            context={context}
+                                            width={14}
+                                            height={7}
+                                            tipRadius={2}
+                                            strokeWidth={1}
+                                            className={tooltipStyles.slots.arrow}
+                                        />
+                                    )}
+                                    {children}
+                                </Polymorph>
+                            </MotionConfig>
+                        </FloatingPortal>
+                    )}
+                </AnimatePresence>
             </Fragment>
         );
     }

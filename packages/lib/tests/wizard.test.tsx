@@ -110,6 +110,84 @@ describe("Wizard", () => {
         }
     });
 
+    it("scrolls a target that is outside the viewport into view, and leaves a visible one alone", async () => {
+        vi.stubGlobal(
+            "ResizeObserver",
+            class ResizeObserver {
+                observe() {}
+                unobserve() {}
+                disconnect() {}
+            }
+        );
+        const visible = document.createElement("button");
+        const below = document.createElement("button");
+        document.body.append(visible, below);
+        vi.spyOn(visible, "getBoundingClientRect").mockImplementation(() => new DOMRect(100, 100, 120, 40));
+        vi.spyOn(below, "getBoundingClientRect").mockImplementation(() => new DOMRect(100, window.innerHeight + 900, 120, 40));
+        const scrollVisible = vi.fn();
+        const scrollBelow = vi.fn();
+        visible.scrollIntoView = scrollVisible;
+        below.scrollIntoView = scrollBelow;
+
+        const { unmount } = renderWizard({
+            steps: [
+                { element: visible, title: "Visible target" },
+                { element: below, title: "Far target" },
+            ],
+        });
+        try {
+            await screen.findByText("Visible target");
+            expect(scrollVisible).not.toHaveBeenCalled();
+
+            fireEvent.keyDown(document, { key: "ArrowRight" });
+            await screen.findByText("Far target");
+            await waitFor(() => expect(scrollBelow).toHaveBeenCalledTimes(1));
+            expect(scrollBelow).toHaveBeenCalledWith({ block: "center", inline: "nearest", behavior: "smooth" });
+        } finally {
+            unmount();
+            visible.remove();
+            below.remove();
+        }
+    });
+
+    it("runs onEnter before looking up the target, so a step can open what it points at", async () => {
+        vi.stubGlobal(
+            "ResizeObserver",
+            class ResizeObserver {
+                observe() {}
+                unobserve() {}
+                disconnect() {}
+            }
+        );
+        const panel = document.createElement("button");
+        panel.id = "opened-by-step";
+        vi.spyOn(panel, "getBoundingClientRect").mockImplementation(() => new DOMRect(120, 140, 100, 32));
+        const onEnter = vi.fn(() => {
+            // The target mounts a moment after the step starts, like a modal that animates in.
+            window.setTimeout(() => document.body.append(panel), 250);
+        });
+        const { unmount } = renderWizard({
+            steps: [
+                { element: "#before", title: "Plain step" },
+                { element: "#opened-by-step", title: "Opens a panel", onEnter },
+            ],
+        });
+        try {
+            await screen.findByText("Plain step");
+            expect(onEnter).not.toHaveBeenCalled();
+
+            fireEvent.keyDown(document, { key: "ArrowRight" });
+            await screen.findByText("Opens a panel");
+            expect(onEnter).toHaveBeenCalledTimes(1);
+
+            // Found after it mounted, so the card is anchored to the target and not centered on the screen.
+            await waitFor(() => expect(screen.getByRole("dialog")).not.toHaveStyle({ top: "50%", left: "50%" }), { timeout: 3000 });
+        } finally {
+            unmount();
+            panel.remove();
+        }
+    });
+
     it("navigates with horizontal arrow keys", async () => {
         const user = userEvent.setup();
         const onChange = vi.fn();

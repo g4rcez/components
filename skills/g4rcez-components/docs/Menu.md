@@ -2,8 +2,8 @@
 title: Menu
 description: Floating application-action menu with nested submenus, keyboard navigation, hover support, and typeahead.
 package: "@g4rcez/components"
-export: "{ Menu, MenuItem }"
-import: "import { Menu, MenuItem } from '@g4rcez/components/menu'"
+export: "{ Menu, MenuItem, MenuSeparator, MenuLabel }"
+import: "import { Menu, MenuItem, MenuLabel, MenuSeparator } from '@g4rcez/components/menu'"
 category: floating
 ---
 
@@ -32,6 +32,10 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 | `floatingClassName` | `string` | — | Extra classes for the floating list container. |
 | `FloatingComponent` | `React.ElementType` | `"div"` | Element type for the floating container. |
 
+### MenuSeparator and MenuLabel
+
+`<MenuSeparator />` draws a hairline between groups (`role="separator"`). `<MenuLabel>People</MenuLabel>` is a small, non-focusable heading for the group that follows it.
+
 ### MenuItem
 
 | Prop | Type | Default | Description |
@@ -39,7 +43,10 @@ import { Menu, MenuItem } from "@g4rcez/components/menu";
 | `title` | `string` | — | Item text. Used for typeahead matching and the `title` attribute. |
 | `children` | `React.ReactNode` | — | Visual content of the item. |
 | `disabled` | `boolean` | `false` | Removes the item from keyboard navigation and typeahead. |
+| `Left` | `React.FC<IconProps>` | — | Icon before the label, in the muted color until the row is highlighted. |
 | `Right` | `React.FC<IconProps>` | — | Icon on the right side. |
+| `shortcut` | `string` | — | Key hint at the end of the row, such as `⌘N`. Display only: bind the key yourself. |
+| `tone` | `"default" \| "danger"` | `"default"` | `danger` colors a destructive row and highlights it with the soft danger surface. |
 | `role` | `"menuitem" \| "menuitemradio" \| "menuitemcheckbox"` | `"menuitem"` | ARIA role. Use `menuitemradio` for one choice in a group and `menuitemcheckbox` for an independent toggle. |
 | `checked` | `boolean` | `false` | Selection state of a radio or checkbox item. Sets `aria-checked` and draws a `Check` icon. Ignored for `menuitem`. |
 | `onClick` | `function` | — | Click handler. |
@@ -50,19 +57,24 @@ Geometry defaults use scoped `calc` fallbacks from `--var-spacing-base` and the 
 
 | Override | Library default |
 | --- | --- |
+| `--var-menu-surface-radius` | `calc(var(--var-radius-base) * 1)` |
+| `--var-menu-surface-padding` | `calc(var(--var-spacing-base) * 0.375)` |
+| `--var-menu-surface-min-inline-size` | `calc(var(--var-spacing-base) * 12)` |
+| `--var-menu-surface-max-block-size` | `calc(var(--var-spacing-base) * 28)` |
+| `--var-menu-item-radius` | `calc(var(--var-radius-base) * 0.625)` |
 | `--var-menu-item-min-inline-size` | `calc(var(--var-spacing-base) * 9)` |
-| `--var-menu-item-padding` | `calc(var(--var-spacing-base) * 0.625)` |
+| `--var-menu-item-padding` | `calc(var(--var-spacing-base) * 0.375) calc(var(--var-spacing-base) * 0.625)` |
 | `--var-menu-item-outline-width` | `calc(var(--var-spacing-base) * 0.125)` |
 | `--var-menu-item-outline-offset` | `calc(var(--var-spacing-base) * 0.125)` |
 
 | Token | CSS Variable | Purpose |
 | --- | --- | --- |
 | CSS override | `--var-menu-surface-background` | Menu list surface background |
-| CSS override | `--var-menu-surface-border` | Menu list border |
-| `shadow-shadow-floating` | `--var-shadow-floating` | Menu list drop shadow |
+| CSS override | `--var-menu-surface-border` | Menu list border (a soft hairline) |
+| CSS override | `--var-menu-surface-shadow` | Menu list drop shadow, built from the theme's shadow colors |
 | `z-floating` | `--var-layer-floating` | Floating list z-index |
-| CSS override | `--var-menu-item-active-background` | Active/focused item background |
-| CSS override | `--var-menu-item-active-foreground` | Active/focused item text |
+| CSS override | `--var-menu-item-active-background` | Active/focused item background, a soft wash |
+| CSS override | `--var-menu-item-active-foreground` | Active/focused item text, the same as the surface text |
 
 ## Examples
 

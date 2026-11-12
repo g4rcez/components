@@ -57,13 +57,13 @@ attributes, design tokens, and CSS dependencies.
 
 ## Public component references
 
-- Core: `Button`, `Heading`, `Polymorph`, `RenderOnView`, `Resizable`,
-  `Slot`, `Tag`, `Typography`
-- Display: `Alert`, `AnimatedList`, `Calendar`, `Card`, `Empty`, `List`,
-  `Masonry`, `Notifications`, `Progress`, `Shortcut`, `Skeleton`, `Spinner`,
+- Core: `ActionSwap`, `Button`, `Heading`, `HoldToConfirm`, `Polymorph`,
+  `RenderOnView`, `Resizable`, `RollingText`, `Slot`, `Tag`, `Typography`
+- Display: `Alert`, `AnimatedList`, `Calendar`, `Card`, `CardStack`, `Empty`,
+  `List`, `Masonry`, `Notifications`, `Progress`, `Reactions`, `Shortcut`, `Skeleton`, `Spinner`,
   `Stats`, `Step`, `SwipeableList`, `Tabs`, `Timeline`
 - Form: `Autocomplete`, `Checkbox`, `DatePicker`, `FileUpload`, `Form`,
-  `FormReset`, `Input`, `InputField`, `MultiSelect`, `Radiobox`, `Select`,
+  `FormReset`, `Input`, `InputField`, `MorphSelect`, `MultiSelect`, `Radiobox`, `Select`,
   `Slider`, `Switch`, `TaskList`, `Textarea`
 - Floating: `CommandPalette`, `Dropdown`, `Expand`, `Menu`, `Modal`,
   `Toolbar`, `Tooltip`, `Wizard`

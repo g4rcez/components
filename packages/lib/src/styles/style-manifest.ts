@@ -3,6 +3,12 @@ import { formStyles } from "../components/form/form/form.styles";
 import { inputStyles } from "../components/form/input/input.styles";
 import { selectStyles } from "../components/form/select/select.styles";
 import { sliderStyles } from "../components/form/slider/slider.styles";
+import { cardStackStyles } from "../components/display/card-stack/card-stack.styles";
+import { morphSelectStyles } from "../components/form/morph-select/morph-select.styles";
+import { reactionsStyles } from "../components/display/reactions/reactions.styles";
+import { actionSwapStyles } from "../components/core/action-swap/action-swap.styles";
+import { holdToConfirmStyles } from "../components/core/hold-to-confirm/hold-to-confirm.styles";
+import { rollingTextStyles } from "../components/core/rolling-text/rolling-text.styles";
 import { switchStyles } from "../components/form/switch/switch.styles";
 import { tableStyles } from "../components/table/table.styles";
 import { cardStyles } from "../components/display/card/card.styles";
@@ -62,7 +68,6 @@ import { tableSortStyles } from "../components/table/sort.styles";
 import { tableHeadStyles } from "../components/table/thead.styles";
 import { videoPlayerStyles } from "../components/display/video-player/video-player.styles";
 import { pdfViewerStyles } from "../components/display/pdf-viewer/pdf-viewer.styles";
-import { richTextEditorStyles } from "../components/form/rich-text-editor/rich-text-editor.styles";
 import { drawingEditorStyles } from "../components/form/drawing-editor/drawing-editor.styles";
 
 const componentStyles = [
@@ -71,6 +76,12 @@ const componentStyles = [
     inputStyles,
     selectStyles,
     sliderStyles,
+    cardStackStyles,
+    morphSelectStyles,
+    reactionsStyles,
+    actionSwapStyles,
+    holdToConfirmStyles,
+    rollingTextStyles,
     switchStyles,
     tableStyles,
     cardStyles,
@@ -130,7 +141,6 @@ const componentStyles = [
     tableHeadStyles,
     videoPlayerStyles,
     pdfViewerStyles,
-    richTextEditorStyles,
     drawingEditorStyles,
 ] as const;
 

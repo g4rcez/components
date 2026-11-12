@@ -1,0 +1,113 @@
+/* Page foundations: fonts, layout measures, focus, selection, motion and forced-colors preferences. */
+
+:root {
+    --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    --docs-layout-header: 56px;
+    --docs-layout-sidebar: 248px;
+    --docs-layout-article: 760px;
+    --docs-layout-toc: 232px;
+    --docs-layout-radius: 10px;
+}
+
+body {
+    font-family: var(--font-sans);
+}
+
+.docs-body {
+    min-block-size: 100vh;
+    background: var(--var-color-background);
+    color: var(--var-color-foreground);
+}
+
+.docs-body ::selection {
+    background: var(--docs-primary-soft);
+    color: var(--var-color-foreground);
+}
+
+.docs-shell {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100vh;
+    background: var(--var-color-background);
+    color: var(--var-color-foreground);
+}
+
+.docs-shell :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible,
+.docs-mobile-modal :where(a, button, input, select, textarea, summary):focus-visible {
+    outline: 2px solid var(--var-color-ring);
+    outline-offset: 2px;
+}
+
+.docs-skip-link {
+    position: fixed;
+    z-index: var(--var-layer-overlay);
+    inset-block-start: -5rem;
+    inset-inline-start: 1rem;
+    padding: 0.625rem 1rem;
+    border-radius: calc(var(--var-radius-base) / 2);
+    background: var(--var-color-primary);
+    color: var(--var-color-primary-foreground);
+    font-weight: 500;
+}
+
+.docs-skip-link:focus {
+    inset-block-start: 1rem;
+}
+
+.site-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--var-spacing-base) / 2);
+    color: var(--var-color-primary);
+    text-underline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .site-text-link:hover {
+        text-decoration: underline;
+    }
+}
+
+html {
+    scroll-padding-block-start: calc(var(--docs-layout-header) + 24px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    .docs-shell *,
+    .docs-mobile-modal * {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+@media (forced-colors: active) {
+    .docs-nav-link[aria-current="page"] {
+        outline: 2px solid Highlight;
+        outline-offset: -2px;
+        forced-color-adjust: none;
+    }
+
+    .docs-toc-link-active {
+        border-color: Highlight;
+        forced-color-adjust: none;
+    }
+}
+
+/* Shiki emits both themes as variables; the html.dark class picks one. */
+.shiki,
+.shiki span {
+    background-color: transparent !important;
+    color: var(--shiki-light) !important;
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+    color: var(--shiki-dark) !important;
+}

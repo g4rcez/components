@@ -220,7 +220,9 @@ describe("Autocomplete selection", () => {
             return this.dataset.floating === "true" ? 160 : 40;
         });
         const boundingRect = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
-            if (this.getAttribute("role") === "combobox") return new DOMRect(100, referenceY, 200, 40);
+            // The panel is positioned from the bordered control that wraps the combobox, so it stands in for the field.
+            if (this.getAttribute("role") === "combobox" || this.querySelector(':scope > [role="combobox"]'))
+                return new DOMRect(100, referenceY, 200, 40);
             if (this.dataset.floating === "true") return new DOMRect(100, referenceY + 44, 240, 160);
             return new DOMRect(0, 0, 200, 40);
         });

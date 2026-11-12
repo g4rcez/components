@@ -120,7 +120,6 @@ export const Group = <T extends object>(props: Props<T>) => {
     return (
         <Fragment>
             <Dropdown
-                arrow={false}
                 title={translations.tableGroupLabel}
                 buttonProps={toolbarTriggerProps}
                 trigger={

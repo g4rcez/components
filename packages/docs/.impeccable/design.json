@@ -3,23 +3,60 @@
   "title": "Design System: Components Website",
   "extensions": {
     "colorMeta": {
-      "primary": { "role": "primary", "displayName": "Cyan", "canonical": "hsla(188, 86%, 57%, 1)" },
-      "canvas": { "role": "neutral", "displayName": "Ink" },
-      "light-canvas": { "role": "neutral", "displayName": "White" }
+      "light-primary": {
+        "role": "primary",
+        "displayName": "Ultramarine",
+        "canonical": "hsl(232 72% 50%)"
+      },
+      "dark-primary": {
+        "role": "primary",
+        "displayName": "Ultramarine (dark)",
+        "canonical": "hsl(232 85% 70%)"
+      },
+      "light-background": {
+        "role": "neutral",
+        "displayName": "White"
+      },
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Ink"
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Landing title", "purpose": "Landing headline, with a smaller mobile size." },
-      "headline": { "displayName": "Documentation title", "purpose": "One primary heading per article." }
+      "display": {
+        "displayName": "Landing title",
+        "purpose": "Landing headline, with a smaller mobile size."
+      },
+      "headline": {
+        "displayName": "Documentation title",
+        "purpose": "One primary heading per page."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "control-color", "value": "150ms ease", "purpose": "Action and navigation color changes." },
-      { "name": "catalog-arrow", "value": "180ms ease-out", "purpose": "Small arrow translation on catalog-link hover; suppressed for reduced motion." }
+      {
+        "name": "control-color",
+        "value": "150ms ease",
+        "purpose": "Action and navigation colour changes."
+      }
     ],
     "breakpoints": [
-      { "name": "stack", "value": "640px" },
-      { "name": "sidebar", "value": "960px" },
-      { "name": "desktop-outline", "value": "1280px" }
+      {
+        "name": "phone",
+        "value": "640px"
+      },
+      {
+        "name": "sidebar",
+        "value": "960px"
+      },
+      {
+        "name": "outline",
+        "value": "1280px"
+      },
+      {
+        "name": "showcase-spans",
+        "value": "1024px"
+      }
     ]
   },
   "components": [
@@ -27,54 +64,48 @@
       "name": "Primary action",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Primary navigation action on the landing page.",
+      "description": "Primary action on the landing page.",
       "html": "<a class=\"ds-primary\" href=\"#\">Get started</a>",
-      "css": ".ds-primary{display:inline-flex;align-items:center;min-height:44px;padding:12px 20px;background:var(--docs-primary);color:var(--docs-canvas);border-radius:8px;font:600 14px var(--font-sans);text-decoration:none;box-sizing:border-box;transition:background-color 150ms ease}.ds-primary:hover{background:var(--docs-text)}.ds-primary:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+      "css": ".ds-primary{display:inline-flex;align-items:center;min-height:44px;padding:12px 20px;background:var(--var-color-primary);color:var(--var-color-primary-foreground);border-radius:8px;font:600 14px var(--font-sans);text-decoration:none;box-sizing:border-box}.ds-primary:hover{background:var(--var-color-primary-hover)}.ds-primary:focus-visible{outline:2px solid var(--var-color-ring);outline-offset:2px}"
     },
     {
-      "name": "Secondary action",
+      "name": "Search trigger",
       "kind": "button",
-      "refersTo": "button-secondary",
-      "description": "Secondary navigation action with an outline.",
-      "html": "<a class=\"ds-secondary\" href=\"#\">Explore the components</a>",
-      "css": ".ds-secondary{display:inline-flex;align-items:center;min-height:44px;padding:12px 20px;border:1px solid var(--docs-border);border-radius:8px;color:var(--docs-text);font:600 14px var(--font-sans);text-decoration:none;box-sizing:border-box}.ds-secondary:hover{background:var(--docs-surface-raised);border-color:var(--docs-text-muted)}.ds-secondary:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
-    },
-    {
-      "name": "Documentation search",
-      "kind": "input",
-      "refersTo": "search",
-      "description": "Filter the documentation navigation.",
-      "html": "<input class=\"ds-search\" type=\"search\" aria-label=\"Search documentation\" placeholder=\"Search docs\" />",
-      "css": ".ds-search{height:42px;padding:0 12px;border:1px solid var(--docs-border);border-radius:8px;background:var(--docs-surface);color:var(--docs-text);font:13px var(--font-sans);caret-color:var(--docs-primary)}.ds-search::placeholder{color:var(--docs-text-muted)}.ds-search:hover{border-color:var(--docs-text-muted)}.ds-search:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+      "refersTo": "search-trigger",
+      "description": "Opens the documentation search palette.",
+      "html": "<button class=\"ds-search\" type=\"button\">Search documentation... <kbd>\u2318 K</kbd></button>",
+      "css": ".ds-search{display:inline-flex;align-items:center;gap:10px;min-width:260px;height:36px;padding:0 12px;border:1px solid var(--var-color-border);border-radius:8px;background:var(--docs-surface);color:var(--var-color-muted-foreground);font:14px var(--font-sans)}.ds-search kbd{margin-left:auto;padding:1px 6px;border:1px solid var(--var-color-border);border-radius:4px;font:11px var(--font-mono)}.ds-search:focus-visible{outline:2px solid var(--var-color-ring);outline-offset:2px}"
     },
     {
       "name": "Current navigation link",
       "kind": "nav",
-      "description": "Cyan selection on a one-pixel navigation rail.",
-      "html": "<a class=\"ds-nav\" href=\"#\" aria-current=\"page\">Introduction</a>",
-      "css": ".ds-nav{display:block;padding:7px 12px;border-left:1px solid var(--docs-primary);background:var(--docs-primary-soft);color:var(--docs-primary);font:600 13px/1.35 var(--font-sans);text-decoration:none}.ds-nav:hover{background:var(--docs-surface-raised)}.ds-nav:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+      "description": "A neutral raised row, not accent text.",
+      "html": "<a class=\"ds-nav\" href=\"#\" aria-current=\"page\">Buttons</a>",
+      "css": ".ds-nav{display:block;padding:6px 10px;border-radius:6px;background:var(--var-color-muted);color:var(--var-color-foreground);font:500 14px/1.4 var(--font-sans);text-decoration:none}.ds-nav:focus-visible{outline:2px solid var(--var-color-ring);outline-offset:2px}"
     },
     {
-      "name": "Guide link",
-      "kind": "card",
-      "description": "A bounded link to installation or theming.",
-      "html": "<a class=\"ds-guide\" href=\"#\"><strong>Get started</strong><span>Install the library and build your first interface.</span></a>",
-      "css": ".ds-guide{display:block;max-width:280px;padding:20px;border:1px solid var(--docs-border);border-radius:12px;color:var(--docs-text);font:14px var(--font-sans);text-decoration:none}.ds-guide strong{display:block;margin-bottom:8px;font-weight:600}.ds-guide span{display:block;color:var(--docs-text-muted);font-size:13px;line-height:1.6}.ds-guide:hover{border-color:var(--docs-primary);background:var(--docs-primary-soft)}.ds-guide:focus-visible{outline:2px solid var(--docs-primary);outline-offset:3px}"
+      "name": "Reference table",
+      "kind": "table",
+      "description": "Generated props table: mono accent name, mono type, muted description.",
+      "html": "<table class=\"ds-ref\"><thead><tr><th>Prop</th><th>Type</th></tr></thead><tbody><tr><th scope=\"row\">theme</th><td>\"primary\" | \"danger\"</td></tr></tbody></table>",
+      "css": ".ds-ref{border-collapse:collapse;border:1px solid var(--var-color-border);font:14px var(--font-sans)}.ds-ref th,.ds-ref td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--var-color-border)}.ds-ref thead th{background:var(--docs-surface);color:var(--var-color-muted-foreground);font-size:12px;font-weight:500}.ds-ref tbody th{color:var(--var-color-primary);font:500 13px var(--font-mono)}"
     }
   ],
   "narrative": {
-    "overview": "The website uses the developer-documentation structure requested from Tailwind CSS and Next.js: a stable header, fine borders, clear type, and examples that demonstrate the library. Cyan connects navigation and actions across the landing page and documentation.",
-    "rules": [],
+    "overview": "A quiet, neutral frame modelled on the Radix documentation experience, in which the library's own components are the colour. One scrolling page per component with a generated API reference; a landing page that is a grid of live compositions.",
+    "rules": [
+      "The shell uses --var-* tokens only; colour literals live in src/app/styles/brand.css.",
+      "Accent only for primary action, link, focus and selection."
+    ],
     "dos": [
-      "Do preserve routes, examples, theme switching, and keyboard navigation.",
-      "Do use cyan for the website's primary actions and navigation.",
-      "Do keep the landing preview interactive and code horizontally scrollable.",
-      "Do respect reduced-motion preferences."
+      "Do keep one palette: change brand.css, not the shell CSS.",
+      "Do preserve the e2e hooks (#main-content, .docs-shell, #docs-page-title, labelled demo sections).",
+      "Do respect reduced motion without causing hydration differences (useMotionPreference)."
     ],
     "donts": [
-      "Don't introduce gradients, promotional statistics, or unsupported product claims.",
-      "Don't change library component tokens as part of website styling.",
-      "Don't use a full expanded page outline to push mobile content below the fold."
+      "Don't add colour literals outside brand.css.",
+      "Don't hand-edit src/generated or the PNG brand assets.",
+      "Don't use <details> except for the mobile outline."
     ]
   }
 }

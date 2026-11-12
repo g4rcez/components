@@ -1,0 +1,1 @@
+components: React components with the details already done.

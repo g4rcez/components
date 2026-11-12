@@ -48,11 +48,11 @@ test.describe("floating panels", () => {
         const panel = page.getByRole("dialog", { name: "Columns" });
         await expect(panel).toBeVisible();
 
-        expect(await computed(panel, "animationName")).toBe("__dropdown-in");
+        // The enter animation is Motion's: the panel scales and fades in, then settles with no transform left over.
         // transform-origin y is 0px for a panel that sits below its trigger.
         expect((await computed(panel, "transformOrigin")).split(" ")[1]).toBe("0px");
-        // top/left positioning leaves `transform` free for the enter animation.
-        expect(await computed(panel, "transform")).toBe("none");
+        await expect.poll(() => computed(panel, "transform")).toBe("none");
+        await expect.poll(() => computed(panel, "opacity")).toBe("1");
 
         const triggerBox = await trigger.boundingBox();
         const panelBox = await panel.boundingBox();
@@ -62,12 +62,12 @@ test.describe("floating panels", () => {
 
     test("a menu opens with the enter animation and a submenu grows from its left edge", async ({ page }) => {
         await page.goto("/docs/menu");
-        await page.getByRole("button", { name: "I'm a menu", exact: true }).first().click();
+        await page.getByRole("button", { name: "Languages", exact: true }).first().click();
         const menu = page.locator(".__menu__floating").first();
         await expect(menu).toBeVisible();
         expect(await computed(menu, "animationName")).toBe("__menu-in");
 
-        const submenuItem = page.getByRole("menuitem", { name: "Submenu" }).first();
+        const submenuItem = page.getByRole("menuitem", { name: "TypeScript" }).first();
         const itemBox = await submenuItem.boundingBox();
         if (!itemBox) throw new Error("Submenu item has no bounds");
         await page.mouse.move(itemBox.x + 10, itemBox.y + 5);
@@ -152,6 +152,8 @@ test.describe("reduced motion", () => {
         await page.getByRole("button", { name: "Properties", exact: true }).first().click();
         const panel = page.getByRole("dialog", { name: "Columns" });
         await expect(panel).toBeVisible();
-        expect(await computed(panel, "animationName")).toBe("__dropdown-fade");
+        // MotionConfig reducedMotion="user" drops the scale and the slide, so the panel never carries a transform.
+        expect(await computed(panel, "transform")).toBe("none");
+        await expect.poll(() => computed(panel, "opacity")).toBe("1");
     });
 });

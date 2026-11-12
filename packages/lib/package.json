@@ -362,15 +362,40 @@
             "import": "./dist/components/form/radiobox.mjs",
             "default": "./dist/components/form/radiobox.mjs"
         },
-        "./components/form/rich-text-editor": {
-            "types": "./dist/components/form/rich-text-editor/rich-text-editor.d.ts",
-            "import": "./dist/components/form/rich-text-editor.mjs",
-            "default": "./dist/components/form/rich-text-editor.mjs"
-        },
         "./components/form/select": {
             "types": "./dist/components/form/select/select.d.ts",
             "import": "./dist/components/form/select.mjs",
             "default": "./dist/components/form/select.mjs"
+        },
+        "./components/core/rolling-text": {
+            "types": "./dist/components/core/rolling-text/rolling-text.d.ts",
+            "import": "./dist/components/core/rolling-text.mjs",
+            "default": "./dist/components/core/rolling-text.mjs"
+        },
+        "./components/core/hold-to-confirm": {
+            "types": "./dist/components/core/hold-to-confirm/hold-to-confirm.d.ts",
+            "import": "./dist/components/core/hold-to-confirm.mjs",
+            "default": "./dist/components/core/hold-to-confirm.mjs"
+        },
+        "./components/core/action-swap": {
+            "types": "./dist/components/core/action-swap/action-swap.d.ts",
+            "import": "./dist/components/core/action-swap.mjs",
+            "default": "./dist/components/core/action-swap.mjs"
+        },
+        "./components/display/reactions": {
+            "types": "./dist/components/display/reactions/reactions.d.ts",
+            "import": "./dist/components/display/reactions.mjs",
+            "default": "./dist/components/display/reactions.mjs"
+        },
+        "./components/form/morph-select": {
+            "types": "./dist/components/form/morph-select/morph-select.d.ts",
+            "import": "./dist/components/form/morph-select.mjs",
+            "default": "./dist/components/form/morph-select.mjs"
+        },
+        "./components/display/card-stack": {
+            "types": "./dist/components/display/card-stack/card-stack.d.ts",
+            "import": "./dist/components/display/card-stack.mjs",
+            "default": "./dist/components/display/card-stack.mjs"
         },
         "./components/form/slider": {
             "types": "./dist/components/form/slider/slider.d.ts",
@@ -582,6 +607,66 @@
             "source": "./src/components/form/select/select.css",
             "default": "./dist/css/select.css"
         },
+        "./rolling-text.css": {
+            "source": "./src/components/core/rolling-text/rolling-text.css",
+            "default": "./dist/css/rolling-text.css"
+        },
+        "./rolling-text": {
+            "source": "./src/components/core/rolling-text/rolling-text.tsx",
+            "types": "./dist/components/core/rolling-text/rolling-text.d.ts",
+            "import": "./dist/components/core/rolling-text.mjs",
+            "default": "./dist/components/core/rolling-text.mjs"
+        },
+        "./hold-to-confirm.css": {
+            "source": "./src/components/core/hold-to-confirm/hold-to-confirm.css",
+            "default": "./dist/css/hold-to-confirm.css"
+        },
+        "./hold-to-confirm": {
+            "source": "./src/components/core/hold-to-confirm/hold-to-confirm.tsx",
+            "types": "./dist/components/core/hold-to-confirm/hold-to-confirm.d.ts",
+            "import": "./dist/components/core/hold-to-confirm.mjs",
+            "default": "./dist/components/core/hold-to-confirm.mjs"
+        },
+        "./action-swap.css": {
+            "source": "./src/components/core/action-swap/action-swap.css",
+            "default": "./dist/css/action-swap.css"
+        },
+        "./action-swap": {
+            "source": "./src/components/core/action-swap/action-swap.tsx",
+            "types": "./dist/components/core/action-swap/action-swap.d.ts",
+            "import": "./dist/components/core/action-swap.mjs",
+            "default": "./dist/components/core/action-swap.mjs"
+        },
+        "./reactions.css": {
+            "source": "./src/components/display/reactions/reactions.css",
+            "default": "./dist/css/reactions.css"
+        },
+        "./reactions": {
+            "source": "./src/components/display/reactions/reactions.tsx",
+            "types": "./dist/components/display/reactions/reactions.d.ts",
+            "import": "./dist/components/display/reactions.mjs",
+            "default": "./dist/components/display/reactions.mjs"
+        },
+        "./morph-select.css": {
+            "source": "./src/components/form/morph-select/morph-select.css",
+            "default": "./dist/css/morph-select.css"
+        },
+        "./morph-select": {
+            "source": "./src/components/form/morph-select/morph-select.tsx",
+            "types": "./dist/components/form/morph-select/morph-select.d.ts",
+            "import": "./dist/components/form/morph-select.mjs",
+            "default": "./dist/components/form/morph-select.mjs"
+        },
+        "./card-stack.css": {
+            "source": "./src/components/display/card-stack/card-stack.css",
+            "default": "./dist/css/card-stack.css"
+        },
+        "./card-stack": {
+            "source": "./src/components/display/card-stack/card-stack.tsx",
+            "types": "./dist/components/display/card-stack/card-stack.d.ts",
+            "import": "./dist/components/display/card-stack.mjs",
+            "default": "./dist/components/display/card-stack.mjs"
+        },
         "./slider.css": {
             "source": "./src/components/form/slider/slider.css",
             "default": "./dist/css/slider.css"
@@ -769,16 +854,6 @@
         "./pdf-viewer.css": {
             "source": "./src/components/display/pdf-viewer/pdf-viewer.css",
             "default": "./dist/css/pdf-viewer.css"
-        },
-        "./rich-text-editor": {
-            "source": "./src/components/form/rich-text-editor/rich-text-editor.tsx",
-            "types": "./dist/components/form/rich-text-editor/rich-text-editor.d.ts",
-            "import": "./dist/components/form/rich-text-editor.mjs",
-            "default": "./dist/components/form/rich-text-editor.mjs"
-        },
-        "./rich-text-editor.css": {
-            "source": "./src/components/form/rich-text-editor/rich-text-editor.css",
-            "default": "./dist/css/rich-text-editor.css"
         },
         "./drawing-editor": {
             "source": "./src/components/form/drawing-editor/drawing-editor.tsx",
@@ -980,21 +1055,11 @@
         "@base-ui/react": "1.6.0",
         "@floating-ui/react": "0.27.20",
         "@phosphor-icons/react": "2.1.10",
-        "@tiptap/core": "3.32.0",
-        "@tiptap/extension-image": "3.32.0",
-        "@tiptap/extension-list": "3.32.0",
-        "@tiptap/extension-table": "3.32.0",
-        "@tiptap/markdown": "3.32.0",
-        "@tiptap/pm": "3.32.0",
-        "@tiptap/react": "3.32.0",
-        "@tiptap/starter-kit": "3.32.0",
         "class-variance-authority": "0.7.1",
         "clsx": "2.1.1",
         "cn": "0.2.6",
         "date-fns": "4.4.0",
-        "dompurify": "3.4.17",
         "linq-arrays": "3.2.5",
-        "marked": "18.1.1",
         "motion": "12.43.0",
         "oxc-parser": "0.148.0",
         "pretty-bytes": "7.1.1",

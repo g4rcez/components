@@ -11,55 +11,85 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     });
 }
 
-test("landing search opens a focused navigation drawer and follows a result", async ({ page }) => {
+test("Ctrl+K opens the search palette from the landing page and follows a result", async ({ page }) => {
     await page.goto("/");
     await page.keyboard.press("Control+k");
     const dialog = page.getByRole("dialog");
-    const search = dialog.getByRole("searchbox", { name: "Search documentation" });
+    const search = dialog.getByRole("combobox", { name: "Search documentation" });
     await expect(search).toBeFocused();
     await search.fill("buttons");
-    await dialog.getByRole("link", { name: "Buttons", exact: true }).click();
+    await dialog.getByRole("option", { name: "Buttons", exact: true }).click();
     await expect(page).toHaveURL(/\/docs\/buttons$/);
     await expect(dialog).not.toBeVisible();
     await expect(page.getByRole("heading", { level: 1, name: "Buttons" })).toBeVisible();
 });
 
-test("desktop search filters routes, shows an empty state, and clears", async ({ page }) => {
+test("search matches prop names and jumps to examples", async ({ page }) => {
+    await page.goto("/docs");
+    await page.keyboard.press("Control+k");
+    const dialog = page.getByRole("dialog");
+    const search = dialog.getByRole("combobox", { name: "Search documentation" });
+    await search.fill("panelWidth");
+    await expect(dialog.getByRole("option", { name: "MorphSelect", exact: true })).toBeVisible();
+
+    await search.fill("Reactions: Controlled");
+    await dialog
+        .getByRole("option", { name: /Reactions: Controlled/ })
+        .first()
+        .click();
+    await expect(page).toHaveURL(/\/docs\/reactions#controlled-and-persisted-by-the-parent$/);
+});
+
+test("desktop: slash opens the palette, an unknown query says so, Escape closes it", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto("/docs");
     await page.keyboard.press("/");
-    const search = page.getByRole("searchbox", { name: "Search documentation" });
+    const dialog = page.getByRole("dialog");
+    const search = dialog.getByRole("combobox", { name: "Search documentation" });
     await expect(search).toBeFocused();
     await search.fill("no-such-component");
-    await expect(page.getByRole("status").filter({ hasText: "No documentation matches" })).toBeVisible();
-    await page.getByRole("button", { name: "Clear documentation search" }).click();
-    await expect(search).toBeFocused();
-    await expect(search).toHaveValue("");
+    await expect(dialog.getByText("No documentation matches your search.")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
     await expect(
         page.getByRole("navigation", { name: "Documentation navigation", exact: true }).getByRole("link", { name: "Introduction", exact: true })
     ).toHaveAttribute("aria-current", "page");
 });
 
-test("mobile navigation focuses search, clears it, and restores the trigger on Escape", async ({ page }) => {
+test("the header search button opens the palette", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto("/docs");
+    await page.getByRole("button", { name: "Search documentation" }).click();
+    await expect(page.getByRole("dialog").getByRole("combobox", { name: "Search documentation" })).toBeFocused();
+});
+
+test("mobile: the drawer lists the docs, hands off to search, and restores the trigger on Escape", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/docs");
     const trigger = page.getByRole("button", { name: "Open documentation navigation" });
     await trigger.click();
-    const dialog = page.getByRole("dialog");
-    const search = dialog.getByRole("searchbox", { name: "Search documentation" });
-    await expect(search).toBeFocused();
-    await search.fill("calendar");
-    await dialog.getByRole("button", { name: "Clear documentation search" }).click();
-    await expect(search).toBeFocused();
+    const drawer = page.getByRole("dialog", { name: "Documentation" });
+    await expect(drawer.getByRole("link", { name: "Buttons", exact: true })).toBeVisible();
+    await expect(drawer.getByRole("button", { name: "Search documentation" })).toBeFocused();
     await page.keyboard.press("Escape");
-    await expect(dialog).not.toBeVisible();
+    await expect(drawer).not.toBeVisible();
     await expect(trigger).toBeFocused();
+
+    await trigger.click();
+    await drawer.getByRole("button", { name: "Search documentation" }).click();
+    await expect(page.getByRole("combobox", { name: "Search documentation" })).toBeFocused();
 });
 
 test("theme switch and code copy work on the landing page", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    // The site follows the system preference until a choice is made, so start from a known scheme.
+    await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/");
+    await expect(page.locator("html")).toHaveClass(/dark/);
     await page.getByRole("button", { name: "Switch to light mode" }).click();
+    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    // The choice is remembered: it beats the system preference after a reload.
+    await page.reload();
     await expect(page.locator("html")).not.toHaveClass(/dark/);
     await page.getByRole("button", { name: "Switch to dark mode" }).click();
     await expect(page.locator("html")).toHaveClass(/dark/);

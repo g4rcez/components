@@ -50,7 +50,7 @@ describe("Floating panels keep 8px from the viewport edge at 390px", () => {
 
     it("Dropdown", async () => {
         render(
-            <Dropdown open arrow={false} side="bottom" align="start" title="Emoji" trigger="Open" buttonProps={{ "data-trigger": "" } as never}>
+            <Dropdown open side="bottom" align="start" title="Emoji" trigger="Open" buttonProps={{ "data-trigger": "" } as never}>
                 <div>Content</div>
             </Dropdown>
         );

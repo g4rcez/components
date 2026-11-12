@@ -5,6 +5,6 @@ export const dropdownStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/dropdown.css",
     defaults: {},
-    slots: ["arrow", "header", "title"],
+    slots: ["header", "title"],
     dependencies: [],
 });

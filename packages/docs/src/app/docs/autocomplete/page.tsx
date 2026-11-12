@@ -1,6 +1,7 @@
 "use client";
 import { DocsLayout } from "@/components/docs-layout";
 import { ComponentDemo } from "@/components/component-demo";
+import { CodeIcon, FilePyIcon, FileRsIcon, FileTsIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { Fragment, useEffect, useState } from "react";
 import { Autocomplete, type AutocompleteItemProps, Button, Modal } from "@g4rcez/components";
 
@@ -56,6 +57,42 @@ const defaults = [
     { label: "Verilog", value: "verilog" },
     { label: "Assembly", value: "assembly" },
 ];
+
+const languageIcons: Record<string, typeof CodeIcon> = { typescript: FileTsIcon, rust: FileRsIcon, python: FilePyIcon };
+
+const IconsAutocomplete = () => {
+    const [language, setLanguage] = useState("typescript");
+    const LanguageIcon = languageIcons[language] ?? CodeIcon;
+    return (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Autocomplete
+                id="icon-left"
+                title="Left icon"
+                options={defaults}
+                placeholder="Search languages"
+                left={<MagnifyingGlassIcon aria-hidden size={16} />}
+            />
+            <Autocomplete
+                id="icon-right"
+                title="Right icon"
+                options={defaults}
+                placeholder="Choose a language"
+                right={<CodeIcon aria-hidden size={16} />}
+            />
+            <Autocomplete
+                id="icon-both"
+                container="md:col-span-2"
+                title="Left follows the value"
+                options={defaults}
+                value={language}
+                placeholder="Choose a language"
+                left={<LanguageIcon aria-hidden size={16} />}
+                right={<span className="text-muted-foreground text-xs">{language.length} chars</span>}
+                onChange={(event) => setLanguage(event.target.value)}
+            />
+        </div>
+    );
+};
 
 const SelectOnModal = () => {
     const [open, setOpen] = useState(false);
@@ -231,6 +268,50 @@ function CreatableAutocomplete() {
                 <div className="w-full max-w-md">
                     <CreateOptionAutocomplete />
                 </div>
+            </ComponentDemo>
+
+            <ComponentDemo
+                title="Left and Right Content"
+                description="left and right put an icon, a hint or any element inside the field, before the text and next to the caret. The right content sits before the caret and the clear button, so those controls keep working. Decorative icons take aria-hidden, and the field keeps its own label."
+                code={`"use client";
+import { useState } from "react";
+import { CodeIcon, FilePyIcon, FileRsIcon, FileTsIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { Autocomplete } from "@g4rcez/components";
+
+const icons = { typescript: FileTsIcon, rust: FileRsIcon, python: FilePyIcon };
+
+function AutocompleteWithIcons() {
+  const [language, setLanguage] = useState("typescript");
+  const LanguageIcon = icons[language] ?? CodeIcon;
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Autocomplete
+        title="Left icon"
+        options={defaults}
+        placeholder="Search languages"
+        left={<MagnifyingGlassIcon aria-hidden size={16} />}
+      />
+      <Autocomplete
+        title="Right icon"
+        options={defaults}
+        placeholder="Choose a language"
+        right={<CodeIcon aria-hidden size={16} />}
+      />
+      <Autocomplete
+        container="md:col-span-2"
+        title="Left follows the value"
+        options={defaults}
+        value={language}
+        placeholder="Choose a language"
+        left={<LanguageIcon aria-hidden size={16} />}
+        right={<span className="text-xs text-muted-foreground">{language.length} chars</span>}
+        onChange={(event) => setLanguage(event.target.value)}
+      />
+    </div>
+  );
+}`}
+            >
+                <IconsAutocomplete />
             </ComponentDemo>
 
             <ComponentDemo

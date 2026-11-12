@@ -1,9 +1,7 @@
 "use client";
 import {
-    arrow,
     autoUpdate,
     flip,
-    FloatingArrow,
     FloatingFocusManager,
     FloatingPortal,
     offset,
@@ -16,11 +14,13 @@ import {
     useInteractions,
     useRole,
 } from "@floating-ui/react";
+import { AnimatePresence, motion, MotionConfig, useIsPresent } from "motion/react";
 import type React from "react";
-import { Fragment, isValidElement, type PropsWithChildren, useId, useMemo, useRef, useState } from "react";
+import { Fragment, isValidElement, type PropsWithChildren, useId, useMemo, useState } from "react";
 import { VIEWPORT_PADDING } from "../../../constants";
 import { css } from "../../../lib/dom";
 import { placementOrigin } from "../../../lib/floating-origin";
+import { floatingVariants } from "../../../lib/motion";
 import { Slot } from "../../core/slot/slot";
 import { dropdownStyles } from "./dropdown.styles";
 
@@ -28,13 +28,11 @@ type DropdownProps = {
     /** Use the `trigger` element itself as the trigger instead of wrapping it in a `<button>`. Pass an interactive element, such as a `Button`, only with this prop. */
     asChild?: boolean;
     open?: boolean;
-    /** Draw the arrow that points at the trigger. @default true */
-    arrow?: boolean;
     /** Side of the trigger where the panel opens. @default "bottom" */
     side?: "top" | "right" | "bottom" | "left";
     /** Alignment of the panel along the trigger edge. @default "center" */
     align?: "start" | "center" | "end";
-    /** Gap in pixels between the trigger and the panel. @default 10 */
+    /** Gap in pixels between the trigger and the panel. @default 8 */
     offset?: number;
     /**
      * Class names merged on the panel root. Use them for width and layout (`w-72`, `w-auto`).
@@ -56,9 +54,30 @@ type DropdownProps = {
     "aria-labelledby"?: string;
 };
 
+const dropdownVariants = floatingVariants({ distance: 6, enterScale: 0.96, exitScale: 0.97, enter: 0.2, exit: 0.14 });
+
 const updatePositionOnce: typeof autoUpdate = (_reference, _floating, update) => {
     void update();
     return () => undefined;
+};
+
+type DropdownPanelProps = React.ComponentProps<typeof motion.div> & { placement: Placement; positioned: boolean };
+
+/** The animated panel. While it leaves it ignores the pointer, so a closing panel cannot be clicked. */
+const DropdownPanel = ({ placement, positioned, style, ref, ...props }: DropdownPanelProps) => {
+    const present = useIsPresent();
+    return (
+        <motion.div
+            {...props}
+            ref={ref}
+            custom={placement}
+            variants={dropdownVariants}
+            initial="initial"
+            animate={positioned ? "open" : "initial"}
+            exit="exit"
+            style={{ ...style, pointerEvents: present ? undefined : "none" }}
+        />
+    );
 };
 
 export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
@@ -67,25 +86,15 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
     const isControlled = props.open !== undefined;
     const [innerOpen, setInnerOpen] = useState(false);
     const open = isControlled ? props.open : innerOpen;
-    const arrowRef = useRef(null);
-    const showArrow = props.arrow ?? true;
-    const gap = props.offset ?? 10;
+    const gap = props.offset ?? 8;
     const align = props.align ?? "center";
     const placement: Placement = align === "center" ? (props.side ?? "bottom") : `${props.side ?? "bottom"}-${align}`;
-    const middleware = useMemo(
-        () => [
-            offset(gap),
-            flip({ fallbackAxisSideDirection: "end" }),
-            shift({ padding: VIEWPORT_PADDING }),
-            ...(showArrow ? [arrow({ padding: 5, element: arrowRef })] : []),
-        ],
-        [gap, showArrow]
-    );
-    const { refs, floatingStyles, context } = useFloating({
+    const middleware = useMemo(() => [offset(gap), flip({ fallbackAxisSideDirection: "end" }), shift({ padding: VIEWPORT_PADDING })], [gap]);
+    const { refs, floatingStyles, context, isPositioned } = useFloating({
         open,
         placement,
         middleware,
-        // Position with top/left so the CSS enter animation can use the `scale` property.
+        // Position with top/left: Motion owns `transform` for the enter and exit animation.
         transform: false,
         whileElementsMounted: props.lockPositionOnOpen ? updatePositionOnce : autoUpdate,
         onOpenChange: (nextValue, event) => {
@@ -118,38 +127,46 @@ export const Dropdown = (props: PropsWithChildren<DropdownProps>) => {
                     {props.trigger}
                 </button>
             )}
-            {open && (
-                <FloatingPortal preserveTabOrder id={`${headingId}-portal`}>
-                    <FloatingFocusManager
-                        guards
-                        restoreFocus={props.restoreFocus ?? true}
-                        returnFocus={props.returnFocus ?? true}
-                        initialFocus={props.initialFocus}
-                        visuallyHiddenDismiss
-                        context={context}
-                        modal={false}
-                    >
-                        <div
-                            className={css(dropdownStyles.className({}), props.className)}
-                            ref={refs.setFloating}
-                            {...getFloatingProps()}
-                            aria-label={hasTitle ? undefined : props["aria-label"]}
-                            aria-labelledby={hasTitle ? headingId : props["aria-labelledby"]}
-                            style={{ ...(floatingStyles as unknown as React.CSSProperties), transformOrigin: placementOrigin(context.placement) }}
+            <AnimatePresence>
+                {open && (
+                    <FloatingPortal key="dropdown" preserveTabOrder id={`${headingId}-portal`}>
+                        <FloatingFocusManager
+                            guards
+                            restoreFocus={props.restoreFocus ?? true}
+                            returnFocus={props.returnFocus ?? true}
+                            initialFocus={props.initialFocus}
+                            visuallyHiddenDismiss
+                            context={context}
+                            modal={false}
                         >
-                            {showArrow && <FloatingArrow ref={arrowRef} context={context} strokeWidth={0.1} className={dropdownStyles.slots.arrow} />}
-                            {hasTitle && (
-                                <header className={dropdownStyles.slots.header}>
-                                    <h3 id={headingId} className={dropdownStyles.slots.title}>
-                                        {props.title}
-                                    </h3>
-                                </header>
-                            )}
-                            {props.children}
-                        </div>
-                    </FloatingFocusManager>
-                </FloatingPortal>
-            )}
+                            <MotionConfig reducedMotion="user">
+                                <DropdownPanel
+                                    {...getFloatingProps()}
+                                    className={css(dropdownStyles.className({}), props.className)}
+                                    ref={refs.setFloating}
+                                    aria-label={hasTitle ? undefined : props["aria-label"]}
+                                    aria-labelledby={hasTitle ? headingId : props["aria-labelledby"]}
+                                    placement={context.placement}
+                                    positioned={isPositioned}
+                                    style={{
+                                        ...(floatingStyles as unknown as React.CSSProperties),
+                                        transformOrigin: placementOrigin(context.placement),
+                                    }}
+                                >
+                                    {hasTitle && (
+                                        <header className={dropdownStyles.slots.header}>
+                                            <h3 id={headingId} className={dropdownStyles.slots.title}>
+                                                {props.title}
+                                            </h3>
+                                        </header>
+                                    )}
+                                    {props.children}
+                                </DropdownPanel>
+                            </MotionConfig>
+                        </FloatingFocusManager>
+                    </FloatingPortal>
+                )}
+            </AnimatePresence>
         </Fragment>
     );
 };

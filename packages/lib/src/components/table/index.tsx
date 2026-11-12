@@ -143,6 +143,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                 <AnimatePresence propagate initial={false}>
                     {operations ? (
                         <Metadata
+                            key="table-metadata"
                             cols={state.cols}
                             rows={props.rows}
                             options={optionCols}
@@ -159,6 +160,7 @@ export const Table = <T extends Record<string, unknown>>(props: TableProps<T>) =
                         />
                     ) : null}
                     <InnerTable
+                        key="table-body"
                         {...tableProps}
                         index={0}
                         cols={visibleCols}

@@ -8,28 +8,32 @@ Selectors: base `__<component>`, variant `__<component>--<variant>-<value>`, slo
 
 | Component | CSS | Needs | Variants (name=values) | Slots |
 |---|---|---|---|---|
+| action-swap | action-swap.css | rolling-text.css, spinner.css | size=sm/md/lg | content, icon, spinner, label, status |
 | alert | alert.css | polymorph.css | theme=primary/danger/info/success/secondary/warn/muted/neutral | container, collapse, content, close-button, close-icon, header, icon, title, body |
 | autocomplete | autocomplete.css | free-text.css, input-field.css, polymorph.css, select.css, tooltip.css | size=big/default/min/normal/small/tiny | list, item, option, field-state, disabled-border, actions, action, input-icon, sr-label, input, control-state, panel, empty, empty-text, scroll |
 | button | button.css | - | size=icon/big/default/min/tiny/small; rounded=rough/squared/default/circle; theme=raw/disabled/loading/main/info/warn/muted/danger/neutral/outlined/primary/success/secondary/ghost-info/ghost-warn/ghost-danger/ghost-primary/ghost-success/ghost-secondary/ghost-muted/ghost-neutral | icon |
 | calendar | calendar.css | input.css, input-field.css, polymorph.css, tooltip.css | - | day-cell, day-button, range-label, range-label-text, viewport, month-page, month-header, previous-button, next-button, nav-icon, current-month, month-controls, month-select, year-input, table, weekday, datetime, time-input, footer, today-button, numeric |
 | card | card.css | polymorph.css | - | body, title, content, skeleton, skeleton-line, header, heading, actions, stats-container, stats-body, stats-panel, stats-icon, stats-content, stats-title, stats-loading, stats-value, border |
+| card-stack | card-stack.css | button.css | - | body, stage, card, stamp, stamp-left, stamp-right, controls, undo-label, empty, hint, status |
 | checkbox | checkbox.css | - | size=big/default/min/normal/small/tiny/medium/large; task=true/false | label, control, control-state, error |
 | command-palette | command-palette.css | button.css, modal.css | - | body, group-label, group-row, item, item-content, loading-row, header, search-icon-frame, search-icon, input, controls, filters, loading-list, content, list, preview, preview-empty, empty, footer |
 | date-picker | date-picker.css | calendar.css, dropdown.css, input.css, input-field.css, polymorph.css, tooltip.css | - | calendar-icon, sr-label, range-calendar, range-header, range-nights, range-fields, range-field, range-header-field, range-header-field-label, range-header-field-value, range-header-field-divider, range-control, range-input, range-separator, panel, presets, preset-list, preset-button, actions, actions-confirm, today-action, cancel-action, apply-action |
 | drawing-editor | drawing-editor.css | alert.css, button.css, checkbox.css, free-text.css, input.css, input-field.css, polymorph.css, resizable.css, select.css, textarea.css, tooltip.css | - | toolbar, workspace, viewport, stage, canvas-frame, overlay, selection, layers, layer-list, properties |
-| dropdown | dropdown.css | - | - | arrow, header, title |
+| dropdown | dropdown.css | - | - | header, title |
 | empty | empty.css | - | - | icon, message |
 | expand | expand.css | button.css | - | content |
 | file-upload | file-upload.css | button.css, modal.css | - | accent, actions, aside, column, dropzone, file-details, file-icon, file-row, idle, idle-copy, idle-icon, idle-icon-wrap, item, list, preview-button, preview-image, remove-button, remove-icon, row, size, stack, thumb-icon, viewer-image, viewer-name, viewer-size, viewer-video |
 | form | form.css | - | - | - |
 | free-text | input.css | input-field.css, polymorph.css, tooltip.css | size=big/default/min/normal/small/tiny | disabled-border, field-state, input, input-state, invalid, placeholder, resizable, surface, transition |
 | heading | heading.css | polymorph.css | - | - |
+| hold-to-confirm | hold-to-confirm.css | - | tone=danger/neutral | fill, content, overlay, icon, label, hint, status |
 | input | input.css | input-field.css, polymorph.css, tooltip.css | - | - |
 | input-field | input.css | polymorph.css, tooltip.css | size=big/default/min/normal/small/tiny | border, control, control-disabled, control-state, control-surface, error, error-state, error-text, feedback, feedback-body, feedback-hidden, feedback-icon, feedback-state, feedback-text, fieldset, label, label-active, label-disabled, label-layout, label-meta, label-row, label-state, optional, optional-state, optional-text, slot, slot-end, slot-start, sr-only, status, status-error, status-icon, status-indicator, status-success, tooltip-body, tooltip-content, tooltip-icon, tooltip-trigger |
 | list | list.css | button.css, modal.css | - | overlay, floating-layer, detail-card, close-nav, close-button, header, title, description, item, item-shell, item-row, avatar-frame, avatar-button, item-body, item-content, item-action |
 | masonry | masonry.css | polymorph.css | - | item |
-| menu | menu.css | - | - | item, floating, nested-indicator, nested-icon, item-icon, sr-label |
+| menu | menu.css | - | - | item, floating, nested-indicator, nested-icon, item-icon, sr-label, separator, label |
 | modal | modal.css | button.css | type=dialog/drawer/sheet; position=none/right/left | resizer, sheet-pill, overlay, content, sr-description, header, title, body, footer, close-control, close-button, close-icon, confirm-dialog, confirm-actions, confirm-description |
+| morph-select | morph-select.css | rolling-text.css | - | label, anchor, trigger, trigger-content, value, caret, surface, inner, header, search, list, group, group-label, option, option-icon, option-label, option-meta, option-check, highlight, empty, status |
 | multi-select | multi-select.css | free-text.css, input-field.css, polymorph.css, select.css, tag.css, tooltip.css | size=big/default/min/normal/small/tiny | action, actions, caret-icon, checkbox, control-state, empty, empty-text, field, footer, input, invalid, item, list, option, overlay, overflow, panel, placeholder, placeholder-text, results, scroll, search, sr-label, surface, tag-remove, tag-remove-icon, tags, transition, value |
 | notifications | notifications.css | - | theme=default/info/warn/muted/danger/success/secondary | item, content, icon, text, title, description, action, close, close-icon, viewport, badge |
 | page-calendar | page-calendar.css | button.css, calendar.css, date-picker.css, dropdown.css, input.css, input-field.css, page-calendar-day-view.css, page-calendar-event-pill.css, page-calendar-header.css, page-calendar-month-view.css, page-calendar-week-view.css, polymorph.css, spinner.css, tag.css, tooltip.css | - | - |
@@ -42,13 +46,14 @@ Selectors: base `__<component>`, variant `__<component>--<variant>-<value>`, slo
 | polymorph | polymorph.css | - | - | - |
 | progress | progress.css | - | - | indicator, label |
 | radiobox | radiobox.css | - | size=medium/large | label, control, control-state |
+| reactions | reactions.css | dropdown.css, rolling-text.css | - | bar, pill, icon, count, add, panel, picker, option, highlight, status |
 | render-on-view | render-on-view.css | polymorph.css | - | - |
 | resizable | resizable.css | - | - | content |
-| rich-text-editor | rich-text-editor.css | alert.css, button.css, free-text.css, input.css, input-field.css, polymorph.css, resizable.css, select.css, textarea.css, tooltip.css | - | label, modes, toolbar, content, source, fields, help, image, image-content |
+| rolling-text | rolling-text.css | - | - | visual, char, label |
 | select | select.css | free-text.css, input-field.css, polymorph.css, tooltip.css | size=big/default/min/normal/small/tiny | field, trigger, trigger-icon, trigger-label, control |
 | shortcut | shortcut.css | - | - | icon |
 | skeleton | skeleton.css | polymorph.css | - | cell, block, list |
-| slider | slider.css | polymorph.css, tooltip.css | - | control, track, indicator, thumb |
+| slider | slider.css | - | - | row, body, control, track, indicator, thumb, tag, tick, marks, mark-label, icon |
 | spinner | spinner.css | - | - | container |
 | stats | stats.css | - | - | header, icon, icon-svg, content, title, value, footer |
 | step | step.css | - | - | connector, item, halo, marker, marker-content, status-icon, label, title |

@@ -16,29 +16,9 @@ describe("Dropdown props", () => {
         vi.stubGlobal("ResizeObserver", ResizeObserverMock);
     });
 
-    it("draws the arrow by default", async () => {
-        render(
-            <Dropdown open title="Menu" trigger="Open menu">
-                <div>Content</div>
-            </Dropdown>
-        );
-        const panel = await screen.findByRole("dialog", { name: "Menu" });
-        expect(panel.querySelector("svg")).not.toBeNull();
-    });
-
-    it("removes the arrow with arrow={false}", async () => {
-        render(
-            <Dropdown open arrow={false} title="Menu" trigger="Open menu">
-                <div>Content</div>
-            </Dropdown>
-        );
-        const panel = await screen.findByRole("dialog", { name: "Menu" });
-        expect(panel.querySelector("svg")).toBeNull();
-    });
-
     it("renders no header and no heading without a title, and keeps the aria-label", async () => {
         render(
-            <Dropdown open arrow={false} aria-label="Pick an emoji" trigger="Open menu">
+            <Dropdown open aria-label="Pick an emoji" trigger="Open menu">
                 <div>Content</div>
             </Dropdown>
         );
@@ -50,7 +30,7 @@ describe("Dropdown props", () => {
 
     it("keeps the header when there is a title", async () => {
         render(
-            <Dropdown open arrow={false} title="Menu" trigger="Open menu">
+            <Dropdown open title="Menu" trigger="Open menu">
                 <div>Content</div>
             </Dropdown>
         );
@@ -104,7 +84,7 @@ describe("Dropdown props", () => {
     it("closes on Escape and returns focus to the trigger", async () => {
         const user = userEvent.setup();
         render(
-            <Dropdown asChild arrow={false} title="Menu" trigger={<button type="button">Open menu</button>}>
+            <Dropdown asChild title="Menu" trigger={<button type="button">Open menu</button>}>
                 <button type="button">Item</button>
             </Dropdown>
         );
@@ -112,7 +92,7 @@ describe("Dropdown props", () => {
         await user.click(trigger);
         await screen.findByRole("dialog", { name: "Menu" });
         await user.keyboard("{Escape}");
-        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
         expect(trigger).toHaveFocus();
     });
 });

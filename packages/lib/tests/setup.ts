@@ -30,17 +30,3 @@ global.ResizeObserver = vi.fn().mockImplementation(function () {
 global.IntersectionObserver = vi.fn().mockImplementation(function () {
     return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn(), takeRecords: vi.fn(), root: null, rootMargin: "0px", thresholds: [] };
 });
-
-// JSDOM has no layout engine; ProseMirror still queries selection geometry.
-if (!Range.prototype.getClientRects) {
-    Object.defineProperty(Range.prototype, "getClientRects", {
-        configurable: true,
-        value: () => ({ length: 0, item: () => null, *[Symbol.iterator]() {} }),
-    });
-}
-if (!Range.prototype.getBoundingClientRect) {
-    Object.defineProperty(Range.prototype, "getBoundingClientRect", {
-        configurable: true,
-        value: () => new DOMRect(),
-    });
-}

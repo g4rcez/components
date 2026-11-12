@@ -104,8 +104,9 @@ describe("floating and command contracts", () => {
 
         const panel = await screen.findByRole("dialog", { name: "Menu" });
         expect(panel.style.transformOrigin).toBe("center top");
-        // Positioned with top/left, so the CSS `scale` enter animation does not move the panel.
-        expect(panel.style.transform).toBe("");
+        // Positioned with top/left, so Motion owns `transform` for the enter and exit animation.
+        expect(panel.style.top).not.toBe("");
+        expect(panel.style.left).not.toBe("");
     });
 
     it("keeps controlled Tooltip changes owned by the parent and preserves no-popover defaults", async () => {

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -70,7 +70,7 @@ describe("Escape inside a Modal closes only the topmost popup", () => {
 
         await user.keyboard("{Escape}");
 
-        expect(screen.queryByRole("dialog", { name: "Filters" })).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("dialog", { name: "Filters" })).not.toBeInTheDocument());
         expect(screen.getByTestId("modal-state")).toHaveTextContent("open");
 
         await user.keyboard("{Escape}");
@@ -92,7 +92,7 @@ describe("Escape inside a Modal closes only the topmost popup", () => {
 
         await user.keyboard("{Escape}");
 
-        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
         expect(screen.getByTestId("modal-state")).toHaveTextContent("open");
 
         await user.keyboard("{Escape}");

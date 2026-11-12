@@ -1,0 +1,31 @@
+import { defineComponentStyles } from "../../../lib/component-styles";
+
+export const morphSelectStyles = defineComponentStyles({
+    name: "morph-select",
+    variants: {},
+    defaults: {},
+    slots: [
+        "label",
+        "anchor",
+        "trigger",
+        "trigger-content",
+        "value",
+        "caret",
+        "surface",
+        "inner",
+        "header",
+        "search",
+        "list",
+        "group",
+        "group-label",
+        "option",
+        "option-icon",
+        "option-label",
+        "option-meta",
+        "option-check",
+        "highlight",
+        "empty",
+        "status",
+    ],
+    dependencies: ["rolling-text"],
+});

@@ -86,8 +86,12 @@ Component docs describe interaction behavior and acceptance criteria. They do no
 | Input email | Existing: [Input](Input.md) with `type="email"`. |
 | Input search | Existing: [Input](Input.md) with `type="search"`. The application owns results and feedback. |
 | Input password | Existing: [Input](Input.md) with `type="password"`. See the visibility-control limits. |
-| Select (Combo) | Existing/adapted: [Select](Select.md), [MultiSelect](MultiSelect.md), [Autocomplete](Autocomplete.md). Verify custom behavior. |
+| Select (Combo) | Existing/adapted: [Select](Select.md), [MorphSelect](MorphSelect.md), [MultiSelect](MultiSelect.md), [Autocomplete](Autocomplete.md). Verify custom behavior. |
 | Slider | Existing: [Slider](Slider.md), with an accessible name and a readable value. |
+| Confirmação por pressão longa (hold to confirm) | Existing: [HoldToConfirm](HoldToConfirm.md) for destructive actions whose consequence is visible. Use [Modal](Modal.md) when the person must read first. |
+| Reações (reactions) | Existing: [Reactions](Reactions.md). Persistence belongs to the consumer. |
+| Triagem por cartões (swipe deck) | Existing: [CardStack](CardStack.md), with buttons and keys for every gesture. It is not a carousel. |
+| Botão de estados (stateful pill) | Existing: [ActionSwap](ActionSwap.md) for a control that cycles through related states. |
 | Switch | Existing: [Switch](Switch.md). Separate immediate settings from submitted checkbox choices. |
 
 ## Catalog
@@ -98,11 +102,14 @@ Read the component doc before using a component. Each row links the doc and show
 
 | Component | Import | Use |
 |---|---|---|
+| [ActionSwap](ActionSwap.md) | `import { ActionSwap } from "@g4rcez/components"` | Pill button that cycles through related states, such as Pin and Pinned, morphing width, tone, icon and label together. |
 | [Button](Button.md) | `import { Button } from "@g4rcez/components/button"` | A versatile button component with multiple variants, sizes, and states. |
 | [Heading](Heading.md) | `import { Heading } from "@g4rcez/components"` | Semantic heading wrapper that renders h2 by default and accepts a polymorphic element type. |
+| [HoldToConfirm](HoldToConfirm.md) | `import { HoldToConfirm } from "@g4rcez/components"` | Button that runs its action only after being held down, for destructive actions whose consequence is already visible. |
 | [Polymorph](Polymorph.md) | `import { Polymorph } from "@g4rcez/components"` | A polymorphic component that renders as any HTML element while maintaining full TypeScript type safety. |
 | [RenderOnView](RenderOnView.md) | `import { RenderOnView } from "@g4rcez/components"` | A performance wrapper that defers rendering children until the container enters the viewport. |
 | [Resizable](Resizable.md) | `import { Resizable } from "@g4rcez/components"` | Motion wrapper that animates its height when content changes or when it opens and closes. |
+| [RollingText](RollingText.md) | `import { RollingText, RollingDigits } from "@g4rcez/components"` | Text and numbers whose changed characters roll in, with the full value kept for assistive technology. |
 | [Slot](Slot.md) | `import { Slot, Slottable } from "@g4rcez/components"` | A composition primitive that merges its props into a single child element, enabling the asChild pattern. |
 | [Tag](Tag.md) | `import { Tag } from "@g4rcez/components/tag"` | A label/badge component for displaying metadata, status, or categorization information. |
 | [Typography](Typography.md) | `import { Paragraph, Description, Info, PageTitle, PageHeader } from "@g4rcez/components"` | A set of text and page-structure components for consistent typographic styling. |
@@ -119,15 +126,15 @@ Read the component doc before using a component. Each row links the doc and show
 | [formReset](FormReset.md) | `import { formReset } from "@g4rcez/components"` | Utility function that resets all inputs and selects in a form to their default values and clears their initialization state. |
 | [Input](Input.md) | `import { Input } from "@g4rcez/components/input"` | Text input with optional masking for currencies, percentages, phone numbers, dates, and custom regex patterns. |
 | [InputField](InputField.md) | `import { InputField } from "@g4rcez/components"` | Low-level field wrapper that provides a label, tooltip, error message, feedback text, and left/right slots for any form control. |
+| [MorphSelect](MorphSelect.md) | `import { MorphSelect } from "@g4rcez/components"` | Select whose trigger grows into the list, with a gliding highlight, type-ahead, groups and optional search. |
 | [MultiSelect](MultiSelect.md) | `import { MultiSelect } from "@g4rcez/components"` | Dropdown that lets users select multiple options with fuzzy search and tag display. |
 | [Radiobox](Radiobox.md) | `import { Radiobox } from "@g4rcez/components/radiobox"` | Styled radio button for selecting one option from a mutually exclusive set. |
 | [Select](Select.md) | `import { Select } from "@g4rcez/components/select"` | Styled native select component with validation, loading state, and form integration. |
-| [Slider](Slider.md) | `import { Slider } from "@g4rcez/components"` | Range control for selecting one or more numeric values along a scale. |
+| [Slider](Slider.md) | `import { Slider } from "@g4rcez/components"` | Range control for one value or a range, with a rubber-band stretch past the ends, detent marks and a value tag. |
 | [Switch](Switch.md) | `import { Switch } from "@g4rcez/components/switch"` | Toggle switch for switching between two mutually exclusive states such as On/Off. |
 | [TaskList](TaskList.md) | `import { TaskList } from "@g4rcez/components/task-list"` | Fieldset container with a reduced-motion-aware celebration when all child tasks are checked. |
 | [Textarea](Textarea.md) | `import { Textarea } from "@g4rcez/components"` | Auto-growing multi-line text input built on the InputField foundation. |
 | [DrawingEditor](drawing-editor.md) | `import { DrawingEditor, createDrawingScene } from "@g4rcez/components/drawing-editor"` | Controlled layered raster/vector drawing with bounded JSON scenes and flattened PNG export. |
-| [RichTextEditor](rich-text-editor.md) | `import { RichTextEditor } from "@g4rcez/components/rich-text-editor"` | Controlled GFM Markdown editing with a safe rich view and an exact source view. |
 
 ### Display
 
@@ -135,6 +142,7 @@ Read the component doc before using a component. Each row links the doc and show
 |---|---|---|
 | [Alert](Alert.md) | `import { Alert } from "@g4rcez/components/alert"` | Collapsible, themed alert banner for displaying important messages and status updates. |
 | [AnimatedList](AnimatedList.md) | `import { AnimatedList, AnimatedListItem } from "@g4rcez/components"` | Animated list that expands each item into a floating detail overlay on click. |
+| [CardStack](CardStack.md) | `import { CardStack } from "@g4rcez/components"` | Review a deck one card at a time by dragging, flicking, pressing a button or using the arrow keys, with undo. |
 | [Calendar](Calendar.md) | `import { Calendar } from "@g4rcez/components/calendar"` | Interactive month calendar with single-date, date-time, and range selection modes. |
 | [Card](Card.md) | `import { Card, StatsCard } from "@g4rcez/components/card"` | Polymorphic container for grouping related content with optional title header, loading state, and composable sub-components. |
 | [Empty](Empty.md) | `import { Empty } from "@g4rcez/components"` | Empty state placeholder displayed when a collection or data set contains no items. |
@@ -142,6 +150,7 @@ Read the component doc before using a component. Each row links the doc and show
 | [Masonry](Masonry.md) | `import { Masonry, MasonryItem } from "@g4rcez/components/masonry"` | Measured masonry layout that preserves source order while placing items in columns of uneven height. |
 | [Notifications](Notifications.md) | `import { Notifications, useNotification } from "@g4rcez/components/notifications"` | Toast notification system with themes, stacking, swipe-to-dismiss, and programmatic control. |
 | [Progress](Progress.md) | `import { Progress } from "@g4rcez/components"` | Accessible determinate progress bar with an optional label overlay. |
+| [Reactions](Reactions.md) | `import { Reactions } from "@g4rcez/components"` | Bar of reaction pills with a picker to add more, where counts roll digit by digit and pills reflow on a spring. |
 | [Shortcut](Shortcut.md) | `import { Shortcut } from "@g4rcez/components"` | Inline keyboard shortcut display with automatic OS-specific key symbol mapping. |
 | [Skeleton](Skeleton.md) | `import { Skeleton, SkeletonCell, SkeletonList } from "@g4rcez/components"` | Accessible animated loading placeholders for blocks, cells, and lists. |
 | [Spinner](Spinner.md) | `import { Spinner, Loading } from "@g4rcez/components"` | Accessible loading indicator for indeterminate work with a reduced-motion static state, plus an optional full-container wrapper. |
@@ -158,7 +167,7 @@ Read the component doc before using a component. Each row links the doc and show
 | Component | Import | Use |
 |---|---|---|
 | [CommandPalette](CommandPalette.md) | `import { CommandPalette } from "@g4rcez/components"` | Searchable command palette with fuzzy search, keyboard shortcuts, and grouped commands. |
-| [Dropdown](Dropdown.md) | `import { Dropdown } from "@g4rcez/components/dropdown"` | Floating dropdown panel with an optional title, arrow pointer, and automatic collision-aware positioning. |
+| [Dropdown](Dropdown.md) | `import { Dropdown } from "@g4rcez/components/dropdown"` | Floating dropdown panel with an optional title, soft border, and automatic collision-aware positioning. |
 | [Expand](Expand.md) | `import { Expand } from "@g4rcez/components/expand"` | A button that expands in-place into a floating container using shared-element layout animations. |
 | [Menu](Menu.md) | `import { Menu, MenuItem } from "@g4rcez/components/menu"` | Floating application-action menu with nested submenus, keyboard navigation, hover support, and typeahead. |
 | [Modal](Modal.md) | `import { Modal } from "@g4rcez/components/modal"` | Animated modal with dialog, drawer, and sheet variants; includes drag-to-resize and a programmatic confirm utility. |

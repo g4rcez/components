@@ -87,13 +87,6 @@ describe("press feedback and reduced motion", () => {
 
 describe("enter animations", () => {
     const cases = [
-        {
-            name: "Dropdown panel",
-            path: "src/components/floating/dropdown/dropdown.css",
-            selector: ".__dropdown",
-            full: "__dropdown-in",
-            fade: "__dropdown-fade",
-        },
         { name: "Menu panel", path: "src/components/floating/menu/menu.css", selector: ".__menu__floating", full: "__menu-in", fade: "__menu-fade" },
         {
             name: "FileUpload drag icon",

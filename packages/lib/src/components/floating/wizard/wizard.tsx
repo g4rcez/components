@@ -15,6 +15,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { type CSSProperties, Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { VIEWPORT_PADDING } from "../../../constants";
 import { useResizeObserver } from "../../../hooks/use-resize-observer";
 import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
@@ -47,6 +48,28 @@ const getRect = (element: Element | null) => {
     return element.getBoundingClientRect();
 };
 
+/** Whether the target sits inside the viewport with room around it. A target taller than the viewport only needs its top edge in view. */
+const isInView = (rect: DOMRect | ReturnType<typeof getRect>) => {
+    const height = window.innerHeight;
+    const width = window.innerWidth;
+    const fitsVertically =
+        rect.height > height - VIEWPORT_PADDING * 2
+            ? rect.top >= 0 && rect.top < height - VIEWPORT_PADDING
+            : rect.top >= VIEWPORT_PADDING && rect.bottom <= height - VIEWPORT_PADDING;
+    const fitsHorizontally =
+        rect.width > width - VIEWPORT_PADDING * 2
+            ? rect.left >= 0 && rect.left < width - VIEWPORT_PADDING
+            : rect.left >= VIEWPORT_PADDING && rect.right <= width - VIEWPORT_PADDING;
+    return fitsVertically && fitsHorizontally;
+};
+
+/** Brings a target that is outside the viewport into view, centered, smoothly unless the person asked for reduced motion. */
+const scrollIntoViewIfNeeded = (element: Element) => {
+    if (typeof element.scrollIntoView !== "function" || isInView(element.getBoundingClientRect())) return;
+    const reduce = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    element.scrollIntoView({ block: "center", inline: "nearest", behavior: reduce ? "auto" : "smooth" });
+};
+
 const resolveElement = (element: WizardStep["element"]): Element | null => {
     if (typeof element === "string") {
         return document.querySelector(element);
@@ -57,7 +80,15 @@ const resolveElement = (element: WizardStep["element"]): Element | null => {
     return element;
 };
 
-export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop, onChange = noop, labels: labelsProp, translations }: WizardProps) => {
+export const Wizard = ({
+    steps,
+    active = false,
+    onClose = noop,
+    onFinish = noop,
+    onChange = noop,
+    labels: labelsProp,
+    translations,
+}: WizardProps) => {
     const translation = useTranslations(translations);
     const [index, setIndex] = useState(0);
     const currentStep = steps[index];
@@ -92,24 +123,85 @@ export const Wizard = ({ steps, active = false, onClose = noop, onFinish = noop,
         setIsOverlayReady(false);
     }, [index, active]);
 
+    // `onEnter` runs once per step, before the target is looked up, so it can open the panel or modal the step points at.
+    // The steps array is often rebuilt on every render, so the step object itself cannot be the key.
+    const enteredRef = useRef<string | null>(null);
+
     useEffect(() => {
-        if (!active || !currentStep) return;
-        const el = resolveElement(currentStep.element);
-        if (!el) {
+        if (!active || !currentStep) {
+            enteredRef.current = null;
+            return;
+        }
+        const key = `${index}`;
+        const hasOnEnter = typeof currentStep.onEnter === "function";
+        if (enteredRef.current !== key) {
+            enteredRef.current = key;
+            currentStep.onEnter?.();
+        }
+
+        let cancelled = false;
+        let timeout = 0;
+        let frame = 0;
+        const startedAt = performance.now();
+        // A step that opens something (a modal, a panel) needs a moment for the target to mount, so it is looked up again.
+        const lookupWindow = hasOnEnter ? 1500 : 0;
+
+        const showMissing = () => {
             refs.setReference(null);
             setElement(null);
             setRect(getRect(null));
             setIsOverlayReady(true);
-            return;
-        }
+        };
 
-        currentStep.onEnter?.();
-        const timeout = window.setTimeout(() => {
+        // Follows the target for a moment after it appears: a modal or panel is still sliding or scaling in, and that
+        // movement fires neither scroll nor resize.
+        const follow = (el: Element, until: number) => {
+            const tick = () => {
+                if (cancelled) return;
+                setRect((previous) => {
+                    const next = el.getBoundingClientRect();
+                    return previous.top === next.top &&
+                        previous.left === next.left &&
+                        previous.width === next.width &&
+                        previous.height === next.height
+                        ? previous
+                        : next;
+                });
+                if (performance.now() < until) frame = window.requestAnimationFrame(tick);
+            };
+            frame = window.requestAnimationFrame(tick);
+        };
+
+        const attempt = () => {
+            if (cancelled) return;
+            const el = resolveElement(currentStep.element);
+            if (!el) {
+                if (performance.now() - startedAt < lookupWindow) timeout = window.setTimeout(attempt, 50);
+                else showMissing();
+                return;
+            }
+            // A step can point at something far down the page or inside a scroller: bring it into view first. The scroll
+            // listener below keeps the spotlight and the floating card following it while the page moves.
+            scrollIntoViewIfNeeded(el);
             setRect(el.getBoundingClientRect());
             refs.setReference(el);
             setElement(el);
-        }, 100);
-        return () => window.clearTimeout(timeout);
+            if (hasOnEnter) follow(el, performance.now() + 700);
+        };
+
+        // The first look is immediate when nothing is going to open, so a missing target centers the card right away.
+        if (!hasOnEnter && !resolveElement(currentStep.element)) {
+            showMissing();
+            return () => {
+                cancelled = true;
+            };
+        }
+        timeout = window.setTimeout(attempt, 100);
+        return () => {
+            cancelled = true;
+            window.clearTimeout(timeout);
+            window.cancelAnimationFrame(frame);
+        };
     }, [index, active, currentStep, refs]);
 
     useLayoutEffect(() => {

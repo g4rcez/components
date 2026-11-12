@@ -108,7 +108,6 @@ const ColumnProperties = <T extends object>(props: Pick<PropertiesItemProps<T>, 
     const translations = useTranslations(props.translations);
     return (
         <Dropdown
-            arrow
             lockPositionOnOpen
             title={translations.tablePropertiesTitle}
             buttonProps={{
@@ -222,7 +221,6 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                     ) : null}
                     {props.inlineFilter && defaultAllowFilter ? (
                         <Dropdown
-                            arrow
                             buttonProps={{
                                 className: css(
                                     tableHeadStyles.slots["filter-trigger"],
@@ -252,7 +250,12 @@ const HeaderChild = <T extends object>(props: HeaderChildProps<T>) => {
                                     <Fragment>
                                         {ownFilters.map((filter) => (
                                             <li key={`thead-filter-${filter.id}`} className={tableHeadStyles.slots["filter-item"]}>
-                                                <ColumnHeaderFilter onDelete={onDelete} filter={filter} set={props.setFilters} translations={props.translations} />
+                                                <ColumnHeaderFilter
+                                                    onDelete={onDelete}
+                                                    filter={filter}
+                                                    set={props.setFilters}
+                                                    translations={props.translations}
+                                                />
                                             </li>
                                         ))}
                                     </Fragment>

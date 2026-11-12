@@ -2,23 +2,56 @@
     box-sizing: border-box;
 }
 
+/* The panel: a padded, rounded surface. Items sit inside it as their own rounded rows. */
+.__menu__floating {
+    isolation: isolate;
+    z-index: var(--var-layer-floating);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: calc(var(--var-spacing-base) * 0.125);
+    min-inline-size: var(--var-menu-surface-min-inline-size, calc(var(--var-spacing-base) * 12));
+    max-block-size: var(--var-menu-surface-max-block-size, calc(var(--var-spacing-base) * 28));
+    overflow-y: auto;
+    padding: var(--var-menu-surface-padding, calc(var(--var-spacing-base) * 0.375));
+    border-style: solid;
+    border-width: var(--var-border-hairline);
+    border-color: var(--var-menu-surface-border);
+    border-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) * 1));
+    background-color: var(--var-menu-surface-background);
+    color: var(--var-menu-surface-foreground);
+    font-size: calc(var(--var-fontsize) * 0.9375);
+    line-height: 1.4;
+    text-align: left;
+    box-shadow: var(--var-menu-surface-shadow, var(--var-shadow-floating));
+    animation: __menu-in var(--var-motion-duration-fast) var(--var-motion-timing-out);
+    outline: var(--var-menu-item-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
+    outline-offset: var(--var-menu-item-outline-offset, calc(var(--var-spacing-base) * 0.125));
+}
+
 .__menu__item {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-sizing: border-box;
     inline-size: 100%;
+    min-block-size: var(--var-menu-item-min-block-size, calc(var(--var-spacing-base) * 2.25));
     min-inline-size: var(--var-menu-item-min-inline-size, calc(var(--var-spacing-base) * 9));
-    padding: var(--var-menu-item-padding, calc(var(--var-spacing-base) * 0.625));
+    padding: var(--var-menu-item-padding, calc(var(--var-spacing-base) * 0.375) calc(var(--var-spacing-base) * 0.625));
+    border-radius: var(--var-menu-item-radius, calc(var(--var-radius-base) * 0.625));
     text-align: left;
+    white-space: nowrap;
     outline: var(--var-menu-item-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
     outline-offset: var(--var-menu-item-outline-offset, calc(var(--var-spacing-base) * 0.125));
+    transition: background-color var(--var-motion-duration-fast) var(--var-motion-timing-out);
 }
 
 .__menu__item [data-menu-item-label] {
     display: flex;
     flex: 1 1 auto;
     align-items: center;
-    gap: var(--var-menu-item-gap, calc(var(--var-spacing-base) * 0.5));
+    gap: var(--var-menu-item-gap, calc(var(--var-spacing-base) * 0.625));
     min-inline-size: 0;
 }
 
@@ -27,8 +60,8 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    inline-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
-    block-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
+    inline-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1.125));
+    block-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1.125));
 }
 
 /* Reserve the indicator column only in menus that have a checkable item, so plain menus keep their original inset. */
@@ -36,14 +69,24 @@
     display: none;
 }
 
-.__menu__item:first-of-type {
-    border-start-start-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
-    border-start-end-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
+.__menu__item-icon {
+    flex: none;
+    inline-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1.125));
+    block-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1.125));
 }
 
-.__menu__item:last-of-type {
-    border-end-start-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
-    border-end-end-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
+/* Leading icons and trailing hints read as secondary until the row is highlighted. */
+.__menu__item [data-menu-item-icon] {
+    color: var(--var-color-muted-foreground);
+}
+
+.__menu__item [data-menu-item-shortcut] {
+    flex: none;
+    margin-inline-start: calc(var(--var-spacing-base) * 1.5);
+    color: var(--var-color-muted-foreground);
+    font-size: 0.8125em;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
 }
 
 .__menu__item[aria-expanded="true"] {
@@ -68,40 +111,51 @@
     opacity: var(--var-menu-item-disabled-opacity);
 }
 
-.__menu__floating {
-    isolation: isolate;
-    z-index: var(--var-layer-floating);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-block-size: var(--var-menu-surface-max-block-size, calc(var(--var-spacing-base) * 20));
-    overflow-y: auto;
-    border-style: solid;
-    border-width: var(--var-border-hairline);
-    border-color: var(--var-menu-surface-border);
-    border-radius: var(--var-menu-surface-radius, calc(var(--var-radius-base) / 2));
-    background-color: var(--var-menu-surface-background);
-    color: var(--var-menu-surface-foreground);
-    text-align: left;
-    box-shadow: var(--var-shadow-floating);
-    animation: __menu-in var(--var-motion-duration-fast) var(--var-motion-timing-out);
-    outline: var(--var-menu-item-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
-    outline-offset: var(--var-menu-item-outline-offset, calc(var(--var-spacing-base) * 0.125));
+/* Destructive rows keep the danger color and highlight with its soft surface. */
+.__menu__item[data-tone="danger"],
+.__menu__item[data-tone="danger"] [data-menu-item-icon] {
+    color: var(--var-color-danger);
+}
+
+.__menu__item[data-tone="danger"]:focus,
+.__menu__item[data-tone="danger"].__menu__item--active {
+    background-color: var(--var-color-danger-subtle);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .__menu__item[data-tone="danger"]:hover {
+        background-color: var(--var-color-danger-subtle);
+    }
+}
+
+.__menu__separator {
+    flex: none;
+    align-self: stretch;
+    block-size: var(--var-border-hairline);
+    margin-block: calc(var(--var-spacing-base) * 0.25);
+    margin-inline: calc(var(--var-spacing-base) * 0.5);
+    background-color: var(--var-color-border);
+}
+
+.__menu__label {
+    padding: calc(var(--var-spacing-base) * 0.5) calc(var(--var-spacing-base) * 0.625) calc(var(--var-spacing-base) * 0.25);
+    color: var(--var-color-muted-foreground);
+    font-size: 0.8125em;
+    font-weight: var(--var-font-weight-medium);
+    letter-spacing: 0.02em;
+    cursor: default;
+    user-select: none;
 }
 
 .__menu__nested-indicator {
-    margin-inline-start: var(--var-menu-nested-indicator-margin-inline-start, calc( var(--var-spacing-base) * 0.625 ));
+    margin-inline-start: var(--var-menu-nested-indicator-margin-inline-start, calc(var(--var-spacing-base) * 0.625));
+    color: var(--var-color-muted-foreground);
     font-size: var(--var-menu-nested-indicator-font-size);
 }
 
 .__menu__nested-icon {
     inline-size: var(--var-menu-nested-icon-size, calc(var(--var-spacing-base) * 0.875));
     block-size: var(--var-menu-nested-icon-size, calc(var(--var-spacing-base) * 0.875));
-}
-
-.__menu__item-icon {
-    inline-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
-    block-size: var(--var-menu-item-icon-size, calc(var(--var-spacing-base) * 1));
 }
 
 .__menu__sr-label {

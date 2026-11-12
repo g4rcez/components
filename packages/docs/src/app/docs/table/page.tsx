@@ -1,71 +1,71 @@
 "use client";
 import { ComponentDemo } from "@/components/component-demo";
 import { DocsLayout } from "@/components/docs-layout";
-import { ColType, createColumns, Table, useTablePreferences, uuid } from "@g4rcez/components";
+import { ColType, createColumns, Table, Tag, useTablePreferences } from "@g4rcez/components";
 import { useState } from "react";
+import { type Language, languages, type Paradigm, paradigmTheme } from "./languages";
 
-type User = { id: string; name: string; type: string; document: string };
+const initials = (name = "") =>
+    name
+        .split(" ")
+        .map((part) => part[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
 
-const cols = createColumns<User>((col) => {
+const cols = createColumns<Language>((col) => {
     col.add(
         "name",
         ({ Properties }) => (
             <span className="flex items-center gap-2">
                 <Properties />
-                Nome
+                Language
             </span>
         ),
         {
-            type: ColType.Number,
-            headerLabel: "Name",
-            Element: (props) => {
-                return (
-                    <span className="whitespace-pre-line break-words">
-                        {props.rowIndex}. {props.value}
-                    </span>
-                );
-            },
+            type: ColType.Text,
+            headerLabel: "Language",
+            Element: (props) => <span className="text-sm font-medium">{props.value}</span>,
         }
     );
-    col.add("id", "ID", {
-        thProps: { style: { width: "40%" } },
+    col.add("creator", "Creator", {
+        type: ColType.Text,
         Element: (props) => (
-            <span>
-                {props.rowIndex}. {props.value}
+            <span className="flex items-center gap-2 text-sm">
+                <span
+                    aria-hidden="true"
+                    className="bg-muted inline-flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-medium"
+                >
+                    {initials(props.value)}
+                </span>
+                {props.value}
             </span>
         ),
     });
-    col.add("type", "Type", { thProps: { style: { width: "10%" } } });
-    col.add("document", "Document", { thProps: { style: { width: "22%" } } });
+    col.add("paradigm", "Paradigm", {
+        type: ColType.Text,
+        Element: (props) => (
+            <Tag appearance="soft" size="tiny" theme={paradigmTheme[props.value]}>
+                {props.value}
+            </Tag>
+        ),
+    });
 });
 
-const clients = Array.from({ length: 500 }).map(
-    (_, i): User => ({
-        id: uuid(),
-        name: `${i}`.repeat(i).substring(0, 30),
-        type: i % 2 === 0 ? "pj" : "pf",
-        document: i % 2 === 0 ? "000.000.000-00" : "00.000.000/0001-00",
-    })
-);
+const paradigms = Object.keys(paradigmTheme) as Paradigm[];
 
-const groupedClients = [
-    { key: "pj", name: "Companies" },
-    { key: "pf", name: "Individuals" },
-].map(({ key, name }, index) => ({
-    ...cols.find((col) => col.id === "type")!,
-    groupId: `client-type-${key}`,
-    groupKey: "type" as const,
-    groupName: name,
-    groupTitle: <div className="text-lg font-medium uppercase">{name}</div>,
+const groupedLanguages = paradigms.map((paradigm, index) => ({
+    ...cols.find((col) => col.id === "paradigm")!,
+    groupId: `language-paradigm-${index}`,
+    groupKey: "paradigm" as const,
+    groupName: paradigm,
+    groupTitle: <span className="font-medium">{paradigm}</span>,
     index,
-    rows: clients.filter((client) => client.type === key).slice(0, 10),
+    rows: languages.filter((item) => item.paradigm === paradigm),
 }));
 
 export default function TablePage() {
-    const preferences = useTablePreferences("@test-table", cols);
-    const groupPreferences = useTablePreferences("@table-groups", cols, { groups: groupedClients });
-    const selectionPreferences = useTablePreferences("@table-row-selection", cols);
-    const borderPreferences = useTablePreferences("@table-border", cols);
+    const preferences = useTablePreferences("@table-languages", cols, { groups: groupedLanguages });
     const [selected, setSelected] = useState<string[]>([]);
     return (
         <DocsLayout
@@ -78,88 +78,60 @@ export default function TablePage() {
         >
             <ComponentDemo
                 title="Virtual and fast by default"
-                description="The table component uses the react-virtuoso to guarantee a fast and virtualized table, avoiding problems with large datasets"
-                code={`import { Table } from "@g4rcez/components";
-function VirtualTable() {
-  return (
-    <Table
-      cols={cols}
-      rows={data}
-      getRowProps={(item) => 
-        item.type === "pf" ? { 
-          style: { background: "hsla(0, 0%, 14%, 0.5)" } 
-        } : {}
-      }
-    />
-  );
-}`}
-            >
-                <Table<User>
-                    {...preferences}
-                    name="table-selection"
-                    rows={clients.slice(0, 100)}
-                    loading={clients.length === 0}
-                    getRowProps={(item: User) => (item.type === "pf" ? { className: "bg-muted" } : {})}
-                />
-            </ComponentDemo>
-            <ComponentDemo
-                title="Row selection"
-                description="Set selectable and reference to add a checkbox to each row. The header checkbox selects the rows that pass the active filters, and shows a mixed state when only some are selected. Leave selected undefined to let the table keep the selection."
-                code={`import { Table } from "@g4rcez/components";
+                description="One table with every option on: 200 rows rendered by react-virtuoso with window scroll, so only the rows near the viewport are in the DOM and the page scrolls with the table. The header stays sticky, the checkbox column selects rows, the toolbar sorts, filters and groups, the Properties button reorders columns, and border adds the column dividers."
+                code={`import { ColType, createColumns, Table, Tag, useTablePreferences } from "@g4rcez/components";
 import { useState } from "react";
 
-function SelectableTable() {
+const cols = createColumns<Language>((col) => {
+  col.add("name", ({ Properties }) => <span><Properties /> Language</span>, { type: ColType.Text });
+  col.add("creator", "Creator", { type: ColType.Text });
+  col.add("paradigm", "Paradigm", {
+    type: ColType.Text,
+    Element: (props) => <Tag appearance="soft" size="small" theme={theme[props.value]}>{props.value}</Tag>,
+  });
+});
+
+const groups = paradigms.map((paradigm, index) => ({
+  ...cols.find((column) => column.id === "paradigm"),
+  groupId: \`language-paradigm-\${index}\`,
+  groupKey: "paradigm",
+  groupName: paradigm,
+  groupTitle: <span>{paradigm}</span>,
+  index,
+  rows: languages.filter((item) => item.paradigm === paradigm),
+}));
+
+function LanguagesTable() {
+  const preferences = useTablePreferences("languages", cols, { groups });
   const [selected, setSelected] = useState<string[]>([]);
   return (
     <Table
-      name="clients"
-      cols={cols}
-      rows={clients}
-      reference="id"
+      {...preferences}
+      border
       selectable
+      operations
+      name="languages"
+      reference="id"
+      rows={languages}
       selected={selected}
-      onSelectionChange={(ids, rows) => setSelected(ids)}
+      onSelectionChange={(ids) => setSelected(ids)}
     />
   );
 }`}
             >
-                <Table<User>
-                    {...selectionPreferences}
-                    name="table-row-selection"
-                    rows={clients.slice(0, 20)}
-                    reference="id"
-                    selectable
-                    selected={selected}
-                    onSelectionChange={(ids) => setSelected(ids)}
-                />
-            </ComponentDemo>
-            <ComponentDemo
-                title="Column dividers"
-                description="The default look has horizontal dividers only. Pass border to show the column dividers."
-                code={`<Table name="clients" cols={cols} rows={clients} border />`}
-            >
-                <Table<User> {...borderPreferences} name="table-border" rows={clients.slice(0, 10)} border />
-            </ComponentDemo>
-            <ComponentDemo
-                title="Grouped rows"
-                description="Set the initial groups to split related rows into separate tables. Use the Group control to change or clear the grouping."
-                code={`const groups = ["pj", "pf"].map((type, index) => ({
-  ...cols.find((column) => column.id === "type"),
-  groupId: \`client-type-\${type}\`,
-  groupKey: "type",
-  groupName: type,
-  groupTitle: <span>{type === "pj" ? "Companies" : "Individuals"}</span>,
-  index,
-  rows: clients.filter((client) => client.type === type),
-}));
-
-function GroupedTable() {
-  const preferences = useTablePreferences("clients-by-type", cols, { groups });
-
-  return <Table {...preferences} name="clients-by-type" rows={clients} />;
-}`}
-            >
-                <Table<User> {...groupPreferences} name="table-groups" rows={clients.slice(0, 20)} loading={clients.length === 0} />
+                <div className="w-full [--var-table-cell-padding:0.5rem] [--var-table-head-cell-block-size:2.25rem] [--var-table-properties-trigger-min-block-size:2rem] [--var-table-row-block-size:2.25rem] [--var-table-selection-target-size:1.75rem]">
+                    <Table<Language>
+                        {...preferences}
+                        border
+                        selectable
+                        operations
+                        name="table-languages"
+                        reference="id"
+                        rows={languages}
+                        selected={selected}
+                        onSelectionChange={(ids) => setSelected(ids)}
+                    />
+                </div>
             </ComponentDemo>
         </DocsLayout>
     );

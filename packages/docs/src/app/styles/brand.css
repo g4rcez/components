@@ -1,0 +1,140 @@
+/*
+ * Brand palette for the docs: the ONLY file in the docs that may contain colour literals.
+ *
+ * Light neutrals use hue 240, in Radix-style steps. Dark neutrals and both accents use hue 202, the hue of
+ * the library primary (#0084D1), so dark mode reads as sky instead of purple. Contrast (WCAG), measured on the
+ * previous hue-232 palette and re-checked by e2e/theme-contrast.spec.ts:
+ *   light: white on primary 7.64:1, white on hover 9.23:1, primary on background 7.64:1, soft text 8.71:1,
+ *          muted text 6.61:1 (6.00:1 on muted), input border 3.98:1
+ *   dark:  background ink on primary 5.62:1, on hover 7.38:1, soft text 7.93:1, muted text 8.64:1, input border 4.81:1
+ *
+ * The library hard-codes its old accent (hue 202) in ~54 component tokens instead of deriving them from
+ * --var-color-primary, so every one of them is re-derived here. This file is unlayered, so it wins over the
+ * library's @layer var.tokens / var.theme.
+ */
+
+:root {
+    --var-spacing-base: 16px;
+    --var-radius-base: 1rem;
+    --var-motion-duration-normal: 180ms;
+
+    /* Neutrals */
+    --var-color-background: hsl(0 0% 100%);
+    --var-color-foreground: hsl(240 10% 10%);
+    --var-color-border: hsl(240 6% 91%);
+    --var-color-input: hsl(240 6% 78%);
+    --var-color-muted: hsl(240 10% 96%);
+    --var-color-muted-foreground: hsl(240 5% 38%);
+    --var-color-disabled: hsl(240 10% 96%);
+    --var-card-background: hsl(0 0% 100%);
+    --var-card-border: hsl(240 6% 91%);
+
+    /* Shell surfaces the library has no token for (plain hsl: computed colours stay rgb-parsable for contrast tests) */
+    --docs-surface: hsl(240 20% 98.5%);
+    --docs-surface-raised: hsl(240 10% 96%);
+    --docs-primary-soft: hsl(202 100% 96%);
+    --docs-success-soft: hsl(146 35% 94%);
+    --docs-danger-soft: hsl(2 50% 95%);
+
+    /* Accent */
+    --var-color-primary: hsla(202, 100%, 41%);
+    --var-color-primary-foreground: hsl(0 0% 100%);
+    --var-color-primary-hover: hsl(202 100% 33%);
+    --var-color-primary-subtle: hsl(202 100% 30%);
+    --var-color-ring: hsl(202 100% 41%);
+
+    /* Soft accent buttons and tags */
+    --var-button-secondary-background: hsl(202 100% 96%);
+    --var-button-secondary-foreground: hsl(202 100% 26%);
+    --var-button-ghost-primary-background-hover: hsl(202 100% 41% / 0.12);
+    --var-tag-primary-background: hsl(202 100% 41%);
+    --var-tag-soft-primary-background: hsl(202 100% 96%);
+    --var-tag-soft-primary-foreground: hsl(202 100% 26%);
+    --var-tag-soft-primary-border: hsl(202 90% 86%);
+
+    /* Controls that mark a selection */
+    --var-checkbox-control-foreground: hsl(202 100% 41%);
+    --var-checkbox-focus-ring: hsl(202 100% 41%);
+    --var-radiobox-control-foreground: hsl(202 100% 41%);
+    --var-radiobox-focus-ring: hsl(202 100% 41%);
+    --var-switch-track-checked-background: hsl(202 100% 41% / 0.9);
+    --var-table-inline-placeholder-color: hsl(202 100% 41% / 0.7);
+
+    /* Active rows: light text on L22 = 12.8:1 */
+    --var-autocomplete-option-active-background: hsl(202 100% 22%);
+
+    /* Surfaces whose hover state is a wash of the accent */
+    --var-card-stats-panel-background-hover: hsl(202 100% 33% / 0.1);
+    --var-calendar-focus-border: hsl(202 100% 41% / 0.78);
+    --var-calendar-focus-ring: hsl(202 100% 41% / 0.18);
+    --var-calendar-today-border: hsl(202 100% 41% / 0.38);
+    --var-calendar-selected-ring: hsl(202 100% 41% / 0.14);
+    --var-calendar-selected-background-hover: hsl(202 100% 41% / 0.92);
+    --var-calendar-range-border: hsl(202 100% 41% / 0.28);
+    --var-calendar-range-background: hsl(202 100% 41% / 0.08);
+    --var-calendar-nav-button-border-hover: hsl(202 100% 41% / 0.28);
+    --var-calendar-nav-button-background-hover: hsl(202 100% 41% / 0.1);
+}
+
+html.dark {
+    --docs-surface: hsl(202 18% 9%);
+    --docs-surface-raised: hsl(202 15% 12%);
+    --docs-primary-soft: hsl(202 50% 15%);
+    --docs-success-soft: hsl(145 22% 13%);
+    --docs-danger-soft: hsl(2 28% 14%);
+
+    --var-color-background: hsl(202 18% 7%);
+    --var-color-foreground: hsl(202 6% 94%);
+    --var-color-border: hsl(202 15% 17%);
+    --var-color-input: hsl(202 8% 28%);
+    --var-color-muted: hsl(202 15% 12%);
+    --var-color-muted-foreground: hsl(202 5% 70%);
+    --var-color-disabled: hsl(202 12% 16%);
+    --var-card-background: hsl(202 18% 9%);
+    --var-card-border: hsl(202 15% 14%);
+
+    --var-color-primary: hsl(198 93% 60%);
+    --var-color-primary-foreground: hsl(202 18% 7%);
+    --var-color-primary-hover: hsl(198 93% 68%);
+    --var-color-primary-subtle: hsl(198 93% 80%);
+    --var-color-ring: hsl(198 93% 60%);
+
+    --var-button-secondary-background: hsl(202 50% 15%);
+    --var-button-secondary-foreground: hsl(198 93% 80%);
+    --var-button-ghost-primary-background-hover: hsl(198 93% 60% / 0.16);
+    --var-tag-primary-background: hsl(198 93% 60%);
+    --var-tag-soft-primary-background: hsl(202 50% 15%);
+    --var-tag-soft-primary-foreground: hsl(198 93% 80%);
+    --var-tag-soft-primary-border: hsl(202 50% 26%);
+
+    --var-checkbox-control-foreground: hsl(198 93% 60%);
+    --var-checkbox-focus-ring: hsl(198 93% 70%);
+    --var-radiobox-control-foreground: hsl(198 93% 60%);
+    --var-radiobox-focus-ring: hsl(198 93% 70%);
+    --var-switch-track-checked-background: hsl(198 93% 60% / 0.86);
+    --var-table-inline-placeholder-color: hsl(198 93% 70% / 0.7);
+
+    /* Light text on L22 = 12.8:1 */
+    --var-autocomplete-option-active-background: hsl(202 60% 22%);
+
+    --var-card-stats-panel-background-hover: hsl(198 93% 60% / 0.1);
+    --var-calendar-focus-border: hsl(198 93% 70% / 0.78);
+    --var-calendar-focus-ring: hsl(198 93% 70% / 0.18);
+    --var-calendar-today-border: hsl(198 93% 70% / 0.38);
+    --var-calendar-selected-ring: hsl(198 93% 70% / 0.14);
+    --var-calendar-selected-background-hover: hsl(198 93% 60% / 0.92);
+    --var-calendar-range-border: hsl(198 93% 70% / 0.28);
+    --var-calendar-range-background: hsl(198 93% 70% / 0.08);
+    --var-calendar-nav-button-border-hover: hsl(198 93% 70% / 0.28);
+    --var-calendar-nav-button-background-hover: hsl(198 93% 70% / 0.1);
+
+    /* Floating and control surfaces: one step above the page so layers stay legible */
+    --var-dropdown-surface-background: hsl(202 18% 10%);
+    --var-menu-surface-background: hsl(202 18% 10%);
+    --var-autocomplete-panel-background: hsl(202 18% 10%);
+    --var-wizard-surface-background: hsl(202 18% 10%);
+    --var-command-surface-background: hsl(202 18% 10%);
+    --var-table-background: hsl(202 18% 7%);
+    --var-radiobox-control-background: hsl(202 18% 7%);
+    --var-checkbox-control-background: hsl(202 18% 7%);
+}

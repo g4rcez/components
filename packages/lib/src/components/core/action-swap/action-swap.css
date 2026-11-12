@@ -1,0 +1,181 @@
+.__action-swap {
+    --action-swap-background: var(--var-color-background);
+    --action-swap-foreground: var(--var-color-foreground);
+    --action-swap-border: var(--var-color-border);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: var(--var-rounded-full);
+    color: var(--action-swap-foreground);
+    background: var(--action-swap-background);
+    font: inherit;
+    font-weight: var(--var-font-weight-medium);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: color, background-color, box-shadow, transform, opacity;
+    transition-duration:
+        var(--var-motion-duration-fast), var(--var-motion-duration-fast), var(--var-motion-duration-fast), var(--var-motion-duration-fast),
+        var(--var-motion-duration-fast);
+    transition-timing-function: var(--var-motion-timing-out);
+}
+
+/* The hairline border lives above the content so tone changes never shift layout. */
+.__action-swap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--var-border-hairline) var(--action-swap-border);
+    pointer-events: none;
+    transition: box-shadow var(--var-motion-duration-fast) var(--var-motion-timing-out);
+}
+
+.__action-swap[data-tone="primary"] {
+    --action-swap-background: var(--var-color-primary);
+    --action-swap-foreground: var(--var-color-primary-foreground);
+    --action-swap-border: var(--var-color-primary);
+}
+
+.__action-swap[data-tone="success"] {
+    --action-swap-background: var(--var-color-success);
+    --action-swap-foreground: var(--var-color-success-foreground);
+    --action-swap-border: var(--var-color-success);
+}
+
+.__action-swap[data-tone="warn"] {
+    --action-swap-background: var(--var-color-warn);
+    --action-swap-foreground: var(--var-color-warn-foreground);
+    --action-swap-border: var(--var-color-warn);
+}
+
+.__action-swap[data-tone="danger"] {
+    --action-swap-background: var(--var-color-danger);
+    --action-swap-foreground: var(--var-color-danger-foreground);
+    --action-swap-border: var(--var-color-danger);
+}
+
+.__action-swap[data-tone="quiet"] {
+    --action-swap-background: var(--var-color-muted);
+    --action-swap-foreground: var(--var-color-muted-foreground);
+    --action-swap-border: transparent;
+}
+
+.__action-swap:not(:disabled):not([aria-disabled="true"]):active {
+    transform: scale(0.97);
+}
+
+.__action-swap:focus-visible {
+    box-shadow: 0 0 0 var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) var(--var-color-ring);
+}
+
+@media (forced-colors: active) {
+    .__action-swap:focus-visible {
+        outline: var(--var-button-focus-ring-width, calc(var(--var-spacing-base) / 4)) solid ButtonText;
+        box-shadow: none;
+    }
+}
+
+.__action-swap:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.__action-swap[aria-disabled="true"] {
+    cursor: progress;
+}
+
+.__action-swap__content {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--var-button-gap, calc(var(--var-spacing-base) * 0.375));
+}
+
+.__action-swap--size-sm .__action-swap__content {
+    min-block-size: var(--var-button-small-height, calc(var(--var-spacing-base) * 2));
+    padding-inline: var(--var-button-small-px, calc(var(--var-spacing-base) * 1));
+    font-size: var(--var-button-small-font-size);
+}
+
+.__action-swap--size-md .__action-swap__content {
+    min-block-size: var(--var-button-height, calc(var(--var-spacing-base) * 2.5));
+    padding-inline: var(--var-button-px, calc(var(--var-spacing-base) * 1));
+    font-size: var(--var-button-font-size);
+}
+
+.__action-swap--size-lg .__action-swap__content {
+    min-block-size: var(--var-button-big-height, calc(var(--var-spacing-base) * 3));
+    padding-inline: var(--var-button-big-px, calc(var(--var-spacing-base) * 1.5));
+    font-size: var(--var-button-big-font-size);
+}
+
+/* Working without a label: the pill folds into a round spinner. */
+.__action-swap[data-round="true"] .__action-swap__content {
+    gap: 0;
+    padding-inline: 0;
+    min-inline-size: var(--action-swap-round-size, 2.5em);
+}
+
+.__action-swap__icon {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    block-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    font-size: var(--var-button-icon-font-size, calc(var(--var-spacing-base) * 1));
+    line-height: 1;
+}
+
+.__action-swap__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+}
+
+.__action-swap__spinner {
+    --var-spinner-indicator-size: 100%;
+    --var-spinner-indicator-border-width: 2px;
+    inline-size: 100%;
+    block-size: 100%;
+    border-color: color-mix(in srgb, currentColor 30%, transparent);
+    border-block-end-color: currentColor;
+}
+
+.__action-swap__label {
+    display: inline-flex;
+}
+
+.__action-swap__status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__action-swap:not(:disabled):not([aria-disabled="true"]):active {
+        transform: none;
+    }
+
+    .__action-swap,
+    .__action-swap::after {
+        transition-duration: 1ms;
+    }
+}

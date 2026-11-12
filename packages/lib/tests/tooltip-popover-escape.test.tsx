@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -51,7 +51,7 @@ describe("Tooltip popover: Escape closes one layer at a time", () => {
 
         await user.keyboard("{Escape}");
 
-        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     });
 
     it("MultiSelect: the first Escape closes the list, the second closes the popover", async () => {
@@ -64,6 +64,6 @@ describe("Tooltip popover: Escape closes one layer at a time", () => {
 
         await user.keyboard("{Escape}");
 
-        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     });
 });
