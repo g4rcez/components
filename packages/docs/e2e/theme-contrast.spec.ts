@@ -15,7 +15,7 @@ async function setTheme(page: Page, theme: Theme): Promise<void> {
 
 async function renderedContrastRatio(
     locator: Locator,
-    foregroundProperty: "color" | "borderTopColor" | "borderBottomColor" | "outlineColor" = "color"
+    foregroundProperty: "color" | "borderTopColor" | "borderBottomColor" | "outlineColor" | "boxShadow" = "color"
 ): Promise<number> {
     return locator.evaluate(async (target, property) => {
         const ancestors: Element[] = [];
@@ -69,7 +69,9 @@ async function renderedContrastRatio(
             background = composite(layer, background);
             if (layer.alpha === 1) break;
         }
-        const foreground = composite(parseColor(style[property]), background);
+        // A computed box-shadow reads "rgb(...) 0px 0px 0px 2px": keep only the color part.
+        const colorValue = property === "boxShadow" ? (style.boxShadow.match(/rgba?\([^)]*\)/)?.[0] ?? "") : style[property];
+        const foreground = composite(parseColor(colorValue), background);
         const luminance = ({ red, green, blue }: Color): number => {
             const linearize = (channel: number) => {
                 const normalized = channel / 255;
@@ -160,6 +162,29 @@ test("Input border is a soft outline, between 1.4:1 and 3:1, in both themes", as
         // Deliberately soft: visible, but below the 3:1 of a high-contrast outline.
         expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(1.4);
         expect(ratio, `${theme} Input border contrast (${ratio.toFixed(2)}:1)`).toBeLessThan(3);
+    }
+});
+
+test("Input focus ring is 2px and meets 3:1 non-text contrast without moving the layout in both themes", async ({ page }) => {
+    await page.goto("/docs/input");
+    await expect(page.getByRole("heading", { level: 1, name: "Input" })).toBeVisible();
+    const control = page.locator(".__input-field__control").first();
+    const field = control.locator("input").first();
+    await expect(control).toBeVisible();
+
+    for (const theme of ["light", "dark"] as const) {
+        await setTheme(page, theme);
+        await field.blur();
+        const restingHeight = (await control.boundingBox())?.height;
+        expect(await control.evaluate((element) => getComputedStyle(element).boxShadow), `${theme} resting Input has no ring`).toBe("none");
+
+        await field.focus();
+        await expect(field).toBeFocused();
+        const ringWidth = await control.evaluate((element) => Number.parseFloat(getComputedStyle(element).boxShadow.split(" ").at(-1) ?? "0"));
+        expect(ringWidth, `${theme} Input focus ring width`).toBeGreaterThanOrEqual(2);
+        const ratio = await renderedContrastRatio(control, "boxShadow");
+        expect(ratio, `${theme} Input focus ring contrast (${ratio.toFixed(2)}:1)`).toBeGreaterThanOrEqual(3);
+        expect((await control.boundingBox())?.height, `${theme} Input height with focus`).toBe(restingHeight);
     }
 });
 
