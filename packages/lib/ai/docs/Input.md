@@ -258,7 +258,8 @@ function SignUpForm() {
 - Placeholder text is supplementary, not a label.
 - Label activation by pointer or touch focuses the field. Native editing, `Tab`, and `Shift+Tab` stay available.
 - `Enter` follows the form submission behavior. Exception: when `enterKeyHint="next"` and `next` resolve to a focusable target, `Enter` focuses that target. Explain this override. Do not intercept ordinary editing keys.
-- On focus, CSS changes the containing border to the primary color. There is no primary focus ring.
+- On focus, CSS changes the containing border to the primary color and eases in a ring (`--var-color-ring`, `--var-free-text-focus-ring-width`) over `--var-motion-duration-fast`. `prefers-reduced-motion` turns the transition off.
+- On touch devices (`pointer: coarse`) typed text is at least 16px, so iOS Safari does not zoom the page on focus.
 - Verify contrast, read-only and disabled states, target sizes, zoom, and visibility above the virtual keyboard in the actual theme and layout.
 - A populated `error` sets `aria-invalid` and adds its message ID to `aria-describedby`. Caller IDs stay in `aria-describedby`.
 - An explicit caller `aria-invalid` stays when neither state applies.
