@@ -9,13 +9,14 @@ import type { TranslationOverrides } from "../../../hooks/use-translations";
 import { useTranslations } from "../../../hooks/use-translations";
 import { CombiKeys } from "../../../lib/combi-keys";
 import { Dict } from "../../../lib/dict";
+import { useMediaQuery } from "../../../hooks/use-media-query";
 import { css, isChildVisible, mergeRefs } from "../../../lib/dom";
 import { fzf, type MatchValue } from "../../../lib/fzf";
 import type { Label } from "../../../types";
 import { Button } from "../../core/button/button";
 import { Shortcut } from "../../display/shortcut/shortcut";
 import { SkeletonCell } from "../../display/skeleton/skeleton";
-import { Modal } from "../modal/modal";
+import { MODAL_DESKTOP_QUERY, Modal } from "../modal/modal";
 import { commandPaletteStyles } from "./command-palette.styles";
 
 type ViewProps = { text: string };
@@ -270,6 +271,7 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         return combi.register();
     }, [bindKey, commands, valueRef, callbacksRef]);
 
+    const isDesktop = useMediaQuery(MODAL_DESKTOP_QUERY);
     const Icon = props.Icon ?? FunnelIcon;
     const Preview = props.Preview;
     const hasFilters = props.filters !== undefined && props.filters !== null && props.filters !== false;
@@ -278,149 +280,39 @@ export const CommandPalette = (props: CommandPaletteProps) => {
         <Fragment>
             <Modal
                 {...getFloatingProps()}
-                animated={false}
+                animated={!isDesktop}
                 closable={false}
                 open={props.open}
                 overlayClickClose
                 initialFocus={searchInputRef}
                 ariaTitle={translations.commandPaletteTitle}
                 bodyClassName={commandPaletteStyles.slots.body}
-                data-component="command-palette"
-                data-has-preview={Preview ? "true" : undefined}
                 onChange={props.onChangeVisibility}
-                className={commandPaletteStyles.className({})}
+                overlayClassName={css(commandPaletteStyles.slots.overlay, Preview ? `${commandPaletteStyles.slots.overlay}--preview` : undefined)}
             >
-                <header className={commandPaletteStyles.slots.header}>
-                    <div className={commandPaletteStyles.slots["search-icon-frame"]}>
-                        {props.Icon ? (
-                            <Icon Default={FunnelIcon} text={text} className={commandPaletteStyles.slots["search-icon"]} />
-                        ) : (
-                            <FunnelIcon className={commandPaletteStyles.slots["search-icon"]} />
-                        )}
-                    </div>
-                    <input
-                        {...(getReferenceProps({
-                            ref: mergeRefs(root.refs.setReference, searchInputRef),
-                            onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
-                                const item = Is.number(resolvedActiveIndex) ? displayItems[resolvedActiveIndex] : null;
-                                const key = e.key;
-                                if (key === "Escape") {
-                                    e.preventDefault();
-                                    props.onChangeVisibility(false);
-                                    return;
-                                }
-                                if (key === "Enter") {
-                                    e.preventDefault();
-                                    if (item) {
-                                        if (item.type === "shortcut")
-                                            item.action({
-                                                event: e,
-                                                text: text,
-                                                setOpen: props.onChangeVisibility,
-                                                setText: changeText,
-                                            });
-                                    } else {
-                                        const item = findFirstClickable(fuzzy);
-                                        if (item?.type === "shortcut")
-                                            item.action({
-                                                event: e,
-                                                text: text,
-                                                setOpen: props.onChangeVisibility,
-                                                setText: changeText,
-                                            });
+                <div data-component="command-palette" data-has-preview={Preview ? "true" : undefined} className={commandPaletteStyles.className({})}>
+                    <header className={commandPaletteStyles.slots.header}>
+                        <div className={commandPaletteStyles.slots["search-icon-frame"]}>
+                            {props.Icon ? (
+                                <Icon Default={FunnelIcon} text={text} className={commandPaletteStyles.slots["search-icon"]} />
+                            ) : (
+                                <FunnelIcon className={commandPaletteStyles.slots["search-icon"]} />
+                            )}
+                        </div>
+                        <input
+                            {...(getReferenceProps({
+                                ref: mergeRefs(root.refs.setReference, searchInputRef),
+                                onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
+                                    const item = Is.number(resolvedActiveIndex) ? displayItems[resolvedActiveIndex] : null;
+                                    const key = e.key;
+                                    if (key === "Escape") {
+                                        e.preventDefault();
+                                        props.onChangeVisibility(false);
+                                        return;
                                     }
-                                }
-                            },
-                        } as Parameters<typeof getReferenceProps>[0]) as React.InputHTMLAttributes<HTMLInputElement>)}
-                        value={text}
-                        role="combobox"
-                        aria-label={translations.commandPaletteSearchLabel}
-                        aria-autocomplete="list"
-                        aria-expanded={props.open}
-                        aria-haspopup="listbox"
-                        aria-controls={listboxId}
-                        aria-activedescendant={activeOptionId}
-                        data-combikeysbypass="true"
-                        placeholder={translations.commandPaletteSearchPlaceholder}
-                        onChange={(e) => changeText(e.target.value)}
-                        className={commandPaletteStyles.slots.input}
-                    />
-                    {Preview || hasFilters ? (
-                        <div role="group" aria-label={translations.commandPaletteViewControls} className={commandPaletteStyles.slots.controls}>
-                            {Preview ? (
-                                <Button
-                                    size="icon"
-                                    aria-controls={previewId}
-                                    aria-expanded={previewVisible}
-                                    onClick={() => setPreviewVisible((visible) => !visible)}
-                                    icon={previewVisible ? <EyeIcon aria-hidden="true" /> : <EyeSlashIcon aria-hidden="true" />}
-                                    title={previewVisible ? translations.commandPaletteHidePreview : translations.commandPaletteShowPreview}
-                                    aria-label={previewVisible ? translations.commandPaletteHidePreview : translations.commandPaletteShowPreview}
-                                />
-                            ) : null}
-                            {hasFilters ? (
-                                <Button
-                                    size="icon"
-                                    aria-controls={filtersId}
-                                    aria-expanded={filtersVisible}
-                                    icon={<FunnelIcon aria-hidden="true" />}
-                                    onClick={() => setFiltersVisible((visible) => !visible)}
-                                    title={filtersVisible ? translations.commandPaletteHideFilters : translations.commandPaletteShowFilters}
-                                    aria-label={filtersVisible ? translations.commandPaletteHideFilters : translations.commandPaletteShowFilters}
-                                />
-                            ) : null}
-                        </div>
-                    ) : null}
-                </header>
-                {hasFilters ? (
-                    <div
-                        id={filtersId}
-                        data-component="command-palette-filters"
-                        className={commandPaletteStyles.slots.filters}
-                        hidden={!filtersVisible}
-                    >
-                        {props.filters}
-                    </div>
-                ) : null}
-                <div
-                    className={commandPaletteStyles.slots.content}
-                    data-component="command-palette-container"
-                    data-preview-visible={Preview && previewVisible ? "true" : "false"}
-                >
-                    {props.loading ? (
-                        <div
-                            data-component="command-palette-list"
-                            className={commandPaletteStyles.slots["loading-list"]}
-                            role="status"
-                            aria-busy="true"
-                            aria-label={translations.commandPaletteLoading}
-                        >
-                            <div className={commandPaletteStyles.slots["group-row"]}>{translations.commandPaletteLoading}</div>
-                            {loadingSkeleton.map((_, i) => (
-                                <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]} aria-hidden="true">
-                                    {SkeletonCell}
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div
-                            role="listbox"
-                            id={listboxId}
-                            ref={scrollContainerRef}
-                            data-component="command-palette-list"
-                            className={commandPaletteStyles.slots.list}
-                        >
-                            {displayItems.map((item, index) => (
-                                <Item
-                                    id={`${id}-option-${index}`}
-                                    {...getItemProps({
-                                        onMouseEnter: () => setActiveIndex(index),
-                                        ref(node: HTMLElement | null) {
-                                            listRef.current[index] = node;
-                                        },
-                                        onClick(e: React.MouseEvent<HTMLDivElement>) {
-                                            e.preventDefault();
-                                            props.onChangeVisibility(false);
+                                    if (key === "Enter") {
+                                        e.preventDefault();
+                                        if (item) {
                                             if (item.type === "shortcut")
                                                 item.action({
                                                     event: e,
@@ -428,36 +320,146 @@ export const CommandPalette = (props: CommandPaletteProps) => {
                                                     setOpen: props.onChangeVisibility,
                                                     setText: changeText,
                                                 });
-                                        },
-                                    })}
-                                    item={item}
-                                    text={text}
-                                    active={resolvedActiveIndex === index}
-                                    key={`${id}-${item.type}-${index}`}
-                                />
-                            ))}
-                            {text.length > 0 && !hasVisibleShortcut ? (
-                                <div className={commandPaletteStyles.slots.empty}>{props.emptyMessage ?? translations.commandPaletteEmpty}</div>
-                            ) : null}
-                        </div>
-                    )}
-                    {Preview ? (
-                        <section
-                            id={previewId}
-                            aria-label={translations.commandPalettePreviewLabel}
-                            data-component="command-palette-preview"
-                            className={commandPaletteStyles.slots.preview}
-                            hidden={!previewVisible}
+                                        } else {
+                                            const item = findFirstClickable(fuzzy);
+                                            if (item?.type === "shortcut")
+                                                item.action({
+                                                    event: e,
+                                                    text: text,
+                                                    setOpen: props.onChangeVisibility,
+                                                    setText: changeText,
+                                                });
+                                        }
+                                    }
+                                },
+                            } as Parameters<typeof getReferenceProps>[0]) as React.InputHTMLAttributes<HTMLInputElement>)}
+                            value={text}
+                            role="combobox"
+                            aria-label={translations.commandPaletteSearchLabel}
+                            aria-autocomplete="list"
+                            aria-expanded={props.open}
+                            aria-haspopup="listbox"
+                            aria-controls={listboxId}
+                            aria-activedescendant={activeOptionId}
+                            data-combikeysbypass="true"
+                            placeholder={translations.commandPaletteSearchPlaceholder}
+                            onChange={(e) => changeText(e.target.value)}
+                            className={commandPaletteStyles.slots.input}
+                        />
+                        {Preview || hasFilters ? (
+                            <div role="group" aria-label={translations.commandPaletteViewControls} className={commandPaletteStyles.slots.controls}>
+                                {Preview ? (
+                                    <Button
+                                        size="icon"
+                                        aria-controls={previewId}
+                                        aria-expanded={previewVisible}
+                                        onClick={() => setPreviewVisible((visible) => !visible)}
+                                        icon={previewVisible ? <EyeIcon aria-hidden="true" /> : <EyeSlashIcon aria-hidden="true" />}
+                                        title={previewVisible ? translations.commandPaletteHidePreview : translations.commandPaletteShowPreview}
+                                        aria-label={previewVisible ? translations.commandPaletteHidePreview : translations.commandPaletteShowPreview}
+                                    />
+                                ) : null}
+                                {hasFilters ? (
+                                    <Button
+                                        size="icon"
+                                        aria-controls={filtersId}
+                                        aria-expanded={filtersVisible}
+                                        icon={<FunnelIcon aria-hidden="true" />}
+                                        onClick={() => setFiltersVisible((visible) => !visible)}
+                                        title={filtersVisible ? translations.commandPaletteHideFilters : translations.commandPaletteShowFilters}
+                                        aria-label={filtersVisible ? translations.commandPaletteHideFilters : translations.commandPaletteShowFilters}
+                                    />
+                                ) : null}
+                            </div>
+                        ) : null}
+                    </header>
+                    {hasFilters ? (
+                        <div
+                            id={filtersId}
+                            data-component="command-palette-filters"
+                            className={commandPaletteStyles.slots.filters}
+                            hidden={!filtersVisible}
                         >
-                            {!props.loading && previewCommand ? (
-                                <Preview command={previewCommand} text={text} />
-                            ) : (
-                                <div className={commandPaletteStyles.slots["preview-empty"]}>{translations.commandPalettePreviewEmpty}</div>
-                            )}
-                        </section>
+                            {props.filters}
+                        </div>
                     ) : null}
+                    <div
+                        className={commandPaletteStyles.slots.content}
+                        data-component="command-palette-container"
+                        data-preview-visible={Preview && previewVisible ? "true" : "false"}
+                    >
+                        {props.loading ? (
+                            <div
+                                data-component="command-palette-list"
+                                className={commandPaletteStyles.slots["loading-list"]}
+                                role="status"
+                                aria-busy="true"
+                                aria-label={translations.commandPaletteLoading}
+                            >
+                                <div className={commandPaletteStyles.slots["group-row"]}>{translations.commandPaletteLoading}</div>
+                                {loadingSkeleton.map((_, i) => (
+                                    <div key={`${id}-${i}-skeleton-index`} className={commandPaletteStyles.slots["loading-row"]} aria-hidden="true">
+                                        {SkeletonCell}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div
+                                role="listbox"
+                                id={listboxId}
+                                ref={scrollContainerRef}
+                                data-component="command-palette-list"
+                                className={commandPaletteStyles.slots.list}
+                            >
+                                {displayItems.map((item, index) => (
+                                    <Item
+                                        id={`${id}-option-${index}`}
+                                        {...getItemProps({
+                                            onMouseEnter: () => setActiveIndex(index),
+                                            ref(node: HTMLElement | null) {
+                                                listRef.current[index] = node;
+                                            },
+                                            onClick(e: React.MouseEvent<HTMLDivElement>) {
+                                                e.preventDefault();
+                                                props.onChangeVisibility(false);
+                                                if (item.type === "shortcut")
+                                                    item.action({
+                                                        event: e,
+                                                        text: text,
+                                                        setOpen: props.onChangeVisibility,
+                                                        setText: changeText,
+                                                    });
+                                            },
+                                        })}
+                                        item={item}
+                                        text={text}
+                                        active={resolvedActiveIndex === index}
+                                        key={`${id}-${item.type}-${index}`}
+                                    />
+                                ))}
+                                {text.length > 0 && !hasVisibleShortcut ? (
+                                    <div className={commandPaletteStyles.slots.empty}>{props.emptyMessage ?? translations.commandPaletteEmpty}</div>
+                                ) : null}
+                            </div>
+                        )}
+                        {Preview ? (
+                            <section
+                                id={previewId}
+                                aria-label={translations.commandPalettePreviewLabel}
+                                data-component="command-palette-preview"
+                                className={commandPaletteStyles.slots.preview}
+                                hidden={!previewVisible}
+                            >
+                                {!props.loading && previewCommand ? (
+                                    <Preview command={previewCommand} text={text} />
+                                ) : (
+                                    <div className={commandPaletteStyles.slots["preview-empty"]}>{translations.commandPalettePreviewEmpty}</div>
+                                )}
+                            </section>
+                        ) : null}
+                    </div>
+                    {props.footer ? <footer className={commandPaletteStyles.slots.footer}>{props.footer}</footer> : null}
                 </div>
-                {props.footer ? <footer className={commandPaletteStyles.slots.footer}>{props.footer}</footer> : null}
             </Modal>
         </Fragment>
     );

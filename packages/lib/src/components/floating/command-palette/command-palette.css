@@ -1,31 +1,56 @@
-.__command-palette {
-    position: relative;
-    box-sizing: border-box;
-    width: 100%;
-    overflow: clip;
-    padding-block: 0;
+/*
+ * The palette never styles the Modal surface's geometry (position, inset, padding,
+ * radius, overflow). It tunes the Modal through its public tokens, set on the overlay
+ * (custom properties inherit down to the surface), and keeps its own look on the
+ * wrapper rendered inside the Modal body.
+ */
+.__command-palette__overlay {
+    --var-modal-surface-padding-block: 0px;
+    --var-modal-surface-overflow: clip;
 }
 
+/* Below 64rem the Modal renders as a bottom sheet (see useMediaQuery in modal.tsx):
+   the list fills the sheet and the body scrolls. */
+@media not all and (min-width: 64rem) {
+    .__command-palette__overlay {
+        --var-command-list-max-block-size: none;
+    }
+}
+
+/* Dialog sizing. The sheet sets its own min/max inline size, so these only reach the dialog. */
 @media (min-width: 768px) {
-    .__command-palette {
+    .__command-palette__overlay .__modal--type-dialog {
+        min-inline-size: var(--var-command-dialog-max-inline-size-md, calc(var(--var-spacing-base) * 40));
         max-inline-size: var(--var-command-dialog-max-inline-size-md, calc(var(--var-spacing-base) * 40));
     }
 
-    .__command-palette[data-has-preview="true"] {
+    .__command-palette__overlay--preview .__modal--type-dialog {
+        min-inline-size: min(94vw, calc(var(--var-spacing-base) * 96));
         max-inline-size: min(94vw, calc(var(--var-spacing-base) * 96));
     }
 }
 
 @media (min-width: 1024px) {
-    .__command-palette {
+    .__command-palette__overlay .__modal--type-dialog {
+        min-inline-size: var(--var-command-dialog-max-inline-size-lg, calc(var(--var-spacing-base) * 48));
         max-inline-size: var(--var-command-dialog-max-inline-size-lg, calc(var(--var-spacing-base) * 48));
     }
 
-    .__command-palette[data-has-preview="true"] {
+    .__command-palette__overlay--preview .__modal--type-dialog {
+        min-inline-size: min(94vw, calc(var(--var-spacing-base) * 96));
         max-inline-size: min(94vw, calc(var(--var-spacing-base) * 96));
+    }
+
+    .__command-palette__overlay--preview {
         --var-command-list-max-block-size: min(calc(100vh - var(--var-spacing-base) * 8), calc(var(--var-spacing-base) * 52));
         --var-modal-dialog-max-block-size: min(calc(100vh - var(--var-spacing-base) * 4), calc(var(--var-spacing-base) * 64));
     }
+}
+
+.__command-palette {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
 }
 
 .__command-palette__body {

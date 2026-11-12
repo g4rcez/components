@@ -6,6 +6,7 @@ export const commandPaletteStyles = defineComponentStyles({
     css: "@g4rcez/components/command-palette.css",
     defaults: {},
     slots: [
+        "overlay",
         "body",
         "group-label",
         "group-row",
