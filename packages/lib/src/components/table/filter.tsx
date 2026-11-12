@@ -188,7 +188,6 @@ export const Filter = <T extends object>(props: Props<T>) => {
     return (
         <Fragment>
             <Dropdown
-                arrow
                 title={translation.tableFilterDropdownTitle}
                 buttonProps={toolbarTriggerProps}
                 trigger={

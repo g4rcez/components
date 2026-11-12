@@ -59,7 +59,7 @@ export type MenuProps = Partial<
         side: "top" | "right" | "bottom" | "left";
         /** Alignment of the root menu along the trigger edge. @default "start" */
         align: "start" | "center" | "end";
-        /** Gap in pixels between the trigger and the root menu. Nested menus have no gap. @default 4 */
+        /** Gap in pixels between the trigger and the root menu. Nested menus sit 4px from their parent. @default 4 */
         offset: number;
         nested: boolean;
         asChild: boolean;
@@ -115,8 +115,9 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
             placement: isNested ? "right" : align === "center" ? side : `${side}-${align}`,
             middleware: [
                 offset({
-                    mainAxis: isNested ? 0 : gap,
-                    alignmentAxis: isNested ? -4 : 0,
+                    mainAxis: isNested ? 4 : gap,
+                    // Lines the first row of the submenu up with the row that opened it: panel padding plus its border.
+                    alignmentAxis: isNested ? -7 : 0,
                 }),
                 flip(),
                 shift({ padding: VIEWPORT_PADDING }),
@@ -276,10 +277,23 @@ const MenuComponent = React.forwardRef<HTMLButtonElement, Override<React.HTMLPro
 
 export type MenuItemRole = "menuitem" | "menuitemradio" | "menuitemcheckbox";
 
-type MenuItemProps = { title: string; disabled?: boolean; Right?: Icon; role?: MenuItemRole; checked?: boolean };
+type MenuItemProps = {
+    title: string;
+    disabled?: boolean;
+    /** Icon shown after the label. */
+    Right?: Icon;
+    /** Icon shown before the label. */
+    Left?: Icon;
+    /** Keyboard hint shown at the end of the row, such as `⌘N`. It is display only: bind the key yourself. */
+    shortcut?: string;
+    /** `danger` colors a destructive row. */
+    tone?: "default" | "danger";
+    role?: MenuItemRole;
+    checked?: boolean;
+};
 
 export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.ButtonHTMLAttributes<HTMLButtonElement>, MenuItemProps>>(
-    ({ title, Right, disabled, children, role = "menuitem", checked = false, ...props }, forwardedRef) => {
+    ({ title, Right, Left, shortcut, tone = "default", disabled, children, role = "menuitem", checked = false, ...props }, forwardedRef) => {
         const menu = useContext(MenuContext);
         const item = useListItem({ label: disabled ? null : title });
         const tree = useFloatingTree();
@@ -294,6 +308,7 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                 disabled={disabled}
                 aria-checked={isCheckable ? checked : undefined}
                 data-checked={isCheckable && checked ? "" : undefined}
+                data-tone={tone === "danger" ? "danger" : undefined}
                 data-active={isActive}
                 data-open={menu.isOpen}
                 tabIndex={isActive ? 0 : -1}
@@ -314,12 +329,24 @@ export const MenuItem = React.forwardRef<HTMLButtonElement, Override<React.Butto
                     <span data-menu-item-indicator="" aria-hidden="true">
                         {isCheckable && checked ? <CheckIcon className={menuStyles.slots["item-icon"]} /> : null}
                     </span>
+                    {Left ? <Left aria-hidden="true" data-menu-item-icon="" className={menuStyles.slots["item-icon"]} /> : null}
                     {children}
                 </span>
+                {shortcut ? <kbd data-menu-item-shortcut="">{shortcut}</kbd> : null}
                 {Right ? <Right className={menuStyles.slots["item-icon"]} /> : null}
             </button>
         );
     }
+);
+
+/** A thin line that groups the items around it. */
+export const MenuSeparator = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+    <div {...props} role="separator" className={css(menuStyles.slots.separator, className)} />
+);
+
+/** A small heading for the group of items that follows it. It is not focusable. */
+export const MenuLabel = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+    <div {...props} role="presentation" className={css(menuStyles.slots.label, className)} />
 );
 
 export const Menu = React.forwardRef<HTMLButtonElement, Override<React.ComponentProps<"button">, MenuProps>>((props, ref) => {

@@ -71,6 +71,9 @@ const RowAside = (props: PropsWithChildren) => {
 };
 
 export const Row = <T extends Record<string, unknown>>(index: number, row: T, context: ItemContentContext<T>) => {
+    // A grouped table keeps an `undefined` slot per group header in its data, and Virtuoso can call itemContent for it while it measures.
+    // Render one empty cell: it keeps the row height Virtuoso needs and never hands the missing row to a column or the selection.
+    if (row === undefined) return <td role="cell" colSpan={999} className={tableRowStyles.slots.cell} />;
     const cols = context.cols;
     const loading = context.loading;
     const selection = context.selection;

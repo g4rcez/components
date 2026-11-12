@@ -14,7 +14,7 @@ import {
 import { CaretDownIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
-import { forwardRef, Fragment, type PropsWithChildren, type Ref, useEffect, useId, useMemo, useRef, useState } from "react";
+import { forwardRef, Fragment, type PropsWithChildren, type Ref, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { type ContextProp, type ItemProps, type ListProps, type SizeFunction, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { useMediaQuery } from "../../../hooks/use-media-query";
@@ -182,7 +182,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     elementContext: "reference",
                     apply(args) {
                         const DEFAULT_SIZE = getRemainingSize(refs.reference!.current as HTMLElement, window.innerHeight);
-                        const mw = `${fieldset.current?.getBoundingClientRect().width || DEFAULT_SIZE}px`;
+                        // The panel is as wide as the whole control, so it lines up with a left icon or any other slot.
+                        const mw = `${args.rects.reference.width || fieldset.current?.getBoundingClientRect().width || DEFAULT_SIZE}px`;
                         Object.assign(args.elements.floating.style, {
                             width: mw,
                             maxWidth: mw,
@@ -191,6 +192,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 }),
             ],
         });
+        // Interactions stay on the input, but the panel is positioned and sized from the whole bordered control (the input plus its
+        // left and right slots). Anchoring it to the input alone shifted the panel right by the width of a left icon.
+        const setInputReference = useCallback(
+            (node: HTMLInputElement | null) => {
+                refs.setReference(node);
+                refs.setPositionReference(node?.parentElement ?? null);
+            },
+            [refs]
+        );
         const transitions = useTransitionStyles(context, transitionStyles);
         const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([useDismiss(context)]);
 
@@ -204,10 +214,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         }, [isControlled, props.value, options]);
 
         useEffect(() => {
-            const input = refs.reference.current as HTMLInputElement;
+            const input = refs.domReference.current as HTMLInputElement;
             if (!input) return;
             return initializeInputDataset(input);
-        }, [refs.reference]);
+        }, [refs.domReference]);
 
         useEffect(() => {
             if (!open) return;
@@ -227,7 +237,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const onSelect = (opt: AutocompleteItemProps, i: number | null, restoreFocus = true) => {
             setValue(opt.value);
-            const input = refs.reference.current as HTMLInputElement;
+            const input = refs.domReference.current as HTMLInputElement;
             const origin = hiddenInput.current ?? input;
             if (!input || !origin) return;
             input.setAttribute("data-value", opt.value);
@@ -268,7 +278,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             if (props.disabled) return;
             openDropdown();
             setShadow("");
-            (refs.reference.current as HTMLInputElement)?.focus();
+            (refs.domReference.current as HTMLInputElement)?.focus();
         };
 
         const onFocus = () => {
@@ -298,7 +308,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         const onClose = () => {
             if (props.disabled) return;
-            const input = refs.reference.current as HTMLInputElement;
+            const input = refs.domReference.current as HTMLInputElement;
             const origin = hiddenInput.current ?? input;
             input?.setAttribute("data-value", "");
             if (input) input.value = "";
@@ -518,7 +528,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                         onChange,
                         id: shadowId,
                         name: shadowId,
-                        ref: refs.setReference,
+                        ref: setInputReference,
                         onClick: onCaretDownClick,
                         onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
                             props.onKeyDown?.(event);

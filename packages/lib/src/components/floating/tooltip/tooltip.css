@@ -2,14 +2,38 @@
     box-sizing: border-box;
     isolation: isolate;
     z-index: var(--var-layer-tooltip);
+    inline-size: max-content;
+    max-inline-size: min(20rem, calc(100vw - 1rem));
     border-style: solid;
     border-width: var(--var-border-hairline);
     border-color: var(--var-tooltip-surface-border);
-    border-radius: var(--var-tooltip-surface-radius, calc(var(--var-radius-base) / 2));
+    border-radius: var(--var-tooltip-surface-radius, calc(var(--var-radius-base) * 0.625));
     background-color: var(--var-tooltip-surface-background);
-    padding: var(--var-tooltip-surface-padding, calc(var(--var-spacing-base) * 0.75));
+    padding: var(--var-tooltip-surface-padding, calc(var(--var-spacing-base) * 0.5) calc(var(--var-spacing-base) * 0.75));
     color: var(--var-tooltip-surface-foreground);
+    font-size: calc(var(--var-fontsize) * 0.875);
+    line-height: 1.45;
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
     box-shadow: var(--var-shadow-floating);
+    /* Motion owns `transform` (enter and exit); Floating UI positions with top and left. */
+    transform-origin: var(--__tooltip-origin, center);
+}
+
+.__tooltip[data-placement^="top"] {
+    --__tooltip-origin: 50% 100%;
+}
+
+.__tooltip[data-placement^="bottom"] {
+    --__tooltip-origin: 50% 0;
+}
+
+.__tooltip[data-placement^="left"] {
+    --__tooltip-origin: 100% 50%;
+}
+
+.__tooltip[data-placement^="right"] {
+    --__tooltip-origin: 0 50%;
 }
 
 .__tooltip__arrow {

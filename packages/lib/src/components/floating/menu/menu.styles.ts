@@ -5,6 +5,6 @@ export const menuStyles = defineComponentStyles({
     variants: {},
     css: "@g4rcez/components/menu.css",
     defaults: {},
-    slots: ["item", "floating", "nested-indicator", "nested-icon", "item-icon", "sr-label"],
+    slots: ["item", "floating", "nested-indicator", "nested-icon", "item-icon", "sr-label", "separator", "label"],
     dependencies: [],
 });

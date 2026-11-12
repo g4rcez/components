@@ -378,7 +378,9 @@
     align-items: center;
     justify-content: space-between;
     background-color: var(--var-table-header-background);
-    padding: var(--var-table-cell-padding, calc(var(--var-spacing-base) * 0.75));
+    /* No block padding: the header is as tall as a row. Its controls already keep a 44px target. */
+    padding-block: 0;
+    padding-inline: var(--var-table-cell-padding, calc(var(--var-spacing-base) * 0.75));
 }
 
 .__table-head__cell-content--last {
@@ -517,6 +519,12 @@
     margin-inline: auto;
 }
 
+/* Beats the checkbox size variant (`--size-big`), so the target size decides how tall the checkbox makes the row. */
+.__table-row__selection-cell .__table-row__selection-control.__checkbox__label,
+.__table-head__selection-cell .__table-head__selection-control.__checkbox__label {
+    min-block-size: var(--var-table-selection-target-size, calc(var(--var-spacing-base) * 2.75));
+}
+
 /* pagination */
 .__table-pagination__root {
     display: flex;
@@ -596,7 +604,7 @@
     flex-wrap: wrap;
     gap: var(--var-table-operations-gap, calc(var(--var-spacing-base) * 1));
     white-space: nowrap;
-    padding-block: var(--var-table-operations-padding-block, calc(var(--var-spacing-base) * 0.5));
+    padding-block: var(--var-table-operations-padding-block, 0);
 }
 
 .__table-metadata__active-filters {
@@ -631,9 +639,8 @@
     align-items: center;
     gap: var(--var-table-inline-gap-tight, calc(var(--var-spacing-base) * 0.25));
     min-block-size: var(--var-table-pill-min-block-size, calc(var(--var-spacing-base) * 2.75));
-    padding-inline: var(--var-table-pill-padding-inline, calc(var(--var-spacing-base) * 1));
-    border: var(--var-table-cell-border) solid var(--var-table-border);
-    border-radius: var(--var-table-pill-radius, var(--var-radius-base));
+    padding: 0;
+    border: 0;
     background-color: transparent;
     color: var(--var-color-foreground);
     font-size: var(--var-table-header-font-size);
