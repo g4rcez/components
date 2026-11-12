@@ -27,7 +27,7 @@ export const themeTokenMetadata = {
         "page-calendar",
         "progress",
         "radiobox",
-        "rich-text-editor",
+        "reactions",
         "shortcut",
         "skeleton",
         "slider",

@@ -99,18 +99,172 @@
   "slider": {
     "import": "@g4rcez/components/slider",
     "css": "@g4rcez/components/slider.css",
-    "dependencies": [
-      "polymorph",
-      "tooltip"
-    ],
+    "dependencies": [],
     "classes": {
       "base": "__slider",
       "variants": {},
       "slots": {
+        "row": "__slider__row",
+        "body": "__slider__body",
         "control": "__slider__control",
         "track": "__slider__track",
         "indicator": "__slider__indicator",
-        "thumb": "__slider__thumb"
+        "thumb": "__slider__thumb",
+        "tag": "__slider__tag",
+        "tick": "__slider__tick",
+        "marks": "__slider__marks",
+        "mark-label": "__slider__mark-label",
+        "icon": "__slider__icon"
+      },
+      "compounds": []
+    }
+  },
+  "card-stack": {
+    "import": "@g4rcez/components/card-stack",
+    "css": "@g4rcez/components/card-stack.css",
+    "dependencies": [
+      "button"
+    ],
+    "classes": {
+      "base": "__card-stack",
+      "variants": {},
+      "slots": {
+        "body": "__card-stack__body",
+        "stage": "__card-stack__stage",
+        "card": "__card-stack__card",
+        "stamp": "__card-stack__stamp",
+        "stamp-left": "__card-stack__stamp-left",
+        "stamp-right": "__card-stack__stamp-right",
+        "controls": "__card-stack__controls",
+        "undo-label": "__card-stack__undo-label",
+        "empty": "__card-stack__empty",
+        "hint": "__card-stack__hint",
+        "status": "__card-stack__status"
+      },
+      "compounds": []
+    }
+  },
+  "morph-select": {
+    "import": "@g4rcez/components/morph-select",
+    "css": "@g4rcez/components/morph-select.css",
+    "dependencies": [
+      "rolling-text"
+    ],
+    "classes": {
+      "base": "__morph-select",
+      "variants": {},
+      "slots": {
+        "label": "__morph-select__label",
+        "anchor": "__morph-select__anchor",
+        "trigger": "__morph-select__trigger",
+        "trigger-content": "__morph-select__trigger-content",
+        "value": "__morph-select__value",
+        "caret": "__morph-select__caret",
+        "surface": "__morph-select__surface",
+        "inner": "__morph-select__inner",
+        "header": "__morph-select__header",
+        "search": "__morph-select__search",
+        "list": "__morph-select__list",
+        "group": "__morph-select__group",
+        "group-label": "__morph-select__group-label",
+        "option": "__morph-select__option",
+        "option-icon": "__morph-select__option-icon",
+        "option-label": "__morph-select__option-label",
+        "option-meta": "__morph-select__option-meta",
+        "option-check": "__morph-select__option-check",
+        "highlight": "__morph-select__highlight",
+        "empty": "__morph-select__empty",
+        "status": "__morph-select__status"
+      },
+      "compounds": []
+    }
+  },
+  "reactions": {
+    "import": "@g4rcez/components/reactions",
+    "css": "@g4rcez/components/reactions.css",
+    "dependencies": [
+      "dropdown",
+      "rolling-text"
+    ],
+    "classes": {
+      "base": "__reactions",
+      "variants": {},
+      "slots": {
+        "bar": "__reactions__bar",
+        "pill": "__reactions__pill",
+        "icon": "__reactions__icon",
+        "count": "__reactions__count",
+        "add": "__reactions__add",
+        "panel": "__reactions__panel",
+        "picker": "__reactions__picker",
+        "option": "__reactions__option",
+        "highlight": "__reactions__highlight",
+        "status": "__reactions__status"
+      },
+      "compounds": []
+    }
+  },
+  "action-swap": {
+    "import": "@g4rcez/components/action-swap",
+    "css": "@g4rcez/components/action-swap.css",
+    "dependencies": [
+      "rolling-text",
+      "spinner"
+    ],
+    "classes": {
+      "base": "__action-swap",
+      "variants": {
+        "size": {
+          "sm": "__action-swap--size-sm",
+          "md": "__action-swap--size-md",
+          "lg": "__action-swap--size-lg"
+        }
+      },
+      "slots": {
+        "content": "__action-swap__content",
+        "icon": "__action-swap__icon",
+        "spinner": "__action-swap__spinner",
+        "label": "__action-swap__label",
+        "status": "__action-swap__status"
+      },
+      "compounds": []
+    }
+  },
+  "hold-to-confirm": {
+    "import": "@g4rcez/components/hold-to-confirm",
+    "css": "@g4rcez/components/hold-to-confirm.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__hold-to-confirm",
+      "variants": {
+        "tone": {
+          "danger": "__hold-to-confirm--tone-danger",
+          "neutral": "__hold-to-confirm--tone-neutral"
+        }
+      },
+      "slots": {
+        "fill": "__hold-to-confirm__fill",
+        "content": "__hold-to-confirm__content",
+        "overlay": "__hold-to-confirm__overlay",
+        "icon": "__hold-to-confirm__icon",
+        "label": "__hold-to-confirm__label",
+        "hint": "__hold-to-confirm__hint",
+        "status": "__hold-to-confirm__status"
+      },
+      "compounds": []
+    }
+  },
+  "rolling-text": {
+    "import": "@g4rcez/components/rolling-text",
+    "css": "@g4rcez/components/rolling-text.css",
+    "dependencies": [],
+    "classes": {
+      "base": "__rolling-text",
+      "variants": {},
+      "slots": {
+        "visual": "__rolling-text__visual",
+        "char": "__rolling-text__char",
+        "label": "__rolling-text__label"
       },
       "compounds": []
     }
@@ -392,7 +546,9 @@
         "nested-indicator": "__menu__nested-indicator",
         "nested-icon": "__menu__nested-icon",
         "item-icon": "__menu__item-icon",
-        "sr-label": "__menu__sr-label"
+        "sr-label": "__menu__sr-label",
+        "separator": "__menu__separator",
+        "label": "__menu__label"
       },
       "compounds": []
     }
@@ -891,7 +1047,6 @@
       "base": "__dropdown",
       "variants": {},
       "slots": {
-        "arrow": "__dropdown__arrow",
         "header": "__dropdown__header",
         "title": "__dropdown__title"
       },
@@ -1685,38 +1840,6 @@
       "slots": {
         "toolbar": "__pdf-viewer__toolbar",
         "page": "__pdf-viewer__page"
-      },
-      "compounds": []
-    }
-  },
-  "rich-text-editor": {
-    "import": "@g4rcez/components/rich-text-editor",
-    "css": "@g4rcez/components/rich-text-editor.css",
-    "dependencies": [
-      "alert",
-      "button",
-      "free-text",
-      "input",
-      "input-field",
-      "polymorph",
-      "resizable",
-      "select",
-      "textarea",
-      "tooltip"
-    ],
-    "classes": {
-      "base": "__rich-text-editor",
-      "variants": {},
-      "slots": {
-        "label": "__rich-text-editor__label",
-        "modes": "__rich-text-editor__modes",
-        "toolbar": "__rich-text-editor__toolbar",
-        "content": "__rich-text-editor__content",
-        "source": "__rich-text-editor__source",
-        "fields": "__rich-text-editor__fields",
-        "help": "__rich-text-editor__help",
-        "image": "__rich-text-editor__image",
-        "image-content": "__rich-text-editor__image-content"
       },
       "compounds": []
     }
