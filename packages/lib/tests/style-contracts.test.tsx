@@ -33,14 +33,14 @@ describe("empty and soft secondary tag token contracts", () => {
     it("colors the empty state with its own readable token", () => {
         expect(readSource("src/components/display/empty/empty.css")).toContain("color: var(--var-empty-foreground);");
         expect(lightTokens).toContain("--var-empty-foreground: hsla(240, 5%, 30%);");
-        expect(darkTokens).toContain("--var-empty-foreground: hsla(240, 5%, 65%);");
+        expect(darkTokens).toContain("--var-empty-foreground: hsla(202, 5%, 65%);");
     });
 
     it("defines the soft secondary tag tokens", () => {
         expect(lightTokens).toContain("--var-tag-soft-secondary-background: var(--var-color-secondary-subtle);");
         expect(lightTokens).toContain("--var-tag-soft-secondary-foreground: var(--var-color-secondary);");
-        expect(lightTokens).toContain("--var-tag-soft-secondary-border: hsla(240, 6%, 90%);");
-        expect(darkTokens).toContain("--var-tag-soft-secondary-border: hsla(240, 4%, 25%);");
+        expect(lightTokens).toContain("--var-tag-soft-secondary-border: hsla(240, 6%, 92%);");
+        expect(darkTokens).toContain("--var-tag-soft-secondary-border: hsla(202, 10%, 25%);");
     });
 
     it("styles the soft secondary tag with its tokens", () => {

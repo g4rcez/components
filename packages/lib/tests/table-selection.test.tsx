@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { ComponentsProvider } from "../src/hooks/use-components-provider";
 import { Table } from "../src/components/table";
 import type { FilterConfig } from "../src/components/table/filter";
+import { Row as TableRow } from "../src/components/table/row";
 import { ColType, createColumns } from "../src/components/table/table-lib";
 
 type Row = { id: string; name: string; status: string };
@@ -150,6 +151,27 @@ describe("Table row selection", () => {
 
         await user.tab();
         expect(selectRow("2")).toHaveFocus();
+    });
+
+    it("renders one empty cell for the undefined row a grouped table hands over for a group header slot", () => {
+        const selection = {
+            isSelected: (item: Row) => item.id === "1",
+            label: (item: Row | undefined, index: number) => `Select row ${item?.id ?? index + 1}`,
+            toggle: () => undefined,
+        };
+        const context = { cols: columns, loading: false, selection } as unknown as Parameters<typeof TableRow<Row>>[2];
+
+        const { container } = render(
+            <table>
+                <tbody>
+                    <tr>{TableRow<Row>(0, undefined as unknown as Row, context)}</tr>
+                </tbody>
+            </table>
+        );
+
+        expect(container.querySelectorAll("td")).toHaveLength(1);
+        expect(container.querySelector("td")).toBeEmptyDOMElement();
+        expect(container.querySelectorAll("input, [role=checkbox]")).toHaveLength(0);
     });
 
     it("disables the checkboxes while loading", () => {

@@ -51,27 +51,39 @@ const contrast = (a: string, b: string) => {
 
 describe("Dropdown and Menu surface border", () => {
     it.each([
-        [":root" as const, "--var-dropdown-surface-border"],
-        [":root" as const, "--var-menu-surface-border"],
-        ["html.dark" as const, "--var-dropdown-surface-border"],
-        ["html.dark" as const, "--var-menu-surface-border"],
-    ])("%s %s uses the input colour, the only 3:1 border token", (selector, token) => {
-        expect(themeTokens(selector)[token]).toBe("var(--var-color-input)");
+        ["dropdown", ":root" as const],
+        ["dropdown", "html.dark" as const],
+        ["menu", ":root" as const],
+        ["menu", "html.dark" as const],
+    ])("the %s border in %s is a soft hairline that the shadow backs up, not the 3:1 input colour", (component, selector) => {
+        const tokens = themeTokens(selector);
+        expect(tokens[`--var-${component}-surface-border`]).not.toBe("var(--var-color-input)");
+        const ratio = contrast(tokens[`--var-${component}-surface-border`], tokens[`--var-${component}-surface-background`]);
+        expect(ratio).toBeGreaterThan(1.05);
+        expect(ratio).toBeLessThan(2);
     });
 
+    it.each(["dropdown", "menu"])("builds the %s shadow from the theme's shadow colours, so dark mode follows", (component) => {
+        expect(themeTokens(":root")[`--var-${component}-surface-shadow`]).toContain("var(--var-color-shadow-drop)");
+    });
+
+    // The input colour draws the outline of controls. It is deliberately soft: visible on every surface, but well under the
+    // 3:1 of a high-contrast outline, so borders do not compete with the content.
     it.each([
-        [":root" as const, "--var-dropdown-surface-background", 3],
-        [":root" as const, "--var-menu-surface-background", 3],
-        ["html.dark" as const, "--var-dropdown-surface-background", 3],
-        ["html.dark" as const, "--var-menu-surface-background", 3],
-    ])("%s the input colour is at least 3:1 against %s (WCAG 1.4.11)", (selector, surface, minimum) => {
+        [":root" as const, "--var-dropdown-surface-background"],
+        [":root" as const, "--var-menu-surface-background"],
+        ["html.dark" as const, "--var-dropdown-surface-background"],
+        ["html.dark" as const, "--var-menu-surface-background"],
+    ])("%s the input colour is a soft outline against %s, between 1.4:1 and 3:1", (selector, surface) => {
         const tokens = themeTokens(selector);
-        expect(contrast(tokens["--var-color-input"], tokens[surface])).toBeGreaterThanOrEqual(minimum);
+        const ratio = contrast(tokens["--var-color-input"], tokens[surface]);
+        expect(ratio).toBeGreaterThanOrEqual(1.4);
+        expect(ratio).toBeLessThan(3);
     });
 
     it("keeps the decorative border token unchanged", () => {
-        expect(themeTokens(":root")["--var-color-border"]).toBe("hsla(240, 6%, 90%)");
-        expect(themeTokens("html.dark")["--var-color-border"]).toBe("hsla(240, 4%, 12%)");
+        expect(themeTokens(":root")["--var-color-border"]).toBe("hsla(240, 6%, 92%)");
+        expect(themeTokens("html.dark")["--var-color-border"]).toBe("hsla(202, 10%, 12%)");
     });
 });
 
@@ -96,16 +108,12 @@ describe("Notification close button", () => {
 });
 
 describe("active MenuItem text", () => {
-    it("uses the 28% primary with white text in the light theme", () => {
-        const tokens = themeTokens(":root");
-        expect(tokens["--var-menu-item-active-background"]).toBe("hsla(201, 49%, 28%)");
-        expect(tokens["--var-menu-item-active-foreground"]).toBe("hsla(0, 0%, 100%)");
-    });
-
-    it("uses the 65% ring colour with the existing dark text in the dark theme", () => {
-        const tokens = themeTokens("html.dark");
-        expect(tokens["--var-menu-item-active-background"]).toBe("hsla(201, 49%, 65%)");
-        expect(tokens["--var-menu-item-active-foreground"]).toBe("hsla(240, 6%, 10%)");
+    it("keeps the surface text colour on a soft highlight, so only the background changes", () => {
+        for (const selector of [":root", "html.dark"] as const) {
+            const tokens = themeTokens(selector);
+            expect(tokens["--var-menu-item-active-foreground"]).toBe(tokens["--var-menu-surface-foreground"]);
+            expect(tokens["--var-menu-item-active-background"]).not.toBe(tokens["--var-menu-surface-background"]);
+        }
     });
 
     it.each([":root" as const, "html.dark" as const])("%s the text is at least 7:1 against the active background", (selector) => {

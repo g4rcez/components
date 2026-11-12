@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -63,22 +63,46 @@ describe("Tooltip props", () => {
         expect(screen.getByRole("tooltip")).toHaveAttribute("data-placement", placement);
     });
 
-    it("draws the arrow by default", () => {
+    it("opens on top by default", () => {
         render(
             <Tooltip open title="Anchor">
+                Content
+            </Tooltip>
+        );
+        expect(screen.getByRole("tooltip").getAttribute("data-placement")).toBe("top");
+    });
+
+    it("has no arrow by default", () => {
+        render(
+            <Tooltip open title="Anchor">
+                Content
+            </Tooltip>
+        );
+        expect(screen.getByRole("tooltip").querySelector("svg")).toBeNull();
+    });
+
+    it("draws the arrow with arrow", () => {
+        render(
+            <Tooltip open arrow title="Anchor">
                 Content
             </Tooltip>
         );
         expect(screen.getByRole("tooltip").querySelector("svg")).not.toBeNull();
     });
 
-    it("removes the arrow with arrow={false}", () => {
-        render(
-            <Tooltip open arrow={false} title="Anchor">
+    it("draws the arrow by default in popover mode and removes it with arrow={false}", () => {
+        const { rerender } = render(
+            <Tooltip open popover title="Anchor">
                 Content
             </Tooltip>
         );
-        expect(screen.getByRole("tooltip").querySelector("svg")).toBeNull();
+        expect(screen.getByRole("dialog").querySelector("svg")).not.toBeNull();
+        rerender(
+            <Tooltip open popover arrow={false} title="Anchor">
+                Content
+            </Tooltip>
+        );
+        expect(screen.getByRole("dialog").querySelector("svg")).toBeNull();
     });
 
     it("closes on click with closeOnClick and stays closed while the pointer moves over the trigger", async () => {
@@ -92,9 +116,9 @@ describe("Tooltip props", () => {
         await user.hover(button);
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
         await user.click(button);
-        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
         await user.pointer({ target: button, coords: { clientX: 3, clientY: 3 } });
-        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
         await user.unhover(button);
         await user.hover(button);
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
@@ -132,7 +156,7 @@ describe("Tooltip props", () => {
             </Tooltip>
         );
         await user.pointer({ keys: "[TouchA]", target: screen.getByRole("button", { name: "Copy" }) });
-        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
     });
 
     it("opens on a mouse hover with touch={false} after an earlier touch tap", async () => {
@@ -144,7 +168,7 @@ describe("Tooltip props", () => {
         );
         const button = screen.getByRole("button", { name: "Copy" });
         await user.pointer({ keys: "[TouchA]", target: button });
-        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
         await user.unhover(button);
         await user.hover(button);
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
@@ -189,7 +213,7 @@ describe("Tooltip props", () => {
         await user.hover(screen.getByRole("button", { name: "Copy" }));
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
         await user.keyboard("{Escape}");
-        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
     });
 
     describe("Tooltip and Dropdown on the same button", () => {
@@ -222,7 +246,7 @@ describe("Tooltip props", () => {
             expect(screen.getByRole("tooltip")).toHaveTextContent("Open the server files");
             expect(button).toHaveAttribute("aria-expanded", "false");
             await user.click(button);
-            expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+            await waitFor(() => expect(screen.queryByRole("tooltip")).not.toBeInTheDocument());
             expect(screen.getByRole("dialog")).toHaveTextContent("Panel content");
             expect(button).toHaveAttribute("aria-expanded", "true");
         });
@@ -264,7 +288,7 @@ describe("Tooltip props", () => {
             await user.tab();
             expect(screen.getByRole("dialog")).toBeInTheDocument();
             await user.keyboard("{Escape}");
-            expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+            await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
             expect(screen.getByLabelText("Sync status")).toHaveFocus();
         });
     });

@@ -1,11 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import {
-    configureTheme,
-    createThemeCss,
-    createThemeProperties,
-    defaultDarkThemeTokens,
-    defaultLightThemeTokens,
-} from "../src/styles/theme-runtime";
+import { configureTheme, createThemeCss, createThemeProperties, defaultDarkThemeTokens, defaultLightThemeTokens } from "../src/styles/theme-runtime";
 
 const testDocument = document;
 
@@ -42,7 +36,7 @@ describe("sparse theme overrides", () => {
         expect(defaultLightThemeTokens.components.table.background).toBe("hsla(0, 0%, 100%)");
         expect(defaultDarkThemeTokens).not.toHaveProperty("tokens");
         expect(defaultDarkThemeTokens.components.button["secondary-background"]).toBe("hsla(0, 0%, 100%)");
-        expect(defaultDarkThemeTokens.components.alert["danger-background"]).toBe("hsla(0, 84%, 12%)");
+        expect(defaultDarkThemeTokens.components.alert["danger-background"]).toBe("hsla(2, 28%, 13%)");
     });
 });
 
@@ -61,12 +55,10 @@ describe("theme CSS serialization", () => {
     });
 
     it("accepts CSS functions with nested tokens and rejects declaration or rule boundaries", () => {
-        expect(
-            createThemeProperties({ colors: { primary: "var(--brand, hsla(201, 49%, 60%, 1))" } })["--var-color-primary"]
-        ).toBe("var(--brand, hsla(201, 49%, 60%, 1))");
-        expect(createThemeProperties({ colors: { primary: "var(--brand, !important)" } })["--var-color-primary"]).toBe(
-            "var(--brand, !important)"
+        expect(createThemeProperties({ colors: { primary: "var(--brand, hsla(201, 49%, 60%, 1))" } })["--var-color-primary"]).toBe(
+            "var(--brand, hsla(201, 49%, 60%, 1))"
         );
+        expect(createThemeProperties({ colors: { primary: "var(--brand, !important)" } })["--var-color-primary"]).toBe("var(--brand, !important)");
         for (const value of ["red; color: blue", "red !important", "red } html { color: blue", "red</style><script>", "calc(1px", "red)"]) {
             expect(() => createThemeProperties({ colors: { primary: value } })).toThrow();
         }
@@ -108,7 +100,6 @@ describe("theme registration", () => {
         configureTheme({ name: "dark" }, { document: testDocument, nonce: "nonce-2" });
         expect(style.nonce).toBe("nonce-2");
     });
-
 
     it("validates a replacement before mutating an existing registration", () => {
         configureTheme({ name: "dark", colors: { primary: "green" } }, { document: testDocument });
