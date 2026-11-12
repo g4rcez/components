@@ -104,9 +104,9 @@
 .__multi-select__transition {
     outline: var(--var-free-text-outline-width, calc(var(--var-spacing-base) * 0.125)) solid transparent;
     outline-offset: var(--var-free-text-outline-offset, calc(var(--var-spacing-base) * 0.125));
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-duration: var(--var-motion-duration-normal);
-    transition-timing-function: var(--var-motion-timing-linear);
+    transition-property: color, background-color, border-color, box-shadow, text-decoration-color, fill, stroke;
+    transition-duration: var(--var-motion-duration-fast);
+    transition-timing-function: var(--var-motion-timing-out);
 }
 
 .__multi-select__transition:focus {
@@ -302,4 +302,10 @@
 
 .__multi-select__placeholder::placeholder {
     color: var(--var-free-text-placeholder-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .__multi-select__transition {
+        transition-duration: 0ms;
+    }
 }
