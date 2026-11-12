@@ -55,6 +55,9 @@ import { Modal, ModalConfirmProvider, useConfirm } from "@g4rcez/components/moda
 
 - Below `64rem`, `dialog` and `drawer` become `sheet`. Set `forceType={true}` to prevent this.
 - `sheet` stays `sheet`.
+- Sheets use the iOS sheet curve (`cubic-bezier(0.32, 0.72, 0, 1)`): 0.5s in, 0.32s out, with the backdrop on the same timing. `prefers-reduced-motion` is respected.
+- While a sheet is open it lifts above the on-screen keyboard. `useKeyboardInset` publishes the covered height as `--var-keyboard-inset` on `<html>` (from `window.visualViewport`), and the sheet translates and shrinks with it so its top stays on screen. The focused field is scrolled into view once the keyboard settles. Apps can read the same variable, or call `useKeyboardInset(enabled)`, for their own fixed bottom bars.
+- `MODAL_DESKTOP_QUERY` (`"(min-width: 64rem)"`) is the breakpoint where a Modal stops being a sheet. Reuse it to match the switch.
 
 ## Design Tokens
 
@@ -69,6 +72,8 @@ import { Modal, ModalConfirmProvider, useConfirm } from "@g4rcez/components/moda
 | `--var-modal-surface-gap` | `calc(var(--var-spacing-base) * 1)` |
 | `--var-modal-dialog-max-block-size` | `calc(var(--var-spacing-base) * 40)` |
 | `--var-modal-surface-radius` | `var(--var-radius-base)` |
+| `--var-modal-surface-overflow` | `visible` |
+| `--var-motion-timing-sheet` | `cubic-bezier(0.32, 0.72, 0, 1)` |
 
 | Token | CSS Variable | Purpose |
 |---|---|---|

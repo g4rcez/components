@@ -1,6 +1,6 @@
 export const themeTokenMetadata = {
     sharedTokenPrefixes: ["border-", "font-weight-", "layer-", "motion-", "rounded-", "shadow-", "spacing-"],
-    sharedTokenNames: ["fontsize"],
+    sharedTokenNames: ["fontsize", "keyboard-inset"],
     colorPrefixes: ["color-"],
     componentOwners: [
         "alert",

@@ -15,6 +15,7 @@
   --var-motion-duration-normal: 300ms;
   --var-motion-timing-linear: linear;
   --var-motion-timing-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --var-motion-timing-sheet: cubic-bezier(0.32, 0.72, 0, 1);
   --var-typography-xs: calc(var(--var-fontsize) * 0.75);
   --var-typography-sm: calc(var(--var-fontsize) * 0.875);
   --var-typography-lg: calc(var(--var-fontsize) * 1.25);
