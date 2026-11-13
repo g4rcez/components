@@ -98,10 +98,9 @@ const placeholders = {
 const formatParts = (datetimeFormat: Intl.DateTimeFormat, date: Date) => {
     try {
         return datetimeFormat.formatToParts(date).map((x) => {
-            if (x.type === "literal" && x.value === ", ") {
-                return { type: x.type, value: " " };
-            }
-            return x;
+            if (x.type !== "literal") return x;
+            // Node and browsers disagree on the space (a plain one or U+202F), which breaks hydration of the mask and its pattern.
+            return { type: x.type, value: x.value === ", " ? " " : x.value.replace(/[\u00a0\u202f]/g, " ") };
         });
     } catch {
         return [];

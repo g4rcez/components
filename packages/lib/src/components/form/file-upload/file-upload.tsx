@@ -41,6 +41,8 @@ type Props = Omit<Override<React.ComponentProps<"input">, DropzoneProps>, "onDro
     translations?: TranslationOverrides;
 };
 
+export type FileUploadProps = Props;
+
 const getMimeType = (file: File) => {
     if (file.type.startsWith("image/")) return "img";
     if (file.type.startsWith("audio/")) return "audio";
