@@ -1,22 +1,36 @@
 "use client";
-import { isValid } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { parse } from "qs";
-import React, { type ComponentProps, useCallback, useEffect, useRef, useState } from "react";
+import React, { type ComponentProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getPath, Is } from "sidekicker";
 import { LocalStorage } from "storage-manager-js";
-import { z, ZodNumber } from "zod";
-import {
-    type AutocompleteProps,
-    type CheckboxProps,
-    type DatePickerProps,
-    formReset,
-    type InputProps,
-    type MultiSelectProps,
-    type SelectProps,
-    type SwitchProps,
-    type TextareaProps,
+import { z } from "zod";
+import type {
+    AutocompleteProps,
+    CheckboxProps,
+    DatePickerProps,
+    FileUploadProps,
+    InputProps,
+    MorphSelectProps,
+    MultiSelectProps,
+    RadioboxProps,
+    SelectProps,
+    SliderProps,
+    SwitchProps,
+    TextareaProps,
 } from "../components";
+import { formReset } from "../components/form/form/formReset";
 import type { AllPaths } from "../lib/path-types";
+import {
+    coerceFieldValue,
+    coerceFormValues,
+    describeField,
+    fieldConstraintProps,
+    getSchemaAtPath,
+    getSchemaDefaults,
+    type ZodFieldDescriptor,
+    zodToFields,
+} from "../lib/zod-fields";
 import type { Any, SetState } from "../types";
 
 /**
@@ -68,26 +82,6 @@ const setPath = <O extends Any>(o: O, path: string | Array<string | number>, val
 
 const sort = (a: string, b: string) => a.localeCompare(b);
 
-const getDefaultValue = (inner: z.ZodTypeAny): unknown => {
-    const instanceName = inner._def.typeName;
-    if (instanceName === "ZodDefault") return inner._def.defaultValue();
-    if (inner instanceof z.ZodObject) return getDefaults(inner);
-    if (instanceName === "ZodArray") return [];
-    if ("innerType" in inner._def) {
-        const defaults = getDefaultValue(inner._def.innerType);
-        if (instanceName === "ZodArray") return defaults ?? [];
-        return defaults;
-    }
-    return undefined;
-};
-
-const getDefaults = <TSchema extends z.AnyZodObject>(schema: TSchema) =>
-    Object.fromEntries(
-        Object.entries(schema.shape).map(([key, value]) => {
-            return [key, getDefaultValue(value as z.ZodTypeAny)];
-        })
-    );
-
 const deepMerge = <T extends object, U extends object>(a: T, b: U): T & U => {
     // as unknown as Record: structuredClone returns T, but we mutate it dynamically; static T & U proven at return
     const result: Record<string, unknown> = structuredClone(a) as unknown as Record<string, unknown>;
@@ -138,26 +132,51 @@ export const formToJson = (form: HTMLFormElement): Record<string, unknown> => {
     return parse(urlSearchParams.toString(), options) as never;
 };
 
-const schemaShapeCache = new WeakMap<z.ZodObject<z.ZodRawShape>, Map<string, z.ZodTypeAny>>();
+type FieldEntry = { validator: z.ZodType; field: ZodFieldDescriptor };
 
-export const getSchemaShape = <T extends z.ZodObject<z.ZodRawShape>>(name: string, schema: T) => {
-    let nameMap = schemaShapeCache.get(schema);
-    if (!nameMap) {
-        nameMap = new Map();
-        schemaShapeCache.set(schema, nameMap);
+const fieldCache = new WeakMap<z.ZodType, Map<string, FieldEntry>>();
+
+/** The schema found at `name` plus its descriptor. A path that does not exist in the schema accepts anything. */
+const getFieldEntry = (name: string, schema: z.ZodType): FieldEntry => {
+    let byName = fieldCache.get(schema);
+    if (!byName) {
+        byName = new Map();
+        fieldCache.set(schema, byName);
     }
-    const cached = nameMap.get(name);
+    const cached = byName.get(name);
     if (cached !== undefined) return cached;
-    const result = convertPath(name).reduce<z.ZodTypeAny>((acc, el) => {
-        if (el === "") return acc;
-        const zodObj = acc as z.ZodObject<z.ZodRawShape>;
-        const shape = zodObj.shape?.[el] || acc;
-        const result = shape._def.typeName === "ZodArray" ? (shape as unknown as { element: unknown }).element : shape;
-        return result as z.ZodTypeAny;
-    }, schema as z.ZodTypeAny);
-    nameMap.set(name, result);
-    return result;
+    const validator = getSchemaAtPath(schema, name) ?? z.any().optional();
+    const entry = { validator, field: describeField(name, validator) };
+    byName.set(name, entry);
+    return entry;
 };
+
+/**
+ * Finds the schema of a field by path (`address.street`, `items[0].name`).
+ * @deprecated Use `getSchemaAtPath`, or `useForm().field(name)` for the full descriptor.
+ */
+export const getSchemaShape = <T extends z.ZodObject>(name: string, schema: T): z.ZodType => getFieldEntry(name, schema).validator;
+
+const compact = <T extends Record<string, unknown>>(value: T): Partial<T> =>
+    Object.fromEntries(Object.entries(value).filter(([, entry]) => entry !== undefined)) as Partial<T>;
+
+const asError = (value: unknown): string | undefined => (typeof value === "string" ? value : undefined);
+
+/** `["items", 0, "name"]` becomes `items[0].name`. */
+const pathToString = (path: ReadonlyArray<PropertyKey>) =>
+    path.reduce<string>((acc, part) => (typeof part === "number" ? `${acc}[${part}]` : acc === "" ? String(part) : `${acc}.${String(part)}`), "");
+
+/** Turns zod issues into the nested error object `useForm` exposes. The first message of each field wins. */
+const issuesToErrors = (issues: ReadonlyArray<{ message: string; path: ReadonlyArray<PropertyKey> }>) =>
+    issues
+        .slice()
+        .sort((a, b) => b.path.length - a.path.length)
+        .reduce<Record<string, unknown>>((acc, issue) => {
+            const path = pathToString(issue.path);
+            // Skips a path that already holds a message, or nested messages (an array level issue next to its items).
+            if (path === "" || getPath(acc, path, undefined) !== undefined) return acc;
+            return setPath(acc, path, issue.message);
+        }, {});
 
 type HTMLEntryElements = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
@@ -176,8 +195,6 @@ const getDataTarget = (e: HTMLEntryElements) => {
     return getValueByType(element as HTMLInputElement);
 };
 
-type CustomOnInvalid = (args: { form: HTMLFormElement; errors: Record<string, string> }) => void;
-
 export type UseOnSubmitArgs<T> = {
     data: T;
     json: Record<string, unknown>;
@@ -188,6 +205,8 @@ export type UseOnSubmitArgs<T> = {
     event: React.FormEvent<HTMLFormElement>;
     errors: Array<{ message: string; path: string[] }>;
 };
+
+export type UseFormInvalid = (args: { form: HTMLFormElement; errors: Record<string, string> }) => void;
 
 export type UseFormSubmit<T> = (event: React.FormEvent<HTMLFormElement>, args: UseOnSubmitArgs<T>) => unknown;
 
@@ -223,18 +242,52 @@ export const createFormStorage = (name: string): Interceptor<Any> => {
     };
 };
 
+const dateOf = (value: unknown): Date | undefined => {
+    if (value instanceof Date) return isValid(value) ? value : undefined;
+    if (!Is.string(value) || value === "") return undefined;
+    const parsed = parseISO(value);
+    return isValid(parsed) ? parsed : undefined;
+};
+
+const serializeDate = (date: Date, storage: ZodFieldDescriptor["storage"]) => {
+    if (storage === "date") return date;
+    if (storage === "iso-date") return format(date, "yyyy-MM-dd");
+    return date.toISOString();
+};
+
+const toDisabledDate = (field: ZodFieldDescriptor) => {
+    const { minDate, maxDate } = field.constraints;
+    if (!minDate && !maxDate) return undefined;
+    return (date: Date) => (minDate !== undefined && date < minDate) || (maxDate !== undefined && date > maxDate);
+};
+
+const toDropzoneAccept = (accept?: string) =>
+    accept === undefined ? undefined : Object.fromEntries(accept.split(",").map((mime) => [mime.trim(), [] as string[]]));
+
+const toArray = <V>(value: V | V[] | undefined): V[] => (value === undefined ? [] : Array.isArray(value) ? value : [value]);
+
+type SliderChangeDetails = Parameters<NonNullable<SliderProps["onValueChange"]>>[1];
+
+type Registered = { element: HTMLInputElement | HTMLSelectElement; schema: z.ZodType };
+
 /**
  * A comprehensive form management hook with Zod schema validation.
  *
  * Provides form state management, validation, and component binding for React forms.
  * Supports automatic validation, error handling, and form persistence.
  *
+ * Every helper (`input`, `select`, `checkbox`...) reads the schema and spreads what it knows onto the component:
+ * `required`, `min`/`max`/`step`, `minLength`/`maxLength`, `pattern`, `type`, the `mask` set in `.meta()`, the
+ * `options` of an enum, and the value declared with `.default()`. Props you pass always win over the schema.
+ *
  * @example
  * ```tsx
  * const schema = z.object({
  *   name: z.string().min(1, "Name is required"),
- *   email: z.string().email("Invalid email"),
- *   age: z.number().min(18, "Must be 18 or older")
+ *   email: z.email("Invalid email"),
+ *   age: z.number().min(18, "Must be 18 or older"),
+ *   document: z.string().meta({ mask: "cpf", title: "CPF" }),
+ *   role: z.enum(["admin", "member"]).default("member"),
  * });
  *
  * const MyForm = () => {
@@ -244,9 +297,11 @@ export const createFormStorage = (name: string): Interceptor<Any> => {
  *     <form {...form.controller()} onSubmit={form.onSubmit((e, { data }) => {
  *       console.log("Form data:", data);
  *     })}>
- *       <Input {...form.input("name")} placeholder="Name" />
- *       <Input {...form.input("email")} type="email" placeholder="Email" />
- *       <Input {...form.input("age")} type="number" placeholder="Age" />
+ *       <Input {...form.input("name", { title: "Name" })} />
+ *       <Input {...form.input("email", { title: "Email" })} />
+ *       <Input {...form.input("age", { title: "Age" })} />
+ *       <Input {...form.input("document")} />
+ *       <Select {...form.select("role", { title: "Role" })} />
  *       <Button type="submit">Submit</Button>
  *     </form>
  *   );
@@ -259,15 +314,51 @@ export const createFormStorage = (name: string): Interceptor<Any> => {
  * @param opts - Optional configuration including initial state and interceptors
  * @returns Form management object with input helpers and handlers
  */
-export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formName: string, opts: UseFormOptions<z.infer<T>> = {}) => {
-    type Fields = AllPaths<z.infer<T>>;
+export const useForm = <T extends z.ZodObject>(schema: T, formName: string, opts: UseFormOptions<z.input<T>> = {}) => {
+    type Fields = AllPaths<z.input<T>>;
 
     const loading = opts.loading ?? false;
     const [errors, setErrors] = useState<Record<string, unknown> | null>(null);
-    const ref = useRef<Record<string, { element: HTMLInputElement | HTMLSelectElement; schema: z.ZodType }>>({});
-    const [state, setState] = useState<z.infer<T>>(() => {
-        if (Is.function(opts?.state)) return opts.state();
-        return opts?.state ?? getDefaults(schema) ?? {};
+    const ref = useRef<Record<string, Registered>>({});
+    const bound = useRef(new WeakSet<Element>());
+    const abort = useRef<AbortController | null>(null);
+    const fields = useMemo(() => zodToFields(schema), [schema]);
+    const [state, setState] = useState<z.input<T>>(() => {
+        const initial = Is.function(opts?.state) ? opts.state() : opts?.state;
+        return deepMerge(getSchemaDefaults(schema), (initial ?? {}) as object) as z.input<T>;
+    });
+
+    /**
+     * Writes a value into the state. A field that shows an error is validated again, so the message goes away as soon as
+     * the value is valid (controls without a blur, like sliders and radios, would otherwise keep it forever).
+     */
+    const update = (name: string, value: unknown) => {
+        setState((prev) => setPath((prev ?? {}) as Any, name, value) as z.input<T>);
+        setErrors((prev) => {
+            if (prev === null || typeof getPath(prev, name, undefined) !== "string") return prev;
+            const { validator } = getFieldEntry(name, schema);
+            if (!validator.safeParse(coerceFieldValue(validator, value)).success) return prev;
+            ref.current[name]?.element.setCustomValidity?.("");
+            const next = setPath(prev, name, undefined);
+            return Is.empty(next) ? null : next;
+        });
+    };
+
+    const clearError = (name: string) => setErrors((prev) => (prev === null ? null : setPath(prev, name, undefined)));
+
+    const register = (name: string, entry: FieldEntry) => (element: HTMLInputElement | HTMLSelectElement | null) => {
+        if (element === null) delete ref.current[name];
+        else ref.current[name] = { element, schema: entry.validator };
+    };
+
+    const managed = (name: Fields, entry: FieldEntry, required?: boolean) => ({
+        name,
+        id: name,
+        // Some controls forward unknown props to the DOM, so `loading: false` is left out.
+        loading: loading || undefined,
+        form: formName,
+        required: required ?? entry.field.required,
+        error: asError(getPath(errors, name, undefined)),
     });
 
     const onInvalidField = useCallback(
@@ -280,23 +371,21 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             }
             const path = getName(target);
             const value = getDataTarget(target) ?? (related ? getValueByType(related) : "");
-            const partialSchema = getSchemaShape(path, schema);
+            const { validator } = getFieldEntry(path, schema);
             target.setAttribute("data-initialized", "true");
-            if (partialSchema) {
-                const validation = partialSchema.safeParse(value);
-                const message = validation.success ? undefined : (validation.error.issues[0]?.message ?? "");
-                setErrors((prev) => setPath(prev ?? {}, path, message));
-            }
+            const validation = validator.safeParse(coerceFieldValue(validator, value));
+            const message = validation.success ? undefined : (validation.error.issues[0]?.message ?? "");
+            setErrors((prev) => setPath(prev ?? {}, path, message));
         },
         [schema]
     );
 
     const onInvalid = useCallback(
-        (exec?: CustomOnInvalid) => (event: React.FormEvent<HTMLFormElement>) => {
+        (exec?: UseFormInvalid) => (event: React.FormEvent<HTMLFormElement>) => {
             const form = event.currentTarget;
             const validationErrors = Object.values(ref.current).reduce((acc, input) => {
                 const field = input.element as HTMLInputElement;
-                const validation = input.schema.safeParse(getValueByType(field));
+                const validation = input.schema.safeParse(coerceFieldValue(input.schema, getValueByType(field)));
                 if (field.dataset.ignore === "ignore") return acc;
                 if (validation.success) return acc;
                 const errorMessage = validation.error.issues[0]?.message;
@@ -313,230 +402,318 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
     );
 
     const datepicker = (name: Fields, props?: DatePickerProps): DatePickerProps => {
-        const validator = getSchemaShape(name, schema);
-        const onChange = (date: Date) => {
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
+        const onChange = (date: Date | undefined) => {
+            if (date === undefined) {
+                update(name, undefined);
+                return (props?.onChange as ((date?: Date) => void) | undefined)?.(date);
+            }
             if (!isValid(date)) return;
-            setState((prev) => setPath(prev!, name, date.toISOString()));
-            setErrors((prev) => setPath(prev!, name, undefined));
-            const input = ref.current[name].element as HTMLInputElement;
+            update(name, serializeDate(date, field.storage));
+            clearError(name);
+            const input = ref.current[name]?.element as HTMLInputElement | undefined;
             if (input) {
                 const origin = input.getAttribute("data-origin");
                 const inputShadow = document.querySelector(`input[data-target="${origin}"]`) as HTMLInputElement;
                 if (inputShadow) inputShadow.setCustomValidity("");
             }
-            props?.onChange?.(date);
+            (props?.onChange as ((date: Date) => void) | undefined)?.(date);
         };
         return {
+            ...compact({
+                title: field.meta.title,
+                info: field.info,
+                placeholder: field.placeholder,
+                disabledDate: toDisabledDate(field),
+                type: field.kind === "datetime" ? "datetime" : undefined,
+            }),
             ...props,
-            loading,
-            name,
-            id: name,
+            ...managed(name, entry, props?.required),
             onChange,
-            form: formName,
-            date: Is.string(state[name]) ? new Date(state[name]) : state[name],
-            required: props?.required ?? !validator.isOptional(),
-            error: getPath(errors, name),
-            ref: (e: HTMLSelectElement) => {
-                if (e === null) return;
-                ref.current[name] = { element: e, schema: validator };
-            },
+            date: dateOf(getPath(state, name, undefined)),
+            ref: register(name, entry),
         } as unknown as DatePickerProps;
     };
 
     const select = <Props extends SelectProps | AutocompleteProps>(name: Fields, props?: Props): Props => {
-        const validator = getSchemaShape(name, schema);
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
         const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-            const value = e.target.value;
-            setState((prev) => setPath(prev!, name, value));
+            update(name, e.target.value);
             // SelectProps/AutocompleteProps have divergent onChange signatures at this generic union boundary
             (props?.onChange as React.ChangeEventHandler<HTMLSelectElement> | undefined)?.(e);
         };
         return {
+            ...compact({
+                title: field.meta.title,
+                info: field.info,
+                placeholder: field.placeholder,
+                options: field.options.length > 0 ? field.options : undefined,
+            }),
             ...props,
-            name,
-            id: name,
+            ...managed(name, entry, props?.required),
             onChange,
-            form: formName,
-            loading,
             onInvalid: onInvalidField,
-            error: getPath(errors, name, undefined),
             value: getPath(state, name, undefined) ?? "",
-            required: props?.required ?? !validator.isOptional(),
-            ref: (e: HTMLSelectElement) =>
-                e !== null
-                    ? (ref.current[name] = {
-                          element: e,
-                          schema: validator,
-                      })
-                    : undefined,
+            ref: register(name, entry),
         } as unknown as Props;
     };
 
     const checkbox = <Props extends CheckboxProps | SwitchProps>(name: Fields, props?: Props): Props => {
-        const validator = getSchemaShape(name, schema);
+        const entry = getFieldEntry(name, schema);
         const onChange: Props["onChange"] = (e) => {
-            const value = e.target.checked;
-            setState((prev) => setPath(prev ?? {}, name, value));
+            update(name, e.target.checked);
             props?.onChange?.(e);
         };
         return {
+            defaultChecked: Boolean(getPath(state, name, undefined)),
             ...props,
-            name,
-            id: name,
+            ...managed(name, entry, props?.required),
             onChange,
-            form: formName,
-            loading,
             onInvalid: onInvalidField,
-            error: getPath(errors, name, undefined),
-            required: props?.required ?? !validator.isOptional(),
-            ref: (e: HTMLInputElement) =>
-                e !== null
-                    ? void (ref.current[name] = {
-                          element: e,
-                          schema: validator,
-                      })
-                    : undefined,
+            ref: register(name, entry),
         } as unknown as Props;
     };
 
     const textarea = <Props extends TextareaProps>(name: Fields, props?: Props): Props => {
-        const validator = getSchemaShape(name, schema);
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
         const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             e.persist?.();
-            const value = e.target.value;
             props?.onChange?.(e);
-            setState((prev) => setPath(prev, name, value));
+            update(name, e.target.value);
         };
         return {
+            ...compact({
+                title: field.meta.title,
+                info: field.info,
+                placeholder: field.placeholder,
+                ...fieldConstraintProps(field, ["minLength", "maxLength"]),
+            }),
             ...props,
-            loading,
-            name,
-            id: name,
+            ...managed(name, entry, props?.required),
             onChange,
-            form: formName,
             onInvalid: onInvalidField,
-            error: getPath(errors, name, undefined),
-            required: props?.required ?? !validator.isOptional(),
             value: getPath(state, name, undefined) ?? props?.value ?? "",
-            type: Is.instance(validator, ZodNumber) ? "number" : (props?.type ?? "text"),
-            ref: (e: HTMLInputElement) =>
-                e === null
-                    ? undefined
-                    : (ref.current[name] = {
-                          element: e,
-                          schema: validator,
-                      }),
+            ref: register(name, entry),
         } as unknown as Props;
     };
 
     const multiselect = <Props extends MultiSelectProps>(name: Fields, props?: Props): Props => {
-        const validator = getSchemaShape(name, schema);
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
         const onChangeOptions = (options: string[]) => {
-            setState((prev) => setPath(prev, name, options));
+            update(name, options);
+            props?.onChangeOptions?.(options);
         };
         return {
+            ...compact({
+                title: field.meta.title,
+                info: field.info,
+                placeholder: field.placeholder,
+                options: field.options.length > 0 ? field.options : undefined,
+                // An array of free strings has no list to pick from, so the user creates the options.
+                dynamicOption: field.options.length === 0 ? true : undefined,
+            }),
             ...props,
-            name,
-            id: name,
+            ...managed(name, entry, props?.required),
             onChangeOptions,
-            form: formName,
-            loading,
             onInvalid: onInvalidField,
-            error: getPath(errors, name, undefined),
-            required: props?.required ?? !validator.isOptional(),
             value: getPath(state, name, undefined) ?? props?.value ?? [],
-            ref: (e: HTMLInputElement) =>
-                e === null
-                    ? undefined
-                    : void (ref.current[name] = {
-                          element: e,
-                          schema: validator,
-                      }),
+            ref: register(name, entry),
         } as unknown as Props;
     };
 
     const input = <Props extends InputProps>(name: Fields, props?: Props): Props => {
-        const validator = getSchemaShape(name, schema);
-        const isNumber = (validator._def.typeName as string) === "ZodNumber";
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
+        // A masked number is typed as text ("R$ 1.234,56") and converted back when the form is parsed.
+        const isNumber = field.kind === "number" && field.mask === undefined;
         const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             e.persist?.();
-            const value = isNumber ? e.target.valueAsNumber : e.target.value;
+            const raw = isNumber ? e.target.valueAsNumber : e.target.value;
             props?.onChange?.(e);
-            setState((prev) => setPath(prev, name, value));
+            update(name, typeof raw === "number" && Number.isNaN(raw) ? undefined : raw);
+        };
+        return {
+            ...compact({
+                type: field.constraints.type,
+                mask: field.mask,
+                title: field.meta.title,
+                info: field.info,
+                locale: field.locale,
+                currency: field.currency,
+                placeholder: field.placeholder,
+                ...fieldConstraintProps(field),
+            }),
+            ...props,
+            ...managed(name, entry, props?.required),
+            onChange,
+            onInvalid: onInvalidField,
+            value: getPath(state, name, undefined) ?? props?.value ?? "",
+            ref: register(name, entry),
+        } as unknown as Props;
+    };
+
+    /** Props for one `<Radiobox />` of the group. Call it once per option value. */
+    const radio = (name: Fields, value: string, props?: RadioboxProps): RadioboxProps => {
+        const entry = getFieldEntry(name, schema);
+        const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.checked) update(name, value);
+            props?.onChange?.(e);
         };
         return {
             ...props,
             name,
-            id: name,
+            value,
             onChange,
             form: formName,
-            loading,
-            onInvalid: onInvalidField,
-            error: getPath(errors, name, undefined),
-            required: props?.required ?? !validator.isOptional(),
-            type: isNumber ? "number" : (props?.type ?? "text"),
-            value: getPath(state, name, undefined) ?? props?.value ?? "",
-            ref: (e: HTMLInputElement) =>
-                e === null
-                    ? undefined
-                    : void (ref.current[name] = {
-                          element: e,
-                          schema: validator,
-                      }),
-        } as unknown as Props;
+            id: `${name}-${value}`,
+            required: props?.required ?? entry.field.required,
+            checked: String(getPath(state, name, undefined) ?? "") === value,
+        };
+    };
+
+    const slider = (name: Fields, props?: Partial<SliderProps>): SliderProps => {
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
+        const { min, max, step } = field.constraints;
+        return {
+            ...compact({ min, max, step, label: field.meta.title }),
+            ...props,
+            name,
+            value: getPath(state, name, undefined) ?? field.defaultValue ?? min ?? 0,
+            onValueChange: (value: number | readonly number[], details: SliderChangeDetails) => {
+                update(name, value);
+                (props?.onValueChange as ((value: number | readonly number[], details: SliderChangeDetails) => void) | undefined)?.(value, details);
+            },
+        } as SliderProps;
+    };
+
+    const file = (name: Fields, props?: Partial<FileUploadProps>): FileUploadProps => {
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
+        const multiple = field.constraints.multiple === true;
+        const current = toArray(getPath(state, name, undefined) as File | File[] | undefined);
+        return {
+            ...compact({
+                multiple,
+                maxSize: field.constraints.maxSize,
+                minSize: field.constraints.minSize,
+                accept: toDropzoneAccept(field.constraints.accept),
+            }),
+            ...props,
+            name,
+            files: current,
+            onDrop: (files: File[]) => {
+                update(name, multiple ? files : files[0]);
+                props?.onDrop?.(files);
+            },
+            onDeleteFile: (target: File) => {
+                update(name, multiple ? current.filter((item) => item !== target) : undefined);
+                props?.onDeleteFile?.(target);
+            },
+        } as FileUploadProps;
+    };
+
+    /** Adds a row to an array of objects. The row starts from the defaults the schema declares. */
+    const append = (name: Fields, value?: unknown) => {
+        const { field } = getFieldEntry(name, schema);
+        const current = toArray(getPath(state, name, undefined) as unknown[] | undefined);
+        update(name, current.concat([value ?? structuredClone(field.element?.defaultValue ?? {})]));
+    };
+
+    /** Removes a row from an array of objects and forgets the messages of the array. */
+    const remove = (name: Fields, index: number) => {
+        const current = toArray(getPath(state, name, undefined) as unknown[] | undefined);
+        update(
+            name,
+            current.filter((_, position) => position !== index)
+        );
+        clearError(name);
+    };
+
+    const morph = (name: Fields, props?: Partial<MorphSelectProps>): MorphSelectProps => {
+        const entry = getFieldEntry(name, schema);
+        const { field } = entry;
+        return {
+            label: field.title,
+            placeholder: field.placeholder,
+            items: field.options.map(({ value, label }) => ({ value, label })),
+            ...props,
+            name,
+            value: (getPath(state, name, undefined) as string | undefined) ?? null,
+            onValueChange: (value, option) => {
+                update(name, value);
+                props?.onValueChange?.(value, option);
+            },
+        };
+    };
+
+    /** Registers the blur validation of a field once. Rows added after the first render are bound on the next one. */
+    const bind = (input: Registered, signal: AbortSignal) => {
+        const element = input.element.dataset.origin
+            ? (document.querySelector(`[data-target="${input.element.name}"]`) as HTMLEntryElements | null)
+            : (input.element as HTMLEntryElements);
+        if (!element || bound.current.has(element)) return;
+        bound.current.add(element);
+        const onBlurField = (e: Event) => {
+            if (e.target === null) return false;
+            const name = getName(e.target as unknown as HTMLEntryElements);
+            if (!name) return false;
+            const current = e.target as HTMLEntryElements;
+            const relatedTarget = (e as FocusEvent).relatedTarget as HTMLEntryElements | null;
+            const value = getDataTarget(current) ?? (relatedTarget ? getValueByType(relatedTarget) : "");
+            const validation = input.schema.safeParse(coerceFieldValue(input.schema, value));
+            current.setAttribute("value", value as string);
+            if (validation.success) {
+                if (element.setCustomValidity) element.setCustomValidity("");
+                setErrors((prev) => {
+                    if (Is.null(prev)) return null;
+                    const newErrors = setPath(prev, name, undefined);
+                    if (Is.empty(prev) || Is.nil(prev)) return null;
+                    return Is.empty(newErrors) ? null : newErrors;
+                });
+                return false;
+            }
+            if (element.required) {
+                const errorMessage = validation.error.issues[0]?.message || "";
+                if (element.setCustomValidity) element.setCustomValidity(errorMessage);
+                setErrors((prev) => {
+                    if (Is.null(prev)) return null;
+                    const newErrors = setPath(prev, name, errorMessage || undefined);
+                    return Is.empty(newErrors) ? null : newErrors;
+                });
+            }
+            return false;
+        };
+        element.addEventListener(element.getAttribute("data-trigger") || "blur", onBlurField, { signal });
     };
 
     useEffect(() => {
-        const events = Object.values(ref.current).map((input) => {
-            const element = input.element.dataset.origin
-                ? (document.querySelector(`[data-target="${input.element.name}"]`) as HTMLEntryElements)
-                : (input.element as HTMLEntryElements);
-            const validation = input.schema.safeParse(getValueByType(element));
-            const onBlurField = (e: Event) => {
-                if (e.target === null) return false;
-                const name = getName(e.target as unknown as HTMLEntryElements);
-                if (!name) return false;
-                const current = e.target as HTMLEntryElements;
-                const relatedTarget = (e as FocusEvent).relatedTarget as HTMLEntryElements | null;
-                const value = getDataTarget(current) ?? (relatedTarget ? getValueByType(relatedTarget) : "");
-                const validation = input.schema.safeParse(value);
-                current.setAttribute("value", value as string);
-                if (validation.success) {
-                    if (element.setCustomValidity) element.setCustomValidity("");
-                    setErrors((prev) => {
-                        if (Is.null(prev)) return null;
-                        const newErrors = setPath(prev, name, undefined);
-                        if (Is.empty(prev) || Is.nil(prev)) return null;
-                        return Is.empty(newErrors) ? null : newErrors;
-                    });
-                    return false;
-                }
-                if (element.required) {
-                    const errorMessage = validation.error.issues[0]?.message || "";
-                    if (element.setCustomValidity) element.setCustomValidity(errorMessage);
-                    setErrors((prev) => {
-                        if (Is.null(prev)) return null;
-                        const newErrors = setPath(prev, name, errorMessage || undefined);
-                        return Is.empty(newErrors) ? null : newErrors;
-                    });
-                }
-                return false;
-            };
-            const controller = new AbortController();
-            const trigger = element.getAttribute("data-trigger") || "blur";
-            element.addEventListener(trigger, onBlurField, {
-                signal: controller.signal,
-            });
-            const hasInitialError = element.dataset.shadow ? false : (element as HTMLInputElement).required ? !validation.success : false;
-            return {
-                input,
-                hasInitialError,
-                unsubscribe: () => controller.abort(),
-            };
+        const controller = (abort.current ??= new AbortController());
+        for (const registered of Object.values(ref.current)) bind(registered, controller.signal);
+    });
+
+    useEffect(
+        () => () => {
+            abort.current?.abort();
+            abort.current = null;
+            bound.current = new WeakSet();
+        },
+        []
+    );
+
+    useEffect(() => {
+        const hasErrors = Object.values(ref.current).some((registered) => {
+            const element = registered.element.dataset.origin
+                ? (document.querySelector(`[data-target="${registered.element.name}"]`) as HTMLEntryElements | null)
+                : (registered.element as HTMLEntryElements);
+            if (!element || element.dataset.shadow || !(element as HTMLInputElement).required) return false;
+            return !registered.schema.safeParse(coerceFieldValue(registered.schema, getValueByType(element))).success;
         });
-        const hasErrors = events.some((x) => x.hasInitialError);
         if (hasErrors) setErrors((prev) => (prev === null ? {} : prev));
-        return () => events.forEach((item) => item.unsubscribe());
     }, []);
 
     const onSubmit = (exec?: UseFormSubmit<z.infer<T>>) => (event: React.FormEvent<HTMLFormElement>) => {
@@ -555,7 +732,8 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
                 json = setPath(json, input.dataset.target || input.name, value);
             }
         });
-        const input = deepMerge(json, state);
+        // Native controls post strings only: convert them to what the schema declares after the typed state is merged in.
+        const input = coerceFormValues(schema, deepMerge(json, state as object));
         const result = schema.safeParse(input);
         const reset = () => {
             formReset(form);
@@ -565,6 +743,7 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
             const jsonString = JSON.stringify(result.data);
             form.setAttribute("data-json", jsonString);
             opts.interceptor?.clear();
+            setErrors(null);
             return exec?.(event, {
                 form,
                 event,
@@ -581,15 +760,16 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
         console.info(result.error.issues);
         console.error(result.error);
         console.groupEnd();
+        setErrors(issuesToErrors(result.error.issues));
         form.reportValidity();
         return exec?.(event, {
             form,
-            json,
             event,
             reset,
             setErrors,
-            data: json,
+            json: input,
             success: false,
+            data: input as z.infer<T>,
             errors: result.error.issues.map((x) => ({
                 message: x.message,
                 path: x.path.map((x) => String(x)),
@@ -598,6 +778,8 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
     };
 
     const get = (p: Fields) => getPath(state, p) ?? "";
+
+    const field = (name: Fields): ZodFieldDescriptor => getFieldEntry(name, schema).field;
 
     const controller = (props?: ComponentProps<"form">) => ({
         ...props,
@@ -611,10 +793,18 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
 
     return {
         get,
+        file,
         input,
+        append,
+        remove,
+        radio,
         state,
+        field,
+        fields,
+        morph,
         errors,
         select,
+        slider,
         checkbox,
         onSubmit,
         setState,
@@ -628,7 +818,10 @@ export const useForm = <T extends z.ZodObject<z.ZodRawShape>>(schema: T, formNam
     };
 };
 
-export const getJsonForm = <T extends z.ZodObject<z.ZodRawShape>>(form?: HTMLFormElement | null): z.infer<T> => {
+/** What `useForm` returns, for components that receive the form as a prop. */
+export type UseFormApi<T extends z.ZodObject> = ReturnType<typeof useForm<T>>;
+
+export const getJsonForm = <T extends z.ZodObject>(form?: HTMLFormElement | null): z.infer<T> => {
     if (!form) return {} as z.infer<T>;
     const value = form.getAttribute("data-json");
     if (!value) return {} as z.infer<T>;

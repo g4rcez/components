@@ -11,6 +11,7 @@ export * from "./hooks/use-swipe";
 export * from "./lib/dom";
 export * from "./lib/dict";
 export * from "./lib/fns";
+export * from "./lib/zod-fields";
 export * from "./styles/design-tokens";
 export * from "./styles/theme-runtime";
 export * from "./styles/theme.types";

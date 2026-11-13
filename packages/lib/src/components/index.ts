@@ -53,6 +53,7 @@ export * from "./core/action-swap/action-swap";
 export * from "./core/hold-to-confirm/hold-to-confirm";
 export * from "./core/rolling-text/rolling-text";
 export * from "./form/switch/switch";
+export * from "./form/zod-form/zod-form";
 export * from "./form/drawing-editor/drawing-editor";
 export * from "./form/task-list/task-list";
 export * from "./page-calendar/index";
