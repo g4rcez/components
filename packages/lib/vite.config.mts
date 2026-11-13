@@ -4,7 +4,7 @@ import { glob } from "glob";
 import { join, relative } from "node:path";
 import { defineConfig, ViteUserConfig } from "vitest/config";
 
-const externalPackages = new Set(["react", "react-dom", "use-sync-external-store"]);
+const externalPackages = new Set(["react", "react-dom", "use-sync-external-store", "zod"]);
 
 function isExternalDependency(id: string) {
     return externalPackages.has(id) || [...externalPackages].some((pkg) => id.startsWith(`${pkg}/`));

@@ -392,6 +392,11 @@
             "import": "./dist/components/form/morph-select.mjs",
             "default": "./dist/components/form/morph-select.mjs"
         },
+        "./components/form/zod-form": {
+            "types": "./dist/components/form/zod-form/zod-form.d.ts",
+            "import": "./dist/components/form/zod-form.mjs",
+            "default": "./dist/components/form/zod-form.mjs"
+        },
         "./components/display/card-stack": {
             "types": "./dist/components/display/card-stack/card-stack.d.ts",
             "import": "./dist/components/display/card-stack.mjs",
@@ -656,6 +661,12 @@
             "types": "./dist/components/form/morph-select/morph-select.d.ts",
             "import": "./dist/components/form/morph-select.mjs",
             "default": "./dist/components/form/morph-select.mjs"
+        },
+        "./zod-form": {
+            "source": "./src/components/form/zod-form/zod-form.tsx",
+            "types": "./dist/components/form/zod-form/zod-form.d.ts",
+            "import": "./dist/components/form/zod-form.mjs",
+            "default": "./dist/components/form/zod-form.mjs"
         },
         "./card-stack.css": {
             "source": "./src/components/display/card-stack/card-stack.css",
@@ -1071,8 +1082,7 @@
         "storage-manager-js": "4.2.6-5",
         "the-mask-input": "3.5.0",
         "use-sync-external-store": "1.6.0",
-        "use-typed-reducer": "4.3.0",
-        "zod": "3.25.67"
+        "use-typed-reducer": "4.3.0"
     },
     "devDependencies": {
         "@tailwindcss/forms": "0.5.11",
@@ -1092,11 +1102,13 @@
         "typescript": "6.0.3",
         "vite": "8.0.14",
         "vitest": "4.1.7",
-        "vitest-axe": "0.1.0"
+        "vitest-axe": "0.1.0",
+        "zod": "4.6.7"
     },
     "peerDependencies": {
         "react": ">=18",
-        "react-dom": ">=18"
+        "react-dom": ">=18",
+        "zod": "^4.0.0"
     },
     "engines": {
         "node": ">=20.14.0"
