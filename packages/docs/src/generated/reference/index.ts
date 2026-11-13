@@ -60,6 +60,7 @@ const raw: Record<string, Loader> = {
     typography: () => import("./typography.json"),
     "video-player": () => import("./video-player.json"),
     wizard: () => import("./wizard.json"),
+    "zod-form": () => import("./zod-form.json"),
 };
 
 export const referenceSlugs = Object.keys(raw);

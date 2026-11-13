@@ -27,14 +27,14 @@ export default function GetStartedPage() {
                 <section id="installation">
                     <h2 className="text-foreground mb-4 text-2xl font-bold tracking-tight">Installation</h2>
                     <p className="text-muted-foreground mb-6">
-                        Install the library with your preferred package manager. It needs React 18 or newer. Icons and animation libraries come with
-                        the package, so you do not install them yourself.
+                        Install the library with your preferred package manager. It needs React 18 or newer and zod 4. Icons and animation libraries
+                        come with the package, so you do not install them yourself.
                     </p>
                     <div className="border-border/40 bg-background overflow-hidden rounded-xl border">
                         <div className="border-border/40 bg-muted/30 flex items-center justify-between border-b px-4 py-2">
                             <span className="text-muted-foreground text-xs font-medium tracking-wide">Terminal</span>
                         </div>
-                        <CodeBlock code="pnpm add @g4rcez/components" lang="bash" />
+                        <CodeBlock code="pnpm add @g4rcez/components zod" lang="bash" />
                     </div>
                     <p className="text-muted-foreground mb-6 mt-6">
                         Then import the CSS in your app stylesheet. `foundation.css` comes first, followed by the CSS of each component you use. Run

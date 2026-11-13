@@ -32,6 +32,8 @@ const languages: AutocompleteItemProps[] = [
     { label: "F#", value: "fsharp" },
 ] as const;
 
+const languageValues = languages.map((x) => x.value) as [string, ...string[]];
+
 const clamp = (min: number, x: number, max: number) => Math.min(Math.max(x, min), max);
 
 const oabMask = (str: string) => {
@@ -48,13 +50,13 @@ const schema = z.object({
     number: z.number(),
     boolean: z.literal(true),
     languages: z.array(z.string()),
-    date: z.string().datetime(),
-    datetime: z.string().datetime(),
+    date: z.iso.datetime(),
+    datetime: z.iso.datetime(),
     name: z.string().min(1),
     document: z.string().min(1),
     surname: z.string().min(1),
-    main: z.enum(languages.map((x) => x.value) as any),
-    secondary: z.enum(languages.map((x) => x.value) as any),
+    main: z.enum(languageValues),
+    secondary: z.enum(languageValues),
     items: z.array(z.object({ document: z.string().min(1), name: z.string().min(1) })),
     oab: z.array(
         z.object({
@@ -63,7 +65,7 @@ const schema = z.object({
                 .regex(new RegExp("[[0-9]{4,6}/[A-Z]"), "Invalid OAB document")
                 .transform((x) => x.toUpperCase()),
         }),
-        { message: "At least one OAB" }
+        { error: "At least one OAB" }
     ),
 });
 
@@ -84,7 +86,7 @@ const DatePickerControlled = () => {
 };
 
 export default function FormPage() {
-    const form = useForm(schema as any, "form");
+    const form = useForm(schema, "form");
     const [state, setState] = useState({});
     const [items, setItems] = useState<number[]>([0]);
 
@@ -134,6 +136,8 @@ const languages: AutocompleteItemProps[] = [
   { label: "F#", value: "fsharp" },
 ];
 
+const languageValues = languages.map((x) => x.value) as [string, ...string[]];
+
 const clamp = (min: number, x: number, max: number) =>
   Math.min(Math.max(x, min), max);
 
@@ -152,13 +156,13 @@ const schema = z.object({
   number: z.number(),
   boolean: z.literal(true),
   languages: z.array(z.string()),
-  date: z.string().datetime(),
-  datetime: z.string().datetime(),
+  date: z.iso.datetime(),
+  datetime: z.iso.datetime(),
   name: z.string().min(1),
   document: z.string().min(1),
   surname: z.string().min(1),
-  main: z.enum(languages.map((x) => x.value) as any),
-  secondary: z.enum(languages.map((x) => x.value) as any),
+  main: z.enum(languageValues),
+  secondary: z.enum(languageValues),
   items: z.array(
     z.object({ document: z.string().min(1), name: z.string().min(1) }),
   ),
@@ -169,7 +173,7 @@ const schema = z.object({
         .regex(new RegExp("[[0-9]{4,6}/[A-Z]"), "Invalid OAB document")
         .transform((x) => x.toUpperCase()),
     }),
-    { message: "At least one OAB" },
+    { error: "At least one OAB" },
   ),
 });
 
@@ -188,7 +192,7 @@ function DatePickerControlled() {
 };
 
 function DynamicForm() {
-  const form = useForm(schema as any, "form");
+  const form = useForm(schema, "form");
   const [state, setState] = useState({});
   const [items, setItems] = useState<number[]>([0]);
 

@@ -172,6 +172,7 @@ export const sections: Section[] = [
             { title: "Task List", href: "/docs/task-list", icon: CheckSquareIcon },
             { title: "Textarea", href: "/docs/textarea", icon: TextAlignLeftIcon },
             { title: "useForm", href: "/docs/form", icon: FileTextIcon },
+            { title: "Zod Form", href: "/docs/zod-form", icon: FileTextIcon },
         ],
     },
     {
