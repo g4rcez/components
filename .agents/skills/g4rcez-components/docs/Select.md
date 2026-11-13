@@ -176,25 +176,23 @@ export default function AsyncSelect() {
 
 ### Form integration with `useForm`
 
+The options of an enum come from the schema. Use `.meta({ labels })` for the texts.
+
 ```tsx
 import { Select } from "@g4rcez/components/select";
 import { useForm } from "@g4rcez/components";
 import { z } from "zod";
-const schema = z.object({ role: z.string });
+const schema = z.object({
+    role: z
+        .enum(["admin", "editor", "viewer"])
+        .default("viewer")
+        .meta({ title: "Role", labels: { admin: "Administrator", editor: "Editor", viewer: "Viewer" } }),
+});
 export default function UserForm() {
     const form = useForm(schema, "userForm");
     return (
-        <form {...form.props}>
-            {" "}
-            <Select
-                {...form.select("role")}
-                options={[
-                    { value: "admin", label: "Administrator" },
-                    { value: "editor", label: "Editor" },
-                    { value: "viewer", label: "Viewer" },
-                ]}
-                placeholder="Select role"
-            />{" "}
+        <form {...form.controller()} onSubmit={form.onSubmit((event, { success, data }) => success && save(data))}>
+            <Select {...form.select("role", { placeholder: "Select role" })} />
         </form>
     );
 }

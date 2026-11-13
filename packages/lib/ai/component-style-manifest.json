@@ -1209,6 +1209,7 @@
       "base": "__command-palette",
       "variants": {},
       "slots": {
+        "overlay": "__command-palette__overlay",
         "body": "__command-palette__body",
         "group-label": "__command-palette__group-label",
         "group-row": "__command-palette__group-row",

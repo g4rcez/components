@@ -39,7 +39,7 @@ The references sit in `docs/` next to this file. If you read this file from
 ## Setup
 
 ```bash
-pnpm add @g4rcez/components   # peer deps: react >=18, react-dom >=18
+pnpm add @g4rcez/components zod   # peer deps: react >=18, react-dom >=18, zod ^4
 ```
 
 Import the foundation first, then the CSS chunk of each component you use. Do this in a stylesheet, not in JS/TS:
@@ -143,7 +143,7 @@ Read the matching file before use. Each file's frontmatter states the import pat
 
 **Core** — [Button](docs/Button.md), [ActionSwap](docs/ActionSwap.md) (cycling pill), [HoldToConfirm](docs/HoldToConfirm.md) (press-and-hold), [RollingText](docs/RollingText.md), [Heading](docs/Heading.md), [Typography](docs/Typography.md) (Paragraph, Description, Info, PageTitle, PageHeader), [Tag](docs/Tag.md), [Polymorph](docs/Polymorph.md) (`as` rendering), [Slot](docs/Slot.md) (`asChild`), [Resizable](docs/Resizable.md) (animated height), [RenderOnView](docs/RenderOnView.md)
 
-**Form** — [Form](docs/Form.md), [FormReset](docs/FormReset.md), [InputField](docs/InputField.md), [Input](docs/Input.md) (masks), [Textarea](docs/Textarea.md), [Select](docs/Select.md) (native), [MorphSelect](docs/MorphSelect.md) (morphing picker), [Autocomplete](docs/Autocomplete.md) (searchable), [MultiSelect](docs/MultiSelect.md), [Checkbox](docs/Checkbox.md), [Radiobox](docs/Radiobox.md), [Switch](docs/Switch.md), [Slider](docs/Slider.md), [DatePicker](docs/DatePicker.md), [FileUpload](docs/FileUpload.md), [TaskList](docs/TaskList.md)
+**Form** — [Form](docs/Form.md), [FormReset](docs/FormReset.md), [InputField](docs/InputField.md), [Input](docs/Input.md) (masks), [Textarea](docs/Textarea.md), [Select](docs/Select.md) (native), [MorphSelect](docs/MorphSelect.md) (morphing picker), [Autocomplete](docs/Autocomplete.md) (searchable), [MultiSelect](docs/MultiSelect.md), [Checkbox](docs/Checkbox.md), [Radiobox](docs/Radiobox.md), [Switch](docs/Switch.md), [Slider](docs/Slider.md), [DatePicker](docs/DatePicker.md), [FileUpload](docs/FileUpload.md), [TaskList](docs/TaskList.md), [ZodForm](docs/ZodForm.md) (a form from a zod 4 schema: `ZodForm`, `ZodField`, and `useForm` helpers that read masks, options, defaults and limits from `.meta()`)
 
 **Editors and media** — [DrawingEditor](docs/drawing-editor.md) (layered canvas, PNG export), [VideoPlayer](docs/video-player.md), [PdfViewer](docs/pdf-viewer.md)
 

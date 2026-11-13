@@ -67,7 +67,7 @@ Component docs describe interaction behavior and acceptance criteria. They do no
 | Tabbar | Partial: [Tabs](Tabs.md) for same-page panels. A destination navigation bar is missing. |
 | Alertas (alerts) | Existing: [Alert](Alert.md). Urgency and announcement strategy depend on context. |
 | Dialogs, Modal | Existing: [Modal](Modal.md), including confirmation. Focus and dismissal decisions depend on context. |
-| Validação de formulários (form validation) | Partial: [Form](Form.md), [InputField](InputField.md), [Input](Input.md), [Textarea](Textarea.md). A reusable error summary is missing. |
+| Validação de formulários (form validation) | Partial: [Form](Form.md), [ZodForm](ZodForm.md), [InputField](InputField.md), [Input](Input.md), [Textarea](Textarea.md). A reusable error summary is missing. |
 | Toasts | Existing: [Notifications](Notifications.md). Announcement and timing limits are documented. |
 | Breadcrumb | Missing: ordered hierarchical navigation. |
 | Menu | Existing: [Menu](Menu.md). [Dropdown](Dropdown.md) is a dialog-style surface, not a menu keyboard model. |
@@ -135,6 +135,7 @@ Read the component doc before using a component. Each row links the doc and show
 | [TaskList](TaskList.md) | `import { TaskList } from "@g4rcez/components/task-list"` | Fieldset container with a reduced-motion-aware celebration when all child tasks are checked. |
 | [Textarea](Textarea.md) | `import { Textarea } from "@g4rcez/components"` | Auto-growing multi-line text input built on the InputField foundation. |
 | [DrawingEditor](drawing-editor.md) | `import { DrawingEditor, createDrawingScene } from "@g4rcez/components/drawing-editor"` | Controlled layered raster/vector drawing with bounded JSON scenes and flattened PNG export. |
+| [ZodForm](ZodForm.md) | `import { ZodForm, ZodField } from "@g4rcez/components/zod-form"` | A form generated from a zod 4 schema: each field renders the component its type asks for, with mask, options, defaults and constraints from the schema. |
 
 ### Display
 

@@ -166,14 +166,15 @@ function EmailForm({ onSave }: { onSave: (email: string) => void }) {
 
 ### Using the existing useForm hook
 
-- `useForm` is exported from `@g4rcez/components`, separately from `Form`.
-- Its `input`/`textarea` helpers bind names, IDs, values, requirements, and field-error props to a synchronous Zod schema.
+- `useForm` is exported from `@g4rcez/components`, separately from `Form`. It needs a zod 4 object schema (`zod` is a peer dependency).
+- Its helpers (`input`, `textarea`, `select`, `multiselect`, `checkbox`, `radio`, `slider`, `datepicker`, `file`, `morph`) bind names, IDs, values, field-error props and the schema-derived props: `required`, `min`/`max`/`step`, `minLength`/`maxLength`, `pattern`, `type`, the `mask` and `title` set with `.meta()`, the `options` of an enum, and the `.default()` value. Props you pass win over the schema. See [ZodForm](ZodForm.md).
+- `<ZodForm schema={schema} name="..." />` renders the whole form from the schema. Use `useForm` with `<ZodField />` or the helpers to lay the fields out yourself.
 - `controller` supplies the form's ID/name, not submit or invalid handlers.
-- Field checks listen for `blur` by default, or for a native `data-trigger` event.
+- Field checks listen for `blur` by default, or for a native `data-trigger` event. Controls that mount later (added rows) are bound on the next render.
 - Connect `onInvalid={form.onInvalid}` explicitly for the native-invalid path.
-- `form.onSubmit(callback)` calls the callback for valid and schema-invalid data. Check `success` before saving.
-- On schema failure, it calls `reportValidity` and passes an `errors` list plus `setErrors` to the callback.
-- It does not copy those issues into field-error state. It does not guarantee focus for schema-only errors. The consumer MUST map errors into field state and choose a focus destination.
+- `form.onSubmit(callback)` calls the callback for valid and schema-invalid data. Check `success` before saving. Native values are converted to the schema types (numbers, booleans, `Date`, arrays) before parsing.
+- On schema failure, it copies every issue into the field-error state (by issue path), calls `reportValidity` and passes an `errors` list plus `setErrors` to the callback.
+- It does not guarantee focus for schema-only errors. The consumer MUST choose a focus destination.
 - The hook renders no summary, gives no asynchronous schema validation or response ordering, and announces no server results.
 - Its `disabled` return value reflects whether error state is non-null. It is not a complete submission or explanation policy.
 - Successful schema submissions serialize parsed data to the form's `data-json` attribute. An optional storage interceptor persists state. Review both paths before using the hook with secrets.

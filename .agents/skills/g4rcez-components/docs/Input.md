@@ -41,6 +41,10 @@ import { Input } from "@g4rcez/components/input";
 | `hiddenLabel` | `boolean` | `false` | Hides the label visually, not from screen readers. |
 | `...props` | `React.InputHTMLAttributes<HTMLInputElement>` | - | All standard input attributes. |
 
+### Mask from a zod schema
+
+With `useForm` or `ZodForm` the mask can live in the schema: `z.string().meta({ mask: "cpf" })`. `form.input("document")` then sends `mask` (and `currency` / `locale` for money masks) to the `Input`. A `z.number()` with a money or percentage mask is typed as text and parsed back to a number on submit. See [ZodForm](ZodForm.md).
+
 ### Mask patterns
 
 | Pattern char | Matches |
