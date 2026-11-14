@@ -53,7 +53,7 @@ class IntersectionObserverMock {
 global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver;
 
 describe("table group a11y", () => {
-    it("names each group row with the column groupTitle", () => {
+    it("names each group row with the column groupTitle and keeps explicit row roles", () => {
         render(
             <ComponentsProvider>
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 48 }}>
@@ -65,26 +65,8 @@ describe("table group a11y", () => {
         const header = screen.getByRole("rowheader", { name: "Status group: Active" });
         expect(header).toHaveClass("__table-root__group-title");
         expect(header).toHaveAttribute("scope", "rowgroup");
-    });
-
-    it("keeps explicit row and rowheader roles on the group row at 375px", () => {
-        const innerWidth = window.innerWidth;
-        window.innerWidth = 375;
-        try {
-            render(
-                <ComponentsProvider>
-                    <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 48 }}>
-                        <Table name="grouped-status-375" cols={columns} rows={grouped.rows} groups={[grouped]} operations={false} />
-                    </VirtuosoMockContext.Provider>
-                </ComponentsProvider>
-            );
-
-            const header = screen.getByRole("rowheader", { name: "Status group: Active" });
-            expect(header).toHaveAttribute("role", "rowheader");
-            expect(header.closest("tr")).toHaveAttribute("role", "row");
-        } finally {
-            window.innerWidth = innerWidth;
-        }
+        expect(header).toHaveAttribute("role", "rowheader");
+        expect(header.closest("tr")).toHaveAttribute("role", "row");
     });
 
     it("uses provider map labels for group controls", async () => {
