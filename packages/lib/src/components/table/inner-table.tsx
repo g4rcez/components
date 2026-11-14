@@ -107,7 +107,8 @@ type GroupRowProps = HTMLAttributes<HTMLTableRowElement> & ContextProp<{ sticky?
 // Virtuoso sticks the group row under the header (`top` = header height) and ignores the header's own `sticky` offset.
 const GroupRow = React.forwardRef<HTMLTableRowElement, GroupRowProps>(({ context, style, ...props }, ref) => {
     const top = Is.number(context.sticky) && Is.number(style?.top) ? style.top + context.sticky : style?.top;
-    return <tr {...props} ref={ref} style={{ ...style, top }} />;
+    // Explicit roles: below 768px the group `th` is `display:block`, and WebKit can drop implicit table semantics (components#106).
+    return <tr {...props} role="row" ref={ref} style={{ ...style, top }} />;
 });
 
 type TRowProps = ItemProps<VirtuosoData> & ContextProp<VirtuosoCtx> & { className?: string };
@@ -355,7 +356,12 @@ export const InnerTable = <T extends Record<string, unknown>>({
                     data={grouped.data as VirtuosoData[]}
                     groupCounts={grouped.counts}
                     groupContent={(groupIndex) => (
-                        <th scope="rowgroup" colSpan={cols.length + (selection ? 1 : 0)} className={tableRootStyles.slots["group-title"]}>
+                        <th
+                            role="rowheader"
+                            scope="rowgroup"
+                            colSpan={cols.length + (selection ? 1 : 0)}
+                            className={tableRootStyles.slots["group-title"]}
+                        >
                             {grouped.labels[groupIndex]}
                         </th>
                     )}

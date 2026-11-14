@@ -67,6 +67,26 @@ describe("table group a11y", () => {
         expect(header).toHaveAttribute("scope", "rowgroup");
     });
 
+    it("keeps explicit row and rowheader roles on the group row at 375px", () => {
+        const innerWidth = window.innerWidth;
+        window.innerWidth = 375;
+        try {
+            render(
+                <ComponentsProvider>
+                    <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 48 }}>
+                        <Table name="grouped-status-375" cols={columns} rows={grouped.rows} groups={[grouped]} operations={false} />
+                    </VirtuosoMockContext.Provider>
+                </ComponentsProvider>
+            );
+
+            const header = screen.getByRole("rowheader", { name: "Status group: Active" });
+            expect(header).toHaveAttribute("role", "rowheader");
+            expect(header.closest("tr")).toHaveAttribute("role", "row");
+        } finally {
+            window.innerWidth = innerWidth;
+        }
+    });
+
     it("uses provider map labels for group controls", async () => {
         const user = userEvent.setup();
 
